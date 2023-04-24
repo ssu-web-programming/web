@@ -5,6 +5,7 @@ const LinkTextWrapper = styled.div`
   color: black;
   cursor: pointer;
   text-decoration: underline;
+  width: fit-content;
 `;
 
 interface LinkTextProps {

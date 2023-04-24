@@ -4,8 +4,9 @@ import TextArea from '../components/TextArea';
 import { LengthWrapper, RowBox } from './AIChatTab';
 import Button from '../components/Button';
 import Icon from '../components/Icon';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import OpenAILinkText from '../components/OpenAILinkText';
+import LinkText from '../components/LinkText';
 
 const Wrapper = styled.div`
   display: flex;
@@ -81,43 +82,79 @@ interface LengthListType {
   length: number;
 }
 
-const testResult = `곳으로 품었기 피어나는 간에 부패뿐이다. 그들의 피부가 그들의 교향악이다. 목숨을 너의 없으면 소금이라 황금시대의 것은 칼이다. 미묘한 우리는 피고, 관현악이며, 사막이다. 같으며, 많이 우리 황금시대를 방황하여도, 그들은 별과 것이다. 들어 청춘의 위하여서, 예가 철환하였는가? 심장의 인생에 가는 피고, 스며들어 그것은 운다. 찾아다녀도, 풀이 대고, 보라. 청춘의 이것을 하여도 아니다. 얼마나 광야에서 귀는 풀밭에 이상의 거친 심장은 없으면 봄바람이다.
-
-트고, 뛰노는 품었기 봄날의 그것을 방황하였으며, 노년에게서 밝은 지혜는 황금시대다. 어디 얼마나 사랑의 용기가 뜨거운지라, 가지에 있는가? 이상의 갑 그것을 날카로우나 끓는다. 전인 행복스럽고 고동을 발휘하기 그리하였는가? 작고 것이다.보라, 가치를 인생의 웅대한 봄날의 이상의 피다. 인도하겠다는 피고, 놀이 얼음과 영원히 옷을 만물은 그들의 어디 때문이다. 생명을 인생에 싶이 것은 모래뿐일 그들의 두손을 때문이다. 주며, 황금시대의 영원히 것이다. 얼마나 용기가 우리의 노년에게서 우는 피고 못하다 듣는다. 우리의 공자는 인도하겠다는 품고 것이다.
-
-모래뿐일 이성은 이것이야말로 하는 고동을 장식하는 있다. 만물은 넣는 이 기관과 같은 트고, 소리다.이것은 이것은 봄바람이다. 아니더면, 청춘 인생을 품었기 같은 피어나는 곳이 긴지라 열락의 피다. 스며들어 풀이 천하를 이성은 그러므로 이상은 풀밭에 대고, 날카로우나 봄바람이다. 아니더면, 용감하고 있는 있는 사막이다. 속에 구하지 그것은 사막이다. 이상 남는 보이는 싶이 곧 청춘 그러므로 소금이라 열락의 봄바람이다. 긴지라 풀이 우리 물방아 듣는다. 이것이야말로 않는 무엇을 목숨을 보라. 수 그것은 청춘 이것이다. 피어나는 있을 자신과 하는 칼이다.`;
+const subjectMaxLength = 1000;
+const exampleSubject = [
+  '건강한 생활습관을 위한 효과적인 5가지 방법',
+  '배달 서비스 마케팅 아이디어를 브레인스토밍하고 각 아이디어가 지닌 장점 설명',
+  '비 오는 바다 주제의 소설 시놉시스',
+  '중고 의류 쇼핑몰 CEO 인터뷰 질문 목록 10가지',
+  '부모님 생일 선물을 추천해줘',
+  '문서 작성을 효율적으로 하는 방법'
+];
 
 const AIWriteTab = () => {
   const [subject, setSubject] = useState<string>('');
   const [selectedForm, setSelectedForm] = useState<FormListType | null>(null);
   const [selectedLength, setSelectedLength] = useState<LengthListType | null>(null);
+
   const [writeResult, setWriteResult] = useState<string>('');
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isEndResult, setIsEndResult] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false); // 로딩 true 일때 == valid check 할 때 ~ response 오기 전
+  const [isEndResult, setIsEndResult] = useState<boolean>(true); // response result 스트리밍 끝났을 때
+
+  const stopRef = useRef<boolean>(false); // response result 스트리밍 도중 stop 버튼 눌렀을 때
 
   const checkValid = () => {
     return subject.length > 0 && selectedForm != null && selectedLength != null;
   };
 
-  const submitSubject = () => {
+  const setTempResult = async () => {
+    const res = await fetch('https://kittyhawk.polarisoffice.com/api/v2/chat/chatStream', {
+      headers: { 'content-type': 'application/json' },
+      //   responseType: 'stream',
+      body: JSON.stringify({
+        history: [
+          {
+            content: 'hello',
+            role: 'system'
+          },
+          {
+            content: '한국 관광명소 3가지만 알려줘',
+            role: 'user'
+          }
+        ]
+      }),
+      method: 'POST'
+    });
+    const reader = res.body?.getReader();
+    var enc = new TextDecoder('utf-8');
+
+    if (reader) {
+      setIsLoading(false);
+      setIsEndResult(false);
+    }
+
+    while (reader) {
+      // if (isFull) break;
+      const { value, done } = await reader.read();
+
+      if (done || stopRef.current) {
+        // setProcessState(PROCESS_STATE.COMPLETE_GENERATE);
+        setIsEndResult(true);
+        break;
+      }
+
+      const decodeStr = enc.decode(value);
+
+      setWriteResult((prev) => (prev += decodeStr));
+    }
+  };
+
+  const submitSubject = async () => {
     // API 통신
     // TODO: 크레딧 체크 -> fail시 isLading(false) && Toast 출력.
     // TODO: 크레딧 체크 통과 시 결과 set.
-
     // 임시 함수
-    const startTimer = setTimeout(() => {
-      setIsLoading(false);
-      setIsEndResult(false);
-      setWriteResult(testResult);
-    }, 2000);
-
-    const endTimer = setTimeout(() => {
-      setIsEndResult(true);
-    }, 3000);
-    return () => {
-      clearTimeout(startTimer);
-      clearTimeout(endTimer);
-    };
+    setTempResult();
   };
 
   return (
@@ -130,12 +167,19 @@ const AIWriteTab = () => {
               rows={5}
               value={subject}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setSubject(e.target.value);
+                if (e?.target?.value.length <= subjectMaxLength) setSubject(e.target.value);
               }}
             />
             <RowBox>
-              <LengthWrapper>1000/10</LengthWrapper>
-              <TextButton>예시 문구보기</TextButton>
+              <LengthWrapper>
+                {subject.length}/{subjectMaxLength}
+              </LengthWrapper>
+              <TextButton
+                onClick={() => {
+                  setSubject(exampleSubject[Math.floor(Math.random() * exampleSubject.length)]);
+                }}>
+                예시 문구보기
+              </TextButton>
             </RowBox>
           </InputArea>
 
@@ -186,6 +230,10 @@ const AIWriteTab = () => {
         </>
       ) : (
         <>
+          <RowBox>
+            <SubTitle subTitle="내용 미리보기" />
+            <LinkText url="">주제 다시 입력하기</LinkText>
+          </RowBox>
           <ResultBox>
             {isLoading && writeResult.length === 0 ? (
               <LoadingWrapper>로딩중...</LoadingWrapper>
@@ -197,7 +245,7 @@ const AIWriteTab = () => {
                 {!isEndResult && (
                   <Button
                     onClick={() => {
-                      // TODO: stop 로직
+                      stopRef.current = true;
                       // TODO: Toast 출력
                     }}
                     width={50}
