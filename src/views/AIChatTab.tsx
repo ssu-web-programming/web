@@ -108,9 +108,8 @@ const AIChatTab = () => {
 
   const [chatInput, setChatInput] = useState<string>('');
   const [activeInput, setActiveInput] = useState<boolean>(false);
-  const [, render] = useState<any>({});
 
-  const isEndResponse = useRef<boolean>(true);
+  const [isEndResponse, setIsEndResponse] = useState<boolean>(true);
 
   const chatEndRef = useRef<any>();
 
@@ -124,7 +123,7 @@ const AIChatTab = () => {
 
     setChatList((prev) => [...prev, { content: chatInput, role: 'user' }]);
 
-    isEndResponse.current = false;
+    setIsEndResponse(false);
     const res = await fetch('https://kittyhawk.polarisoffice.com/api/v2/chat/chatStream', {
       headers: { 'content-type': 'application/json' },
       //   responseType: 'stream',
@@ -146,11 +145,12 @@ const AIChatTab = () => {
     const reader = res.body?.getReader();
     var enc = new TextDecoder('utf-8');
 
-    while (reader && !isEndResponse.current) {
+    while (reader) {
       // if (isFull) break;
       const { value, done } = await reader.read();
       if (done) {
         // setProcessState(PROCESS_STATE.COMPLETE_GENERATE);
+        setIsEndResponse(true);
         break;
       }
 
@@ -166,15 +166,13 @@ const AIChatTab = () => {
         }
       });
     }
-    isEndResponse.current = true;
-    render({});
   };
 
   return (
     <Wrapper>
       <ChatListWrapper>
-        {chatList.map((chat) => (
-          <SpeechBubble text={chat.content} isUser={chat.role === 'user'} />
+        {chatList.map((chat, index) => (
+          <SpeechBubble key={index} text={chat.content} isUser={chat.role === 'user'} />
         ))}
         <div ref={chatEndRef}></div>
       </ChatListWrapper>
@@ -185,7 +183,7 @@ const AIChatTab = () => {
               if (chatInput.length === 0) setActiveInput(false);
             }}>
             <TextArea
-              disable={!isEndResponse.current}
+              disable={!isEndResponse}
               cssExt={css`
                 width: 100%;
                 border: 0;

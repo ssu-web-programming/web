@@ -143,6 +143,7 @@ const AIWriteTab = () => {
           <RowBox>
             {formList.map((form) => (
               <Button
+                key={form.id}
                 onClick={() => {
                   setSelectedForm(form);
                 }}
@@ -155,8 +156,9 @@ const AIWriteTab = () => {
 
           <SubTitle subTitle="글자 수" />
           <RowBox>
-            {lengthList.map((length) => (
+            {lengthList.map((length, index) => (
               <Button
+                key={index}
                 onClick={() => {
                   setSelectedLength(length);
                 }}
