@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { ReactElement, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import SpeechBubble from '../components/SpeechBubble';
 import TextArea from '../components/TextArea';
 
@@ -117,8 +117,6 @@ const AIChatTab = () => {
   useEffect(() => {
     chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
   }, [chatList]);
-
-  useEffect(() => {}, [activeInput]);
 
   const submitChat = async () => {
     setChatInput('');

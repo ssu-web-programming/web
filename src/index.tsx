@@ -5,7 +5,7 @@ import App from './App';
 import { BrowserRouter } from 'react-router-dom';
 
 // eslint-disable-next-line
-import i18n from './locale';
+import './locale';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
