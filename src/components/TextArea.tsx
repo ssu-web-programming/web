@@ -13,7 +13,7 @@ interface TextAreaProps {
   onKeyUp?: React.KeyboardEventHandler;
   cssExt?: CSSProp<any>;
   rows?: number;
-  ref?: any;
+  textRef?: React.RefObject<HTMLTextAreaElement> | null;
   disable?: boolean;
 }
 
@@ -23,12 +23,12 @@ const TextArea = ({
   onKeyUp,
   cssExt,
   rows,
-  ref,
+  textRef,
   disable = false
 }: TextAreaProps) => {
   return (
     <TextAreaWrapper
-      ref={ref}
+      ref={textRef}
       cssExt={cssExt}
       value={value}
       onChange={(e) => onChange(e)}

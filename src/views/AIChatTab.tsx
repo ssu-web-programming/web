@@ -168,6 +168,13 @@ const AIChatTab = () => {
     }
   };
 
+  const textRef = useRef<HTMLTextAreaElement>(null);
+  useEffect(() => {
+    if (activeInput && textRef?.current) {
+      textRef.current.focus();
+    }
+  }, [activeInput]);
+
   return (
     <Wrapper>
       <ChatListWrapper>
@@ -183,6 +190,7 @@ const AIChatTab = () => {
               if (chatInput.length === 0) setActiveInput(false);
             }}>
             <TextArea
+              textRef={textRef}
               disable={!isEndResponse}
               cssExt={css`
                 width: 100%;
