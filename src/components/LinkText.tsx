@@ -1,0 +1,23 @@
+import styled from 'styled-components';
+
+const LinkTextWrapper = styled.div`
+  display: flex;
+  color: black;
+  cursor: pointer;
+  text-decoration: underline;
+`;
+
+interface LinkTextProps {
+  url: string;
+  children?: React.ReactNode;
+}
+
+const LinkText = ({ url, children }: LinkTextProps) => {
+  const handleOpenNewTab = (url: string) => {
+    window.open(url, '_blank', 'noopener, noreferrer');
+  };
+
+  return <LinkTextWrapper onClick={() => handleOpenNewTab(url)}>{children}</LinkTextWrapper>;
+};
+
+export default LinkText;

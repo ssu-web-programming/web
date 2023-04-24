@@ -1,0 +1,17 @@
+{
+  "printWidth": 100,
+  "tabWidth": 2,
+  "singleQuote": true,
+  "trailingComma": "none",
+  "jsxBracketSameLine": true,
+  "arrowParens": "always",
+  "overrides": [
+    {
+      "files": ["*.json"],
+      "options": {
+        "printWidth": 60,
+        "tabWidth": 2
+      }
+    }
+  ]
+}

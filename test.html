@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" style="width: 100%; height: 100%">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body style="width: 100%; height: 100%; padding: 30px; box-sizing: border-box">
+    <div style="position: relative">
+      <iframe width="300" height="300" style="position: absolute; left: 0px; top: 0px"></iframe>
+      <iframe width="300" height="500" style="position: absolute; left: 0px; top: 350px"></iframe>
+      <iframe width="300" height="800" style="position: absolute; left: 350px; top: 0px"></iframe>
+      <iframe width="1000" height="800" style="position: absolute; left: 700px; top: 0px"></iframe>
+    </div>
+  </body>
+  <script>
+    const target = 'http://localhost:3000/presentation';
+    window.onload = () => {
+      const iframe = document.getElementsByTagName('iframe');
+      Array.from(iframe).forEach((f) => (f.src = target));
+    };
+  </script>
+</html>
