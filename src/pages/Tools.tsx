@@ -13,6 +13,7 @@ const Contents = styled.div`
 
 const Header = styled.div`
   padding: 20px 10px 20px 10px;
+  height: 50px;
   display: flex;
   justify-content: space-between;
 `;
@@ -20,6 +21,7 @@ const Header = styled.div`
 const TabList = styled.div`
   display: flex;
   justify-content: flex-start;
+  height: 20px;
 `;
 
 const TabItem = styled.div<{ selected: boolean }>`
@@ -33,6 +35,7 @@ const TabItem = styled.div<{ selected: boolean }>`
 
 const Body = styled.div`
   flex: 1;
+  overflow: hidden;
 `;
 
 interface AiWriteTabItem {
@@ -73,7 +76,7 @@ export default function Tools() {
             </TabItem>
           ))}
         </TabList>
-        <Body style={{ border: 'solid 1px red' }}>{selectedTab.comp}</Body>
+        <Body>{selectedTab.comp}</Body>
       </Contents>
     </Wrapper>
   );

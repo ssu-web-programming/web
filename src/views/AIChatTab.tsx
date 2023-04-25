@@ -13,7 +13,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 const Wrapper = styled.div`
   width: 100%;
-  height: 80%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -24,19 +24,20 @@ const Wrapper = styled.div`
 
 const ChatListWrapper = styled.div`
   display: flex;
+  flex: 1;
   flex-direction: column;
   width: 100%;
-  height: 90%;
   overflow-y: auto;
   box-sizing: border-box;
   padding: 20px;
+  overflow: auto;
 `;
 
 const InputWrapper = styled.div`
-  /* height: 20%; */
   display: flex;
   justify-content: center;
   width: 100%;
+  height: 100px;
   margin-top: 20px;
   box-sizing: border-box;
 `;
