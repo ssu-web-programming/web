@@ -7,15 +7,19 @@ import { Provider } from 'react-redux';
 import store from './store/store';
 // eslint-disable-next-line
 import './locale';
+import { ThemeProvider } from 'styled-components';
+import { selectTheme } from './theme/theme';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </Provider>
+    <ThemeProvider theme={selectTheme()}>
+      <Provider store={store}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </Provider>
+    </ThemeProvider>
   </React.StrictMode>
 );
 
