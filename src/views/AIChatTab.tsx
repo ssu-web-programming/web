@@ -2,6 +2,14 @@ import styled, { css } from 'styled-components';
 import { useEffect, useRef, useState } from 'react';
 import SpeechBubble from '../components/SpeechBubble';
 import TextArea from '../components/TextArea';
+import { useAppDispatch, useAppSelector } from '../store/store';
+import {
+  appendChat,
+  initChatHistory,
+  selectChatHistory,
+  updateChat
+} from '../store/slices/chatHistorySlice';
+import { v4 as uuidv4 } from 'uuid';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -91,20 +99,11 @@ const ButtonWrapper = styled.div`
   cursor: pointer;
 `;
 
-interface Chat {
-  content: string;
-  role: string;
-}
-
-const INITIAL_CHAT: Chat = {
-  role: 'assistant',
-  content: 'what do you want?'
-};
-
 const inputMaxLength = 1000;
 
 const AIChatTab = () => {
-  const [chatList, setChatList] = useState<Chat[]>([INITIAL_CHAT]);
+  const dispatch = useAppDispatch();
+  const chatHistory = useAppSelector(selectChatHistory);
 
   const [chatInput, setChatInput] = useState<string>('');
   const [activeInput, setActiveInput] = useState<boolean>(false);
@@ -115,13 +114,22 @@ const AIChatTab = () => {
 
   useEffect(() => {
     chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
-  }, [chatList]);
+  }, [chatHistory]);
+
+  useEffect(() => {
+    if (chatHistory.length === 0) {
+      // TODO : set content
+      dispatch(initChatHistory({ id: uuidv4(), role: 'assistant', content: 'what do you want?' }));
+    }
+  }, []);
 
   const submitChat = async () => {
+    const assistantId = uuidv4();
     setChatInput('');
     setActiveInput(false);
 
-    setChatList((prev) => [...prev, { content: chatInput, role: 'user' }]);
+    dispatch(appendChat({ id: uuidv4(), role: 'user', content: chatInput }));
+    dispatch(appendChat({ id: assistantId, role: 'assistant', content: '' }));
 
     setIsEndResponse(false);
     const res = await fetch('https://kittyhawk.polarisoffice.com/api/v2/chat/chatStream', {
@@ -133,7 +141,7 @@ const AIChatTab = () => {
             content: 'hello',
             role: 'system'
           },
-          ...chatList,
+          ...chatHistory.map((chat) => ({ content: chat.content, role: chat.role })),
           {
             content: chatInput,
             role: 'user'
@@ -155,16 +163,7 @@ const AIChatTab = () => {
       }
 
       const decodeStr = enc.decode(value);
-
-      setChatList((prev) => {
-        if (prev[prev.length - 1].role === 'assistant') {
-          const last = prev[prev.length - 1];
-          //last.content += decodeStr;
-          return [...prev.slice(0, -1), { ...last, content: last.content + decodeStr }]; //.concat(last);
-        } else {
-          return [...prev, { role: 'assistant', content: decodeStr }];
-        }
-      });
+      dispatch(updateChat({ id: assistantId, role: 'assistant', content: decodeStr }));
     }
   };
 
@@ -178,8 +177,8 @@ const AIChatTab = () => {
   return (
     <Wrapper>
       <ChatListWrapper>
-        {chatList.map((chat, index) => (
-          <SpeechBubble key={index} text={chat.content} isUser={chat.role === 'user'} />
+        {chatHistory.map((chat) => (
+          <SpeechBubble key={chat.id} text={chat.content} isUser={chat.role === 'user'} />
         ))}
         <div ref={chatEndRef}></div>
       </ChatListWrapper>
