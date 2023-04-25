@@ -1,11 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import styled, { keyframes } from 'styled-components';
+import { initToast } from '../store/slices/toastSlice';
+import { useDispatch } from 'react-redux';
 
 const Fade = keyframes`
   0% {
       opacity: 0;
   }
-  70%{
+  50%{
     opacity: 1;
   }
   100% {
@@ -28,7 +30,7 @@ const ToastMsgWrapper = styled.div`
   color: white;
   padding: 10px 20px 10px 20px;
   opacity: 0;
-  animation: ${Fade} 2s;
+  animation: ${Fade} 1.5s;
 `;
 
 const ToastText = styled.div`
@@ -40,19 +42,32 @@ const ToastText = styled.div`
 const CloaseBtn = styled.div`
   display: flex;
   margin-left: 10px;
+  cursor: pointer;
 `;
 
 const ToastMsg = ({ msg }: { msg: string }) => {
+  const dispatch = useDispatch();
+
   const [isVisible, setIsVisible] = useState<boolean>(true);
+  const delayTime = useRef<number>(2000);
+
+  const closeToast = () => {
+    dispatch(initToast());
+  };
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsVisible(false);
-    }, 3000);
+      closeToast();
+    }, 2000);
     return () => {
       clearTimeout(timer);
     };
   }, []);
+
+  useEffect(() => {
+    delayTime.current += 2000;
+  }, [msg]);
 
   return (
     <>

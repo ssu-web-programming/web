@@ -7,6 +7,8 @@ import Icon from '../components/Icon';
 import { useRef, useState } from 'react';
 import OpenAILinkText from '../components/OpenAILinkText';
 import LinkText from '../components/LinkText';
+import { useDispatch } from 'react-redux';
+import { activeToast } from '../store/slices/toastSlice';
 
 const Wrapper = styled.div`
   display: flex;
@@ -102,6 +104,7 @@ const AIWriteTab = () => {
   const [isEndResult, setIsEndResult] = useState<boolean>(true); // response result 스트리밍 끝났을 때
 
   const stopRef = useRef<boolean>(false); // response result 스트리밍 도중 stop 버튼 눌렀을 때
+  const dispatch = useDispatch();
 
   const checkValid = () => {
     return subject.length > 0 && selectedForm != null && selectedLength != null;
@@ -218,14 +221,23 @@ const AIWriteTab = () => {
 
           <Button
             onClick={() => {
-              if (checkValid()) {
-                setIsLoading(true);
-                submitSubject();
-              }
+              // if (checkValid()) {
+              //   setIsLoading(true);
+              //   submitSubject();
+              // }
+              dispatch(activeToast({ msg: '작성 시작', active: true }));
             }}
             width={150}
             height={30}>
-            작성하기
+            글 작성하기
+          </Button>
+          <Button
+            onClick={() => {
+              dispatch(activeToast({ msg: '토슽토슽', active: true }));
+            }}
+            width={150}
+            height={30}>
+            토슽토슽
           </Button>
         </>
       ) : (
@@ -245,8 +257,8 @@ const AIWriteTab = () => {
                 {!isEndResult && (
                   <Button
                     onClick={() => {
+                      dispatch(activeToast({ msg: '정지 되었습니다.', active: true }));
                       stopRef.current = true;
-                      // TODO: Toast 출력
                     }}
                     width={50}
                     height={20}>
@@ -258,6 +270,7 @@ const AIWriteTab = () => {
                   <Button
                     onClick={() => {
                       // 복사 로직
+                      dispatch(activeToast({ msg: '복사 되었습니다.', active: true }));
                     }}
                     width={50}
                     height={20}>
