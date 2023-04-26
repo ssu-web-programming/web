@@ -11,6 +11,9 @@ import {
 } from '../store/slices/chatHistorySlice';
 import { v4 as uuidv4 } from 'uuid';
 
+const INPUT_HEIGHT = 120;
+const TEXT_MAX_HEIGHT = 200;
+
 const Wrapper = styled.div`
   width: 100%;
   height: 100%;
@@ -33,13 +36,14 @@ const ChatListWrapper = styled.div`
   overflow: auto;
 `;
 
-const InputWrapper = styled.div`
+const InputWrapper = styled.div<{ activeInputWrap: boolean }>`
   display: flex;
   justify-content: center;
   width: 100%;
-  height: 100px;
-  margin-top: 20px;
   box-sizing: border-box;
+
+  height: ${({ activeInputWrap }: { activeInputWrap: boolean }) =>
+    activeInputWrap ? INPUT_HEIGHT + 'px' : ''};
 `;
 
 const InactiveInput = styled.div`
@@ -50,6 +54,7 @@ const InactiveInput = styled.div`
   display: flex;
   justify-content: flex-end;
   align-self: center;
+  margin-bottom: 10px;
 
   &:hover {
     cursor: text;
@@ -60,11 +65,11 @@ const ActiveInput = styled.div`
   border-radius: 5px;
   border: solid 1px black;
   position: absolute;
-  bottom: 0px;
-  padding: 10px;
-  /* margin: 10px; */
+  bottom: 10px;
+  padding: 5px;
   width: 95%;
   box-sizing: border-box;
+  flex: 1;
 
   left: 50%;
   transform: translate(-50%);
@@ -123,6 +128,13 @@ const AIChatTab = () => {
       dispatch(initChatHistory({ id: uuidv4(), role: 'assistant', content: 'what do you want?' }));
     }
   }, []);
+
+  const handleResizeHeight = () => {
+    if (textRef.current) {
+      textRef.current.style.height = 'auto';
+      textRef.current.style.height = textRef.current.scrollHeight + 'px';
+    }
+  };
 
   const submitChat = async () => {
     const assistantId = uuidv4();
@@ -183,7 +195,7 @@ const AIChatTab = () => {
         ))}
         <div ref={chatEndRef}></div>
       </ChatListWrapper>
-      <InputWrapper>
+      <InputWrapper activeInputWrap={activeInput}>
         {activeInput || chatInput.length !== 0 ? (
           <ActiveInput
             onBlur={() => {
@@ -195,11 +207,12 @@ const AIChatTab = () => {
               cssExt={css`
                 width: 100%;
                 border: 0;
-                height: 100px;
+                max-height: ${TEXT_MAX_HEIGHT}px;
                 justify-content: center;
               `}
               value={chatInput}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                handleResizeHeight();
                 setChatInput(e.target.value);
               }}
             />
