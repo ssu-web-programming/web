@@ -108,7 +108,6 @@ const AIChatTab = () => {
 
   const [chatInput, setChatInput] = useState<string>('');
   const [activeInput, setActiveInput] = useState<boolean>(false);
-
   const [isEndResponse, setIsEndResponse] = useState<boolean>(true);
 
   const chatEndRef = useRef<any>();
