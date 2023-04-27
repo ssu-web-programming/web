@@ -27,7 +27,7 @@ const InputArea = styled.div`
   padding: 10px;
 `;
 
-const TextButton = styled.div`
+export const TextButton = styled.div`
   display: flex;
   cursor: pointer;
 `;
@@ -221,10 +221,10 @@ const AIWriteTab = () => {
 
           <Button
             onClick={() => {
-              // if (checkValid()) {
-              //   setIsLoading(true);
-              //   submitSubject();
-              // }
+              if (checkValid()) {
+                setIsLoading(true);
+                submitSubject();
+              }
               dispatch(activeToast({ msg: '작성 시작', active: true }));
             }}
             width={150}

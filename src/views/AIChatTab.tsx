@@ -10,6 +10,10 @@ import {
   updateChat
 } from '../store/slices/chatHistorySlice';
 import { v4 as uuidv4 } from 'uuid';
+import Button from '../components/Button';
+import OpenAILinkText from '../components/OpenAILinkText';
+import { TextButton } from './AIWriteTab';
+import FucRecBox from '../components/AIChat/FucRecBox';
 
 const INPUT_HEIGHT = 120;
 const TEXT_MAX_HEIGHT = 200;
@@ -61,9 +65,7 @@ const InactiveInput = styled.div`
   }
 `;
 
-const ActiveInput = styled.div`
-  border-radius: 5px;
-  border: solid 1px black;
+const ActiveInputBox = styled.div`
   position: absolute;
   bottom: 10px;
   padding: 5px;
@@ -75,6 +77,17 @@ const ActiveInput = styled.div`
   transform: translate(-50%);
   background-color: white;
   box-sizing: border-box;
+
+  &:hover {
+    border-color: blue;
+  }
+`;
+
+const ActiveInput = styled.div`
+  border-radius: 5px;
+  border: solid 1px black;
+  box-sizing: border-box;
+  padding: 5px;
 
   &:hover {
     border-color: blue;
@@ -105,6 +118,12 @@ const ButtonWrapper = styled.div`
   cursor: pointer;
 `;
 
+const FitButton = styled.button`
+  width: fit-content;
+  height: fit-content;
+  padding: 10px;
+`;
+
 const inputMaxLength = 1000;
 
 const AIChatTab = () => {
@@ -113,9 +132,10 @@ const AIChatTab = () => {
 
   const [chatInput, setChatInput] = useState<string>('');
   const [activeInput, setActiveInput] = useState<boolean>(false);
-  const [isEndResponse, setIsEndResponse] = useState<boolean>(true);
+  const [isLoadingRes, setIsLoadingRes] = useState<boolean>(false);
 
   const chatEndRef = useRef<any>();
+  const stopRef = useRef<boolean>(false);
 
   useEffect(() => {
     chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -135,15 +155,16 @@ const AIChatTab = () => {
     }
   };
 
-  const submitChat = async () => {
+  const submitChat = async (inputParam?: string) => {
     const assistantId = uuidv4();
+    const input = inputParam ? inputParam : chatInput;
     setChatInput('');
     setActiveInput(false);
 
     dispatch(appendChat({ id: uuidv4(), role: 'user', content: chatInput }));
     dispatch(appendChat({ id: assistantId, role: 'assistant', content: '' }));
 
-    setIsEndResponse(false);
+    setIsLoadingRes(true);
     const res = await fetch('https://kittyhawk.polarisoffice.com/api/v2/chat/chatStream', {
       headers: { 'content-type': 'application/json' },
       //   responseType: 'stream',
@@ -155,7 +176,7 @@ const AIChatTab = () => {
           },
           ...chatHistory.map((chat) => ({ content: chat.content, role: chat.role })),
           {
-            content: chatInput,
+            content: input,
             role: 'user'
           }
         ]
@@ -167,16 +188,20 @@ const AIChatTab = () => {
 
     while (reader) {
       // if (isFull) break;
+      if (stopRef.current) break;
+
       const { value, done } = await reader.read();
       if (done) {
         // setProcessState(PROCESS_STATE.COMPLETE_GENERATE);
-        setIsEndResponse(true);
         break;
       }
 
       const decodeStr = enc.decode(value);
       dispatch(updateChat({ id: assistantId, role: 'assistant', content: decodeStr }));
     }
+
+    setIsLoadingRes(false);
+    stopRef.current = false;
   };
 
   const textRef = useRef<HTMLTextAreaElement>(null);
@@ -189,40 +214,99 @@ const AIChatTab = () => {
   return (
     <Wrapper>
       <ChatListWrapper>
-        {chatHistory.map((chat) => (
-          <SpeechBubble key={chat.id} text={chat.content} isUser={chat.role === 'user'} />
+        {chatHistory.map((chat, index) => (
+          <SpeechBubble
+            key={chat.id}
+            text={chat.content}
+            isUser={chat.role === 'user'}
+            outterChild={
+              !isLoadingRes &&
+              chat.role === 'assistant' &&
+              index > 1 && (
+                <>
+                  <RowBox>
+                    <FitButton
+                      onClick={() => {
+                        submitChat(chatHistory[index - 1].content);
+                      }}>
+                      다시 만들기
+                    </FitButton>
+                    <FitButton
+                      onClick={() => {
+                        // TODO: 문서 삽입 로직
+                      }}>
+                      문서에 삽입하기
+                    </FitButton>
+                  </RowBox>
+                  <OpenAILinkText />
+                </>
+              )
+            }>
+            {chat.role !== 'user' && (
+              <RowBox>
+                <div>공백 포함 {chat.content.length}/1000</div>
+                {isLoadingRes ? <div>로딩중</div> : <div>복사</div>}
+              </RowBox>
+            )}
+          </SpeechBubble>
         ))}
         <div ref={chatEndRef}></div>
       </ChatListWrapper>
-      <InputWrapper activeInputWrap={activeInput}>
+      {isLoadingRes && (
+        <Button
+          onClick={() => {
+            stopRef.current = true;
+          }}>
+          STOP
+        </Button>
+      )}
+      <InputWrapper
+        activeInputWrap={activeInput}
+        onBlur={() => {
+          if (chatInput.length === 0) setActiveInput(false);
+        }}>
         {activeInput || chatInput.length !== 0 ? (
-          <ActiveInput
-            onBlur={() => {
-              if (chatInput.length === 0) setActiveInput(false);
-            }}>
-            <TextArea
-              textRef={textRef}
-              disable={!isEndResponse}
-              cssExt={css`
-                width: 100%;
-                border: 0;
-                max-height: ${TEXT_MAX_HEIGHT}px;
-                justify-content: center;
-              `}
-              value={chatInput}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                handleResizeHeight();
-                setChatInput(e.target.value);
-              }}
-            />
-            <LengthWrapper>
-              {chatInput.length}/{inputMaxLength}
-            </LengthWrapper>
-            <RowBox>
-              <InfoWRapper>경고경고</InfoWRapper>
-              <ButtonWrapper onClick={submitChat}>전송</ButtonWrapper>
-            </RowBox>
-          </ActiveInput>
+          <ActiveInputBox>
+            <FucRecBox />
+
+            <ActiveInput>
+              <RowBox>
+                <TextArea
+                  textRef={textRef}
+                  cssExt={css`
+                    width: 100%;
+                    border: 0;
+                    width: 80%;
+                    max-height: ${TEXT_MAX_HEIGHT}px;
+                    justify-content: center;
+                  `}
+                  value={chatInput}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    handleResizeHeight();
+                    setChatInput(e.target.value);
+                  }}
+                />
+                <ButtonWrapper
+                  onClick={() => {
+                    submitChat();
+                  }}>
+                  전송
+                </ButtonWrapper>
+              </RowBox>
+              <LengthWrapper>
+                {chatInput.length}/{inputMaxLength}
+              </LengthWrapper>
+              <RowBox>
+                <InfoWRapper>대화 1회 당 N크레딧이 차감됩니다.</InfoWRapper>
+                <TextButton
+                  onClick={() => {
+                    // setSubject(exampleSubject[Math.floor(Math.random() * exampleSubject.length)]);
+                  }}>
+                  예시 문구보기
+                </TextButton>
+              </RowBox>
+            </ActiveInput>
+          </ActiveInputBox>
         ) : (
           <InactiveInput
             onClick={() => {
