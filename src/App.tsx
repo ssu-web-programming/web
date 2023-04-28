@@ -3,11 +3,20 @@ import Tools from './pages/Tools';
 import Presentation from './pages/Presentation';
 import Wrapper from './components/Wrapper';
 import ToastMsg from './components/ToastMsg';
-import { useAppSelector } from './store/store';
+import { useAppDispatch, useAppSelector } from './store/store';
 import { selectToast } from './store/slices/toastSlice';
+import { useEffect } from 'react';
+import { setBridgeMessage } from './store/slices/bridge';
 
 function App() {
+  const dispatch = useAppDispatch();
   const toast = useAppSelector(selectToast);
+
+  useEffect(() => {
+    document.addEventListener('CustomBridgeEvent', (e: any) => {
+      dispatch(setBridgeMessage(e.detail));
+    });
+  }, []);
 
   return (
     <Wrapper>

@@ -20,37 +20,100 @@ const getPlatform = () => {
   return getAgentPlatform(navigator.userAgent);
 };
 
-window._Bridge = {
-  insertText: (contents) => {
+async function imageToString(img) {
+  return new Promise((resolve, reject) => {
+    try {
+      let reader = new FileReader();
+      reader.onloadend = function () {
+        resolve(reader.result);
+      };
+      reader.readAsDataURL(img);
+    } catch (err) {
+      throw err;
+    }
+  });
+}
+
+const getDelegator = (call) => {
+  try {
     const platform = getPlatform();
-    console.log(platform);
+    switch (platform) {
+      case 'android': {
+        return window.Native[call];
+      }
+      case 'ios':
+      case 'mac': {
+        return window.webkit.messageHandlers[call].postMessage;
+      }
+      // case 'pc': {
+      //   window.chrome.webview.postMessage(msg);
+      //   break;
+      // }
+      // case 'web': {
+      //   break;
+      // }
+      default: {
+        throw new Error(`unknown platform : ${platform}`);
+      }
+    }
+  } catch (err) {
+    throw err;
   }
 };
 
-// try {
-//   const platform = getPlatform();
-//   console.log(platform);
-//   const msg = JSON.stringify(contents);
-//   switch (platform) {
-//     case 'android': {
-//       window.Native.sendMessage(msg);
-//       break;
-//     }
-//     case 'ios': {
-//       window.webkit.messageHandlers.macosListener.postMessage(msg);
-//       break;
-//     }
-//     case 'pc': {
-//       window.chrome.webview.postMessage(msg);
-//       break;
-//     }
-//     case 'web': {
-//       break;
-//     }
-//     default: {
-//       break;
-//     }
-//   }
-// } catch (err) {
-//   throw err;
-// }
+window._Bridge = {
+  insertText: (text) => {
+    try {
+      const deletor = getDelegator('insertText');
+      deletor(text);
+    } catch (err) {
+      console.log(err);
+    }
+  },
+
+  insertHtml: (html) => {
+    try {
+      const deletor = getDelegator('insertHtml');
+      deletor(html);
+    } catch (err) {
+      console.log(err);
+    }
+  },
+
+  downloadImage: async (img) => {
+    try {
+      const text = await imageToString(img);
+      const deletor = getDelegator('downloadImage');
+      deletor(text);
+    } catch (err) {
+      console.log(err);
+    }
+  },
+
+  insertImage: async (img) => {
+    try {
+      const text = await imageToString(img);
+      const deletor = getDelegator('insertImage');
+      deletor(text);
+    } catch (err) {
+      console.log(err);
+    }
+  },
+
+  closePanel: (history) => {
+    try {
+      const deletor = getDelegator('closePanel');
+      deletor(history);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+};
+
+function receiveMessage(msg) {
+  document.dispatchEvent(
+    new CustomEvent('CustomBridgeEvent', {
+      detail: msg
+    })
+  );
+}

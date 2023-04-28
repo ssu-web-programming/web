@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import Wrapper from '../components/Wrapper';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useAppSelector } from '../store/store';
+import { selectBridgeMessage } from '../store/slices/bridge';
 
 const Body = styled.div`
   width: 100%;
@@ -15,20 +17,20 @@ const Body = styled.div`
 `;
 
 const TestButton = styled.button`
-  width: 100px;
-  height: 60px;
+  height: 40px;
 `;
 
 const Result = styled.div`
   flex: 1;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
 
   border: solid 1px gray;
   box-sizing: border-box;
 
   padding: 10px;
+
+  overflow: auto;
 `;
 
 const Row = styled.div`
@@ -43,36 +45,95 @@ const Row = styled.div`
 // }
 
 declare global {
-  var _Bridge: {
-    insertText: (contents: string) => void;
-  };
+  var _Bridge: any;
+  var imageToString: any;
 }
 
 export default function AITest() {
-  const [result, setResult] = useState('ready');
+  const bridgeMsg = useAppSelector(selectBridgeMessage);
+  const [log, setLog] = useState<string[]>([]);
 
-  const insertText = (msg: string) => {
+  const writeLog = useCallback((text: string) => {
+    setLog((prev) => [...prev, text]);
+  }, []);
+
+  useEffect(() => {
+    if (bridgeMsg !== '') setLog((prev) => [...prev, `=== called receiveMessage : ${bridgeMsg}`]);
+  }, [bridgeMsg]);
+
+  const onInsertText = () => {
     try {
-      window._Bridge.insertText(msg);
-      setResult(`success message
-      ${JSON.stringify(msg)}`);
+      const text = 'hello world!!';
+      window._Bridge.insertText(text);
+      writeLog(`call insertText : ${text}`);
     } catch (err) {
-      setResult(JSON.stringify(err));
+      writeLog(JSON.stringify(err));
     }
   };
 
-  const onTestString = () => {
-    insertText('hello world');
+  const onInsertHtml = () => {
+    try {
+      const html = '<p>hello</p><p>world!!</p>';
+      window._Bridge.insertHtml(html);
+      writeLog(`call insertHtml : ${html}`);
+    } catch (err) {
+      writeLog(JSON.stringify(err));
+    }
+  };
+
+  const getBlob = async (url: string) => {
+    try {
+      const res = await fetch(url);
+      const blob = await res.blob();
+      return blob;
+    } catch (err) {
+      throw err;
+    }
+  };
+
+  const onDownloadImage = async () => {
+    try {
+      const blob = await getBlob('./bo.png');
+      window._Bridge.downloadImage(blob);
+      writeLog(`call onDownloadImage : ${await window.imageToString(blob)}`);
+    } catch (err) {
+      writeLog(JSON.stringify(err));
+    }
+  };
+
+  const onInsertImage = async () => {
+    try {
+      const blob = await getBlob('./bo.png');
+      window._Bridge.insertImage(blob);
+      writeLog(`call onInsertImage : ${await window.imageToString(blob)}`);
+    } catch (err) {
+      writeLog(JSON.stringify(err));
+    }
+  };
+
+  const onClosePanel = () => {
+    try {
+      window._Bridge.closePanel('');
+      writeLog(`call closePanel`);
+    } catch (err) {
+      writeLog(JSON.stringify(err));
+    }
   };
 
   return (
     <Wrapper>
       <Body>
-        <Result>{result}</Result>
+        <Result>
+          {log.map((item) => (
+            <div style={{ width: '100%', wordBreak: 'break-all' }}>{item}</div>
+          ))}
+        </Result>
         <Row>
-          <TestButton onClick={onTestString}>test string</TestButton>
-          <TestButton onClick={onTestString}>test html</TestButton>
-          <TestButton onClick={onTestString}>test image</TestButton>
+          <TestButton onClick={onInsertText}>insertText</TestButton>
+          <TestButton onClick={onInsertHtml}>insertHtml</TestButton>
+          <TestButton onClick={onDownloadImage}>downloadImage</TestButton>
+          <TestButton onClick={onInsertImage}>insertImage</TestButton>
+          <TestButton onClick={onClosePanel}>closePanel</TestButton>
         </Row>
       </Body>
     </Wrapper>
