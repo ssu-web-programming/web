@@ -3,6 +3,7 @@ import Wrapper from '../components/Wrapper';
 import { ReactElement, useState } from 'react';
 import AIChatTab from '../views/AIChatTab';
 import AIWriteTab from '../views/AIWriteTab';
+import AITest from '../views/AITest';
 
 const Contents = styled.div`
   width: 100%;
@@ -54,6 +55,11 @@ const TAB_ITEMS: AiWriteTabItem[] = [
     id: 'chat',
     name: '채팅',
     comp: <AIChatTab />
+  },
+  {
+    id: 'test',
+    name: '테스트',
+    comp: <AITest />
   }
 ];
 
