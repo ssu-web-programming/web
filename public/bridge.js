@@ -1,24 +1,54 @@
+const UA_PREFIX = `__polaris_office_ai_`;
+
 const CLIENT_TYPE = {
   UNKNOWN: 'unknown',
   ANDROID: 'android',
   IOS: 'ios',
   MAC: 'mac',
-  PC: 'pc',
+  WINDOWS: 'windows',
   WEB: 'web'
 };
+// const CLIENT_TYPE = {
+//   UNKNOWN: 'unknown',
+//   ANDROID: 'android',
+//   IOS: 'ios',
+//   MAC: 'mac',
+//   WINDOWS: 'windows',
+//   WEB: 'web'
+// };
+
+// function getAgentPlatform(userAgent) {
+//   if (userAgent) {
+//     let ua = userAgent.toLowerCase();
+
+//     if (ua.search('android') > -1) {
+//       return CLIENT_TYPE.ANDROID;
+//     } else if (ua.search('iphone') > -1 || ua.search('ipod') > -1 || ua.search('ipad') > -1) {
+//       return CLIENT_TYPE.IOS;
+//     } else if (ua.search('macintosh') > -1) {
+//       return CLIENT_TYPE.MAC;
+//     } else if (ua.search('win') > -1) {
+//       return CLIENT_TYPE.WINDOWS;
+//     }
+//   }
+
+//   return CLIENT_TYPE.UNKNOWN;
+// }
 
 function getAgentPlatform(userAgent) {
   if (userAgent) {
     let ua = userAgent.toLowerCase();
 
-    if (ua.search('android') > -1) {
+    if (ua.search(`${UA_PREFIX}${CLIENT_TYPE.ANDROID}`) > -1) {
       return CLIENT_TYPE.ANDROID;
-    } else if (ua.search('iphone') > -1 || ua.search('ipod') > -1 || ua.search('ipad') > -1) {
+    } else if (ua.search(`${UA_PREFIX}${CLIENT_TYPE.IOS}`) > -1) {
       return CLIENT_TYPE.IOS;
-    } else if (ua.search('macintosh') > -1) {
+    } else if (ua.search(`${UA_PREFIX}${CLIENT_TYPE.MAC}`) > -1) {
       return CLIENT_TYPE.MAC;
-    } else if (ua.search('win') > -1) {
-      return CLIENT_TYPE.PC;
+    } else if (ua.search(`${UA_PREFIX}${CLIENT_TYPE.WINDOWS}`) > -1) {
+      return CLIENT_TYPE.WINDOWS;
+    } else if (ua.search(`${UA_PREFIX}${CLIENT_TYPE.WEB}`) > -1) {
+      return CLIENT_TYPE.WEB;
     }
   }
 
@@ -55,7 +85,7 @@ const getDelegator = (api, arg) => {
         case CLIENT_TYPE.MAC: {
           return window.webkit.messageHandlers[api].postMessage(arg);
         }
-        case CLIENT_TYPE.PC: {
+        case CLIENT_TYPE.WINDOWS: {
           return window.chrome.webview.postMessage(arg);
         }
         case CLIENT_TYPE.WEB: {
