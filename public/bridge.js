@@ -83,7 +83,33 @@ const getDelegator = (api, arg) => {
         }
         case CLIENT_TYPE.IOS:
         case CLIENT_TYPE.MAC: {
-          return window.webkit.messageHandlers[api].postMessage(arg);
+          switch (api) {
+            case 'initComplete': {
+              return window.webkit.messageHandlers.initComplete.postMessage(arg);
+            }
+            case 'insertText': {
+              return window.webkit.messageHandlers.insertText.postMessage(arg);
+            }
+            case 'insertHtml': {
+              return window.webkit.messageHandlers.insertHtml.postMessage(arg);
+            }
+            case 'downloadImage': {
+              return window.webkit.messageHandlers.downloadImage.postMessage(arg);
+            }
+            case 'insertImage': {
+              return window.webkit.messageHandlers.insertImage.postMessage(arg);
+            }
+            case 'openDoc': {
+              return window.webkit.messageHandlers.openDoc.postMessage(arg);
+            }
+            case 'closePanel': {
+              return window.webkit.messageHandlers.closePanel.postMessage(arg);
+            }
+            default: {
+              throw new Error(`unknown handler name : ${api}`);
+            }
+          }
+          // return window.webkit.messageHandlers[api].postMessage(arg);
         }
         case CLIENT_TYPE.WINDOWS: {
           const msg = arg ? `${api} ${arg}` : api;
@@ -97,7 +123,7 @@ const getDelegator = (api, arg) => {
         }
       }
     } catch (err) {
-      throw err;
+      console.log(`Error in getDelegator : ${err}`);
     }
   };
 };
