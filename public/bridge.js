@@ -86,7 +86,8 @@ const getDelegator = (api, arg) => {
           return window.webkit.messageHandlers[api].postMessage(arg);
         }
         case CLIENT_TYPE.WINDOWS: {
-          return window.chrome.webview.postMessage(arg);
+          const msg = arg ? `${api} ${arg}` : api;
+          return window.chrome.webview.postMessage(msg);
         }
         case CLIENT_TYPE.WEB: {
           return window.parent.postMessage(arg, 'https://kittyhawk.polarisoffice.com/');
