@@ -16,6 +16,7 @@ function App() {
     document.addEventListener('CustomBridgeEvent', (e: any) => {
       dispatch(setBridgeMessage(e.detail));
     });
+    window._Bridge.initComplete();
   }, []);
 
   return (

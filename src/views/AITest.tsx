@@ -73,7 +73,7 @@ export default function AITest() {
 
   const onInsertHtml = () => {
     try {
-      const html = '<p>hello</p><p>world!!</p>';
+      const html = '<p>hello</p><h1>월드123!!</h1>';
       window._Bridge.insertHtml(html);
       writeLog(`call insertHtml : ${html}`);
     } catch (err) {
@@ -111,11 +111,11 @@ export default function AITest() {
     }
   };
 
-  const onInsertDoc = async () => {
+  const onOpenDoc = async () => {
     try {
       const blob = await getBlob('./test.pptx');
-      window._Bridge.insertImage(blob);
-      writeLog(`call onInsertDoc : ${await window.fileToString(blob)}`);
+      window._Bridge.openDoc(blob);
+      writeLog(`call onOpenDoc : ${await window.fileToString(blob)}`);
     } catch (err) {
       writeLog(JSON.stringify(err));
     }
@@ -143,7 +143,7 @@ export default function AITest() {
           <TestButton onClick={onInsertHtml}>insertHtml</TestButton>
           <TestButton onClick={onDownloadImage}>downloadImage</TestButton>
           <TestButton onClick={onInsertImage}>insertImage</TestButton>
-          <TestButton onClick={onInsertDoc}>insertDoc</TestButton>
+          <TestButton onClick={onOpenDoc}>openDoc</TestButton>
           <TestButton onClick={onClosePanel}>closePanel</TestButton>
         </Row>
       </Body>

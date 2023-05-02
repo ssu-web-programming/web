@@ -71,6 +71,15 @@ const getDelegator = (call) => {
 };
 
 window._Bridge = {
+  initComplete: () => {
+    try {
+      const delegator = getDelegator('initComplete');
+      delegator();
+    } catch (err) {
+      console.log(err);
+    }
+  },
+
   insertText: (text) => {
     try {
       const delegator = getDelegator('insertText');
@@ -109,10 +118,10 @@ window._Bridge = {
     }
   },
 
-  insertDoc: async (doc) => {
+  openDoc: async (doc) => {
     try {
       const text = await fileToString(doc);
-      const delegator = getDelegator('insertDoc');
+      const delegator = getDelegator('openDoc');
       delegator(text);
     } catch (err) {
       console.log(err);
