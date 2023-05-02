@@ -1,10 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 
-interface Chat {
+export interface Chat {
   id: string;
   content: string;
   role: 'assistant' | 'user';
+  input: string;
 }
 
 interface ChatHistoryState {
@@ -27,7 +28,8 @@ const chatHistorySlice = createSlice({
           return {
             id: chat.id,
             role: chat.role,
-            content: chat.content + action.payload.content
+            content: chat.content + action.payload.content,
+            input: action.payload.input
           };
         }
         return chat;

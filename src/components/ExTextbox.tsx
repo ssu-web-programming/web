@@ -3,6 +3,7 @@ import SubTitle from './SubTitle';
 import TextArea from './TextArea';
 import { RowBox } from '../views/AIChatTab';
 import { useState } from 'react';
+import ExButton from './ExButton';
 
 const InputArea = styled.div`
   display: flex;
@@ -11,11 +12,6 @@ const InputArea = styled.div`
   border: solid 1px black;
   padding: 10px;
   box-sizing: border-box;
-`;
-
-export const TextButton = styled.div`
-  display: flex;
-  cursor: pointer;
 `;
 
 export const LengthWrapper = styled.div`
@@ -49,12 +45,7 @@ const ExTextbox = ({ subTitle, value, setValue, exampleList, maxtTextLen }: ExTe
           <LengthWrapper>
             {value.length}/{maxtTextLen}
           </LengthWrapper>
-          <TextButton
-            onClick={() => {
-              setValue(exampleList[Math.floor(Math.random() * exampleList.length)]);
-            }}>
-            예시 문구보기
-          </TextButton>
+          <ExButton exampleList={exampleList} setExam={setValue} />
         </RowBox>
       </InputArea>
     </>

@@ -15,6 +15,8 @@ interface TextAreaProps {
   rows?: number;
   textRef?: React.RefObject<HTMLTextAreaElement> | null;
   disable?: boolean;
+  onBlur?: Function;
+  placeholder?: string;
 }
 
 const TextArea = ({
@@ -24,10 +26,16 @@ const TextArea = ({
   cssExt,
   rows = 5,
   textRef,
-  disable = false
+  disable = false,
+  onBlur,
+  placeholder
 }: TextAreaProps) => {
   return (
     <TextAreaWrapper
+      placeholder={placeholder}
+      onBlur={() => {
+        onBlur && onBlur();
+      }}
       ref={textRef}
       cssExt={cssExt}
       value={value}

@@ -2,9 +2,10 @@ import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import chatHistory from './slices/chatHistorySlice';
 import toast from './slices/toastSlice';
+import recFunction from './slices/recFuncSlice';
 
 const store = configureStore({
-  reducer: { chatHistory, toast },
+  reducer: { chatHistory, toast, recFunction },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false })
 });
 
