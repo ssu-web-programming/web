@@ -46,7 +46,7 @@ const Row = styled.div`
 
 declare global {
   var _Bridge: any;
-  var imageToString: any;
+  var fileToString: any;
 }
 
 export default function AITest() {
@@ -95,7 +95,7 @@ export default function AITest() {
     try {
       const blob = await getBlob('./bo.png');
       window._Bridge.downloadImage(blob);
-      writeLog(`call onDownloadImage : ${await window.imageToString(blob)}`);
+      writeLog(`call onDownloadImage : ${await window.fileToString(blob)}`);
     } catch (err) {
       writeLog(JSON.stringify(err));
     }
@@ -105,7 +105,17 @@ export default function AITest() {
     try {
       const blob = await getBlob('./bo.png');
       window._Bridge.insertImage(blob);
-      writeLog(`call onInsertImage : ${await window.imageToString(blob)}`);
+      writeLog(`call onInsertImage : ${await window.fileToString(blob)}`);
+    } catch (err) {
+      writeLog(JSON.stringify(err));
+    }
+  };
+
+  const onInsertDoc = async () => {
+    try {
+      const blob = await getBlob('./test.pptx');
+      window._Bridge.insertImage(blob);
+      writeLog(`call onInsertDoc : ${await window.fileToString(blob)}`);
     } catch (err) {
       writeLog(JSON.stringify(err));
     }
@@ -133,6 +143,7 @@ export default function AITest() {
           <TestButton onClick={onInsertHtml}>insertHtml</TestButton>
           <TestButton onClick={onDownloadImage}>downloadImage</TestButton>
           <TestButton onClick={onInsertImage}>insertImage</TestButton>
+          <TestButton onClick={onInsertDoc}>insertDoc</TestButton>
           <TestButton onClick={onClosePanel}>closePanel</TestButton>
         </Row>
       </Body>

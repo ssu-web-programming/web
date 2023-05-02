@@ -29,14 +29,14 @@ const getPlatform = () => {
   return getAgentPlatform(navigator.userAgent);
 };
 
-async function imageToString(img) {
+async function fileToString(file) {
   return new Promise((resolve, reject) => {
     try {
       let reader = new FileReader();
       reader.onloadend = function () {
         resolve(reader.result);
       };
-      reader.readAsDataURL(img);
+      reader.readAsDataURL(file);
     } catch (err) {
       throw err;
     }
@@ -73,8 +73,8 @@ const getDelegator = (call) => {
 window._Bridge = {
   insertText: (text) => {
     try {
-      const deletor = getDelegator('insertText');
-      deletor(text);
+      const delegator = getDelegator('insertText');
+      delegator(text);
     } catch (err) {
       console.log(err);
     }
@@ -82,8 +82,8 @@ window._Bridge = {
 
   insertHtml: (html) => {
     try {
-      const deletor = getDelegator('insertHtml');
-      deletor(html);
+      const delegator = getDelegator('insertHtml');
+      delegator(html);
     } catch (err) {
       console.log(err);
     }
@@ -91,9 +91,9 @@ window._Bridge = {
 
   downloadImage: async (img) => {
     try {
-      const text = await imageToString(img);
-      const deletor = getDelegator('downloadImage');
-      deletor(text);
+      const text = await fileToString(img);
+      const delegator = getDelegator('downloadImage');
+      delegator(text);
     } catch (err) {
       console.log(err);
     }
@@ -101,9 +101,19 @@ window._Bridge = {
 
   insertImage: async (img) => {
     try {
-      const text = await imageToString(img);
-      const deletor = getDelegator('insertImage');
-      deletor(text);
+      const text = await fileToString(img);
+      const delegator = getDelegator('insertImage');
+      delegator(text);
+    } catch (err) {
+      console.log(err);
+    }
+  },
+
+  insertDoc: async (doc) => {
+    try {
+      const text = await fileToString(doc);
+      const delegator = getDelegator('insertDoc');
+      delegator(text);
     } catch (err) {
       console.log(err);
     }
@@ -111,8 +121,8 @@ window._Bridge = {
 
   closePanel: (history) => {
     try {
-      const deletor = getDelegator('closePanel');
-      deletor(history);
+      const delegator = getDelegator('closePanel');
+      delegator(history);
     } catch (err) {
       console.log(err);
     }
