@@ -22,7 +22,7 @@ const TextArea = ({
   onChange,
   onKeyUp,
   cssExt,
-  rows,
+  rows = 5,
   textRef,
   disable = false
 }: TextAreaProps) => {

@@ -5,6 +5,7 @@ import Wrapper from './components/Wrapper';
 import ToastMsg from './components/ToastMsg';
 import { useAppSelector } from './store/store';
 import { selectToast } from './store/slices/toastSlice';
+import TextToImage from './pages/TextToImage';
 
 function App() {
   const toast = useAppSelector(selectToast);
@@ -13,6 +14,7 @@ function App() {
     <Wrapper>
       <Routes>
         <Route path="/tools" element={<Tools></Tools>}></Route>
+        <Route path="/texttoimage" element={<TextToImage></TextToImage>}></Route>
         <Route path="/presentation" element={<Presentation></Presentation>}></Route>
       </Routes>
       {toast.active && <ToastMsg msg={toast.msg} />}
