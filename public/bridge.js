@@ -43,31 +43,32 @@ async function fileToString(file) {
   });
 }
 
-const getDelegator = (call) => {
-  try {
-    const platform = getPlatform();
-    switch (platform) {
-      case CLIENT_TYPE.ANDROID: {
-        return window.Native[call];
+const getDelegator = (api, arg) => {
+  return () => {
+    try {
+      const platform = getPlatform();
+      switch (platform) {
+        case CLIENT_TYPE.ANDROID: {
+          return window.Native[api](arg);
+        }
+        case CLIENT_TYPE.IOS:
+        case CLIENT_TYPE.MAC: {
+          return window.webkit.messageHandlers[api].postMessage(arg);
+        }
+        case CLIENT_TYPE.PC: {
+          return window.chrome.webview.postMessage(arg);
+        }
+        case CLIENT_TYPE.WEB: {
+          return window.parent.postMessage(arg, 'https://kittyhawk.polarisoffice.com/');
+        }
+        default: {
+          throw new Error(`unknown platform : ${platform}`);
+        }
       }
-      case CLIENT_TYPE.IOS:
-      case CLIENT_TYPE.MAC: {
-        return window.webkit.messageHandlers[call].postMessage;
-      }
-      // case CLIENT_TYPE.PC: {
-      //   window.chrome.webview.postMessage(msg);
-      //   break;
-      // }
-      // case CLIENT_TYPE.WEB: {
-      //   break;
-      // }
-      default: {
-        throw new Error(`unknown platform : ${platform}`);
-      }
+    } catch (err) {
+      throw err;
     }
-  } catch (err) {
-    throw err;
-  }
+  };
 };
 
 window._Bridge = {
@@ -82,8 +83,8 @@ window._Bridge = {
 
   insertText: (text) => {
     try {
-      const delegator = getDelegator('insertText');
-      delegator(text);
+      const delegator = getDelegator('insertText', text);
+      delegator();
     } catch (err) {
       console.log(err);
     }
@@ -91,8 +92,8 @@ window._Bridge = {
 
   insertHtml: (html) => {
     try {
-      const delegator = getDelegator('insertHtml');
-      delegator(html);
+      const delegator = getDelegator('insertHtml', html);
+      delegator();
     } catch (err) {
       console.log(err);
     }
@@ -101,8 +102,8 @@ window._Bridge = {
   downloadImage: async (img) => {
     try {
       const text = await fileToString(img);
-      const delegator = getDelegator('downloadImage');
-      delegator(text);
+      const delegator = getDelegator('downloadImage', text);
+      delegator();
     } catch (err) {
       console.log(err);
     }
@@ -111,8 +112,8 @@ window._Bridge = {
   insertImage: async (img) => {
     try {
       const text = await fileToString(img);
-      const delegator = getDelegator('insertImage');
-      delegator(text);
+      const delegator = getDelegator('insertImage', text);
+      delegator();
     } catch (err) {
       console.log(err);
     }
@@ -121,8 +122,8 @@ window._Bridge = {
   openDoc: async (doc) => {
     try {
       const text = await fileToString(doc);
-      const delegator = getDelegator('openDoc');
-      delegator(text);
+      const delegator = getDelegator('openDoc', text);
+      delegator();
     } catch (err) {
       console.log(err);
     }
@@ -130,8 +131,8 @@ window._Bridge = {
 
   closePanel: (history) => {
     try {
-      const delegator = getDelegator('closePanel');
-      delegator(history);
+      const delegator = getDelegator('closePanel', history);
+      delegator();
     } catch (err) {
       console.log(err);
     }
