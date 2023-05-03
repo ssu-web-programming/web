@@ -1,16 +1,12 @@
 import ImageCreate from '../views/ImageCreate';
-import TabPage from '../components/layout/TabLayout';
-
-const tabList = [
-  {
-    id: 'createImage',
-    name: '이미지 생성',
-    comp: <ImageCreate />
-  }
-];
+import HeaderPageLayout from '../components/layout/HeaderPageLayout';
 
 const TextToImage = () => {
-  return <TabPage title="AI Tools" subTitle="Text to Image" tabList={tabList} />;
+  return (
+    <HeaderPageLayout title="AI Tools" subTitle="Text to Image">
+      <ImageCreate />
+    </HeaderPageLayout>
+  );
 };
 
 export default TextToImage;
