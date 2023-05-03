@@ -1,19 +1,21 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 
-interface Chat {
+export interface Chat {
   id: string;
   content: string;
   role: 'assistant' | 'user';
+  input: string;
 }
 
 interface ChatHistoryState {
   history: Chat[];
+  defaultInput: string | null;
 }
 
 const chatHistorySlice = createSlice({
   name: 'chatHistory',
-  initialState: { history: [] } as ChatHistoryState,
+  initialState: { history: [], defaultInput: null } as ChatHistoryState,
   reducers: {
     initChatHistory: (state, action: PayloadAction<Chat>) => {
       state.history = [action.payload];
@@ -27,15 +29,20 @@ const chatHistorySlice = createSlice({
           return {
             id: chat.id,
             role: chat.role,
-            content: chat.content + action.payload.content
+            content: chat.content + action.payload.content,
+            input: action.payload.input
           };
         }
         return chat;
       });
+    },
+    updateDefaultInput: (state, action: PayloadAction<string | null>) => {
+      state.defaultInput = action.payload;
     }
   }
 });
 
-export const { initChatHistory, appendChat, updateChat } = chatHistorySlice.actions;
-export const selectChatHistory = (state: RootState) => state.chatHistory.history;
+export const { initChatHistory, appendChat, updateChat, updateDefaultInput } =
+  chatHistorySlice.actions;
+export const selectChatHistory = (state: RootState) => state.chatHistory;
 export default chatHistorySlice.reducer;

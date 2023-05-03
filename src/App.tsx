@@ -7,6 +7,8 @@ import { useAppDispatch, useAppSelector } from './store/store';
 import { selectToast } from './store/slices/toastSlice';
 import { useEffect } from 'react';
 import { setBridgeMessage } from './store/slices/bridge';
+import TextToImage from './pages/TextToImage';
+import GlobalStyle from './style/globalStyle';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -20,13 +22,17 @@ function App() {
   }, []);
 
   return (
-    <Wrapper>
-      <Routes>
-        <Route path="/tools" element={<Tools></Tools>}></Route>
-        <Route path="/presentation" element={<Presentation></Presentation>}></Route>
-      </Routes>
-      {toast.active && <ToastMsg msg={toast.msg} />}
-    </Wrapper>
+    <>
+      <GlobalStyle></GlobalStyle>
+      <Wrapper>
+        <Routes>
+          <Route path="/tools" element={<Tools></Tools>}></Route>
+          <Route path="/texttoimage" element={<TextToImage></TextToImage>}></Route>
+          {/* <Route path="/presentation" element={<Presentation></Presentation>}></Route> */}
+        </Routes>
+        {toast.active && <ToastMsg msg={toast.msg} />}
+      </Wrapper>
+    </>
   );
 }
 

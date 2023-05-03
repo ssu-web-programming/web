@@ -1,0 +1,52 @@
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootState } from '../store';
+
+interface WriteType {
+  id: string;
+  result: string;
+  input: string;
+}
+
+interface WriteHistoryType {
+  history: WriteType[];
+  currentWriteId: string | null;
+}
+
+export const WRITE_HISTORY_MAX = 10;
+
+const writeHistorySlice = createSlice({
+  name: 'writeHistory',
+  initialState: { history: [], currentWriteId: null } as WriteHistoryType,
+  reducers: {
+    initWriteHistory: (state) => {
+      state.history = [];
+      state.currentWriteId = null;
+    },
+    addWriteHistory: (state, action: PayloadAction<WriteType>) => {
+      const history =
+        state.history.length >= WRITE_HISTORY_MAX
+          ? state.history.slice(1, WRITE_HISTORY_MAX - 1)
+          : state.history;
+      state.history = [...history, action.payload];
+    },
+    updateWriteHistory: (state, action: PayloadAction<WriteType>) => {
+      state.history = state.history.map((history) => {
+        if (history.id === action.payload.id) {
+          return {
+            ...history,
+            result: history.result + action.payload.result
+          };
+        }
+        return history;
+      });
+    },
+    setCurrentWrite: (state, action: PayloadAction<string>) => {
+      state.currentWriteId = action.payload;
+    }
+  }
+});
+
+export const { initWriteHistory, addWriteHistory, updateWriteHistory, setCurrentWrite } =
+  writeHistorySlice.actions;
+export const selectWriteHistorySlice = (state: RootState) => state.writeHistory;
+export default writeHistorySlice.reducer;
