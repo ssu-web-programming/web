@@ -1,22 +1,6 @@
 import styled, { css } from 'styled-components';
-import Wrapper from '../Wrapper';
 import { ReactElement, useState } from 'react';
-import AIChatTab from '../../views/AIChatTab';
-import AIWriteTab from '../../views/AIWriteTab';
-
-const Contents = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-`;
-
-const Header = styled.div`
-  padding: 20px 10px 20px 10px;
-  height: 50px;
-  display: flex;
-  justify-content: space-between;
-`;
+import HeaderPageLayout from './HeaderPageLayout';
 
 const TabList = styled.div`
   display: flex;
@@ -31,11 +15,6 @@ const TabItem = styled.div<{ selected: boolean }>`
     css`
       color: blue;
     `}
-`;
-
-const Body = styled.div`
-  flex: 1;
-  overflow: hidden;
 `;
 
 interface AiWriteTabItem {
@@ -56,14 +35,10 @@ export default function TabPage({
   const [selectedTab, setSelectedTab] = useState<any>(tabList[0]);
 
   return (
-    <Wrapper>
-      <Contents>
-        <Header>
-          <div>
-            {title} | {subTitle}
-          </div>
-          <div>Close</div>
-        </Header>
+    <HeaderPageLayout
+      title={title}
+      subTitle={subTitle}
+      tabComp={
         <TabList>
           {tabList.map((item) => (
             <TabItem
@@ -74,8 +49,8 @@ export default function TabPage({
             </TabItem>
           ))}
         </TabList>
-        <Body>{selectedTab.comp}</Body>
-      </Contents>
-    </Wrapper>
+      }>
+      {selectedTab.comp}
+    </HeaderPageLayout>
   );
 }

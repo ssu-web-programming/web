@@ -1,7 +1,7 @@
 import { ReactElement } from 'react';
 import AIChatTab from '../views/AIChatTab';
 import AIWriteTab from '../views/AIWriteTab';
-import TabPage from '../components/layout/TabLayout';
+import TabLayout from '../components/layout/TabLayout';
 
 interface AiWriteTabItem {
   id: string;
@@ -23,5 +23,5 @@ const TAB_ITEMS: AiWriteTabItem[] = [
 ];
 
 export default function Tools() {
-  return <TabPage title="AI Tools" subTitle="AI Write" tabList={TAB_ITEMS} />;
+  return <TabLayout title="AI Tools" subTitle="AI Write" tabList={TAB_ITEMS} />;
 }
