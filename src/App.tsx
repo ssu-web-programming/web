@@ -3,13 +3,23 @@ import Tools from './pages/Tools';
 import Presentation from './pages/Presentation';
 import Wrapper from './components/Wrapper';
 import ToastMsg from './components/ToastMsg';
-import { useAppSelector } from './store/store';
+import { useAppDispatch, useAppSelector } from './store/store';
 import { selectToast } from './store/slices/toastSlice';
+import { useEffect } from 'react';
+import { setBridgeMessage } from './store/slices/bridge';
 import TextToImage from './pages/TextToImage';
 import GlobalStyle from './style/globalStyle';
 
 function App() {
+  const dispatch = useAppDispatch();
   const toast = useAppSelector(selectToast);
+
+  useEffect(() => {
+    document.addEventListener('CustomBridgeEvent', (e: any) => {
+      dispatch(setBridgeMessage(e.detail));
+    });
+    window._Bridge.initComplete();
+  }, []);
 
   return (
     <>
@@ -18,7 +28,7 @@ function App() {
         <Routes>
           <Route path="/tools" element={<Tools></Tools>}></Route>
           <Route path="/texttoimage" element={<TextToImage></TextToImage>}></Route>
-          <Route path="/presentation" element={<Presentation></Presentation>}></Route>
+          {/* <Route path="/presentation" element={<Presentation></Presentation>}></Route> */}
         </Routes>
         {toast.active && <ToastMsg msg={toast.msg} />}
       </Wrapper>
