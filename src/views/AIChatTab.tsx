@@ -8,7 +8,8 @@ import {
   appendChat,
   initChatHistory,
   selectChatHistory,
-  updateChat
+  updateChat,
+  updateDefaultInput
 } from '../store/slices/chatHistorySlice';
 import { v4 as uuidv4 } from 'uuid';
 import Button from '../components/Button';
@@ -26,15 +27,7 @@ import { activeToast } from '../store/slices/toastSlice';
 const INPUT_HEIGHT = 120;
 const TEXT_MAX_HEIGHT = 168;
 
-const Wrapper = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  box-sizing: border-box;
-
-  position: relative;
+export const TableCss = css`
   table {
     border-collapse: collapse;
     border-radius: 6px;
@@ -62,6 +55,18 @@ const Wrapper = styled.div`
   input:focus {
     outline: none;
   }
+`;
+
+const Wrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+
+  position: relative;
+  ${TableCss}
 `;
 
 const ChatListWrapper = styled.div`
@@ -133,7 +138,7 @@ const FitButton = styled.button`
   padding: 10px;
 `;
 
-const RightBox = styled.div`
+export const RightBox = styled.div`
   display: flex;
   align-self: flex-end;
 `;
@@ -155,7 +160,7 @@ const inputMaxLength = 1000;
 
 const AIChatTab = () => {
   const dispatch = useAppDispatch();
-  const chatHistory = useAppSelector(selectChatHistory);
+  const { history: chatHistory, defaultInput } = useAppSelector(selectChatHistory);
   const { selectedRecFunction, selectedSubRecFunction, isActive } =
     useAppSelector(selectRecFuncSlice);
 
@@ -167,6 +172,18 @@ const AIChatTab = () => {
 
   const chatEndRef = useRef<any>();
   const stopRef = useRef<boolean>(false);
+
+  useEffect(() => {
+    if (defaultInput && defaultInput.length > 0) {
+      setActiveInput(true);
+      setChatInput(defaultInput);
+      dispatch(updateDefaultInput(null));
+    }
+  }, []);
+
+  useEffect(() => {
+    handleResizeHeight();
+  }, [chatInput]);
 
   useEffect(() => {
     chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -183,6 +200,7 @@ const AIChatTab = () => {
         })
       );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleResizeHeight = () => {
@@ -240,6 +258,9 @@ const AIChatTab = () => {
     setChatInput('');
     setActiveInput(false);
     setLoadingMsg(selectLoadingMsg(false));
+
+    handleResizeHeight();
+    if (textRef.current) textRef.current.style.height = 'auto';
 
     if (!isRetry)
       dispatch(appendChat({ id: uuidv4(), role: 'user', content: chatInput, input: input }));
@@ -408,8 +429,7 @@ const AIChatTab = () => {
                 `}
                 value={chatInput}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  handleResizeHeight();
-                  setChatInput(e.target.value);
+                  setChatInput(e.target.value.slice(0, inputMaxLength));
                 }}
               />
               {!loadingResId && activeInput && (
@@ -437,17 +457,5 @@ const AIChatTab = () => {
     </Wrapper>
   );
 };
-
-// <ColumBox>
-//   {!loadingResId && <div>대화 1회 당 N크레딧이 차감됩니다.</div>}
-//   <InactiveInput
-//     onClick={() => {
-//       if (!loadingResId) setActiveInput(true);
-//     }}>
-//     {!loadingResId && '무엇이든 질문해주세요'}
-//   </InactiveInput>
-// </ColumBox>
-
-// activeInput || chatInput.length > 0 &&
 
 export default AIChatTab;

@@ -1,6 +1,8 @@
 import styled, { css } from 'styled-components';
-import { ReactElement, useState } from 'react';
+import { ReactElement, useEffect } from 'react';
 import HeaderPageLayout from './HeaderPageLayout';
+import { useAppDispatch, useAppSelector } from '../../store/store';
+import { initTab, selectTab, selectTabSlice } from '../../store/slices/tabSlice';
 
 const TabList = styled.div`
   display: flex;
@@ -32,7 +34,18 @@ export default function TabPage({
   subTitle: string;
   tabList: AiWriteTabItem[];
 }) {
-  const [selectedTab, setSelectedTab] = useState<any>(tabList[0]);
+  const dispatch = useAppDispatch();
+  const selectedTab = useAppSelector(selectTabSlice);
+
+  useEffect(() => {
+    dispatch(selectTab(tabList[0].id));
+
+    return () => {
+      dispatch(initTab());
+    };
+  }, []);
+
+  const currentTab = tabList.filter((tab) => tab.id === selectedTab.selectedTabId)[0];
 
   return (
     <HeaderPageLayout
@@ -43,14 +56,14 @@ export default function TabPage({
           {tabList.map((item) => (
             <TabItem
               key={item.id}
-              selected={item.id === selectedTab.id}
-              onClick={() => setSelectedTab(item)}>
+              selected={item.id === selectedTab.selectedTabId}
+              onClick={() => dispatch(selectTab(item.id))}>
               {item.name}
             </TabItem>
           ))}
         </TabList>
       }>
-      {selectedTab.comp}
+      {currentTab && currentTab.comp}
     </HeaderPageLayout>
   );
 }

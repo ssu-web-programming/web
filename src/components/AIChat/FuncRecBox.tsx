@@ -151,6 +151,7 @@ const FucRecBox = ({ chatLength }: { chatLength: number }) => {
 
   useEffect(() => {
     if (chatLength <= 1) setSelectedFunc(firstRecList[0]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

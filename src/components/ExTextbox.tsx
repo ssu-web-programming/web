@@ -2,7 +2,6 @@ import styled, { css } from 'styled-components';
 import SubTitle from './SubTitle';
 import TextArea from './TextArea';
 import { RowBox } from '../views/AIChatTab';
-import { useState } from 'react';
 import ExButton from './ExButton';
 
 const InputArea = styled.div`

@@ -1,8 +1,8 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 
-const DEFAULT_WIDTH = 200;
-const DEFAULT_HEIGHT = 60;
+// const DEFAULT_WIDTH = 200;
+// const DEFAULT_HEIGHT = 60;
 
 const Body = styled.button<{ width?: number; height?: number; selected: boolean }>`
   display: flex;

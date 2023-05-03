@@ -9,19 +9,24 @@ interface AiWriteTabItem {
   comp: ReactElement;
 }
 
-const TAB_ITEMS: AiWriteTabItem[] = [
+export const TAB_ITEM_VAL = {
+  WRITE: 'write',
+  CHAT: 'chat'
+};
+
+const TAB_LIST: AiWriteTabItem[] = [
   {
-    id: 'write',
+    id: TAB_ITEM_VAL.WRITE,
     name: '작성',
     comp: <AIWriteTab />
   },
   {
-    id: 'chat',
+    id: TAB_ITEM_VAL.CHAT,
     name: '채팅',
     comp: <AIChatTab />
   }
 ];
 
 export default function Tools() {
-  return <TabLayout title="AI Tools" subTitle="AI Write" tabList={TAB_ITEMS} />;
+  return <TabLayout title="AI Tools" subTitle="AI Write" tabList={TAB_LIST} />;
 }

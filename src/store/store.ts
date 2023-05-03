@@ -3,9 +3,11 @@ import { configureStore } from '@reduxjs/toolkit';
 import chatHistory from './slices/chatHistorySlice';
 import toast from './slices/toastSlice';
 import recFunction from './slices/recFuncSlice';
+import writeHistory from './slices/writeHistorySlice';
+import tab from './slices/tabSlice';
 
 const store = configureStore({
-  reducer: { chatHistory, toast, recFunction },
+  reducer: { chatHistory, toast, recFunction, writeHistory, tab },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false })
 });
 
