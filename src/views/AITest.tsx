@@ -11,7 +11,7 @@ const Body = styled.div`
   display: flex;
   flex-direction: column;
 
-  padding: 10px;
+  padding: 10px 10px 0px 10px ;
   gap: 10px;
   box-sizing: border-box;
 `;
@@ -36,6 +36,10 @@ const Result = styled.div`
 const Row = styled.div`
   display: flex;
   gap: 10px;
+  overflow-y: hidden;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  box-sizing: border-box;
 `;
 
 // interface BridgeMessage {
