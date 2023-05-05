@@ -2,6 +2,8 @@ import styled, { CSSProp } from 'styled-components';
 import remarkGfm from 'remark-gfm';
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
 import { RowBox } from '../views/AIChatTab';
+import Icon from './Icon';
+import icon_ai from '../img/ico_ai.svg';
 
 const Wrapper = styled.div<{ isUser: boolean }>`
   display: flex;
@@ -16,10 +18,13 @@ const Wrapper = styled.div<{ isUser: boolean }>`
 `;
 
 const Profile = styled.div`
-  width: 50px;
-  height: 50px;
-  background-color: purple;
   align-self: flex-start;
+  width: 32px;
+  height: 32px;
+  margin: 0 8px 24px 0;
+  padding: 4px 4px 4px;
+  border-radius: 10px;
+  background-color: var(--ai-purple-95-list-pressed);
 `;
 
 const SpeechBubbleWrapper = styled.div<{ cssExt: any; isUser: boolean }>`
@@ -27,21 +32,27 @@ const SpeechBubbleWrapper = styled.div<{ cssExt: any; isUser: boolean }>`
   flex-direction: column;
   width: fit-content;
   /* max-width: 80%; */
-  border: solid 1px black;
   border-radius: 5px;
-  padding: 5px;
-  margin: 0px 5px 10px 5px;
+  padding: 8px 12px 8px 12px;
 
-  background-color: ${({ isUser }: { isUser: boolean }) => isUser && 'blue'};
+  background-color: ${({ isUser }: { isUser: boolean }) =>
+    isUser ? 'var(--ai-purple-70)' : 'white'};
   color: ${({ isUser }: { isUser: boolean }) => isUser && 'white'};
-  align-self: ${({ isUser }: { isUser: boolean }) => isUser && 'flex-end'};
+
+  pre {
+    margin: 0;
+    padding: 0;
+  }
 
   ${({ cssExt }: any) => cssExt && cssExt}
 `;
 
 const LoadingMsg = styled.div`
   display: flex;
-  color: blue;
+  font-family: NotoSansCJKKR;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ai-purple-50-main);
 `;
 
 interface SpeechBubbleProps {
@@ -66,9 +77,13 @@ const SpeechBubble = ({
   return (
     <Wrapper isUser={isUser}>
       <RowBox>
-        {!isUser && <Profile />}
+        {!isUser && (
+          <Profile>
+            <Icon iconSrc={icon_ai} />
+          </Profile>
+        )}
         <SpeechBubbleWrapper cssExt={cssExt} isUser={isUser}>
-          <LoadingMsg>{loadingMsg}</LoadingMsg>
+          {!isUser && <LoadingMsg>{loadingMsg}</LoadingMsg>}
           <pre style={{ whiteSpace: 'pre-wrap' }}>
             <ReactMarkdown remarkPlugins={[remarkGfm]}>{text}</ReactMarkdown>
           </pre>

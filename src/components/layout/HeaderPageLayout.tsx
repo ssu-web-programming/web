@@ -1,5 +1,9 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import Wrapper from '../Wrapper';
+import Icon from '../Icon';
+import icon_ai from '../../img/ico_ai.svg';
+import icon_ai_close from '../../img/ico_ai_close.svg';
+import badge_beta from '../../img/badge_beta_ai.svg';
 
 const Contents = styled.div`
   width: 100%;
@@ -9,8 +13,8 @@ const Contents = styled.div`
 `;
 
 const Header = styled.div`
-  padding: 20px 10px 20px 10px;
-  height: 50px;
+  padding: 8px 5px 8px 10px;
+  height: 48px;
   display: flex;
   justify-content: space-between;
 `;
@@ -18,6 +22,43 @@ const Header = styled.div`
 const Body = styled.div`
   flex: 1;
   overflow: hidden;
+`;
+
+const TitleWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  width: fit-content;
+`;
+
+const Title = styled.div`
+  display: flex;
+  font-family: NotoSansCJKKR;
+  font-size: 16px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: var(--ai-purple-50-main);
+`;
+
+const SubTitle = styled.div`
+  display: flex;
+  font-family: NotoSansCJKKR;
+  font-size: 14px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #282828;
+`;
+
+const Divider = styled.div`
+  width: 1px;
+  height: 20px;
+  margin: 0px 12px 0px 12px;
+  background-color: #b1b6bb;
 `;
 
 export default function HeaderPageLayout({
@@ -35,10 +76,39 @@ export default function HeaderPageLayout({
     <Wrapper>
       <Contents>
         <Header>
-          <div>
-            {title} | {subTitle}
-          </div>
-          <div>Close</div>
+          <TitleWrapper>
+            <Icon
+              iconSrc={icon_ai}
+              cssExt={css`
+                width: 32px;
+                height: 32px;
+                margin: 0 4px 0 0;
+                padding: 1px 2px 3px;
+              `}
+            />
+            <Title>{title}</Title>
+            <Icon
+              iconSrc={badge_beta}
+              cssExt={css`
+                width: 34px;
+                height: 16px;
+                margin: 9px 0px 7px 7px;
+              `}
+            />
+            {subTitle && (
+              <>
+                <Divider /> <SubTitle>{subTitle}</SubTitle>
+              </>
+            )}
+          </TitleWrapper>
+          <Icon
+            iconSrc={icon_ai_close}
+            cssExt={css`
+              width: 32px;
+              height: 32px;
+              padding: 10.8px 10.8px 10.8px 10.8px;
+            `}
+          />
         </Header>
         {tabComp && tabComp}
         <Body>{children}</Body>

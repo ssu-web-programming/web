@@ -3,26 +3,37 @@ import { ReactElement, useEffect } from 'react';
 import HeaderPageLayout from './HeaderPageLayout';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { initTab, selectTab, selectTabSlice } from '../../store/slices/tabSlice';
+import Icon from '../Icon';
 
 const TabList = styled.div`
   display: flex;
   justify-content: flex-start;
   height: 20px;
+  height: 34px;
 `;
 
 const TabItem = styled.div<{ selected: boolean }>`
   flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: NotoSansCJKKR;
+  font-size: 13px;
+  color: var(--gray-gray-90-01);
+
   ${({ selected }) =>
     selected &&
     css`
-      color: blue;
+      border-bottom: solid 2px var(--ai-purple-80-sub);
+      color: var(--ai-purple-50-main);
     `}
 `;
 
-interface AiWriteTabItem {
+export interface TabItemType {
   id: string;
   name: string;
   comp: ReactElement;
+  icon?: string;
 }
 
 export default function TabPage({
@@ -32,7 +43,7 @@ export default function TabPage({
 }: {
   title: string;
   subTitle: string;
-  tabList: AiWriteTabItem[];
+  tabList: TabItemType[];
 }) {
   const dispatch = useAppDispatch();
   const selectedTab = useAppSelector(selectTabSlice);
@@ -58,6 +69,16 @@ export default function TabPage({
               key={item.id}
               selected={item.id === selectedTab.selectedTabId}
               onClick={() => dispatch(selectTab(item.id))}>
+              {item.icon && (
+                <Icon
+                  iconSrc={item.icon}
+                  cssExt={css`
+                    width: 16px;
+                    height: 16px;
+                    padding-right: 7px;
+                  `}
+                />
+              )}
               {item.name}
             </TabItem>
           ))}

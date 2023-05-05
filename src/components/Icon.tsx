@@ -3,6 +3,7 @@ import styled, { CSSProp } from 'styled-components';
 const IconWrapper = styled.div<{ cssExt: any }>`
   display: flex;
   justify-content: center;
+  width: fit-content;
   ${({ cssExt }: any) => cssExt && cssExt}
 `;
 
@@ -11,11 +12,16 @@ const IconImg = styled.img``;
 interface IconProps {
   iconSrc: any;
   cssExt?: CSSProp<any>;
+  onClick?: Function;
 }
 
-const Icon = ({ iconSrc, cssExt }: IconProps) => {
+const Icon = ({ iconSrc, cssExt, onClick }: IconProps) => {
   return (
-    <IconWrapper cssExt={cssExt}>
+    <IconWrapper
+      onClick={(e: React.MouseEvent) => {
+        onClick && onClick(e);
+      }}
+      cssExt={cssExt}>
       <IconImg src={iconSrc} />
     </IconWrapper>
   );

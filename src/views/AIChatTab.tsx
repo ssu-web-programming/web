@@ -23,6 +23,10 @@ import {
   selectRecFuncSlice
 } from '../store/slices/recFuncSlice';
 import { activeToast } from '../store/slices/toastSlice';
+import icon_ai from '../img/ico_ai.svg';
+import Icon from '../components/Icon';
+import icon_stop from '../img/ico_stop.svg';
+import icon_copy from '../img/ico_copy.svg';
 
 const INPUT_HEIGHT = 120;
 const TEXT_MAX_HEIGHT = 168;
@@ -64,6 +68,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   justify-content: space-between;
   box-sizing: border-box;
+  background-color: var(--ai-purple-99-bg-light);
 
   position: relative;
   ${TableCss}
@@ -114,22 +119,24 @@ const ActiveInput = styled.div`
   box-sizing: border-box;
   padding: 5px;
   /* min-height: 30px; */
-
-  &:hover {
-    border-color: blue;
-  }
+  align-items: center;
+  box-shadow: 0 -2px 8px 0 rgba(111, 58, 208, 0.11);
 `;
 
-export const RowBox = styled.div`
+export const RowBox = styled.div<{ cssExt?: any }>`
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+
+  ${({ cssExt }) => cssExt && cssExt}
 `;
 
 export const LengthWrapper = styled.div`
   display: flex;
-  color: lightgray;
+  font-family: NotoSansCJKSC;
+  font-size: 12px;
+  color: var(--gray-gray-70);
 `;
 
 const FitButton = styled.button`
@@ -141,6 +148,36 @@ const FitButton = styled.button`
 export const RightBox = styled.div`
   display: flex;
   align-self: flex-end;
+`;
+
+const Info = styled.div`
+  display: flex;
+  background-color: transparrent;
+  color: var(--ai-purple-50-main);
+  padding: 14px 16px 14px 16px;
+  background-color: var(--ai-purple-99-bg-light);
+  font-family: NotoSansCJKKR;
+  font-size: 12px;
+
+  align-items: center;
+`;
+
+const CenterBox = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: center;
+`;
+
+const ColumDivider = styled.div`
+  width: 100%;
+  height: 1px;
+  background-color: var(--ai-purple-97-list-over);
+  margin-bottom: 8px;
+`;
+
+const purpleBtnCss = css`
+  background-image: linear-gradient(to left, #a86cea 100%, var(--ai-purple-50-main) 0%);
+  color: #fff;
 `;
 
 const exampleList = [
@@ -255,9 +292,6 @@ const AIChatTab = () => {
     }
 
     const assistantId = uuidv4();
-    setChatInput('');
-    setActiveInput(false);
-    setLoadingMsg(selectLoadingMsg(false));
 
     handleResizeHeight();
     if (textRef.current) textRef.current.style.height = 'auto';
@@ -363,26 +397,33 @@ const AIChatTab = () => {
               chat.role === 'assistant' &&
               index > 1 && (
                 <>
+                  <ColumDivider />
                   <RowBox>
-                    <div>공백 포함 {chat.content.length}자</div>
-                    {chat.id === loadingResId ? <div>로딩중</div> : <div>복사</div>}
+                    <LengthWrapper>공백 포함 {chat.content.length}자</LengthWrapper>
+                    {chat.id !== loadingResId && <Icon iconSrc={icon_copy} onClick={() => {}} />}
                   </RowBox>
-                  <RowBox>
+                  <RowBox
+                    cssExt={css`
+                      margin-top: 12px;
+                      justify-content: space-around;
+                    `}>
                     {retryRes !== chat.id && (
-                      <FitButton
+                      <Button
+                        isCredit={true}
                         onClick={() => {
                           submitChat(chat.input, chat, true);
                           setLoadingMsg(selectLoadingMsg(true));
                         }}>
                         다시 만들기
-                      </FitButton>
+                      </Button>
                     )}
-                    <FitButton
+                    <Button
+                      cssExt={purpleBtnCss}
                       onClick={() => {
                         // TODO: 문서 삽입 로직
                       }}>
                       문서에 삽입하기
-                    </FitButton>
+                    </Button>
                   </RowBox>
                 </>
               )
@@ -397,19 +438,53 @@ const AIChatTab = () => {
         <div ref={chatEndRef}></div>
       </ChatListWrapper>
       {loadingResId && (
-        <Button
-          onClick={() => {
-            stopRef.current = true;
-          }}>
-          STOP
-        </Button>
+        <CenterBox>
+          <Button
+            cssExt={css`
+              padding: 4px 12px 5px;
+              border-radius: 4px;
+              border: solid 1px var(--gray-gray-50);
+              background-color: #fff;
+              display: flex;
+              width: fit-content;
+              font-family: NotoSansCJKKR;
+              font-size: 13px;
+              color: #2f3133;
+            `}
+            onClick={() => {
+              stopRef.current = true;
+            }}>
+            <>
+              <Icon
+                iconSrc={icon_stop}
+                cssExt={css`
+                  width: 8px;
+                  height: 8px;
+                `}
+              />
+              STOP
+            </>
+          </Button>
+        </CenterBox>
       )}
-      <InputWrapper activeInputWrap={activeInput}>
+      <InputWrapper className="inputwrapper" activeInputWrap={activeInput && !loadingResId}>
         <ActiveInputBox>
           {activeInput && !loadingResId ? (
             <FuncRecBox chatLength={chatHistory.length} />
           ) : (
-            !loadingResId && <div>대화 1회 당 N크레딧이 차감됩니다.</div>
+            !loadingResId && (
+              <Info>
+                <Icon
+                  iconSrc={icon_ai}
+                  cssExt={css`
+                    width: 16px;
+                    height: 20px;
+                    margin: 0 8px 0 0px;
+                  `}
+                />
+                대화 1회 당 N크레딧이 차감됩니다.
+              </Info>
+            )
           )}
           <ActiveInput>
             <RowBox
@@ -425,7 +500,19 @@ const AIChatTab = () => {
                   width: 80%;
                   border: 0;
                   max-height: ${TEXT_MAX_HEIGHT}px;
+                  height: fit-content;
                   justify-content: center;
+                  height: 20px;
+                  padding: 8px 0px 0px 8px;
+                  ::placeholder {
+                    font-family: NotoSansCJKKR;
+                    font-size: 13px;
+                    color: var(--gray-gray-60-03);
+                    /* padding: 8px; */
+                  }
+                  &:disabled {
+                    background-color: #fff;
+                  }
                 `}
                 value={chatInput}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -435,6 +522,10 @@ const AIChatTab = () => {
               {!loadingResId && activeInput && (
                 <Button
                   onClick={() => {
+                    // TODO: 전송 가능 여부 체크
+                    setChatInput('');
+                    setActiveInput(false);
+                    setLoadingMsg(selectLoadingMsg(false));
                     submitChat();
                   }}>
                   전송

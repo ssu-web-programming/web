@@ -4,7 +4,6 @@ const LinkTextWrapper = styled.div`
   display: flex;
   color: black;
   cursor: pointer;
-  text-decoration: underline;
   width: fit-content;
 `;
 

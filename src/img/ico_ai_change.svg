@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>ico_ai_change</title>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
+        <g id="Group-3" stroke="#454C53" transform="translate(0.692096, 3.000000)">
+            <path d="M12.3079043,5 C12.3079043,2.23857625 10.069328,0 7.30790425,0 C5.83836551,0 4.51689811,0.633968762 3.60208065,1.64332769 M2.30790425,5 C2.30790425,7.76142375 4.5464805,10 7.30790425,10 C8.60334554,10 9.78372152,9.50734687 10.6718979,8.6991749" id="Shape"></path>
+            <polyline id="Path" stroke-linejoin="round" transform="translate(2.350442, 5.514303) rotate(-12.000000) translate(-2.350442, -5.514303) " points="0.26632458 7.01430279 2.26632458 4.01430279 4.43455851 6.83732025"></polyline>
+            <polyline id="Path" stroke-linejoin="round" transform="translate(12.333234, 4.463708) scale(1, -1) rotate(12.000000) translate(-12.333234, -4.463708) " points="10.1969043 5.96370755 12.1969043 2.96370755 14.4695637 5.94091841"></polyline>
+        </g>
+    </g>
+</svg>

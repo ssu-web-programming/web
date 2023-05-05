@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import Button from '../Button';
 import { RowBox } from '../../views/AIChatTab';
 import { useAppDispatch, useAppSelector } from '../../store/store';
@@ -11,6 +11,14 @@ import {
   selectRecFuncSlice,
   selectSubRecFunc
 } from '../../store/slices/recFuncSlice';
+import icon_arrow_down from '../../img/ico_arrow_down_small.svg';
+import icon_arrow_up from '../../img/ico_arrow_up_small.svg';
+
+import Icon from '../Icon';
+import icon_sentence from '../../img/ico_sentence.svg';
+import icon_table from '../../img/ico_table.svg';
+import icon_list from '../../img/ico_table_of_contents.svg';
+import IconButton from '../IconButton';
 
 const Wrapper = styled.div`
   background-color: lightgray;
@@ -18,6 +26,12 @@ const Wrapper = styled.div`
   padding: 10px;
   display: flex;
   flex-direction: column;
+  background-color: var(--ai-purple-99-bg-light);
+  box-shadow: 0 -2px 8px 0 rgba(111, 58, 208, 0.11);
+  border: 1px solid white;
+  border-radius: 10px 10px 0px 0px;
+
+  justify-content: center;
 `;
 
 export const RowWrapBox = styled.div`
@@ -28,18 +42,32 @@ export const RowWrapBox = styled.div`
   width: 100%;
 `;
 
+const OpenedBox = styled(RowWrapBox)`
+  max-height: 138px;
+`;
+
+const CommentWrapper = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  /* margin: 8px; */
+`;
+
 export interface recType {
   id: string;
   title: string;
+  icon?: string;
 }
 
 const firstRecList = [
   {
     id: 'sentence',
-    title: '문장'
+    title: '문장',
+    icon: icon_sentence
   },
-  { id: 'list', title: '목록' },
-  { id: 'table', title: '표' }
+  { id: 'list', title: '목록', icon: icon_list },
+  { id: 'table', title: '표', icon: icon_table }
 ];
 
 const recList = [
@@ -126,6 +154,33 @@ export const recSubList = [
   }
 ];
 
+const CommentFlip = ({
+  comment,
+  onclick,
+  icon
+}: {
+  comment: string;
+  onclick: Function;
+  icon: string;
+}) => {
+  return (
+    <CommentWrapper>
+      <div>{comment}</div>
+      <Icon
+        iconSrc={icon}
+        cssExt={css`
+          width: 16px;
+          height: 16px;
+          margin: 2px 0 2px 4px;
+        `}
+        onClick={() => {
+          onclick();
+        }}
+      />
+    </CommentWrapper>
+  );
+};
+
 const FucRecBox = ({ chatLength }: { chatLength: number }) => {
   const dispatch = useAppDispatch();
   const { selectedRecFunction, selectedSubRecFunction, isOpen, isActive } =
@@ -160,26 +215,50 @@ const FucRecBox = ({ chatLength }: { chatLength: number }) => {
         <Wrapper>
           {isOpen ? (
             <>
-              <RowWrapBox>
+              <OpenedBox>
                 <RowWrapBox>
-                  <div>{recOpenComment}</div>
-                  <Button
-                    onClick={() => {
+                  <CommentFlip
+                    comment={recOpenComment}
+                    icon={icon_arrow_down}
+                    onclick={() => {
                       dispatch(closeRecFunc());
-                    }}>
-                    닫기
-                  </Button>
+                    }}
+                  />
                 </RowWrapBox>
                 {chatLength <= 1
                   ? firstRecList.map((rec) => (
-                      <Button
-                        key={rec.id}
-                        selected={rec.id === selectedRecFunction?.id}
+                      <IconButton
                         onClick={() => {
                           setSelectedFunc(rec);
-                        }}>
-                        {rec.title}
-                      </Button>
+                        }}
+                        selected={selectedRecFunction ? selectedRecFunction.id === rec.id : false}
+                        key={rec.id}
+                        title={rec.title}
+                        cssExt={css`
+                          align-items: center;
+                          box-sizing: border-box;
+                          margin-top: 10px;
+                          color: ${selectedRecFunction?.id === rec.id
+                            ? `var(--ai-purple-50-main)`
+                            : ''};
+                        `}>
+                        <Icon
+                          iconSrc={rec.icon}
+                          cssExt={css`
+                            width: 24px;
+                            height: 24px;
+                            padding: 10px 40px 10px 40px;
+                            background-color: #fff;
+                            border-radius: 4px;
+                            border: ${selectedRecFunction?.id === rec.id
+                              ? `solid 1px var(--ai-purple-80-sub)`
+                              : ''};
+                            background-color: ${selectedRecFunction?.id === rec.id
+                              ? `var(--ai-purple-97-list-over)`
+                              : ''};
+                          `}
+                        />
+                      </IconButton>
                     ))
                   : !isSubPage &&
                     recList.map((rec) => (
@@ -228,20 +307,30 @@ const FucRecBox = ({ chatLength }: { chatLength: number }) => {
                     </RowWrapBox>
                   </RowBox>
                 )}
-              </RowWrapBox>
+              </OpenedBox>
             </>
           ) : (
-            <>
-              <RowWrapBox>
-                <div>{recClosedComment}</div>
-                <Button
-                  onClick={() => {
-                    dispatch(openRecFunc());
-                  }}>
-                  열기
-                </Button>
-              </RowWrapBox>
-            </>
+            // <CommentWrapper>
+            //   <div>{recOpenComment}</div>
+            //   <Icon
+            //     iconSrc={icon_arrow_up}
+            //     cssExt={css`
+            //       width: 16px;
+            //       height: 16px;
+            //       margin: 2px 0 2px 4px;
+            //     `}
+            //     onClick={() => {
+            //       dispatch(openRecFunc());
+            //     }}
+            //   />
+            // </CommentWrapper>
+            <CommentFlip
+              comment={recOpenComment}
+              icon={icon_arrow_up}
+              onclick={() => {
+                dispatch(openRecFunc());
+              }}
+            />
           )}
         </Wrapper>
       )}
