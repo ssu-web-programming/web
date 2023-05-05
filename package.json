@@ -13,6 +13,9 @@
     "@types/react-dom": "^18.0.0",
     "@types/styled-components": "^5.1.26",
     "@types/uuid": "^9.0.1",
+    "archiver": "^5.3.1",
+    "env-cmd": "^10.1.0",
+    "esm": "^3.2.25",
     "i18next": "^22.4.14",
     "i18next-browser-languagedetector": "^7.0.1",
     "react": "^18.2.0",
@@ -22,15 +25,18 @@
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.10.0",
     "react-scripts": "5.0.1",
+    "recursive-readdir-async": "^1.3.0",
     "remark-gfm": "^3.0.1",
     "styled-components": "^5.3.9",
     "typescript": "^4.4.2",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "xml2js": "^0.5.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "dev": "yarn build && nodemon --watch ./build/**/*.js --exec \"ts-node\" server/server.ts"
+    "dev": "yarn build && nodemon --watch ./build/**/*.js --exec \"ts-node\" server/server.ts",
+    "build:all": "node -r esm ./scripts/buildByEnv.js aws_s3"
   },
   "eslintConfig": {
     "extends": [
