@@ -148,6 +148,7 @@ const FitButton = styled.button`
 export const RightBox = styled.div`
   display: flex;
   align-self: flex-end;
+  margin: 4px;
 `;
 
 const Info = styled.div`
@@ -534,6 +535,7 @@ const AIChatTab = () => {
             </RowBox>
             {!loadingResId && activeInput && (
               <RowWrapBox>
+                <ColumDivider />
                 <LengthWrapper>
                   {chatInput.length}/{inputMaxLength}
                 </LengthWrapper>

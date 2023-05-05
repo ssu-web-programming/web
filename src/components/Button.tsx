@@ -19,12 +19,16 @@ const Body = styled.button<{ width?: number; height?: number; selected: boolean;
   color: black;
   font-size: 13px;
   color: var(--gray-gray-90-01);
-  padding: 8px;
+  padding: 6px;
+  flex: 1 1 fit-content;
+  margin: 3px;
 
   ${({ width, height, selected }) => css`
     width: ${width} && ${width}px;
     height: ${height} && ${height}px;
-    background-color: ${selected ? 'color: var(--ai-purple-50-main)' : '#fff'};
+    border: ${selected ? `solid 1px var(--ai-purple-80-sub)` : ''};
+    background-color: ${selected ? `var(--ai-purple-97-list-over)` : ''};
+    color: var(--ai-purple-50-main);
   `}
 
   ${({ cssExt }) => cssExt && cssExt}

@@ -19,6 +19,13 @@ import icon_sentence from '../../img/ico_sentence.svg';
 import icon_table from '../../img/ico_table.svg';
 import icon_list from '../../img/ico_table_of_contents.svg';
 import IconButton from '../IconButton';
+import icon_resume from '../../img/ico_ai_resume.svg';
+import icon_spelingcheck from '../../img/ico_ai_spellingcheck.svg';
+import icon_summary from '../../img/ico_ai_summary.svg';
+import icon_translation from '../../img/ico_ai_translation.svg';
+import icon_style from '../../img/ico_changing_style.svg';
+import icon_ai from '../../img/ico_ai.svg';
+import icon_prev from '../../img/ico_arrow_prev.svg';
 
 const Wrapper = styled.div`
   background-color: lightgray;
@@ -28,7 +35,6 @@ const Wrapper = styled.div`
   flex-direction: column;
   background-color: var(--ai-purple-99-bg-light);
   box-shadow: 0 -2px 8px 0 rgba(111, 58, 208, 0.11);
-  border: 1px solid white;
   border-radius: 10px 10px 0px 0px;
 
   justify-content: center;
@@ -52,6 +58,9 @@ const CommentWrapper = styled.div`
   justify-content: center;
   align-items: center;
   /* margin: 8px; */
+  font-family: NotoSansCJKKR;
+  font-size: 13px;
+  color: var(--gray-gray-90-01);
 `;
 
 export interface recType {
@@ -73,23 +82,28 @@ const firstRecList = [
 const recList = [
   {
     id: 'continueWriting',
-    title: '이어쓰기'
+    title: '이어쓰기',
+    icon: icon_resume
   },
   {
     id: 'summarize',
-    title: '요약하기'
+    title: '요약하기',
+    icon: icon_summary
   },
   {
     id: 'translate',
-    title: '번역하기'
+    title: '번역하기',
+    icon: icon_translation
   },
   {
     id: 'changeWritingStyle',
-    title: '문체 변경하기'
+    title: '문체 변경하기',
+    icon: icon_style
   },
   {
     id: 'editGrammar',
-    title: '맞춤법/문법 수정하기'
+    title: '맞춤법/문법 수정하기',
+    icon: icon_spelingcheck
   }
 ];
 
@@ -165,7 +179,17 @@ const CommentFlip = ({
 }) => {
   return (
     <CommentWrapper>
-      <div>{comment}</div>
+      <RowBox>
+        <Icon
+          cssExt={css`
+            width: 16px;
+            height: 20px;
+            margin: 0 6px 0 0;
+          `}
+          iconSrc={icon_ai}
+        />
+        {comment}
+      </RowBox>
       <Icon
         iconSrc={icon}
         cssExt={css`
@@ -277,24 +301,51 @@ const FucRecBox = ({ chatLength }: { chatLength: number }) => {
                           } else {
                             dispatch(selectSubRecFunc(null));
                           }
-                        }}>
+                        }}
+                        cssExt={css`
+                          border: none;
+                          margin: 3px;
+                        `}>
+                        <Icon
+                          iconSrc={rec.icon}
+                          cssExt={css`
+                            width: 12px;
+                            height: 12px;
+                            margin-right: 6px;
+                          `}
+                        />
                         {rec.title}
                       </Button>
                     ))}
                 {isSubPage && (
                   <RowBox>
                     <Button
+                      cssExt={css`
+                        border: none;
+                        background-color: transparent;
+                      `}
                       onClick={() => {
                         setIsSubPage(false);
                         resetAll();
                       }}>
-                      {'<'}
+                      <Icon
+                        iconSrc={icon_prev}
+                        cssExt={css`
+                          width: 16px;
+                          height: 16px;
+                          padding: 5px 3px 5px 1px;
+                        `}
+                      />
                     </Button>
                     <RowWrapBox>
                       {recSubList
                         .filter((sub) => sub.id === selectedRecFunction?.id)[0]
                         .subList.map((sub) => (
                           <Button
+                            cssExt={css`
+                              border: none;
+                              margin: 3px;
+                            `}
                             selected={selectedSubRecFunction?.id === sub.id}
                             onClick={() => {
                               if (selectedSubRecFunction?.id !== sub.id) setSelectedSubFunc(sub);
@@ -310,20 +361,6 @@ const FucRecBox = ({ chatLength }: { chatLength: number }) => {
               </OpenedBox>
             </>
           ) : (
-            // <CommentWrapper>
-            //   <div>{recOpenComment}</div>
-            //   <Icon
-            //     iconSrc={icon_arrow_up}
-            //     cssExt={css`
-            //       width: 16px;
-            //       height: 16px;
-            //       margin: 2px 0 2px 4px;
-            //     `}
-            //     onClick={() => {
-            //       dispatch(openRecFunc());
-            //     }}
-            //   />
-            // </CommentWrapper>
             <CommentFlip
               comment={recOpenComment}
               icon={icon_arrow_up}
