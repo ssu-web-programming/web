@@ -1,6 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
 import Tools from './pages/Tools';
-import Presentation from './pages/Presentation';
 import Wrapper from './components/Wrapper';
 import ToastMsg from './components/ToastMsg';
 import { useAppDispatch, useAppSelector } from './store/store';
@@ -9,6 +8,7 @@ import { useEffect } from 'react';
 import { setBridgeMessage } from './store/slices/bridge';
 import TextToImage from './pages/TextToImage';
 import GlobalStyle from './style/globalStyle';
+import InvalidAccess from './pages/InvalidAccess';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -27,8 +27,8 @@ function App() {
       <Wrapper>
         <Routes>
           <Route path="/tools" element={<Tools></Tools>}></Route>
-          <Route path="/texttoimage" element={<TextToImage></TextToImage>}></Route>
-          {/* <Route path="/presentation" element={<Presentation></Presentation>}></Route> */}
+          <Route path="/txt2img" element={<TextToImage></TextToImage>}></Route>
+          <Route path="*" element={<InvalidAccess></InvalidAccess>}></Route>
         </Routes>
         {toast.active && <ToastMsg msg={toast.msg} />}
       </Wrapper>
