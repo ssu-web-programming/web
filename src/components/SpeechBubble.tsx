@@ -1,9 +1,10 @@
-import styled, { CSSProp } from 'styled-components';
+import styled, { CSSProp, css } from 'styled-components';
 import remarkGfm from 'remark-gfm';
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
 import { RowBox } from '../views/AIChatTab';
 import Icon from './Icon';
 import icon_ai from '../img/ico_ai.svg';
+import icon_ai_loading from '../img/loading_dot_2x.webp';
 
 const Wrapper = styled.div<{ isUser: boolean }>`
   display: flex;
@@ -38,6 +39,7 @@ const SpeechBubbleWrapper = styled.div<{ cssExt: any; isUser: boolean }>`
   background-color: ${({ isUser }: { isUser: boolean }) =>
     isUser ? 'var(--ai-purple-70)' : 'white'};
   color: ${({ isUser }: { isUser: boolean }) => isUser && 'white'};
+  overflow-x: scroll;
 
   pre {
     margin: 0;
@@ -79,12 +81,18 @@ const SpeechBubble = ({
       <RowBox>
         {!isUser && (
           <Profile>
-            <Icon iconSrc={icon_ai} />
+            <Icon
+              iconSrc={loadingMsg ? icon_ai_loading : icon_ai}
+              cssExt={css`
+                width: 32px;
+                height: 32px;
+              `}
+            />
           </Profile>
         )}
         <SpeechBubbleWrapper cssExt={cssExt} isUser={isUser}>
           {!isUser && <LoadingMsg>{loadingMsg}</LoadingMsg>}
-          <pre style={{ whiteSpace: 'pre-wrap' }}>
+          <pre style={{ whiteSpace: 'pre-wrap', fontFamily: 'NotoSansCJKKR', fontSize: '13px' }}>
             <ReactMarkdown remarkPlugins={[remarkGfm]}>{text}</ReactMarkdown>
           </pre>
           {outterChild}

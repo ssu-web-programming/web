@@ -9,8 +9,8 @@ const TextAreaWrapper = styled.textarea<{ cssExt: any }>`
 
 interface TextAreaProps {
   value: string | number;
-  onChange: Function;
-  onKeyUp?: React.KeyboardEventHandler;
+  onChange?: Function;
+  onKeyDown?: Function;
   cssExt?: CSSProp<any>;
   rows?: number;
   textRef?: React.RefObject<HTMLTextAreaElement> | null;
@@ -22,7 +22,7 @@ interface TextAreaProps {
 const TextArea = ({
   value,
   onChange,
-  onKeyUp,
+  onKeyDown,
   cssExt,
   rows = 5,
   textRef,
@@ -39,8 +39,8 @@ const TextArea = ({
       ref={textRef}
       cssExt={cssExt}
       value={value}
-      onChange={(e) => onChange(e)}
-      onKeyUp={onKeyUp}
+      onChange={(e) => onChange && onChange(e)}
+      onKeyDown={(e) => onKeyDown && onKeyDown(e)}
       rows={rows}
       disabled={disable}
     />

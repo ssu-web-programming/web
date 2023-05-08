@@ -61,6 +61,7 @@ const CommentWrapper = styled.div`
   font-family: NotoSansCJKKR;
   font-size: 13px;
   color: var(--gray-gray-90-01);
+  margin-bottom: 3px;
 `;
 
 export interface recType {
@@ -252,19 +253,15 @@ const FucRecBox = ({ chatLength }: { chatLength: number }) => {
                 {chatLength <= 1
                   ? firstRecList.map((rec) => (
                       <IconButton
+                        key={rec.id}
                         onClick={() => {
                           setSelectedFunc(rec);
                         }}
                         selected={selectedRecFunction ? selectedRecFunction.id === rec.id : false}
-                        key={rec.id}
                         title={rec.title}
                         cssExt={css`
                           align-items: center;
                           box-sizing: border-box;
-                          margin-top: 10px;
-                          color: ${selectedRecFunction?.id === rec.id
-                            ? `var(--ai-purple-50-main)`
-                            : ''};
                         `}>
                         <Icon
                           iconSrc={rec.icon}

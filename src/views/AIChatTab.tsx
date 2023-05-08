@@ -16,7 +16,7 @@ import Button from '../components/Button';
 import OpenAILinkText from '../components/OpenAILinkText';
 import ExButton from '../components/ExButton';
 import FuncRecBox, { RowWrapBox, recSubList } from '../components/AIChat/FuncRecBox';
-import {
+import recFuncSlice, {
   activeRecFunc,
   inactiveRecFunc,
   initRecFunc,
@@ -249,47 +249,48 @@ const AIChatTab = () => {
     }
   };
 
-  const recFuncToDesc = (input: string) => {
-    // TODO: 예외처리 세분화 필요
+  const checkInput = () => {
+    const hasSubRec =
+      recSubList.filter((sub) => selectedRecFunction && selectedRecFunction.id === sub.id).length >
+      0;
 
-    if (chatHistory.length >= 2 && !selectedRecFunction && chatInput.length === 0) {
-      // error
+    if (
+      (chatHistory.length === 1 && chatInput.length === 0) ||
+      (chatHistory.length >= 2 && chatInput.length === 0 && !selectedRecFunction) ||
+      (chatHistory.length >= 2 && chatInput.length === 0 && hasSubRec) ||
+      (hasSubRec && !selectedSubRecFunction)
+    ) {
+      dispatch(activeToast({ active: true, msg: '추천 기능 선택 및 내용을 입력해주세요' }));
       return false;
     }
 
-    if (chatHistory.length <= 1 && selectedRecFunction) {
-      return (input += '\n 결과는' + selectedRecFunction.title + '형식으로 알려줘');
-    }
+    return true;
+  };
 
-    if (chatHistory.length >= 2 && !selectedRecFunction) return input;
+  const makeQuestion = (input: string) => {
+    const hasSubRec =
+      recSubList.filter((sub) => selectedRecFunction && selectedRecFunction.id === sub.id).length >
+      0;
 
-    if (chatHistory.length >= 2 && selectedRecFunction) {
-      if (
-        recSubList.filter((sub) => sub.id === selectedRecFunction.id).length > 0 &&
-        selectedSubRecFunction &&
-        chatInput.length > 0
-      )
-        input +=
-          '\n 위의 문장을 ' + selectedSubRecFunction?.title + '으로 ' + selectedRecFunction.title;
-      else if (recSubList.filter((sub) => sub.id === selectedRecFunction.id).length === 0)
-        return input;
-      else return false;
+    if (chatHistory.length === 1 && selectedRecFunction) {
+      input += `\n 결과는 ${selectedRecFunction.title} 형식으로 알려줘`;
+    } else if (hasSubRec && selectedRecFunction) {
+      input += `\n 위의 문장을 ${selectedSubRecFunction?.title}으로 ${selectedRecFunction.title}`;
+    } else if (!hasSubRec && selectedRecFunction) {
+      input = `\n 위 내용에 대해서 ${selectedRecFunction.title}`;
     }
 
     return input;
   };
 
-  const submitChat = async (targetQuestion?: string, targetRes?: Chat, isRetry?: boolean) => {
-    let input: string | boolean = targetQuestion ? targetQuestion : chatInput;
+  const submitChat = async (chat?: Chat) => {
+    let input = '';
 
-    if (isRetry && targetRes) setRetryRes(targetRes.id);
-    else if (isActive) {
-      input = recFuncToDesc(input);
-      if (!input) {
-        // 오류 발생
-        dispatch(activeToast({ active: true, msg: '추천 기능 선택 및 내용을 입력해주세요' }));
-        return;
-      }
+    if (chat) {
+      input = chat.input;
+      setRetryRes(chat.id);
+    } else {
+      input = makeQuestion(chatInput ? chatInput : chatHistory[chatHistory.length - 1].content);
     }
 
     const assistantId = uuidv4();
@@ -297,7 +298,7 @@ const AIChatTab = () => {
     handleResizeHeight();
     if (textRef.current) textRef.current.style.height = 'auto';
 
-    if (!isRetry)
+    if (!chat)
       dispatch(appendChat({ id: uuidv4(), role: 'user', content: chatInput, input: input }));
     dispatch(appendChat({ id: assistantId, role: 'assistant', content: '', input: input }));
 
@@ -345,7 +346,7 @@ const AIChatTab = () => {
     setLoadingMsg('');
     dispatch(initRecFunc());
 
-    if (isRetry && targetRes) setRetryRes(null);
+    if (chat) setRetryRes(null);
   };
 
   const textRef = useRef<HTMLTextAreaElement>(null);
@@ -389,7 +390,7 @@ const AIChatTab = () => {
         }}>
         {chatHistory.map((chat, index) => (
           <SpeechBubble
-            loadingMsg={loadingMsg}
+            loadingMsg={loadingResId === chat.id ? loadingMsg : undefined}
             key={chat.id}
             text={chat.content}
             isUser={chat.role === 'user'}
@@ -412,8 +413,8 @@ const AIChatTab = () => {
                       <Button
                         isCredit={true}
                         onClick={() => {
-                          submitChat(chat.input, chat, true);
                           setLoadingMsg(selectLoadingMsg(true));
+                          submitChat(chat);
                         }}>
                         다시 만들기
                       </Button>
@@ -442,6 +443,8 @@ const AIChatTab = () => {
         <CenterBox>
           <Button
             cssExt={css`
+              width: 73px;
+              height: 28px;
               padding: 4px 12px 5px;
               border-radius: 4px;
               border: solid 1px var(--gray-gray-50);
@@ -451,6 +454,7 @@ const AIChatTab = () => {
               font-family: NotoSansCJKKR;
               font-size: 13px;
               color: #2f3133;
+              flex: none;
             `}
             onClick={() => {
               stopRef.current = true;
@@ -459,11 +463,12 @@ const AIChatTab = () => {
               <Icon
                 iconSrc={icon_stop}
                 cssExt={css`
-                  width: 8px;
-                  height: 8px;
+                  width: 16px;
+                  height: 16px;
+                  margin: 4px;
                 `}
               />
-              STOP
+              Stop
             </>
           </Button>
         </CenterBox>
@@ -516,6 +521,17 @@ const AIChatTab = () => {
                   }
                 `}
                 value={chatInput}
+                onKeyDown={(e: React.KeyboardEvent<HTMLElement>) => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    if (checkInput()) {
+                      setChatInput('');
+                      setActiveInput(false);
+                      setLoadingMsg(selectLoadingMsg(false));
+
+                      submitChat();
+                    }
+                  }
+                }}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   setChatInput(e.target.value.slice(0, inputMaxLength));
                 }}
@@ -524,10 +540,13 @@ const AIChatTab = () => {
                 <Button
                   onClick={() => {
                     // TODO: 전송 가능 여부 체크
-                    setChatInput('');
-                    setActiveInput(false);
-                    setLoadingMsg(selectLoadingMsg(false));
-                    submitChat();
+                    if (checkInput()) {
+                      setChatInput('');
+                      setActiveInput(false);
+                      setLoadingMsg(selectLoadingMsg(false));
+
+                      submitChat();
+                    }
                   }}>
                   전송
                 </Button>
