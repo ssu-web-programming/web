@@ -16,8 +16,33 @@ function App() {
 
   useEffect(() => {
     document.addEventListener('CustomBridgeEvent', (e: any) => {
+      console.log(`[AI] receiveMessage : ${e.detail}`);
       dispatch(setBridgeMessage(e.detail));
     });
+    window.addEventListener(
+      'message',
+      (e) => {
+        try {
+          const msg = JSON.parse(e.data);
+          if (msg) {
+            switch (msg.cmd) {
+              case 'sessionInfo':
+              case 'openAiTools':
+              case 'openTextToImg': {
+                const postMsg = JSON.stringify(msg);
+                console.log(`[AI] receiveMessage : ${postMsg}`);
+                dispatch(setBridgeMessage(postMsg));
+                break;
+              }
+              default: {
+                break;
+              }
+            }
+          }
+        } catch (err) {}
+      },
+      false
+    );
     window._Bridge.initComplete();
   }, []);
 
