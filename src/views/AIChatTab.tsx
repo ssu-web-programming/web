@@ -422,6 +422,7 @@ const AIChatTab = () => {
                     <Button
                       cssExt={purpleBtnCss}
                       onClick={() => {
+                        window._Bridge.insertText(chat.content);
                         // TODO: 문서 삽입 로직
                       }}>
                       문서에 삽입하기
