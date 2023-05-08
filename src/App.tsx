@@ -26,7 +26,7 @@ function App() {
       <GlobalStyle></GlobalStyle>
       <Wrapper>
         <Routes>
-          <Route path="/tools" element={<Tools></Tools>}></Route>
+          <Route path="/aiWrite" element={<Tools></Tools>}></Route>
           <Route path="/txt2img" element={<TextToImage></TextToImage>}></Route>
           <Route path="*" element={<InvalidAccess></InvalidAccess>}></Route>
         </Routes>
