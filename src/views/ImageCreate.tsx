@@ -1,6 +1,6 @@
 import ExTextbox from '../components/ExTextbox';
 import { useState } from 'react';
-import styled, { css } from 'styled-components';
+import styled, { CSSProperties, css } from 'styled-components';
 import SubTitle from '../components/SubTitle';
 
 import iconStyleNone from '../img/text2Img/non_select.svg';
@@ -39,42 +39,50 @@ const selectStyleItemList = [
   {
     id: 'selectStyleNone',
     title: '없음',
-    imgItem: iconStyleNone
+    imgItem: iconStyleNone,
+    selectedImgItem: iconStyleNonePurple
   },
   {
     id: 'selectStylePhoto',
     title: '사진',
-    imgItem: iconStylePhoto
+    imgItem: iconStylePhoto,
+    selectedImgItem: iconStylePhoto
   },
   {
     id: 'selectStyleConcept',
     title: '컨셉아트',
-    imgItem: iconStyleConcept
+    imgItem: iconStyleConcept,
+    selectedImgItem: iconStyleConcept
   },
   {
     id: 'selectStyle3d',
     title: '3D',
-    imgItem: iconStyle3d
+    imgItem: iconStyle3d,
+    selectedImgItem: iconStyle3d
   },
   {
     id: 'selectStyleAni',
     title: '애니메이션',
-    imgItem: iconStyleAni
+    imgItem: iconStyleAni,
+    selectedImgItem: iconStyleAni
   },
   {
     id: 'selectStyleRet',
     title: '레트로',
-    imgItem: iconStyleRet
+    imgItem: iconStyleRet,
+    selectedImgItem: iconStyleRet
   },
   {
     id: 'selectStyleWater',
     title: '수채화',
-    imgItem: iconStyleWater
+    imgItem: iconStyleWater,
+    selectedImgItem: iconStyleWater
   },
   {
     id: 'selectStyleOil',
     title: '유채화',
-    imgItem: iconStyleOil
+    imgItem: iconStyleOil,
+    selectedImgItem: iconStyleOil
   }
 ];
 
@@ -118,40 +126,38 @@ const SubTitleArea = styled.div`
   width: 100%;
 `;
 
-const SelectOptionGrid = styled.div<{ colCnt: number }>`
-  display: grid;
-  /* width: 100%; */
-  /* height: 230px; */
-  ${({ colCnt }) =>
-    colCnt > 0 &&
-    css`
-      grid-template-columns: repeat(${colCnt}, minmax(0, 1fr));
-    `}
+const RowContainer = styled.div`
+  width: '100%';
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 
-  grid-row-gap: 10px;
-  grid-column-gap: 8px;
-  margin: 0 10px;
-  box-sizing: border-box;
+  gap: 8px;
 `;
 
-const SelectOptionGridItem = styled.div`
+const ContainerItem = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  border: none;
-  cursor: pointer;
-`;
-const SelectOptionGridItemTitle = styled.div<{ isSelected: boolean }>`
-  display: flex;
-  width: 100%;
-  justify-content: center;
-  align-items: center;
-  font-size: 12px;
-  color: var(--gray-gray-80-02);
 
-  ${userSelectCss}
+  gap: 8px;
+`;
+
+const ItemTitle = styled.div<{ isSelected: boolean }>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-weight: bold;
+
+  font-size: 12px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  font-weight: 400;
+  color: var(--gray-gray-80-02);
 
   ${({ isSelected }) =>
     isSelected &&
@@ -160,73 +166,41 @@ const SelectOptionGridItemTitle = styled.div<{ isSelected: boolean }>`
       color: var(--ai-purple-50-main);
     `}
 `;
-const SelectOptionGridItemImageArea = styled.div<{ isSelected: boolean }>`
+
+const ItemIconBox = styled.div<{
+  width: number;
+  height: number;
+  isSelected: boolean;
+  cssExt?: any;
+}>`
+  width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  /* width: 81px;
-  height: 80px; */
-  width: 100%;
-  height: 100%;
   border-radius: 4px;
-  box-sizing: border-box;
-
-  ${({ isSelected }) => {
-    if (isSelected)
-      return css`
-        outline: 0.2rem solid var(--ai-purple-80-sub);
-        outline-offset: 3px;
-      `;
-    return css`
-      &:hover {
-        outline: 0.2rem solid var(--ai-purple-99-bg-light);
-        outline-offset: 3px;
-      }
-    `;
-  }}
-`;
-
-const SelectOptionGridItemImage = styled.img`
-  width: 100%;
-  border-radius: 4px;
-
-  ${userSelectCss}/* background-color: var(--gray-gray-20); */
-`;
-
-const SelectOptionNoneGridItemImageArea = styled.div<{ isSelected: boolean }>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  /* width: 81px;
-  height: 80px; */
-  width: 100%;
-  height: 100%;
-  border-radius: 4px;
-  box-sizing: border-box;
-
   background-color: var(--gray-gray-20);
+  box-sizing: border-box;
+  overflow: hidden;
 
   &:hover {
     background-color: var(--ai-purple-97-list-over);
   }
 
+  ${({ width, height }) =>
+    css`
+      width: ${width}px;
+      height: ${height}px;
+    `}
+
+  ${({ cssExt }) => cssExt && cssExt}
+
   ${({ isSelected }) =>
     isSelected &&
     css`
-      outline: 0.2rem solid var(--ai-purple-80-sub);
+      border: solid 1px var(--ai-purple-80-sub);
       background-color: var(--ai-purple-97-list-over);
     `}
-`;
-
-const SelectOptionNoneGridItemImage = styled.img<{ ratio: number }>`
-  ${({ ratio }) =>
-    ratio > 0 &&
-    css`
-      width: ${ratio}%;
-      height: ${ratio}%;
-    `}
-  border-radius: 4px;
-  ${userSelectCss}
 `;
 
 const GenButton = styled.div<{ disabled: boolean }>`
@@ -287,52 +261,43 @@ const ImageCreate = () => {
         <SubTitleArea>
           <SubTitle subTitle="스타일 선택하기" />
         </SubTitleArea>
-        <SelectOptionGrid colCnt={4}>
+        <RowContainer>
           {selectStyleItemList.map((item) => {
             return (
-              <SelectOptionGridItem key={item.id} onClick={() => setSelectedStyle(item.id)}>
-                {item.id === 'selectStyleNone' ? (
-                  <SelectOptionNoneGridItemImageArea isSelected={item.id === selectedStyle}>
-                    <SelectOptionNoneGridItemImage
-                      ratio={30}
-                      src={item.id === selectedStyle ? iconStyleNonePurple : item.imgItem}
-                    />
-                  </SelectOptionNoneGridItemImageArea>
-                ) : (
-                  <SelectOptionGridItemImageArea isSelected={item.id === selectedStyle}>
-                    <SelectOptionGridItemImage src={item.imgItem} />
-                  </SelectOptionGridItemImageArea>
-                )}
-
-                <SelectOptionGridItemTitle isSelected={item.id === selectedStyle}>
-                  {item.title}
-                </SelectOptionGridItemTitle>
-              </SelectOptionGridItem>
+              <ContainerItem key={item.id} onClick={() => setSelectedStyle(item.id)}>
+                <ItemIconBox width={80} height={80} isSelected={item.id === selectedStyle}>
+                  <img
+                    style={{
+                      width: item.id === 'selectStyleNone' ? '24px' : '100%',
+                      height: item.id === 'selectStyleNone' ? '24px' : '100%'
+                    }}
+                    src={item.id === selectedStyle ? item.selectedImgItem : item.imgItem}
+                    alt=""></img>
+                </ItemIconBox>
+                <ItemTitle isSelected={item.id === selectedStyle}>{item.title}</ItemTitle>
+              </ContainerItem>
             );
           })}
-        </SelectOptionGrid>
+        </RowContainer>
       </SelectOptionArea>
       <SelectOptionArea>
         <SubTitleArea>
           <SubTitle subTitle="이미지 비율 선택하기" />
         </SubTitleArea>
-        <SelectOptionGrid colCnt={3}>
+        <RowContainer>
           {selectImageRatioItemList.map((item) => {
             return (
-              <SelectOptionGridItem key={item.id} onClick={() => setSelectedRatio(item.id)}>
-                <SelectOptionNoneGridItemImageArea isSelected={item.id === selectedRatio}>
-                  <SelectOptionNoneGridItemImage
-                    ratio={40}
+              <ContainerItem key={item.id} onClick={() => setSelectedRatio(item.id)}>
+                <ItemIconBox width={81} height={48} isSelected={item.id === selectedRatio}>
+                  <img
                     src={item.id === selectedRatio ? item.selectedImgItem : item.imgItem}
-                  />
-                </SelectOptionNoneGridItemImageArea>
-                <SelectOptionGridItemTitle isSelected={item.id === selectedRatio}>
-                  {item.title}
-                </SelectOptionGridItemTitle>
-              </SelectOptionGridItem>
+                    alt=""></img>
+                </ItemIconBox>
+                <ItemTitle isSelected={item.id === selectedRatio}>{item.title}</ItemTitle>
+              </ContainerItem>
             );
           })}
-        </SelectOptionGrid>
+        </RowContainer>
       </SelectOptionArea>
       <GenButton disabled={!descInput}>
         <GenButtonImg src={iconCreditText} />
