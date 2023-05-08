@@ -16,7 +16,7 @@ import Button from '../components/Button';
 import OpenAILinkText from '../components/OpenAILinkText';
 import ExButton from '../components/ExButton';
 import FuncRecBox, { RowWrapBox, recSubList } from '../components/AIChat/FuncRecBox';
-import recFuncSlice, {
+import {
   activeRecFunc,
   inactiveRecFunc,
   initRecFunc,
@@ -27,6 +27,8 @@ import icon_ai from '../img/ico_ai.svg';
 import Icon from '../components/Icon';
 import icon_stop from '../img/ico_stop.svg';
 import icon_copy from '../img/ico_copy.svg';
+import { load } from 'cheerio';
+import { marked } from 'marked';
 
 const INPUT_HEIGHT = 120;
 const TEXT_MAX_HEIGHT = 168;
@@ -137,6 +139,7 @@ export const LengthWrapper = styled.div`
   font-family: NotoSansCJKSC;
   font-size: 12px;
   color: var(--gray-gray-70);
+  margin: 11px;
 `;
 
 const FitButton = styled.button`
@@ -169,7 +172,7 @@ const CenterBox = styled.div`
   justify-content: center;
 `;
 
-const ColumDivider = styled.div`
+export const ColumDivider = styled.div`
   width: 100%;
   height: 1px;
   background-color: var(--ai-purple-97-list-over);
@@ -195,6 +198,39 @@ const exampleList = [
 ];
 
 const inputMaxLength = 1000;
+
+const html = `
+<html>
+<head>
+<style>
+table{
+  border-collapse: collapse ;
+  border-radius: 6px;
+}
+
+th ,
+td{
+  padding: 1em;
+  padding-top: .5em;
+  padding-bottom: .5em;
+}
+
+table,
+tr,
+td,
+th 
+{
+  border-radius: 6px;
+  border: 1px solid #555;
+}
+</style>
+</head>
+<body>
+<!--StartFragment-->
+
+<!--EndFragment-->
+</body>
+</html>`;
 
 const AIChatTab = () => {
   const dispatch = useAppDispatch();
@@ -381,6 +417,18 @@ const AIChatTab = () => {
     dispatch(isActive ? activeRecFunc() : inactiveRecFunc());
   };
 
+  const insertDoc = async (content: string) => {
+    try {
+      const tt = await marked(content);
+      const $ = load(html);
+      const body = $('body');
+
+      body.html(tt);
+
+      await window._Bridge.insertHtml($.html());
+    } catch (error) {}
+  };
+
   return (
     <Wrapper>
       <ChatListWrapper
@@ -422,8 +470,7 @@ const AIChatTab = () => {
                     <Button
                       cssExt={purpleBtnCss}
                       onClick={() => {
-                        window._Bridge.insertText(chat.content);
-                        // TODO: 문서 삽입 로직
+                        insertDoc(chat.content);
                       }}>
                       문서에 삽입하기
                     </Button>

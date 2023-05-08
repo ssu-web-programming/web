@@ -3,6 +3,12 @@ import styled, { CSSProp } from 'styled-components';
 const TextAreaWrapper = styled.textarea<{ cssExt: any }>`
   resize: none;
   outline: none;
+  font-family: NotoSansCJKKR;
+  ::placeholder {
+    font-family: NotoSansCJKKR;
+    font-size: 13px;
+    color: var(--gray-gray-60-03);
+  }
 
   ${({ cssExt }: any) => cssExt && cssExt}
 `;
