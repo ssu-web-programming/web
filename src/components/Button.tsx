@@ -2,6 +2,7 @@ import React from 'react';
 import styled, { CSSProp, css } from 'styled-components';
 import Icon from './Icon';
 import icon_credit from '../img/ico_credit.svg';
+import { RowBox } from '../views/AIChatTab';
 
 // const DEFAULT_WIDTH = 200;
 // const DEFAULT_HEIGHT = 60;
@@ -24,42 +25,68 @@ const Body = styled.button<{ width?: number; height?: number; selected: boolean;
   margin: 3px;
 
   ${({ width, height, selected }) => css`
-    width: ${width} && ${width}px;
-    height: ${height} && ${height}px;
+    width: ${width} ? ${width}px : fit-content;
+    height: ${height} ? ${height}px: fit-content;
     border: ${selected ? `solid 1px var(--ai-purple-80-sub)` : ''};
     background-color: ${selected ? `var(--ai-purple-97-list-over)` : ''};
-    color: var(--ai-purple-50-main);
+    color: ${selected ? `var(--ai-purple-50-main)` : ''};
+    font-weight: ${selected ? `bold` : ''};
   `}
+
+  &:hover {
+    cursor: pointer;
+  }
 
   ${({ cssExt }) => cssExt && cssExt}
 `;
 
-interface ButtonProps {
+export interface ButtonProps {
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   selected?: boolean;
   width?: number;
   height?: number;
   cssExt?: CSSProp<any>;
+  children?: React.ReactNode;
+  icon?: string;
   isCredit?: boolean;
 }
 
 export default function Button(props: React.PropsWithChildren<ButtonProps>) {
-  const { onClick, selected, width, height, children, cssExt, isCredit } = props;
+  const { onClick, selected, width, height, children, cssExt, icon, isCredit = false } = props;
   return (
     <Body
-      cssExt={cssExt && cssExt}
+      cssExt={css`
+        position: relative;
+        ${cssExt}
+      `}
       width={width}
       height={height}
       selected={selected || false}
       onClick={onClick}>
-      {children}
+      <RowBox
+        cssExt={css`
+          display: flex;
+          justify-content: center;
+          flex-grow: 1;
+        `}>
+        {icon && (
+          <Icon
+            iconSrc={icon}
+            cssExt={css`
+              margin-right: 6px;
+            `}
+          />
+        )}
+        {children}
+      </RowBox>
       {isCredit && (
         <Icon
-          iconSrc={icon_credit}
           cssExt={css`
-            width: 16px;
-            height: 16px;
+            position: absolute;
+            right: 6px;
+            flex: none;
           `}
+          iconSrc={icon_credit}
         />
       )}
     </Body>

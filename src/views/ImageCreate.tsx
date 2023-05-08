@@ -219,7 +219,7 @@ const GenButton = styled.div<{ disabled: boolean }>`
   line-height: 1.54;
   color: #fff;
   border-radius: 4px;
-  background-image: linear-gradient(to left, #a86cea, var(--ai-purple-50-main) 0%);
+  background-image: linear-gradient(to left, #a86cea, var(--ai-purple-50-main) 100%);
 
   ${({ disabled }) =>
     disabled &&

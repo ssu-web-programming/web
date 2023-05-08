@@ -2,9 +2,8 @@ import styled from 'styled-components';
 
 const SubTitleWrapper = styled.div`
   display: flex;
-
-  font-weight: bold;
-  font-size: larger;
+  font-size: 13px;
+  font-weight: 500;
 `;
 
 interface SubTitleProps {

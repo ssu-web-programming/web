@@ -1,28 +1,37 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import SubTitle from '../components/SubTitle';
-import TextArea from '../components/TextArea';
-import { LengthWrapper, RightBox, RowBox, TableCss } from './AIChatTab';
+import { ColumDivider, LengthWrapper, RightBox, RowBox } from './AIChatTab';
 import Button from '../components/Button';
 import Icon from '../components/Icon';
 import { useRef, useState } from 'react';
 import OpenAILinkText from '../components/OpenAILinkText';
 import { useDispatch } from 'react-redux';
 import { activeToast } from '../store/slices/toastSlice';
-import ExButton from '../components/ExButton';
 import { v4 as uuidv4 } from 'uuid';
 import {
   addWriteHistory,
-  initWriteHistory,
+  resetCurrentWrite,
   selectWriteHistorySlice,
   setCurrentWrite,
   updateWriteHistory
 } from '../store/slices/writeHistorySlice';
 import { useAppSelector } from '../store/store';
-import remarkGfm from 'remark-gfm';
-import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
 import { selectTab } from '../store/slices/tabSlice';
 import { TAB_ITEM_VAL } from '../pages/Tools';
 import { updateDefaultInput } from '../store/slices/chatHistorySlice';
+import ExTextbox from '../components/ExTextbox';
+import IconButton from '../components/IconButton';
+import { firstRecList } from '../components/AIChat/FuncRecBox';
+import icon_write from '../img/ico_creating_text_white.svg';
+import icon_prev from '../img/ico_arrow_prev.svg';
+import icon_next from '../img/ico_arrow_next.svg';
+import PreMarkdown from '../components/PreMarkdown';
+import CopyIcon from '../components/CopyIcon';
+import StopButton from '../components/StopButton';
+import icon_chat_white from '../img/ico_chat_white.svg';
+import { TableCss, purpleBtnCss } from '../style/cssCommon';
+import ai_loading from '../img/ai_motion_mid_56.webp';
+import RecreatingButton from '../components/RecreatingButton';
 
 const Wrapper = styled.div`
   display: flex;
@@ -35,10 +44,12 @@ const Wrapper = styled.div`
 
 const InputArea = styled.div`
   display: flex;
-  flex-direction: column;
+  /* flex-direction: column;
   margin: 10px 0px 10px;
   border: solid 1px black;
-  padding: 10px;
+  border-radius: 4px;
+  border: solid 1px var(--gray-gray-50); */
+  width: 100%;
 `;
 
 export const TextButton = styled.div`
@@ -51,17 +62,32 @@ const ResultBox = styled.div`
   flex-direction: column;
   justify-content: space-between;
   width: 100%;
-  height: 50%;
-  border: solid 1px black;
+  max-height: 70%;
+  flex: 1;
+  border-radius: 4px;
+  background-color: #fff;
+  padding: 8px 12px 0px 12px;
+  box-sizing: border-box;
+  margin-bottom: 16px;
+
   ${TableCss}
 `;
 
 const LoadingWrapper = styled.div`
   display: flex;
+  flex-direction: column;
   width: 100%;
   height: 100%;
   justify-content: center;
   align-items: center;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ai-purple-50-main);
+  word-wrap: break-word;
+  div {
+    width: 196px;
+    text-align: center;
+  }
 `;
 
 const ResultWrapper = styled.div`
@@ -72,14 +98,25 @@ const ResultWrapper = styled.div`
 
 const TextInfo = styled.div`
   display: flex;
+  align-items: center;
   margin-top: 10px;
+  font-size: 12px;
+  color: var(--gray-gray-80-02);
 `;
 
-const formList = [
-  { id: 'sentence', icon: '', title: '문장' },
-  { id: 'list', icon: '', title: '목록' },
-  { id: 'table', icon: '', title: '표' }
-];
+const RowStartBox = styled(RowBox)`
+  justify-content: flex-start;
+  margin: 8px 0px 8px 0px;
+  box-sizing: border-box;
+`;
+
+const ResWrapper = styled(Wrapper)`
+  background-color: var(--ai-purple-99-bg-light);
+`;
+
+const fitButtonCss = css`
+  flex: none;
+`;
 
 const lengthList = [
   { title: '300자', length: 300 },
@@ -130,6 +167,7 @@ const AIWriteTab = () => {
     setSubject('');
     setSelectedForm(null);
     setSelectedLength(null);
+    dispatch(resetCurrentWrite());
   };
 
   const submitSubject = async (inputParam?: string) => {
@@ -188,43 +226,51 @@ const AIWriteTab = () => {
   const currentWrite = history.filter((write) => write.id === currentWriteId)[0];
 
   return (
-    <Wrapper>
+    <>
       {!currentWriteId ? (
-        <>
+        <Wrapper>
           <SubTitle subTitle="주제 작성하기" />
+
           <InputArea>
-            <TextArea
-              rows={5}
+            <ExTextbox
+              exampleList={exampleSubject}
+              maxtTextLen={subjectMaxLength}
               value={subject}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                if (e?.target?.value.length <= subjectMaxLength) setSubject(e.target.value);
-              }}
-            />
-            <RowBox>
-              <LengthWrapper>
-                {subject.length}/{subjectMaxLength}
-              </LengthWrapper>
-              <ExButton exampleList={exampleSubject} setExam={setSubject} />
-            </RowBox>
+              placeholder={'작성할 글의 주제를 입력하세요.'}
+              setValue={(val: string) => {
+                setSubject(val);
+              }}></ExTextbox>
           </InputArea>
 
-          <SubTitle subTitle="형식" />
-          <RowBox>
-            {formList.map((form) => (
-              <Button
+          <SubTitle subTitle="글 형식 정하기" />
+          <RowStartBox>
+            {firstRecList.map((form) => (
+              <IconButton
                 key={form.id}
+                title={form.title}
                 onClick={() => {
                   setSelectedForm(form);
                 }}
-                selected={selectedForm ? (selectedForm.id === form.id ? true : false) : false}>
-                <Icon iconSrc={form.icon} />
-                <div>{form.title}</div>
-              </Button>
-            ))}
-          </RowBox>
+                selected={selectedForm ? (selectedForm.id === form.id ? true : false) : false}
+                icon={form.icon}
+                cssExt={css`
+                  margin-right: 8px;
 
-          <SubTitle subTitle="글자 수" />
-          <RowBox>
+                  & > div {
+                    background-color: ${selectedForm && selectedForm.id === form.id
+                      ? `var(--ai-purple-97-list-over)`
+                      : 'var(--gray-gray-20)'};
+                    margin-bottom: 8px;
+                    width: 81px;
+                    height: 48px;
+                    padding: 0;
+                  }
+                `}></IconButton>
+            ))}
+          </RowStartBox>
+
+          <SubTitle subTitle="작성 될 글자 수 선택하기 (공백포함)" />
+          <RowStartBox>
             {lengthList.map((length, index) => (
               <Button
                 key={index}
@@ -234,69 +280,104 @@ const AIWriteTab = () => {
                 selected={
                   selectedLength ? (selectedLength.length === length.length ? true : false) : false
                 }
-                width={150}
-                height={30}>
+                cssExt={css`
+                  border: none;
+                  width: 82px;
+                  background-color: ${selectedLength && selectedLength.length === length.length
+                    ? `var(--ai-purple-97-list-over)`
+                    : 'var(--gray-gray-20)'};
+                `}>
                 {length.title}
               </Button>
             ))}
-          </RowBox>
+          </RowStartBox>
 
-          <Button
-            onClick={() => {
-              if (checkValid()) {
-                submitSubject();
-              }
-              dispatch(activeToast({ msg: '작성 시작', active: true }));
-            }}
-            width={150}
-            height={30}>
-            글 작성하기
-          </Button>
-        </>
+          <div>
+            <Button
+              isCredit={true}
+              cssExt={css`
+                ${purpleBtnCss}
+                width: 100%;
+              `}
+              onClick={() => {
+                if (checkValid()) {
+                  submitSubject();
+                }
+                dispatch(activeToast({ msg: '작성 시작', active: true }));
+              }}
+              icon={icon_write}>
+              글 작성하기
+            </Button>
+          </div>
+        </Wrapper>
       ) : (
-        <>
-          <RowBox>
+        <ResWrapper>
+          <RowBox
+            cssExt={css`
+              margin-bottom: 8px;
+            `}>
             <SubTitle subTitle="내용 미리보기" />
             {!isLoadingResult && (
-              <div
+              <RecreatingButton
                 onClick={() => {
                   // dispatch(initWriteHistory()); // 같은 주제끼리만 저장할지 의논 필요
                   initAllInput();
-                }}>
-                주제 다시 입력하기
-              </div>
+                }}
+              />
             )}
           </RowBox>
           <ResultBox>
             {currentWrite.result.length === 0 ? (
-              <LoadingWrapper>로딩중...</LoadingWrapper>
+              <LoadingWrapper>
+                <div>
+                  <Icon
+                    iconSrc={ai_loading}
+                    cssExt={css`
+                      margin-bottom: 8px;
+                    `}
+                  />
+                  작성한 주제로 폴라리스 오피스 AI가 멋진 내용을 만들어 드릴게요!
+                </div>
+              </LoadingWrapper>
             ) : (
               <ResultWrapper>
-                <pre style={{ whiteSpace: 'pre-wrap' }}>
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>{currentWrite.result}</ReactMarkdown>
-                  <div ref={endRef} />
-                </pre>
+                <PreMarkdown text={currentWrite.result} endRef={endRef} />
               </ResultWrapper>
             )}
             {currentWrite.result.length > 0 && (
-              <>
+              <div>
                 {isLoadingResult && (
-                  <Button
+                  <StopButton
+                    cssExt={css`
+                      margin: 0 auto;
+                      margin-bottom: 16px;
+                    `}
                     onClick={() => {
                       dispatch(activeToast({ msg: '정지 되었습니다.', active: true }));
                       stopRef.current = true;
                     }}
-                    width={50}
-                    height={20}>
-                    STOP
-                  </Button>
+                  />
                 )}
-                <RowBox>
-                  <TextInfo>공백 포함 {currentWrite?.result.length}자</TextInfo>
-                  {!isLoadingResult && (
-                    <>
-                      <>
-                        <Button
+
+                <>
+                  <ColumDivider />
+                  <RowBox
+                    cssExt={css`
+                      align-items: center;
+                      color: var(--gray-gray-70);
+                      font-size: 13px;
+                    `}>
+                    <LengthWrapper>공백포함 {currentWrite?.result.length}자</LengthWrapper>
+                    {!isLoadingResult && (
+                      <RightBox>
+                        <Icon
+                          cssExt={css`
+                            width: 16px;
+                            height: 16px;
+                            padding: 6px 3px 6px 5px;
+                            margin-right: 12px;
+                          `}
+                          iconSrc={icon_prev}
                           onClick={() => {
                             const currentIndex = history.findIndex(
                               (write) => write.id === currentWriteId
@@ -304,12 +385,20 @@ const AIWriteTab = () => {
                             if (currentIndex > 0) {
                               dispatch(setCurrentWrite(history[currentIndex - 1]?.id));
                             }
-                          }}>
-                          {'<'}
-                        </Button>
-                        {history.findIndex((write) => write.id === currentWriteId) + 1}/
-                        {history.length}
-                        <Button
+                          }}
+                        />
+                        <div>
+                          {history.findIndex((write) => write.id === currentWriteId) + 1}/
+                          {history.length}
+                        </div>
+                        <Icon
+                          cssExt={css`
+                            width: 16px;
+                            height: 16px;
+                            padding: 6px 3px 6px 5px;
+                            margin-left: 12px;
+                          `}
+                          iconSrc={icon_next}
                           onClick={() => {
                             const currentIndex = history.findIndex(
                               (write) => write.id === currentWriteId
@@ -317,35 +406,35 @@ const AIWriteTab = () => {
                             if (currentIndex < history.length - 1) {
                               dispatch(setCurrentWrite(history[currentIndex + 1]?.id));
                             }
-                          }}>
-                          {'>'}
-                        </Button>
-                      </>
-                      <Button
-                        onClick={() => {
-                          // 복사 로직
-                          dispatch(activeToast({ msg: '복사 되었습니다.', active: true }));
-                        }}
-                        width={50}
-                        height={20}>
-                        복사
-                      </Button>
-                    </>
-                  )}
-                </RowBox>
-              </>
+                          }}
+                        />
+                        <CopyIcon
+                          cssExt={css`
+                            margin-left: 12px;
+                          `}
+                          onClick={() => {}}
+                        />
+                      </RightBox>
+                    )}
+                  </RowBox>
+                </>
+              </div>
             )}
           </ResultBox>
           {currentWrite?.result.length > 0 && !isLoadingResult && (
             <>
               <RowBox>
                 <Button
+                  isCredit={true}
                   onClick={() => {
                     submitSubject(currentWrite.input);
                   }}>
-                  다시 작성하기
+                  다시 만들기
                 </Button>
                 <Button
+                  cssExt={css`
+                    margin-right: 0px;
+                  `}
                   onClick={() => {
                     // TODO
                   }}>
@@ -353,11 +442,19 @@ const AIWriteTab = () => {
                 </Button>
               </RowBox>
               <Button
+                isCredit={true}
+                icon={icon_chat_white}
+                cssExt={css`
+                  flex: none;
+                  width: 100%;
+                  box-sizing: border-box;
+                  margin: 0;
+                  ${purpleBtnCss}
+                `}
                 onClick={() => {
                   dispatch(updateDefaultInput(currentWrite.result));
                   dispatch(selectTab(TAB_ITEM_VAL.CHAT));
-                }}
-                width={400}>
+                }}>
                 채팅으로 더 많은 작업하기
               </Button>
               <RightBox>
@@ -365,9 +462,9 @@ const AIWriteTab = () => {
               </RightBox>
             </>
           )}
-        </>
+        </ResWrapper>
       )}
-    </Wrapper>
+    </>
   );
 };
 

@@ -1,51 +1,65 @@
 import styled, { css } from 'styled-components';
 import SubTitle from './SubTitle';
 import TextArea from './TextArea';
-import { RowBox } from '../views/AIChatTab';
+import { LengthWrapper, RowBox } from '../views/AIChatTab';
 import ExButton from './ExButton';
 
 const InputArea = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 10px;
-  border: solid 1px black;
-  padding: 10px;
+  box-sizing: border-box;
+  flex-direction: column;
+  margin: 10px 0px 10px;
+  border-radius: 4px;
+  border: solid 1px var(--gray-gray-50);
+  width: 100%;
+`;
+
+const TopBorer = styled(RowBox)`
+  border-top: 1px solid #e8ebed;
+  width: 100%;
   box-sizing: border-box;
 `;
 
-export const LengthWrapper = styled.div`
-  display: flex;
-  color: lightgray;
-`;
-
 interface ExTextboxProps {
-  subTitle: string;
+  subTitle?: string;
   value: string;
   maxtTextLen: number;
   setValue: Function;
   exampleList: string[];
+  placeholder?: string;
 }
 
-const ExTextbox = ({ subTitle, value, setValue, exampleList, maxtTextLen }: ExTextboxProps) => {
+const ExTextbox = ({
+  subTitle,
+  value,
+  setValue,
+  exampleList,
+  maxtTextLen,
+  placeholder
+}: ExTextboxProps) => {
   return (
     <>
-      <SubTitle subTitle={subTitle} />
+      {subTitle && <SubTitle subTitle={subTitle} />}
       <InputArea>
         <TextArea
+          placeholder={placeholder}
           value={value}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            e.currentTarget.value.length <= maxtTextLen && setValue(e.currentTarget.value);
+            setValue && e?.target?.value.length <= maxtTextLen && setValue(e.currentTarget.value);
           }}
           cssExt={css`
             box-sizing: border-box;
+            border: none;
+            margin: 8px 12px 8px 12px;
           `}
         />
-        <RowBox>
+        <TopBorer>
           <LengthWrapper>
             {value.length}/{maxtTextLen}
           </LengthWrapper>
           <ExButton exampleList={exampleList} setExam={setValue} />
-        </RowBox>
+        </TopBorer>
       </InputArea>
     </>
   );

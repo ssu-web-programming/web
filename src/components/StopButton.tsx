@@ -1,0 +1,42 @@
+import Button from './Button';
+import { CSSProp, css } from 'styled-components';
+import icon_stop from '../img/ico_stop.svg';
+import Icon from './Icon';
+
+const StopButton = ({ onClick, cssExt }: { onClick: Function; cssExt?: CSSProp }) => {
+  return (
+    <Button
+      cssExt={css`
+        width: 73px;
+        height: 28px;
+        padding: 4px 12px 5px;
+        border-radius: 4px;
+        border: solid 1px var(--gray-gray-50);
+        background-color: #fff;
+        display: flex;
+        width: fit-content;
+        font-family: NotoSansCJKKR;
+        font-size: 13px;
+        color: #2f3133;
+        flex: none;
+        ${cssExt && cssExt}
+      `}
+      onClick={() => {
+        onClick();
+      }}>
+      <>
+        <Icon
+          iconSrc={icon_stop}
+          cssExt={css`
+            width: 16px;
+            height: 16px;
+            margin: 4px;
+          `}
+        />
+        Stop
+      </>
+    </Button>
+  );
+};
+
+export default StopButton;

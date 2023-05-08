@@ -1,4 +1,4 @@
-import styled, { CSSProp } from 'styled-components';
+import styled, { CSSProp, css } from 'styled-components';
 
 const IconWrapper = styled.div<{ cssExt: any }>`
   display: flex;
@@ -21,7 +21,13 @@ const Icon = ({ iconSrc, cssExt, onClick }: IconProps) => {
       onClick={(e: React.MouseEvent) => {
         onClick && onClick(e);
       }}
-      cssExt={cssExt}>
+      cssExt={css`
+        &:hover {
+          ${onClick && 'cursor: pointer'}
+        }
+
+        ${cssExt && cssExt}
+      `}>
       <IconImg src={iconSrc} />
     </IconWrapper>
   );

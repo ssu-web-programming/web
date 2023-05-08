@@ -8,6 +8,8 @@ export const TextButton = styled.div`
   font-family: NotoSansCJKKR;
   font-size: 12px;
   color: var(--gray-gray-70);
+  align-items: center;
+  margin-right: 11px;
 `;
 
 interface ExButtonProps {

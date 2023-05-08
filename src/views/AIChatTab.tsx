@@ -25,43 +25,14 @@ import {
 import { activeToast } from '../store/slices/toastSlice';
 import icon_ai from '../img/ico_ai.svg';
 import Icon from '../components/Icon';
-import icon_stop from '../img/ico_stop.svg';
-import icon_copy from '../img/ico_copy.svg';
 import { load } from 'cheerio';
 import { marked } from 'marked';
+import CopyIcon from '../components/CopyIcon';
+import StopButton from '../components/StopButton';
+import { TableCss, purpleBtnCss } from '../style/cssCommon';
 
 const INPUT_HEIGHT = 120;
 const TEXT_MAX_HEIGHT = 168;
-
-export const TableCss = css`
-  table {
-    border-collapse: collapse;
-    border-radius: 6px;
-  }
-
-  th,
-  td {
-    padding: 1em;
-    padding-top: 0.5em;
-    padding-bottom: 0.5em;
-  }
-
-  table,
-  tr,
-  td,
-  th {
-    border-radius: 6px;
-    border: 1px solid #555;
-  }
-
-  textarea:focus {
-    outline: none;
-  }
-
-  input:focus {
-    outline: none;
-  }
-`;
 
 const Wrapper = styled.div`
   width: 100%;
@@ -139,19 +110,14 @@ export const LengthWrapper = styled.div`
   font-family: NotoSansCJKSC;
   font-size: 12px;
   color: var(--gray-gray-70);
-  margin: 11px;
-`;
-
-const FitButton = styled.button`
-  width: fit-content;
-  height: fit-content;
-  padding: 10px;
+  margin: 8px 0px 8px 11px;
 `;
 
 export const RightBox = styled.div`
   display: flex;
   align-self: flex-end;
   margin: 4px;
+  align-items: center;
 `;
 
 const Info = styled.div`
@@ -176,12 +142,6 @@ export const ColumDivider = styled.div`
   width: 100%;
   height: 1px;
   background-color: var(--ai-purple-97-list-over);
-  margin-bottom: 8px;
-`;
-
-const purpleBtnCss = css`
-  background-image: linear-gradient(to left, #a86cea 100%, var(--ai-purple-50-main) 0%);
-  color: #fff;
 `;
 
 const exampleList = [
@@ -235,8 +195,7 @@ th
 const AIChatTab = () => {
   const dispatch = useAppDispatch();
   const { history: chatHistory, defaultInput } = useAppSelector(selectChatHistory);
-  const { selectedRecFunction, selectedSubRecFunction, isActive } =
-    useAppSelector(selectRecFuncSlice);
+  const { selectedRecFunction, selectedSubRecFunction } = useAppSelector(selectRecFuncSlice);
 
   const [chatInput, setChatInput] = useState<string>('');
   const [activeInput, setActiveInput] = useState<boolean>(false);
@@ -450,11 +409,16 @@ const AIChatTab = () => {
                   <ColumDivider />
                   <RowBox>
                     <LengthWrapper>공백 포함 {chat.content.length}자</LengthWrapper>
-                    {chat.id !== loadingResId && <Icon iconSrc={icon_copy} onClick={() => {}} />}
+                    {chat.id !== loadingResId && (
+                      <CopyIcon
+                        onClick={() => {
+                          //TODO: 복사 로직
+                        }}
+                      />
+                    )}
                   </RowBox>
                   <RowBox
                     cssExt={css`
-                      margin-top: 12px;
                       justify-content: space-around;
                     `}>
                     {retryRes !== chat.id && (
@@ -489,36 +453,11 @@ const AIChatTab = () => {
       </ChatListWrapper>
       {loadingResId && (
         <CenterBox>
-          <Button
-            cssExt={css`
-              width: 73px;
-              height: 28px;
-              padding: 4px 12px 5px;
-              border-radius: 4px;
-              border: solid 1px var(--gray-gray-50);
-              background-color: #fff;
-              display: flex;
-              width: fit-content;
-              font-family: NotoSansCJKKR;
-              font-size: 13px;
-              color: #2f3133;
-              flex: none;
-            `}
+          <StopButton
             onClick={() => {
               stopRef.current = true;
-            }}>
-            <>
-              <Icon
-                iconSrc={icon_stop}
-                cssExt={css`
-                  width: 16px;
-                  height: 16px;
-                  margin: 4px;
-                `}
-              />
-              Stop
-            </>
-          </Button>
+            }}
+          />
         </CenterBox>
       )}
       <InputWrapper className="inputwrapper" activeInputWrap={activeInput && !loadingResId}>

@@ -10,6 +10,7 @@ const TabList = styled.div`
   justify-content: flex-start;
   height: 20px;
   height: 34px;
+  border-bottom: 1px solid #c9cdd2;
 `;
 
 const TabItem = styled.div<{ selected: boolean }>`
@@ -20,6 +21,11 @@ const TabItem = styled.div<{ selected: boolean }>`
   font-family: NotoSansCJKKR;
   font-size: 13px;
   color: var(--gray-gray-90-01);
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f7f8f9;
+  }
 
   ${({ selected }) =>
     selected &&
@@ -34,6 +40,7 @@ export interface TabItemType {
   name: string;
   comp: ReactElement;
   icon?: string;
+  selectedIcon?: string;
 }
 
 export default function TabPage({
@@ -71,7 +78,7 @@ export default function TabPage({
               onClick={() => dispatch(selectTab(item.id))}>
               {item.icon && (
                 <Icon
-                  iconSrc={item.icon}
+                  iconSrc={item.id === selectedTab.selectedTabId ? item.selectedIcon : item.icon}
                   cssExt={css`
                     width: 16px;
                     height: 16px;

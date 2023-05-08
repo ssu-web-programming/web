@@ -70,13 +70,13 @@ export interface recType {
   icon?: string;
 }
 
-const firstRecList = [
+export const firstRecList = [
   {
     id: 'sentence',
     title: '문장',
     icon: icon_sentence
   },
-  { id: 'list', title: '목록', icon: icon_list },
+  { id: 'list', title: '목차', icon: icon_list },
   { id: 'table', title: '표', icon: icon_table }
 ];
 
@@ -253,33 +253,13 @@ const FucRecBox = ({ chatLength }: { chatLength: number }) => {
                 {chatLength <= 1
                   ? firstRecList.map((rec) => (
                       <IconButton
+                        title={rec.title}
                         key={rec.id}
                         onClick={() => {
                           setSelectedFunc(rec);
                         }}
                         selected={selectedRecFunction ? selectedRecFunction.id === rec.id : false}
-                        title={rec.title}
-                        cssExt={css`
-                          align-items: center;
-                          box-sizing: border-box;
-                        `}>
-                        <Icon
-                          iconSrc={rec.icon}
-                          cssExt={css`
-                            width: 24px;
-                            height: 24px;
-                            padding: 10px 40px 10px 40px;
-                            background-color: #fff;
-                            border-radius: 4px;
-                            border: ${selectedRecFunction?.id === rec.id
-                              ? `solid 1px var(--ai-purple-80-sub)`
-                              : ''};
-                            background-color: ${selectedRecFunction?.id === rec.id
-                              ? `var(--ai-purple-97-list-over)`
-                              : ''};
-                          `}
-                        />
-                      </IconButton>
+                        icon={rec.icon}></IconButton>
                     ))
                   : !isSubPage &&
                     recList.map((rec) => (
