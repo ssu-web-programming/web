@@ -61,5 +61,6 @@
     "express": "^4.18.2",
     "nodemon": "^2.0.22",
     "ts-node": "^10.9.1"
-  }
+  },
+  "proxy": "https://kittyhawk.polarisoffice.com"
 }

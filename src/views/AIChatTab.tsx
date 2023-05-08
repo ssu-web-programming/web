@@ -303,7 +303,7 @@ const AIChatTab = () => {
 
     setLoadingResId(assistantId);
 
-    const res = await fetch('https://kittyhawk.polarisoffice.com/api/v2/chat/chatStream', {
+    const res = await fetch('/api/v2/chat/chatStream', {
       headers: { 'content-type': 'application/json' },
       //   responseType: 'stream',
       body: JSON.stringify({
