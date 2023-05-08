@@ -1,6 +1,6 @@
 import ExTextbox from '../components/ExTextbox';
-import { useState } from 'react';
-import styled, { CSSProperties, css } from 'styled-components';
+import { useCallback, useState } from 'react';
+import styled, { css } from 'styled-components';
 import SubTitle from '../components/SubTitle';
 
 import iconStyleNone from '../img/text2Img/non_select.svg';
@@ -124,6 +124,8 @@ const SelectOptionArea = styled.div`
 
 const SubTitleArea = styled.div`
   width: 100%;
+  display: flex;
+  justify-content: space-between;
 `;
 
 const RowContainer = styled.div`
@@ -243,67 +245,192 @@ const CreditImg = styled.img`
   ${userSelectCss}
 `;
 
+const ImagePreview = styled.div`
+  width: 100%;
+  aspect-ratio: 1 / 1;
+`;
+
+const ImageDesc = styled.div`
+  font-size: 13px;
+  font-weight: 400;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.54;
+  letter-spacing: normal;
+  color: var(--gray-gray-60-03);
+`;
+
+const ImageList = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  gap: 8px;
+`;
+
+interface AiImageResponse {
+  contentType: string;
+  data: string;
+}
+
 const ImageCreate = () => {
   const [descInput, setDescInput] = useState<string>('');
   const [selectedStyle, setSelectedStyle] = useState<string>('selectStyleNone');
   const [selectedRatio, setSelectedRatio] = useState<string>('selectRatioSqure');
+  const [aiImgs, setAiImgs] = useState<AiImageResponse[]>([]);
+  const [previewIndex, setPreviewIndex] = useState(0);
+  const [creating, setCreating] = useState(false);
+
+  const createAiImage = useCallback(async () => {
+    try {
+      setCreating(true);
+      const res = await fetch(`/api/v1/image/genImageByDreamXL`, {
+        headers: { 'content-type': 'text/plain' },
+        body: descInput,
+        method: 'POST'
+      });
+      const body = await res.json();
+      const { images } = body.data;
+      if (images) {
+        setCreating(false);
+        setAiImgs(images);
+      }
+    } catch (err) {}
+  }, [descInput]);
 
   return (
     <Body>
-      <ExTextbox
-        exampleList={exampleList}
-        maxtTextLen={1000}
-        subTitle="이미지 설명 작성하기"
-        value={descInput}
-        setValue={setDescInput}
-      />
-      <SelectOptionArea>
-        <SubTitleArea>
-          <SubTitle subTitle="스타일 선택하기" />
-        </SubTitleArea>
-        <RowContainer>
-          {selectStyleItemList.map((item) => {
-            return (
-              <ContainerItem key={item.id} onClick={() => setSelectedStyle(item.id)}>
-                <ItemIconBox width={80} height={80} isSelected={item.id === selectedStyle}>
+      {aiImgs.length === 0 ? (
+        creating === false ? (
+          <>
+            <ExTextbox
+              exampleList={exampleList}
+              maxtTextLen={1000}
+              subTitle="이미지 설명 작성하기"
+              value={descInput}
+              setValue={setDescInput}
+            />
+            <SelectOptionArea>
+              <SubTitleArea>
+                <SubTitle subTitle="스타일 선택하기" />
+              </SubTitleArea>
+              <RowContainer>
+                {selectStyleItemList.map((item) => {
+                  return (
+                    <ContainerItem key={item.id} onClick={() => setSelectedStyle(item.id)}>
+                      <ItemIconBox width={80} height={80} isSelected={item.id === selectedStyle}>
+                        <img
+                          style={{
+                            width: item.id === 'selectStyleNone' ? '24px' : '100%',
+                            height: item.id === 'selectStyleNone' ? '24px' : '100%'
+                          }}
+                          src={item.id === selectedStyle ? item.selectedImgItem : item.imgItem}
+                          alt=""></img>
+                      </ItemIconBox>
+                      <ItemTitle isSelected={item.id === selectedStyle}>{item.title}</ItemTitle>
+                    </ContainerItem>
+                  );
+                })}
+              </RowContainer>
+            </SelectOptionArea>
+            <SelectOptionArea>
+              <SubTitleArea>
+                <SubTitle subTitle="이미지 비율 선택하기" />
+              </SubTitleArea>
+              <RowContainer>
+                {selectImageRatioItemList.map((item) => {
+                  return (
+                    <ContainerItem key={item.id} onClick={() => setSelectedRatio(item.id)}>
+                      <ItemIconBox width={81} height={48} isSelected={item.id === selectedRatio}>
+                        <img
+                          src={item.id === selectedRatio ? item.selectedImgItem : item.imgItem}
+                          alt=""></img>
+                      </ItemIconBox>
+                      <ItemTitle isSelected={item.id === selectedRatio}>{item.title}</ItemTitle>
+                    </ContainerItem>
+                  );
+                })}
+              </RowContainer>
+            </SelectOptionArea>
+            <GenButton disabled={!descInput} onClick={createAiImage}>
+              <GenButtonImg src={iconCreditText} />
+              <GenButtonText>이미지 생성하기</GenButtonText>
+              <CreditImg src={iconCredit} />
+            </GenButton>
+            <div style={{ display: 'flex', flexDirection: 'row' }}>
+              {aiImgs &&
+                aiImgs.map((img) => (
                   <img
-                    style={{
-                      width: item.id === 'selectStyleNone' ? '24px' : '100%',
-                      height: item.id === 'selectStyleNone' ? '24px' : '100%'
-                    }}
-                    src={item.id === selectedStyle ? item.selectedImgItem : item.imgItem}
+                    style={{ width: '100px', height: '100px' }}
+                    src={`data:${img.contentType};base64,${img.data}`}
                     alt=""></img>
-                </ItemIconBox>
-                <ItemTitle isSelected={item.id === selectedStyle}>{item.title}</ItemTitle>
-              </ContainerItem>
-            );
-          })}
-        </RowContainer>
-      </SelectOptionArea>
-      <SelectOptionArea>
-        <SubTitleArea>
-          <SubTitle subTitle="이미지 비율 선택하기" />
-        </SubTitleArea>
-        <RowContainer>
-          {selectImageRatioItemList.map((item) => {
-            return (
-              <ContainerItem key={item.id} onClick={() => setSelectedRatio(item.id)}>
-                <ItemIconBox width={81} height={48} isSelected={item.id === selectedRatio}>
-                  <img
-                    src={item.id === selectedRatio ? item.selectedImgItem : item.imgItem}
-                    alt=""></img>
-                </ItemIconBox>
-                <ItemTitle isSelected={item.id === selectedRatio}>{item.title}</ItemTitle>
-              </ContainerItem>
-            );
-          })}
-        </RowContainer>
-      </SelectOptionArea>
-      <GenButton disabled={!descInput}>
-        <GenButtonImg src={iconCreditText} />
-        <GenButtonText>이미지 생성하기</GenButtonText>
-        <CreditImg src={iconCredit} />
-      </GenButton>
+                ))}
+            </div>
+          </>
+        ) : (
+          <div
+            style={{
+              width: '100%',
+              height: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}>
+            Creating...
+          </div>
+        )
+      ) : (
+        <>
+          <SubTitleArea>
+            <SubTitle subTitle="이미지 미리보기" />
+            <button
+              onClick={() => {
+                setAiImgs([]);
+                setPreviewIndex(0);
+              }}>
+              주제 다시 입력하기
+            </button>
+          </SubTitleArea>
+          <ImageDesc>{descInput}</ImageDesc>
+          <ImagePreview>
+            <img
+              style={{ width: '100%', height: '100%' }}
+              src={`data:${aiImgs[previewIndex].contentType};base64,${aiImgs[previewIndex].data}`}
+              alt=""></img>
+          </ImagePreview>
+          <ImageList>
+            <button
+              onClick={() =>
+                setPreviewIndex((prev) => {
+                  return (prev + aiImgs.length - 1) % aiImgs.length;
+                })
+              }>
+              prev
+            </button>
+            {aiImgs.map((img, index) => (
+              <img
+                onClick={() => setPreviewIndex(index)}
+                style={{ width: '60px', height: '60px' }}
+                src={`data:${img.contentType};base64,${img.data}`}
+                alt=""></img>
+            ))}
+            <button
+              onClick={() =>
+                setPreviewIndex((prev) => {
+                  return (prev + aiImgs.length + 1) % aiImgs.length;
+                })
+              }>
+              next
+            </button>
+          </ImageList>
+          <RowContainer>
+            <button onClick={createAiImage}>다시 만들기</button>
+            <button>다운로드</button>
+            <GenButton disabled={false}>문서에 삽입하기</GenButton>
+          </RowContainer>
+        </>
+      )}
     </Body>
   );
 };

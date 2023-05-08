@@ -115,11 +115,12 @@ const getDelegator = (api, arg) => {
           const msg = arg ? `${api} ${arg}` : api;
           return window.chrome.webview.postMessage(msg);
         }
-        case CLIENT_TYPE.WEB: {
-          return window.parent.postMessage(arg, 'https://kittyhawk.polarisoffice.com/');
-        }
+        case CLIENT_TYPE.WEB:
         default: {
-          throw new Error(`unknown platform : ${platform}`);
+          if (!window || !window.parent || !window.parent.postMessage) {
+            throw new Error(`unknown platform : ${platform}`);
+          }
+          return window.parent.postMessage(JSON.stringify({ api, arg }), '*');
         }
       }
     } catch (err) {
