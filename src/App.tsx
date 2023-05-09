@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import Tools from './pages/Tools';
 import Wrapper from './components/Wrapper';
 import ToastMsg from './components/ToastMsg';
@@ -13,33 +13,40 @@ import InvalidAccess from './pages/InvalidAccess';
 function App() {
   const dispatch = useAppDispatch();
   const toast = useAppSelector(selectToast);
+  const navigate = useNavigate();
+
+  const procMsg = (msg: string) => {
+    try {
+      const { cmd, body } = JSON.parse(msg);
+      dispatch(setBridgeMessage({ cmd, body }));
+      switch (cmd) {
+        case 'sessionInfo': {
+          break;
+        }
+        case 'openAiTools':
+        case 'openTextToImg': {
+          const path = cmd === `openAiTools` ? `/aiWrite` : `/txt2img`;
+          const time = new Date().getTime();
+          navigate(path, {
+            state: { body, time }
+          });
+          break;
+        }
+        default: {
+          break;
+        }
+      }
+    } catch (err) {}
+  };
 
   useEffect(() => {
     document.addEventListener('CustomBridgeEvent', (e: any) => {
-      console.log(`[AI] receiveMessage : ${e.detail}`);
-      dispatch(setBridgeMessage(e.detail));
+      procMsg(e.detail);
     });
     window.addEventListener(
       'message',
       (e) => {
-        try {
-          const msg = JSON.parse(e.data);
-          if (msg) {
-            switch (msg.cmd) {
-              case 'sessionInfo':
-              case 'openAiTools':
-              case 'openTextToImg': {
-                const postMsg = JSON.stringify(msg);
-                console.log(`[AI] receiveMessage : ${postMsg}`);
-                dispatch(setBridgeMessage(postMsg));
-                break;
-              }
-              default: {
-                break;
-              }
-            }
-          }
-        } catch (err) {}
+        procMsg(e.data);
       },
       false
     );

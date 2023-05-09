@@ -274,8 +274,8 @@ interface AiImageResponse {
   data: string;
 }
 
-const ImageCreate = () => {
-  const [descInput, setDescInput] = useState<string>('');
+const ImageCreate = ({ contents }: { contents?: string }) => {
+  const [descInput, setDescInput] = useState<string>(contents ? contents : '');
   const [selectedStyle, setSelectedStyle] = useState<string>('selectStyleNone');
   const [selectedRatio, setSelectedRatio] = useState<string>('selectRatioSqure');
   const [aiImgs, setAiImgs] = useState<AiImageResponse[]>([]);

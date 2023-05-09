@@ -2,19 +2,24 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 
 interface BridgeState {
-  message: string;
+  cmd: string;
+  body: string;
 }
+
+const initialState: BridgeState = { cmd: '', body: '' };
 
 const bridgeMessageSlice = createSlice({
   name: 'bridge',
-  initialState: { message: '' } as BridgeState,
+  initialState: initialState,
   reducers: {
-    setBridgeMessage: (state, action: PayloadAction<string>) => {
-      state.message = action.payload;
+    initBridgeMessage: () => initialState,
+    setBridgeMessage: (state, action: PayloadAction<BridgeState>) => {
+      state.cmd = action.payload.cmd;
+      state.body = action.payload.body;
     }
   }
 });
 
-export const { setBridgeMessage } = bridgeMessageSlice.actions;
-export const selectBridgeMessage = (state: RootState) => state.bridge.message;
+export const { initBridgeMessage, setBridgeMessage } = bridgeMessageSlice.actions;
+export const selectBridgeMessage = (state: RootState) => state.bridge;
 export default bridgeMessageSlice.reducer;

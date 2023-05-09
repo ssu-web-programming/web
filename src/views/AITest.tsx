@@ -11,7 +11,7 @@ const Body = styled.div`
   display: flex;
   flex-direction: column;
 
-  padding: 10px 10px 0px 10px ;
+  padding: 10px 10px 0px 10px;
   gap: 10px;
   box-sizing: border-box;
 `;
@@ -54,7 +54,7 @@ declare global {
 }
 
 export default function AITest() {
-  const bridgeMsg = useAppSelector(selectBridgeMessage);
+  const bridgeSelector = useAppSelector(selectBridgeMessage);
   const [log, setLog] = useState<string[]>([]);
 
   const writeLog = useCallback((text: string) => {
@@ -62,8 +62,12 @@ export default function AITest() {
   }, []);
 
   useEffect(() => {
-    if (bridgeMsg !== '') setLog((prev) => [...prev, `=== called receiveMessage : ${bridgeMsg}`]);
-  }, [bridgeMsg]);
+    if (bridgeSelector.cmd && bridgeSelector.cmd !== '')
+      setLog((prev) => [
+        ...prev,
+        `=== called receiveMessage : ${bridgeSelector.cmd} / ${bridgeSelector.body}`
+      ]);
+  }, [bridgeSelector]);
 
   const onInsertText = () => {
     try {
