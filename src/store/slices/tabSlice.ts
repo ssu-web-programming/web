@@ -2,23 +2,20 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 
 interface TabType {
-  active: boolean;
+  isLoading: boolean;
   selectedTabId: string | null;
 }
 
 const tabSlice = createSlice({
   name: 'tab',
-  initialState: { active: false, selectedTabId: null } as TabType,
+  initialState: { isLoading: false, selectedTabId: null } as TabType,
   reducers: {
     initTab: (state) => {
-      state.active = false;
+      state.isLoading = false;
       state.selectedTabId = null;
     },
-    activeTab: (state) => {
-      state.active = true;
-    },
-    inactiveTab: (state) => {
-      state.active = false;
+    setLoadingTab: (state, action: PayloadAction<boolean>) => {
+      state.isLoading = action.payload;
     },
     selectTab: (state, action: PayloadAction<string>) => {
       state.selectedTabId = action.payload;
@@ -26,6 +23,6 @@ const tabSlice = createSlice({
   }
 });
 
-export const { initTab, activeTab, inactiveTab, selectTab } = tabSlice.actions;
+export const { initTab, setLoadingTab, selectTab } = tabSlice.actions;
 export const selectTabSlice = (state: RootState) => state.tab;
 export default tabSlice.reducer;

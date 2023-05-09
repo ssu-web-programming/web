@@ -1,5 +1,13 @@
 import remarkGfm from 'remark-gfm';
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
+import styled from 'styled-components';
+
+const Pre = styled.pre`
+  p {
+    margin: 0px;
+    padding: 0px;
+  }
+`;
 
 const PreMarkdown = ({
   text,
@@ -9,10 +17,17 @@ const PreMarkdown = ({
   endRef?: React.RefObject<HTMLDivElement> | null;
 }) => {
   return (
-    <pre style={{ whiteSpace: 'pre-wrap', fontFamily: 'NotoSansCJKKR', fontSize: '13px' }}>
+    <Pre
+      style={{
+        whiteSpace: 'pre-wrap',
+        fontFamily: 'NotoSansCJKKR',
+        fontSize: '13px',
+        margin: '0px',
+        padding: '0px'
+      }}>
       <ReactMarkdown remarkPlugins={[remarkGfm]}>{text}</ReactMarkdown>
       {endRef && <div ref={endRef} />}
-    </pre>
+    </Pre>
   );
 };
 

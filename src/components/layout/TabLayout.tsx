@@ -53,13 +53,13 @@ export default function TabPage({
   tabList: TabItemType[];
 }) {
   const dispatch = useAppDispatch();
-  const selectedTab = useAppSelector(selectTabSlice);
+  const { isLoading, selectedTabId } = useAppSelector(selectTabSlice);
 
   useEffect(() => {
-    if (!selectedTab.selectedTabId) dispatch(selectTab(tabList[0].id));
+    if (!selectedTabId) dispatch(selectTab(tabList[0].id));
   }, []);
 
-  const currentTab = tabList.filter((tab) => tab.id === selectedTab.selectedTabId)[0];
+  const currentTab = tabList.filter((tab) => tab.id === selectedTabId)[0];
 
   return (
     <HeaderPageLayout
@@ -70,11 +70,13 @@ export default function TabPage({
           {tabList.map((item) => (
             <TabItem
               key={item.id}
-              selected={item.id === selectedTab.selectedTabId}
-              onClick={() => dispatch(selectTab(item.id))}>
+              selected={item.id === selectedTabId}
+              onClick={() => {
+                if (!isLoading) dispatch(selectTab(item.id));
+              }}>
               {item.icon && (
                 <Icon
-                  iconSrc={item.id === selectedTab.selectedTabId ? item.selectedIcon : item.icon}
+                  iconSrc={item.id === selectedTabId ? item.selectedIcon : item.icon}
                   cssExt={css`
                     width: 16px;
                     height: 16px;

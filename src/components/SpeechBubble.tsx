@@ -40,11 +40,6 @@ const SpeechBubbleWrapper = styled.div<{ cssExt: any; isUser: boolean }>`
   color: ${({ isUser }: { isUser: boolean }) => isUser && 'white'};
   overflow-x: auto;
 
-  pre {
-    margin: 0;
-    padding: 0;
-  }
-
   ${({ cssExt }: any) => cssExt && cssExt}
 `;
 

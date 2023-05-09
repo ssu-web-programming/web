@@ -30,6 +30,7 @@ import { marked } from 'marked';
 import CopyIcon from '../components/CopyIcon';
 import StopButton from '../components/StopButton';
 import { TableCss, purpleBtnCss } from '../style/cssCommon';
+import { setLoadingTab } from '../store/slices/tabSlice';
 
 const INPUT_HEIGHT = 120;
 const TEXT_MAX_HEIGHT = 168;
@@ -110,7 +111,6 @@ export const LengthWrapper = styled.div`
   font-family: NotoSansCJKSC;
   font-size: 12px;
   color: var(--gray-gray-70);
-  margin: 8px 0px 8px 11px;
 `;
 
 export const RightBox = styled.div`
@@ -142,6 +142,7 @@ export const ColumDivider = styled.div`
   width: 100%;
   height: 1px;
   background-color: var(--ai-purple-97-list-over);
+  margin-top: 8px;
 `;
 
 const exampleList = [
@@ -198,13 +199,12 @@ const AIChatTab = () => {
   const { selectedRecFunction, selectedSubRecFunction } = useAppSelector(selectRecFuncSlice);
 
   const [chatInput, setChatInput] = useState<string>('');
-  const [activeInput, setActiveInput] = useState<boolean>(false);
+  const [isActiveInput, setIsActiveInput] = useState<boolean>(false);
   const [loadingResId, setLoadingResId] = useState<string | null>(null);
-  const [loadingMsg, setLoadingMsg] = useState<string>('');
   const [retryRes, setRetryRes] = useState<string | null>(null);
-
   const chatEndRef = useRef<any>();
   const stopRef = useRef<boolean>(false);
+  const textRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     if (defaultInput && defaultInput.length > 0 && !loadingResId) {
@@ -228,7 +228,7 @@ const AIChatTab = () => {
         initChatHistory({
           id: uuidv4(),
           role: 'assistant',
-          content: 'what do you want?',
+          content: '안녕하세요. 쉽고, 빠르게 문서 작성을 도와주는 폴라리스오피스 AI Chat 입니다.',
           input: ''
         })
       );
@@ -279,6 +279,8 @@ const AIChatTab = () => {
   };
 
   const submitChat = async (chat?: Chat) => {
+    dispatch(setLoadingTab(true));
+
     let input = '';
 
     if (chat) {
@@ -293,7 +295,7 @@ const AIChatTab = () => {
     handleResizeHeight();
     if (textRef.current) textRef.current.style.height = 'auto';
 
-    if (!chat)
+    if (!chat && chatInput.length > 0)
       dispatch(appendChat({ id: uuidv4(), role: 'user', content: chatInput, input: input }));
     dispatch(appendChat({ id: assistantId, role: 'assistant', content: '', input: input }));
 
@@ -338,18 +340,17 @@ const AIChatTab = () => {
 
     setLoadingResId(null);
     stopRef.current = false;
-    setLoadingMsg('');
     dispatch(initRecFunc());
+    dispatch(setLoadingTab(false));
 
     if (chat) setRetryRes(null);
   };
 
-  const textRef = useRef<HTMLTextAreaElement>(null);
   useEffect(() => {
-    if (activeInput && textRef?.current) {
+    if (isActiveInput && textRef?.current) {
       textRef.current.focus();
     }
-  }, [activeInput]);
+  }, [isActiveInput]);
 
   const selectLoadingMsg = (isRetry: boolean) => {
     if (isRetry) return '내용을 다시 만드는 중입니다...';
@@ -372,7 +373,7 @@ const AIChatTab = () => {
   };
 
   const toggleActiveInput = (isActive: boolean) => {
-    setActiveInput(isActive);
+    setIsActiveInput(isActive);
     dispatch(isActive ? activeRecFunc() : inactiveRecFunc());
   };
 
@@ -397,7 +398,7 @@ const AIChatTab = () => {
         }}>
         {chatHistory.map((chat, index) => (
           <SpeechBubble
-            loadingMsg={loadingResId === chat.id ? loadingMsg : undefined}
+            loadingMsg={loadingResId === chat.id ? selectLoadingMsg(false) : undefined}
             key={chat.id}
             text={chat.content}
             isUser={chat.role === 'user'}
@@ -407,7 +408,10 @@ const AIChatTab = () => {
               index > 1 && (
                 <>
                   <ColumDivider />
-                  <RowBox>
+                  <RowBox
+                    cssExt={css`
+                      margin: 8px 0px 8px 0px;
+                    `}>
                     <LengthWrapper>공백 포함 {chat.content.length}자</LengthWrapper>
                     {chat.id !== loadingResId && (
                       <CopyIcon
@@ -417,28 +421,30 @@ const AIChatTab = () => {
                       />
                     )}
                   </RowBox>
-                  <RowBox
-                    cssExt={css`
-                      justify-content: space-around;
-                    `}>
+                  <RowWrapBox>
                     {retryRes !== chat.id && (
                       <Button
+                        cssExt={css`
+                          min-width: 124px;
+                        `}
                         isCredit={true}
                         onClick={() => {
-                          setLoadingMsg(selectLoadingMsg(true));
                           submitChat(chat);
                         }}>
                         다시 만들기
                       </Button>
                     )}
                     <Button
-                      cssExt={purpleBtnCss}
+                      cssExt={css`
+                        ${purpleBtnCss}
+                        min-width: 124px;
+                      `}
                       onClick={() => {
                         insertDoc(chat.content);
                       }}>
                       문서에 삽입하기
                     </Button>
-                  </RowBox>
+                  </RowWrapBox>
                 </>
               )
             }>
@@ -460,9 +466,9 @@ const AIChatTab = () => {
           />
         </CenterBox>
       )}
-      <InputWrapper className="inputwrapper" activeInputWrap={activeInput && !loadingResId}>
+      <InputWrapper className="inputwrapper" activeInputWrap={isActiveInput && !loadingResId}>
         <ActiveInputBox>
-          {activeInput && !loadingResId ? (
+          {isActiveInput && !loadingResId ? (
             <FuncRecBox chatLength={chatHistory.length} />
           ) : (
             !loadingResId && (
@@ -475,7 +481,7 @@ const AIChatTab = () => {
                     margin: 0 8px 0 0px;
                   `}
                 />
-                대화 1회 당 N크레딧이 차감됩니다.
+                대화 1회 당 크레딧이 차감됩니다.
               </Info>
             )
           )}
@@ -497,12 +503,6 @@ const AIChatTab = () => {
                   justify-content: center;
                   height: 20px;
                   padding: 8px 0px 0px 8px;
-                  ::placeholder {
-                    font-family: NotoSansCJKKR;
-                    font-size: 13px;
-                    color: var(--gray-gray-60-03);
-                    /* padding: 8px; */
-                  }
                   &:disabled {
                     background-color: #fff;
                   }
@@ -512,8 +512,7 @@ const AIChatTab = () => {
                   if (e.key === 'Enter' && !e.shiftKey) {
                     if (checkInput()) {
                       setChatInput('');
-                      setActiveInput(false);
-                      setLoadingMsg(selectLoadingMsg(false));
+                      setIsActiveInput(false);
 
                       submitChat();
                     }
@@ -523,14 +522,13 @@ const AIChatTab = () => {
                   setChatInput(e.target.value.slice(0, inputMaxLength));
                 }}
               />
-              {!loadingResId && activeInput && (
+              {!loadingResId && isActiveInput && (
                 <Button
                   onClick={() => {
                     // TODO: 전송 가능 여부 체크
                     if (checkInput()) {
                       setChatInput('');
-                      setActiveInput(false);
-                      setLoadingMsg(selectLoadingMsg(false));
+                      setIsActiveInput(false);
 
                       submitChat();
                     }
@@ -539,9 +537,13 @@ const AIChatTab = () => {
                 </Button>
               )}
             </RowBox>
-            {!loadingResId && activeInput && (
-              <RowWrapBox>
-                <ColumDivider />
+            {!loadingResId && isActiveInput && (
+              <RowWrapBox
+                cssExt={css`
+                  padding: 8px 3px 8px 11px;
+                  box-sizing: border-box;
+                  border-top: 1px solid var(--ai-purple-97-list-over);
+                `}>
                 <LengthWrapper>
                   {chatInput.length}/{inputMaxLength}
                 </LengthWrapper>

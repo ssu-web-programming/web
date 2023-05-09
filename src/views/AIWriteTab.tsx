@@ -16,9 +16,7 @@ import {
   updateWriteHistory
 } from '../store/slices/writeHistorySlice';
 import { useAppSelector } from '../store/store';
-import { selectTab } from '../store/slices/tabSlice';
-import { TAB_ITEM_VAL } from '../pages/Tools';
-import { updateDefaultInput } from '../store/slices/chatHistorySlice';
+import { selectTabSlice } from '../store/slices/tabSlice';
 import ExTextbox from '../components/ExTextbox';
 import IconButton from '../components/IconButton';
 import { firstRecList } from '../components/AIChat/FuncRecBox';
@@ -33,6 +31,7 @@ import { TableCss, purpleBtnCss } from '../style/cssCommon';
 import ai_loading from '../img/ai_motion_mid_56.webp';
 import RecreatingButton from '../components/RecreatingButton';
 import { useMoveChatTab } from '../components/hooks/useMovePage';
+import { setLoadingTab } from '../store/slices/tabSlice';
 
 const Wrapper = styled.div`
   display: flex;
@@ -97,14 +96,6 @@ const ResultWrapper = styled.div`
   white-space: break-spaces;
 `;
 
-const TextInfo = styled.div`
-  display: flex;
-  align-items: center;
-  margin-top: 10px;
-  font-size: 12px;
-  color: var(--gray-gray-80-02);
-`;
-
 const RowStartBox = styled(RowBox)`
   justify-content: flex-start;
   margin: 8px 0px 8px 0px;
@@ -113,10 +104,6 @@ const RowStartBox = styled(RowBox)`
 
 const ResWrapper = styled(Wrapper)`
   background-color: var(--ai-purple-99-bg-light);
-`;
-
-const fitButtonCss = css`
-  flex: none;
 `;
 
 const lengthList = [
@@ -152,7 +139,8 @@ const AIWriteTab = () => {
   const [selectedForm, setSelectedForm] = useState<FormListType | null>(null);
   const [selectedLength, setSelectedLength] = useState<LengthListType | null>(null);
 
-  const [isLoadingResult, setIsLoadingResult] = useState<boolean>(false);
+  // const [isLoadingResult, setIsLoadingResult] = useState<boolean>(false);
+  const { isLoading } = useAppSelector(selectTabSlice);
 
   const stopRef = useRef<boolean>(false);
   const endRef = useRef<any>();
@@ -190,7 +178,8 @@ const AIWriteTab = () => {
     dispatch(addWriteHistory({ id: assistantId, result: '', input: input }));
     dispatch(setCurrentWrite(assistantId));
 
-    setIsLoadingResult(true);
+    // setIsLoadingResult(true);
+    dispatch(setLoadingTab(true));
 
     const res = await fetch('/api/v2/chat/chatStream', {
       headers: { 'content-type': 'application/json' },
@@ -223,7 +212,8 @@ const AIWriteTab = () => {
     }
 
     stopRef.current = false;
-    setIsLoadingResult(false);
+    // setIsLoadingResult(false);
+    dispatch(setLoadingTab(false));
   };
 
   const currentWrite = history.filter((write) => write.id === currentWriteId)[0];
@@ -289,6 +279,8 @@ const AIWriteTab = () => {
                   background-color: ${selectedLength && selectedLength.length === length.length
                     ? `var(--ai-purple-97-list-over)`
                     : 'var(--gray-gray-20)'};
+                  flex: none;
+                  width: 82px;
                 `}>
                 {length.title}
               </Button>
@@ -320,7 +312,7 @@ const AIWriteTab = () => {
               margin-bottom: 8px;
             `}>
             <SubTitle subTitle="내용 미리보기" />
-            {!isLoadingResult && (
+            {!isLoading && (
               <RecreatingButton
                 onClick={() => {
                   // dispatch(initWriteHistory()); // 같은 주제끼리만 저장할지 의논 필요
@@ -349,7 +341,7 @@ const AIWriteTab = () => {
             )}
             {currentWrite.result.length > 0 && (
               <div>
-                {isLoadingResult && (
+                {isLoading && (
                   <StopButton
                     cssExt={css`
                       margin: 0 auto;
@@ -371,7 +363,7 @@ const AIWriteTab = () => {
                       font-size: 13px;
                     `}>
                     <LengthWrapper>공백포함 {currentWrite?.result.length}자</LengthWrapper>
-                    {!isLoadingResult && (
+                    {!isLoading && (
                       <RightBox>
                         <Icon
                           cssExt={css`
@@ -424,7 +416,7 @@ const AIWriteTab = () => {
               </div>
             )}
           </ResultBox>
-          {currentWrite?.result.length > 0 && !isLoadingResult && (
+          {currentWrite?.result.length > 0 && !isLoading && (
             <>
               <RowBox>
                 <Button

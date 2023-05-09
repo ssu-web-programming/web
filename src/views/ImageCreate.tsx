@@ -113,6 +113,8 @@ const Body = styled.div`
   display: flex;
   flex-direction: column;
   gap: 17px;
+  padding: 16px;
+  box-sizing: border-box;
 `;
 
 const SelectOptionArea = styled.div`

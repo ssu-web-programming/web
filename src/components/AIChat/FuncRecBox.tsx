@@ -40,12 +40,13 @@ const Wrapper = styled.div`
   justify-content: center;
 `;
 
-export const RowWrapBox = styled.div`
+export const RowWrapBox = styled.div<{ cssExt?: any }>`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-between;
   width: 100%;
+  ${({ cssExt }) => cssExt && cssExt}
 `;
 
 const OpenedBox = styled(RowWrapBox)`

@@ -19,6 +19,7 @@ const TopBorer = styled(RowBox)`
   border-top: 1px solid #e8ebed;
   width: 100%;
   box-sizing: border-box;
+  padding: 8px 3px 8px 11px;
 `;
 
 interface ExTextboxProps {
