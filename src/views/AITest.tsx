@@ -142,8 +142,10 @@ export default function AITest() {
     <Wrapper>
       <Body>
         <Result>
-          {log.map((item) => (
-            <div style={{ width: '100%', wordBreak: 'break-all' }}>{item}</div>
+          {log.map((item, index) => (
+            <div key={index} style={{ width: '100%', wordBreak: 'break-all' }}>
+              {item}
+            </div>
           ))}
         </Result>
         <Row>
