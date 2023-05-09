@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import Wrapper from '../components/Wrapper';
 import { useCallback, useEffect, useState } from 'react';
-import { useAppSelector } from '../store/store';
-import { selectBridgeMessage } from '../store/slices/bridge';
+import { useAppDispatch, useAppSelector } from '../store/store';
+import { selectBridgeMessage, setBridgeMessage } from '../store/slices/bridge';
 
 const Body = styled.div`
   width: 100%;
@@ -54,20 +54,12 @@ declare global {
 }
 
 export default function AITest() {
+  const dispatch = useAppDispatch();
   const bridgeSelector = useAppSelector(selectBridgeMessage);
-  const [log, setLog] = useState<string[]>([]);
 
   const writeLog = useCallback((text: string) => {
-    setLog((prev) => [...prev, text]);
+    dispatch(setBridgeMessage({ cmd: 'call api', body: text }));
   }, []);
-
-  useEffect(() => {
-    if (bridgeSelector.cmd && bridgeSelector.cmd !== '')
-      setLog((prev) => [
-        ...prev,
-        `=== called receiveMessage : ${bridgeSelector.cmd} / ${bridgeSelector.body}`
-      ]);
-  }, [bridgeSelector]);
 
   const onInsertText = () => {
     try {
@@ -142,9 +134,9 @@ export default function AITest() {
     <Wrapper>
       <Body>
         <Result>
-          {log.map((item, index) => (
+          {bridgeSelector.map((item, index) => (
             <div key={index} style={{ width: '100%', wordBreak: 'break-all' }}>
-              {item}
+              {`cmd : ${item.cmd} / body : ${item.body}`}
             </div>
           ))}
         </Result>
