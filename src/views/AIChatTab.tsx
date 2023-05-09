@@ -207,12 +207,12 @@ const AIChatTab = () => {
   const stopRef = useRef<boolean>(false);
 
   useEffect(() => {
-    if (defaultInput && defaultInput.length > 0) {
-      setActiveInput(true);
+    if (defaultInput && defaultInput.length > 0 && !loadingResId) {
+      // setActiveInput(true);
       setChatInput(defaultInput);
       dispatch(updateDefaultInput(null));
     }
-  }, []);
+  }, [defaultInput]);
 
   useEffect(() => {
     handleResizeHeight();

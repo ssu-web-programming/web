@@ -29,7 +29,7 @@ function App() {
         case 'openTextToImg': {
           const path = cmd === `openAiTools` ? `/aiWrite` : `/txt2img`;
           const time = new Date().getTime();
-          movePage('im bonnie'); // Change input and get parameter
+          movePage(body);
           navigate(path, {
             state: { body, time }
           });
