@@ -32,6 +32,7 @@ import icon_chat_white from '../img/ico_chat_white.svg';
 import { TableCss, purpleBtnCss } from '../style/cssCommon';
 import ai_loading from '../img/ai_motion_mid_56.webp';
 import RecreatingButton from '../components/RecreatingButton';
+import { useMoveChatTab } from '../components/hooks/useMovePage';
 
 const Wrapper = styled.div`
   display: flex;
@@ -155,6 +156,8 @@ const AIWriteTab = () => {
 
   const stopRef = useRef<boolean>(false);
   const endRef = useRef<any>();
+
+  const moveChat = useMoveChatTab();
 
   const dispatch = useDispatch();
   const { history, currentWriteId } = useAppSelector(selectWriteHistorySlice);
@@ -452,8 +455,7 @@ const AIWriteTab = () => {
                   ${purpleBtnCss}
                 `}
                 onClick={() => {
-                  dispatch(updateDefaultInput(currentWrite.result));
-                  dispatch(selectTab(TAB_ITEM_VAL.CHAT));
+                  moveChat(currentWrite.result);
                 }}>
                 채팅으로 더 많은 작업하기
               </Button>
