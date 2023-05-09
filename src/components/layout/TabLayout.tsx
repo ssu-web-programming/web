@@ -56,11 +56,7 @@ export default function TabPage({
   const selectedTab = useAppSelector(selectTabSlice);
 
   useEffect(() => {
-    dispatch(selectTab(tabList[0].id));
-
-    return () => {
-      dispatch(initTab());
-    };
+    if (!selectedTab.selectedTabId) dispatch(selectTab(tabList[0].id));
   }, []);
 
   const currentTab = tabList.filter((tab) => tab.id === selectedTab.selectedTabId)[0];

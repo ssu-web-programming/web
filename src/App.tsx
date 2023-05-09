@@ -9,11 +9,13 @@ import { setBridgeMessage } from './store/slices/bridge';
 import TextToImage from './pages/TextToImage';
 import GlobalStyle from './style/globalStyle';
 import InvalidAccess from './pages/InvalidAccess';
+import { useMoveChatTab } from './components/hooks/useMovePage';
 
 function App() {
   const dispatch = useAppDispatch();
   const toast = useAppSelector(selectToast);
   const navigate = useNavigate();
+  const movePage = useMoveChatTab();
 
   const procMsg = (msg: string) => {
     try {
@@ -27,6 +29,7 @@ function App() {
         case 'openTextToImg': {
           const path = cmd === `openAiTools` ? `/aiWrite` : `/txt2img`;
           const time = new Date().getTime();
+          movePage('im bonnie'); // Change input and get parameter
           navigate(path, {
             state: { body, time }
           });
