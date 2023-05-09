@@ -17,12 +17,26 @@ function App() {
   const navigate = useNavigate();
   const movePage = useMoveChatTab();
 
-  const procMsg = (msg: string) => {
+  const procMsg = async (msg: string) => {
     try {
       const { cmd, body } = JSON.parse(msg);
-      dispatch(setBridgeMessage({ cmd, body }));
+      dispatch(setBridgeMessage({ cmd, body: JSON.stringify(body) }));
       switch (cmd) {
         case 'sessionInfo': {
+          const res = await (
+            await fetch('/api/v2/user/getCurrentLoginStatus', {
+              headers: {
+                'content-type': 'application/json',
+                'X-PO-AI-MayFlower-Auth-AID': body['AID'],
+                'X-PO-AI-MayFlower-Auth-BID': body['BID'],
+                'X-PO-AI-MayFlower-Auth-SID': body['SID']
+              },
+              method: 'GET'
+            })
+          ).json();
+          const email = res?.data?.userInfo?.email;
+          const resultMsg = res?.data?.userInfo?.resultMsg;
+          dispatch(setBridgeMessage({ cmd: `${cmd}_response`, body: email ? email : resultMsg }));
           break;
         }
         case 'openAiTools':
