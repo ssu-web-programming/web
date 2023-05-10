@@ -22,7 +22,16 @@ import iconRatioVertical_purple from '../img/text2Img/vertical_purple.svg';
 
 import iconCredit from '../img/ico_credit.svg';
 import iconCreditText from '../img/text2Img/ico_creating_text.svg';
+import iconPrev from '../img/ico_arrow_prev.svg';
+import iconNext from '../img/ico_arrow_next.svg';
+
 import { userSelectCss } from '../style/cssCommon';
+import Loading from '../components/Loading';
+import Button from '../components/Button';
+import RecreatingButton from '../components/RecreatingButton';
+import Icon from '../components/Icon';
+import LinkText from '../components/LinkText';
+import { RightBox } from './AIChatTab';
 
 const exampleList = [
   '노을진 바다 위 비행기',
@@ -162,6 +171,13 @@ const ItemTitle = styled.div<{ isSelected: boolean }>`
   text-align: center;
   font-weight: 400;
   color: var(--gray-gray-80-02);
+  cursor: pointer;
+
+  &:hover {
+    div {
+      padding: 2px;
+    }
+  }
 
   ${({ isSelected }) =>
     isSelected &&
@@ -186,9 +202,11 @@ const ItemIconBox = styled.div<{
   background-color: var(--gray-gray-20);
   box-sizing: border-box;
   overflow: hidden;
+  cursor: pointer;
 
   &:hover {
     background-color: var(--ai-purple-97-list-over);
+    padding: 2px;
   }
 
   ${({ width, height }) =>
@@ -202,8 +220,9 @@ const ItemIconBox = styled.div<{
   ${({ isSelected }) =>
     isSelected &&
     css`
-      border: solid 1px var(--ai-purple-80-sub);
+      border: solid 2px var(--ai-purple-80-sub);
       background-color: var(--ai-purple-97-list-over);
+      padding: 2px;
     `}
 `;
 
@@ -250,6 +269,7 @@ const CreditImg = styled.img`
 const ImagePreview = styled.div`
   width: 100%;
   aspect-ratio: 1 / 1;
+  max-height: 348px;
 `;
 
 const ImageDesc = styled.div`
@@ -379,58 +399,73 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
               justifyContent: 'center',
               alignItems: 'center'
             }}>
-            Creating...
+            <Loading>
+              폴라리스오피스 AI가 작성하신 내용을 이미지로 만들고 있어요.
+              <br />
+              잠시만 기다려주세요.
+            </Loading>
           </div>
         )
       ) : (
         <>
           <SubTitleArea>
             <SubTitle subTitle="이미지 미리보기" />
-            <button
+            <RecreatingButton
               onClick={() => {
                 setAiImgs([]);
                 setPreviewIndex(0);
-              }}>
-              주제 다시 입력하기
-            </button>
+              }}
+            />
           </SubTitleArea>
           <ImageDesc>{descInput}</ImageDesc>
           <ImagePreview>
             <img
-              style={{ width: '100%', height: '100%' }}
+              style={{ width: '100%', height: '100%', objectFit: 'contain' }}
               src={`data:${aiImgs[previewIndex].contentType};base64,${aiImgs[previewIndex].data}`}
               alt=""></img>
           </ImagePreview>
           <ImageList>
-            <button
-              onClick={() =>
-                setPreviewIndex((prev) => {
-                  return (prev + aiImgs.length - 1) % aiImgs.length;
-                })
-              }>
-              prev
-            </button>
-            {aiImgs.map((img, index) => (
-              <img
-                onClick={() => setPreviewIndex(index)}
-                style={{ width: '60px', height: '60px' }}
-                src={`data:${img.contentType};base64,${img.data}`}
-                alt=""></img>
-            ))}
-            <button
+            <Icon
+              iconSrc={iconPrev}
               onClick={() =>
                 setPreviewIndex((prev) => {
                   return (prev + aiImgs.length + 1) % aiImgs.length;
                 })
-              }>
-              next
-            </button>
+              }
+            />
+            {aiImgs.map((img, index) => (
+              <img
+                onClick={() => setPreviewIndex(index)}
+                style={{
+                  width: '60px',
+                  height: '60px',
+                  borderRadius: '4px',
+                  opacity: `${index === previewIndex ? '1' : '0.6'}`
+                }}
+                src={`data:${img.contentType};base64,${img.data}`}
+                alt=""></img>
+            ))}
+            <Icon
+              iconSrc={iconNext}
+              onClick={() =>
+                setPreviewIndex((prev) => {
+                  return (prev + aiImgs.length + 1) % aiImgs.length;
+                })
+              }
+            />
           </ImageList>
           <RowContainer>
-            <button onClick={createAiImage}>다시 만들기</button>
-            <button>다운로드</button>
+            <Button isCredit={true} onClick={createAiImage}>
+              다시 만들기
+            </Button>
+            <Button>다운로드</Button>
             <GenButton disabled={false}>문서에 삽입하기</GenButton>
           </RowContainer>
+          <RightBox>
+            <div style={{ color: '#8769ba', fontSize: '11px' }}>
+              Powered By <b>Stable Diffusion</b>
+            </div>
+          </RightBox>
         </>
       )}
     </Body>

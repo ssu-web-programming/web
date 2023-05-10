@@ -32,6 +32,7 @@ import ai_loading from '../img/ai_motion_mid_56.webp';
 import RecreatingButton from '../components/RecreatingButton';
 import { useMoveChatTab } from '../components/hooks/useMovePage';
 import { setLoadingTab } from '../store/slices/tabSlice';
+import Loading from '../components/Loading';
 
 const Wrapper = styled.div`
   display: flex;
@@ -139,7 +140,6 @@ const AIWriteTab = () => {
   const [selectedForm, setSelectedForm] = useState<FormListType | null>(null);
   const [selectedLength, setSelectedLength] = useState<LengthListType | null>(null);
 
-  // const [isLoadingResult, setIsLoadingResult] = useState<boolean>(false);
   const { isLoading } = useAppSelector(selectTabSlice);
 
   const stopRef = useRef<boolean>(false);
@@ -178,7 +178,6 @@ const AIWriteTab = () => {
     dispatch(addWriteHistory({ id: assistantId, result: '', input: input }));
     dispatch(setCurrentWrite(assistantId));
 
-    // setIsLoadingResult(true);
     dispatch(setLoadingTab(true));
 
     const res = await fetch('/api/v2/chat/chatStream', {
@@ -212,7 +211,6 @@ const AIWriteTab = () => {
     }
 
     stopRef.current = false;
-    // setIsLoadingResult(false);
     dispatch(setLoadingTab(false));
   };
 
@@ -324,15 +322,7 @@ const AIWriteTab = () => {
           <ResultBox>
             {currentWrite.result.length === 0 ? (
               <LoadingWrapper>
-                <div>
-                  <Icon
-                    iconSrc={ai_loading}
-                    cssExt={css`
-                      margin-bottom: 8px;
-                    `}
-                  />
-                  작성한 주제로 폴라리스 오피스 AI가 멋진 내용을 만들어 드릴게요!
-                </div>
+                <Loading>작성한 주제로 폴라리스 오피스 AI가 멋진 내용을 만들어 드릴게요!</Loading>
               </LoadingWrapper>
             ) : (
               <ResultWrapper>
