@@ -108,6 +108,7 @@ export default function HeaderPageLayout({
               height: 32px;
               padding: 10.8px 10.8px 10.8px 10.8px;
             `}
+            onClick={() => window._Bridge.closePanel()}
           />
         </Header>
         {tabComp && tabComp}
