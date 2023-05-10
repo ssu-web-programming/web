@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import Wrapper from '../components/Wrapper';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import { selectBridgeMessage, setBridgeMessage } from '../store/slices/bridge';
 
@@ -115,7 +115,7 @@ export default function AITest() {
     try {
       const blob = await getBlob('./test.pptx');
       window._Bridge.openDoc(blob);
-      writeLog(`call onOpenDoc : ${await window.fileToString(blob)}`);
+      writeLog(`call onOpenDoc : type(${blob.type}), size(${blob.size})`);
     } catch (err) {
       writeLog(JSON.stringify(err));
     }
