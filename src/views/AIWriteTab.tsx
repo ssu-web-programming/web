@@ -314,7 +314,8 @@ const AIWriteTab = () => {
               <RecreatingButton
                 onClick={() => {
                   // dispatch(initWriteHistory()); // 같은 주제끼리만 저장할지 의논 필요
-                  initAllInput();
+                  // initAllInput();
+                  dispatch(resetCurrentWrite());
                 }}
               />
             )}
