@@ -33,6 +33,7 @@ import RecreatingButton from '../components/RecreatingButton';
 import { useMoveChatTab } from '../components/hooks/useMovePage';
 import { setLoadingTab } from '../store/slices/tabSlice';
 import Loading from '../components/Loading';
+import { CHAT_STREAM_API, CHAT_STREAM_API_HEADER } from '../api/aiWrite';
 
 const Wrapper = styled.div`
   display: flex;
@@ -179,9 +180,8 @@ const AIWriteTab = () => {
     dispatch(setCurrentWrite(assistantId));
 
     dispatch(setLoadingTab(true));
-
-    const res = await fetch('/api/v2/chat/chatStream', {
-      headers: { 'content-type': 'application/json' },
+    const res = await fetch(CHAT_STREAM_API, {
+      headers: CHAT_STREAM_API_HEADER,
       //   responseType: 'stream',
       body: JSON.stringify({
         history: [

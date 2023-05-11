@@ -31,6 +31,7 @@ import CopyIcon from '../components/CopyIcon';
 import StopButton from '../components/StopButton';
 import { TableCss, purpleBtnCss } from '../style/cssCommon';
 import { setLoadingTab } from '../store/slices/tabSlice';
+import { CHAT_STREAM_API, CHAT_STREAM_API_HEADER } from '../api/aiWrite';
 
 const INPUT_HEIGHT = 120;
 const TEXT_MAX_HEIGHT = 168;
@@ -301,8 +302,8 @@ const AIChatTab = () => {
 
     setLoadingResId(assistantId);
 
-    const res = await fetch('/api/v2/chat/chatStream', {
-      headers: { 'content-type': 'application/json' },
+    const res = await fetch(CHAT_STREAM_API, {
+      headers: CHAT_STREAM_API_HEADER,
       //   responseType: 'stream',
       body: JSON.stringify({
         history: [

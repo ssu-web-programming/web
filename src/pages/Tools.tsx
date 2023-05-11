@@ -42,7 +42,7 @@ export default function Tools() {
 
   useEffect(() => {
     dispatch(selectTab(TAB_ITEM_VAL.CHAT));
-  });
+  }, []);
 
   return <TabLayout title="AI 도구" subTitle="AI Write" tabList={TAB_LIST} />;
 }
