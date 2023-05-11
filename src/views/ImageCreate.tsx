@@ -559,16 +559,17 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
               다시 만들기
             </Button>
             <Button
-              onClick={() => {
+              onClick={async () => {
                 try {
                   if (currentItemIdx === null) throw new Error('invalid currentItemIdx');
                   const selected = currentHistory.list[currentItemIdx];
 
                   if (!selected) throw new Error('invalid target');
 
-                  const blob = new Blob([selected.data], {
-                    type: selected.contentType
-                  });
+                  const res = await fetch(
+                    `data:${currentHistory.list[currentItemIdx].contentType};base64,${currentHistory.list[currentItemIdx].data}`
+                  );
+                  const blob = await res.blob();
                   window._Bridge.downloadImage(blob);
                 } catch (err) {
                   // TODO : error handle
@@ -577,16 +578,17 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
               다운로드
             </Button>
             <GenButton
-              onClick={() => {
+              onClick={async () => {
                 try {
                   if (currentItemIdx === null) throw new Error('invalid currentItemIdx');
                   const selected = currentHistory.list[currentItemIdx];
 
                   if (!selected) throw new Error('invalid target');
 
-                  const blob = new Blob([selected.data], {
-                    type: selected.contentType
-                  });
+                  const res = await fetch(
+                    `data:${currentHistory.list[currentItemIdx].contentType};base64,${currentHistory.list[currentItemIdx].data}`
+                  );
+                  const blob = await res.blob();
                   window._Bridge.insertImage(blob);
 
                   dispatch(
