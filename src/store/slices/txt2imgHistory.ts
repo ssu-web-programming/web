@@ -4,6 +4,9 @@ import { AiImageResponse } from '../../views/ImageCreate';
 
 interface T2IType {
   id: string;
+  input: string;
+  ratio: string;
+  style: string;
   list: AiImageResponse[];
 }
 

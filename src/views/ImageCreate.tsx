@@ -313,7 +313,15 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
       const body = await res.json();
       const { images } = body.data;
       if (images) {
-        dispatch(addT2I({ id: assistantId, list: images }));
+        dispatch(
+          addT2I({
+            id: assistantId,
+            list: images,
+            input: descInput,
+            style: selectedStyle,
+            ratio: selectedRatio
+          })
+        );
         dispatch(updateT2ICurListId(assistantId));
         dispatch(updateT2ICurItemIndex(0));
 
@@ -323,10 +331,8 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
     } catch (err) {}
   }, [descInput]);
 
-  const imgList =
-    history &&
-    history.length > 0 &&
-    history?.filter((history) => history.id === currentListId)[0]?.list;
+  const currentHistory =
+    history && history.length > 0 && history?.filter((history) => history.id === currentListId)[0];
 
   const curListIndex = history.findIndex((list) => list.id === currentListId);
 
@@ -347,7 +353,7 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
             잠시만 기다려주세요.
           </Loading>
         </div>
-      ) : !imgList || imgList.length === 0 ? (
+      ) : !currentHistory ? (
         <>
           <div>
             <ExTextbox
@@ -411,15 +417,6 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
             `}>
             이미지 생성하기
           </Button>
-          <div style={{ display: 'flex', flexDirection: 'row' }}>
-            {imgList &&
-              imgList.map((img) => (
-                <img
-                  style={{ width: '100px', height: '100px' }}
-                  src={`data:${img.contentType};base64,${img.data}`}
-                  alt=""></img>
-              ))}
-          </div>
         </>
       ) : (
         <>
@@ -471,12 +468,12 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
               }}
             />
           </RowBox>
-          <ImageDesc>{descInput}</ImageDesc>
+          <ImageDesc>{currentHistory.input}</ImageDesc>
           <ImagePreview>
             {currentItemIdx !== null && (
               <img
                 style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-                src={`data:${imgList[currentItemIdx].contentType};base64,${imgList[currentItemIdx].data}`}
+                src={`data:${currentHistory.list[currentItemIdx].contentType};base64,${currentHistory.list[currentItemIdx].data}`}
                 alt=""></img>
             )}
           </ImagePreview>
@@ -489,7 +486,7 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
                 }
               }}
             />
-            {imgList.map((img, index) => (
+            {currentHistory.list.map((img, index) => (
               <img
                 onClick={() => {
                   dispatch(updateT2ICurItemIndex(index));
