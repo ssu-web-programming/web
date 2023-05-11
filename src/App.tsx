@@ -10,6 +10,7 @@ import TextToImage from './pages/TextToImage';
 import GlobalStyle from './style/globalStyle';
 import InvalidAccess from './pages/InvalidAccess';
 import { useMoveChatTab } from './components/hooks/useMovePage';
+import { GET_USER_LOGIN_STATUS_API } from './api/constant';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -25,7 +26,7 @@ function App() {
         switch (cmd) {
           case 'sessionInfo': {
             const res = await (
-              await fetch('/api/v2/user/getCurrentLoginStatus', {
+              await fetch(GET_USER_LOGIN_STATUS_API, {
                 headers: {
                   'content-type': 'application/json',
                   'X-PO-AI-MayFlower-Auth-AID': body['AID'],
@@ -35,9 +36,8 @@ function App() {
                 method: 'GET'
               })
             ).json();
-            const email = res?.data?.userInfo?.email;
-            const resultMsg = res?.data?.userInfo?.resultMsg;
-            dispatch(setBridgeMessage({ cmd: `${cmd}_response`, body: email ? email : resultMsg }));
+            const resMsg = res?.data?.msg;
+            dispatch(setBridgeMessage({ cmd: `${cmd}_response`, body: resMsg }));
             break;
           }
           case 'openAiTools':
