@@ -29,6 +29,7 @@ interface ExTextboxProps {
   setValue: Function;
   exampleList: string[];
   placeholder?: string;
+  rows?: number;
 }
 
 const ExTextbox = ({
@@ -37,13 +38,15 @@ const ExTextbox = ({
   setValue,
   exampleList,
   maxtTextLen,
-  placeholder
+  placeholder,
+  rows
 }: ExTextboxProps) => {
   return (
     <>
       {subTitle && <SubTitle subTitle={subTitle} />}
       <InputArea>
         <TextArea
+          rows={rows}
           placeholder={placeholder}
           value={value}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {

@@ -6,9 +6,10 @@ import bridge from './slices/bridge';
 import recFunction from './slices/recFuncSlice';
 import writeHistory from './slices/writeHistorySlice';
 import tab from './slices/tabSlice';
+import txtimgHistory from './slices/txt2imgHistory';
 
 const store = configureStore({
-  reducer: { chatHistory, toast, recFunction, writeHistory, tab, bridge },
+  reducer: { chatHistory, toast, recFunction, writeHistory, tab, bridge, txtimgHistory },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false })
 });
 

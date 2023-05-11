@@ -20,18 +20,23 @@ import iconRatioHorizontal_purple from '../img/text2Img/horizontal_purple.svg';
 import iconRatioVertical from '../img/text2Img/vertical.svg';
 import iconRatioVertical_purple from '../img/text2Img/vertical_purple.svg';
 
-import iconCredit from '../img/ico_credit.svg';
-import iconCreditText from '../img/text2Img/ico_creating_text.svg';
 import iconPrev from '../img/ico_arrow_prev.svg';
 import iconNext from '../img/ico_arrow_next.svg';
 
-import { userSelectCss } from '../style/cssCommon';
+import { purpleBtnCss } from '../style/cssCommon';
 import Loading from '../components/Loading';
 import Button from '../components/Button';
 import RecreatingButton from '../components/RecreatingButton';
 import Icon from '../components/Icon';
-import LinkText from '../components/LinkText';
-import { RightBox } from './AIChatTab';
+import { RightBox, RowBox } from './AIChatTab';
+import { v4 as uuidv4 } from 'uuid';
+import { useAppDispatch, useAppSelector } from '../store/store';
+import {
+  addT2I,
+  selectT2IHIstory,
+  updateT2ICurItemIndex,
+  updateT2ICurListId
+} from '../store/slices/txt2imgHistory';
 
 const exampleList = [
   '노을진 바다 위 비행기',
@@ -40,7 +45,7 @@ const exampleList = [
   '로봇들만 있는 도시가 된 뉴욕,사이버펑크,현실적,4K,HQ',
   '모나리자 초상화 컨셉의 강아지',
   '하우스, 컨셉아트, 매트페인팅, HQ, 4k',
-  '한강에서 새해 충사 행사의 모습, 불꽃놀이, 드론 쇼, 초현실적, 8k 높은 디테일',
+  '한강에서 새해 축하 행사의 모습, 불꽃놀이, 드론 쇼, 초현실적, 8k 높은 디테일',
   '만화 컨셉의 해리포터 포스터, 4K, HQ'
 ];
 
@@ -116,6 +121,8 @@ const selectImageRatioItemList = [
   }
 ];
 
+const MAX_LENGTH_T2I = 10;
+
 const Body = styled.div`
   width: 100%;
   height: 100%;
@@ -124,6 +131,9 @@ const Body = styled.div`
   gap: 17px;
   padding: 16px;
   box-sizing: border-box;
+
+  overflow-y: auto;
+  overflow-x: hidden;
 `;
 
 const SelectOptionArea = styled.div`
@@ -252,20 +262,6 @@ const GenButton = styled.div<{ disabled: boolean }>`
     `}
 `;
 
-const GenButtonImg = styled.img`
-  ${userSelectCss}
-`;
-
-const GenButtonText = styled.span`
-  ${userSelectCss}
-`;
-
-const CreditImg = styled.img`
-  position: absolute;
-  right: 6px;
-  ${userSelectCss}
-`;
-
 const ImagePreview = styled.div`
   width: 100%;
   aspect-ratio: 1 / 1;
@@ -291,7 +287,7 @@ const ImageList = styled.div`
   gap: 8px;
 `;
 
-interface AiImageResponse {
+export interface AiImageResponse {
   contentType: string;
   data: string;
 }
@@ -300,12 +296,14 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
   const [descInput, setDescInput] = useState<string>(contents ? contents : '');
   const [selectedStyle, setSelectedStyle] = useState<string>('selectStyleNone');
   const [selectedRatio, setSelectedRatio] = useState<string>('selectRatioSqure');
-  const [aiImgs, setAiImgs] = useState<AiImageResponse[]>([]);
-  const [previewIndex, setPreviewIndex] = useState(0);
   const [creating, setCreating] = useState(false);
+  const dispatch = useAppDispatch();
+  const { currentListId, currentItemIdx, history } = useAppSelector(selectT2IHIstory);
 
   const createAiImage = useCallback(async () => {
     try {
+      const assistantId = uuidv4();
+
       setCreating(true);
       const res = await fetch(`/api/v1/image/genImageByDreamXL`, {
         headers: { 'content-type': 'text/plain' },
@@ -315,17 +313,43 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
       const body = await res.json();
       const { images } = body.data;
       if (images) {
+        dispatch(addT2I({ id: assistantId, list: images }));
+        dispatch(updateT2ICurListId(assistantId));
+        dispatch(updateT2ICurItemIndex(0));
+
         setCreating(false);
-        setAiImgs(images);
+        // setAiImgs(images);
       }
     } catch (err) {}
   }, [descInput]);
 
+  const imgList =
+    history &&
+    history.length > 0 &&
+    history?.filter((history) => history.id === currentListId)[0]?.list;
+
+  const curListIndex = history.findIndex((list) => list.id === currentListId);
+
   return (
     <Body>
-      {aiImgs.length === 0 ? (
-        creating === false ? (
-          <>
+      {creating ? (
+        <div
+          style={{
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}>
+          <Loading>
+            폴라리스오피스 AI가 작성하신 내용을 이미지로 만들고 있어요.
+            <br />
+            잠시만 기다려주세요.
+          </Loading>
+        </div>
+      ) : !imgList || imgList.length === 0 ? (
+        <>
+          <div>
             <ExTextbox
               exampleList={exampleList}
               maxtTextLen={1000}
@@ -333,132 +357,172 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
               value={descInput}
               setValue={setDescInput}
             />
-            <SelectOptionArea>
-              <SubTitleArea>
-                <SubTitle subTitle="스타일 선택하기" />
-              </SubTitleArea>
-              <RowContainer>
-                {selectStyleItemList.map((item) => {
-                  return (
-                    <ContainerItem key={item.id} onClick={() => setSelectedStyle(item.id)}>
-                      <ItemIconBox width={80} height={80} isSelected={item.id === selectedStyle}>
-                        <img
-                          style={{
-                            width: item.id === 'selectStyleNone' ? '24px' : '100%',
-                            height: item.id === 'selectStyleNone' ? '24px' : '100%'
-                          }}
-                          src={item.id === selectedStyle ? item.selectedImgItem : item.imgItem}
-                          alt=""></img>
-                      </ItemIconBox>
-                      <ItemTitle isSelected={item.id === selectedStyle}>{item.title}</ItemTitle>
-                    </ContainerItem>
-                  );
-                })}
-              </RowContainer>
-            </SelectOptionArea>
-            <SelectOptionArea>
-              <SubTitleArea>
-                <SubTitle subTitle="이미지 비율 선택하기" />
-              </SubTitleArea>
-              <RowContainer>
-                {selectImageRatioItemList.map((item) => {
-                  return (
-                    <ContainerItem key={item.id} onClick={() => setSelectedRatio(item.id)}>
-                      <ItemIconBox width={81} height={48} isSelected={item.id === selectedRatio}>
-                        <img
-                          src={item.id === selectedRatio ? item.selectedImgItem : item.imgItem}
-                          alt=""></img>
-                      </ItemIconBox>
-                      <ItemTitle isSelected={item.id === selectedRatio}>{item.title}</ItemTitle>
-                    </ContainerItem>
-                  );
-                })}
-              </RowContainer>
-            </SelectOptionArea>
-            <GenButton disabled={!descInput} onClick={createAiImage}>
-              <GenButtonImg src={iconCreditText} />
-              <GenButtonText>이미지 생성하기</GenButtonText>
-              <CreditImg src={iconCredit} />
-            </GenButton>
-            <div style={{ display: 'flex', flexDirection: 'row' }}>
-              {aiImgs &&
-                aiImgs.map((img) => (
-                  <img
-                    style={{ width: '100px', height: '100px' }}
-                    src={`data:${img.contentType};base64,${img.data}`}
-                    alt=""></img>
-                ))}
-            </div>
-          </>
-        ) : (
-          <div
-            style={{
-              width: '100%',
-              height: '100%',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center'
-            }}>
-            <Loading>
-              폴라리스오피스 AI가 작성하신 내용을 이미지로 만들고 있어요.
-              <br />
-              잠시만 기다려주세요.
-            </Loading>
           </div>
-        )
+          <SelectOptionArea>
+            <SubTitleArea>
+              <SubTitle subTitle="스타일 선택하기" />
+            </SubTitleArea>
+            <RowContainer>
+              {selectStyleItemList.map((item) => {
+                return (
+                  <ContainerItem key={item.id} onClick={() => setSelectedStyle(item.id)}>
+                    <ItemIconBox width={80} height={80} isSelected={item.id === selectedStyle}>
+                      <img
+                        style={{
+                          width: item.id === 'selectStyleNone' ? '24px' : '100%',
+                          height: item.id === 'selectStyleNone' ? '24px' : '100%'
+                        }}
+                        src={item.id === selectedStyle ? item.selectedImgItem : item.imgItem}
+                        alt=""></img>
+                    </ItemIconBox>
+                    <ItemTitle isSelected={item.id === selectedStyle}>{item.title}</ItemTitle>
+                  </ContainerItem>
+                );
+              })}
+            </RowContainer>
+          </SelectOptionArea>
+          <SelectOptionArea>
+            <SubTitleArea>
+              <SubTitle subTitle="이미지 비율 선택하기" />
+            </SubTitleArea>
+            <RowContainer>
+              {selectImageRatioItemList.map((item) => {
+                return (
+                  <ContainerItem key={item.id} onClick={() => setSelectedRatio(item.id)}>
+                    <ItemIconBox width={81} height={48} isSelected={item.id === selectedRatio}>
+                      <img
+                        src={item.id === selectedRatio ? item.selectedImgItem : item.imgItem}
+                        alt=""></img>
+                    </ItemIconBox>
+                    <ItemTitle isSelected={item.id === selectedRatio}>{item.title}</ItemTitle>
+                  </ContainerItem>
+                );
+              })}
+            </RowContainer>
+          </SelectOptionArea>
+          <Button
+            isCredit={true}
+            onClick={createAiImage}
+            cssExt={css`
+              width: 100%;
+              box-sizing: border-box;
+              flex: none;
+              ${purpleBtnCss}
+            `}>
+            이미지 생성하기
+          </Button>
+          <div style={{ display: 'flex', flexDirection: 'row' }}>
+            {imgList &&
+              imgList.map((img) => (
+                <img
+                  style={{ width: '100px', height: '100px' }}
+                  src={`data:${img.contentType};base64,${img.data}`}
+                  alt=""></img>
+              ))}
+          </div>
+        </>
       ) : (
         <>
           <SubTitleArea>
             <SubTitle subTitle="이미지 미리보기" />
             <RecreatingButton
               onClick={() => {
-                setAiImgs([]);
-                setPreviewIndex(0);
+                dispatch(updateT2ICurListId(null));
+                dispatch(updateT2ICurItemIndex(null));
               }}
             />
           </SubTitleArea>
+          <RowBox
+            cssExt={css`
+              justify-content: center;
+              font-size: 13px;
+              color: var(--gray-gray-70);
+            `}>
+            <Icon
+              cssExt={css`
+                width: 16px;
+                height: 16px;
+                padding: 6px 3px 6px 5px;
+                margin-right: 12px;
+              `}
+              iconSrc={iconPrev}
+              onClick={() => {
+                if (history.length <= 1) return;
+
+                if (curListIndex > 0) dispatch(updateT2ICurListId(history[curListIndex - 1].id));
+              }}
+            />
+            <div>
+              {curListIndex + 1}/{history.length}
+            </div>
+            <Icon
+              cssExt={css`
+                width: 16px;
+                height: 16px;
+                padding: 6px 3px 6px 5px;
+                margin-left: 12px;
+              `}
+              iconSrc={iconNext}
+              onClick={() => {
+                if (history.length <= 1) return;
+
+                if (curListIndex < history.length - 1)
+                  dispatch(updateT2ICurListId(history[curListIndex + 1].id));
+              }}
+            />
+          </RowBox>
           <ImageDesc>{descInput}</ImageDesc>
           <ImagePreview>
-            <img
-              style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-              src={`data:${aiImgs[previewIndex].contentType};base64,${aiImgs[previewIndex].data}`}
-              alt=""></img>
+            {currentItemIdx !== null && (
+              <img
+                style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                src={`data:${imgList[currentItemIdx].contentType};base64,${imgList[currentItemIdx].data}`}
+                alt=""></img>
+            )}
           </ImagePreview>
           <ImageList>
             <Icon
               iconSrc={iconPrev}
-              onClick={() =>
-                setPreviewIndex((prev) => {
-                  return (prev + aiImgs.length + 1) % aiImgs.length;
-                })
-              }
+              onClick={() => {
+                if (currentItemIdx && currentItemIdx >= 1) {
+                  dispatch(updateT2ICurItemIndex(currentItemIdx - 1));
+                }
+              }}
             />
-            {aiImgs.map((img, index) => (
+            {imgList.map((img, index) => (
               <img
-                onClick={() => setPreviewIndex(index)}
+                onClick={() => {
+                  dispatch(updateT2ICurItemIndex(index));
+                }}
                 style={{
                   width: '60px',
                   height: '60px',
                   borderRadius: '4px',
-                  opacity: `${index === previewIndex ? '1' : '0.6'}`
+                  cursor: 'pointer',
+                  opacity: `${index === currentItemIdx ? '1' : '0.6'}`
                 }}
                 src={`data:${img.contentType};base64,${img.data}`}
                 alt=""></img>
             ))}
             <Icon
               iconSrc={iconNext}
-              onClick={() =>
-                setPreviewIndex((prev) => {
-                  return (prev + aiImgs.length + 1) % aiImgs.length;
-                })
-              }
+              onClick={() => {
+                if (currentItemIdx !== null && currentItemIdx <= 2) {
+                  dispatch(updateT2ICurItemIndex(currentItemIdx + 1));
+                }
+              }}
             />
           </ImageList>
           <RowContainer>
             <Button isCredit={true} onClick={createAiImage}>
               다시 만들기
             </Button>
-            <Button>다운로드</Button>
+            <Button
+              onClick={() => {
+                // TODO: 다운로드 로직 부착
+              }}>
+              다운로드
+            </Button>
             <GenButton disabled={false}>문서에 삽입하기</GenButton>
           </RowContainer>
           <RightBox>
