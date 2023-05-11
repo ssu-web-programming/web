@@ -28,12 +28,11 @@ import CopyIcon from '../components/CopyIcon';
 import StopButton from '../components/StopButton';
 import icon_chat_white from '../img/ico_chat_white.svg';
 import { TableCss, purpleBtnCss } from '../style/cssCommon';
-import ai_loading from '../img/ai_motion_mid_56.webp';
 import RecreatingButton from '../components/RecreatingButton';
 import { useMoveChatTab } from '../components/hooks/useMovePage';
 import { setLoadingTab } from '../store/slices/tabSlice';
 import Loading from '../components/Loading';
-import { CHAT_STREAM_API, CHAT_STREAM_API_HEADER } from '../api/aiWrite';
+import { JSON_CONTENT_TYPE, SESSION_KEY_LIST, CHAT_STREAM_API } from '../api/constant';
 
 const Wrapper = styled.div`
   display: flex;
@@ -181,7 +180,7 @@ const AIWriteTab = () => {
 
     dispatch(setLoadingTab(true));
     const res = await fetch(CHAT_STREAM_API, {
-      headers: CHAT_STREAM_API_HEADER,
+      headers: { ...JSON_CONTENT_TYPE, ...SESSION_KEY_LIST },
       //   responseType: 'stream',
       body: JSON.stringify({
         history: [

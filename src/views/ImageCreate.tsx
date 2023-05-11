@@ -37,6 +37,7 @@ import {
   updateT2ICurItemIndex,
   updateT2ICurListId
 } from '../store/slices/txt2imgHistory';
+import { JSON_CONTENT_TYPE, SESSION_KEY_LIST, TEXT_TO_IMAGE_API } from '../api/constant';
 
 const exampleList = [
   '노을진 바다 위 비행기',
@@ -51,49 +52,49 @@ const exampleList = [
 
 const selectStyleItemList = [
   {
-    id: 'selectStyleNone',
+    id: 'none',
     title: '없음',
     imgItem: iconStyleNone,
     selectedImgItem: iconStyleNonePurple
   },
   {
-    id: 'selectStylePhoto',
+    id: 'photographic',
     title: '사진',
     imgItem: iconStylePhoto,
     selectedImgItem: iconStylePhoto
   },
   {
-    id: 'selectStyleConcept',
+    id: 'fantasy-art',
     title: '컨셉아트',
     imgItem: iconStyleConcept,
     selectedImgItem: iconStyleConcept
   },
   {
-    id: 'selectStyle3d',
+    id: '3d-model',
     title: '3D',
     imgItem: iconStyle3d,
     selectedImgItem: iconStyle3d
   },
   {
-    id: 'selectStyleAni',
+    id: 'anime',
     title: '애니메이션',
     imgItem: iconStyleAni,
     selectedImgItem: iconStyleAni
   },
   {
-    id: 'selectStyleRet',
+    id: 'retro',
     title: '레트로',
     imgItem: iconStyleRet,
     selectedImgItem: iconStyleRet
   },
   {
-    id: 'selectStyleWater',
+    id: 'watercolor',
     title: '수채화',
     imgItem: iconStyleWater,
     selectedImgItem: iconStyleWater
   },
   {
-    id: 'selectStyleOil',
+    id: 'oil-painting',
     title: '유채화',
     imgItem: iconStyleOil,
     selectedImgItem: iconStyleOil
@@ -102,19 +103,19 @@ const selectStyleItemList = [
 
 const selectImageRatioItemList = [
   {
-    id: 'selectRatioSqure',
+    id: '512x512',
     title: '정사각형',
     imgItem: iconRatioSqure,
     selectedImgItem: iconRatioSqure_purple
   },
   {
-    id: 'selectRatioHorizontal',
+    id: '512x320',
     title: '가로',
     imgItem: iconRatioHorizontal,
     selectedImgItem: iconRatioHorizontal_purple
   },
   {
-    id: 'selectRatioVertical',
+    id: '320x512',
     title: '세로',
     imgItem: iconRatioVertical,
     selectedImgItem: iconRatioVertical_purple
@@ -294,8 +295,8 @@ export interface AiImageResponse {
 
 const ImageCreate = ({ contents }: { contents?: string }) => {
   const [descInput, setDescInput] = useState<string>(contents ? contents : '');
-  const [selectedStyle, setSelectedStyle] = useState<string>('selectStyleNone');
-  const [selectedRatio, setSelectedRatio] = useState<string>('selectRatioSqure');
+  const [selectedStyle, setSelectedStyle] = useState<string>('none');
+  const [selectedRatio, setSelectedRatio] = useState<string>('512x512');
   const [creating, setCreating] = useState(false);
   const dispatch = useAppDispatch();
   const { currentListId, currentItemIdx, history } = useAppSelector(selectT2IHIstory);
@@ -305,9 +306,16 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
       const assistantId = uuidv4();
 
       setCreating(true);
-      const res = await fetch(`/api/v1/image/genImageByDreamXL`, {
-        headers: { 'content-type': 'text/plain' },
-        body: descInput,
+
+      const apiBody: any = {
+        prompt: descInput,
+        imgSize: selectedRatio
+      };
+      if (selectedStyle !== 'none') apiBody['style_preset'] = selectedStyle;
+
+      const res = await fetch(TEXT_TO_IMAGE_API, {
+        headers: { ...JSON_CONTENT_TYPE, ...SESSION_KEY_LIST },
+        body: JSON.stringify(apiBody),
         method: 'POST'
       });
       const body = await res.json();
@@ -329,7 +337,7 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
         // setAiImgs(images);
       }
     } catch (err) {}
-  }, [descInput]);
+  }, [descInput, selectedRatio, selectedStyle]);
 
   const currentHistory =
     history && history.length > 0 && history?.filter((history) => history.id === currentListId)[0];
@@ -375,8 +383,8 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
                     <ItemIconBox width={80} height={80} isSelected={item.id === selectedStyle}>
                       <img
                         style={{
-                          width: item.id === 'selectStyleNone' ? '24px' : '100%',
-                          height: item.id === 'selectStyleNone' ? '24px' : '100%'
+                          width: item.id === 'none' ? '24px' : '100%',
+                          height: item.id === 'none' ? '24px' : '100%'
                         }}
                         src={item.id === selectedStyle ? item.selectedImgItem : item.imgItem}
                         alt=""></img>
