@@ -195,6 +195,9 @@ const AIWriteTab = () => {
         }),
         method: 'POST'
       });
+
+      if (res.status !== 200) throw new SyntaxError('not 200 error');
+
       const reader = res.body?.getReader();
       var enc = new TextDecoder('utf-8');
 
