@@ -297,8 +297,11 @@ const FucRecBox = ({ chatLength }: { chatLength: number }) => {
                           }
                         }}
                         cssExt={css`
-                          border: none;
+                          border: ${rec.id === selectedRecFunction?.id
+                            ? 'solid 1px var(--ai-purple-80-sub)'
+                            : 'none'};
                           margin: 3px;
+                          height: fit-content;
                         `}>
                         <Icon
                           iconSrc={rec.id === selectedRecFunction?.id ? rec.selectedIcon : rec.icon}
@@ -337,8 +340,11 @@ const FucRecBox = ({ chatLength }: { chatLength: number }) => {
                         .subList.map((sub) => (
                           <Button
                             cssExt={css`
-                              border: none;
+                              border: ${selectedSubRecFunction?.id === sub.id
+                                ? 'solid 1px var(--ai-purple-80-sub)'
+                                : 'none'};
                               margin: 3px;
+                              height: fit-content;
                             `}
                             selected={selectedSubRecFunction?.id === sub.id}
                             onClick={() => {
