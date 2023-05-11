@@ -19,7 +19,7 @@ import { useAppSelector } from '../store/store';
 import { selectTabSlice } from '../store/slices/tabSlice';
 import ExTextbox from '../components/ExTextbox';
 import IconButton from '../components/IconButton';
-import { firstRecList } from '../components/AIChat/FuncRecBox';
+import { firstRecList } from '../img/aiChat/FuncRecBox';
 import icon_write from '../img/ico_creating_text_white.svg';
 import icon_prev from '../img/ico_arrow_prev.svg';
 import icon_next from '../img/ico_arrow_next.svg';
@@ -250,7 +250,7 @@ const AIWriteTab = () => {
   };
 
   const currentWrite = history.filter((write) => write.id === currentWriteId)[0];
-
+  const currentIndex = history.findIndex((write) => write.id === currentWriteId);
   return (
     <>
       {!currentWriteId ? (
@@ -407,12 +407,10 @@ const AIWriteTab = () => {
                             height: 16px;
                             padding: 6px 3px 6px 5px;
                             margin-right: 12px;
+                            opacity: ${currentIndex === 0 && '0.3'};
                           `}
                           iconSrc={icon_prev}
                           onClick={() => {
-                            const currentIndex = history.findIndex(
-                              (write) => write.id === currentWriteId
-                            );
                             if (currentIndex > 0) {
                               dispatch(setCurrentWrite(history[currentIndex - 1]?.id));
                             }
@@ -428,12 +426,10 @@ const AIWriteTab = () => {
                             height: 16px;
                             padding: 6px 3px 6px 5px;
                             margin-left: 12px;
+                            opacity: ${currentIndex === history.length - 1 && '0.3'};
                           `}
                           iconSrc={icon_next}
                           onClick={() => {
-                            const currentIndex = history.findIndex(
-                              (write) => write.id === currentWriteId
-                            );
                             if (currentIndex < history.length - 1) {
                               dispatch(setCurrentWrite(history[currentIndex + 1]?.id));
                             }

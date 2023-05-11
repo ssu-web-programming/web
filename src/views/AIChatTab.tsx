@@ -15,7 +15,7 @@ import { v4 as uuidv4 } from 'uuid';
 import Button from '../components/Button';
 import OpenAILinkText from '../components/OpenAILinkText';
 import ExButton from '../components/ExButton';
-import FuncRecBox, { RowWrapBox, recSubList } from '../components/AIChat/FuncRecBox';
+import FuncRecBox, { RowWrapBox, recSubList } from '../img/aiChat/FuncRecBox';
 import {
   activeRecFunc,
   inactiveRecFunc,

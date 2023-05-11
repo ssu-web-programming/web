@@ -474,6 +474,7 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
                 height: 16px;
                 padding: 6px 3px 6px 5px;
                 margin-right: 12px;
+                opacity: ${curListIndex === 0 && '0.3'};
               `}
               iconSrc={iconPrev}
               onClick={() => {
@@ -491,6 +492,7 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
                 height: 16px;
                 padding: 6px 3px 6px 5px;
                 margin-left: 12px;
+                opacity: ${curListIndex === history.length - 1 && '0.3'};
               `}
               iconSrc={iconNext}
               onClick={() => {
@@ -513,6 +515,9 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
           <ImageList>
             <Icon
               iconSrc={iconPrev}
+              cssExt={css`
+                opacity: ${currentItemIdx === 0 && '0.3'};
+              `}
               onClick={() => {
                 if (currentItemIdx && currentItemIdx >= 1) {
                   dispatch(updateT2ICurItemIndex(currentItemIdx - 1));
@@ -536,6 +541,9 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
             ))}
             <Icon
               iconSrc={iconNext}
+              cssExt={css`
+                opacity: ${currentItemIdx === 3 && '0.3'};
+              `}
               onClick={() => {
                 if (currentItemIdx !== null && currentItemIdx <= 2) {
                   dispatch(updateT2ICurItemIndex(currentItemIdx + 1));
