@@ -18,9 +18,9 @@ function App() {
   const navigate = useNavigate();
   const movePage = useMoveChatTab();
 
-  const procMsg = async (msg: string) => {
+  const procMsg = async (msg: any) => {
     try {
-      const { cmd, body } = JSON.parse(msg);
+      const { cmd, body } = msg; //JSON.parse(msg);
       if (cmd && cmd !== '') {
         dispatch(setBridgeMessage({ cmd, body: JSON.stringify(body) }));
         switch (cmd) {
@@ -55,7 +55,9 @@ function App() {
           }
         }
       }
-    } catch (err) {}
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   useEffect(() => {
