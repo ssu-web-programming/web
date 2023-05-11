@@ -6,6 +6,9 @@ import icon_chat from '../img/ico_chat.svg';
 import icon_chat_purple from '../img/ico_chat_purple.svg';
 import icon_creating_text from '../img/ico_creating_text.svg';
 import icon_creating_text_purple from '../img/ico_creating_text_purple.svg';
+import { useEffect } from 'react';
+import { useAppDispatch } from '../store/store';
+import { selectTab } from '../store/slices/tabSlice';
 
 export const TAB_ITEM_VAL = {
   WRITE: 'write',
@@ -35,5 +38,11 @@ const TAB_LIST: TabItemType[] = [
 ];
 
 export default function Tools() {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(selectTab(TAB_ITEM_VAL.CHAT));
+  });
+
   return <TabLayout title="AI 도구" subTitle="AI Write" tabList={TAB_LIST} />;
 }
