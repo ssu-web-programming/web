@@ -22,6 +22,7 @@ import iconRatioVertical_purple from '../img/text2Img/vertical_purple.svg';
 
 import iconPrev from '../img/ico_arrow_prev.svg';
 import iconNext from '../img/ico_arrow_next.svg';
+import iconCreatingWhite from '../img/ico_creating_text_white.svg';
 
 import { purpleBtnCss } from '../style/cssCommon';
 import Loading from '../components/Loading';
@@ -441,12 +442,14 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
           </SelectOptionArea>
           <Button
             isCredit={true}
+            icon={iconCreatingWhite}
             onClick={createAiImage}
             cssExt={css`
               width: 100%;
               box-sizing: border-box;
               flex: none;
               ${purpleBtnCss}
+              opacity: ${descInput.length === 0 && '0.3'};
             `}>
             이미지 생성하기
           </Button>

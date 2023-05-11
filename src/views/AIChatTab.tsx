@@ -173,11 +173,18 @@ const AIChatTab = () => {
   const stopRef = useRef<boolean>(false);
   const textRef = useRef<HTMLTextAreaElement>(null);
 
+  const toggleActiveInput = (isActive: boolean) => {
+    setIsActiveInput(isActive);
+    dispatch(isActive ? activeRecFunc() : inactiveRecFunc());
+  };
+
   useEffect(() => {
     if (defaultInput && defaultInput.length > 0 && !loadingResId) {
       // setActiveInput(true);
       setChatInput(defaultInput);
       dispatch(updateDefaultInput(null));
+      textRef?.current?.focus();
+      toggleActiveInput(true);
     }
   }, [defaultInput]);
 
@@ -375,11 +382,6 @@ const AIChatTab = () => {
     }
 
     return '';
-  };
-
-  const toggleActiveInput = (isActive: boolean) => {
-    setIsActiveInput(isActive);
-    dispatch(isActive ? activeRecFunc() : inactiveRecFunc());
   };
 
   return (
