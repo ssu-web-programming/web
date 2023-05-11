@@ -25,13 +25,12 @@ import {
 import { activeToast } from '../store/slices/toastSlice';
 import icon_ai from '../img/ico_ai.svg';
 import Icon from '../components/Icon';
-import { load } from 'cheerio';
-import { marked } from 'marked';
 import CopyIcon from '../components/CopyIcon';
 import StopButton from '../components/StopButton';
 import { TableCss, purpleBtnCss } from '../style/cssCommon';
 import { setLoadingTab } from '../store/slices/tabSlice';
 import { CHAT_STREAM_API, JSON_CONTENT_TYPE, SESSION_KEY_LIST } from '../api/constant';
+import { insertDoc } from '../util/common';
 
 const INPUT_HEIGHT = 120;
 const TEXT_MAX_HEIGHT = 168;
@@ -161,39 +160,6 @@ const exampleList = [
 
 const inputMaxLength = 1000;
 
-const html = `
-<html>
-<head>
-<style>
-table{
-  border-collapse: collapse ;
-  border-radius: 6px;
-}
-
-th ,
-td{
-  padding: 1em;
-  padding-top: .5em;
-  padding-bottom: .5em;
-}
-
-table,
-tr,
-td,
-th 
-{
-  border-radius: 6px;
-  border: 1px solid #555;
-}
-</style>
-</head>
-<body>
-<!--StartFragment-->
-
-<!--EndFragment-->
-</body>
-</html>`;
-
 const AIChatTab = () => {
   const dispatch = useAppDispatch();
   const { history: chatHistory, defaultInput } = useAppSelector(selectChatHistory);
@@ -256,7 +222,6 @@ const AIChatTab = () => {
       (chatHistory.length >= 2 && chatInput.length === 0 && hasSubRec) ||
       (hasSubRec && !selectedSubRecFunction)
     ) {
-      dispatch(activeToast({ active: true, msg: '추천 기능 선택 및 내용을 입력해주세요' }));
       return false;
     }
 
@@ -280,62 +245,98 @@ const AIChatTab = () => {
   };
 
   const submitChat = async (chat?: Chat) => {
-    dispatch(setLoadingTab(true));
+    try {
+      dispatch(setLoadingTab(true));
 
-    let input = '';
+      let input = '';
 
-    if (chat) {
-      input = chat.input;
-      setRetryRes(chat.id);
-    } else {
-      input = makeQuestion(chatInput ? chatInput : chatHistory[chatHistory.length - 1].content);
-    }
-
-    const assistantId = uuidv4();
-
-    handleResizeHeight();
-    if (textRef.current) textRef.current.style.height = 'auto';
-
-    if (!chat && chatInput.length > 0)
-      dispatch(appendChat({ id: uuidv4(), role: 'user', content: chatInput, input: input }));
-    dispatch(appendChat({ id: assistantId, role: 'assistant', content: '', input: input }));
-
-    setLoadingResId(assistantId);
-
-    const res = await fetch(CHAT_STREAM_API, {
-      headers: { ...JSON_CONTENT_TYPE, ...SESSION_KEY_LIST },
-      //   responseType: 'stream',
-      body: JSON.stringify({
-        history: [
-          {
-            content: 'hello',
-            role: 'system'
-          },
-          ...chatHistory.map((chat) => ({ content: chat.content, role: chat.role })),
-          {
-            content: input,
-            role: 'user'
-          }
-        ]
-      }),
-      method: 'POST'
-    });
-    const reader = res.body?.getReader();
-    var enc = new TextDecoder('utf-8');
-
-    while (reader) {
-      // if (isFull) break;
-      if (stopRef.current) break;
-
-      const { value, done } = await reader.read();
-      if (done) {
-        // setProcessState(PROCESS_STATE.COMPLETE_GENERATE);
-        break;
+      if (chat) {
+        input = chat.input;
+        setRetryRes(chat.id);
+      } else {
+        input = makeQuestion(chatInput ? chatInput : chatHistory[chatHistory.length - 1].content);
       }
 
-      const decodeStr = enc.decode(value);
+      const assistantId = uuidv4();
+
+      handleResizeHeight();
+      if (textRef.current) textRef.current.style.height = 'auto';
+
+      if (!chat && chatInput.length > 0)
+        dispatch(appendChat({ id: uuidv4(), role: 'user', content: chatInput, input: input }));
+      dispatch(appendChat({ id: assistantId, role: 'assistant', content: '', input: input }));
+
+      setLoadingResId(assistantId);
+
       dispatch(
-        updateChat({ id: assistantId, role: 'assistant', content: decodeStr, input: input })
+        activeToast({
+          active: true,
+          msg: '내용을 생성합니다. 10 크레딧이 차감되었습니다. (잔여 크레딧 :980)',
+          isError: false
+        })
+      );
+
+      const res = await fetch(CHAT_STREAM_API, {
+        headers: { ...JSON_CONTENT_TYPE, ...SESSION_KEY_LIST },
+        //   responseType: 'stream',
+        body: JSON.stringify({
+          history: [
+            {
+              content: 'hello',
+              role: 'system'
+            },
+            ...chatHistory.map((chat) => ({ content: chat.content, role: chat.role })),
+            {
+              content: input,
+              role: 'user'
+            }
+          ]
+        }),
+        method: 'POST'
+      });
+      const reader = res.body?.getReader();
+      var enc = new TextDecoder('utf-8');
+
+      while (reader) {
+        // if (isFull) break;
+        if (stopRef.current) {
+          dispatch(
+            activeToast({
+              active: true,
+              msg: `작성 중지. 원하는 작업을 실행하세요.`,
+              isError: false
+            })
+          );
+          break;
+        }
+
+        const { value, done } = await reader.read();
+        if (done) {
+          // setProcessState(PROCESS_STATE.COMPLETE_GENERATE);
+          break;
+        }
+
+        const decodeStr = enc.decode(value);
+        dispatch(
+          updateChat({ id: assistantId, role: 'assistant', content: decodeStr, input: input })
+        );
+      }
+
+      if (!stopRef.current)
+        dispatch(
+          activeToast({
+            active: true,
+            msg: `작성 완료. 원하는 작업을 실행하세요.`,
+            isError: false
+          })
+        );
+    } catch (error) {
+      dispatch(
+        activeToast({
+          active: true,
+          msg: `폴라리스 오피스 AI의 생성이 잘 되지 않았습니다.다시 시도해보세요.`,
+          isError: true
+        })
       );
     }
 
@@ -378,18 +379,6 @@ const AIChatTab = () => {
     dispatch(isActive ? activeRecFunc() : inactiveRecFunc());
   };
 
-  const insertDoc = async (content: string) => {
-    try {
-      const tt = await marked(content);
-      const $ = load(html);
-      const body = $('body');
-
-      body.html(tt);
-
-      await window._Bridge.insertHtml($.html());
-    } catch (error) {}
-  };
-
   return (
     <Wrapper>
       <ChatListWrapper
@@ -418,6 +407,14 @@ const AIChatTab = () => {
                       <CopyIcon
                         onClick={() => {
                           //TODO: 복사 로직
+
+                          dispatch(
+                            activeToast({
+                              active: true,
+                              msg: `내용 복사가 완료되었습니다.`,
+                              isError: false
+                            })
+                          );
                         }}
                       />
                     )}
@@ -442,6 +439,13 @@ const AIChatTab = () => {
                       `}
                       onClick={() => {
                         insertDoc(chat.content);
+                        dispatch(
+                          activeToast({
+                            active: true,
+                            msg: `내용 삽입이 완료되었습니다.`,
+                            isError: false
+                          })
+                        );
                       }}>
                       문서에 삽입하기
                     </Button>
@@ -516,6 +520,14 @@ const AIChatTab = () => {
                       setIsActiveInput(false);
 
                       submitChat();
+                    } else {
+                      dispatch(
+                        activeToast({
+                          active: true,
+                          msg: '추천 기능 선택 및 내용을 입력해주세요',
+                          isError: true
+                        })
+                      );
                     }
                   }
                 }}
@@ -532,6 +544,14 @@ const AIChatTab = () => {
                       setIsActiveInput(false);
 
                       submitChat();
+                    } else {
+                      dispatch(
+                        activeToast({
+                          active: true,
+                          msg: '추천 기능 선택 및 내용을 입력해주세요',
+                          isError: true
+                        })
+                      );
                     }
                   }}>
                   전송

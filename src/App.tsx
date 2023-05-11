@@ -81,7 +81,7 @@ function App() {
           <Route path="/txt2img" element={<TextToImage></TextToImage>}></Route>
           <Route path="*" element={<InvalidAccess></InvalidAccess>}></Route>
         </Routes>
-        {toast.active && <ToastMsg msg={toast.msg} />}
+        {toast.active && <ToastMsg msg={toast.msg} isError={toast.isError} />}
       </Wrapper>
     </>
   );

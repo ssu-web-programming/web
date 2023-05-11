@@ -3,21 +3,23 @@ import { RootState } from '../store';
 
 interface ToastType {
   active: boolean;
+  isError: boolean;
   msg: string;
 }
 
 const toastSlice = createSlice({
   name: 'toast',
-  initialState: { active: false, msg: '' } as ToastType,
+  initialState: { active: false, msg: '', isError: false } as ToastType,
   reducers: {
     initToast: (state) => {
       state.active = false;
       state.msg = '';
     },
     activeToast: (state, action: PayloadAction<ToastType>) => {
-      const { active, msg } = action.payload;
+      const { active, msg, isError } = action.payload;
       state.active = active;
       state.msg = msg;
+      state.isError = isError;
     }
   }
 });

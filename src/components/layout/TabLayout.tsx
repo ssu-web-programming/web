@@ -2,8 +2,9 @@ import styled, { css } from 'styled-components';
 import { ReactElement, useEffect } from 'react';
 import HeaderPageLayout from './HeaderPageLayout';
 import { useAppDispatch, useAppSelector } from '../../store/store';
-import { initTab, selectTab, selectTabSlice } from '../../store/slices/tabSlice';
+import { selectTab, selectTabSlice } from '../../store/slices/tabSlice';
 import Icon from '../Icon';
+import { activeToast } from '../../store/slices/toastSlice';
 
 const TabList = styled.div`
   display: flex;
@@ -73,6 +74,15 @@ export default function TabPage({
               selected={item.id === selectedTabId}
               onClick={() => {
                 if (!isLoading) dispatch(selectTab(item.id));
+                else {
+                  dispatch(
+                    activeToast({
+                      active: true,
+                      msg: `현재 탭에서 내용을 생성 중에 있습니다. 완료를 기다리거나, 생성을 멈추고 다시 시도해주세요.`,
+                      isError: true
+                    })
+                  );
+                }
               }}>
               {item.icon && (
                 <Icon
