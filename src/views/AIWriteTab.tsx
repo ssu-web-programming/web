@@ -19,7 +19,7 @@ import { useAppSelector } from '../store/store';
 import { selectTabSlice } from '../store/slices/tabSlice';
 import ExTextbox from '../components/ExTextbox';
 import IconButton from '../components/IconButton';
-import { firstRecList } from '../components/AIChat/FuncRecBox';
+import { firstRecList } from '../img/aiChat/FuncRecBox';
 import icon_write from '../img/ico_creating_text_white.svg';
 import icon_prev from '../img/ico_arrow_prev.svg';
 import icon_next from '../img/ico_arrow_next.svg';
@@ -33,6 +33,7 @@ import { useMoveChatTab } from '../components/hooks/useMovePage';
 import { setLoadingTab } from '../store/slices/tabSlice';
 import Loading from '../components/Loading';
 import { JSON_CONTENT_TYPE, SESSION_KEY_LIST, CHAT_STREAM_API } from '../api/constant';
+import { insertDoc } from '../util/common';
 
 const Wrapper = styled.div`
   display: flex;
@@ -154,59 +155,94 @@ const AIWriteTab = () => {
     return subject.length > 0 && selectedForm != null && selectedLength != null;
   };
 
-  const initAllInput = () => {
-    setSubject('');
-    setSelectedForm(null);
-    setSelectedLength(null);
-    dispatch(resetCurrentWrite());
-  };
-
   const submitSubject = async (inputParam?: string) => {
-    let input = '';
+    try {
+      let input = '';
 
-    if (inputParam) input = inputParam;
-    else
-      input =
-        subject +
-        '\n 위 주제에 대해' +
-        selectedForm?.title +
-        ' 형식으로, 글자 수는' +
-        selectedLength?.title +
-        '이내로 결과를 만들어줘.';
+      if (inputParam) input = inputParam;
+      else
+        input =
+          subject +
+          '\n 위 주제에 대해' +
+          selectedForm?.title +
+          ' 형식으로, 글자 수는' +
+          selectedLength?.title +
+          '이내로 결과를 만들어줘.';
 
-    const assistantId = uuidv4();
-    dispatch(addWriteHistory({ id: assistantId, result: '', input: input }));
-    dispatch(setCurrentWrite(assistantId));
+      const assistantId = uuidv4();
+      dispatch(addWriteHistory({ id: assistantId, result: '', input: input }));
+      dispatch(setCurrentWrite(assistantId));
 
-    dispatch(setLoadingTab(true));
-    const res = await fetch(CHAT_STREAM_API, {
-      headers: { ...JSON_CONTENT_TYPE, ...SESSION_KEY_LIST },
-      //   responseType: 'stream',
-      body: JSON.stringify({
-        history: [
-          {
-            content: input,
-            role: 'user'
-          }
-        ]
-      }),
-      method: 'POST'
-    });
-    const reader = res.body?.getReader();
-    var enc = new TextDecoder('utf-8');
+      dispatch(setLoadingTab(true));
+      dispatch(
+        activeToast({
+          active: true,
+          msg: '내용을 생성합니다. 10 크레딧이 차감되었습니다. (잔여 크레딧 :980)',
+          isError: false
+        })
+      );
 
-    while (reader) {
-      // if (isFull) break;
-      const { value, done } = await reader.read();
-      if (done || stopRef?.current) {
-        // setProcessState(PROCESS_STATE.COMPLETE_GENERATE);
-        break;
+      const res = await fetch(CHAT_STREAM_API, {
+        headers: { ...JSON_CONTENT_TYPE, ...SESSION_KEY_LIST },
+        //   responseType: 'stream',
+        body: JSON.stringify({
+          history: [
+            {
+              content: input,
+              role: 'user'
+            }
+          ]
+        }),
+        method: 'POST'
+      });
+
+      if (res.status !== 200) throw new SyntaxError('not 200 error');
+
+      const reader = res.body?.getReader();
+      var enc = new TextDecoder('utf-8');
+
+      while (reader) {
+        // if (isFull) break;
+        const { value, done } = await reader.read();
+
+        if (stopRef?.current) {
+          dispatch(
+            activeToast({
+              active: true,
+              msg: `작성 중지. 원하는 작업을 실행하세요.`,
+              isError: false
+            })
+          );
+          break;
+        }
+
+        if (done) {
+          // setProcessState(PROCESS_STATE.COMPLETE_GENERATE);
+          break;
+        }
+
+        const decodeStr = enc.decode(value);
+        dispatch(updateWriteHistory({ id: assistantId, result: decodeStr, input: input }));
+
+        endRef?.current?.scrollIntoView({ behavior: 'smooth' });
       }
 
-      const decodeStr = enc.decode(value);
-      dispatch(updateWriteHistory({ id: assistantId, result: decodeStr, input: input }));
-
-      endRef?.current?.scrollIntoView({ behavior: 'smooth' });
+      if (!stopRef.current)
+        dispatch(
+          activeToast({
+            active: true,
+            msg: `작성 완료. 원하는 작업을 실행하세요.`,
+            isError: false
+          })
+        );
+    } catch (error) {
+      dispatch(
+        activeToast({
+          active: true,
+          msg: `폴라리스 오피스 AI의 생성이 잘 되지 않았습니다.다시 시도해보세요.`,
+          isError: true
+        })
+      );
     }
 
     stopRef.current = false;
@@ -214,7 +250,7 @@ const AIWriteTab = () => {
   };
 
   const currentWrite = history.filter((write) => write.id === currentWriteId)[0];
-
+  const currentIndex = history.findIndex((write) => write.id === currentWriteId);
   return (
     <>
       {!currentWriteId ? (
@@ -271,7 +307,9 @@ const AIWriteTab = () => {
                   selectedLength ? (selectedLength.length === length.length ? true : false) : false
                 }
                 cssExt={css`
-                  border: none;
+                  border: ${selectedLength?.length === length.length
+                    ? 'solid 1px var(--ai-purple-80-sub)'
+                    : 'none'};
                   width: 82px;
                   background-color: ${selectedLength && selectedLength.length === length.length
                     ? `var(--ai-purple-97-list-over)`
@@ -294,8 +332,16 @@ const AIWriteTab = () => {
               onClick={() => {
                 if (checkValid()) {
                   submitSubject();
+                  dispatch(activeToast({ msg: '작성 시작', active: true, isError: false }));
+                } else {
+                  dispatch(
+                    activeToast({
+                      msg: '메뉴를 모두 선택하시고 주제를 입력해주세요.',
+                      active: true,
+                      isError: true
+                    })
+                  );
                 }
-                dispatch(activeToast({ msg: '작성 시작', active: true }));
               }}
               icon={icon_write}>
               글 작성하기
@@ -338,7 +384,6 @@ const AIWriteTab = () => {
                       margin-bottom: 16px;
                     `}
                     onClick={() => {
-                      dispatch(activeToast({ msg: '정지 되었습니다.', active: true }));
                       stopRef.current = true;
                     }}
                   />
@@ -351,6 +396,7 @@ const AIWriteTab = () => {
                       align-items: center;
                       color: var(--gray-gray-70);
                       font-size: 13px;
+                      height: 35px;
                     `}>
                     <LengthWrapper>공백포함 {currentWrite?.result.length}자</LengthWrapper>
                     {!isLoading && (
@@ -361,12 +407,10 @@ const AIWriteTab = () => {
                             height: 16px;
                             padding: 6px 3px 6px 5px;
                             margin-right: 12px;
+                            opacity: ${currentIndex === 0 && '0.3'};
                           `}
                           iconSrc={icon_prev}
                           onClick={() => {
-                            const currentIndex = history.findIndex(
-                              (write) => write.id === currentWriteId
-                            );
                             if (currentIndex > 0) {
                               dispatch(setCurrentWrite(history[currentIndex - 1]?.id));
                             }
@@ -382,12 +426,10 @@ const AIWriteTab = () => {
                             height: 16px;
                             padding: 6px 3px 6px 5px;
                             margin-left: 12px;
+                            opacity: ${currentIndex === history.length - 1 && '0.3'};
                           `}
                           iconSrc={icon_next}
                           onClick={() => {
-                            const currentIndex = history.findIndex(
-                              (write) => write.id === currentWriteId
-                            );
                             if (currentIndex < history.length - 1) {
                               dispatch(setCurrentWrite(history[currentIndex + 1]?.id));
                             }
@@ -397,7 +439,17 @@ const AIWriteTab = () => {
                           cssExt={css`
                             margin-left: 12px;
                           `}
-                          onClick={() => {}}
+                          onClick={() => {
+                            // TODO: 복사 로직
+
+                            dispatch(
+                              activeToast({
+                                active: true,
+                                msg: `내용 복사가 완료되었습니다.`,
+                                isError: false
+                              })
+                            );
+                          }}
                         />
                       </RightBox>
                     )}
@@ -421,7 +473,15 @@ const AIWriteTab = () => {
                     margin-right: 0px;
                   `}
                   onClick={() => {
-                    // TODO
+                    insertDoc(currentWrite.result);
+
+                    dispatch(
+                      activeToast({
+                        active: true,
+                        msg: `내용 삽입이 완료되었습니다.`,
+                        isError: false
+                      })
+                    );
                   }}>
                   문서에 삽입하기
                 </Button>

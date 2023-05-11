@@ -38,6 +38,7 @@ import {
   updateT2ICurListId
 } from '../store/slices/txt2imgHistory';
 import { JSON_CONTENT_TYPE, SESSION_KEY_LIST, TEXT_TO_IMAGE_API } from '../api/constant';
+import { activeToast } from '../store/slices/toastSlice';
 
 const exampleList = [
   '노을진 바다 위 비행기',
@@ -121,8 +122,6 @@ const selectImageRatioItemList = [
     selectedImgItem: iconRatioVertical_purple
   }
 ];
-
-const MAX_LENGTH_T2I = 10;
 
 const Body = styled.div`
   width: 100%;
@@ -306,6 +305,13 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
       const assistantId = uuidv4();
 
       setCreating(true);
+      dispatch(
+        activeToast({
+          active: true,
+          msg: '이미지를 생성합니다. 10 크레딧이 차감되었습니다. (잔여 크레딧 :980)',
+          isError: false
+        })
+      );
 
       const apiBody: any = {
         prompt: descInput,
@@ -318,6 +324,9 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
         body: JSON.stringify(apiBody),
         method: 'POST'
       });
+
+      if (res.status !== 200) throw new SyntaxError('not 200 error');
+
       const body = await res.json();
       const { images } = body.data;
       if (images) {
@@ -334,9 +343,25 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
         dispatch(updateT2ICurItemIndex(0));
 
         setCreating(false);
+        dispatch(
+          activeToast({
+            active: true,
+            msg: `이미지 생성 완료. 원하는 작업을 실행하세요.`,
+            isError: false
+          })
+        );
+
         // setAiImgs(images);
       }
-    } catch (err) {}
+    } catch (err) {
+      dispatch(
+        activeToast({
+          active: true,
+          msg: '폴라리스 오피스 AI의 생성이 잘 되지 않았습니다. 다시 시도해보세요.',
+          isError: true
+        })
+      );
+    }
   }, [descInput, selectedRatio, selectedStyle]);
 
   const currentHistory =
@@ -449,6 +474,7 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
                 height: 16px;
                 padding: 6px 3px 6px 5px;
                 margin-right: 12px;
+                opacity: ${curListIndex === 0 && '0.3'};
               `}
               iconSrc={iconPrev}
               onClick={() => {
@@ -466,6 +492,7 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
                 height: 16px;
                 padding: 6px 3px 6px 5px;
                 margin-left: 12px;
+                opacity: ${curListIndex === history.length - 1 && '0.3'};
               `}
               iconSrc={iconNext}
               onClick={() => {
@@ -488,6 +515,9 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
           <ImageList>
             <Icon
               iconSrc={iconPrev}
+              cssExt={css`
+                opacity: ${currentItemIdx === 0 && '0.3'};
+              `}
               onClick={() => {
                 if (currentItemIdx && currentItemIdx >= 1) {
                   dispatch(updateT2ICurItemIndex(currentItemIdx - 1));
@@ -511,6 +541,9 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
             ))}
             <Icon
               iconSrc={iconNext}
+              cssExt={css`
+                opacity: ${currentItemIdx === 3 && '0.3'};
+              `}
               onClick={() => {
                 if (currentItemIdx !== null && currentItemIdx <= 2) {
                   dispatch(updateT2ICurItemIndex(currentItemIdx + 1));
@@ -528,7 +561,21 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
               }}>
               다운로드
             </Button>
-            <GenButton disabled={false}>문서에 삽입하기</GenButton>
+            <GenButton
+              onClick={() => {
+                // TODO: 문서 삽입 로직
+
+                dispatch(
+                  activeToast({
+                    active: true,
+                    msg: `이미지가 문서에 삽입이 완료 되었습니다.`,
+                    isError: false
+                  })
+                );
+              }}
+              disabled={false}>
+              문서에 삽입하기
+            </GenButton>
           </RowContainer>
           <RightBox>
             <div style={{ color: '#8769ba', fontSize: '11px' }}>

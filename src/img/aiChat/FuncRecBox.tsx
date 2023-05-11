@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
-import Button from '../Button';
+import Button from '../../components/Button';
 import { RowBox } from '../../views/AIChatTab';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import {
@@ -13,19 +13,28 @@ import {
 } from '../../store/slices/recFuncSlice';
 import icon_arrow_down from '../../img/ico_arrow_down_small.svg';
 import icon_arrow_up from '../../img/ico_arrow_up_small.svg';
-
-import Icon from '../Icon';
-import icon_sentence from '../../img/ico_sentence.svg';
-import icon_table from '../../img/ico_table.svg';
-import icon_list from '../../img/ico_table_of_contents.svg';
-import IconButton from '../IconButton';
-import icon_resume from '../../img/ico_ai_resume.svg';
-import icon_spelingcheck from '../../img/ico_ai_spellingcheck.svg';
-import icon_summary from '../../img/ico_ai_summary.svg';
-import icon_translation from '../../img/ico_ai_translation.svg';
-import icon_style from '../../img/ico_changing_style.svg';
 import icon_ai from '../../img/ico_ai.svg';
 import icon_prev from '../../img/ico_arrow_prev.svg';
+import Icon from '../../components/Icon';
+import IconButton from '../../components/IconButton';
+
+import icon_sentence from '../../img/aiChat/ico_sentence.svg';
+import icon_table from '../../img/aiChat/ico_table.svg';
+import icon_list from '../../img/aiChat/ico_table_of_contents.svg';
+import icon_resume from '../../img/aiChat/ico_ai_resume.svg';
+import icon_spelingcheck from '../../img/aiChat/ico_ai_spellingcheck.svg';
+import icon_summary from '../../img/aiChat/ico_ai_summary.svg';
+import icon_translation from '../../img/aiChat/ico_ai_translation.svg';
+import icon_style from '../../img/aiChat/ico_changing_style.svg';
+
+import icon_sentence_purple from '../../img/aiChat/ico_sentence_purple.svg';
+import icon_table_purple from '../../img/aiChat/ico_table_purple.svg';
+import icon_list_purple from '../../img/aiChat/ico_table_of_contents_purple.svg';
+import icon_resume_purple from '../../img/aiChat/ico_ai_resume_purple.svg';
+import icon_spelingcheck_purple from '../../img/aiChat/ico_ai_spellingcheck_purple.svg';
+import icon_summary_purple from '../../img/aiChat/ico_ai_summary_purple.svg';
+import icon_translation_purple from '../../img/aiChat/ico_ai_translation_purple.svg';
+import icon_style_purple from '../../img/aiChat/ico_changing_style_purple.svg';
 
 const Wrapper = styled.div`
   background-color: lightgray;
@@ -75,37 +84,43 @@ export const firstRecList = [
   {
     id: 'sentence',
     title: '문장',
-    icon: icon_sentence
+    icon: icon_sentence,
+    selectedIcon: icon_sentence_purple
   },
-  { id: 'list', title: '목차', icon: icon_list },
-  { id: 'table', title: '표', icon: icon_table }
+  { id: 'list', title: '목차', icon: icon_list, selectedIcon: icon_list_purple },
+  { id: 'table', title: '표', icon: icon_table, selectedIcon: icon_table_purple }
 ];
 
 const recList = [
   {
     id: 'continueWriting',
     title: '이어쓰기',
-    icon: icon_resume
+    icon: icon_resume,
+    selectedIcon: icon_resume_purple
   },
   {
     id: 'summarize',
     title: '요약하기',
-    icon: icon_summary
+    icon: icon_summary,
+    selectedIcon: icon_summary_purple
   },
   {
     id: 'translate',
     title: '번역하기',
-    icon: icon_translation
+    icon: icon_translation,
+    selectedIcon: icon_translation_purple
   },
   {
     id: 'changeWritingStyle',
     title: '문체 변경하기',
-    icon: icon_style
+    icon: icon_style,
+    selectedIcon: icon_style_purple
   },
   {
     id: 'editGrammar',
     title: '맞춤법/문법 수정하기',
-    icon: icon_spelingcheck
+    icon: icon_spelingcheck,
+    selectedIcon: icon_spelingcheck_purple
   }
 ];
 
@@ -260,7 +275,8 @@ const FucRecBox = ({ chatLength }: { chatLength: number }) => {
                           setSelectedFunc(rec);
                         }}
                         selected={selectedRecFunction ? selectedRecFunction.id === rec.id : false}
-                        icon={rec.icon}></IconButton>
+                        icon={rec.id === selectedRecFunction?.id ? rec.selectedIcon : rec.icon}
+                      />
                     ))
                   : !isSubPage &&
                     recList.map((rec) => (
@@ -285,7 +301,7 @@ const FucRecBox = ({ chatLength }: { chatLength: number }) => {
                           margin: 3px;
                         `}>
                         <Icon
-                          iconSrc={rec.icon}
+                          iconSrc={rec.id === selectedRecFunction?.id ? rec.selectedIcon : rec.icon}
                           cssExt={css`
                             width: 12px;
                             height: 12px;

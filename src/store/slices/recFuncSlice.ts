@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store';
-import { recType } from '../../components/AIChat/FuncRecBox';
+import { recType } from '../../img/aiChat/FuncRecBox';
 
 interface recFuncType {
   isOpen: boolean;
