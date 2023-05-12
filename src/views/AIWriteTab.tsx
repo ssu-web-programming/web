@@ -138,8 +138,8 @@ const exampleSubject = [
 
 const AIWriteTab = () => {
   const [subject, setSubject] = useState<string>('');
-  const [selectedForm, setSelectedForm] = useState<FormListType | null>(null);
-  const [selectedLength, setSelectedLength] = useState<LengthListType | null>(null);
+  const [selectedForm, setSelectedForm] = useState<FormListType>(firstRecList[0]);
+  const [selectedLength, setSelectedLength] = useState<LengthListType>(lengthList[0]);
 
   const { isLoading } = useAppSelector(selectTabSlice);
 
