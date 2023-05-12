@@ -355,6 +355,9 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
         // setAiImgs(images);
       }
     } catch (err) {
+      dispatch(updateT2ICurListId(null));
+      dispatch(updateT2ICurItemIndex(null));
+      setCreating(false);
       dispatch(
         activeToast({
           active: true,
