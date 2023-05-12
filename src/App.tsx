@@ -11,6 +11,7 @@ import GlobalStyle from './style/globalStyle';
 import InvalidAccess from './pages/InvalidAccess';
 import { useMoveChatTab } from './components/hooks/useMovePage';
 import { GET_USER_LOGIN_STATUS_API } from './api/constant';
+import { setLoginSession } from './store/slices/loginSession';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -40,6 +41,13 @@ function App() {
               dispatch(setBridgeMessage({ cmd: `${cmd}_response`, body: res?.error?.message }));
               throw new Error(`Login Faild : ${res?.error?.message}`);
             }
+            dispatch(
+              setLoginSession({
+                AID: body['AID'] ? body['AID'] : '',
+                BID: body['BID'] ? body['BID'] : '',
+                SID: body['SID'] ? body['SID'] : ''
+              })
+            );
             dispatch(setBridgeMessage({ cmd: `${cmd}_response`, body: res?.success }));
             break;
           }

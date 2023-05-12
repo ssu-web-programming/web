@@ -7,9 +7,19 @@ import recFunction from './slices/recFuncSlice';
 import writeHistory from './slices/writeHistorySlice';
 import tab from './slices/tabSlice';
 import txtimgHistory from './slices/txt2imgHistory';
+import loginSession from './slices/loginSession';
 
 const store = configureStore({
-  reducer: { chatHistory, toast, recFunction, writeHistory, tab, bridge, txtimgHistory },
+  reducer: {
+    chatHistory,
+    toast,
+    recFunction,
+    writeHistory,
+    tab,
+    bridge,
+    txtimgHistory,
+    loginSession
+  },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false })
 });
 
