@@ -13,6 +13,7 @@ const loginSessionSlice = createSlice({
   reducers: {
     setLoginSession: (state, action: PayloadAction<LoginSessionType>) => {
       state = action.payload;
+      return state;
     }
   }
 });
