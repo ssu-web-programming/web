@@ -15,13 +15,15 @@ const Fade = keyframes`
   20%{
     opacity: 1;
   }
-  70%{
+  80%{
     opacity: 1;
   }
   100% {
       opacity: 0;
   }
 `;
+
+const TIME = 2000;
 
 const ToastMsgWrapper = styled.div<{ isError: boolean }>`
   display: flex;
@@ -32,12 +34,12 @@ const ToastMsgWrapper = styled.div<{ isError: boolean }>`
   bottom: 100px;
 
   word-wrap: break-word;
-  max-width: 360px;
+  width: 80%;
   flex-grow: 1;
   border-radius: 10px;
   padding: 4px 4px 11px 12px;
   opacity: 0;
-  animation: ${Fade} 1.5s;
+  animation: ${Fade} ${TIME}ms;
   font-size: 13px;
   box-shadow: 0 2px 8px 0 var(--black-10);
 
@@ -75,7 +77,7 @@ const ToastMsg = ({ msg, isError }: { msg: string; isError: boolean }) => {
     const timer = setTimeout(() => {
       setIsVisible(false);
       closeToast();
-    }, 1500);
+    }, TIME);
     return () => {
       clearTimeout(timer);
     };
