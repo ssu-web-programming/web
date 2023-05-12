@@ -12,7 +12,10 @@ const Fade = keyframes`
   0% {
       opacity: 0;
   }
-  50%{
+  20%{
+    opacity: 1;
+  }
+  70%{
     opacity: 1;
   }
   100% {
@@ -72,7 +75,7 @@ const ToastMsg = ({ msg, isError }: { msg: string; isError: boolean }) => {
     const timer = setTimeout(() => {
       setIsVisible(false);
       closeToast();
-    }, 2000);
+    }, 1500);
     return () => {
       clearTimeout(timer);
     };
