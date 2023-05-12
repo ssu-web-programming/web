@@ -9,6 +9,7 @@ import { useDispatch } from 'react-redux';
 import { activeToast } from '../store/slices/toastSlice';
 import { v4 as uuidv4 } from 'uuid';
 import {
+  WriteType,
   addWriteHistory,
   resetCurrentWrite,
   selectWriteHistorySlice,
@@ -151,26 +152,32 @@ const AIWriteTab = () => {
   const dispatch = useDispatch();
   const { history, currentWriteId } = useAppSelector(selectWriteHistorySlice);
 
-  const checkValid = () => {
-    return subject.length > 0 && selectedForm != null && selectedLength != null;
-  };
-
-  const submitSubject = async (inputParam?: string) => {
+  const submitSubject = async (inputParam?: WriteType) => {
     try {
-      let input = '';
-
-      if (inputParam) input = inputParam;
-      else
-        input =
-          subject +
-          '\n 위 주제에 대해' +
-          selectedForm?.title +
-          ' 형식으로, 글자 수는' +
-          selectedLength?.title +
-          '이내로 결과를 만들어줘.';
-
       const assistantId = uuidv4();
-      dispatch(addWriteHistory({ id: assistantId, result: '', input: input }));
+
+      let input = '';
+      let preProc = {
+        type: '',
+        arg1: '',
+        arg2: ''
+      };
+
+      if (inputParam) {
+        input = inputParam.input;
+        preProc = inputParam.preProcessing;
+      } else {
+        input = subject;
+        preProc = {
+          type: 'create_text',
+          arg1: selectedForm.id, // id로 수정
+          arg2: selectedLength.length.toString()
+        };
+      }
+
+      dispatch(
+        addWriteHistory({ id: assistantId, input: subject, preProcessing: preProc, result: '' })
+      );
       dispatch(setCurrentWrite(assistantId));
 
       dispatch(setLoadingTab(true));
@@ -189,7 +196,8 @@ const AIWriteTab = () => {
           history: [
             {
               content: input,
-              role: 'user'
+              role: 'user',
+              preProcessing: preProc
             }
           ]
         }),
@@ -222,20 +230,28 @@ const AIWriteTab = () => {
         }
 
         const decodeStr = enc.decode(value);
-        dispatch(updateWriteHistory({ id: assistantId, result: decodeStr, input: input }));
+        dispatch(
+          updateWriteHistory({
+            id: assistantId,
+            result: decodeStr,
+            input: input,
+            preProcessing: preProc
+          })
+        );
 
         endRef?.current?.scrollIntoView({ behavior: 'smooth' });
       }
 
-      if (!stopRef.current)
-        dispatch(
-          activeToast({
-            active: true,
-            msg: `작성 완료. 원하는 작업을 실행하세요.`,
-            isError: false
-          })
-        );
+      if (!stopRef.current) dispatch(setLoadingTab(false));
+      dispatch(
+        activeToast({
+          active: true,
+          msg: `작성 완료. 원하는 작업을 실행하세요.`,
+          isError: false
+        })
+      );
     } catch (error) {
+      dispatch(resetCurrentWrite());
       dispatch(
         activeToast({
           active: true,
@@ -243,10 +259,10 @@ const AIWriteTab = () => {
           isError: true
         })
       );
+    } finally {
+      stopRef.current = false;
+      dispatch(setLoadingTab(false));
     }
-
-    stopRef.current = false;
-    dispatch(setLoadingTab(false));
   };
 
   const currentWrite = history.filter((write) => write.id === currentWriteId)[0];
@@ -330,18 +346,8 @@ const AIWriteTab = () => {
                 width: 100%;
               `}
               onClick={() => {
-                if (checkValid()) {
-                  submitSubject();
-                  dispatch(activeToast({ msg: '작성 시작', active: true, isError: false }));
-                } else {
-                  dispatch(
-                    activeToast({
-                      msg: '메뉴를 모두 선택하시고 주제를 입력해주세요.',
-                      active: true,
-                      isError: true
-                    })
-                  );
-                }
+                submitSubject();
+                dispatch(activeToast({ msg: '작성 시작', active: true, isError: false }));
               }}
               icon={icon_write}>
               글 작성하기
@@ -464,7 +470,7 @@ const AIWriteTab = () => {
                 <Button
                   isCredit={true}
                   onClick={() => {
-                    submitSubject(currentWrite.input);
+                    submitSubject(currentWrite);
                   }}>
                   다시 만들기
                 </Button>

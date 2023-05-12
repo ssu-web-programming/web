@@ -5,6 +5,7 @@ import TextArea from '../components/TextArea';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import {
   Chat,
+  ChatPreProcessing,
   appendChat,
   initChatHistory,
   selectChatHistory,
@@ -251,27 +252,47 @@ const AIChatTab = () => {
     return input;
   };
 
+  const getPreProcessing = (chat?: Chat) => {
+    if (chat?.preProcessing) {
+      return chat.preProcessing;
+    } else if (selectedRecFunction) {
+      return { type: selectedRecFunction.id, arg: selectedSubRecFunction?.id };
+    } else return undefined;
+  };
+
   const submitChat = async (chat?: Chat) => {
     try {
       dispatch(setLoadingTab(true));
 
-      let input = '';
-
-      if (chat) {
-        input = chat.input;
-        setRetryRes(chat.id);
-      } else {
-        input = makeQuestion(chatInput ? chatInput : chatHistory[chatHistory.length - 1].content);
-      }
+      const input = chat ? chat.input : chatInput;
 
       const assistantId = uuidv4();
 
       handleResizeHeight();
       if (textRef.current) textRef.current.style.height = 'auto';
 
-      if (!chat && chatInput.length > 0)
-        dispatch(appendChat({ id: uuidv4(), role: 'user', content: chatInput, input: input }));
-      dispatch(appendChat({ id: assistantId, role: 'assistant', content: '', input: input }));
+      const PreProc = getPreProcessing(chat);
+
+      if (!chat && chatInput.length > 0) {
+        dispatch(
+          appendChat({
+            id: uuidv4(),
+            role: 'user',
+            content: chatInput,
+            input: chatInput,
+            preProcessing: PreProc
+          })
+        );
+      }
+      dispatch(
+        appendChat({
+          id: assistantId,
+          role: 'assistant',
+          content: '',
+          input: input,
+          preProcessing: PreProc
+        })
+      );
 
       setLoadingResId(assistantId);
 
@@ -295,7 +316,8 @@ const AIChatTab = () => {
             ...chatHistory.map((chat) => ({ content: chat.content, role: chat.role })),
             {
               content: input,
-              role: 'user'
+              role: 'user',
+              preProcessing: PreProc
             }
           ]
         }),

@@ -84,19 +84,19 @@ const selectStyleItemList = [
     selectedImgItem: iconStyleAni
   },
   {
-    id: 'retro',
+    id: 'x-po-retro',
     title: '레트로',
     imgItem: iconStyleRet,
     selectedImgItem: iconStyleRet
   },
   {
-    id: 'watercolor',
+    id: 'x-po-watercolor-painting',
     title: '수채화',
     imgItem: iconStyleWater,
     selectedImgItem: iconStyleWater
   },
   {
-    id: 'oil-painting',
+    id: 'x-po-oil-painting',
     title: '유채화',
     imgItem: iconStyleOil,
     selectedImgItem: iconStyleOil

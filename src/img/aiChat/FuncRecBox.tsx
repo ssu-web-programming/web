@@ -82,7 +82,7 @@ export interface recType {
 
 export const firstRecList = [
   {
-    id: 'sentence',
+    id: 'paragraph',
     title: '문장',
     icon: icon_sentence,
     selectedIcon: icon_sentence_purple

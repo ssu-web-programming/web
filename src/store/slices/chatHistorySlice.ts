@@ -1,11 +1,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 
+export interface ChatPreProcessing {
+  type?: string;
+  arg?: string;
+}
 export interface Chat {
   id: string;
   content: string;
   role: 'assistant' | 'user';
   input: string;
+  preProcessing?: ChatPreProcessing;
 }
 
 interface ChatHistoryState {

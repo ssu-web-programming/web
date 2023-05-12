@@ -1,10 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 
-interface WriteType {
+export interface WriteType {
   id: string;
   result: string;
   input: string;
+  preProcessing: {
+    type: string;
+    arg1: string;
+    arg2: string;
+  };
 }
 
 interface WriteHistoryType {
