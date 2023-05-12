@@ -562,22 +562,48 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
               다시 만들기
             </Button>
             <Button
-              onClick={() => {
-                // TODO: 다운로드 로직 부착
+              onClick={async () => {
+                try {
+                  if (currentItemIdx === null) throw new Error('invalid currentItemIdx');
+                  const selected = currentHistory.list[currentItemIdx];
+
+                  if (!selected) throw new Error('invalid target');
+
+                  const res = await fetch(
+                    `data:${currentHistory.list[currentItemIdx].contentType};base64,${currentHistory.list[currentItemIdx].data}`
+                  );
+                  const blob = await res.blob();
+                  window._Bridge.downloadImage(blob);
+                } catch (err) {
+                  // TODO : error handle
+                }
               }}>
               다운로드
             </Button>
             <GenButton
-              onClick={() => {
-                // TODO: 문서 삽입 로직
+              onClick={async () => {
+                try {
+                  if (currentItemIdx === null) throw new Error('invalid currentItemIdx');
+                  const selected = currentHistory.list[currentItemIdx];
 
-                dispatch(
-                  activeToast({
-                    active: true,
-                    msg: `이미지가 문서에 삽입이 완료 되었습니다.`,
-                    isError: false
-                  })
-                );
+                  if (!selected) throw new Error('invalid target');
+
+                  const res = await fetch(
+                    `data:${currentHistory.list[currentItemIdx].contentType};base64,${currentHistory.list[currentItemIdx].data}`
+                  );
+                  const blob = await res.blob();
+                  window._Bridge.insertImage(blob);
+
+                  dispatch(
+                    activeToast({
+                      active: true,
+                      msg: `이미지가 문서에 삽입이 완료 되었습니다.`,
+                      isError: false
+                    })
+                  );
+                } catch (err) {
+                  // TODO : error handle
+                }
               }}
               disabled={false}>
               문서에 삽입하기
