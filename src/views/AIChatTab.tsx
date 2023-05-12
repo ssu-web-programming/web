@@ -247,7 +247,7 @@ const AIChatTab = () => {
     if (chat?.preProcessing) {
       return chat.preProcessing;
     } else if (selectedRecFunction) {
-      return { type: selectedRecFunction.id, arg: selectedSubRecFunction?.id };
+      return { type: selectedRecFunction.id, arg1: selectedSubRecFunction?.id };
     } else return undefined;
   };
 
