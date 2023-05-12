@@ -40,6 +40,7 @@ import {
 } from '../store/slices/txt2imgHistory';
 import { JSON_CONTENT_TYPE, SESSION_KEY_LIST, TEXT_TO_IMAGE_API } from '../api/constant';
 import { activeToast } from '../store/slices/toastSlice';
+import { selectLoginSessionSlice } from '../store/slices/loginSession';
 
 const exampleList = [
   '노을진 바다 위 비행기',
@@ -301,6 +302,8 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
   const dispatch = useAppDispatch();
   const { currentListId, currentItemIdx, history } = useAppSelector(selectT2IHIstory);
 
+  const { AID, BID, SID } = useAppSelector(selectLoginSessionSlice);
+
   const createAiImage = useCallback(async () => {
     try {
       const assistantId = uuidv4();
@@ -321,7 +324,12 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
       if (selectedStyle !== 'none') apiBody['style_preset'] = selectedStyle;
 
       const res = await fetch(TEXT_TO_IMAGE_API, {
-        headers: { ...JSON_CONTENT_TYPE, ...SESSION_KEY_LIST },
+        headers: {
+          ...JSON_CONTENT_TYPE,
+          'X-PO-AI-MayFlower-Auth-SID': SID,
+          'X-PO-AI-MayFlower-Auth-BID': BID,
+          'X-PO-AI-MayFlower-Auth-AID': AID
+        },
         body: JSON.stringify(apiBody),
         method: 'POST'
       });

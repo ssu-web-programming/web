@@ -32,6 +32,8 @@ import { TableCss, purpleBtnCss } from '../style/cssCommon';
 import { setLoadingTab } from '../store/slices/tabSlice';
 import { CHAT_STREAM_API, JSON_CONTENT_TYPE, SESSION_KEY_LIST } from '../api/constant';
 import { insertDoc } from '../util/common';
+import icon_sand from '../img/ico_send.svg';
+import { selectLoginSessionSlice } from '../store/slices/loginSession';
 
 const INPUT_HEIGHT = 120;
 const TEXT_MAX_HEIGHT = 168;
@@ -57,7 +59,6 @@ const ChatListWrapper = styled.div`
   overflow-y: auto;
   box-sizing: border-box;
   padding: 20px;
-  overflow: auto;
 `;
 
 const InputWrapper = styled.div<{ activeInputWrap: boolean }>`
@@ -174,6 +175,8 @@ const AIChatTab = () => {
   const stopRef = useRef<boolean>(false);
   const textRef = useRef<HTMLTextAreaElement>(null);
 
+  const { AID, BID, SID } = useAppSelector(selectLoginSessionSlice);
+
   const toggleActiveInput = (isActive: boolean) => {
     setIsActiveInput(isActive);
     dispatch(isActive ? activeRecFunc() : inactiveRecFunc());
@@ -195,7 +198,7 @@ const AIChatTab = () => {
 
   useEffect(() => {
     chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
-  }, [chatHistory]);
+  }, [chatHistory, isActiveInput, loadingResId]);
 
   useEffect(() => {
     if (chatHistory.length === 0) {
@@ -219,21 +222,9 @@ const AIChatTab = () => {
     }
   };
 
-  const checkInput = () => {
-    const hasSubRec =
-      recSubList.filter((sub) => selectedRecFunction && selectedRecFunction.id === sub.id).length >
-      0;
-
-    if (
-      (chatHistory.length === 1 && chatInput.length === 0) ||
-      (chatHistory.length >= 2 && chatInput.length === 0 && !selectedRecFunction) ||
-      (chatHistory.length >= 2 && chatInput.length === 0 && hasSubRec) ||
-      (hasSubRec && !selectedSubRecFunction)
-    ) {
-      return false;
-    }
-
-    return true;
+  const validInput = () => {
+    if (chatHistory.length === 1 && chatInput.length === 0) return false;
+    else return true;
   };
 
   const makeQuestion = (input: string) => {
@@ -305,8 +296,12 @@ const AIChatTab = () => {
       );
 
       const res = await fetch(CHAT_STREAM_API, {
-        headers: { ...JSON_CONTENT_TYPE, ...SESSION_KEY_LIST },
-        //   responseType: 'stream',
+        headers: {
+          ...JSON_CONTENT_TYPE,
+          'X-PO-AI-MayFlower-Auth-SID': SID,
+          'X-PO-AI-MayFlower-Auth-BID': BID,
+          'X-PO-AI-MayFlower-Auth-AID': AID
+        }, //   responseType: 'stream',
         body: JSON.stringify({
           history: [
             {
@@ -370,14 +365,15 @@ const AIChatTab = () => {
           isError: true
         })
       );
+    } finally {
+      setLoadingResId(null);
+      stopRef.current = false;
+      dispatch(initRecFunc());
+      dispatch(setLoadingTab(false));
+      toggleActiveInput(false);
+
+      if (chat) setRetryRes(null);
     }
-
-    setLoadingResId(null);
-    stopRef.current = false;
-    dispatch(initRecFunc());
-    dispatch(setLoadingTab(false));
-
-    if (chat) setRetryRes(null);
   };
 
   useEffect(() => {
@@ -389,7 +385,7 @@ const AIChatTab = () => {
   const selectLoadingMsg = (isRetry: boolean) => {
     if (isRetry) return '내용을 다시 만드는 중입니다...';
 
-    if (!selectedRecFunction || chatHistory.length <= 1) {
+    if (!selectedRecFunction || chatHistory.length <= 3) {
       return '내용을 생성 중입니다...';
     }
 
@@ -491,11 +487,11 @@ const AIChatTab = () => {
       </ChatListWrapper>
       {loadingResId && (
         <CenterBox>
-          <StopButton
+          {/* <StopButton
             onClick={() => {
               stopRef.current = true;
             }}
-          />
+          /> */}
         </CenterBox>
       )}
       <InputWrapper className="inputwrapper" activeInputWrap={isActiveInput && !loadingResId}>
@@ -542,7 +538,7 @@ const AIChatTab = () => {
                 value={chatInput}
                 onKeyDown={(e: React.KeyboardEvent<HTMLElement>) => {
                   if (e.key === 'Enter' && !e.shiftKey) {
-                    if (checkInput()) {
+                    if (validInput()) {
                       setChatInput('');
                       setIsActiveInput(false);
 
@@ -563,10 +559,20 @@ const AIChatTab = () => {
                 }}
               />
               {!loadingResId && isActiveInput && (
-                <Button
+                <Icon
+                  iconSrc={icon_sand}
+                  cssExt={css`
+                    padding: 5px;
+                    width: 40px;
+                    height: 32px;
+                    box-sizing: border-box;
+                    background-image: linear-gradient(to left, #a86cea, #6f3ad0 100%);
+                    border-radius: 4px;
+                    margin-bottom: 3px;
+                  `}
                   onClick={() => {
                     // TODO: 전송 가능 여부 체크
-                    if (checkInput()) {
+                    if (validInput()) {
                       setChatInput('');
                       setIsActiveInput(false);
 
@@ -580,9 +586,8 @@ const AIChatTab = () => {
                         })
                       );
                     }
-                  }}>
-                  전송
-                </Button>
+                  }}
+                />
               )}
             </RowBox>
             {!loadingResId && isActiveInput && (

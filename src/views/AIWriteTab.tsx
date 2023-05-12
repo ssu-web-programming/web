@@ -35,6 +35,7 @@ import { setLoadingTab } from '../store/slices/tabSlice';
 import Loading from '../components/Loading';
 import { JSON_CONTENT_TYPE, SESSION_KEY_LIST, CHAT_STREAM_API } from '../api/constant';
 import { insertDoc } from '../util/common';
+import { selectLoginSessionSlice } from '../store/slices/loginSession';
 
 const Wrapper = styled.div`
   display: flex;
@@ -143,6 +144,7 @@ const AIWriteTab = () => {
   const [selectedLength, setSelectedLength] = useState<LengthListType>(lengthList[0]);
 
   const { isLoading } = useAppSelector(selectTabSlice);
+  const { AID, BID, SID } = useAppSelector(selectLoginSessionSlice);
 
   const stopRef = useRef<boolean>(false);
   const endRef = useRef<any>();
@@ -190,7 +192,12 @@ const AIWriteTab = () => {
       );
 
       const res = await fetch(CHAT_STREAM_API, {
-        headers: { ...JSON_CONTENT_TYPE, ...SESSION_KEY_LIST },
+        headers: {
+          ...JSON_CONTENT_TYPE,
+          'X-PO-AI-MayFlower-Auth-SID': SID,
+          'X-PO-AI-MayFlower-Auth-BID': BID,
+          'X-PO-AI-MayFlower-Auth-AID': AID
+        },
         //   responseType: 'stream',
         body: JSON.stringify({
           history: [
@@ -383,7 +390,7 @@ const AIWriteTab = () => {
             )}
             {currentWrite.result.length > 0 && (
               <div>
-                {isLoading && (
+                {/* {isLoading && (
                   <StopButton
                     cssExt={css`
                       margin: 0 auto;
@@ -393,7 +400,7 @@ const AIWriteTab = () => {
                       stopRef.current = true;
                     }}
                   />
-                )}
+                )} */}
 
                 <>
                   <ColumDivider />
