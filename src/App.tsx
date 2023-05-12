@@ -20,7 +20,7 @@ function App() {
 
   const procMsg = async (msg: any) => {
     try {
-      const { cmd, body } = msg; //JSON.parse(msg);
+      const { cmd, body } = msg;
       if (cmd && cmd !== '') {
         dispatch(setBridgeMessage({ cmd, body: JSON.stringify(body) }));
         switch (cmd) {
@@ -36,8 +36,11 @@ function App() {
                 method: 'GET'
               })
             ).json();
-            const resMsg = res?.data?.msg;
-            dispatch(setBridgeMessage({ cmd: `${cmd}_response`, body: resMsg }));
+            if (res?.success === false) {
+              dispatch(setBridgeMessage({ cmd: `${cmd}_response`, body: res?.error?.message }));
+              throw new Error(`Login Faild : ${res?.error?.message}`);
+            }
+            dispatch(setBridgeMessage({ cmd: `${cmd}_response`, body: res?.success }));
             break;
           }
           case 'openAiTools':
