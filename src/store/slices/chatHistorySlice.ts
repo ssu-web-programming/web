@@ -7,7 +7,7 @@ export interface ChatPreProcessing {
 }
 export interface Chat {
   id: string;
-  content: string;
+  result: string;
   role: 'assistant' | 'user';
   input: string;
   preProcessing?: ChatPreProcessing;
@@ -35,7 +35,7 @@ const chatHistorySlice = createSlice({
             ...chat,
             id: chat.id,
             role: chat.role,
-            content: chat.content + action.payload.content,
+            result: chat.result + action.payload.result,
             input: action.payload.input
           };
         }

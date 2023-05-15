@@ -205,7 +205,7 @@ const AIChatTab = () => {
         initChatHistory({
           id: uuidv4(),
           role: 'assistant',
-          content: '안녕하세요. 쉽고, 빠르게 문서 작성을 도와주는 폴라리스오피스 AI Chat 입니다.',
+          result: '안녕하세요. 쉽고, 빠르게 문서 작성을 도와주는 폴라리스오피스 AI Chat 입니다.',
           input: ''
         })
       );
@@ -245,7 +245,7 @@ const AIChatTab = () => {
         ? chat.input
         : chatInput.length > 0
         ? chatInput
-        : chatHistory[chatHistory.length - 1].content;
+        : chatHistory[chatHistory.length - 1].result;
 
       const assistantId = uuidv4();
 
@@ -259,7 +259,7 @@ const AIChatTab = () => {
           appendChat({
             id: uuidv4(),
             role: 'user',
-            content: input,
+            result: input,
             input: input,
             preProcessing: preProc
           })
@@ -269,7 +269,7 @@ const AIChatTab = () => {
         appendChat({
           id: assistantId,
           role: 'assistant',
-          content: '',
+          result: '',
           input: input,
           preProcessing: preProc
         })
@@ -294,7 +294,7 @@ const AIChatTab = () => {
         }, //   responseType: 'stream',
         body: JSON.stringify({
           history: [
-            ...chatHistory.map((chat) => ({ content: chat.content, role: chat.role })),
+            ...chatHistory.map((chat) => ({ content: chat.result, role: chat.role })),
             {
               content: input,
               role: 'user',
@@ -305,7 +305,7 @@ const AIChatTab = () => {
         method: 'POST'
       });
 
-      if (res.status !== 200) throw new SyntaxError('not 200 error');
+      if (res.status !== 200) throw new Error('not 200 error');
 
       const reader = res.body?.getReader();
       var enc = new TextDecoder('utf-8');
@@ -331,7 +331,7 @@ const AIChatTab = () => {
 
         const decodeStr = enc.decode(value);
         dispatch(
-          updateChat({ id: assistantId, role: 'assistant', content: decodeStr, input: input })
+          updateChat({ id: assistantId, role: 'assistant', result: decodeStr, input: input })
         );
       }
 
@@ -399,7 +399,7 @@ const AIChatTab = () => {
           <SpeechBubble
             loadingMsg={loadingResId === chat.id ? selectLoadingMsg(false) : undefined}
             key={chat.id}
-            text={chat.content}
+            text={chat.role === 'assistant' ? chat.result : chat.input}
             isUser={chat.role === 'user'}
             outterChild={
               chat.id !== loadingResId &&
@@ -411,7 +411,7 @@ const AIChatTab = () => {
                     cssExt={css`
                       margin: 8px 0px 8px 0px;
                     `}>
-                    <LengthWrapper>공백 포함 {chat.content.length}자</LengthWrapper>
+                    <LengthWrapper>공백 포함 {chat.result.length}자</LengthWrapper>
                     {chat.id !== loadingResId && (
                       <CopyIcon
                         onClick={() => {
@@ -447,7 +447,7 @@ const AIChatTab = () => {
                         min-width: 124px;
                       `}
                       onClick={() => {
-                        insertDoc(chat.content);
+                        insertDoc(chat.result);
                         dispatch(
                           activeToast({
                             active: true,
