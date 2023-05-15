@@ -23,7 +23,7 @@ const Fade = keyframes`
   }
 `;
 
-const TIME = 2000;
+const TIME = 5000;
 
 const ToastMsgWrapper = styled.div<{ isError: boolean }>`
   display: flex;
