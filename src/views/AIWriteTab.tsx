@@ -113,8 +113,8 @@ const ResWrapper = styled(Wrapper)`
 const lengthList = [
   { title: '300자', length: 300 },
   { title: '500자', length: 500 },
-  { title: '800자', length: 800 },
-  { title: '1000자', length: 1000 }
+  { title: '800자', length: 800 }
+  // { title: '1000자', length: 1000 }
 ];
 
 interface FormListType {

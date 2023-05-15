@@ -32,6 +32,7 @@ const chatHistorySlice = createSlice({
       state.history = state.history.map((chat) => {
         if (chat.id === action.payload.id) {
           return {
+            ...chat,
             id: chat.id,
             role: chat.role,
             content: chat.content + action.payload.content,

@@ -5,7 +5,6 @@ import TextArea from '../components/TextArea';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import {
   Chat,
-  ChatPreProcessing,
   appendChat,
   initChatHistory,
   selectChatHistory,
@@ -16,7 +15,7 @@ import { v4 as uuidv4 } from 'uuid';
 import Button from '../components/Button';
 import OpenAILinkText from '../components/OpenAILinkText';
 import ExButton from '../components/ExButton';
-import FuncRecBox, { RowWrapBox, recSubList } from '../img/aiChat/FuncRecBox';
+import FuncRecBox, { RowWrapBox } from '../img/aiChat/FuncRecBox';
 import {
   activeRecFunc,
   inactiveRecFunc,
@@ -30,7 +29,7 @@ import CopyIcon from '../components/CopyIcon';
 import StopButton from '../components/StopButton';
 import { TableCss, purpleBtnCss } from '../style/cssCommon';
 import { setLoadingTab } from '../store/slices/tabSlice';
-import { CHAT_STREAM_API, JSON_CONTENT_TYPE, SESSION_KEY_LIST } from '../api/constant';
+import { CHAT_STREAM_API, JSON_CONTENT_TYPE } from '../api/constant';
 import { insertDoc } from '../util/common';
 import icon_sand from '../img/ico_send.svg';
 import { selectLoginSessionSlice } from '../store/slices/loginSession';
@@ -224,30 +223,17 @@ const AIChatTab = () => {
 
   const validInput = () => {
     if (chatHistory.length === 1 && chatInput.length === 0) return false;
+    else if (chatInput.length === 0 && !selectedRecFunction) return false;
     else return true;
-  };
-
-  const makeQuestion = (input: string) => {
-    const hasSubRec =
-      recSubList.filter((sub) => selectedRecFunction && selectedRecFunction.id === sub.id).length >
-      0;
-
-    if (chatHistory.length === 1 && selectedRecFunction) {
-      input += `\n 결과는 ${selectedRecFunction.title} 형식으로 알려줘`;
-    } else if (hasSubRec && selectedRecFunction) {
-      input += `\n 위의 문장을 ${selectedSubRecFunction?.title}으로 ${selectedRecFunction.title}`;
-    } else if (!hasSubRec && selectedRecFunction) {
-      input = `\n 위 내용에 대해서 ${selectedRecFunction.title}`;
-    }
-
-    return input;
   };
 
   const getPreProcessing = (chat?: Chat) => {
     if (chat?.preProcessing) {
       return chat.preProcessing;
+    } else if (chatHistory.length === 1) {
+      return { type: 'create_text', arg1: selectedRecFunction?.id };
     } else if (selectedRecFunction) {
-      return { type: selectedRecFunction.id, arg: selectedSubRecFunction?.id };
+      return { type: selectedRecFunction.id, arg1: selectedSubRecFunction?.id };
     } else return undefined;
   };
 
@@ -255,23 +241,27 @@ const AIChatTab = () => {
     try {
       dispatch(setLoadingTab(true));
 
-      const input = chat ? chat.input : chatInput;
+      let input = chat
+        ? chat.input
+        : chatInput.length > 0
+        ? chatInput
+        : chatHistory[chatHistory.length - 1].content;
 
       const assistantId = uuidv4();
 
       handleResizeHeight();
       if (textRef.current) textRef.current.style.height = 'auto';
 
-      const PreProc = getPreProcessing(chat);
+      let preProc = getPreProcessing(chat);
 
-      if (!chat && chatInput.length > 0) {
+      if (!chat && chatInput.length > 1) {
         dispatch(
           appendChat({
             id: uuidv4(),
             role: 'user',
-            content: chatInput,
-            input: chatInput,
-            preProcessing: PreProc
+            content: input,
+            input: input,
+            preProcessing: preProc
           })
         );
       }
@@ -281,7 +271,7 @@ const AIChatTab = () => {
           role: 'assistant',
           content: '',
           input: input,
-          preProcessing: PreProc
+          preProcessing: preProc
         })
       );
 
@@ -304,15 +294,11 @@ const AIChatTab = () => {
         }, //   responseType: 'stream',
         body: JSON.stringify({
           history: [
-            {
-              content: 'hello',
-              role: 'system'
-            },
             ...chatHistory.map((chat) => ({ content: chat.content, role: chat.role })),
             {
               content: input,
               role: 'user',
-              preProcessing: PreProc
+              preProcessing: preProc
             }
           ]
         }),
@@ -551,6 +537,7 @@ const AIChatTab = () => {
                           isError: true
                         })
                       );
+                      e.preventDefault();
                     }
                   }
                 }}

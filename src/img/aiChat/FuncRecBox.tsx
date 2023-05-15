@@ -93,13 +93,13 @@ export const firstRecList = [
 
 const recList = [
   {
-    id: 'continueWriting',
+    id: 'resume_writing',
     title: '이어쓰기',
     icon: icon_resume,
     selectedIcon: icon_resume_purple
   },
   {
-    id: 'summarize',
+    id: 'summary',
     title: '요약하기',
     icon: icon_summary,
     selectedIcon: icon_summary_purple
@@ -111,13 +111,13 @@ const recList = [
     selectedIcon: icon_translation_purple
   },
   {
-    id: 'changeWritingStyle',
+    id: 'change_text_style',
     title: '문체 변경하기',
     icon: icon_style,
     selectedIcon: icon_style_purple
   },
   {
-    id: 'editGrammar',
+    id: 'modify_text',
     title: '맞춤법/문법 수정하기',
     icon: icon_spelingcheck,
     selectedIcon: icon_spelingcheck_purple
@@ -163,10 +163,10 @@ export const recSubList = [
     ]
   },
   {
-    id: 'changeWritingStyle',
+    id: 'change_text_style',
     subList: [
       {
-        id: 'businessStyle',
+        id: 'businessBody',
         title: '비즈니스체'
       },
       {
