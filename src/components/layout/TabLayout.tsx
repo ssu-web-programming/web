@@ -19,7 +19,6 @@ const TabItem = styled.div<{ selected: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: NotoSansCJKKR;
   font-size: 13px;
   color: var(--gray-gray-90-01);
   cursor: pointer;

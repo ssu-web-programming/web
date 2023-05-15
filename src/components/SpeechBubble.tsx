@@ -45,7 +45,6 @@ const SpeechBubbleWrapper = styled.div<{ cssExt: any; isUser: boolean }>`
 
 const LoadingMsg = styled.div`
   display: flex;
-  font-family: NotoSansCJKKR;
   font-size: 13px;
   font-weight: 500;
   color: var(--ai-purple-50-main);

@@ -20,7 +20,8 @@ const PreMarkdown = ({
     <Pre
       style={{
         whiteSpace: 'pre-wrap',
-        fontFamily: 'NotoSansCJKKR',
+        // fontFamily: 'Noto Sans KR',
+        fontWeight: 'normal',
         fontSize: '13px',
         margin: '0px',
         padding: '0px'

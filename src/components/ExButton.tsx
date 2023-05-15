@@ -5,7 +5,6 @@ import icon_ai_change from '../img/ico_ai_change.svg';
 export const TextButton = styled.div`
   display: flex;
   cursor: pointer;
-  font-family: NotoSansCJKKR;
   font-size: 12px;
   color: var(--gray-gray-70);
   align-items: center;

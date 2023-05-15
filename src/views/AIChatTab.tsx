@@ -109,7 +109,6 @@ export const RowBox = styled.div<{ cssExt?: any }>`
 
 export const LengthWrapper = styled.div`
   display: flex;
-  font-family: NotoSansCJKSC;
   font-size: 12px;
   color: var(--gray-gray-70);
 `;
@@ -127,7 +126,6 @@ const Info = styled.div`
   color: var(--ai-purple-50-main);
   padding: 14px 16px 14px 16px;
   background-color: var(--ai-purple-99-bg-light);
-  font-family: NotoSansCJKKR;
   font-size: 12px;
 
   align-items: center;

@@ -15,7 +15,6 @@ const StopButton = ({ onClick, cssExt }: { onClick: Function; cssExt?: CSSProp }
         background-color: #fff;
         display: flex;
         width: fit-content;
-        font-family: NotoSansCJKKR;
         font-size: 13px;
         color: #2f3133;
         flex: none;

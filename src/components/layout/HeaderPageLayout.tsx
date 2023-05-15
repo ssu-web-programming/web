@@ -32,7 +32,6 @@ const TitleWrapper = styled.div`
 
 const Title = styled.div`
   display: flex;
-  font-family: NotoSansCJKKR;
   font-size: 16px;
   font-weight: bold;
   font-stretch: normal;
@@ -44,7 +43,6 @@ const Title = styled.div`
 
 const SubTitle = styled.div`
   display: flex;
-  font-family: NotoSansCJKKR;
   font-size: 14px;
   font-weight: normal;
   font-stretch: normal;

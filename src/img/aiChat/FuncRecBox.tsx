@@ -68,7 +68,6 @@ const CommentWrapper = styled.div`
   justify-content: center;
   align-items: center;
   /* margin: 8px; */
-  font-family: NotoSansCJKKR;
   font-size: 13px;
   color: var(--gray-gray-90-01);
   margin-bottom: 3px;
@@ -311,7 +310,7 @@ const FucRecBox = ({ chatLength }: { chatLength: number }) => {
                             margin-right: 6px;
                           `}
                         />
-                        {rec.title}
+                        <div>{rec.title}</div>
                       </Button>
                     ))}
                 {isSubPage && (
