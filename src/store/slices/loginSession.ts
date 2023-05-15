@@ -12,7 +12,9 @@ const loginSessionSlice = createSlice({
   initialState: { AID: '', BID: '', SID: '' } as LoginSessionType,
   reducers: {
     setLoginSession: (state, action: PayloadAction<LoginSessionType>) => {
-      state = action.payload;
+      state.AID = action.payload.AID;
+      state.BID = action.payload.BID;
+      state.SID = action.payload.SID;
     }
   }
 });
