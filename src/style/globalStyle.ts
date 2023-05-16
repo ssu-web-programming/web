@@ -14,13 +14,16 @@ html,
     scrollbar-color: #ebebeb #ffffff;
     scrollbar-width: thin;
 
+    
+  }
+
+  html, body, #root, div, textarea{
     &::-webkit-scrollbar {
       width: 8px;
     }
     &::-webkit-scrollbar-thumb {
       border-radius: 4px;
-      opacity: 0.2;
-        background-color: #000;
+      background-color: rgba(0, 0, 0, 0.2);
 
       &:hover {
        opacity: 0.4;
