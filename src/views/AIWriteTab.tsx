@@ -353,6 +353,13 @@ const AIWriteTab = () => {
                 width: 100%;
               `}
               onClick={() => {
+                if (subject.length === 0) {
+                  dispatch(
+                    activeToast({ active: true, msg: '주제를 입력해주세요.', isError: true })
+                  );
+                  return;
+                }
+
                 submitSubject();
                 dispatch(activeToast({ msg: '작성 시작', active: true, isError: false }));
               }}
