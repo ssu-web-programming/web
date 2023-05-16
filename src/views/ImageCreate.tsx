@@ -334,7 +334,7 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
         method: 'POST'
       });
 
-      if (res.status !== 200) throw new SyntaxError('not 200 error');
+      if (res.status !== 200) throw new Error('not 200 error');
 
       const body = await res.json();
       const { images } = body.data;
