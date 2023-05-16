@@ -347,6 +347,7 @@ const AIWriteTab = () => {
 
           <div>
             <Button
+              disable={subject.length === 0}
               isCredit={true}
               cssExt={css`
                 ${purpleBtnCss}
