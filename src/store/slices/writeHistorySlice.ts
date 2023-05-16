@@ -30,7 +30,7 @@ const writeHistorySlice = createSlice({
     addWriteHistory: (state, action: PayloadAction<WriteType>) => {
       const history =
         state.history.length >= WRITE_HISTORY_MAX
-          ? state.history.slice(1, WRITE_HISTORY_MAX - 1)
+          ? state.history.slice(1, WRITE_HISTORY_MAX)
           : state.history;
       state.history = [...history, action.payload];
     },
