@@ -62,6 +62,38 @@ html,
         font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
       }
+
+  ol, ul{
+    margin: 0;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    margin-block-start: 0px;
+    margin-block-end: 0px;
+    height: fit-content;
+
+    li{
+      ::marker{
+      }
+    }
+  }
+
+  li{
+    margin-block-end: 8px;
+  }
+      
+  p{
+    /* css reset */
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+
+    line-height: 160%;
+  }  
+
 `;
 
 export default GlobalStyle;

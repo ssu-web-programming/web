@@ -2,10 +2,11 @@ import remarkGfm from 'remark-gfm';
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
 import styled from 'styled-components';
 
-const Pre = styled.pre`
+const Pre = styled.div`
   p {
     margin: 0px;
     padding: 0px;
+    box-sizing: border-box;
   }
 `;
 
