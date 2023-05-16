@@ -49,14 +49,28 @@ export interface ButtonProps {
   children?: React.ReactNode;
   icon?: string;
   isCredit?: boolean;
+  disable?: boolean;
 }
 
 export default function Button(props: React.PropsWithChildren<ButtonProps>) {
-  const { onClick, selected, width, height, children, cssExt, icon, isCredit = false } = props;
+  const {
+    onClick,
+    selected,
+    width,
+    height,
+    children,
+    cssExt,
+    icon,
+    isCredit = false,
+    disable = false
+  } = props;
   return (
     <Body
+      disabled={disable}
       cssExt={css`
         position: relative;
+        opacity: ${disable ? 0.3 : 1};
+        pointer-events: ${disable && 'none'};
         ${cssExt}
       `}
       width={width}

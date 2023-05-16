@@ -455,12 +455,12 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
             isCredit={true}
             icon={iconCreatingWhite}
             onClick={createAiImage}
+            disable={descInput.length === 0}
             cssExt={css`
               width: 100%;
               box-sizing: border-box;
               flex: none;
               ${purpleBtnCss}
-              opacity: ${descInput.length === 0 && '0.3'};
             `}>
             이미지 생성하기
           </Button>
