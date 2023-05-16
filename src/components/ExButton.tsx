@@ -2,23 +2,34 @@ import styled, { css } from 'styled-components';
 import Icon from './Icon';
 import icon_ai_change from '../img/ico_ai_change.svg';
 
-export const TextButton = styled.div`
+const TextButton = styled.button<{ disabled: boolean }>`
+  background-color: transparent;
+  border: none;
   display: flex;
   cursor: pointer;
   font-size: 12px;
-  color: var(--gray-gray-70);
   align-items: center;
   width: 105px;
+  color: var(--gray-gray-80-02);
+  ${({ disabled }: { disabled: boolean }) =>
+    disabled &&
+    css`
+      color: var(--gray-gray-80-02);
+      opacity: 0.3;
+      pointer-events: none;
+    `}
 `;
 
 interface ExButtonProps {
   exampleList: string[];
   setExam: Function;
+  disable: boolean;
 }
 
-const ExButton = ({ exampleList, setExam }: ExButtonProps) => {
+const ExButton = ({ exampleList, setExam, disable }: ExButtonProps) => {
   return (
     <TextButton
+      disabled={disable}
       onClick={() => {
         setExam(exampleList[Math.floor(Math.random() * exampleList.length)]);
       }}>

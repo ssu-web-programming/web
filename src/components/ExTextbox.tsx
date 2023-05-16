@@ -62,7 +62,7 @@ const ExTextbox = ({
           <LengthWrapper>
             {value.length}/{maxtTextLen}
           </LengthWrapper>
-          <ExButton exampleList={exampleList} setExam={setValue} />
+          <ExButton disable={value.length > 0} exampleList={exampleList} setExam={setValue} />
         </TopBorer>
       </InputArea>
     </>

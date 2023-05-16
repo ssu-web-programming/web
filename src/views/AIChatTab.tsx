@@ -598,9 +598,11 @@ const AIChatTab = () => {
                 <LengthWrapper>
                   {chatInput.length}/{inputMaxLength}
                 </LengthWrapper>
-                {chatInput.length === 0 && (
-                  <ExButton exampleList={exampleList} setExam={setChatInput} />
-                )}
+                <ExButton
+                  disable={chatInput.length > 0}
+                  exampleList={exampleList}
+                  setExam={setChatInput}
+                />
               </RowWrapBox>
             )}
           </ActiveInput>

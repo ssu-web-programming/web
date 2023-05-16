@@ -56,7 +56,7 @@ const InputArea = styled.div`
   width: 100%;
 `;
 
-export const TextButton = styled.div`
+const TextButton = styled.div`
   display: flex;
   cursor: pointer;
 `;
