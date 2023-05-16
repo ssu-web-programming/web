@@ -5,11 +5,12 @@ import TextArea from '../components/TextArea';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import {
   Chat,
+  INPUT_MAX_LENGTH,
   appendChat,
   initChatHistory,
+  resetDefaultInput,
   selectChatHistory,
-  updateChat,
-  updateDefaultInput
+  updateChat
 } from '../store/slices/chatHistorySlice';
 import { v4 as uuidv4 } from 'uuid';
 import Button from '../components/Button';
@@ -158,8 +159,6 @@ const exampleList = [
   '회의 결과 보고 메일 작성 방법 '
 ];
 
-const inputMaxLength = 1000;
-
 const AIChatTab = () => {
   const dispatch = useAppDispatch();
   const { history: chatHistory, defaultInput } = useAppSelector(selectChatHistory);
@@ -184,7 +183,7 @@ const AIChatTab = () => {
     if (defaultInput && defaultInput.length > 0 && !loadingResId) {
       // setActiveInput(true);
       setChatInput(defaultInput);
-      dispatch(updateDefaultInput(null));
+      dispatch(resetDefaultInput());
       textRef?.current?.focus();
       toggleActiveInput(true);
     }
@@ -541,7 +540,7 @@ const AIChatTab = () => {
                   }
                 }}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  setChatInput(e.target.value.slice(0, inputMaxLength));
+                  setChatInput(e.target.value.slice(0, INPUT_MAX_LENGTH));
                 }}
               />
               {!loadingResId && isActiveInput && (
@@ -596,7 +595,7 @@ const AIChatTab = () => {
                   border-top: 1px solid var(--ai-purple-97-list-over);
                 `}>
                 <LengthWrapper>
-                  {chatInput.length}/{inputMaxLength}
+                  {chatInput.length}/{INPUT_MAX_LENGTH}
                 </LengthWrapper>
                 <ExButton
                   disable={chatInput.length > 0}
