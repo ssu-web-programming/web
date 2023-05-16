@@ -521,7 +521,7 @@ const AIChatTab = () => {
                 `}
                 value={chatInput}
                 onKeyDown={(e: React.KeyboardEvent<HTMLElement>) => {
-                  if (e.key === 'Enter' && !e.shiftKey) {
+                  if (e.key === 'Enter' && e.ctrlKey) {
                     if (validInput()) {
                       setChatInput('');
                       setIsActiveInput(false);
