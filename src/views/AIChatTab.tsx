@@ -33,6 +33,7 @@ import { CHAT_STREAM_API, JSON_CONTENT_TYPE } from '../api/constant';
 import { insertDoc } from '../util/common';
 import icon_sand from '../img/ico_send.svg';
 import { selectLoginSessionSlice } from '../store/slices/loginSession';
+import icon_credit from '../img/ico_credit.svg';
 
 const INPUT_HEIGHT = 120;
 const TEXT_MAX_HEIGHT = 168;
@@ -544,17 +545,7 @@ const AIChatTab = () => {
                 }}
               />
               {!loadingResId && isActiveInput && (
-                <Icon
-                  iconSrc={icon_sand}
-                  cssExt={css`
-                    padding: 5px;
-                    width: 40px;
-                    height: 32px;
-                    box-sizing: border-box;
-                    background-image: linear-gradient(to left, #a86cea, #6f3ad0 100%);
-                    border-radius: 4px;
-                    margin-bottom: 3px;
-                  `}
+                <div
                   onClick={() => {
                     // TODO: 전송 가능 여부 체크
                     if (validInput()) {
@@ -572,7 +563,29 @@ const AIChatTab = () => {
                       );
                     }
                   }}
-                />
+                  style={{ display: 'flex', position: 'relative', cursor: 'pointer' }}>
+                  <Icon
+                    iconSrc={icon_sand}
+                    cssExt={css`
+                      padding: 5px;
+                      width: 40px;
+                      height: 32px;
+                      box-sizing: border-box;
+                      background-image: linear-gradient(to left, #a86cea, #6f3ad0 100%);
+                      border-radius: 4px;
+                      margin-bottom: 3px;
+                    `}
+                  />
+                  <Icon
+                    iconSrc={icon_credit}
+                    cssExt={css`
+                      display: flex;
+                      position: absolute;
+                      bottom: 7px;
+                      right: 4px;
+                    `}
+                  />
+                </div>
               )}
             </RowBox>
             {!loadingResId && isActiveInput && (
