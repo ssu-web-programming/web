@@ -7,6 +7,7 @@ import icon_close_green from '../img/ico_ai_close_green.svg';
 import icon_close_red from '../img/ico_ai_close_red.svg';
 import icon_warnning from '../img/ico_toast_warning.svg';
 import icon_pass from '../img/ico_toast_completion.svg';
+import { alignItemCenter, flex, flexGrow } from '../style/cssCommon';
 
 const Fade = keyframes`
   0% {
@@ -26,8 +27,7 @@ const Fade = keyframes`
 const TIME = 2000;
 
 const ToastMsgWrapper = styled.div<{ isError: boolean }>`
-  display: flex;
-  align-items: center;
+  ${alignItemCenter}
   position: absolute;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -35,7 +35,9 @@ const ToastMsgWrapper = styled.div<{ isError: boolean }>`
 
   word-wrap: break-word;
   width: 80%;
-  flex-grow: 1;
+  /* flex-grow: 1; */
+  ${flexGrow}
+
   border-radius: 10px;
   padding: 4px 4px 11px 12px;
   opacity: 0;
@@ -58,8 +60,10 @@ const ToastMsgWrapper = styled.div<{ isError: boolean }>`
 `;
 
 const ToastText = styled.div`
-  display: flex;
+  ${flex}
+
   width: 100%;
+  height: fit-content;
   word-break: break-all;
 `;
 

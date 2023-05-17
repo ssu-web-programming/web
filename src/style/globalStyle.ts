@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
+import { flexColumn } from './cssCommon';
 
 const GlobalStyle = createGlobalStyle`
 html,
@@ -29,7 +30,7 @@ html,
       }
     }
     &::-webkit-scrollbar-track {
-      background: #ffffff;
+      background: transparent;
     }
   }
   
@@ -68,8 +69,7 @@ html,
   ol, ul{
     margin: 0;
     padding-left: 20px;
-    display: flex;
-    flex-direction: column;
+    ${flexColumn}
     margin-block-start: 0px;
     margin-block-end: 0px;
     height: fit-content;

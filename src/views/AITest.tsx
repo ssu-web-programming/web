@@ -3,13 +3,13 @@ import Wrapper from '../components/Wrapper';
 import { useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import { selectBridgeMessage, setBridgeMessage } from '../store/slices/bridge';
+import { flex, flexColumn, flexGrow, flexShrink } from '../style/cssCommon';
 
 const Body = styled.div`
   width: 100%;
   height: 100%;
   border: solid 1px gray;
-  display: flex;
-  flex-direction: column;
+  ${flexColumn}
 
   padding: 10px 10px 0px 10px;
   gap: 10px;
@@ -21,9 +21,10 @@ const TestButton = styled.button`
 `;
 
 const Result = styled.div`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+  /* flex: 1; */
+  ${flexColumn}
+  ${flexGrow}
+  ${flexShrink}
 
   border: solid 1px gray;
   box-sizing: border-box;
@@ -34,7 +35,7 @@ const Result = styled.div`
 `;
 
 const Row = styled.div`
-  display: flex;
+  ${flex}
   gap: 10px;
   overflow-y: hidden;
   overflow-x: auto;

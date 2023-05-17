@@ -4,12 +4,12 @@ import TextArea from './TextArea';
 import { LengthWrapper, RowBox } from '../views/AIChatTab';
 import ExButton from './ExButton';
 import { useState } from 'react';
+import { flexColumn } from '../style/cssCommon';
 
 const InputArea = styled.div<{ activeBorder: boolean }>`
-  display: flex;
-  flex-direction: column;
+  ${flexColumn}
+
   box-sizing: border-box;
-  flex-direction: column;
   margin: 10px 0px 10px;
   border-radius: 4px;
   border: ${({ activeBorder }: { activeBorder: boolean }) =>

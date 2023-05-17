@@ -35,25 +35,32 @@ import icon_spelingcheck_purple from '../../img/aiChat/ico_ai_spellingcheck_purp
 import icon_summary_purple from '../../img/aiChat/ico_ai_summary_purple.svg';
 import icon_translation_purple from '../../img/aiChat/ico_ai_translation_purple.svg';
 import icon_style_purple from '../../img/aiChat/ico_changing_style_purple.svg';
+import {
+  justiCenter,
+  flexColumn,
+  justiSpaceBetween,
+  flexWrap,
+  alignItemCenter
+} from '../../style/cssCommon';
 
 const Wrapper = styled.div`
-  background-color: lightgray;
   border-radius: 0;
   padding: 10px;
-  display: flex;
-  flex-direction: column;
+  ${flexColumn}
+
+  /* background-color: transparent; */
   background-color: var(--ai-purple-99-bg-light);
-  box-shadow: 0 -2px 8px 0 rgba(111, 58, 208, 0.11);
+  box-shadow: 0 -2px 8px 0 rgba(111, 58, 208, 0.3);
+  backdrop-filter: blur(10px);
   border-radius: 10px 10px 0px 0px;
 
-  justify-content: center;
+  ${justiCenter}
 `;
 
 export const RowWrapBox = styled.div<{ cssExt?: any }>`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  ${flexWrap}
+  ${justiSpaceBetween}
+
   width: 100%;
   ${({ cssExt }) => cssExt && cssExt}
 `;
@@ -63,10 +70,9 @@ const OpenedBox = styled(RowWrapBox)`
 `;
 
 const CommentWrapper = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: center;
-  align-items: center;
+  ${justiCenter}
+  ${alignItemCenter}
+
   /* margin: 8px; */
   font-size: 13px;
   color: var(--gray-gray-90-01);
@@ -195,7 +201,11 @@ const CommentFlip = ({
 }) => {
   return (
     <CommentWrapper>
-      <RowBox>
+      <RowBox
+        cssExt={css`
+          ${justiCenter}
+          width: fit-content;
+        `}>
         <Icon
           cssExt={css`
             width: 16px;
@@ -256,7 +266,10 @@ const FucRecBox = ({ chatLength }: { chatLength: number }) => {
           {isOpen ? (
             <>
               <OpenedBox>
-                <RowWrapBox>
+                <RowWrapBox
+                  cssExt={css`
+                    ${justiCenter}
+                  `}>
                   <CommentFlip
                     comment={recOpenComment}
                     icon={icon_arrow_down}

@@ -1,16 +1,17 @@
 import styled, { css } from 'styled-components';
 import Icon from './Icon';
 import icon_ai_change from '../img/ico_ai_change.svg';
+import { alignItemCenter } from '../style/cssCommon';
 
 const TextButton = styled.button<{ disabled: boolean }>`
   background-color: transparent;
   border: none;
-  display: flex;
   cursor: pointer;
   font-size: 12px;
-  align-items: center;
-  width: 105px;
+  ${alignItemCenter}
+  width: fit-content;
   color: var(--gray-gray-80-02);
+
   ${({ disabled }: { disabled: boolean }) =>
     disabled &&
     css`
@@ -39,7 +40,7 @@ const ExButton = ({ exampleList, setExam, disable }: ExButtonProps) => {
           margin-right: 4px;
         `}
       />
-      예시 문구보기
+      <div>예시 문구보기</div>
     </TextButton>
   );
 };

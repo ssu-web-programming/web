@@ -28,7 +28,17 @@ import icon_ai from '../img/ico_ai.svg';
 import Icon from '../components/Icon';
 import CopyIcon from '../components/CopyIcon';
 import StopButton from '../components/StopButton';
-import { TableCss, purpleBtnCss } from '../style/cssCommon';
+import {
+  TableCss,
+  justiCenter,
+  flexColumn,
+  flexGrow,
+  flexShrink,
+  alignItemCenter,
+  purpleBtnCss,
+  justiSpaceBetween,
+  alignItemEnd
+} from '../style/cssCommon';
 import { setLoadingTab } from '../store/slices/tabSlice';
 import { CHAT_STREAM_API, JSON_CONTENT_TYPE } from '../api/constant';
 import { insertDoc } from '../util/common';
@@ -42,76 +52,70 @@ const TEXT_MAX_HEIGHT = 168;
 const Wrapper = styled.div`
   width: 100%;
   height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  ${flexColumn}
+  ${justiSpaceBetween}
   box-sizing: border-box;
   background-color: var(--ai-purple-99-bg-light);
 
-  position: relative;
   ${TableCss}
 `;
 
-const ChatListWrapper = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
+const ChatListWrapper = styled.div<{ activeInputWrap: boolean }>`
+  ${flexColumn}
+  /* ${flexColumn}
+  ${flexGrow} */
+  position: relative;
+
   width: 100%;
   overflow-y: auto;
   box-sizing: border-box;
   padding: 20px;
-`;
-
-const InputWrapper = styled.div<{ activeInputWrap: boolean }>`
-  display: flex;
-  justify-content: center;
-  width: 100%;
   box-sizing: border-box;
-
-  /* height: ${({ activeInputWrap }: { activeInputWrap: boolean }) =>
-    activeInputWrap ? INPUT_HEIGHT + 'px' : ''}; */
-  margin-top: ${({ activeInputWrap }: { activeInputWrap: boolean }) =>
-    activeInputWrap ? 100 : 50}px;
+  margin-bottom: 30px;
+  overflow-x: hidden;
 `;
 
-const ActiveInputBox = styled.div`
+const FloatingBox = styled.div`
   position: absolute;
-  bottom: 0px;
-  /* padding: 5px; */
+  top: 0px;
   width: 100%;
   box-sizing: border-box;
-  flex: 1;
+  /* flex: 1; */
+  ${flexGrow}
+  ${flexShrink}
 
-  left: 50%;
-  transform: translate(-50%);
-  background-color: white;
+  transform: translate(0, -100%);
+  background-color: transparent;
   box-sizing: border-box;
-
-  &:hover {
-    border-color: blue;
-  }
 `;
 
-const ActiveInput = styled.div<{ activeInputWrap: boolean }>`
+const InputBox = styled.div<{ activeInputWrap: boolean }>`
   box-sizing: border-box;
   padding: ${({ activeInputWrap }: { activeInputWrap: boolean }) =>
     activeInputWrap ? '5px 5px 0px 5px' : '5px'};
   /* min-height: 30px; */
   align-items: center;
+
+  height: fit-content;
+  width: 100%;
+  background-color: white;
+  ${alignItemCenter}
+  ${flexColumn}
+  ${flexShrink}
   box-shadow: 0 -2px 8px 0 rgba(111, 58, 208, 0.11);
 `;
 
 export const RowBox = styled.div<{ cssExt?: any }>`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
+  ${justiSpaceBetween}
+  ${alignItemCenter}
+  width: 100%;
 
   ${({ cssExt }) => cssExt && cssExt}
 `;
 
 export const LengthWrapper = styled.div<{ isError?: boolean }>`
-  display: flex;
+  ${alignItemCenter}
+
   font-size: 12px;
   color: var(--gray-gray-70);
 
@@ -123,27 +127,24 @@ export const LengthWrapper = styled.div<{ isError?: boolean }>`
 `;
 
 export const RightBox = styled.div`
-  display: flex;
+  ${alignItemCenter}
+
   align-self: flex-end;
   margin: 4px;
-  align-items: center;
 `;
 
 const Info = styled.div`
-  display: flex;
-  background-color: transparrent;
+  background-color: var(--ai-purple-99-bg-light);
   color: var(--ai-purple-50-main);
   padding: 14px 16px 14px 16px;
-  background-color: var(--ai-purple-99-bg-light);
   font-size: 12px;
 
-  align-items: center;
+  ${alignItemCenter}
 `;
 
 const CenterBox = styled.div`
-  display: flex;
   width: 100%;
-  justify-content: center;
+  ${justiCenter}
 `;
 
 export const ColumDivider = styled.div`
@@ -167,6 +168,9 @@ const SubmitButton = styled.button<{ disabled: boolean }>`
   &:hover {
     cursor: pointer;
   }
+
+  ${alignItemEnd}
+  align-self: flex-end;
 
   ${({ disabled }) =>
     disabled &&
@@ -419,6 +423,8 @@ const AIChatTab = () => {
   return (
     <Wrapper>
       <ChatListWrapper
+        style={{ position: 'relative' }}
+        activeInputWrap={isActiveInput && !loadingResId}
         onClick={(e) => {
           toggleActiveInput(false);
           // dispatch(closeRecFunc());
@@ -508,8 +514,8 @@ const AIChatTab = () => {
           /> */}
         </CenterBox>
       )}
-      <InputWrapper activeInputWrap={isActiveInput && !loadingResId}>
-        <ActiveInputBox>
+      <div style={{ position: 'relative', display: 'flex' }}>
+        <FloatingBox>
           {isActiveInput && !loadingResId ? (
             <FuncRecBox chatLength={chatHistory.length} />
           ) : (
@@ -527,111 +533,114 @@ const AIChatTab = () => {
               </Info>
             )
           )}
-          <ActiveInput activeInputWrap={isActiveInput && !loadingResId}>
-            <RowBox
-              onClick={() => {
-                toggleActiveInput(true);
-              }}>
-              <TextArea
-                disable={loadingResId !== null}
-                placeholder={!loadingResId ? '무엇이든 질문해주세요' : ''}
-                textRef={textRef}
-                rows={1}
-                cssExt={css`
-                  width: 80%;
-                  border: 0;
-                  max-height: ${TEXT_MAX_HEIGHT}px;
-                  height: fit-content;
-                  justify-content: center;
-                  height: 20px;
-                  padding: 8px 0px 0px 8px;
-                  &:disabled {
-                    background-color: #fff;
-                  }
-                `}
-                value={chatInput}
-                onKeyDown={(e: React.KeyboardEvent<HTMLElement>) => {
-                  if (e.key === 'Enter' && e.ctrlKey) {
-                    if (validInput()) {
-                      setChatInput('');
-                      setIsActiveInput(false);
+        </FloatingBox>
 
-                      submitChat();
-                    } else {
-                      dispatch(
-                        activeToast({
-                          active: true,
-                          msg: '추천 기능 선택 및 내용을 입력해주세요',
-                          isError: true
-                        })
-                      );
-                      e.preventDefault();
-                    }
-                  }
-                }}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  setChatInput(e.target.value.slice(0, INPUT_MAX_LENGTH));
-                }}
-              />
-              {!loadingResId && isActiveInput && (
-                <SubmitButton
-                  disabled={
-                    (chatHistory.length === 1 && chatInput.length === 0) ||
-                    (chatHistory.length > 1 &&
-                      chatInput.length === 0 &&
-                      selectedRecFunction === null)
-                  }
-                  onClick={() => {
-                    // TODO: 전송 가능 여부 체크
-                    if (validInput()) {
-                      setChatInput('');
-                      setIsActiveInput(false);
+        <InputBox
+          activeInputWrap={isActiveInput && !loadingResId}
+          style={{ position: 'relative', display: 'flex' }}>
+          <RowBox
+            onClick={() => {
+              toggleActiveInput(true);
+            }}>
+            <TextArea
+              disable={loadingResId !== null}
+              placeholder={!loadingResId ? '무엇이든 질문해주세요' : ''}
+              textRef={textRef}
+              rows={1}
+              cssExt={css`
+                width: fit-content;
+                ${flexGrow}
+                border: 0;
+                max-height: ${TEXT_MAX_HEIGHT}px;
+                height: fit-content;
+                justify-content: center;
+                margin: 6px 16px 6px 8px;
 
-                      submitChat();
-                    } else {
-                      dispatch(
-                        activeToast({
-                          active: true,
-                          msg: '추천 기능 선택 및 내용을 입력해주세요',
-                          isError: true
-                        })
-                      );
-                    }
-                  }}
-                  style={{ display: 'flex', position: 'relative' }}>
-                  <Icon iconSrc={icon_sand} />
-                  <Icon
-                    iconSrc={icon_credit}
-                    cssExt={css`
-                      display: flex;
-                      position: absolute;
-                      bottom: 7px;
-                      right: 4px;
-                    `}
-                  />
-                </SubmitButton>
-              )}
-            </RowBox>
+                &:disabled {
+                  background-color: #fff;
+                }
+              `}
+              value={chatInput}
+              onKeyDown={(e: React.KeyboardEvent<HTMLElement>) => {
+                if (e.key === 'Enter' && e.ctrlKey) {
+                  if (validInput()) {
+                    setChatInput('');
+                    setIsActiveInput(false);
+
+                    submitChat();
+                  } else {
+                    dispatch(
+                      activeToast({
+                        active: true,
+                        msg: '추천 기능 선택 및 내용을 입력해주세요',
+                        isError: true
+                      })
+                    );
+                    e.preventDefault();
+                  }
+                }
+              }}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                setChatInput(e.target.value.slice(0, INPUT_MAX_LENGTH));
+              }}
+            />
             {!loadingResId && isActiveInput && (
-              <RowWrapBox
-                cssExt={css`
-                  padding: 8px 3px 8px 11px;
-                  box-sizing: border-box;
-                  border-top: 1px solid var(--ai-purple-97-list-over);
-                `}>
-                <LengthWrapper isError={chatInput.length >= INPUT_MAX_LENGTH}>
-                  {chatInput.length}/{INPUT_MAX_LENGTH}
-                </LengthWrapper>
-                <ExButton
-                  disable={chatInput.length > 0}
-                  exampleList={exampleList}
-                  setExam={setChatInput}
+              <SubmitButton
+                disabled={
+                  (chatHistory.length === 1 && chatInput.length === 0) ||
+                  (chatHistory.length > 1 && chatInput.length === 0 && selectedRecFunction === null)
+                }
+                onClick={() => {
+                  // TODO: 전송 가능 여부 체크
+                  if (validInput()) {
+                    setChatInput('');
+                    setIsActiveInput(false);
+
+                    submitChat();
+                  } else {
+                    dispatch(
+                      activeToast({
+                        active: true,
+                        msg: '추천 기능 선택 및 내용을 입력해주세요',
+                        isError: true
+                      })
+                    );
+                  }
+                }}
+                style={{ display: 'flex', position: 'relative', cursor: 'pointer' }}>
+                <Icon iconSrc={icon_sand} />
+                <Icon
+                  iconSrc={icon_credit}
+                  cssExt={css`
+                    display: flex;
+                    position: absolute;
+                    bottom: 7px;
+                    right: 4px;
+                  `}
                 />
-              </RowWrapBox>
+              </SubmitButton>
             )}
-          </ActiveInput>
-        </ActiveInputBox>
-      </InputWrapper>
+          </RowBox>
+          {!loadingResId && isActiveInput && (
+            <RowWrapBox
+              cssExt={css`
+                height: 34px;
+                padding: 8px 3px 8px 11px;
+                box-sizing: border-box;
+                border-top: 1px solid var(--ai-purple-97-list-over);
+              `}>
+              <LengthWrapper isError={chatInput.length >= INPUT_MAX_LENGTH}>
+                {chatInput.length}/{INPUT_MAX_LENGTH}
+              </LengthWrapper>
+              <ExButton
+                disable={chatInput.length > 0}
+                exampleList={exampleList}
+                setExam={setChatInput}
+              />
+            </RowWrapBox>
+          )}
+        </InputBox>
+      </div>
     </Wrapper>
   );
 };

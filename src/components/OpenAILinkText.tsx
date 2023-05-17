@@ -2,9 +2,11 @@ import Icon from './Icon';
 import LinkText from './LinkText';
 import icon_openai from '../img/logo_open_ai.svg';
 import styled from 'styled-components';
+import { flex } from '../style/cssCommon';
 
 const Wrapper = styled.div`
-  display: flex;
+  ${flex}
+
   font-family: Pretendard;
   font-size: 11px;
   font-weight: 500;

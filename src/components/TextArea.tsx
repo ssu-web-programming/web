@@ -1,4 +1,5 @@
 import styled, { CSSProp } from 'styled-components';
+import { alignItemCenter } from '../style/cssCommon';
 
 const TextAreaWrapper = styled.textarea<{ cssExt: any }>`
   resize: none;
@@ -6,7 +7,9 @@ const TextAreaWrapper = styled.textarea<{ cssExt: any }>`
   ::placeholder {
     font-size: 13px;
     color: var(--gray-gray-60-03);
+    ${alignItemCenter}
   }
+  font-size: 13px;
 
   ${({ cssExt }: any) => cssExt && cssExt}
 `;

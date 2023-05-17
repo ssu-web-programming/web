@@ -24,7 +24,14 @@ import iconPrev from '../img/ico_arrow_prev.svg';
 import iconNext from '../img/ico_arrow_next.svg';
 import iconCreatingWhite from '../img/ico_creating_text_white.svg';
 
-import { purpleBtnCss } from '../style/cssCommon';
+import {
+  flexColumn,
+  purpleBtnCss,
+  justiSpaceBetween,
+  flexWrap,
+  justiCenter,
+  alignItemCenter
+} from '../style/cssCommon';
 import Loading from '../components/Loading';
 import Button from '../components/Button';
 import RecreatingButton from '../components/RecreatingButton';
@@ -38,7 +45,7 @@ import {
   updateT2ICurItemIndex,
   updateT2ICurListId
 } from '../store/slices/txt2imgHistory';
-import { JSON_CONTENT_TYPE, SESSION_KEY_LIST, TEXT_TO_IMAGE_API } from '../api/constant';
+import { JSON_CONTENT_TYPE, TEXT_TO_IMAGE_API } from '../api/constant';
 import { activeToast } from '../store/slices/toastSlice';
 import { selectLoginSessionSlice } from '../store/slices/loginSession';
 
@@ -128,8 +135,7 @@ const selectImageRatioItemList = [
 const Body = styled.div`
   width: 100%;
   height: 100%;
-  display: flex;
-  flex-direction: column;
+  ${flexColumn}
   gap: 17px;
   padding: 16px;
   box-sizing: border-box;
@@ -139,38 +145,33 @@ const Body = styled.div`
 `;
 
 const SelectOptionArea = styled.div`
-  display: flex;
   width: 100%;
-  flex-direction: column;
+  ${flexColumn}
+
   gap: 8px;
 `;
 
 const SubTitleArea = styled.div`
   width: 100%;
-  display: flex;
-  justify-content: space-between;
+  ${justiSpaceBetween}
 `;
 
 const RowContainer = styled.div`
   width: '100%';
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  ${flexWrap}
 
   gap: 8px;
 `;
 
 const ContainerItem = styled.div`
-  display: flex;
-  flex-direction: column;
+  ${flexColumn}
 
   gap: 8px;
 `;
 
 const ItemTitle = styled.div<{ isSelected: boolean }>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  ${justiCenter}
+  ${alignItemCenter}
 
   font-weight: bold;
 
@@ -207,9 +208,8 @@ const ItemIconBox = styled.div<{
 }>`
   width: 100%;
   height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  ${justiCenter}
+  ${alignItemCenter}
   border-radius: 4px;
   background-color: var(--gray-gray-20);
   box-sizing: border-box;
@@ -239,11 +239,9 @@ const ItemIconBox = styled.div<{
 `;
 
 const GenButton = styled.div<{ disabled: boolean }>`
-  display: flex;
   position: relative;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
+  ${justiCenter}
+  ${alignItemCenter}
   width: 100%;
   height: 35px;
   cursor: pointer;

@@ -1,10 +1,10 @@
 import styled, { CSSProp, css } from 'styled-components';
 import Icon from './Icon';
+import { alignItemCenter, flexColumn } from '../style/cssCommon';
 
 const Wrapper = styled.div<{ cssExt: any; selected: boolean }>`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  ${flexColumn}
+  ${alignItemCenter}
   box-sizing: border-box;
   color: ${({ selected }: { selected: Boolean }) =>
     selected ? 'var(--ai-purple-50-main)' : 'var(--gray-gray-80-02)'};
@@ -18,21 +18,25 @@ const Wrapper = styled.div<{ cssExt: any; selected: boolean }>`
   ${({ cssExt }: any) => cssExt && cssExt};
 `;
 
-const IconButton = ({
-  cssExt,
-  children,
-  selected = false,
-  onClick,
-  icon,
-  title
-}: {
+interface IconButtonProps {
   cssExt?: CSSProp<any>;
   children?: React.ReactNode;
   selected?: boolean;
   onClick: Function;
   icon?: string;
   title: string;
-}) => {
+  iconCssExt?: CSSProp<any>;
+}
+
+const IconButton = ({
+  cssExt,
+  children,
+  selected = false,
+  onClick,
+  icon,
+  title,
+  iconCssExt
+}: IconButtonProps) => {
   return (
     <Wrapper
       onClick={() => {
@@ -50,6 +54,7 @@ const IconButton = ({
           border-radius: 4px;
           border: ${selected ? `solid 1px var(--ai-purple-80-sub)` : ''};
           background-color: ${selected ? `var(--ai-purple-97-list-over)` : ''};
+          ${iconCssExt}
         `}
       />
       {title}

@@ -4,10 +4,11 @@ import Icon from './Icon';
 import icon_ai from '../img/ico_ai.svg';
 import icon_ai_loading from '../img/loading_dot_2x.webp';
 import PreMarkdown from './PreMarkdown';
+import { flexColumn, flex } from '../style/cssCommon';
 
 const Wrapper = styled.div<{ isUser: boolean }>`
-  display: flex;
-  flex-direction: column;
+  ${flexColumn}
+
   width: fit-content;
   max-width: 100%;
   margin-right: ${({ isUser }: { isUser: boolean }) => !isUser && '30px'};
@@ -28,9 +29,10 @@ const Profile = styled.div`
 `;
 
 const SpeechBubbleWrapper = styled.div<{ cssExt: any; isUser: boolean }>`
-  display: flex;
-  flex-direction: column;
-  width: fit-content;
+  ${flexColumn}
+
+  width: 100%;
+  height: 100%;
   /* max-width: 80%; */
   border-radius: 5px;
   padding: 8px 12px 8px 12px;
@@ -44,7 +46,8 @@ const SpeechBubbleWrapper = styled.div<{ cssExt: any; isUser: boolean }>`
 `;
 
 const LoadingMsg = styled.div`
-  display: flex;
+  ${flex}
+
   font-size: 13px;
   font-weight: 500;
   color: var(--ai-purple-50-main);
