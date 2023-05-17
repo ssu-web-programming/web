@@ -181,7 +181,7 @@ const AIWriteTab = () => {
       }
 
       dispatch(
-        addWriteHistory({ id: assistantId, input: subject, preProcessing: preProc, result: '' })
+        addWriteHistory({ id: assistantId, input: input, preProcessing: preProc, result: '' })
       );
       dispatch(setCurrentWrite(assistantId));
 
