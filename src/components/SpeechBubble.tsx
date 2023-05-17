@@ -34,6 +34,7 @@ const SpeechBubbleWrapper = styled.div<{ cssExt: any; isUser: boolean }>`
   width: 100%;
   height: 100%;
   /* max-width: 80%; */
+  box-sizing: border-box;
   border-radius: 5px;
   padding: 8px 12px 8px 12px;
 
