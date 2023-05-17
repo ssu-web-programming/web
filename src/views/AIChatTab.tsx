@@ -496,7 +496,7 @@ const AIChatTab = () => {
                 </>
               )
             }>
-            {chat.role !== 'user' && index !== 0 && !loadingResId && (
+            {chat.role !== 'user' && index !== 0 && loadingResId !== chat.id && (
               <RightBox>
                 <OpenAILinkText />
               </RightBox>
@@ -519,7 +519,8 @@ const AIChatTab = () => {
           {isActiveInput && !loadingResId ? (
             <FuncRecBox chatLength={chatHistory.length} />
           ) : (
-            !loadingResId && (
+            !loadingResId &&
+            chatInput.length === 0 && (
               <Info>
                 <Icon
                   iconSrc={icon_ai}
