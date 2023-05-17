@@ -14,6 +14,7 @@ const TextAreaWrapper = styled.textarea<{ cssExt: any }>`
 interface TextAreaProps {
   value: string | number;
   onChange?: Function;
+  onClick?: Function;
   onKeyDown?: Function;
   cssExt?: CSSProp<any>;
   rows?: number;
@@ -26,6 +27,7 @@ interface TextAreaProps {
 const TextArea = ({
   value,
   onChange,
+  onClick,
   onKeyDown,
   cssExt,
   rows = 5,
@@ -36,6 +38,7 @@ const TextArea = ({
 }: TextAreaProps) => {
   return (
     <TextAreaWrapper
+      onClick={(e) => onClick && onClick(e)}
       placeholder={placeholder}
       onBlur={() => {
         onBlur && onBlur();

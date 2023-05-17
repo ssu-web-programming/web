@@ -13,8 +13,6 @@ html,
 
     scrollbar-color: #ebebeb #ffffff;
     scrollbar-width: thin;
-
-    
   }
 
   html, body, #root, div, textarea{
@@ -26,7 +24,8 @@ html,
       background-color: rgba(0, 0, 0, 0.2);
 
       &:hover {
-       opacity: 0.4;
+       background-color: rgba(0, 0, 0, 0.4);
+       cursor: pointer;
       }
     }
     &::-webkit-scrollbar-track {

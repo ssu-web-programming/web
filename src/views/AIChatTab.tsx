@@ -92,9 +92,10 @@ const ActiveInputBox = styled.div`
   }
 `;
 
-const ActiveInput = styled.div`
+const ActiveInput = styled.div<{ activeInputWrap: boolean }>`
   box-sizing: border-box;
-  padding: 5px;
+  padding: ${({ activeInputWrap }: { activeInputWrap: boolean }) =>
+    activeInputWrap ? '5px 5px 0px 5px' : '5px'};
   /* min-height: 30px; */
   align-items: center;
   box-shadow: 0 -2px 8px 0 rgba(111, 58, 208, 0.11);
@@ -109,10 +110,16 @@ export const RowBox = styled.div<{ cssExt?: any }>`
   ${({ cssExt }) => cssExt && cssExt}
 `;
 
-export const LengthWrapper = styled.div`
+export const LengthWrapper = styled.div<{ isError?: boolean }>`
   display: flex;
   font-size: 12px;
   color: var(--gray-gray-70);
+
+  ${({ isError }) =>
+    isError !== undefined &&
+    css`
+      color: ${isError ? 'var(--sale)' : 'var(--gray-gray-70)'};
+    `}
 `;
 
 export const RightBox = styled.div`
@@ -144,6 +151,29 @@ export const ColumDivider = styled.div`
   height: 1px;
   background-color: var(--ai-purple-97-list-over);
   margin-top: 8px;
+`;
+
+const SubmitButton = styled.button<{ disabled: boolean }>`
+  margin: 0;
+  padding: 0;
+  border: none;
+  background-image: linear-gradient(to left, #a86cea, #6f3ad0 100%);
+  padding: 5px;
+  width: 40px;
+  height: 32px;
+  box-sizing: border-box;
+  border-radius: 4px;
+  margin-bottom: 3px;
+  &:hover {
+    cursor: pointer;
+  }
+
+  ${({ disabled }) =>
+    disabled &&
+    css`
+      pointer-events: none;
+      opacity: 0.3;
+    `}
 `;
 
 const exampleList = [
@@ -478,7 +508,7 @@ const AIChatTab = () => {
           /> */}
         </CenterBox>
       )}
-      <InputWrapper className="inputwrapper" activeInputWrap={isActiveInput && !loadingResId}>
+      <InputWrapper activeInputWrap={isActiveInput && !loadingResId}>
         <ActiveInputBox>
           {isActiveInput && !loadingResId ? (
             <FuncRecBox chatLength={chatHistory.length} />
@@ -497,7 +527,7 @@ const AIChatTab = () => {
               </Info>
             )
           )}
-          <ActiveInput>
+          <ActiveInput activeInputWrap={isActiveInput && !loadingResId}>
             <RowBox
               onClick={() => {
                 toggleActiveInput(true);
@@ -544,7 +574,13 @@ const AIChatTab = () => {
                 }}
               />
               {!loadingResId && isActiveInput && (
-                <div
+                <SubmitButton
+                  disabled={
+                    (chatHistory.length === 1 && chatInput.length === 0) ||
+                    (chatHistory.length > 1 &&
+                      chatInput.length === 0 &&
+                      selectedRecFunction === null)
+                  }
                   onClick={() => {
                     // TODO: 전송 가능 여부 체크
                     if (validInput()) {
@@ -562,19 +598,8 @@ const AIChatTab = () => {
                       );
                     }
                   }}
-                  style={{ display: 'flex', position: 'relative', cursor: 'pointer' }}>
-                  <Icon
-                    iconSrc={icon_sand}
-                    cssExt={css`
-                      padding: 5px;
-                      width: 40px;
-                      height: 32px;
-                      box-sizing: border-box;
-                      background-image: linear-gradient(to left, #a86cea, #6f3ad0 100%);
-                      border-radius: 4px;
-                      margin-bottom: 3px;
-                    `}
-                  />
+                  style={{ display: 'flex', position: 'relative' }}>
+                  <Icon iconSrc={icon_sand} />
                   <Icon
                     iconSrc={icon_credit}
                     cssExt={css`
@@ -584,7 +609,7 @@ const AIChatTab = () => {
                       right: 4px;
                     `}
                   />
-                </div>
+                </SubmitButton>
               )}
             </RowBox>
             {!loadingResId && isActiveInput && (
@@ -594,7 +619,7 @@ const AIChatTab = () => {
                   box-sizing: border-box;
                   border-top: 1px solid var(--ai-purple-97-list-over);
                 `}>
-                <LengthWrapper>
+                <LengthWrapper isError={chatInput.length >= INPUT_MAX_LENGTH}>
                   {chatInput.length}/{INPUT_MAX_LENGTH}
                 </LengthWrapper>
                 <ExButton

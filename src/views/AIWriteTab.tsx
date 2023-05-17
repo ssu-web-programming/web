@@ -301,7 +301,7 @@ const AIWriteTab = () => {
                   setSelectedForm(form);
                 }}
                 selected={selectedForm ? (selectedForm.id === form.id ? true : false) : false}
-                icon={form.icon}
+                icon={selectedForm.id === form.id ? form.selectedIcon : form.icon}
                 cssExt={css`
                   margin-right: 8px;
 
