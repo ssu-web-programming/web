@@ -193,6 +193,14 @@ const exampleList = [
   '회의 결과 보고 메일 작성 방법 '
 ];
 
+const chatTipList = [
+  '대화 1회당 N 크레딧이 차감됩니다.',
+  'Ctrl + Enter로 줄을 바꾸세요',
+  'Enter를 눌러 대화를 할 수 있습니다.',
+  '구체적인 질문으로 더 좋은 답변을 받아보세요.',
+  '2021년 9월 이후의 사건은 부정확할 수 있습니다.'
+];
+
 const AIChatTab = () => {
   const dispatch = useAppDispatch();
   const { history: chatHistory, defaultInput } = useAppSelector(selectChatHistory);
@@ -202,6 +210,9 @@ const AIChatTab = () => {
   const [isActiveInput, setIsActiveInput] = useState<boolean>(false);
   const [loadingResId, setLoadingResId] = useState<string | null>(null);
   const [retryRes, setRetryRes] = useState<string | null>(null);
+  const [chatTip, setChatTip] = useState<string>(
+    chatTipList[Math.floor(Math.random() * chatTipList.length)]
+  );
   const chatEndRef = useRef<any>();
   const stopRef = useRef<boolean>(false);
   const textRef = useRef<HTMLTextAreaElement>(null);
@@ -212,6 +223,20 @@ const AIChatTab = () => {
     setIsActiveInput(isActive);
     dispatch(isActive ? activeRecFunc() : inactiveRecFunc());
   };
+
+  useEffect(() => {
+    // update chat tip
+    const timer = setInterval(() => {
+      if (!loadingResId && chatInput.length === 0)
+        setChatTip(chatTipList[Math.floor(Math.random() * chatTipList.length)]);
+    }, 5000);
+
+    if (isActiveInput) {
+      clearInterval(timer);
+    }
+
+    return () => clearInterval(timer);
+  }, [isActiveInput]);
 
   useEffect(() => {
     if (defaultInput && defaultInput.length > 0 && !loadingResId) {
@@ -530,7 +555,7 @@ const AIChatTab = () => {
                     margin: 0 8px 0 0px;
                   `}
                 />
-                대화 1회 당 크레딧이 차감됩니다.
+                {chatTip}
               </Info>
             )
           )}
