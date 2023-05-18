@@ -1,4 +1,5 @@
 import styled, { CSSProp } from 'styled-components';
+import { alignItemCenter } from '../style/cssCommon';
 
 const TextAreaWrapper = styled.textarea<{ cssExt: any }>`
   resize: none;
@@ -6,7 +7,9 @@ const TextAreaWrapper = styled.textarea<{ cssExt: any }>`
   ::placeholder {
     font-size: 13px;
     color: var(--gray-gray-60-03);
+    ${alignItemCenter}
   }
+  font-size: 13px;
 
   ${({ cssExt }: any) => cssExt && cssExt}
 `;
@@ -14,6 +17,7 @@ const TextAreaWrapper = styled.textarea<{ cssExt: any }>`
 interface TextAreaProps {
   value: string | number;
   onChange?: Function;
+  onClick?: Function;
   onKeyDown?: Function;
   cssExt?: CSSProp<any>;
   rows?: number;
@@ -26,6 +30,7 @@ interface TextAreaProps {
 const TextArea = ({
   value,
   onChange,
+  onClick,
   onKeyDown,
   cssExt,
   rows = 5,
@@ -36,6 +41,7 @@ const TextArea = ({
 }: TextAreaProps) => {
   return (
     <TextAreaWrapper
+      onClick={(e) => onClick && onClick(e)}
       placeholder={placeholder}
       onBlur={() => {
         onBlur && onBlur();

@@ -4,34 +4,44 @@ import Icon from '../Icon';
 import icon_ai from '../../img/ico_ai.svg';
 import icon_ai_close from '../../img/ico_ai_close.svg';
 import badge_beta from '../../img/badge_beta_ai.svg';
+import {
+  flexColumn,
+  flex,
+  flexGrow,
+  alignItemCenter,
+  justiSpaceBetween,
+  flexShrink
+} from '../../style/cssCommon';
 
 const Contents = styled.div`
   width: 100%;
   height: 100%;
-  display: flex;
-  flex-direction: column;
+  ${flexColumn}
 `;
 
 const Header = styled.div`
   padding: 8px 5px 8px 10px;
   height: 48px;
-  display: flex;
-  justify-content: space-between;
+  ${justiSpaceBetween}
 `;
 
 const Body = styled.div`
-  flex: 1;
+  /* flex: 1; */
+  ${flexGrow}
+  ${flexShrink}
+
   overflow: hidden;
 `;
 
 const TitleWrapper = styled.div`
-  display: flex;
-  align-items: center;
+  ${alignItemCenter}
+
   width: fit-content;
 `;
 
 const Title = styled.div`
-  display: flex;
+  ${flex}
+
   font-size: 16px;
   font-weight: bold;
   font-stretch: normal;
@@ -42,7 +52,8 @@ const Title = styled.div`
 `;
 
 const SubTitle = styled.div`
-  display: flex;
+  ${flex}
+
   font-size: 14px;
   font-weight: normal;
   font-stretch: normal;

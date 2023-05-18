@@ -1,8 +1,9 @@
 import styled, { CSSProp, css } from 'styled-components';
+import { justiCenter } from '../style/cssCommon';
 
 const IconWrapper = styled.div<{ cssExt: any }>`
-  display: flex;
-  justify-content: center;
+  ${justiCenter}
+
   width: fit-content;
   ${({ cssExt }: any) => cssExt && cssExt}
 `;

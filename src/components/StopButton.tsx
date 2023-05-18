@@ -2,6 +2,7 @@ import Button from './Button';
 import { CSSProp, css } from 'styled-components';
 import icon_stop from '../img/ico_stop.svg';
 import Icon from './Icon';
+import { flex } from '../style/cssCommon';
 
 const StopButton = ({ onClick, cssExt }: { onClick: Function; cssExt?: CSSProp }) => {
   return (
@@ -13,7 +14,8 @@ const StopButton = ({ onClick, cssExt }: { onClick: Function; cssExt?: CSSProp }
         border-radius: 4px;
         border: solid 1px var(--gray-gray-50);
         background-color: #fff;
-        display: flex;
+        ${flex}
+
         width: fit-content;
         font-size: 13px;
         color: #2f3133;

@@ -1,11 +1,11 @@
 import styled from 'styled-components';
+import { alignItemCenter, justiCenter } from '../style/cssCommon';
 
 const Body = styled.div`
   width: 100%;
   height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  ${justiCenter}
+  ${alignItemCenter}
 `;
 
 const InvalidAccess = () => {

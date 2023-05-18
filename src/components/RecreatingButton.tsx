@@ -1,17 +1,19 @@
 import Icon from './Icon';
 import icon_recreating from '../img/ico_recreating.svg';
-import { RowBox } from '../views/AIChatTab';
-import { css } from 'styled-components';
+import styled, { css } from 'styled-components';
+import { flex } from '../style/cssCommon';
+
+const Wrapper = styled.div`
+  ${flex}
+  font-size: 12px;
+  color: var(--gray-gray-80-02);
+  align-items: center;
+  cursor: pointer;
+`;
 
 const RecreatingButton = ({ onClick }: { onClick: Function }) => {
   return (
-    <RowBox
-      cssExt={css`
-        font-size: 12px;
-        color: var(--gray-gray-80-02);
-        align-items: center;
-        cursor: pointer;
-      `}
+    <Wrapper
       onClick={() => {
         onClick();
       }}>
@@ -24,7 +26,7 @@ const RecreatingButton = ({ onClick }: { onClick: Function }) => {
         iconSrc={icon_recreating}
       />
       주제 다시 입력하기
-    </RowBox>
+    </Wrapper>
   );
 };
 

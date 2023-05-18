@@ -28,7 +28,16 @@ import PreMarkdown from '../components/PreMarkdown';
 import CopyIcon from '../components/CopyIcon';
 import StopButton from '../components/StopButton';
 import icon_chat_white from '../img/ico_chat_white.svg';
-import { TableCss, purpleBtnCss } from '../style/cssCommon';
+import {
+  TableCss,
+  flexColumn,
+  flex,
+  flexStart,
+  alignItemCenter,
+  purpleBtnCss,
+  justiSpaceBetween,
+  justiCenter
+} from '../style/cssCommon';
 import RecreatingButton from '../components/RecreatingButton';
 import { useMoveChatTab } from '../components/hooks/useMovePage';
 import { setLoadingTab } from '../store/slices/tabSlice';
@@ -38,8 +47,7 @@ import { insertDoc } from '../util/common';
 import apiWrapper from '../api/apiWrapper';
 
 const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
+  ${flexColumn}
   padding: 20px;
   width: 100%;
   height: 100%;
@@ -47,7 +55,7 @@ const Wrapper = styled.div`
 `;
 
 const InputArea = styled.div`
-  display: flex;
+  ${flex}
   /* flex-direction: column;
   margin: 10px 0px 10px;
   border: solid 1px black;
@@ -56,15 +64,7 @@ const InputArea = styled.div`
   width: 100%;
 `;
 
-export const TextButton = styled.div`
-  display: flex;
-  cursor: pointer;
-`;
-
 const ResultBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
   width: 100%;
   max-height: 70%;
   flex: 1;
@@ -73,17 +73,15 @@ const ResultBox = styled.div`
   padding: 8px 12px 0px 12px;
   box-sizing: border-box;
   margin-bottom: 16px;
+  ${flexColumn}
+  ${justiSpaceBetween}
 
   ${TableCss}
 `;
 
 const LoadingWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
   width: 100%;
   height: 100%;
-  justify-content: center;
-  align-items: center;
   font-size: 13px;
   font-weight: 500;
   color: var(--ai-purple-50-main);
@@ -92,18 +90,23 @@ const LoadingWrapper = styled.div`
     width: 196px;
     text-align: center;
   }
+  ${flexColumn}
+  ${justiCenter}
+  ${alignItemCenter}
 `;
 
 const ResultWrapper = styled.div`
-  display: flex;
+  ${flex}
   overflow: auto;
   white-space: break-spaces;
+  width: 100%;
 `;
 
 const RowStartBox = styled(RowBox)`
   justify-content: flex-start;
   margin: 8px 0px 8px 0px;
   box-sizing: border-box;
+  ${flexStart}
 `;
 
 const ResWrapper = styled(Wrapper)`
@@ -177,7 +180,7 @@ const AIWriteTab = () => {
       }
 
       dispatch(
-        addWriteHistory({ id: assistantId, input: subject, preProcessing: preProc, result: '' })
+        addWriteHistory({ id: assistantId, input: input, preProcessing: preProc, result: '' })
       );
       dispatch(setCurrentWrite(assistantId));
 
@@ -306,26 +309,25 @@ const AIWriteTab = () => {
           <RowStartBox>
             {firstRecList.map((form) => (
               <IconButton
+                cssExt={css`
+                  margin-right: 8px;
+                `}
+                iconCssExt={css`
+                  background-color: ${selectedForm.id === form.id
+                    ? 'var(--ai-purple-97-list-over)'
+                    : 'var(--gray-gray-20)'};
+                  width: 81px;
+                  height: 48px;
+                  box-sizing: border-box;
+                `}
                 key={form.id}
                 title={form.title}
                 onClick={() => {
                   setSelectedForm(form);
                 }}
                 selected={selectedForm ? (selectedForm.id === form.id ? true : false) : false}
-                icon={form.icon}
-                cssExt={css`
-                  margin-right: 8px;
-
-                  & > div {
-                    background-color: ${selectedForm && selectedForm.id === form.id
-                      ? `var(--ai-purple-97-list-over)`
-                      : 'var(--gray-gray-20)'};
-                    margin-bottom: 8px;
-                    width: 81px;
-                    height: 48px;
-                    padding: 0;
-                  }
-                `}></IconButton>
+                icon={selectedForm.id === form.id ? form.selectedIcon : form.icon}
+              />
             ))}
           </RowStartBox>
 
@@ -358,12 +360,20 @@ const AIWriteTab = () => {
 
           <div>
             <Button
+              // disable={subject.length === 0}
               isCredit={true}
               cssExt={css`
                 ${purpleBtnCss}
                 width: 100%;
               `}
               onClick={() => {
+                if (subject.length === 0) {
+                  dispatch(
+                    activeToast({ active: true, msg: '주제를 입력해주세요.', isError: true })
+                  );
+                  return;
+                }
+
                 submitSubject();
                 dispatch(activeToast({ msg: '작성 시작', active: true, isError: false }));
               }}
@@ -510,21 +520,23 @@ const AIWriteTab = () => {
                   문서에 삽입하기
                 </Button>
               </RowBox>
-              <Button
-                isCredit={true}
-                icon={icon_chat_white}
-                cssExt={css`
-                  flex: none;
-                  width: 100%;
-                  box-sizing: border-box;
-                  margin: 0;
-                  ${purpleBtnCss}
-                `}
-                onClick={() => {
-                  moveChat(currentWrite.result);
-                }}>
-                채팅으로 더 많은 작업하기
-              </Button>
+              <div>
+                <Button
+                  isCredit={true}
+                  icon={icon_chat_white}
+                  cssExt={css`
+                    flex: none;
+                    width: 100%;
+                    box-sizing: border-box;
+                    margin: 0;
+                    ${purpleBtnCss}
+                  `}
+                  onClick={() => {
+                    moveChat(currentWrite.result);
+                  }}>
+                  채팅으로 더 많은 작업하기
+                </Button>
+              </div>
               <RightBox>
                 <OpenAILinkText />
               </RightBox>

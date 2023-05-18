@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
+import { flexColumn } from './cssCommon';
 
 const GlobalStyle = createGlobalStyle`
 html,
@@ -13,21 +14,23 @@ html,
 
     scrollbar-color: #ebebeb #ffffff;
     scrollbar-width: thin;
+  }
 
+  html, body, #root, div, textarea{
     &::-webkit-scrollbar {
       width: 8px;
     }
     &::-webkit-scrollbar-thumb {
       border-radius: 4px;
-      opacity: 0.2;
-        background-color: #000;
+      background-color: rgba(0, 0, 0, 0.2);
 
       &:hover {
-       opacity: 0.4;
+       background-color: rgba(0, 0, 0, 0.4);
+       cursor: pointer;
       }
     }
     &::-webkit-scrollbar-track {
-      background: #ffffff;
+      background: transparent;
     }
   }
   
@@ -62,6 +65,37 @@ html,
         font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
       }
+
+  ol, ul{
+    margin: 0;
+    padding-left: 20px;
+    ${flexColumn}
+    margin-block-start: 0px;
+    margin-block-end: 0px;
+    height: fit-content;
+
+    li{
+      ::marker{
+      }
+    }
+  }
+
+  li{
+    margin-block-end: 8px;
+  }
+      
+  p{
+    /* css reset */
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+
+    line-height: 160%;
+  }  
+
 `;
 
 export default GlobalStyle;

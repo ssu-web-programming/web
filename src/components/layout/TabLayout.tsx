@@ -5,20 +5,29 @@ import { useAppDispatch, useAppSelector } from '../../store/store';
 import { selectTab, selectTabSlice } from '../../store/slices/tabSlice';
 import Icon from '../Icon';
 import { activeToast } from '../../store/slices/toastSlice';
+import {
+  justiCenter,
+  flexGrow,
+  flexStart,
+  alignItemCenter,
+  flexShrink
+} from '../../style/cssCommon';
 
 const TabList = styled.div`
-  display: flex;
-  justify-content: flex-start;
+  ${flexStart}
+
   height: 20px;
   height: 34px;
   border-bottom: 1px solid #c9cdd2;
 `;
 
 const TabItem = styled.div<{ selected: boolean }>`
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  /* flex: 1; */
+  ${flexGrow}
+  ${flexShrink}
+  ${alignItemCenter}
+  ${justiCenter}
+
   font-size: 13px;
   color: var(--gray-gray-90-01);
   cursor: pointer;

@@ -18,6 +18,8 @@ interface ChatHistoryState {
   defaultInput: string | null;
 }
 
+export const INPUT_MAX_LENGTH = 1000;
+
 const chatHistorySlice = createSlice({
   name: 'chatHistory',
   initialState: { history: [], defaultInput: null } as ChatHistoryState,
@@ -42,13 +44,16 @@ const chatHistorySlice = createSlice({
         return chat;
       });
     },
-    updateDefaultInput: (state, action: PayloadAction<string | null>) => {
-      state.defaultInput = action.payload;
+    updateDefaultInput: (state, action: PayloadAction<string>) => {
+      state.defaultInput = action.payload.slice(0, INPUT_MAX_LENGTH);
+    },
+    resetDefaultInput: (state) => {
+      state.defaultInput = null;
     }
   }
 });
 
-export const { initChatHistory, appendChat, updateChat, updateDefaultInput } =
+export const { initChatHistory, appendChat, updateChat, updateDefaultInput, resetDefaultInput } =
   chatHistorySlice.actions;
 export const selectChatHistory = (state: RootState) => state.chatHistory;
 export default chatHistorySlice.reducer;

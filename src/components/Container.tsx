@@ -1,9 +1,9 @@
 import styled from 'styled-components';
+import { alignItemCenter, justiCenter } from '../style/cssCommon';
 
 const Wrap = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  ${justiCenter}
+  ${alignItemCenter}
 `;
 
 export default function Container({ children }: { children: React.ReactNode }) {

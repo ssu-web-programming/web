@@ -3,15 +3,17 @@ import SubTitle from './SubTitle';
 import TextArea from './TextArea';
 import { LengthWrapper, RowBox } from '../views/AIChatTab';
 import ExButton from './ExButton';
+import { useState } from 'react';
+import { flexColumn } from '../style/cssCommon';
 
-const InputArea = styled.div`
-  display: flex;
-  flex-direction: column;
+const InputArea = styled.div<{ activeBorder: boolean }>`
+  ${flexColumn}
+
   box-sizing: border-box;
-  flex-direction: column;
   margin: 10px 0px 10px;
   border-radius: 4px;
-  border: solid 1px var(--gray-gray-50);
+  border: ${({ activeBorder }: { activeBorder: boolean }) =>
+    activeBorder ? 'solid 1px var(--ai-purple-50-main)' : 'solid 1px var(--gray-gray-50)'};
   width: 100%;
 `;
 
@@ -19,7 +21,8 @@ const TopBorer = styled(RowBox)`
   border-top: 1px solid #e8ebed;
   width: 100%;
   box-sizing: border-box;
-  padding: 8px 3px 8px 11px;
+  padding: 0px 6px 0px 11px;
+  height: 34px;
 `;
 
 interface ExTextboxProps {
@@ -41,16 +44,24 @@ const ExTextbox = ({
   placeholder,
   rows
 }: ExTextboxProps) => {
+  const [activeTextbox, setActiveTextbox] = useState<boolean>(false);
+
   return (
     <>
       {subTitle && <SubTitle subTitle={subTitle} />}
-      <InputArea>
+      <InputArea activeBorder={activeTextbox}>
         <TextArea
+          onClick={() => {
+            setActiveTextbox(true);
+          }}
+          onBlur={() => {
+            setActiveTextbox(false);
+          }}
           rows={rows}
           placeholder={placeholder}
           value={value}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            setValue && e?.target?.value.length <= maxtTextLen && setValue(e.currentTarget.value);
+            setValue && setValue(e.currentTarget.value.slice(0, maxtTextLen));
           }}
           cssExt={css`
             box-sizing: border-box;
@@ -59,10 +70,10 @@ const ExTextbox = ({
           `}
         />
         <TopBorer>
-          <LengthWrapper>
+          <LengthWrapper isError={value.length >= maxtTextLen}>
             {value.length}/{maxtTextLen}
           </LengthWrapper>
-          <ExButton exampleList={exampleList} setExam={setValue} />
+          <ExButton disable={value.length > 0} exampleList={exampleList} setExam={setValue} />
         </TopBorer>
       </InputArea>
     </>

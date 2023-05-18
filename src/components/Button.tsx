@@ -3,14 +3,14 @@ import styled, { CSSProp, css } from 'styled-components';
 import Icon from './Icon';
 import icon_credit from '../img/ico_credit.svg';
 import { RowBox } from '../views/AIChatTab';
+import { alignItemCenter, flexGrow, flexShrink, justiCenter } from '../style/cssCommon';
 
 // const DEFAULT_WIDTH = 200;
 // const DEFAULT_HEIGHT = 60;
 
 const Body = styled.button<{ width?: number; height?: number; selected: boolean; cssExt: any }>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  ${justiCenter}
+  ${alignItemCenter}
   color: white;
 
   width: fit-content;
@@ -21,7 +21,10 @@ const Body = styled.button<{ width?: number; height?: number; selected: boolean;
   font-size: 13px;
   color: var(--gray-gray-90-01);
   padding: 6px;
-  flex: 1 1 fit-content;
+  /* flex: 1 1 fit-content; */
+  ${flexGrow}
+  ${flexShrink}
+  flex-basis: fit-content;
   margin: 3px;
 
   ${({ width, height, selected }) => css`
@@ -49,14 +52,28 @@ export interface ButtonProps {
   children?: React.ReactNode;
   icon?: string;
   isCredit?: boolean;
+  disable?: boolean;
 }
 
 export default function Button(props: React.PropsWithChildren<ButtonProps>) {
-  const { onClick, selected, width, height, children, cssExt, icon, isCredit = false } = props;
+  const {
+    onClick,
+    selected,
+    width,
+    height,
+    children,
+    cssExt,
+    icon,
+    isCredit = false,
+    disable = false
+  } = props;
   return (
     <Body
+      disabled={disable}
       cssExt={css`
         position: relative;
+        opacity: ${disable ? 0.3 : 1};
+        pointer-events: ${disable && 'none'};
         ${cssExt}
       `}
       width={width}
@@ -65,9 +82,8 @@ export default function Button(props: React.PropsWithChildren<ButtonProps>) {
       onClick={onClick}>
       <RowBox
         cssExt={css`
-          display: flex;
-          justify-content: center;
-          flex-grow: 1;
+          ${justiCenter}
+          ${flexGrow}
         `}>
         {icon && (
           <Icon

@@ -1,7 +1,8 @@
 import styled from 'styled-components';
+import { flex } from '../style/cssCommon';
 
 const LinkTextWrapper = styled.div`
-  display: flex;
+  ${flex}
   color: black;
   cursor: pointer;
   width: fit-content;
