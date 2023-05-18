@@ -45,6 +45,7 @@ import { insertDoc } from '../util/common';
 import icon_sand from '../img/ico_send.svg';
 import { setBridgeMessage } from '../store/slices/bridge';
 import apiWrapper from '../api/apiWrapper';
+import icon_credit from '../img/ico_credit.svg';
 
 const INPUT_HEIGHT = 120;
 const TEXT_MAX_HEIGHT = 168;
