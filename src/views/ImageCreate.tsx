@@ -40,6 +40,7 @@ import { RightBox, RowBox } from './AIChatTab';
 import { v4 as uuidv4 } from 'uuid';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import {
+  T2IType,
   addT2I,
   selectT2IHIstory,
   updateT2ICurItemIndex,
@@ -300,90 +301,94 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
   const dispatch = useAppDispatch();
   const { currentListId, currentItemIdx, history } = useAppSelector(selectT2IHIstory);
 
-  const createAiImage = useCallback(async () => {
-    try {
-      const assistantId = uuidv4();
+  const createAiImage = useCallback(
+    async (remake?: T2IType) => {
+      try {
+        const assistantId = uuidv4();
 
-      setCreating(true);
-      // dispatch(
-      //   activeToast({
-      //     active: true,
-      //     msg: '이미지를 생성합니다. 10 크레딧이 차감되었습니다. (잔여 크레딧 :980)',
-      //     isError: false
-      //   })
-      // );
-
-      const apiBody: any = {
-        prompt: descInput,
-        imgSize: selectedRatio
-      };
-      if (selectedStyle !== 'none') apiBody['style_preset'] = selectedStyle;
-
-      const res = await apiWrapper(TEXT_TO_IMAGE_API, {
-        headers: {
-          ...JSON_CONTENT_TYPE,
-          'User-Agent': navigator.userAgent
-        },
-        body: JSON.stringify(apiBody),
-        method: 'POST'
-      });
-
-      if (res.status !== 200) {
-        throw new Error(`${res.status}: ${res.statusText}`);
-      }
-
-      dispatch(
-        activeToast({
-          active: true,
-          msg: `이미지를 생성합니다. ${res.headers.get(
-            'X-PO-AI-Mayflower-Userinfo-Usedcredit'.toLowerCase()
-          )} 크레딧이 차감되었습니다. (잔여 크레딧 : ${res.headers.get(
-            'X-PO-AI-Mayflower-Userinfo-Credit'.toLowerCase()
-          )})`,
-          isError: false
-        })
-      );
-
-      const body = await res.json();
-      const { images } = body.data;
-      if (images) {
-        dispatch(
-          addT2I({
-            id: assistantId,
-            list: images,
-            input: descInput,
-            style: selectedStyle,
-            ratio: selectedRatio
-          })
-        );
-        dispatch(updateT2ICurListId(assistantId));
-        dispatch(updateT2ICurItemIndex(0));
-
-        setCreating(false);
+        setCreating(true);
         // dispatch(
         //   activeToast({
         //     active: true,
-        //     msg: `이미지 생성 완료. 원하는 작업을 실행하세요.`,
+        //     msg: '이미지를 생성합니다. 10 크레딧이 차감되었습니다. (잔여 크레딧 :980)',
         //     isError: false
         //   })
         // );
 
-        // setAiImgs(images);
+        const apiBody: any = {
+          prompt: remake ? remake?.input : descInput,
+          imgSize: remake ? remake?.ratio : selectedRatio
+        };
+        if (selectedStyle !== 'none')
+          apiBody['style_preset'] = remake ? remake.style : selectedStyle;
+
+        const res = await apiWrapper(TEXT_TO_IMAGE_API, {
+          headers: {
+            ...JSON_CONTENT_TYPE,
+            'User-Agent': navigator.userAgent
+          },
+          body: JSON.stringify(apiBody),
+          method: 'POST'
+        });
+
+        if (res.status !== 200) {
+          throw new Error(`${res.status}: ${res.statusText}`);
+        }
+
+        dispatch(
+          activeToast({
+            active: true,
+            msg: `이미지를 생성합니다. ${res.headers.get(
+              'X-PO-AI-Mayflower-Userinfo-Usedcredit'.toLowerCase()
+            )} 크레딧이 차감되었습니다. (잔여 크레딧 : ${res.headers.get(
+              'X-PO-AI-Mayflower-Userinfo-Credit'.toLowerCase()
+            )})`,
+            isError: false
+          })
+        );
+
+        const body = await res.json();
+        const { images } = body.data;
+        if (images) {
+          dispatch(
+            addT2I({
+              id: assistantId,
+              list: images,
+              input: remake ? remake?.input : descInput,
+              style: remake ? remake?.input : selectedStyle,
+              ratio: remake ? remake?.input : selectedRatio
+            })
+          );
+          dispatch(updateT2ICurListId(assistantId));
+          dispatch(updateT2ICurItemIndex(0));
+
+          setCreating(false);
+          // dispatch(
+          //   activeToast({
+          //     active: true,
+          //     msg: `이미지 생성 완료. 원하는 작업을 실행하세요.`,
+          //     isError: false
+          //   })
+          // );
+
+          // setAiImgs(images);
+        }
+      } catch (err: any) {
+        dispatch(updateT2ICurListId(null));
+        dispatch(updateT2ICurItemIndex(null));
+        setCreating(false);
+        dispatch(
+          activeToast({
+            active: true,
+            msg: err.message,
+            // msg: '폴라리스 오피스 AI의 생성이 잘 되지 않았습니다. 다시 시도해보세요.',
+            isError: true
+          })
+        );
       }
-    } catch (err: any) {
-      dispatch(updateT2ICurListId(null));
-      dispatch(updateT2ICurItemIndex(null));
-      setCreating(false);
-      dispatch(
-        activeToast({
-          active: true,
-          msg: err.message,
-          // msg: '폴라리스 오피스 AI의 생성이 잘 되지 않았습니다. 다시 시도해보세요.',
-          isError: true
-        })
-      );
-    }
-  }, [descInput, selectedRatio, selectedStyle]);
+    },
+    [descInput, selectedRatio, selectedStyle]
+  );
 
   const currentHistory =
     history && history.length > 0 && history?.filter((history) => history.id === currentListId)[0];
@@ -463,7 +468,9 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
           <Button
             isCredit={true}
             icon={iconCreatingWhite}
-            onClick={createAiImage}
+            onClick={() => {
+              createAiImage();
+            }}
             disable={descInput.length === 0}
             cssExt={css`
               width: 100%;
@@ -575,7 +582,11 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
             />
           </ImageList>
           <RowContainer>
-            <Button isCredit={true} onClick={createAiImage}>
+            <Button
+              isCredit={true}
+              onClick={() => {
+                createAiImage(currentHistory);
+              }}>
               다시 만들기
             </Button>
             <Button

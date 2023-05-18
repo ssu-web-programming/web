@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 import { AiImageResponse } from '../../views/ImageCreate';
 
-interface T2IType {
+export interface T2IType {
   id: string;
   input: string;
   ratio: string;
