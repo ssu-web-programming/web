@@ -311,7 +311,7 @@ const AIChatTab = () => {
 
       let preProc = getPreProcessing(chat);
 
-      if (!chat && chatInput.length > 1) {
+      if (!chat && chatHistory.length > 1) {
         dispatch(
           appendChat({
             id: uuidv4(),
