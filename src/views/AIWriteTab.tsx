@@ -44,7 +44,7 @@ import { setLoadingTab } from '../store/slices/tabSlice';
 import Loading from '../components/Loading';
 import { JSON_CONTENT_TYPE, CHAT_STREAM_API } from '../api/constant';
 import { insertDoc } from '../util/common';
-import apiWrapper from '../api/apiWrapper';
+import useApiWrapper from '../api/useApiWrapper';
 
 const Wrapper = styled.div`
   ${flexColumn}
@@ -142,6 +142,7 @@ const exampleSubject = [
 ];
 
 const AIWriteTab = () => {
+  const apiWrapper = useApiWrapper();
   const [subject, setSubject] = useState<string>('');
   const [selectedForm, setSelectedForm] = useState<FormListType>(firstRecList[0]);
   const [selectedLength, setSelectedLength] = useState<LengthListType>(lengthList[0]);

@@ -12,6 +12,7 @@ import InvalidAccess from './pages/InvalidAccess';
 import { useMoveChatTab } from './components/hooks/useMovePage';
 import { useTranslation } from 'react-i18next';
 import { activeToast } from './store/slices/toastSlice';
+import OfflineView from './components/OfflineView';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -81,6 +82,7 @@ function App() {
           <Route path="*" element={<InvalidAccess></InvalidAccess>}></Route>
         </Routes>
         {toast.active && <ToastMsg msg={toast.msg} isError={toast.isError} />}
+        <OfflineView></OfflineView>
       </Wrapper>
     </>
   );

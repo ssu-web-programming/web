@@ -44,7 +44,7 @@ import { CHAT_STREAM_API, JSON_CONTENT_TYPE } from '../api/constant';
 import { insertDoc } from '../util/common';
 import icon_sand from '../img/ico_send.svg';
 import { setBridgeMessage } from '../store/slices/bridge';
-import apiWrapper from '../api/apiWrapper';
+import useApiWrapper from '../api/useApiWrapper';
 import icon_credit from '../img/ico_credit.svg';
 
 const INPUT_HEIGHT = 120;
@@ -204,6 +204,7 @@ const chatTipList = [
 
 const AIChatTab = () => {
   const dispatch = useAppDispatch();
+  const apiWrapper = useApiWrapper();
   const { history: chatHistory, defaultInput } = useAppSelector(selectChatHistory);
   const { selectedRecFunction, selectedSubRecFunction } = useAppSelector(selectRecFuncSlice);
 

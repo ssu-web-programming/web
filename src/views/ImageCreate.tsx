@@ -47,7 +47,7 @@ import {
 } from '../store/slices/txt2imgHistory';
 import { JSON_CONTENT_TYPE, TEXT_TO_IMAGE_API } from '../api/constant';
 import { activeToast } from '../store/slices/toastSlice';
-import apiWrapper from '../api/apiWrapper';
+import useApiWrapper from '../api/useApiWrapper';
 
 const exampleList = [
   '노을진 바다 위 비행기',
@@ -293,6 +293,7 @@ export interface AiImageResponse {
 }
 
 const ImageCreate = ({ contents }: { contents?: string }) => {
+  const apiWrapper = useApiWrapper();
   const [descInput, setDescInput] = useState<string>(contents ? contents : '');
   const [selectedStyle, setSelectedStyle] = useState<string>('none');
   const [selectedRatio, setSelectedRatio] = useState<string>('512x512');
