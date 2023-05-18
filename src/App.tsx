@@ -10,11 +10,12 @@ import TextToImage from './pages/TextToImage';
 import GlobalStyle from './style/globalStyle';
 import InvalidAccess from './pages/InvalidAccess';
 import { useMoveChatTab } from './components/hooks/useMovePage';
-import { GET_USER_LOGIN_STATUS_API } from './api/constant';
-import { setLoginSession } from './store/slices/loginSession';
+import { useTranslation } from 'react-i18next';
+import { activeToast } from './store/slices/toastSlice';
 
 function App() {
   const dispatch = useAppDispatch();
+  const { i18n } = useTranslation();
   const toast = useAppSelector(selectToast);
   const navigate = useNavigate();
   const movePage = useMoveChatTab();
@@ -25,32 +26,6 @@ function App() {
       if (cmd && cmd !== '') {
         dispatch(setBridgeMessage({ cmd, body: JSON.stringify(body) }));
         switch (cmd) {
-          case 'sessionInfo': {
-            const res = await (
-              await fetch(GET_USER_LOGIN_STATUS_API, {
-                headers: {
-                  'content-type': 'application/json',
-                  'X-PO-AI-MayFlower-Auth-AID': body['AID'],
-                  'X-PO-AI-MayFlower-Auth-BID': body['BID'],
-                  'X-PO-AI-MayFlower-Auth-SID': body['SID']
-                },
-                method: 'GET'
-              })
-            ).json();
-            if (res?.success === false) {
-              dispatch(setBridgeMessage({ cmd: `${cmd}_response`, body: res?.error?.message }));
-              throw new Error(`Login Faild : ${res?.error?.message}`);
-            }
-            dispatch(
-              setLoginSession({
-                AID: body['AID'] ? body['AID'] : '',
-                BID: body['BID'] ? body['BID'] : '',
-                SID: body['SID'] ? body['SID'] : ''
-              })
-            );
-            dispatch(setBridgeMessage({ cmd: `${cmd}_response`, body: res?.success }));
-            break;
-          }
           case 'openAiTools':
           case 'openTextToImg': {
             const path = cmd === `openAiTools` ? `/aiWrite` : `/txt2img`;
@@ -59,6 +34,17 @@ function App() {
             navigate(path, {
               state: { body, time }
             });
+            break;
+          }
+          case 'showToast': {
+            const msg = i18n.t(body);
+            dispatch(
+              activeToast({
+                active: true,
+                msg,
+                isError: true
+              })
+            );
             break;
           }
           default: {

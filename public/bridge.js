@@ -35,6 +35,8 @@ const CLIENT_TYPE = {
 //   return CLIENT_TYPE.UNKNOWN;
 // }
 
+const BridgeList = {};
+
 function getAgentPlatform(userAgent) {
   if (userAgent) {
     let ua = userAgent.toLowerCase();
@@ -105,11 +107,13 @@ const getDelegator = (api, arg) => {
             case 'closePanel': {
               return window.webkit.messageHandlers.closePanel.postMessage(arg);
             }
+            case 'getSessionInfo': {
+              return window.webkit.messageHandlers.getSessionInfo.postMessage(arg);
+            }
             default: {
               throw new Error(`unknown handler name : ${api}`);
             }
           }
-          // return window.webkit.messageHandlers[api].postMessage(arg);
         }
         case CLIENT_TYPE.WINDOWS: {
           const msg = arg ? `${api} ${arg}` : api;
@@ -130,6 +134,53 @@ const getDelegator = (api, arg) => {
 };
 
 window._Bridge = {
+  checkSession: (api) => {
+    return new Promise((resolve, reject) => {
+      const callback = async (sessionInfo, id) => {
+        try {
+          const { body } = sessionInfo;
+          const res = await fetch('/api/v2/user/getCurrentLoginStatus', {
+            headers: {
+              'content-type': 'application/json',
+              'X-PO-AI-MayFlower-Auth-AID': body['AID'],
+              'X-PO-AI-MayFlower-Auth-BID': body['BID'],
+              'X-PO-AI-MayFlower-Auth-SID': body['SID'],
+              'User-Agent': navigator.userAgent
+            },
+            method: 'GET'
+          });
+          const resJson = await res.json();
+          if (resJson?.success === false) {
+            reject({
+              success: false
+            });
+          } else {
+            resolve({
+              success: true,
+              sessionInfo: { AID: body['AID'], BID: body['BID'], SID: body['SID'] }
+            });
+          }
+        } catch (err) {
+          reject({ success: false, err });
+        } finally {
+          delete BridgeList[id];
+        }
+      };
+      try {
+        const item = {
+          id: `${api}_${Date.now()}`,
+          callback
+        };
+        BridgeList[item.id] = item;
+
+        const delegator = getDelegator('getSessionInfo', item.id);
+        delegator();
+      } catch (err) {
+        reject(err);
+      }
+    });
+  },
+
   initComplete: () => {
     try {
       const delegator = getDelegator('initComplete');
@@ -197,6 +248,20 @@ window._Bridge = {
   }
 };
 
+function callbackMessage(msg) {
+  try {
+    const id = msg.cmdID;
+    if (BridgeList[id]) {
+      const item = BridgeList[id];
+      if (item && item.callback) {
+        item.callback(msg, id);
+      }
+    }
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 function receiveMessage(msg) {
   document.dispatchEvent(
     new CustomEvent('CustomBridgeEvent', {
@@ -204,3 +269,11 @@ function receiveMessage(msg) {
     })
   );
 }
+
+window.addEventListener('message', (msg) => {
+  try {
+    callbackMessage(msg.data);
+  } catch (err) {
+    console.log(err);
+  }
+});

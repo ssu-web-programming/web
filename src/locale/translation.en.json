@@ -1,3 +1,4 @@
 {
-  "PageCount": "Page Count"
+  "PageCount": "Page Count",
+  "InsertFail": "Please set the cursor in the document!"
 }

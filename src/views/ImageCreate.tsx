@@ -47,7 +47,7 @@ import {
 } from '../store/slices/txt2imgHistory';
 import { JSON_CONTENT_TYPE, TEXT_TO_IMAGE_API } from '../api/constant';
 import { activeToast } from '../store/slices/toastSlice';
-import { selectLoginSessionSlice } from '../store/slices/loginSession';
+import apiWrapper from '../api/apiWrapper';
 
 const exampleList = [
   '노을진 바다 위 비행기',
@@ -300,20 +300,18 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
   const dispatch = useAppDispatch();
   const { currentListId, currentItemIdx, history } = useAppSelector(selectT2IHIstory);
 
-  const { AID, BID, SID } = useAppSelector(selectLoginSessionSlice);
-
   const createAiImage = useCallback(async () => {
     try {
       const assistantId = uuidv4();
 
       setCreating(true);
-      dispatch(
-        activeToast({
-          active: true,
-          msg: '이미지를 생성합니다. 10 크레딧이 차감되었습니다. (잔여 크레딧 :980)',
-          isError: false
-        })
-      );
+      // dispatch(
+      //   activeToast({
+      //     active: true,
+      //     msg: '이미지를 생성합니다. 10 크레딧이 차감되었습니다. (잔여 크레딧 :980)',
+      //     isError: false
+      //   })
+      // );
 
       const apiBody: any = {
         prompt: descInput,
@@ -321,18 +319,30 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
       };
       if (selectedStyle !== 'none') apiBody['style_preset'] = selectedStyle;
 
-      const res = await fetch(TEXT_TO_IMAGE_API, {
+      const res = await apiWrapper(TEXT_TO_IMAGE_API, {
         headers: {
           ...JSON_CONTENT_TYPE,
-          'X-PO-AI-MayFlower-Auth-SID': SID,
-          'X-PO-AI-MayFlower-Auth-BID': BID,
-          'X-PO-AI-MayFlower-Auth-AID': AID
+          'User-Agent': navigator.userAgent
         },
         body: JSON.stringify(apiBody),
         method: 'POST'
       });
 
-      if (res.status !== 200) throw new Error('not 200 error');
+      if (res.status !== 200) {
+        throw new Error(`${res.status}: ${res.statusText}`);
+      }
+
+      dispatch(
+        activeToast({
+          active: true,
+          msg: `이미지를 생성합니다. ${res.headers.get(
+            'X-PO-AI-Mayflower-Userinfo-Usedcredit'.toLowerCase()
+          )} 크레딧이 차감되었습니다. (잔여 크레딧 : ${res.headers.get(
+            'X-PO-AI-Mayflower-Userinfo-Credit'.toLowerCase()
+          )})`,
+          isError: false
+        })
+      );
 
       const body = await res.json();
       const { images } = body.data;
@@ -350,24 +360,25 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
         dispatch(updateT2ICurItemIndex(0));
 
         setCreating(false);
-        dispatch(
-          activeToast({
-            active: true,
-            msg: `이미지 생성 완료. 원하는 작업을 실행하세요.`,
-            isError: false
-          })
-        );
+        // dispatch(
+        //   activeToast({
+        //     active: true,
+        //     msg: `이미지 생성 완료. 원하는 작업을 실행하세요.`,
+        //     isError: false
+        //   })
+        // );
 
         // setAiImgs(images);
       }
-    } catch (err) {
+    } catch (err: any) {
       dispatch(updateT2ICurListId(null));
       dispatch(updateT2ICurItemIndex(null));
       setCreating(false);
       dispatch(
         activeToast({
           active: true,
-          msg: '폴라리스 오피스 AI의 생성이 잘 되지 않았습니다. 다시 시도해보세요.',
+          msg: err.message,
+          // msg: '폴라리스 오피스 AI의 생성이 잘 되지 않았습니다. 다시 시도해보세요.',
           isError: true
         })
       );

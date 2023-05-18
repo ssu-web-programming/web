@@ -44,7 +44,7 @@ import { setLoadingTab } from '../store/slices/tabSlice';
 import Loading from '../components/Loading';
 import { JSON_CONTENT_TYPE, CHAT_STREAM_API } from '../api/constant';
 import { insertDoc } from '../util/common';
-import { selectLoginSessionSlice } from '../store/slices/loginSession';
+import apiWrapper from '../api/apiWrapper';
 
 const Wrapper = styled.div`
   ${flexColumn}
@@ -147,7 +147,6 @@ const AIWriteTab = () => {
   const [selectedLength, setSelectedLength] = useState<LengthListType>(lengthList[0]);
 
   const { isLoading } = useAppSelector(selectTabSlice);
-  const { AID, BID, SID } = useAppSelector(selectLoginSessionSlice);
 
   const stopRef = useRef<boolean>(false);
   const endRef = useRef<any>();
@@ -186,20 +185,18 @@ const AIWriteTab = () => {
       dispatch(setCurrentWrite(assistantId));
 
       dispatch(setLoadingTab(true));
-      dispatch(
-        activeToast({
-          active: true,
-          msg: '내용을 생성합니다. 10 크레딧이 차감되었습니다. (잔여 크레딧 :980)',
-          isError: false
-        })
-      );
+      // dispatch(
+      //   activeToast({
+      //     active: true,
+      //     msg: '내용을 생성합니다. 10 크레딧이 차감되었습니다. (잔여 크레딧 :980)',
+      //     isError: false
+      //   })
+      // );
 
-      const res = await fetch(CHAT_STREAM_API, {
+      const res = await apiWrapper(CHAT_STREAM_API, {
         headers: {
           ...JSON_CONTENT_TYPE,
-          'X-PO-AI-MayFlower-Auth-SID': SID,
-          'X-PO-AI-MayFlower-Auth-BID': BID,
-          'X-PO-AI-MayFlower-Auth-AID': AID
+          'User-Agent': navigator.userAgent
         },
         //   responseType: 'stream',
         body: JSON.stringify({
@@ -214,7 +211,21 @@ const AIWriteTab = () => {
         method: 'POST'
       });
 
-      if (res.status !== 200) throw new Error('not 200 error');
+      if (res.status !== 200) {
+        throw new Error(`${res.status}: ${res.statusText}`);
+      }
+
+      dispatch(
+        activeToast({
+          active: true,
+          msg: `내용을 생성합니다. ${res.headers.get(
+            'X-PO-AI-Mayflower-Userinfo-Usedcredit'.toLowerCase()
+          )} 크레딧이 차감되었습니다. (잔여 크레딧 : ${res.headers.get(
+            'X-PO-AI-Mayflower-Userinfo-Credit'.toLowerCase()
+          )})`,
+          isError: false
+        })
+      );
 
       const reader = res.body?.getReader();
       var enc = new TextDecoder('utf-8');
@@ -253,19 +264,19 @@ const AIWriteTab = () => {
       }
 
       if (!stopRef.current) dispatch(setLoadingTab(false));
-      dispatch(
-        activeToast({
-          active: true,
-          msg: `작성 완료. 원하는 작업을 실행하세요.`,
-          isError: false
-        })
-      );
-    } catch (error) {
+      // dispatch(
+      //   activeToast({
+      //     active: true,
+      //     msg: `작성 완료. 원하는 작업을 실행하세요.`,
+      //     isError: false
+      //   })
+      // );
+    } catch (error: any) {
       dispatch(resetCurrentWrite());
       dispatch(
         activeToast({
           active: true,
-          msg: `폴라리스 오피스 AI의 생성이 잘 되지 않았습니다.다시 시도해보세요.`,
+          msg: error.message,
           isError: true
         })
       );
