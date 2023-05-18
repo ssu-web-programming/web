@@ -522,7 +522,6 @@ const AIWriteTab = () => {
               </RowBox>
               <div>
                 <Button
-                  isCredit={true}
                   icon={icon_chat_white}
                   cssExt={css`
                     flex: none;
