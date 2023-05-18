@@ -287,10 +287,10 @@ const AIChatTab = () => {
     if (chat?.preProcessing) {
       return chat.preProcessing;
     } else if (chatHistory.length === 1) {
-      return { type: 'create_text', arg1: selectedRecFunction?.id };
+      return { type: 'just_chat', arg1: selectedRecFunction?.id };
     } else if (selectedRecFunction) {
       return { type: selectedRecFunction.id, arg1: selectedSubRecFunction?.id };
-    } else return undefined;
+    } else return { type: 'just_chat' };
   };
 
   const submitChat = async (chat?: Chat) => {
