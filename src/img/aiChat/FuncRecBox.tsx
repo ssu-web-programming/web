@@ -315,6 +315,7 @@ const FucRecBox = ({ chatLength }: { chatLength: number }) => {
                               : 'none'};
                             margin: 3px;
                             height: fit-content;
+                            min-width: fit-content;
                           `}>
                           <Icon
                             iconSrc={
@@ -336,6 +337,7 @@ const FucRecBox = ({ chatLength }: { chatLength: number }) => {
                       cssExt={css`
                         border: none;
                         background-color: transparent;
+                        min-width: fit-content;
                       `}
                       onClick={() => {
                         setIsSubPage(false);
@@ -361,6 +363,7 @@ const FucRecBox = ({ chatLength }: { chatLength: number }) => {
                                 : 'none'};
                               margin: 3px;
                               height: fit-content;
+                              min-width: fit-content;
                             `}
                             selected={selectedSubRecFunction?.id === sub.id}
                             onClick={() => {
