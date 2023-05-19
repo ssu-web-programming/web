@@ -101,6 +101,9 @@ const getDelegator = (api, arg) => {
             case 'insertImage': {
               return window.webkit.messageHandlers.insertImage.postMessage(arg);
             }
+            case 'openWindow': {
+              return window.webkit.messageHandlers.openWindow.postMessage(arg);
+            }
             case 'openDoc': {
               return window.webkit.messageHandlers.openDoc.postMessage(arg);
             }
@@ -222,6 +225,15 @@ window._Bridge = {
     try {
       const text = await fileToString(img);
       const delegator = getDelegator('insertImage', text);
+      delegator();
+    } catch (err) {
+      console.log(err);
+    }
+  },
+
+  openWindow: (target) => {
+    try {
+      const delegator = getDelegator('openWindow', target);
       delegator();
     } catch (err) {
       console.log(err);

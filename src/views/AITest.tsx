@@ -4,6 +4,8 @@ import { useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import { selectBridgeMessage, setBridgeMessage } from '../store/slices/bridge';
 import { flex, flexColumn, flexGrow, flexShrink } from '../style/cssCommon';
+import { activeToast } from '../store/slices/toastSlice';
+import NoCredit from '../components/toast/contents/NoCredit';
 
 const Body = styled.div`
   width: 100%;
@@ -61,6 +63,16 @@ export default function AITest() {
   const writeLog = useCallback((text: string) => {
     dispatch(setBridgeMessage({ cmd: 'call api', body: text }));
   }, []);
+
+  const onToastLink = () => {
+    dispatch(
+      activeToast({
+        active: true,
+        msg: <NoCredit></NoCredit>,
+        isError: true
+      })
+    );
+  };
 
   const onInsertText = () => {
     try {
@@ -142,6 +154,7 @@ export default function AITest() {
           ))}
         </Result>
         <Row>
+          <TestButton onClick={onToastLink}>toastLink</TestButton>
           <TestButton onClick={onInsertText}>insertText</TestButton>
           <TestButton onClick={onInsertHtml}>insertHtml</TestButton>
           <TestButton onClick={onDownloadImage}>downloadImage</TestButton>
