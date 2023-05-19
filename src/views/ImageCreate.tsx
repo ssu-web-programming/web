@@ -334,8 +334,14 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
           method: 'POST'
         });
 
+        const body = await res.json();
+
         if (res.status !== 200) {
-          throw new Error(`${res.status}: ${res.statusText}`);
+          if (res.status === 400 && body?.error?.message === 'invalid_prompts') {
+            throw new Error('프롬프트에 부적절한 단어가 포함되어 있습니다.');
+          } else {
+            throw new Error(`${res.status}: ${res.statusText}`);
+          }
         }
 
         dispatch(
@@ -350,7 +356,6 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
           })
         );
 
-        const body = await res.json();
         const { images } = body.data;
         if (images) {
           dispatch(
