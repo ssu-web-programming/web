@@ -1,10 +1,6 @@
-import { setOnlineStatus } from '../store/slices/network';
-import { useAppDispatch } from '../store/store';
-
-const ERR_NOT_ONLINE = 'NotOnline';
+import { ERR_INVALID_SESSION, ERR_NOT_ONLINE } from '../error/error';
 
 export default function useApiWrapper() {
-  const dispatch = useAppDispatch();
   return async function apiWrapper(api: string, option: any) {
     try {
       if (!navigator.onLine) {
@@ -13,7 +9,7 @@ export default function useApiWrapper() {
       const resSession = await window._Bridge.checkSession(api);
       if (!resSession || !resSession.success) {
         console.log(`apiWrapper[resSession] : ${JSON.stringify(resSession)}`);
-        throw new Error('Error: Invlid Session');
+        throw new Error(ERR_INVALID_SESSION);
       }
 
       const session: any = {};
@@ -25,11 +21,6 @@ export default function useApiWrapper() {
       const res = await fetch(api, _option);
       return res;
     } catch (err: any) {
-      console.log(`apiWrapper : ${JSON.stringify(err)}`);
-      if (err.message === ERR_NOT_ONLINE) {
-        dispatch(setOnlineStatus(false));
-        throw err;
-      }
       throw err;
     }
   };

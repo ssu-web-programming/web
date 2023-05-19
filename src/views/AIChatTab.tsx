@@ -47,7 +47,7 @@ import { setBridgeMessage } from '../store/slices/bridge';
 import useApiWrapper from '../api/useApiWrapper';
 import icon_credit from '../img/ico_credit.svg';
 import { useTranslation } from 'react-i18next';
-import useErrorMsg from '../components/hooks/useErrorMsg';
+import useErrorHandle from '../components/hooks/useErrorHandle';
 
 const INPUT_HEIGHT = 120;
 const TEXT_MAX_HEIGHT = 168;
@@ -211,7 +211,7 @@ const AIChatTab = () => {
   const { history: chatHistory, defaultInput } = useAppSelector(selectChatHistory);
   const { selectedRecFunction, selectedSubRecFunction } = useAppSelector(selectRecFuncSlice);
   const { t } = useTranslation();
-  const getErrorMsg = useErrorMsg();
+  const errorHandle = useErrorHandle();
 
   const [chatInput, setChatInput] = useState<string>('');
   const [isActiveInput, setIsActiveInput] = useState<boolean>(false);
@@ -398,13 +398,7 @@ const AIChatTab = () => {
         );
       }
     } catch (error: any) {
-      dispatch(
-        activeToast({
-          active: true,
-          msg: getErrorMsg(error),
-          isError: true
-        })
-      );
+      errorHandle(error);
     } finally {
       setLoadingResId(null);
       stopRef.current = false;

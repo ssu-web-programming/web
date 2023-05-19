@@ -46,7 +46,7 @@ import { JSON_CONTENT_TYPE, CHAT_STREAM_API } from '../api/constant';
 import { calLeftCredit, insertDoc } from '../util/common';
 import useApiWrapper from '../api/useApiWrapper';
 import { useTranslation } from 'react-i18next';
-import useErrorMsg from '../components/hooks/useErrorMsg';
+import useErrorHandle from '../components/hooks/useErrorHandle';
 
 const Wrapper = styled.div`
   ${flexColumn}
@@ -151,7 +151,7 @@ const AIWriteTab = () => {
   const { t } = useTranslation();
 
   const { isLoading } = useAppSelector(selectTabSlice);
-  const getErrorMsg = useErrorMsg();
+  const errorHandle = useErrorHandle();
 
   const stopRef = useRef<boolean>(false);
   const endRef = useRef<any>();
@@ -265,13 +265,7 @@ const AIWriteTab = () => {
       if (!stopRef.current) dispatch(setLoadingTab(false));
     } catch (error: any) {
       dispatch(resetCurrentWrite());
-      dispatch(
-        activeToast({
-          active: true,
-          msg: getErrorMsg(error),
-          isError: true
-        })
-      );
+      errorHandle(error);
     } finally {
       stopRef.current = false;
       dispatch(setLoadingTab(false));

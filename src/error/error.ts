@@ -1,0 +1,2 @@
+export const ERR_NOT_ONLINE = 'ERR_NOT_ONLINE';
+export const ERR_INVALID_SESSION = 'ERR_INVALID_SESSION';

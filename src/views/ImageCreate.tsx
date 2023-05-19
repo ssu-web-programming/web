@@ -51,7 +51,7 @@ import { activeToast } from '../store/slices/toastSlice';
 import useApiWrapper from '../api/useApiWrapper';
 import { useTranslation } from 'react-i18next';
 import { calLeftCredit } from '../util/common';
-import useErrorMsg from '../components/hooks/useErrorMsg';
+import useErrorHandle from '../components/hooks/useErrorHandle';
 
 const exampleList = [
   // '비행기가 날아가는 그림, 연필로 그린, HQ',
@@ -306,7 +306,7 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
   const [creating, setCreating] = useState(false);
   const dispatch = useAppDispatch();
   const { currentListId, currentItemIdx, history } = useAppSelector(selectT2IHIstory);
-  const getErrorMsg = useErrorMsg();
+  const errorHandle = useErrorHandle();
 
   const { t } = useTranslation();
 
@@ -372,13 +372,7 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
         dispatch(updateT2ICurListId(null));
         dispatch(updateT2ICurItemIndex(null));
         setCreating(false);
-        dispatch(
-          activeToast({
-            active: true,
-            msg: getErrorMsg(error),
-            isError: true
-          })
-        );
+        errorHandle(error);
       }
     },
     [descInput, selectedRatio, selectedStyle]
