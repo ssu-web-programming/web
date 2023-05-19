@@ -139,7 +139,8 @@
     "StopMsg": "Writing content aborted. Select a job you want.",
     "SuccessMsg": "Writing content completed. Select a job you want.",
     "CompleteCopy": "Copy completed.",
-    "CompleteInsert": "Insert completed."
+    "CompleteInsert": "Insert completed.",
+    "ErrorMsg": "An error has occurred. Please try again later. ({{code}} : {{msg}})"
   },
   "Download": "Download",
   "AITools": "AI Tools",

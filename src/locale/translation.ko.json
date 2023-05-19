@@ -139,7 +139,8 @@
     "StopMsg": "작성 중지. 원하는 작업을 실행하세요.",
     "SuccessMsg": "작성 완료. 원하는 작업을 실행하세요.",
     "CompleteCopy": "내용 복사가 완료되었습니다.",
-    "CompleteInsert": "내용 삽입이 완료 되었습니다."
+    "CompleteInsert": "내용 삽입이 완료 되었습니다.",
+    "ErrorMsg": "오류가 발생했습니다. 잠시 후 다시 시도해 주세요. ({{code}} : {{msg}})"
   },
   "Download": "다운로드",
   "AITools": "AI 도구",

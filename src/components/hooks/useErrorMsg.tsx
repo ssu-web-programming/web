@@ -6,22 +6,20 @@ const useErrorMsg = () => {
   const { t } = useTranslation();
 
   return (error: any) => {
-    const { leftCredit, prevCredit } = calLeftCredit(error.header);
-
     switch (error.status) {
       case 400:
         // return '400 Bad Request';
         return t(`Txt2ImgTab.ToastMsg.ForbiddenWord`);
       case 401:
-        // TODO: Unauthorized error
         return '401 Unauthorized';
       case 429:
+        const { leftCredit, prevCredit } = calLeftCredit(error.header);
         if (prevCredit === 0) return <NoCredit />;
         else return t(`ToastMsg.NoCredit`, { credit: Math.abs(leftCredit) });
       case 500:
         return t(`ToastMsg.AIError`);
       default:
-        return `${error.status} : ${error.statusText}`;
+        return t(`ToastMsg.ErrorMsg`, { code: error.status, msg: error.statusText });
     }
   };
 };
