@@ -33,9 +33,9 @@
   "ChatingTab": {
     "AIGreeting": "안녕하세요. 쉽고, 빠르게 문서 작성을 도와주는 폴라리스오피스 AI Chat 입니다.",
     "UseMoreAI": "더 많은 AI 기능을 사용해보세요.",
+    "UseVariableForm": "다양한 형식으로 답변을 작성해보세요.",
     "InputPlaceholder": "무엇이든 질문해주세요.",
     "TipList": {
-      "UseVariableForm": "다양한 형식으로 답변을 작성해보세요.",
       "1ChatingCredit": "대화 1회당 N 크레딧이 차감됩니다.",
       "EnterInfo": "Enter로 줄을 바꾸세요",
       "CtrlEnterInfo": "Ctrl+Enter를 눌러 대화를 할 수 있습니다.",
@@ -145,5 +145,6 @@
   "Download": "다운로드",
   "AITools": "AI 도구",
   "AIWrite": "AI 작성",
-  "Test": "테스트"
+  "Test": "테스트",
+  "Additional": "추가"
 }

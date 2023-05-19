@@ -16,7 +16,7 @@ const useErrorMsg = () => {
         const { leftCredit, prevCredit } = calLeftCredit(error.header);
         if (prevCredit === 0) return <NoCredit />;
         // else return t(`ToastMsg.NoCredit`, { credit: Math.abs(leftCredit) });
-        else return t(`ToastMsg.NoCredit`, { credit: '추가' });
+        else return t(`ToastMsg.NoCredit`, { credit: t(`Additional`) });
       case 500:
         return t(`ToastMsg.AIError`);
       default:

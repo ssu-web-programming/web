@@ -32,10 +32,10 @@
   },
   "ChatingTab": {
     "AIGreeting": "Hello, I am Polaris AI Chat. I'm here to help you create a document easy and fast.",
+    "UseMoreAI": "Use more AI features.",
+    "UseVariableForm": "Create your response in various formats.",
     "InputPlaceholder": "Please ask anything.",
     "TipList": {
-      "UseMoreAI": "Use more AI features.",
-      "UseVariableForm": "Create your response in various formats.",
       "1ChatingCredit": "N credit(s) will be deducted per conversation.",
       "EnterInfo": "Use Enter to break the line.",
       "CtrlEnterInfo": "Enter Ctrl+Enter to open a conversation.",
@@ -145,5 +145,6 @@
   "Download": "Download",
   "AITools": "AI Tools",
   "AIWrite": "AI Write",
-  "Test": "Test"
+  "Test": "Test",
+  "Additional": "more"
 }
