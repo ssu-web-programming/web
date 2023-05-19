@@ -4,7 +4,7 @@ import { RootState } from '../store';
 interface ToastType {
   active: boolean;
   isError: boolean;
-  msg: string;
+  msg: string | React.ReactNode;
 }
 
 const toastSlice = createSlice({

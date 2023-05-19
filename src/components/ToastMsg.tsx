@@ -67,7 +67,7 @@ const ToastText = styled.div`
   word-break: break-all;
 `;
 
-const ToastMsg = ({ msg, isError }: { msg: string; isError: boolean }) => {
+const ToastMsg = ({ msg, isError }: { msg: string | React.ReactNode; isError: boolean }) => {
   const dispatch = useDispatch();
 
   const [isVisible, setIsVisible] = useState<boolean>(true);
