@@ -7,6 +7,7 @@ import recFunction from './slices/recFuncSlice';
 import writeHistory from './slices/writeHistorySlice';
 import tab from './slices/tabSlice';
 import txtimgHistory from './slices/txt2imgHistory';
+import network from './slices/network';
 
 const store = configureStore({
   reducer: {
@@ -16,7 +17,8 @@ const store = configureStore({
     writeHistory,
     tab,
     bridge,
-    txtimgHistory
+    txtimgHistory,
+    network
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false })
 });
