@@ -359,8 +359,8 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
               id: assistantId,
               list: images,
               input: remake ? remake?.input : descInput,
-              style: remake ? remake?.input : selectedStyle,
-              ratio: remake ? remake?.input : selectedRatio
+              style: remake ? remake?.style : selectedStyle,
+              ratio: remake ? remake?.ratio : selectedRatio
             })
           );
           dispatch(updateT2ICurListId(assistantId));
