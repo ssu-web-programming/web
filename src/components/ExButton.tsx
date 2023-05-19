@@ -2,6 +2,7 @@ import styled, { css } from 'styled-components';
 import Icon from './Icon';
 import icon_ai_change from '../img/ico_ai_change.svg';
 import { alignItemCenter } from '../style/cssCommon';
+import { useTranslation } from 'react-i18next';
 
 const TextButton = styled.button<{ disabled: boolean }>`
   background-color: transparent;
@@ -28,11 +29,14 @@ interface ExButtonProps {
 }
 
 const ExButton = ({ exampleList, setExam, disable }: ExButtonProps) => {
+  const { t } = useTranslation();
+
   return (
     <TextButton
       disabled={disable}
       onClick={() => {
-        setExam(exampleList[Math.floor(Math.random() * exampleList.length)]);
+        const text = exampleList[Math.floor(Math.random() * exampleList.length)];
+        setExam(t(`ExampleList.${text}`));
       }}>
       <Icon
         iconSrc={icon_ai_change}
@@ -40,7 +44,7 @@ const ExButton = ({ exampleList, setExam, disable }: ExButtonProps) => {
           margin-right: 4px;
         `}
       />
-      <div>예시 문구보기</div>
+      <div>{t(`ShowExam`)}</div>
     </TextButton>
   );
 };

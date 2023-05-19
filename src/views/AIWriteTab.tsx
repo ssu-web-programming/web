@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 import SubTitle from '../components/SubTitle';
-import { ColumDivider, LengthWrapper, RightBox, RowBox } from './AIChatTab';
+import { ColumDivider, LengthWrapper, RightBox, RowBox, exampleList } from './AIChatTab';
 import Button from '../components/Button';
 import Icon from '../components/Icon';
 import { useRef, useState } from 'react';
@@ -43,8 +43,10 @@ import { useMoveChatTab } from '../components/hooks/useMovePage';
 import { setLoadingTab } from '../store/slices/tabSlice';
 import Loading from '../components/Loading';
 import { JSON_CONTENT_TYPE, CHAT_STREAM_API } from '../api/constant';
-import { insertDoc } from '../util/common';
+import { calLeftCredit, insertDoc } from '../util/common';
 import useApiWrapper from '../api/useApiWrapper';
+import { useTranslation } from 'react-i18next';
+import useErrorMsg from '../components/hooks/useErrorMsg';
 
 const Wrapper = styled.div`
   ${flexColumn}
@@ -114,10 +116,10 @@ const ResWrapper = styled(Wrapper)`
 `;
 
 const lengthList = [
-  { title: '300자', length: 300 },
-  { title: '500자', length: 500 },
-  { title: '800자', length: 800 }
-  // { title: '1000자', length: 1000 }
+  { title: '300', length: 300 },
+  { title: '500', length: 500 },
+  { title: '800', length: 800 }
+  // { title: '1000', length: 1000 }
 ];
 
 interface FormListType {
@@ -132,22 +134,24 @@ interface LengthListType {
 }
 
 const subjectMaxLength = 1000;
-const exampleSubject = [
-  '건강한 생활습관을 위한 효과적인 5가지 방법',
-  '배달 서비스 마케팅 아이디어를 브레인스토밍하고 각 아이디어가 지닌 장점 설명',
-  '비 오는 바다 주제의 소설 시놉시스',
-  '중고 의류 쇼핑몰 CEO 인터뷰 질문 목록 10가지',
-  '부모님 생일 선물을 추천해줘',
-  '문서 작성을 효율적으로 하는 방법'
-];
+// const exampleSubject = [
+//   '건강한 생활습관을 위한 효과적인 5가지 방법',
+//   '배달 서비스 마케팅 아이디어를 브레인스토밍하고 각 아이디어가 지닌 장점 설명',
+//   '비 오는 바다 주제의 소설 시놉시스',
+//   '중고 의류 쇼핑몰 CEO 인터뷰 질문 목록 10가지',
+//   '부모님 생일 선물을 추천해줘',
+//   '문서 작성을 효율적으로 하는 방법'
+// ];
 
 const AIWriteTab = () => {
   const apiWrapper = useApiWrapper();
   const [subject, setSubject] = useState<string>('');
   const [selectedForm, setSelectedForm] = useState<FormListType>(firstRecList[0]);
   const [selectedLength, setSelectedLength] = useState<LengthListType>(lengthList[0]);
+  const { t } = useTranslation();
 
   const { isLoading } = useAppSelector(selectTabSlice);
+  const getErrorMsg = useErrorMsg();
 
   const stopRef = useRef<boolean>(false);
   const endRef = useRef<any>();
@@ -186,13 +190,6 @@ const AIWriteTab = () => {
       dispatch(setCurrentWrite(assistantId));
 
       dispatch(setLoadingTab(true));
-      // dispatch(
-      //   activeToast({
-      //     active: true,
-      //     msg: '내용을 생성합니다. 10 크레딧이 차감되었습니다. (잔여 크레딧 :980)',
-      //     isError: false
-      //   })
-      // );
 
       const res = await apiWrapper(CHAT_STREAM_API, {
         headers: {
@@ -213,17 +210,17 @@ const AIWriteTab = () => {
       });
 
       if (res.status !== 200) {
-        throw new Error(`${res.status}: ${res.statusText}`);
+        throw res;
       }
 
+      const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
       dispatch(
         activeToast({
           active: true,
-          msg: `내용을 생성합니다. ${res.headers.get(
-            'X-PO-AI-Mayflower-Userinfo-Usedcredit'.toLowerCase()
-          )} 크레딧이 차감되었습니다. (잔여 크레딧 : ${res.headers.get(
-            'X-PO-AI-Mayflower-Userinfo-Credit'.toLowerCase()
-          )})`,
+          msg: t(`ToastMsg.StartCreating`, {
+            deductionCredit: deductionCredit,
+            leftCredit: leftCredit
+          }),
           isError: false
         })
       );
@@ -240,7 +237,7 @@ const AIWriteTab = () => {
           dispatch(
             activeToast({
               active: true,
-              msg: `작성 중지. 원하는 작업을 실행하세요.`,
+              msg: t(`ToastMsg.StopMsg`),
               isError: false
             })
           );
@@ -266,19 +263,12 @@ const AIWriteTab = () => {
       }
 
       if (!stopRef.current) dispatch(setLoadingTab(false));
-      // dispatch(
-      //   activeToast({
-      //     active: true,
-      //     msg: `작성 완료. 원하는 작업을 실행하세요.`,
-      //     isError: false
-      //   })
-      // );
     } catch (error: any) {
       dispatch(resetCurrentWrite());
       dispatch(
         activeToast({
           active: true,
-          msg: error.message,
+          msg: getErrorMsg(error),
           isError: true
         })
       );
@@ -294,20 +284,20 @@ const AIWriteTab = () => {
     <>
       {!currentWriteId ? (
         <Wrapper>
-          <SubTitle subTitle="주제 작성하기" />
+          <SubTitle subTitle={t(`WriteTab.WriteTopic`)} />
 
           <InputArea>
             <ExTextbox
-              exampleList={exampleSubject}
+              exampleList={exampleList}
               maxtTextLen={subjectMaxLength}
               value={subject}
-              placeholder={'작성할 글의 주제를 입력하세요.'}
+              placeholder={t(`WriteTab.WriteTextboxPlacehold`) || ''}
               setValue={(val: string) => {
                 setSubject(val);
               }}></ExTextbox>
           </InputArea>
 
-          <SubTitle subTitle="글 형식 정하기" />
+          <SubTitle subTitle={t(`WriteTab.SelectForm`)} />
           <RowStartBox>
             {firstRecList.map((form) => (
               <IconButton
@@ -323,7 +313,7 @@ const AIWriteTab = () => {
                   box-sizing: border-box;
                 `}
                 key={form.id}
-                title={form.title}
+                title={t(`FormList.${form.title}`)}
                 onClick={() => {
                   setSelectedForm(form);
                 }}
@@ -333,7 +323,7 @@ const AIWriteTab = () => {
             ))}
           </RowStartBox>
 
-          <SubTitle subTitle="작성 될 글자 수 선택하기 (공백포함)" />
+          <SubTitle subTitle={t(`WriteTab.SelectResultLength`)} />
           <RowStartBox>
             {lengthList.map((length, index) => (
               <Button
@@ -355,14 +345,14 @@ const AIWriteTab = () => {
                   flex: none;
                   width: 82px;
                 `}>
-                {length.title}
+                {t(`WriteTab.letters.${length.title}`)}
               </Button>
             ))}
           </RowStartBox>
 
           <div>
             <Button
-              // disable={subject.length === 0}
+              disable={subject.length === 0}
               isCredit={true}
               cssExt={css`
                 ${purpleBtnCss}
@@ -370,17 +360,13 @@ const AIWriteTab = () => {
               `}
               onClick={() => {
                 if (subject.length === 0) {
-                  dispatch(
-                    activeToast({ active: true, msg: '주제를 입력해주세요.', isError: true })
-                  );
                   return;
                 }
 
                 submitSubject();
-                dispatch(activeToast({ msg: '작성 시작', active: true, isError: false }));
               }}
               icon={icon_write}>
-              글 작성하기
+              {t(`WriteTab.WritingArticle`)}
             </Button>
           </div>
         </Wrapper>
@@ -390,7 +376,7 @@ const AIWriteTab = () => {
             cssExt={css`
               margin-bottom: 8px;
             `}>
-            <SubTitle subTitle="내용 미리보기" />
+            <SubTitle subTitle={t(`WriteTab.PreviewWriting`)} />
             {!isLoading && (
               <RecreatingButton
                 onClick={() => {
@@ -404,7 +390,7 @@ const AIWriteTab = () => {
           <ResultBox>
             {currentWrite.result.length === 0 ? (
               <LoadingWrapper>
-                <Loading>작성한 주제로 폴라리스 오피스 AI가 멋진 내용을 만들어 드릴게요!</Loading>
+                <Loading>{t(`WriteTab.LoadingMsg`)}</Loading>
               </LoadingWrapper>
             ) : (
               <ResultWrapper>
@@ -434,7 +420,9 @@ const AIWriteTab = () => {
                       font-size: 13px;
                       height: 35px;
                     `}>
-                    <LengthWrapper>공백포함 {currentWrite?.result.length}자</LengthWrapper>
+                    <LengthWrapper>
+                      {t(`WriteTab.LengthInfo`, { length: currentWrite?.result.length })}
+                    </LengthWrapper>
                     {!isLoading && (
                       <RightBox>
                         <Icon
@@ -481,7 +469,7 @@ const AIWriteTab = () => {
                             dispatch(
                               activeToast({
                                 active: true,
-                                msg: `내용 복사가 완료되었습니다.`,
+                                msg: t(`ToastMsg.CompleteCopy`),
                                 isError: false
                               })
                             );
@@ -502,7 +490,7 @@ const AIWriteTab = () => {
                   onClick={() => {
                     submitSubject(currentWrite);
                   }}>
-                  다시 만들기
+                  {t(`WriteTab.Recreating`)}
                 </Button>
                 <Button
                   cssExt={css`
@@ -514,12 +502,12 @@ const AIWriteTab = () => {
                     dispatch(
                       activeToast({
                         active: true,
-                        msg: `내용 삽입이 완료되었습니다.`,
+                        msg: t(`ToastMsg.CompleteInsert`),
                         isError: false
                       })
                     );
                   }}>
-                  문서에 삽입하기
+                  {t(`WriteTab.InsertDoc`)}
                 </Button>
               </RowBox>
               <div>
@@ -535,7 +523,7 @@ const AIWriteTab = () => {
                   onClick={() => {
                     moveChat(currentWrite.result);
                   }}>
-                  채팅으로 더 많은 작업하기
+                  {t(`WriteTab.MoveToChating`)}
                 </Button>
               </div>
               <RightBox>

@@ -2,6 +2,7 @@ import Icon from './Icon';
 import icon_recreating from '../img/ico_recreating.svg';
 import styled, { css } from 'styled-components';
 import { flex } from '../style/cssCommon';
+import { useTranslation } from 'react-i18next';
 
 const Wrapper = styled.div`
   ${flex}
@@ -12,6 +13,7 @@ const Wrapper = styled.div`
 `;
 
 const RecreatingButton = ({ onClick }: { onClick: Function }) => {
+  const { t } = useTranslation();
   return (
     <Wrapper
       onClick={() => {
@@ -25,7 +27,7 @@ const RecreatingButton = ({ onClick }: { onClick: Function }) => {
         `}
         iconSrc={icon_recreating}
       />
-      주제 다시 입력하기
+      {t(`WriteTab.ReEnterTopic`)}
     </Wrapper>
   );
 };

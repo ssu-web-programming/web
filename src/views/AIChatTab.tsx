@@ -16,7 +16,7 @@ import { v4 as uuidv4 } from 'uuid';
 import Button from '../components/Button';
 import OpenAILinkText from '../components/OpenAILinkText';
 import ExButton from '../components/ExButton';
-import FuncRecBox, { RowWrapBox } from '../img/aiChat/FuncRecBox';
+import FuncRecBox, { REC_ID_LIST, RowWrapBox } from '../img/aiChat/FuncRecBox';
 import {
   activeRecFunc,
   inactiveRecFunc,
@@ -41,11 +41,13 @@ import {
 } from '../style/cssCommon';
 import { setLoadingTab } from '../store/slices/tabSlice';
 import { CHAT_STREAM_API, JSON_CONTENT_TYPE } from '../api/constant';
-import { insertDoc } from '../util/common';
+import { calLeftCredit, insertDoc } from '../util/common';
 import icon_sand from '../img/ico_send.svg';
 import { setBridgeMessage } from '../store/slices/bridge';
 import useApiWrapper from '../api/useApiWrapper';
 import icon_credit from '../img/ico_credit.svg';
+import { useTranslation } from 'react-i18next';
+import useErrorMsg from '../components/hooks/useErrorMsg';
 
 const INPUT_HEIGHT = 120;
 const TEXT_MAX_HEIGHT = 168;
@@ -182,25 +184,25 @@ const SubmitButton = styled.button<{ disabled: boolean }>`
     `}
 `;
 
-const exampleList = [
-  '건강한 생활습관을 위한 효과적인 5가지 방법',
-  '배달 서비스 마케팅 아이디어를 브레인스토밍하고 각 아이디어가 지닌 장점 설명',
-  '비 오는 바다 주제의 소설 시놉시스',
-  '중고 의류 쇼핑몰 CEO 인터뷰 질문 목록 10가지',
-  '부모님 생일 선물을 추천해줘',
-  '문서 작성을 효율적으로 하는 방법',
-  'AI 기술 발전에 대한 자료조사 시, 조사할 내용을 정리해줘.',
-  '맛있는 알리오 올리오 파스타 요리 레시피',
-  '신사업 비즈니스 계획서 목차 작성하기',
-  '회의 결과 보고 메일 작성 방법 '
+export const exampleList = [
+  'Health',
+  'DeliveryIdea',
+  'Novel',
+  'InterviewTopic',
+  'RecommendGift',
+  'CreateDoc',
+  'AITech',
+  'Recipe',
+  'BusinessChart',
+  'CreateReport'
 ];
 
 const chatTipList = [
-  '대화 1회당 N 크레딧이 차감됩니다.',
-  'Ctrl + Enter로 줄을 바꾸세요',
-  'Enter를 눌러 대화를 할 수 있습니다.',
-  '구체적인 질문으로 더 좋은 답변을 받아보세요.',
-  '2021년 9월 이후의 사건은 부정확할 수 있습니다.'
+  '1ChatingCredit',
+  'EnterInfo',
+  'CtrlEnterInfo',
+  'DoSepecificQuestion',
+  'DateInfo'
 ];
 
 const AIChatTab = () => {
@@ -208,6 +210,8 @@ const AIChatTab = () => {
   const apiWrapper = useApiWrapper();
   const { history: chatHistory, defaultInput } = useAppSelector(selectChatHistory);
   const { selectedRecFunction, selectedSubRecFunction } = useAppSelector(selectRecFuncSlice);
+  const { t } = useTranslation();
+  const getErrorMsg = useErrorMsg();
 
   const [chatInput, setChatInput] = useState<string>('');
   const [isActiveInput, setIsActiveInput] = useState<boolean>(false);
@@ -259,7 +263,7 @@ const AIChatTab = () => {
         initChatHistory({
           id: uuidv4(),
           role: 'assistant',
-          result: '안녕하세요. 쉽고, 빠르게 문서 작성을 도와주는 폴라리스오피스 AI Chat 입니다.',
+          result: t(`ChatingTab.AIGreeting`),
           input: ''
         })
       );
@@ -331,14 +335,6 @@ const AIChatTab = () => {
 
       setLoadingResId(assistantId);
 
-      // dispatch(
-      //   activeToast({
-      //     active: true,
-      //     msg: '내용을 생성합니다. 10 크레딧이 차감되었습니다. (잔여 크레딧 :980)',
-      //     isError: false
-      //   })
-      // );
-
       const res = await apiWrapper(CHAT_STREAM_API, {
         headers: {
           ...JSON_CONTENT_TYPE,
@@ -358,17 +354,17 @@ const AIChatTab = () => {
       });
 
       if (res.status !== 200) {
-        throw new Error(`${res.status}: ${res.statusText}`);
+        throw res;
       }
 
+      const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
       dispatch(
         activeToast({
           active: true,
-          msg: `내용을 생성합니다. ${res.headers.get(
-            'X-PO-AI-Mayflower-Userinfo-Usedcredit'.toLowerCase()
-          )} 크레딧이 차감되었습니다. (잔여 크레딧 : ${res.headers.get(
-            'X-PO-AI-Mayflower-Userinfo-Credit'.toLowerCase()
-          )})`,
+          msg: t(`ToastMsg.StartCreating`, {
+            deductionCredit: deductionCredit,
+            leftCredit: leftCredit
+          }),
           isError: false
         })
       );
@@ -383,7 +379,7 @@ const AIChatTab = () => {
           dispatch(
             activeToast({
               active: true,
-              msg: `작성 중지. 원하는 작업을 실행하세요.`,
+              msg: t(`ToastMsg.StopMsg`),
               isError: false
             })
           );
@@ -401,21 +397,11 @@ const AIChatTab = () => {
           updateChat({ id: assistantId, role: 'assistant', result: decodeStr, input: input })
         );
       }
-
-      // if (!stopRef.current)
-      //   dispatch(
-      //     activeToast({
-      //       active: true,
-      //       msg: `작성 완료. 원하는 작업을 실행하세요.`,
-      //       isError: false
-      //     })
-      //   );
     } catch (error: any) {
       dispatch(
         activeToast({
           active: true,
-          msg: error.message,
-          // msg: `폴라리스 오피스 AI의 생성이 잘 되지 않았습니다.다시 시도해보세요.`,
+          msg: getErrorMsg(error),
           isError: true
         })
       );
@@ -437,24 +423,53 @@ const AIChatTab = () => {
   }, [isActiveInput]);
 
   const selectLoadingMsg = (isRetry: boolean) => {
-    if (isRetry) return '내용을 다시 만드는 중입니다...';
+    if (isRetry) return t(`ChatingTab.LoadingMsg.ReCreating`);
 
     if (!selectedRecFunction || chatHistory.length <= 3) {
-      return '내용을 생성 중입니다...';
+      return t(`ChatingTab.LoadingMsg.Creating`);
     }
 
-    if (selectedRecFunction) {
-      let msg = '';
+    let msg = '';
 
-      if (selectedSubRecFunction)
-        msg += '작성 내용을 반영하여 ' + selectedSubRecFunction.title + '으로 ';
-      msg += selectedRecFunction.title + '를 시작합니다...';
-
-      return msg;
+    switch (selectedRecFunction.id) {
+      case REC_ID_LIST.RESUME_WRITING:
+        if (chatInput.length > 0) msg = t(`ChatingTab.LoadingMsg.ContitnueWriting_input`);
+        else msg = t(`ChatingTab.LoadingMsg.ContitnueWriting`);
+        break;
+      case REC_ID_LIST.SUMMARY:
+        if (chatInput.length > 0) msg = t(`ChatingTab.LoadingMsg.Summary_input`);
+        else msg = t(`ChatingTab.LoadingMsg.Summary`);
+        break;
+      case REC_ID_LIST.TRANSLATE:
+        if (chatInput.length > 0 && selectedSubRecFunction)
+          msg = t(`ChatingTab.LoadingMsg.Translate_input`, {
+            language: t(`ChatingTab.FuncRecBtn.SubFuncRec.${selectedSubRecFunction.title}`)
+          });
+        else if (selectedSubRecFunction)
+          msg = t(`ChatingTab.LoadingMsg.Translate`, {
+            language: t(`ChatingTab.FuncRecBtn.SubFuncRec.${selectedSubRecFunction.title}`)
+          });
+        break;
+      case REC_ID_LIST.CHANGE_TEXT_STYLE:
+        if (chatInput.length > 0 && selectedSubRecFunction)
+          msg = t(`ChatingTab.LoadingMsg.ChangeStyle`, {
+            style: t(`ChatingTab.FuncRecBtn.SubFuncRec.${selectedSubRecFunction.title}`)
+          });
+        else if (selectedSubRecFunction)
+          msg = t(`ChatingTab.LoadingMsg.ChangeStyle_input`, {
+            style: t(`ChatingTab.FuncRecBtn.SubFuncRec.${selectedSubRecFunction.title}`)
+          });
+        break;
+      case REC_ID_LIST.MODIFY_TEXT:
+        if (chatInput.length > 0) msg = t(`ChatingTab.LoadingMsg.Grammar_input`);
+        else msg = t(`ChatingTab.LoadingMsg.Grammar`);
+        break;
     }
 
-    return '';
+    return msg;
   };
+
+  const placeholder = t(`ChatingTab.InputPlaceholder`);
 
   return (
     <Wrapper>
@@ -481,7 +496,9 @@ const AIChatTab = () => {
                     cssExt={css`
                       margin: 8px 0px 8px 0px;
                     `}>
-                    <LengthWrapper>공백 포함 {chat.result.length}자</LengthWrapper>
+                    <LengthWrapper>
+                      {t(`WriteTab.LengthInfo`, { length: chat.result.length })}
+                    </LengthWrapper>
                     {/* {chat.id !== loadingResId && (
                       <CopyIcon
                         onClick={() => {
@@ -490,7 +507,7 @@ const AIChatTab = () => {
                           dispatch(
                             activeToast({
                               active: true,
-                              msg: `내용 복사가 완료되었습니다.`,
+                              msg: t(`ToastMsg.CompleteCopy`),
                               isError: false
                             })
                           );
@@ -508,7 +525,7 @@ const AIChatTab = () => {
                         onClick={() => {
                           submitChat(chat);
                         }}>
-                        다시 만들기
+                        {t(`WriteTab.Recreating`)}
                       </Button>
                     )}
                     <Button
@@ -521,12 +538,12 @@ const AIChatTab = () => {
                         dispatch(
                           activeToast({
                             active: true,
-                            msg: `내용 삽입이 완료되었습니다.`,
+                            msg: t(`ToastMsg.CompleteInsert`),
                             isError: false
                           })
                         );
                       }}>
-                      문서에 삽입하기
+                      {t(`WriteTab.InsertDoc`)}
                     </Button>
                   </RowWrapBox>
                 </>
@@ -566,7 +583,7 @@ const AIChatTab = () => {
                     margin: 0 8px 0 0px;
                   `}
                 />
-                {chatTip}
+                {t(`ChatingTab.TipList.${chatTip}`)}
               </Info>
             )
           )}
@@ -581,7 +598,7 @@ const AIChatTab = () => {
             }}>
             <TextArea
               disable={loadingResId !== null}
-              placeholder={!loadingResId ? '무엇이든 질문해주세요' : ''}
+              placeholder={!loadingResId ? placeholder || '' : ''}
               textRef={textRef}
               rows={1}
               cssExt={css`
@@ -606,13 +623,6 @@ const AIChatTab = () => {
 
                     submitChat();
                   } else {
-                    dispatch(
-                      activeToast({
-                        active: true,
-                        msg: '추천 기능 선택 및 내용을 입력해주세요',
-                        isError: true
-                      })
-                    );
                     e.preventDefault();
                   }
                 }
@@ -629,20 +639,11 @@ const AIChatTab = () => {
                   (chatHistory.length > 1 && chatInput.length === 0 && selectedRecFunction === null)
                 }
                 onClick={() => {
-                  // TODO: 전송 가능 여부 체크
                   if (validInput()) {
                     setChatInput('');
                     setIsActiveInput(false);
 
                     submitChat();
-                  } else {
-                    dispatch(
-                      activeToast({
-                        active: true,
-                        msg: '추천 기능 선택 및 내용을 입력해주세요',
-                        isError: true
-                      })
-                    );
                   }
                 }}
                 style={{ display: 'flex', position: 'relative', cursor: 'pointer' }}>

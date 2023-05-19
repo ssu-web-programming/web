@@ -42,6 +42,7 @@ import {
   flexWrap,
   alignItemCenter
 } from '../../style/cssCommon';
+import { useTranslation } from 'react-i18next';
 
 const Wrapper = styled.div`
   border-radius: 0;
@@ -88,42 +89,50 @@ export interface recType {
 export const firstRecList = [
   {
     id: 'paragraph',
-    title: '문장',
+    title: 'Sentence',
     icon: icon_sentence,
     selectedIcon: icon_sentence_purple
   },
-  { id: 'list', title: '목차', icon: icon_list, selectedIcon: icon_list_purple },
-  { id: 'table', title: '표', icon: icon_table, selectedIcon: icon_table_purple }
+  { id: 'list', title: 'List', icon: icon_list, selectedIcon: icon_list_purple },
+  { id: 'table', title: 'Table', icon: icon_table, selectedIcon: icon_table_purple }
 ];
+
+export const REC_ID_LIST = {
+  RESUME_WRITING: 'resume_writing',
+  SUMMARY: 'summary',
+  TRANSLATE: 'translate',
+  CHANGE_TEXT_STYLE: 'change_text_style',
+  MODIFY_TEXT: 'modify_text'
+};
 
 const recList = [
   {
-    id: 'resume_writing',
-    title: '이어쓰기',
+    id: REC_ID_LIST.RESUME_WRITING,
+    title: 'AddContent',
     icon: icon_resume,
     selectedIcon: icon_resume_purple
   },
   {
-    id: 'summary',
-    title: '요약하기',
+    id: REC_ID_LIST.SUMMARY,
+    title: 'Summary',
     icon: icon_summary,
     selectedIcon: icon_summary_purple
   },
   {
-    id: 'translate',
-    title: '번역하기',
+    id: REC_ID_LIST.TRANSLATE,
+    title: 'Translate',
     icon: icon_translation,
     selectedIcon: icon_translation_purple
   },
   {
-    id: 'change_text_style',
-    title: '문체 변경하기',
+    id: REC_ID_LIST.CHANGE_TEXT_STYLE,
+    title: 'ChangeStyle',
     icon: icon_style,
     selectedIcon: icon_style_purple
   },
   {
-    id: 'modify_text',
-    title: '맞춤법/문법 수정하기',
+    id: REC_ID_LIST.MODIFY_TEXT,
+    title: 'Grammar',
     icon: icon_spelingcheck,
     selectedIcon: icon_spelingcheck_purple
   }
@@ -135,35 +144,35 @@ export const recSubList = [
     subList: [
       {
         id: 'korean',
-        title: '한국어'
+        title: 'Korean'
       },
       {
         id: 'english',
-        title: '영어'
+        title: 'English'
       },
       {
         id: 'japanese',
-        title: '일본어'
+        title: 'Japanese'
       },
       {
         id: 'chinese',
-        title: '중국어'
+        title: 'Chinese'
       },
       {
         id: 'spanish',
-        title: '스페인어'
+        title: 'Spanish'
       },
       {
         id: 'indonesian',
-        title: '인도네시아어'
+        title: 'Indonesian'
       },
       {
         id: 'brazilian',
-        title: '브라질어'
+        title: 'Brazil'
       },
       {
         id: 'german',
-        title: '독일어'
+        title: 'German'
       }
     ]
   },
@@ -172,19 +181,19 @@ export const recSubList = [
     subList: [
       {
         id: 'businessBody',
-        title: '비즈니스체'
+        title: 'BusinessStyle'
       },
       {
         id: 'friendly',
-        title: '친근하게'
+        title: 'Friendly'
       },
       {
         id: 'concisely',
-        title: '간결하게'
+        title: 'Simply'
       },
       {
         id: 'poetically',
-        title: '시적으로'
+        title: 'Poetically'
       }
     ]
   }
@@ -235,6 +244,7 @@ const FucRecBox = ({ chatLength }: { chatLength: number }) => {
   const dispatch = useAppDispatch();
   const { selectedRecFunction, selectedSubRecFunction, isOpen, isActive } =
     useAppSelector(selectRecFuncSlice);
+  const { t } = useTranslation();
 
   const [isSubPage, setIsSubPage] = useState<boolean>(false);
 
@@ -250,9 +260,8 @@ const FucRecBox = ({ chatLength }: { chatLength: number }) => {
     dispatch(initRecFunc());
   };
 
-  const recClosedComment =
-    chatLength <= 1 ? '다양한 형식으로 답변을 작성해보세요' : '더 많은 AI 기능을 사용해보세요.';
-  const recOpenComment = '더 많은 텍스트를 만들어보세요';
+  const recOpenComment =
+    chatLength <= 1 ? t(`ChatingTab.TipList.UseVariableForm`) : t(`ChatingTab.UseMoreAI`);
 
   useEffect(() => {
     if (chatLength <= 1) setSelectedFunc(firstRecList[0]);
@@ -282,7 +291,7 @@ const FucRecBox = ({ chatLength }: { chatLength: number }) => {
                   {chatLength <= 1
                     ? firstRecList.map((rec) => (
                         <IconButton
-                          title={rec.title}
+                          title={t(`FormList.${rec.title}`)}
                           key={rec.id}
                           onClick={() => {
                             setSelectedFunc(rec);
@@ -327,7 +336,7 @@ const FucRecBox = ({ chatLength }: { chatLength: number }) => {
                               margin-right: 6px;
                             `}
                           />
-                          <div>{rec.title}</div>
+                          <div>{t(`ChatingTab.FuncRecBtn.${rec.title}`)}</div>
                         </Button>
                       ))}
                 </RowWrapBox>
@@ -371,7 +380,7 @@ const FucRecBox = ({ chatLength }: { chatLength: number }) => {
                               else if (selectedSubRecFunction?.id === sub.id)
                                 setSelectedSubFunc(null);
                             }}>
-                            {sub.title}
+                            {t(`ChatingTab.FuncRecBtn.SubFuncRec.${sub.title}`)}
                           </Button>
                         ))}
                     </RowWrapBox>

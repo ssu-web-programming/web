@@ -49,36 +49,39 @@ import {
 import { JSON_CONTENT_TYPE, TEXT_TO_IMAGE_API } from '../api/constant';
 import { activeToast } from '../store/slices/toastSlice';
 import useApiWrapper from '../api/useApiWrapper';
+import { useTranslation } from 'react-i18next';
+import { calLeftCredit } from '../util/common';
+import useErrorMsg from '../components/hooks/useErrorMsg';
 
 const exampleList = [
-  '비행기가 날아가는 그림, 연필로 그린, HQ',
-  '도심가에 앉아있는 호랑이',
-  '레오나르도 다빈치가 그린 해변에 있는 팬더',
-  '미래형 사이버 펑크 도시 풍경, 마천루 건물, 스카이 라인, 4K',
-  '귀엽고 사랑스러운 강아지, 만화, 판타지, 아트 스테이션',
-  '은하, 나선, 우주, 성운, 별, 연기, 무지개 빛깔, 복잡한 디테일, 사자 모양, 8k',
-  '노을진 해변을 걷는 연인',
-  '하우스, 컨셉아트, 매트페인팅, HQ, 4k',
-  '강에서 새해 축하 행사의 모습, 불꽃놀이, 드론 쇼, 초현실적, 8k, 높은 디테일',
-  '만화 컨셉의 해리포터 포스터, 4K, HQ'
+  // '비행기가 날아가는 그림, 연필로 그린, HQ',
+  // '도심가에 앉아있는 호랑이',
+  'Panda',
+  // '미래형 사이버 펑크 도시 풍경, 마천루 건물, 스카이 라인, 4K',
+  // '귀엽고 사랑스러운 강아지, 만화, 판타지, 아트 스테이션',
+  // '은하, 나선, 우주, 성운, 별, 연기, 무지개 빛깔, 복잡한 디테일, 사자 모양, 8k',
+  // '노을진 해변을 걷는 연인',
+  'House',
+  'NewYear',
+  'ComicPoster'
 ];
 
 const selectStyleItemList = [
   {
     id: 'none',
-    title: '없음',
+    title: 'None',
     imgItem: iconStyleNone,
     selectedImgItem: iconStyleNonePurple
   },
   {
     id: 'photographic',
-    title: '사진',
+    title: 'Picture',
     imgItem: iconStylePhoto,
     selectedImgItem: iconStylePhoto
   },
   {
     id: 'fantasy-art',
-    title: '컨셉아트',
+    title: 'ConceptArt',
     imgItem: iconStyleConcept,
     selectedImgItem: iconStyleConcept
   },
@@ -90,25 +93,25 @@ const selectStyleItemList = [
   },
   {
     id: 'anime',
-    title: '애니메이션',
+    title: 'Anime',
     imgItem: iconStyleAni,
     selectedImgItem: iconStyleAni
   },
   {
     id: 'x-po-retro',
-    title: '레트로',
+    title: 'Retro',
     imgItem: iconStyleRet,
     selectedImgItem: iconStyleRet
   },
   {
     id: 'x-po-watercolor-painting',
-    title: '수채화',
+    title: 'WaterPainting',
     imgItem: iconStyleWater,
     selectedImgItem: iconStyleWater
   },
   {
     id: 'x-po-oil-painting',
-    title: '유채화',
+    title: 'OilPainting',
     imgItem: iconStyleOil,
     selectedImgItem: iconStyleOil
   }
@@ -117,19 +120,19 @@ const selectStyleItemList = [
 const selectImageRatioItemList = [
   {
     id: '512x512',
-    title: '정사각형',
+    title: 'Squre',
     imgItem: iconRatioSqure,
     selectedImgItem: iconRatioSqure_purple
   },
   {
     id: '512x320',
-    title: '가로',
+    title: 'Horizontal',
     imgItem: iconRatioHorizontal,
     selectedImgItem: iconRatioHorizontal_purple
   },
   {
     id: '320x512',
-    title: '세로',
+    title: 'Vertical',
     imgItem: iconRatioVertical,
     selectedImgItem: iconRatioVertical_purple
   }
@@ -303,6 +306,9 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
   const [creating, setCreating] = useState(false);
   const dispatch = useAppDispatch();
   const { currentListId, currentItemIdx, history } = useAppSelector(selectT2IHIstory);
+  const getErrorMsg = useErrorMsg();
+
+  const { t } = useTranslation();
 
   const createAiImage = useCallback(
     async (remake?: T2IType) => {
@@ -310,13 +316,6 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
         const assistantId = uuidv4();
 
         setCreating(true);
-        // dispatch(
-        //   activeToast({
-        //     active: true,
-        //     msg: '이미지를 생성합니다. 10 크레딧이 차감되었습니다. (잔여 크레딧 :980)',
-        //     isError: false
-        //   })
-        // );
 
         const apiBody: any = {
           prompt: remake ? remake?.input : descInput,
@@ -337,21 +336,18 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
         const body = await res.json();
 
         if (res.status !== 200) {
-          if (res.status === 400 && body?.error?.message === 'invalid_prompts') {
-            throw new Error('프롬프트에 부적절한 단어가 포함되어 있습니다.');
-          } else {
-            throw new Error(`${res.status}: ${res.statusText}`);
-          }
+          throw res;
         }
 
+        const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
         dispatch(
           activeToast({
             active: true,
-            msg: `이미지를 생성합니다. ${res.headers.get(
-              'X-PO-AI-Mayflower-Userinfo-Usedcredit'.toLowerCase()
-            )} 크레딧이 차감되었습니다. (잔여 크레딧 : ${res.headers.get(
-              'X-PO-AI-Mayflower-Userinfo-Credit'.toLowerCase()
-            )})`,
+            msg: ` ${t(`Txt2ImgTab.ToastMsg.StartCreatingImage`)} 
+             ${t(`ToastMsg.AboutCredit`, {
+               deductionCredit: deductionCredit,
+               leftCredit: leftCredit
+             })}`,
             isError: false
           })
         );
@@ -371,25 +367,15 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
           dispatch(updateT2ICurItemIndex(0));
 
           setCreating(false);
-          // dispatch(
-          //   activeToast({
-          //     active: true,
-          //     msg: `이미지 생성 완료. 원하는 작업을 실행하세요.`,
-          //     isError: false
-          //   })
-          // );
-
-          // setAiImgs(images);
         }
-      } catch (err: any) {
+      } catch (error: any) {
         dispatch(updateT2ICurListId(null));
         dispatch(updateT2ICurItemIndex(null));
         setCreating(false);
         dispatch(
           activeToast({
             active: true,
-            msg: err.message,
-            // msg: '폴라리스 오피스 AI의 생성이 잘 되지 않았습니다. 다시 시도해보세요.',
+            msg: getErrorMsg(error),
             isError: true
           })
         );
@@ -414,11 +400,7 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
             justifyContent: 'center',
             alignItems: 'center'
           }}>
-          <Loading>
-            폴라리스오피스 AI가 작성하신 내용을 이미지로 만들고 있어요.
-            <br />
-            잠시만 기다려주세요.
-          </Loading>
+          <Loading>{t(`Txt2ImgTab.LoadingMsg`)}</Loading>
         </div>
       ) : !currentHistory ? (
         <>
@@ -426,14 +408,14 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
             <ExTextbox
               exampleList={exampleList}
               maxtTextLen={1000}
-              subTitle="이미지 설명 작성하기"
+              subTitle={t(`Txt2ImgTab.WritingImageDesc`) || ''}
               value={descInput}
               setValue={setDescInput}
             />
           </div>
           <SelectOptionArea>
             <SubTitleArea>
-              <SubTitle subTitle="스타일 선택하기" />
+              <SubTitle subTitle={t('Txt2ImgTab.ChooseStyle')} />
             </SubTitleArea>
             <RowContainer>
               {selectStyleItemList.map((item) => {
@@ -448,7 +430,9 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
                         src={item.id === selectedStyle ? item.selectedImgItem : item.imgItem}
                         alt=""></img>
                     </ItemIconBox>
-                    <ItemTitle isSelected={item.id === selectedStyle}>{item.title}</ItemTitle>
+                    <ItemTitle isSelected={item.id === selectedStyle}>
+                      {t(`Txt2ImgTab.StyleList.${item.title}`)}
+                    </ItemTitle>
                   </ContainerItem>
                 );
               })}
@@ -456,7 +440,7 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
           </SelectOptionArea>
           <SelectOptionArea>
             <SubTitleArea>
-              <SubTitle subTitle="이미지 비율 선택하기" />
+              <SubTitle subTitle={t('Txt2ImgTab.ChooseRatio')} />
             </SubTitleArea>
             <RowContainer>
               {selectImageRatioItemList.map((item) => {
@@ -467,7 +451,9 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
                         src={item.id === selectedRatio ? item.selectedImgItem : item.imgItem}
                         alt=""></img>
                     </ItemIconBox>
-                    <ItemTitle isSelected={item.id === selectedRatio}>{item.title}</ItemTitle>
+                    <ItemTitle isSelected={item.id === selectedRatio}>
+                      {t(`Txt2ImgTab.RatioList.${item.title}`)}
+                    </ItemTitle>
                   </ContainerItem>
                 );
               })}
@@ -486,13 +472,13 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
               flex: none;
               ${purpleBtnCss}
             `}>
-            이미지 생성하기
+            {t(`Txt2ImgTab.CreateImage`)}
           </Button>
         </>
       ) : (
         <>
           <SubTitleArea>
-            <SubTitle subTitle="이미지 미리보기" />
+            <SubTitle subTitle={t(`Txt2ImgTab.PreviewImage`)} />
             <RecreatingButton
               onClick={() => {
                 dispatch(updateT2ICurListId(null));
@@ -595,7 +581,7 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
               onClick={() => {
                 createAiImage(currentHistory);
               }}>
-              다시 만들기
+              {t(`WriteTab.Recreating`)}
             </Button>
             <Button
               onClick={async () => {
@@ -614,7 +600,7 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
                   // TODO : error handle
                 }
               }}>
-              다운로드
+              {t(`Download`)}
             </Button>
             <GenButton
               onClick={async () => {
@@ -633,7 +619,7 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
                   dispatch(
                     activeToast({
                       active: true,
-                      msg: `이미지가 문서에 삽입이 완료 되었습니다.`,
+                      msg: t(`Txt2ImgTab.ToastMsg.CompleteInsertImage`),
                       isError: false
                     })
                   );
@@ -642,7 +628,7 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
                 }
               }}
               disabled={false}>
-              문서에 삽입하기
+              {t(`WriteTab.InsertDoc`)}
             </GenButton>
           </RowContainer>
           <RightBox>

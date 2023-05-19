@@ -9,40 +9,42 @@ import icon_creating_text_purple from '../img/ico_creating_text_purple.svg';
 import { useEffect } from 'react';
 import { useAppDispatch } from '../store/store';
 import { selectTab } from '../store/slices/tabSlice';
+import { useTranslation } from 'react-i18next';
 
 export const TAB_ITEM_VAL = {
   WRITE: 'write',
   CHAT: 'chat'
 };
 
-const TAB_LIST: TabItemType[] = [
-  {
-    id: TAB_ITEM_VAL.WRITE,
-    name: '작성',
-    comp: <AIWriteTab />,
-    icon: icon_creating_text,
-    selectedIcon: icon_creating_text_purple
-  },
-  {
-    id: TAB_ITEM_VAL.CHAT,
-    name: '채팅',
-    comp: <AIChatTab />,
-    icon: icon_chat,
-    selectedIcon: icon_chat_purple
-  },
-  {
-    id: 'test',
-    name: '테스트',
-    comp: <AITest />
-  }
-];
-
 export default function Tools() {
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
+
+  const TAB_LIST: TabItemType[] = [
+    {
+      id: TAB_ITEM_VAL.WRITE,
+      name: t(`Write`),
+      comp: <AIWriteTab />,
+      icon: icon_creating_text,
+      selectedIcon: icon_creating_text_purple
+    },
+    {
+      id: TAB_ITEM_VAL.CHAT,
+      name: t(`Chating`),
+      comp: <AIChatTab />,
+      icon: icon_chat,
+      selectedIcon: icon_chat_purple
+    },
+    {
+      id: 'test',
+      name: t(`Test`),
+      comp: <AITest />
+    }
+  ];
 
   useEffect(() => {
     dispatch(selectTab(TAB_ITEM_VAL.CHAT));
   }, []);
 
-  return <TabLayout title="AI 도구" subTitle="AI Write" tabList={TAB_LIST} />;
+  return <TabLayout title={t('AITools')} subTitle={'AI Write'} tabList={TAB_LIST} />;
 }

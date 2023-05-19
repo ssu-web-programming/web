@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 const TextLink = styled.p`
@@ -7,13 +8,17 @@ const TextLink = styled.p`
 `;
 
 export default function NoCredit() {
+  const { t } = useTranslation();
+
   return (
     <div>
-      <p>보유하신 크레딧을 모두 사용하셨습니다.</p>
+      <p>{t(`ToastMsg.UsedAllCredit`)}</p>
       <TextLink
         onClick={() => {
           window._Bridge.openWindow(`credit`);
-        }}>{`크레딧 정책 확인하기 >`}</TextLink>
+        }}>
+        {t(`ToastMsg.CheckCreditPolicy`)}
+      </TextLink>
     </div>
   );
 }

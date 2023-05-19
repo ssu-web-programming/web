@@ -12,6 +12,7 @@ import {
   alignItemCenter,
   flexShrink
 } from '../../style/cssCommon';
+import { useTranslation } from 'react-i18next';
 
 const TabList = styled.div`
   ${flexStart}
@@ -63,6 +64,7 @@ export default function TabPage({
 }) {
   const dispatch = useAppDispatch();
   const { isLoading, selectedTabId } = useAppSelector(selectTabSlice);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!selectedTabId) dispatch(selectTab(tabList[0].id));
@@ -86,7 +88,7 @@ export default function TabPage({
                   dispatch(
                     activeToast({
                       active: true,
-                      msg: `현재 탭에서 내용을 생성 중에 있습니다. 완료를 기다리거나, 생성을 멈추고 다시 시도해주세요.`,
+                      msg: t(`ToastMsg.TabLoadedAndWait`, { tab: currentTab.name }),
                       isError: true
                     })
                   );
