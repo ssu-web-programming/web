@@ -470,7 +470,7 @@ const AIWriteTab = () => {
                             }
                           }}
                         />
-                        <CopyIcon
+                        {/* <CopyIcon
                           cssExt={css`
                             margin-left: 12px;
                           `}
@@ -485,7 +485,7 @@ const AIWriteTab = () => {
                               })
                             );
                           }}
-                        />
+                        /> */}
                       </RightBox>
                     )}
                   </RowBox>

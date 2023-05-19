@@ -480,7 +480,7 @@ const AIChatTab = () => {
                       margin: 8px 0px 8px 0px;
                     `}>
                     <LengthWrapper>공백 포함 {chat.result.length}자</LengthWrapper>
-                    {chat.id !== loadingResId && (
+                    {/* {chat.id !== loadingResId && (
                       <CopyIcon
                         onClick={() => {
                           //TODO: 복사 로직
@@ -494,7 +494,7 @@ const AIChatTab = () => {
                           );
                         }}
                       />
-                    )}
+                    )} */}
                   </RowBox>
                   <RowWrapBox>
                     {retryRes !== chat.id && (
