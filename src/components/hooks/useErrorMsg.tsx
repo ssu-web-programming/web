@@ -1,3 +1,4 @@
+import { calLeftCredit } from '../../util/common';
 import NoCredit from '../toast/contents/NoCredit';
 import { useTranslation } from 'react-i18next';
 
@@ -5,12 +6,7 @@ const useErrorMsg = () => {
   const { t } = useTranslation();
 
   return (error: any) => {
-    // const prevCredit = error.headers.get('X-PO-AI-Mayflower-Userinfo-Credit'.toLowerCase());
-    // const deductionCredit = error.headers.get(
-    //   'X-PO-AI-Mayflower-Userinfo-Usedcredit'.toLowerCase()
-    // );
-
-    // const leftCredit = Number(prevCredit) - Number(deductionCredit);
+    const { leftCredit, prevCredit } = calLeftCredit(error.header);
 
     switch (error.status) {
       case 400:
@@ -20,9 +16,8 @@ const useErrorMsg = () => {
         // TODO: Unauthorized error
         return '401 Unauthorized';
       case 429:
-        // if (leftCredit === 0) return <NoCredit />;
-        // else return t(`ToastMsg.NoCredit`, { credit: leftCredit });
-        return t(`ToastMsg.NoCredit`, { credit: '' });
+        if (prevCredit === 0) return <NoCredit />;
+        else return t(`ToastMsg.NoCredit`, { credit: Math.abs(leftCredit) });
       case 500:
         return t(`ToastMsg.AIError`);
       default:

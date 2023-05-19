@@ -52,7 +52,8 @@ export const calLeftCredit = (headers: any) => {
   const deductionCredit = headers.get('X-PO-AI-Mayflower-Userinfo-Usedcredit'.toLowerCase());
 
   return {
-    deductionCredit: deductionCredit,
+    prevCredit: Number(prevCredit),
+    deductionCredit: Number(deductionCredit),
     leftCredit: Number(prevCredit) - Number(deductionCredit)
   };
 };
