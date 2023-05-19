@@ -261,7 +261,7 @@ const FucRecBox = ({ chatLength }: { chatLength: number }) => {
   };
 
   const recOpenComment =
-    chatLength <= 1 ? t(`ChatingTab.TipList.UseVariableForm`) : t(`ChatingTab.UseMoreAI`);
+    chatLength <= 1 ? t(`ChatingTab.TipList.UseVariableForm`) : t(`ChatingTab.TipList.UseMoreAI`);
 
   useEffect(() => {
     if (chatLength <= 1) setSelectedFunc(firstRecList[0]);
