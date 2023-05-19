@@ -248,10 +248,6 @@ const AIChatTab = () => {
   }, [defaultInput]);
 
   useEffect(() => {
-    handleResizeHeight();
-  }, [chatInput]);
-
-  useEffect(() => {
     chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
   }, [chatHistory, isActiveInput, loadingResId]);
 
@@ -273,7 +269,7 @@ const AIChatTab = () => {
     if (textRef.current) {
       textRef.current.style.height = 'auto';
       textRef.current.style.height = textRef.current.scrollHeight + 'px';
-      chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
+      // chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
@@ -620,6 +616,7 @@ const AIChatTab = () => {
               }}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 setChatInput(e.target.value.slice(0, INPUT_MAX_LENGTH));
+                handleResizeHeight();
               }}
             />
             {!loadingResId && isActiveInput && (

@@ -278,54 +278,58 @@ const FucRecBox = ({ chatLength }: { chatLength: number }) => {
                     }}
                   />
                 </RowWrapBox>
-                {chatLength <= 1
-                  ? firstRecList.map((rec) => (
-                      <IconButton
-                        title={rec.title}
-                        key={rec.id}
-                        onClick={() => {
-                          setSelectedFunc(rec);
-                        }}
-                        selected={selectedRecFunction ? selectedRecFunction.id === rec.id : false}
-                        icon={rec.id === selectedRecFunction?.id ? rec.selectedIcon : rec.icon}
-                      />
-                    ))
-                  : !isSubPage &&
-                    recList.map((rec) => (
-                      <Button
-                        key={rec.id}
-                        selected={rec.id === selectedRecFunction?.id}
-                        onClick={() => {
-                          if (selectedRecFunction?.id !== rec.id) setSelectedFunc(rec);
-                          else if (selectedRecFunction?.id === rec.id) setSelectedFunc(null);
-
-                          if (
-                            selectedRecFunction?.id !== rec.id &&
-                            recSubList.filter((sub) => sub.id === rec.id).length > 0
-                          ) {
-                            setIsSubPage(true);
-                          } else {
-                            dispatch(selectSubRecFunc(null));
-                          }
-                        }}
-                        cssExt={css`
-                          border: ${rec.id === selectedRecFunction?.id
-                            ? 'solid 1px var(--ai-purple-80-sub)'
-                            : 'none'};
-                          margin: 3px;
-                          height: fit-content;
-                        `}>
-                        <Icon
-                          iconSrc={rec.id === selectedRecFunction?.id ? rec.selectedIcon : rec.icon}
-                          cssExt={css`
-                            width: 12px;
-                            height: 12px;
-                            margin-right: 6px;
-                          `}
+                <RowWrapBox>
+                  {chatLength <= 1
+                    ? firstRecList.map((rec) => (
+                        <IconButton
+                          title={rec.title}
+                          key={rec.id}
+                          onClick={() => {
+                            setSelectedFunc(rec);
+                          }}
+                          selected={selectedRecFunction ? selectedRecFunction.id === rec.id : false}
+                          icon={rec.id === selectedRecFunction?.id ? rec.selectedIcon : rec.icon}
                         />
-                        <div>{rec.title}</div>
-                      </Button>
-                    ))}
+                      ))
+                    : !isSubPage &&
+                      recList.map((rec) => (
+                        <Button
+                          key={rec.id}
+                          selected={rec.id === selectedRecFunction?.id}
+                          onClick={() => {
+                            if (selectedRecFunction?.id !== rec.id) setSelectedFunc(rec);
+                            else if (selectedRecFunction?.id === rec.id) setSelectedFunc(null);
+
+                            if (
+                              selectedRecFunction?.id !== rec.id &&
+                              recSubList.filter((sub) => sub.id === rec.id).length > 0
+                            ) {
+                              setIsSubPage(true);
+                            } else {
+                              dispatch(selectSubRecFunc(null));
+                            }
+                          }}
+                          cssExt={css`
+                            border: ${rec.id === selectedRecFunction?.id
+                              ? 'solid 1px var(--ai-purple-80-sub)'
+                              : 'none'};
+                            margin: 3px;
+                            height: fit-content;
+                          `}>
+                          <Icon
+                            iconSrc={
+                              rec.id === selectedRecFunction?.id ? rec.selectedIcon : rec.icon
+                            }
+                            cssExt={css`
+                              width: 12px;
+                              height: 12px;
+                              margin-right: 6px;
+                            `}
+                          />
+                          <div>{rec.title}</div>
+                        </Button>
+                      ))}
+                </RowWrapBox>
                 {isSubPage && (
                   <RowBox>
                     <Button
