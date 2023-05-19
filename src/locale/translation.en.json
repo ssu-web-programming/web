@@ -134,7 +134,7 @@
     "NoCredit": "Insufficient credits; {{credit}} credits needed to continue.",
     "TabLoadedAndWait": "AI is creating a content in the {{tab}}. Please wait for a while to finish, or abort the process and try again.",
     "StartCreating": "A content will be created. {{deductionCredit}} credits have been used. (remaining credits: {{leftCredit}})",
-    "AboutCredit": "{{deductionCredit}} credits have been used. (잔여 크레딧 :{{leftCredit}})",
+    "AboutCredit": "{{deductionCredit}} credits have been used. (remaining credits :{{leftCredit}})",
     "AIError": "Unsuccessful to create a content by Polaris Office AI. Please try again.",
     "StopMsg": "Writing content aborted. Select a job you want.",
     "SuccessMsg": "Writing content completed. Select a job you want.",
