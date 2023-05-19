@@ -236,6 +236,7 @@ const AIWriteTab = () => {
         const { value, done } = await reader.read();
 
         if (stopRef?.current) {
+          reader.cancel();
           dispatch(
             activeToast({
               active: true,
@@ -412,7 +413,7 @@ const AIWriteTab = () => {
             )}
             {currentWrite.result.length > 0 && (
               <div>
-                {/* {isLoading && (
+                {isLoading && (
                   <StopButton
                     cssExt={css`
                       margin: 0 auto;
@@ -422,7 +423,7 @@ const AIWriteTab = () => {
                       stopRef.current = true;
                     }}
                   />
-                )} */}
+                )}
 
                 <>
                   <ColumDivider />

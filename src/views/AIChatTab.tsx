@@ -145,6 +145,7 @@ const Info = styled.div`
 
 const CenterBox = styled.div`
   width: 100%;
+  margin-bottom: 16px;
   ${justiCenter}
 `;
 
@@ -378,6 +379,7 @@ const AIChatTab = () => {
       while (reader) {
         // if (isFull) break;
         if (stopRef.current) {
+          reader.cancel();
           dispatch(
             activeToast({
               active: true,
@@ -541,11 +543,11 @@ const AIChatTab = () => {
       </ChatListWrapper>
       {loadingResId && (
         <CenterBox>
-          {/* <StopButton
+          <StopButton
             onClick={() => {
               stopRef.current = true;
             }}
-          /> */}
+          />
         </CenterBox>
       )}
       <div style={{ position: 'relative', display: 'flex' }}>
