@@ -8,6 +8,7 @@ const htmlBody = `
 table{
   border-collapse: collapse ;
   border-radius: 6px;
+  width: 500px;
 }
 
 th ,
