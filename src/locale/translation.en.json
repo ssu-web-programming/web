@@ -14,11 +14,10 @@
     "WriteTextboxPlacehold": "Enter a topic of your article to write.",
     "SelectForm": "Set article type",
     "SelectResultLength": "Select number of characters (including blanks)",
-    "letters": {
-      "300": "300 characters",
-      "500": "500 characters",
-      "800": "800 characters",
-      "1000": "1,000 characters"
+    "Length": {
+      "Short": "Short",
+      "Medium": "Medium",
+      "Long": "Long"
     },
     "WritingArticle": "Post an article",
     "PreviewWriting": "Preview",
@@ -119,13 +118,14 @@
     "Recipe": "Recipe of a delicious aglio olio pasta",
     "BusinessChart": "Create table of contents for new business plan",
     "CreateReport": "How to write an email to report meeting results",
-    "Flight": "Airplane reflected on the surface of sea in sunset",
-    "Tiger": "A tiger dashing in the streets of New York in the 19th century",
+    "Flight": "a flying airplane,  a pencil drawing, HQ ",
+    "Tiger": "picture of a tiger enjoying sunbathing in the city, concept art, 4K",
     "Panda": "Panda on a beach drawn by Leonardo da Vinci",
-    "Robot": "New York city occupied only by robots, cyber punk, realistic, 4K, HQ",
-    "Puppy": "A dog drawn inspired by Mona Lisa portrait",
+    "City": "Futuristic cyberpunk cityscape, skyscraper, skyline, 4K ",
+    "Puppy": "a cute and lovely puppy, comics, fantasy, artStation style ",
+    "Space": "lion shape, galaxy, spiral, the universe, nebula, star, smoke, iridescent, elaborated detail, 8k",
     "House": "House, concept art, matte painting, HQ, 4k",
-    "NewYear": "New year celebration festival at Han river, fireworks, drone show, surreal, 8k, high definition",
+    "NewYear": "New year celebration festival at river, fireworks, drone show, surreal, 8k, high definition",
     "ComicPoster": "Harry Potter poster in a comic concept, 4K, HQ"
   },
   "ToastMsg": {

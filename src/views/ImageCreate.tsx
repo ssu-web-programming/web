@@ -54,13 +54,12 @@ import { calLeftCredit } from '../util/common';
 import useErrorHandle from '../components/hooks/useErrorHandle';
 
 const exampleList = [
-  // '비행기가 날아가는 그림, 연필로 그린, HQ',
-  // '도심가에 앉아있는 호랑이',
+  'Flight',
+  'Tiger',
   'Panda',
-  // '미래형 사이버 펑크 도시 풍경, 마천루 건물, 스카이 라인, 4K',
-  // '귀엽고 사랑스러운 강아지, 만화, 판타지, 아트 스테이션',
-  // '은하, 나선, 우주, 성운, 별, 연기, 무지개 빛깔, 복잡한 디테일, 사자 모양, 8k',
-  // '노을진 해변을 걷는 연인',
+  'City',
+  'Puppy',
+  'Space',
   'House',
   'NewYear',
   'ComicPoster'

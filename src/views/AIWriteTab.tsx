@@ -116,9 +116,9 @@ const ResWrapper = styled(Wrapper)`
 `;
 
 const lengthList = [
-  { title: '300', length: 300 },
-  { title: '500', length: 500 },
-  { title: '800', length: 800 }
+  { title: 'Short', length: 300 },
+  { title: 'Medium', length: 500 },
+  { title: 'Long', length: 800 }
   // { title: '1000', length: 1000 }
 ];
 
@@ -134,14 +134,6 @@ interface LengthListType {
 }
 
 const subjectMaxLength = 1000;
-// const exampleSubject = [
-//   '건강한 생활습관을 위한 효과적인 5가지 방법',
-//   '배달 서비스 마케팅 아이디어를 브레인스토밍하고 각 아이디어가 지닌 장점 설명',
-//   '비 오는 바다 주제의 소설 시놉시스',
-//   '중고 의류 쇼핑몰 CEO 인터뷰 질문 목록 10가지',
-//   '부모님 생일 선물을 추천해줘',
-//   '문서 작성을 효율적으로 하는 방법'
-// ];
 
 const AIWriteTab = () => {
   const apiWrapper = useApiWrapper();
@@ -339,7 +331,7 @@ const AIWriteTab = () => {
                   flex: none;
                   width: 82px;
                 `}>
-                {t(`WriteTab.letters.${length.title}`)}
+                {t(`WriteTab.Length.${length.title}`)}
               </Button>
             ))}
           </RowStartBox>
