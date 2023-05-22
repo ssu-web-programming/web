@@ -13,6 +13,7 @@ import { useMoveChatTab } from './components/hooks/useMovePage';
 import { useTranslation } from 'react-i18next';
 import { activeToast } from './store/slices/toastSlice';
 import OfflineView from './components/OfflineView';
+import gI18n, { convertLangFromLangCode } from './locale';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -46,6 +47,11 @@ function App() {
                 isError: true
               })
             );
+            break;
+          }
+          case 'changeLang': {
+            const lang = convertLangFromLangCode(body);
+            gI18n.changeLanguage(lang);
             break;
           }
           default: {
