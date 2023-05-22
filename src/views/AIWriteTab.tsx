@@ -116,10 +116,9 @@ const ResWrapper = styled(Wrapper)`
 `;
 
 const lengthList = [
-  { title: 'Short', length: 300 },
-  { title: 'Medium', length: 500 },
-  { title: 'Long', length: 800 }
-  // { title: '1000', length: 1000 }
+  { title: 'Short', length: 'short' },
+  { title: 'Medium', length: 'medium' },
+  { title: 'Long', length: 'long' }
 ];
 
 interface FormListType {
@@ -130,7 +129,7 @@ interface FormListType {
 
 interface LengthListType {
   title: string;
-  length: number;
+  length: string;
 }
 
 const subjectMaxLength = 1000;
