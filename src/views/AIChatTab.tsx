@@ -48,6 +48,7 @@ import useApiWrapper from '../api/useApiWrapper';
 import icon_credit from '../img/ico_credit.svg';
 import { useTranslation } from 'react-i18next';
 import useErrorHandle from '../components/hooks/useErrorHandle';
+import { firstRecList } from '../img/aiChat/FuncRecBox';
 
 const INPUT_HEIGHT = 120;
 const TEXT_MAX_HEIGHT = 168;
@@ -215,8 +216,8 @@ const AIChatTab = () => {
 
   const [chatInput, setChatInput] = useState<string>('');
   const [isActiveInput, setIsActiveInput] = useState<boolean>(false);
-  const [loadingResId, setLoadingResId] = useState<string | null>(null);
-  const [retryRes, setRetryRes] = useState<string | null>(null);
+  const [loadingInfo, setLoadingInfo] = useState<{ id: string; msg: string } | null>(null);
+  const [retryOrigin, setRetryOrigin] = useState<string | null>(null);
   const [chatTip, setChatTip] = useState<string>(
     chatTipList[Math.floor(Math.random() * chatTipList.length)]
   );
@@ -232,7 +233,7 @@ const AIChatTab = () => {
   useEffect(() => {
     // update chat tip
     const timer = setInterval(() => {
-      if (!loadingResId && chatInput.length === 0)
+      if (!loadingInfo && chatInput.length === 0)
         setChatTip(chatTipList[Math.floor(Math.random() * chatTipList.length)]);
     }, 5000);
 
@@ -244,7 +245,7 @@ const AIChatTab = () => {
   }, [isActiveInput]);
 
   useEffect(() => {
-    if (defaultInput && defaultInput.length > 0 && !loadingResId) {
+    if (defaultInput && defaultInput.length > 0 && !loadingInfo) {
       // setActiveInput(true);
       setChatInput(defaultInput);
       dispatch(resetDefaultInput());
@@ -255,7 +256,7 @@ const AIChatTab = () => {
 
   useEffect(() => {
     chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
-  }, [chatHistory, isActiveInput, loadingResId]);
+  }, [chatHistory, isActiveInput, loadingInfo]);
 
   useEffect(() => {
     if (chatHistory.length === 0) {
@@ -306,6 +307,8 @@ const AIChatTab = () => {
         : chatHistory[chatHistory.length - 1].result;
 
       const assistantId = uuidv4();
+      const msg = selectLoadingMsg(chat ? true : false);
+      setLoadingInfo({ id: assistantId, msg: msg });
 
       handleResizeHeight();
       if (textRef.current) textRef.current.style.height = 'auto';
@@ -332,8 +335,6 @@ const AIChatTab = () => {
           preProcessing: preProc
         })
       );
-
-      setLoadingResId(assistantId);
 
       const res = await apiWrapper(CHAT_STREAM_API, {
         headers: {
@@ -400,13 +401,13 @@ const AIChatTab = () => {
     } catch (error: any) {
       errorHandle(error);
     } finally {
-      setLoadingResId(null);
+      setLoadingInfo(null);
       stopRef.current = false;
       dispatch(initRecFunc());
       dispatch(setLoadingTab(false));
       toggleActiveInput(false);
 
-      if (chat) setRetryRes(null);
+      if (chat) setRetryOrigin(null);
     }
   };
 
@@ -419,13 +420,14 @@ const AIChatTab = () => {
   const selectLoadingMsg = (isRetry: boolean) => {
     if (isRetry) return t(`ChatingTab.LoadingMsg.ReCreating`);
 
-    if (!selectedRecFunction || chatHistory.length <= 3) {
+    const isFirstRec = firstRecList.filter((rec) => rec.id === selectedRecFunction?.id).length > 0;
+    if (isFirstRec || (!isFirstRec && !selectedRecFunction && chatInput.length > 0)) {
       return t(`ChatingTab.LoadingMsg.Creating`);
     }
 
     let msg = '';
 
-    switch (selectedRecFunction.id) {
+    switch (selectedRecFunction?.id) {
       case REC_ID_LIST.RESUME_WRITING:
         if (chatInput.length > 0) msg = t(`ChatingTab.LoadingMsg.ContitnueWriting_input`);
         else msg = t(`ChatingTab.LoadingMsg.ContitnueWriting`);
@@ -446,11 +448,11 @@ const AIChatTab = () => {
         break;
       case REC_ID_LIST.CHANGE_TEXT_STYLE:
         if (chatInput.length > 0 && selectedSubRecFunction)
-          msg = t(`ChatingTab.LoadingMsg.ChangeStyle`, {
+          msg = t(`ChatingTab.LoadingMsg.ChangeStyle_input`, {
             style: t(`ChatingTab.FuncRecBtn.SubFuncRec.${selectedSubRecFunction.title}`)
           });
         else if (selectedSubRecFunction)
-          msg = t(`ChatingTab.LoadingMsg.ChangeStyle_input`, {
+          msg = t(`ChatingTab.LoadingMsg.ChangeStyle`, {
             style: t(`ChatingTab.FuncRecBtn.SubFuncRec.${selectedSubRecFunction.title}`)
           });
         break;
@@ -469,19 +471,19 @@ const AIChatTab = () => {
     <Wrapper>
       <ChatListWrapper
         style={{ position: 'relative' }}
-        activeInputWrap={isActiveInput && !loadingResId}
+        activeInputWrap={isActiveInput && !loadingInfo}
         onClick={(e) => {
           toggleActiveInput(false);
           // dispatch(closeRecFunc());
         }}>
         {chatHistory.map((chat, index) => (
           <SpeechBubble
-            loadingMsg={loadingResId === chat.id ? selectLoadingMsg(false) : undefined}
+            loadingMsg={loadingInfo?.id === chat.id ? loadingInfo.msg : undefined}
             key={chat.id}
             text={chat.role === 'assistant' ? chat.result : chat.input}
             isUser={chat.role === 'user'}
             outterChild={
-              chat.id !== loadingResId &&
+              chat.id !== loadingInfo?.id &&
               chat.role === 'assistant' &&
               index > 1 && (
                 <>
@@ -510,7 +512,7 @@ const AIChatTab = () => {
                     )} */}
                   </RowBox>
                   <RowWrapBox>
-                    {retryRes !== chat.id && (
+                    {retryOrigin !== chat.id && (
                       <Button
                         cssExt={css`
                           min-width: 124px;
@@ -518,6 +520,7 @@ const AIChatTab = () => {
                         isCredit={true}
                         onClick={() => {
                           submitChat(chat);
+                          setRetryOrigin(chat.id);
                         }}>
                         {t(`WriteTab.Recreating`)}
                       </Button>
@@ -543,7 +546,7 @@ const AIChatTab = () => {
                 </>
               )
             }>
-            {chat.role !== 'user' && index !== 0 && loadingResId !== chat.id && (
+            {chat.role !== 'user' && index !== 0 && loadingInfo?.id !== chat.id && (
               <RightBox>
                 <OpenAILinkText />
               </RightBox>
@@ -552,7 +555,7 @@ const AIChatTab = () => {
         ))}
         <div ref={chatEndRef}></div>
       </ChatListWrapper>
-      {loadingResId && (
+      {loadingInfo && (
         <CenterBox>
           <StopButton
             onClick={() => {
@@ -563,10 +566,10 @@ const AIChatTab = () => {
       )}
       <div style={{ position: 'relative', display: 'flex' }}>
         <FloatingBox>
-          {isActiveInput && !loadingResId ? (
+          {isActiveInput && !loadingInfo ? (
             <FuncRecBox chatLength={chatHistory.length} />
           ) : (
-            !loadingResId &&
+            !loadingInfo &&
             chatInput.length === 0 && (
               <Info>
                 <Icon
@@ -584,15 +587,15 @@ const AIChatTab = () => {
         </FloatingBox>
 
         <InputBox
-          activeInputWrap={isActiveInput && !loadingResId}
+          activeInputWrap={isActiveInput && !loadingInfo}
           style={{ position: 'relative', display: 'flex' }}>
           <RowBox
             onClick={() => {
               toggleActiveInput(true);
             }}>
             <TextArea
-              disable={loadingResId !== null}
-              placeholder={!loadingResId ? placeholder || '' : ''}
+              disable={loadingInfo !== null}
+              placeholder={!loadingInfo ? placeholder || '' : ''}
               textRef={textRef}
               rows={1}
               cssExt={css`
@@ -626,7 +629,7 @@ const AIChatTab = () => {
                 handleResizeHeight();
               }}
             />
-            {!loadingResId && isActiveInput && (
+            {!loadingInfo && isActiveInput && (
               <SubmitButton
                 disabled={
                   (chatHistory.length === 1 && chatInput.length === 0) ||
@@ -654,7 +657,7 @@ const AIChatTab = () => {
               </SubmitButton>
             )}
           </RowBox>
-          {!loadingResId && isActiveInput && (
+          {!loadingInfo && isActiveInput && (
             <RowWrapBox
               cssExt={css`
                 height: 34px;
