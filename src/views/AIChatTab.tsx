@@ -221,6 +221,7 @@ const AIChatTab = () => {
   const [chatTip, setChatTip] = useState<string>(
     chatTipList[Math.floor(Math.random() * chatTipList.length)]
   );
+  const [isDefaultInput, setIsDefaultInput] = useState<boolean>(false);
   const chatEndRef = useRef<any>();
   const stopRef = useRef<boolean>(false);
   const textRef = useRef<HTMLTextAreaElement>(null);
@@ -269,6 +270,8 @@ const AIChatTab = () => {
         })
       );
     }
+
+    if (defaultInput) setIsDefaultInput(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -567,7 +570,7 @@ const AIChatTab = () => {
       <div style={{ position: 'relative', display: 'flex' }}>
         <FloatingBox>
           {isActiveInput && !loadingInfo ? (
-            <FuncRecBox chatLength={chatHistory.length} />
+            <FuncRecBox isFormRec={!isDefaultInput && chatHistory.length <= 1} />
           ) : (
             !loadingInfo &&
             chatInput.length === 0 && (
@@ -627,6 +630,8 @@ const AIChatTab = () => {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 setChatInput(e.target.value.slice(0, INPUT_MAX_LENGTH));
                 handleResizeHeight();
+
+                if (isDefaultInput && e.target.value.length === 0) setIsDefaultInput(false);
               }}
             />
             {!loadingInfo && isActiveInput && (

@@ -240,9 +240,9 @@ const CommentFlip = ({
   );
 };
 
-const FucRecBox = ({ chatLength }: { chatLength: number }) => {
+const FucRecBox = ({ isFormRec }: { isFormRec: boolean }) => {
   const dispatch = useAppDispatch();
-  const { selectedRecFunction, selectedSubRecFunction, isOpen, isActive } =
+  const { selectedRecFunction, selectedSubRecFunction, isOpen } =
     useAppSelector(selectRecFuncSlice);
   const { t } = useTranslation();
 
@@ -260,146 +260,138 @@ const FucRecBox = ({ chatLength }: { chatLength: number }) => {
     dispatch(initRecFunc());
   };
 
-  const recOpenComment =
-    chatLength <= 1 ? t(`ChatingTab.UseVariableForm`) : t(`ChatingTab.UseMoreAI`);
+  const recOpenComment = isFormRec ? t(`ChatingTab.UseVariableForm`) : t(`ChatingTab.UseMoreAI`);
 
   useEffect(() => {
-    if (chatLength <= 1) setSelectedFunc(firstRecList[0]);
+    if (isFormRec) setSelectedFunc(firstRecList[0]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <>
-      {isActive && (
-        <Wrapper>
-          {isOpen ? (
-            <>
-              <OpenedBox>
-                <RowWrapBox
-                  cssExt={css`
-                    ${justiCenter}
-                  `}>
-                  <CommentFlip
-                    comment={recOpenComment}
-                    icon={icon_arrow_down}
-                    onclick={() => {
-                      dispatch(closeRecFunc());
-                    }}
-                  />
-                </RowWrapBox>
-                <RowWrapBox>
-                  {chatLength <= 1
-                    ? firstRecList.map((rec) => (
-                        <IconButton
-                          title={t(`FormList.${rec.title}`)}
-                          key={rec.id}
-                          onClick={() => {
-                            setSelectedFunc(rec);
-                          }}
-                          selected={selectedRecFunction ? selectedRecFunction.id === rec.id : false}
-                          icon={rec.id === selectedRecFunction?.id ? rec.selectedIcon : rec.icon}
-                        />
-                      ))
-                    : !isSubPage &&
-                      recList.map((rec) => (
-                        <Button
-                          key={rec.id}
-                          selected={rec.id === selectedRecFunction?.id}
-                          onClick={() => {
-                            if (selectedRecFunction?.id !== rec.id) setSelectedFunc(rec);
-                            else if (selectedRecFunction?.id === rec.id) setSelectedFunc(null);
-
-                            if (
-                              selectedRecFunction?.id !== rec.id &&
-                              recSubList.filter((sub) => sub.id === rec.id).length > 0
-                            ) {
-                              setIsSubPage(true);
-                            } else {
-                              dispatch(selectSubRecFunc(null));
-                            }
-                          }}
-                          cssExt={css`
-                            border: ${rec.id === selectedRecFunction?.id
-                              ? 'solid 1px var(--ai-purple-80-sub)'
-                              : 'none'};
-                            margin: 3px;
-                            height: fit-content;
-                            min-width: fit-content;
-                          `}>
-                          <Icon
-                            iconSrc={
-                              rec.id === selectedRecFunction?.id ? rec.selectedIcon : rec.icon
-                            }
-                            cssExt={css`
-                              width: 12px;
-                              height: 12px;
-                              margin-right: 6px;
-                            `}
-                          />
-                          <div>{t(`ChatingTab.FuncRecBtn.${rec.title}`)}</div>
-                        </Button>
-                      ))}
-                </RowWrapBox>
-                {isSubPage && (
-                  <RowBox>
-                    <Button
-                      cssExt={css`
-                        border: none;
-                        background-color: transparent;
-                        min-width: fit-content;
-                      `}
+    <Wrapper>
+      {isOpen ? (
+        <>
+          <OpenedBox>
+            <RowWrapBox
+              cssExt={css`
+                ${justiCenter}
+              `}>
+              <CommentFlip
+                comment={recOpenComment}
+                icon={icon_arrow_down}
+                onclick={() => {
+                  dispatch(closeRecFunc());
+                }}
+              />
+            </RowWrapBox>
+            <RowWrapBox>
+              {isFormRec
+                ? firstRecList.map((rec) => (
+                    <IconButton
+                      title={t(`FormList.${rec.title}`)}
+                      key={rec.id}
                       onClick={() => {
-                        setIsSubPage(false);
-                        resetAll();
-                      }}>
+                        setSelectedFunc(rec);
+                      }}
+                      selected={selectedRecFunction ? selectedRecFunction.id === rec.id : false}
+                      icon={rec.id === selectedRecFunction?.id ? rec.selectedIcon : rec.icon}
+                    />
+                  ))
+                : !isSubPage &&
+                  recList.map((rec) => (
+                    <Button
+                      key={rec.id}
+                      selected={rec.id === selectedRecFunction?.id}
+                      onClick={() => {
+                        if (selectedRecFunction?.id !== rec.id) setSelectedFunc(rec);
+                        else if (selectedRecFunction?.id === rec.id) setSelectedFunc(null);
+
+                        if (
+                          selectedRecFunction?.id !== rec.id &&
+                          recSubList.filter((sub) => sub.id === rec.id).length > 0
+                        ) {
+                          setIsSubPage(true);
+                        } else {
+                          dispatch(selectSubRecFunc(null));
+                        }
+                      }}
+                      cssExt={css`
+                        border: ${rec.id === selectedRecFunction?.id
+                          ? 'solid 1px var(--ai-purple-80-sub)'
+                          : 'none'};
+                        margin: 3px;
+                        height: fit-content;
+                        min-width: fit-content;
+                      `}>
                       <Icon
-                        iconSrc={icon_prev}
+                        iconSrc={rec.id === selectedRecFunction?.id ? rec.selectedIcon : rec.icon}
                         cssExt={css`
-                          width: 16px;
-                          height: 16px;
-                          padding: 5px 3px 5px 1px;
+                          width: 12px;
+                          height: 12px;
+                          margin-right: 6px;
                         `}
                       />
+                      <div>{t(`ChatingTab.FuncRecBtn.${rec.title}`)}</div>
                     </Button>
-                    <RowWrapBox>
-                      {recSubList
-                        .filter((sub) => sub.id === selectedRecFunction?.id)[0]
-                        .subList.map((sub) => (
-                          <Button
-                            cssExt={css`
-                              border: ${selectedSubRecFunction?.id === sub.id
-                                ? 'solid 1px var(--ai-purple-80-sub)'
-                                : 'none'};
-                              margin: 3px;
-                              height: fit-content;
-                              min-width: fit-content;
-                            `}
-                            selected={selectedSubRecFunction?.id === sub.id}
-                            onClick={() => {
-                              if (selectedSubRecFunction?.id !== sub.id) setSelectedSubFunc(sub);
-                              else if (selectedSubRecFunction?.id === sub.id)
-                                setSelectedSubFunc(null);
-                            }}>
-                            {t(`ChatingTab.FuncRecBtn.SubFuncRec.${sub.title}`)}
-                          </Button>
-                        ))}
-                    </RowWrapBox>
-                  </RowBox>
-                )}
-              </OpenedBox>
-            </>
-          ) : (
-            <CommentFlip
-              comment={recOpenComment}
-              icon={icon_arrow_up}
-              onclick={() => {
-                dispatch(openRecFunc());
-              }}
-            />
-          )}
-        </Wrapper>
+                  ))}
+            </RowWrapBox>
+            {isSubPage && (
+              <RowBox>
+                <Button
+                  cssExt={css`
+                    border: none;
+                    background-color: transparent;
+                    min-width: fit-content;
+                  `}
+                  onClick={() => {
+                    setIsSubPage(false);
+                    resetAll();
+                  }}>
+                  <Icon
+                    iconSrc={icon_prev}
+                    cssExt={css`
+                      width: 16px;
+                      height: 16px;
+                      padding: 5px 3px 5px 1px;
+                    `}
+                  />
+                </Button>
+                <RowWrapBox>
+                  {recSubList
+                    .filter((sub) => sub.id === selectedRecFunction?.id)[0]
+                    .subList.map((sub) => (
+                      <Button
+                        cssExt={css`
+                          border: ${selectedSubRecFunction?.id === sub.id
+                            ? 'solid 1px var(--ai-purple-80-sub)'
+                            : 'none'};
+                          margin: 3px;
+                          height: fit-content;
+                          min-width: fit-content;
+                        `}
+                        selected={selectedSubRecFunction?.id === sub.id}
+                        onClick={() => {
+                          if (selectedSubRecFunction?.id !== sub.id) setSelectedSubFunc(sub);
+                          else if (selectedSubRecFunction?.id === sub.id) setSelectedSubFunc(null);
+                        }}>
+                        {t(`ChatingTab.FuncRecBtn.SubFuncRec.${sub.title}`)}
+                      </Button>
+                    ))}
+                </RowWrapBox>
+              </RowBox>
+            )}
+          </OpenedBox>
+        </>
+      ) : (
+        <CommentFlip
+          comment={recOpenComment}
+          icon={icon_arrow_up}
+          onclick={() => {
+            dispatch(openRecFunc());
+          }}
+        />
       )}
-    </>
+    </Wrapper>
   );
 };
 
