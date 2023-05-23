@@ -8,15 +8,18 @@ const IconWrapper = styled.div<{ cssExt: any }>`
   ${({ cssExt }: any) => cssExt && cssExt}
 `;
 
-const IconImg = styled.img``;
+const IconImg = styled.img<{ cssExt: any }>`
+  ${({ cssExt }: any) => cssExt && cssExt}
+`;
 
 interface IconProps {
   iconSrc: any;
   cssExt?: CSSProp<any>;
   onClick?: Function;
+  imgCssExt?: CSSProp<any>;
 }
 
-const Icon = ({ iconSrc, cssExt, onClick }: IconProps) => {
+const Icon = ({ iconSrc, cssExt, imgCssExt, onClick }: IconProps) => {
   return (
     <IconWrapper
       onClick={(e: React.MouseEvent) => {
@@ -29,7 +32,16 @@ const Icon = ({ iconSrc, cssExt, onClick }: IconProps) => {
 
         ${cssExt && cssExt}
       `}>
-      <IconImg src={iconSrc} />
+      <IconImg
+        src={iconSrc}
+        cssExt={css`
+          &:hover {
+            ${onClick && 'cursor: pointer'}
+          }
+
+          ${imgCssExt && imgCssExt}
+        `}
+      />
     </IconWrapper>
   );
 };

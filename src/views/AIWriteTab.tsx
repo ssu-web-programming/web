@@ -32,11 +32,13 @@ import {
   TableCss,
   flexColumn,
   flex,
-  flexStart,
+  justiStart,
   alignItemCenter,
   purpleBtnCss,
   justiSpaceBetween,
-  justiCenter
+  justiCenter,
+  flexGrow,
+  flexShrink
 } from '../style/cssCommon';
 import RecreatingButton from '../components/RecreatingButton';
 import { useMoveChatTab } from '../components/hooks/useMovePage';
@@ -48,22 +50,21 @@ import useApiWrapper from '../api/useApiWrapper';
 import { useTranslation } from 'react-i18next';
 import useErrorHandle from '../components/hooks/useErrorHandle';
 
-const Wrapper = styled.div`
+const WriteInputPage = styled.div`
   ${flexColumn}
   padding: 20px;
   width: 100%;
   height: 100%;
   box-sizing: border-box;
+
+  gap: 16px;
 `;
 
 const InputArea = styled.div`
   ${flex}
-  /* flex-direction: column;
-  margin: 10px 0px 10px;
-  border: solid 1px black;
-  border-radius: 4px;
-  border: solid 1px var(--gray-gray-50); */
+
   width: 100%;
+  /* margin-bottom: 17px; */
 `;
 
 const ResultBox = styled.div`
@@ -72,9 +73,12 @@ const ResultBox = styled.div`
   flex: 1;
   border-radius: 4px;
   background-color: #fff;
-  padding: 8px 12px 0px 12px;
+  /* padding: 8px 12px 0px 12px; */
   box-sizing: border-box;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
+  height: 620px;
+  ${flexGrow}
+  ${flexShrink}
   ${flexColumn}
   ${justiSpaceBetween}
 
@@ -102,17 +106,32 @@ const ResultWrapper = styled.div`
   overflow: auto;
   white-space: break-spaces;
   width: 100%;
+  padding: 8px 12px;
+  box-sizing: border-box;
 `;
 
 const RowStartBox = styled(RowBox)`
-  justify-content: flex-start;
-  margin: 8px 0px 8px 0px;
+  ${justiStart}
+  /* margin: 8px 0px 16px 0px; */
   box-sizing: border-box;
-  ${flexStart}
+  gap: 8px;
+  ${justiStart}
 `;
 
-const ResWrapper = styled(Wrapper)`
+const ResWrapper = styled.div`
+  ${flexColumn}
+  padding: 16px;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
   background-color: var(--ai-purple-99-bg-light);
+
+  gap: 8px;
+`;
+
+const TitleInputSet = styled.div`
+  ${flexColumn}
+  gap: 8px;
 `;
 
 const lengthList = [
@@ -268,72 +287,87 @@ const AIWriteTab = () => {
   return (
     <>
       {!currentWriteId ? (
-        <Wrapper>
-          <SubTitle subTitle={t(`WriteTab.WriteTopic`)} />
+        <WriteInputPage>
+          <TitleInputSet>
+            <SubTitle subTitle={t(`WriteTab.WriteTopic`)} />
+            <InputArea>
+              <ExTextbox
+                exampleList={exampleList}
+                maxtTextLen={subjectMaxLength}
+                value={subject}
+                placeholder={t(`WriteTab.WriteTextboxPlacehold`) || ''}
+                setValue={(val: string) => {
+                  setSubject(val);
+                }}></ExTextbox>
+            </InputArea>
+          </TitleInputSet>
 
-          <InputArea>
-            <ExTextbox
-              exampleList={exampleList}
-              maxtTextLen={subjectMaxLength}
-              value={subject}
-              placeholder={t(`WriteTab.WriteTextboxPlacehold`) || ''}
-              setValue={(val: string) => {
-                setSubject(val);
-              }}></ExTextbox>
-          </InputArea>
+          <TitleInputSet>
+            <SubTitle subTitle={t(`WriteTab.SelectForm`)} />
+            <RowStartBox>
+              {firstRecList.map((form) => (
+                <IconButton
+                  iconCssExt={css`
+                    background-color: ${selectedForm.id === form.id
+                      ? 'var(--ai-purple-97-list-over)'
+                      : 'var(--gray-gray-20)'};
+                    width: 110px;
+                    height: 48px;
+                    box-sizing: border-box;
+                    box-sizing: border-box;
+                  `}
+                  key={form.id}
+                  title={t(`FormList.${form.title}`)}
+                  onClick={() => {
+                    setSelectedForm(form);
+                  }}
+                  selected={selectedForm ? (selectedForm.id === form.id ? true : false) : false}
+                  icon={selectedForm.id === form.id ? form.selectedIcon : form.icon}
+                />
+              ))}
+            </RowStartBox>
+          </TitleInputSet>
 
-          <SubTitle subTitle={t(`WriteTab.SelectForm`)} />
-          <RowStartBox>
-            {firstRecList.map((form) => (
-              <IconButton
-                cssExt={css`
-                  margin-right: 8px;
-                `}
-                iconCssExt={css`
-                  background-color: ${selectedForm.id === form.id
-                    ? 'var(--ai-purple-97-list-over)'
-                    : 'var(--gray-gray-20)'};
-                  width: 81px;
-                  height: 48px;
-                  box-sizing: border-box;
-                `}
-                key={form.id}
-                title={t(`FormList.${form.title}`)}
-                onClick={() => {
-                  setSelectedForm(form);
-                }}
-                selected={selectedForm ? (selectedForm.id === form.id ? true : false) : false}
-                icon={selectedForm.id === form.id ? form.selectedIcon : form.icon}
-              />
-            ))}
-          </RowStartBox>
+          <TitleInputSet>
+            <SubTitle subTitle={t(`WriteTab.SelectResultLength`)} />
+            <RowStartBox>
+              {lengthList.map((length, index) => (
+                <Button
+                  key={index}
+                  onClick={() => {
+                    setSelectedLength(length);
+                  }}
+                  selected={
+                    selectedLength
+                      ? selectedLength.length === length.length
+                        ? true
+                        : false
+                      : false
+                  }
+                  cssExt={css`
+                    border: ${selectedLength?.length === length.length
+                      ? 'solid 1px var(--ai-purple-80-sub)'
+                      : 'none'};
+                    background-color: ${selectedLength && selectedLength.length === length.length
+                      ? `var(--ai-purple-97-list-over)`
+                      : 'var(--gray-gray-20)'};
+                    flex: none;
+                    font-size: 13px;
+                    font-weight: ${selectedLength?.length === length.length ? 'border' : 'none'};
+                    font-stretch: normal;
+                    font-style: normal;
+                    line-height: 1.54;
+                    letter-spacing: normal;
 
-          <SubTitle subTitle={t(`WriteTab.SelectResultLength`)} />
-          <RowStartBox>
-            {lengthList.map((length, index) => (
-              <Button
-                key={index}
-                onClick={() => {
-                  setSelectedLength(length);
-                }}
-                selected={
-                  selectedLength ? (selectedLength.length === length.length ? true : false) : false
-                }
-                cssExt={css`
-                  border: ${selectedLength?.length === length.length
-                    ? 'solid 1px var(--ai-purple-80-sub)'
-                    : 'none'};
-                  width: 82px;
-                  background-color: ${selectedLength && selectedLength.length === length.length
-                    ? `var(--ai-purple-97-list-over)`
-                    : 'var(--gray-gray-20)'};
-                  flex: none;
-                  width: 82px;
-                `}>
-                {t(`WriteTab.Length.${length.title}`)}
-              </Button>
-            ))}
-          </RowStartBox>
+                    width: 111px;
+                    height: 28px;
+                    box-sizing: border-box;
+                  `}>
+                  {t(`WriteTab.Length.${length.title}`)}
+                </Button>
+              ))}
+            </RowStartBox>
+          </TitleInputSet>
 
           <div>
             <Button
@@ -342,6 +376,7 @@ const AIWriteTab = () => {
               cssExt={css`
                 ${purpleBtnCss}
                 width: 100%;
+                margin-top: 4px;
               `}
               onClick={() => {
                 if (subject.length === 0) {
@@ -354,13 +389,10 @@ const AIWriteTab = () => {
               {t(`WriteTab.WritingArticle`)}
             </Button>
           </div>
-        </Wrapper>
+        </WriteInputPage>
       ) : (
         <ResWrapper>
-          <RowBox
-            cssExt={css`
-              margin-bottom: 8px;
-            `}>
+          <RowBox>
             <SubTitle subTitle={t(`WriteTab.PreviewWriting`)} />
             {!isLoading && (
               <RecreatingButton
@@ -389,6 +421,7 @@ const AIWriteTab = () => {
                     cssExt={css`
                       margin: 0 auto;
                       margin-bottom: 16px;
+                      margin-top: 16px;
                     `}
                     onClick={() => {
                       stopRef.current = true;
@@ -396,55 +429,55 @@ const AIWriteTab = () => {
                   />
                 )}
 
-                <>
-                  <ColumDivider />
-                  <RowBox
-                    cssExt={css`
-                      align-items: center;
-                      color: var(--gray-gray-70);
-                      font-size: 13px;
-                      height: 35px;
-                    `}>
-                    <LengthWrapper>
-                      {t(`WriteTab.LengthInfo`, { length: currentWrite?.result.length })}
-                    </LengthWrapper>
-                    {!isLoading && (
-                      <RightBox>
-                        <Icon
-                          cssExt={css`
-                            width: 16px;
-                            height: 16px;
-                            padding: 6px 3px 6px 5px;
-                            margin-right: 12px;
-                            opacity: ${currentIndex === 0 && '0.3'};
-                          `}
-                          iconSrc={icon_prev}
-                          onClick={() => {
-                            if (currentIndex > 0) {
-                              dispatch(setCurrentWrite(history[currentIndex - 1]?.id));
-                            }
-                          }}
-                        />
-                        <div>
-                          {history.findIndex((write) => write.id === currentWriteId) + 1}/
-                          {history.length}
-                        </div>
-                        <Icon
-                          cssExt={css`
-                            width: 16px;
-                            height: 16px;
-                            padding: 6px 3px 6px 5px;
-                            margin-left: 12px;
-                            opacity: ${currentIndex === history.length - 1 && '0.3'};
-                          `}
-                          iconSrc={icon_next}
-                          onClick={() => {
-                            if (currentIndex < history.length - 1) {
-                              dispatch(setCurrentWrite(history[currentIndex + 1]?.id));
-                            }
-                          }}
-                        />
-                        {/* <CopyIcon
+                <ColumDivider />
+                <RowBox
+                  cssExt={css`
+                    ${alignItemCenter}
+                    color: var(--gray-gray-70);
+                    font-size: 13px;
+                    height: 35px;
+
+                    padding: 8px 12px;
+                    box-sizing: border-box;
+                  `}>
+                  <LengthWrapper>
+                    {t(`WriteTab.LengthInfo`, { length: currentWrite?.result.length })}
+                  </LengthWrapper>
+                  {!isLoading && (
+                    <RightBox>
+                      <Icon
+                        cssExt={css`
+                          width: 16px;
+                          height: 16px;
+                          margin-right: 11px;
+                          opacity: ${currentIndex === 0 && '0.3'};
+                        `}
+                        iconSrc={icon_prev}
+                        onClick={() => {
+                          if (currentIndex > 0) {
+                            dispatch(setCurrentWrite(history[currentIndex - 1]?.id));
+                          }
+                        }}
+                      />
+                      <div>
+                        {history.findIndex((write) => write.id === currentWriteId) + 1}/
+                        {history.length}
+                      </div>
+                      <Icon
+                        cssExt={css`
+                          width: 16px;
+                          height: 16px;
+                          margin-left: 11px;
+                          opacity: ${currentIndex === history.length - 1 && '0.3'};
+                        `}
+                        iconSrc={icon_next}
+                        onClick={() => {
+                          if (currentIndex < history.length - 1) {
+                            dispatch(setCurrentWrite(history[currentIndex + 1]?.id));
+                          }
+                        }}
+                      />
+                      {/* <CopyIcon
                           cssExt={css`
                             margin-left: 12px;
                           `}
@@ -460,17 +493,22 @@ const AIWriteTab = () => {
                             );
                           }}
                         /> */}
-                      </RightBox>
-                    )}
-                  </RowBox>
-                </>
+                    </RightBox>
+                  )}
+                </RowBox>
               </div>
             )}
           </ResultBox>
           {currentWrite?.result.length > 0 && !isLoading && (
             <>
-              <RowBox>
+              <RowBox
+                cssExt={css`
+                  gap: 8px;
+                `}>
                 <Button
+                  cssExt={css`
+                    margin: 0px;
+                  `}
                   isCredit={true}
                   onClick={() => {
                     submitSubject(currentWrite);
@@ -479,7 +517,7 @@ const AIWriteTab = () => {
                 </Button>
                 <Button
                   cssExt={css`
-                    margin-right: 0px;
+                    margin: 0px;
                   `}
                   onClick={() => {
                     insertDoc(currentWrite.result);

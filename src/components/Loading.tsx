@@ -1,5 +1,6 @@
 import styled, { CSSProp, css } from 'styled-components';
-import ai_loading from '../img/ai_motion_mid_56.webp';
+// import ai_loading from '../img/ai_motion_mid_56.webp';
+import ai_loading from '../img/ezgif.com-gif-maker.png';
 import Icon from './Icon';
 import { alignItemCenter, flexColumn, justiCenter } from '../style/cssCommon';
 
@@ -22,6 +23,10 @@ const Loading = ({ children, cssExt }: { children?: React.ReactNode; cssExt?: CS
         cssExt={css`
           margin-bottom: 8px;
           ${cssExt}
+        `}
+        imgCssExt={css`
+          width: 56px;
+          height: 56px;
         `}
       />
       {children}

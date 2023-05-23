@@ -8,14 +8,14 @@ import { activeToast } from '../../store/slices/toastSlice';
 import {
   justiCenter,
   flexGrow,
-  flexStart,
+  justiStart,
   alignItemCenter,
   flexShrink
 } from '../../style/cssCommon';
 import { useTranslation } from 'react-i18next';
 
 const TabList = styled.div`
-  ${flexStart}
+  ${justiStart}
 
   height: 20px;
   height: 34px;
@@ -36,12 +36,13 @@ const TabItem = styled.div<{ selected: boolean }>`
   &:hover {
     background-color: #f7f8f9;
   }
-
+  box-sizing: border-box;
   ${({ selected }) =>
     selected &&
     css`
       border-bottom: solid 2px var(--ai-purple-80-sub);
       color: var(--ai-purple-50-main);
+      font-weight: bold;
     `}
 `;
 
@@ -104,7 +105,7 @@ export default function TabPage({
                   `}
                 />
               )}
-              {item.name}
+              <div>{item.name}</div>
             </TabItem>
           ))}
         </TabList>

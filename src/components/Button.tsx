@@ -25,7 +25,7 @@ const Body = styled.button<{ width?: number; height?: number; selected: boolean;
   ${flexGrow}
   ${flexShrink}
   flex-basis: fit-content;
-  margin: 3px;
+  /* margin: 3px; */
 
   ${({ width, height, selected }) => css`
     width: ${width} ? ${width}px : fit-content;

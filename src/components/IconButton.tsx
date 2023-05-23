@@ -49,7 +49,11 @@ const IconButton = ({
         cssExt={css`
           width: 24px;
           height: 24px;
-          padding: 10px 40px 10px 40px;
+          padding: 12px 43px 12px 43px;
+          width: 110px;
+          height: 48px;
+          box-sizing: border-box;
+          margin-bottom: 8px;
           background-color: #fff;
           border-radius: 4px;
           border: ${selected ? `solid 1px var(--ai-purple-80-sub)` : ''};

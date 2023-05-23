@@ -10,8 +10,10 @@ const InputArea = styled.div<{ activeBorder: boolean }>`
   ${flexColumn}
 
   box-sizing: border-box;
-  margin: 10px 0px 10px;
+  /* margin: 10px 0px 10px; */
   border-radius: 4px;
+  height: 153px;
+  box-sizing: border-box;
   border: ${({ activeBorder }: { activeBorder: boolean }) =>
     activeBorder ? 'solid 1px var(--ai-purple-50-main)' : 'solid 1px var(--gray-gray-50)'};
   width: 100%;

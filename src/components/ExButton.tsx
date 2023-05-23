@@ -11,6 +11,7 @@ const TextButton = styled.button<{ disabled: boolean }>`
   font-size: 12px;
   ${alignItemCenter}
   width: fit-content;
+  height: fit-content;
   color: var(--gray-gray-80-02);
 
   ${({ disabled }: { disabled: boolean }) =>

@@ -37,7 +37,8 @@ import {
   alignItemCenter,
   purpleBtnCss,
   justiSpaceBetween,
-  alignItemEnd
+  alignItemEnd,
+  flex
 } from '../style/cssCommon';
 import { setLoadingTab } from '../store/slices/tabSlice';
 import { CHAT_STREAM_API, JSON_CONTENT_TYPE } from '../api/constant';
@@ -51,7 +52,7 @@ import useErrorHandle from '../components/hooks/useErrorHandle';
 import { firstRecList } from '../img/aiChat/FuncRecBox';
 
 const INPUT_HEIGHT = 120;
-const TEXT_MAX_HEIGHT = 168;
+const TEXT_MAX_HEIGHT = 268;
 
 const Wrapper = styled.div`
   width: 100%;
@@ -64,7 +65,7 @@ const Wrapper = styled.div`
   ${TableCss}
 `;
 
-const ChatListWrapper = styled.div<{ activeInputWrap: boolean }>`
+const ChatListWrapper = styled.div<{ isLoading: boolean }>`
   ${flexColumn}
   /* ${flexColumn}
   ${flexGrow} */
@@ -73,10 +74,8 @@ const ChatListWrapper = styled.div<{ activeInputWrap: boolean }>`
   width: 100%;
   overflow-y: auto;
   box-sizing: border-box;
-  padding: 20px;
-  box-sizing: border-box;
-  margin-bottom: 30px;
   overflow-x: hidden;
+  margin-bottom: ${({ isLoading }: { isLoading: boolean }) => (isLoading ? '0px' : '48px')};
 `;
 
 const FloatingBox = styled.div`
@@ -95,10 +94,11 @@ const FloatingBox = styled.div`
 
 const InputBox = styled.div<{ activeInputWrap: boolean }>`
   box-sizing: border-box;
-  padding: ${({ activeInputWrap }: { activeInputWrap: boolean }) =>
-    activeInputWrap ? '5px 5px 0px 5px' : '5px'};
+  /* padding: ${({ activeInputWrap }: { activeInputWrap: boolean }) =>
+    activeInputWrap ? '5px 5px 0px 5px' : '5px'}; */
+  /* padding: 5px; */
   /* min-height: 30px; */
-  align-items: center;
+  ${alignItemCenter}
 
   height: fit-content;
   width: 100%;
@@ -117,7 +117,7 @@ export const RowBox = styled.div<{ cssExt?: any }>`
   ${({ cssExt }) => cssExt && cssExt}
 `;
 
-export const LengthWrapper = styled.div<{ isError?: boolean }>`
+export const LengthWrapper = styled.div<{ isError?: boolean; cssExt?: any }>`
   ${alignItemCenter}
 
   font-size: 12px;
@@ -128,19 +128,24 @@ export const LengthWrapper = styled.div<{ isError?: boolean }>`
     css`
       color: ${isError ? 'var(--sale)' : 'var(--gray-gray-70)'};
     `}
+
+  ${({ cssExt }) => cssExt && cssExt}
 `;
 
 export const RightBox = styled.div`
   ${alignItemCenter}
 
   align-self: flex-end;
-  margin: 4px;
+  margin-top: 9px;
 `;
 
 const Info = styled.div`
   background-color: var(--ai-purple-99-bg-light);
   color: var(--ai-purple-50-main);
   padding: 14px 16px 14px 16px;
+  font-size: 12px;
+  height: 48px;
+  box-sizing: border-box;
   font-size: 12px;
 
   ${alignItemCenter}
@@ -149,14 +154,14 @@ const Info = styled.div`
 const CenterBox = styled.div`
   width: 100%;
   margin-bottom: 16px;
-  ${justiCenter}
+  margin-top: 16px;
+  ${justiCenter};
 `;
 
 export const ColumDivider = styled.div`
   width: 100%;
   height: 1px;
   background-color: var(--ai-purple-97-list-over);
-  margin-top: 8px;
 `;
 
 const SubmitButton = styled.button<{ disabled: boolean }>`
@@ -169,7 +174,8 @@ const SubmitButton = styled.button<{ disabled: boolean }>`
   height: 32px;
   box-sizing: border-box;
   border-radius: 4px;
-  margin-bottom: 3px;
+  margin-right: 8px;
+  margin-bottom: 8px;
   &:hover {
     cursor: pointer;
   }
@@ -474,7 +480,7 @@ const AIChatTab = () => {
     <Wrapper>
       <ChatListWrapper
         style={{ position: 'relative' }}
-        activeInputWrap={isActiveInput && !loadingInfo}
+        isLoading={loadingInfo?.id ? true : false}
         onClick={(e) => {
           toggleActiveInput(false);
           // dispatch(closeRecFunc());
@@ -485,20 +491,22 @@ const AIChatTab = () => {
             key={chat.id}
             text={chat.role === 'assistant' ? chat.result : chat.input}
             isUser={chat.role === 'user'}
-            outterChild={
-              chat.id !== loadingInfo?.id &&
+            innerChild={
+              // chat.id !== loadingInfo?.id &&
               chat.role === 'assistant' &&
               index > 1 && (
                 <>
                   <ColumDivider />
-                  <RowBox
+                  <RowWrapBox
                     cssExt={css`
-                      margin: 8px 0px 8px 0px;
+                      padding: 9px 12px 12px 12px;
+                      box-sizing: border-box;
                     `}>
-                    <LengthWrapper>
-                      {t(`WriteTab.LengthInfo`, { length: chat.result.length })}
-                    </LengthWrapper>
-                    {/* {chat.id !== loadingResId && (
+                    <RowBox>
+                      <LengthWrapper>
+                        {t(`WriteTab.LengthInfo`, { length: chat.result.length })}
+                      </LengthWrapper>
+                      {/* {chat.id !== loadingResId && (
                       <CopyIcon
                         onClick={() => {
                           //TODO: 복사 로직
@@ -513,38 +521,48 @@ const AIChatTab = () => {
                         }}
                       />
                     )} */}
-                  </RowBox>
-                  <RowWrapBox>
-                    {retryOrigin !== chat.id && (
-                      <Button
+                    </RowBox>
+
+                    {chat.id !== loadingInfo?.id && (
+                      <RowWrapBox
                         cssExt={css`
-                          min-width: 124px;
-                        `}
-                        isCredit={true}
-                        onClick={() => {
-                          submitChat(chat);
-                          setRetryOrigin(chat.id);
-                        }}>
-                        {t(`WriteTab.Recreating`)}
-                      </Button>
+                          margin-top: 8px;
+                          gap: 4px 8px;
+                        `}>
+                        {retryOrigin !== chat.id && (
+                          <Button
+                            cssExt={css`
+                              min-width: 135px;
+                              /* margin: 0px; */
+                            `}
+                            isCredit={true}
+                            onClick={() => {
+                              submitChat(chat);
+                              setRetryOrigin(chat.id);
+                            }}>
+                            {t(`WriteTab.Recreating`)}
+                          </Button>
+                        )}
+                        <Button
+                          cssExt={css`
+                            ${purpleBtnCss}
+                            min-width: 135px;
+                            /* margin: 0px; */
+                          `}
+                          onClick={() => {
+                            insertDoc(chat.result);
+                            dispatch(
+                              activeToast({
+                                active: true,
+                                msg: t(`ToastMsg.CompleteInsert`),
+                                isError: false
+                              })
+                            );
+                          }}>
+                          {t(`WriteTab.InsertDoc`)}
+                        </Button>
+                      </RowWrapBox>
                     )}
-                    <Button
-                      cssExt={css`
-                        ${purpleBtnCss}
-                        min-width: 124px;
-                      `}
-                      onClick={() => {
-                        insertDoc(chat.result);
-                        dispatch(
-                          activeToast({
-                            active: true,
-                            msg: t(`ToastMsg.CompleteInsert`),
-                            isError: false
-                          })
-                        );
-                      }}>
-                      {t(`WriteTab.InsertDoc`)}
-                    </Button>
                   </RowWrapBox>
                 </>
               )
@@ -606,9 +624,10 @@ const AIChatTab = () => {
                 ${flexGrow}
                 border: 0;
                 max-height: ${TEXT_MAX_HEIGHT}px;
-                height: fit-content;
-                justify-content: center;
-                margin: 6px 16px 6px 8px;
+                height: 48px;
+                ${justiCenter}
+                padding: 14px 16px 14px 16px;
+                box-sizing: border-box;
 
                 &:disabled {
                   background-color: #fff;
@@ -653,7 +672,7 @@ const AIChatTab = () => {
                 <Icon
                   iconSrc={icon_credit}
                   cssExt={css`
-                    display: flex;
+                    ${flex}
                     position: absolute;
                     bottom: 7px;
                     right: 4px;
@@ -666,9 +685,10 @@ const AIChatTab = () => {
             <RowWrapBox
               cssExt={css`
                 height: 34px;
-                padding: 8px 3px 8px 11px;
+                padding: 0px 3px 0px 9px;
                 box-sizing: border-box;
                 border-top: 1px solid var(--ai-purple-97-list-over);
+                ${alignItemCenter}
               `}>
               <LengthWrapper isError={chatInput.length >= INPUT_MAX_LENGTH}>
                 {chatInput.length}/{INPUT_MAX_LENGTH}

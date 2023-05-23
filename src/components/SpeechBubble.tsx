@@ -15,7 +15,8 @@ const Wrapper = styled.div<{ isUser: boolean }>`
   margin-left: ${({ isUser }: { isUser: boolean }) => isUser && '48px'};
   align-self: ${({ isUser }: { isUser: boolean }) => isUser && 'flex-end'};
 
-  margin-top: 10px;
+  margin: ${({ isUser }: { isUser: boolean }) =>
+    isUser ? '16px 25px 0px 48px' : '16px 30px 0px 8px'};
 `;
 
 const Profile = styled.div`
@@ -36,8 +37,7 @@ const SpeechBubbleWrapper = styled.div<{ cssExt: any; isUser: boolean }>`
   /* height: 100%; */
   /* max-width: 80%; */
   box-sizing: border-box;
-  border-radius: 5px;
-  padding: 8px 12px 8px 12px;
+  border-radius: 10px;
 
   background-color: ${({ isUser }: { isUser: boolean }) =>
     isUser ? 'var(--ai-purple-70)' : 'white'};
@@ -47,9 +47,16 @@ const SpeechBubbleWrapper = styled.div<{ cssExt: any; isUser: boolean }>`
   ${({ cssExt }: any) => cssExt && cssExt}
 `;
 
+const MarkDownWrapper = styled.div`
+  ${flex}
+
+  padding: 8px 12px 8px 12px;
+`;
+
 const LoadingMsg = styled.div`
   ${flex}
 
+  margin: 8px 12px;
   font-size: 13px;
   font-weight: 500;
   color: var(--ai-purple-50-main);
@@ -61,7 +68,7 @@ interface SpeechBubbleProps {
   loadingMsg?: string;
   cssExt?: CSSProp<any>;
   children?: React.ReactNode;
-  outterChild?: React.ReactNode;
+  innerChild?: React.ReactNode;
 }
 
 // TODO : apply css only this component (for html created by 'ReactMarkdown')
@@ -71,7 +78,7 @@ const SpeechBubble = ({
   isUser,
   cssExt,
   children,
-  outterChild,
+  innerChild,
   loadingMsg
 }: SpeechBubbleProps) => {
   return (
@@ -89,9 +96,13 @@ const SpeechBubble = ({
           </Profile>
         )}
         <SpeechBubbleWrapper cssExt={cssExt} isUser={isUser}>
-          {!isUser && <LoadingMsg>{loadingMsg}</LoadingMsg>}
-          <PreMarkdown text={text} />
-          {outterChild}
+          {!isUser && loadingMsg && <LoadingMsg>{loadingMsg}</LoadingMsg>}
+          {text.length > 0 && (
+            <MarkDownWrapper>
+              <PreMarkdown text={text} />
+            </MarkDownWrapper>
+          )}
+          {innerChild}
         </SpeechBubbleWrapper>
       </RowBox>
       {children}

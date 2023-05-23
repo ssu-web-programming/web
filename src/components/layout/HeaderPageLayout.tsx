@@ -20,9 +20,10 @@ const Contents = styled.div`
 `;
 
 const Header = styled.div`
-  padding: 8px 5px 8px 10px;
+  padding-left: 10px;
   height: 48px;
   ${justiSpaceBetween}
+  ${alignItemCenter}
 `;
 
 const Body = styled.div`
@@ -35,7 +36,7 @@ const Body = styled.div`
 
 const TitleWrapper = styled.div`
   ${alignItemCenter}
-
+  line-height: 100%;
   width: fit-content;
 `;
 
@@ -46,9 +47,11 @@ const Title = styled.div`
   font-weight: bold;
   font-stretch: normal;
   font-style: normal;
-  line-height: normal;
+  line-height: 100%;
   letter-spacing: normal;
   color: var(--ai-purple-50-main);
+  margin: 0;
+  padding: 0;
 `;
 
 const SubTitle = styled.div`
@@ -89,10 +92,10 @@ export default function HeaderPageLayout({
             <Icon
               iconSrc={icon_ai}
               cssExt={css`
-                width: 32px;
-                height: 32px;
-                margin: 0 4px 0 0;
-                padding: 1px 2px 3px;
+                width: 28px;
+                height: 28px;
+                margin-right: 4px;
+                object-fit: contain;
               `}
             />
             <Title>{title}</Title>
@@ -101,7 +104,7 @@ export default function HeaderPageLayout({
               cssExt={css`
                 width: 34px;
                 height: 16px;
-                margin: 9px 0px 7px 7px;
+                margin-left: 7px;
               `}
             />
             {subTitle && (
@@ -115,7 +118,7 @@ export default function HeaderPageLayout({
             cssExt={css`
               width: 32px;
               height: 32px;
-              padding: 10.8px 10.8px 10.8px 10.8px;
+              margin-right: 5px;
             `}
             onClick={() => window._Bridge.closePanel()}
           />

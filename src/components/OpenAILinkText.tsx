@@ -1,8 +1,8 @@
 import Icon from './Icon';
 import LinkText from './LinkText';
 import icon_openai from '../img/logo_open_ai.svg';
-import styled from 'styled-components';
-import { flex } from '../style/cssCommon';
+import styled, { css } from 'styled-components';
+import { flex, justiEnd } from '../style/cssCommon';
 
 const Wrapper = styled.div`
   ${flex}
@@ -12,7 +12,7 @@ const Wrapper = styled.div`
   font-weight: 500;
   color: #8769ba;
   outline: none;
-  margin-right: 5px;
+  margin-right: 3px;
 `;
 
 const OPEN_API_LINK =
@@ -22,7 +22,13 @@ const OpenAILinkText = () => {
   return (
     <LinkText url={OPEN_API_LINK}>
       <Wrapper>Powered By</Wrapper>
-      <Icon iconSrc={icon_openai} />
+      <Icon
+        cssExt={css`
+          width: 57px;
+          /* height: 14px; */
+        `}
+        iconSrc={icon_openai}
+      />
     </LinkText>
   );
 };

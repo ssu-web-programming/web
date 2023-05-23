@@ -31,7 +31,7 @@ const ToastMsgWrapper = styled.div<{ isError: boolean }>`
   position: absolute;
   left: 50%;
   transform: translate(-50%, -50%);
-  bottom: 100px;
+  top: 92px;
 
   word-wrap: break-word;
   width: 80%;

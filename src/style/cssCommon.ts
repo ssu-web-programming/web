@@ -80,7 +80,15 @@ export const justiSpaceBetween = css`
   justify-content: space-between;
 `;
 
-export const flexStart = css`
+export const justiSpaceAround = css`
+  ${flex}
+  -webkit-box-pack: justify;
+  -moz-justify-content: space-around;
+  -ms-flex-pack: justify;
+  justify-content: space-around;
+`;
+
+export const justiStart = css`
   ${flex}
   -webkit-box-pack: start;
   -ms-flex-pack: start;
@@ -92,6 +100,13 @@ export const justiCenter = css`
   -webkit-box-pack: center;
   -ms-flex-pack: center;
   justify-content: center;
+`;
+
+export const justiEnd = css`
+  ${flex}
+  -webkit-box-pack: end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
 `;
 
 export const alignItemCenter = css`

@@ -30,7 +30,9 @@ import {
   justiSpaceBetween,
   flexWrap,
   justiCenter,
-  alignItemCenter
+  alignItemCenter,
+  justiSpaceAround,
+  flex
 } from '../style/cssCommon';
 import Loading from '../components/Loading';
 import Button from '../components/Button';
@@ -141,7 +143,7 @@ const Body = styled.div`
   width: 100%;
   height: 100%;
   ${flexColumn}
-  gap: 17px;
+  /* gap: 17px; */
   padding: 16px;
   box-sizing: border-box;
 
@@ -159,6 +161,7 @@ const SelectOptionArea = styled.div`
 const SubTitleArea = styled.div`
   width: 100%;
   ${justiSpaceBetween}
+  ${alignItemCenter}
 `;
 
 const RowContainer = styled.div`
@@ -166,6 +169,7 @@ const RowContainer = styled.div`
   ${flexWrap}
 
   gap: 8px;
+  /* margin-top: 12px; */
 `;
 
 const ContainerItem = styled.div`
@@ -271,6 +275,7 @@ const ImagePreview = styled.div`
   width: 100%;
   aspect-ratio: 1 / 1;
   max-height: 348px;
+  margin-top: 16px;
 `;
 
 const ImageDesc = styled.div`
@@ -281,15 +286,36 @@ const ImageDesc = styled.div`
   line-height: 1.54;
   letter-spacing: normal;
   color: var(--gray-gray-60-03);
+
+  min-height: 40px;
+  max-height: 40px;
+  box-sizing: content-box;
+  margin: 8px 0px 4px 0px;
+
+  width: 100%;
+  ${flex}
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 `;
 
 const ImageList = styled.div`
   width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
-  gap: 8px;
+  ${justiSpaceAround}
+  ${alignItemCenter}
+  height: 84px;
+  box-sizing: border-box;
+  /* margin-top: 12px; */
+  padding: 12px 0px;
+  margin: 12px 0px 12px 0px;
+  gap: 0px 8px;
+`;
+
+const MakingInputWrapper = styled.div`
+  ${flexColumn}
+  gap: 16px;
 `;
 
 export interface AiImageResponse {
@@ -396,17 +422,19 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
           <Loading>{t(`Txt2ImgTab.LoadingMsg`)}</Loading>
         </div>
       ) : !currentHistory ? (
-        <>
-          <div>
+        <MakingInputWrapper>
+          <SelectOptionArea>
+            <SubTitleArea>
+              <SubTitle subTitle={t(`Txt2ImgTab.WritingImageDesc`)} />
+            </SubTitleArea>
             <ExTextbox
               exampleList={exampleList}
               maxtTextLen={1000}
-              subTitle={t(`Txt2ImgTab.WritingImageDesc`) || ''}
               value={descInput}
               setValue={setDescInput}
             />
-          </div>
-          <SelectOptionArea>
+          </SelectOptionArea>
+          <>
             <SubTitleArea>
               <SubTitle subTitle={t('Txt2ImgTab.ChooseStyle')} />
             </SubTitleArea>
@@ -430,7 +458,7 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
                 );
               })}
             </RowContainer>
-          </SelectOptionArea>
+          </>
           <SelectOptionArea>
             <SubTitleArea>
               <SubTitle subTitle={t('Txt2ImgTab.ChooseRatio')} />
@@ -467,7 +495,7 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
             `}>
             {t(`Txt2ImgTab.CreateImage`)}
           </Button>
-        </>
+        </MakingInputWrapper>
       ) : (
         <>
           <SubTitleArea>
@@ -479,9 +507,10 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
               }}
             />
           </SubTitleArea>
+          <ImageDesc>{currentHistory.input}</ImageDesc>
           <RowBox
             cssExt={css`
-              justify-content: center;
+              ${justiCenter}
               font-size: 13px;
               color: var(--gray-gray-70);
             `}>
@@ -520,7 +549,6 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
               }}
             />
           </RowBox>
-          <ImageDesc>{currentHistory.input}</ImageDesc>
           <ImagePreview>
             {currentItemIdx !== null && (
               <img

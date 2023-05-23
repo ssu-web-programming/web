@@ -46,7 +46,6 @@ import { useTranslation } from 'react-i18next';
 
 const Wrapper = styled.div`
   border-radius: 0;
-  padding: 10px;
   ${flexColumn}
 
   /* background-color: transparent; */
@@ -54,8 +53,10 @@ const Wrapper = styled.div`
   box-shadow: 0 -2px 8px 0 rgba(111, 58, 208, 0.3);
   backdrop-filter: blur(10px);
   border-radius: 10px 10px 0px 0px;
+  padding: 14px 16px 14px 16px;
 
   ${justiCenter}
+  backdrop-filter: blur(10px);
 `;
 
 export const RowWrapBox = styled.div<{ cssExt?: any }>`
@@ -74,10 +75,11 @@ const CommentWrapper = styled.div`
   ${justiCenter}
   ${alignItemCenter}
 
-  /* margin: 8px; */
   font-size: 13px;
   color: var(--gray-gray-90-01);
-  margin-bottom: 3px;
+  /* height: 48px; */
+  /* margin-bottom: 14px; */
+  box-sizing: border-box;
 `;
 
 export interface recType {
@@ -230,7 +232,7 @@ const CommentFlip = ({
         cssExt={css`
           width: 16px;
           height: 16px;
-          margin: 2px 0 2px 4px;
+          margin-left: 4px;
         `}
         onClick={() => {
           onclick();
@@ -275,6 +277,7 @@ const FucRecBox = ({ isFormRec }: { isFormRec: boolean }) => {
             <RowWrapBox
               cssExt={css`
                 ${justiCenter}
+                margin-bottom: 14px;
               `}>
               <CommentFlip
                 comment={recOpenComment}
@@ -322,6 +325,8 @@ const FucRecBox = ({ isFormRec }: { isFormRec: boolean }) => {
                         margin: 3px;
                         height: fit-content;
                         min-width: fit-content;
+                        height: 28px;
+                        box-sizing: border-box;
                       `}>
                       <Icon
                         iconSrc={rec.id === selectedRecFunction?.id ? rec.selectedIcon : rec.icon}
