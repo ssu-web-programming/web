@@ -132,7 +132,7 @@
   "ToastMsg": {
     "UsedAllCredit": "You have used all your credits.",
     "CheckCreditPolicy": "Check credit policy >",
-    "NoCredit": "Insufficient credits; {{credit}} credits needed to continue.",
+    "NoCredit": "Insufficient credits, {{credit}} credits needed to continue.",
     "TabLoadedAndWait": "AI is creating a content in the {{tab}}. Please wait for a while to finish, or abort the process and try again.",
     "StartCreating": "A content will be created. {{deductionCredit}} credits have been used. (remaining credits: {{leftCredit}})",
     "AboutCredit": "{{deductionCredit}} credits have been used. (remaining credits :{{leftCredit}})",
