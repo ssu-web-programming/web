@@ -31,12 +31,11 @@ const useErrorHandle = () => {
             msg = '401 Unauthorized';
             break;
           case 429:
-            const { leftCredit, prevCredit } = calLeftCredit(error.header);
-            if (prevCredit === 0) {
+            const { leftCredit, deductionCredit } = calLeftCredit(error.header);
+            if (leftCredit === 0) {
               msg = <NoCredit />;
             } else {
-              // msg = t(`ToastMsg.NoCredit`, { credit: Math.abs(leftCredit) });
-              msg = t(`ToastMsg.NoCredit`, { credit: t(`Additional`) });
+              msg = t(`ToastMsg.NoCredit`, { credit: deductionCredit });
             }
             break;
           case 500:

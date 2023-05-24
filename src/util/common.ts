@@ -48,12 +48,11 @@ export const insertDoc = async (content: string) => {
 };
 
 export const calLeftCredit = (headers: any) => {
-  const prevCredit = headers?.get('X-PO-AI-Mayflower-Userinfo-Credit'.toLowerCase());
+  const leftCredit = headers?.get('X-PO-AI-Mayflower-Userinfo-Credit'.toLowerCase());
   const deductionCredit = headers?.get('X-PO-AI-Mayflower-Userinfo-Usedcredit'.toLowerCase());
 
   return {
-    prevCredit: Number(prevCredit),
-    deductionCredit: Number(deductionCredit),
-    leftCredit: Number(prevCredit) - Number(deductionCredit)
+    deductionCredit: deductionCredit,
+    leftCredit: leftCredit
   };
 };
