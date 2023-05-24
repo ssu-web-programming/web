@@ -36,7 +36,7 @@ const Body = styled.div`
 
 const TitleWrapper = styled.div`
   ${alignItemCenter}
-  line-height: 100%;
+  /* line-height: 100%; */
   width: fit-content;
 `;
 

@@ -52,7 +52,6 @@ import useErrorHandle from '../components/hooks/useErrorHandle';
 import { firstRecList } from '../img/aiChat/FuncRecBox';
 import { updateDefaultInput } from '../store/slices/chatHistorySlice';
 
-const INPUT_HEIGHT = 120;
 const TEXT_MAX_HEIGHT = 268;
 
 const Wrapper = styled.div`
@@ -76,7 +75,7 @@ const ChatListWrapper = styled.div<{ isLoading: boolean }>`
   overflow-y: auto;
   box-sizing: border-box;
   overflow-x: hidden;
-  margin-bottom: ${({ isLoading }: { isLoading: boolean }) => (isLoading ? '0px' : '48px')};
+  padding-bottom: ${({ isLoading }: { isLoading: boolean }) => (isLoading ? '0px' : '66px')};
 `;
 
 const FloatingBox = styled.div`
@@ -133,17 +132,23 @@ export const LengthWrapper = styled.div<{ isError?: boolean; cssExt?: any }>`
   ${({ cssExt }) => cssExt && cssExt}
 `;
 
-export const RightBox = styled.div`
+export const BoldLengthWrapper = styled(LengthWrapper)`
+  font-weight: 500;
+`;
+
+export const RightBox = styled.div<{ cssExt?: any }>`
   ${alignItemCenter}
 
   align-self: flex-end;
-  margin-top: 9px;
+  /* margin-top: 9px; */
+  ${({ cssExt }) => cssExt && cssExt}
 `;
 
 const Info = styled.div`
   background-color: var(--ai-purple-99-bg-light);
   color: var(--ai-purple-50-main);
-  padding: 14px 16px 14px 16px;
+  padding: 0px 16px;
+  line-height: 100%;
   font-size: 12px;
   height: 48px;
   box-sizing: border-box;
@@ -167,10 +172,9 @@ export const ColumDivider = styled.div`
 
 const SubmitButton = styled.button<{ disabled: boolean }>`
   margin: 0;
-  padding: 0;
   border: none;
   background-image: linear-gradient(to left, #a86cea, #6f3ad0 100%);
-  padding: 5px;
+  padding: 6px 10px;
   width: 40px;
   height: 32px;
   box-sizing: border-box;
@@ -181,7 +185,10 @@ const SubmitButton = styled.button<{ disabled: boolean }>`
     cursor: pointer;
   }
 
-  ${alignItemEnd}
+  /* ${alignItemEnd} */
+  ${flex}
+  ${alignItemCenter}
+  ${justiCenter}
   align-self: flex-end;
 
   ${({ disabled }) =>
@@ -517,9 +524,9 @@ const AIChatTab = () => {
                       box-sizing: border-box;
                     `}>
                     <RowBox>
-                      <LengthWrapper>
+                      <BoldLengthWrapper>
                         {t(`WriteTab.LengthInfo`, { length: chat.result.length })}
-                      </LengthWrapper>
+                      </BoldLengthWrapper>
                       {/* {chat.id !== loadingResId && (
                       <CopyIcon
                         onClick={() => {
@@ -582,7 +589,10 @@ const AIChatTab = () => {
               )
             }>
             {chat.role !== 'user' && index !== 0 && loadingInfo?.id !== chat.id && (
-              <RightBox>
+              <RightBox
+                cssExt={css`
+                  margin-top: 9px;
+                `}>
                 <OpenAILinkText />
               </RightBox>
             )}
@@ -680,14 +690,24 @@ const AIChatTab = () => {
                   }
                 }}
                 style={{ display: 'flex', position: 'relative', cursor: 'pointer' }}>
-                <Icon iconSrc={icon_sand} />
+                <Icon
+                  imgCssExt={css`
+                    ${flex}
+                    align-self: center;
+                  `}
+                  iconSrc={icon_sand}
+                />
                 <Icon
                   iconSrc={icon_credit}
                   cssExt={css`
                     ${flex}
                     position: absolute;
-                    bottom: 7px;
+                    bottom: 3px;
                     right: 4px;
+                  `}
+                  imgCssExt={css`
+                    width: 14px;
+                    height: 14px;
                   `}
                 />
               </SubmitButton>

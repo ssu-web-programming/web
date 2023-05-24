@@ -24,8 +24,8 @@ const OpenAILinkText = () => {
       <Wrapper>Powered By</Wrapper>
       <Icon
         cssExt={css`
-          width: 57px;
-          /* height: 14px; */
+          width: 59px;
+          height: 16px;
         `}
         iconSrc={icon_openai}
       />

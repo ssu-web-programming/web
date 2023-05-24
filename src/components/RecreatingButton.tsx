@@ -26,7 +26,7 @@ const RecreatingButton = ({ onClick }: { onClick: Function }) => {
         cssExt={css`
           width: 16px;
           height: 16px;
-          margin-right: 6px;
+          margin-right: 4px;
         `}
         iconSrc={icon_recreating}
       />

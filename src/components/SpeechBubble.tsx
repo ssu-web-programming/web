@@ -23,7 +23,7 @@ const Profile = styled.div`
   align-self: flex-start;
   width: 32px;
   height: 32px;
-  margin: 0 8px 24px 0;
+  margin-right: 8px;
   padding: 4px 4px 4px;
   border-radius: 10px;
   background-color: var(--ai-purple-95-list-pressed);
@@ -50,7 +50,7 @@ const SpeechBubbleWrapper = styled.div<{ cssExt: any; isUser: boolean }>`
 const MarkDownWrapper = styled.div`
   ${flex}
 
-  padding: 8px 12px 8px 12px;
+  padding: 8px 12px;
 `;
 
 const LoadingMsg = styled.div`

@@ -1,6 +1,13 @@
 import styled, { css } from 'styled-components';
 import SubTitle from '../components/SubTitle';
-import { ColumDivider, LengthWrapper, RightBox, RowBox, exampleList } from './AIChatTab';
+import {
+  BoldLengthWrapper,
+  ColumDivider,
+  LengthWrapper,
+  RightBox,
+  RowBox,
+  exampleList
+} from './AIChatTab';
 import Button from '../components/Button';
 import Icon from '../components/Icon';
 import { useRef, useState } from 'react';
@@ -53,7 +60,7 @@ import useErrorHandle from '../components/hooks/useErrorHandle';
 
 const WriteInputPage = styled.div`
   ${flexColumn}
-  padding: 20px;
+  padding: 16px;
   width: 100%;
   height: 100%;
   box-sizing: border-box;
@@ -312,9 +319,7 @@ const AIWriteTab = () => {
                     background-color: ${selectedForm.id === form.id
                       ? 'var(--ai-purple-97-list-over)'
                       : 'var(--gray-gray-20)'};
-                    width: 110px;
                     height: 48px;
-                    box-sizing: border-box;
                     box-sizing: border-box;
                   `}
                   key={form.id}
@@ -439,11 +444,11 @@ const AIWriteTab = () => {
                   padding: 8px 12px;
                   box-sizing: border-box;
                 `}>
-                <LengthWrapper>
+                <BoldLengthWrapper>
                   {currentWrite.result.length > 0 && (
                     <>{t(`WriteTab.LengthInfo`, { length: currentWrite?.result.length })}</>
                   )}
-                </LengthWrapper>
+                </BoldLengthWrapper>
 
                 {creating === 'none' && (
                   <RightBox>

@@ -47,8 +47,6 @@ const IconButton = ({
       <Icon
         iconSrc={icon}
         cssExt={css`
-          width: 24px;
-          height: 24px;
           padding: 12px 43px 12px 43px;
           width: 110px;
           height: 48px;
@@ -59,6 +57,10 @@ const IconButton = ({
           border: ${selected ? `solid 1px var(--ai-purple-80-sub)` : ''};
           background-color: ${selected ? `var(--ai-purple-97-list-over)` : ''};
           ${iconCssExt}
+        `}
+        imgCssExt={css`
+          width: 24px;
+          height: 24px;
         `}
       />
       {title}

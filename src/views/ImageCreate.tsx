@@ -32,7 +32,8 @@ import {
   justiCenter,
   alignItemCenter,
   justiSpaceAround,
-  flex
+  flex,
+  flexShrink
 } from '../style/cssCommon';
 import Loading from '../components/Loading';
 import Button from '../components/Button';
@@ -167,16 +168,20 @@ const SubTitleArea = styled.div`
   ${alignItemCenter}
 `;
 
-const RowContainer = styled.div`
+const RowContainer = styled.div<{
+  cssExt?: any;
+}>`
   width: '100%';
   ${flexWrap}
 
   gap: 8px;
-  /* margin-top: 12px; */
+
+  ${({ cssExt }) => cssExt && cssExt}
 `;
 
 const ContainerItem = styled.div`
   ${flexColumn}
+  ${alignItemCenter}
 
   gap: 8px;
 `;
@@ -213,8 +218,8 @@ const ItemTitle = styled.div<{ isSelected: boolean }>`
 `;
 
 const ItemIconBox = styled.div<{
-  width: number;
-  height: number;
+  width?: number;
+  height?: number;
   isSelected: boolean;
   cssExt?: any;
 }>`
@@ -239,8 +244,6 @@ const ItemIconBox = styled.div<{
       height: ${height}px;
     `}
 
-  ${({ cssExt }) => cssExt && cssExt}
-
   ${({ isSelected }) =>
     isSelected &&
     css`
@@ -248,6 +251,8 @@ const ItemIconBox = styled.div<{
       background-color: var(--ai-purple-97-list-over);
       padding: 2px;
     `}
+
+  ${({ cssExt }) => cssExt && cssExt}
 `;
 
 const GenButton = styled.div<{ disabled: boolean }>`
@@ -319,6 +324,27 @@ const ImageList = styled.div`
 const MakingInputWrapper = styled.div`
   ${flexColumn}
   gap: 16px;
+`;
+
+const GridContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  max-width: fit-content;
+
+  gap: 16px 8px;
+`;
+
+const Container4 = styled(GridContainer)`
+  gap: 8px;
+`;
+
+const Container3 = styled.div`
+  grid-column: 1 / 4;
+  grid-row: 1 / 2;
+  width: 100%;
+
+  ${flex}
+  gap: 8px;
 `;
 
 export interface AiImageResponse {
@@ -442,15 +468,24 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
               setValue={setDescInput}
             />
           </SelectOptionArea>
-          <>
+          <SelectOptionArea>
             <SubTitleArea>
               <SubTitle subTitle={t('Txt2ImgTab.ChooseStyle')} />
             </SubTitleArea>
-            <RowContainer>
+            <GridContainer>
               {selectStyleItemList.map((item) => {
                 return (
                   <ContainerItem key={item.id} onClick={() => setSelectedStyle(item.id)}>
-                    <ItemIconBox width={80} height={80} isSelected={item.id === selectedStyle}>
+                    <ItemIconBox
+                      cssExt={css`
+                        border: ${item.id === 'none' &&
+                        item.id === selectedStyle &&
+                        'solid 1px var(--ai-purple-80-sub)'};
+
+                        max-width: 81px;
+                        height: 80px;
+                      `}
+                      isSelected={item.id === selectedStyle}>
                       <img
                         style={{
                           width: item.id === 'none' ? '24px' : '100%',
@@ -465,8 +500,8 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
                   </ContainerItem>
                 );
               })}
-            </RowContainer>
-          </>
+            </GridContainer>
+          </SelectOptionArea>
           <SelectOptionArea>
             <SubTitleArea>
               <SubTitle subTitle={t('Txt2ImgTab.ChooseRatio')} />
@@ -660,7 +695,10 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
               {t(`WriteTab.InsertDoc`)}
             </GenButton>
           </RowContainer>
-          <RightBox>
+          <RightBox
+            cssExt={css`
+              margin-top: 11px;
+            `}>
             <LinkText url={t(`MoveToLimitInfo`)}>
               <div style={{ color: '#8769ba', fontSize: '11px' }}>
                 Powered By <b>Stable Diffusion</b>

@@ -53,12 +53,11 @@ const Wrapper = styled.div`
   /* background-color: transparent; */
   background-color: var(--ai-purple-99-bg-light);
   box-shadow: 0 -2px 8px 0 rgba(111, 58, 208, 0.3);
-  backdrop-filter: blur(10px);
   border-radius: 10px 10px 0px 0px;
   padding: 14px 16px 14px 16px;
 
-  ${justiCenter}
-  backdrop-filter: blur(10px);
+  ${justiCenter}/* -webkit-backdrop-filter: blur(50px);
+  backdrop-filter: blur(50px); */
 `;
 
 export const RowWrapBox = styled.div<{ cssExt?: any }>`
@@ -224,6 +223,7 @@ const CommentFlip = ({
         cssExt={css`
           ${justiCenter}
           width: fit-content;
+          line-height: 100%;
         `}>
         <Icon
           cssExt={css`

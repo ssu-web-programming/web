@@ -13,6 +13,7 @@ const TextButton = styled.button<{ disabled: boolean }>`
   width: fit-content;
   height: fit-content;
   color: var(--gray-gray-80-02);
+  line-height: 100%;
 
   ${({ disabled }: { disabled: boolean }) =>
     disabled &&

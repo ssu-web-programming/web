@@ -7,16 +7,16 @@ import icon_close_green from '../img/ico_ai_close_green.svg';
 import icon_close_red from '../img/ico_ai_close_red.svg';
 import icon_warnning from '../img/ico_toast_warning.svg';
 import icon_pass from '../img/ico_toast_completion.svg';
-import { alignItemCenter, flex, flexGrow } from '../style/cssCommon';
+import { alignItemCenter, flex, flexGrow, flexShrink } from '../style/cssCommon';
 
 const Fade = keyframes`
   0% {
       opacity: 0;
   }
-  20%{
+  00%{
     opacity: 1;
   }
-  80%{
+  99%{
     opacity: 1;
   }
   100% {
@@ -24,7 +24,7 @@ const Fade = keyframes`
   }
 `;
 
-const TIME = 5000;
+const TIME = 50000;
 
 const ToastMsgWrapper = styled.div<{ isError: boolean }>`
   ${alignItemCenter}
@@ -34,15 +34,20 @@ const ToastMsgWrapper = styled.div<{ isError: boolean }>`
   top: 92px;
 
   word-wrap: break-word;
-  width: 80%;
-  /* flex-grow: 1; */
+  white-space: pre-wrap;
+  width: 360px;
+  ${flex}
+  ${flexShrink}
   ${flexGrow}
+  box-sizing: border-box;
+  height: fit-content;
 
   border-radius: 10px;
-  padding: 4px 4px 11px 12px;
+  padding: 10px 4px 10px 12px;
   opacity: 0;
   animation: ${Fade} ${TIME}ms;
   font-size: 13px;
+  font-weight: 500;
   box-shadow: 0 2px 8px 0 var(--black-10);
 
   ${({ isError }) =>
@@ -62,9 +67,10 @@ const ToastMsgWrapper = styled.div<{ isError: boolean }>`
 const ToastText = styled.div`
   ${flex}
 
-  width: 100%;
+  width: 280px;
+  margin-left: 28px;
   height: fit-content;
-  word-break: break-all;
+  line-height: normal;
 `;
 
 const ToastMsg = ({ msg, isError }: { msg: string | React.ReactNode; isError: boolean }) => {
@@ -97,18 +103,23 @@ const ToastMsg = ({ msg, isError }: { msg: string | React.ReactNode; isError: bo
         <ToastMsgWrapper isError={isError}>
           <Icon
             cssExt={css`
+              position: absolute;
+              top: 12px;
+              left: 12px;
               width: 16px;
               height: 16px;
-              margin-top: 4px;
-              margin-right: 12px;
+              align-self: flex-start;
             `}
             iconSrc={isError ? icon_warnning : icon_pass}
           />
           <ToastText>{msg}</ToastText>
           <Icon
             cssExt={css`
-              width: 24px;
-              height: 24px;
+              position: absolute;
+              top: 4px;
+              right: 4px;
+              width: 32px;
+              height: 32px;
             `}
             iconSrc={isError ? icon_close_red : icon_close_green}
             onClick={() => setIsVisible(false)}
