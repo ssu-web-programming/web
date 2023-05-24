@@ -365,7 +365,7 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
         const body = await res.json();
 
         if (res.status !== 200) {
-          if (body?.error?.message === 'invalid_prompts') throw new Error(INVALID_PROMPT);
+          if (body?.error?.code === 'invalid_prompt') throw new Error(INVALID_PROMPT);
           else throw res;
         }
 
