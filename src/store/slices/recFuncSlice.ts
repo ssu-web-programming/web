@@ -1,12 +1,21 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store';
-import { recType } from '../../img/aiChat/FuncRecBox';
+
+export interface recBaseType {
+  id: string;
+  title: string;
+  icon?: string;
+}
+
+export interface recType extends recBaseType {
+  hasSubRec: boolean;
+}
 
 interface recFuncType {
   isOpen: boolean;
   isActive: boolean;
   selectedRecFunction: recType | null;
-  selectedSubRecFunction: recType | null;
+  selectedSubRecFunction: recBaseType | null;
 }
 
 const recFuncSlice = createSlice({
@@ -31,7 +40,7 @@ const recFuncSlice = createSlice({
     selectRecFunc: (state, action: PayloadAction<recType | null>) => {
       state.selectedRecFunction = action.payload;
     },
-    selectSubRecFunc: (state, action: PayloadAction<recType | null>) => {
+    selectSubRecFunc: (state, action: PayloadAction<recBaseType | null>) => {
       state.selectedSubRecFunction = action.payload;
     },
     activeRecFunc: (state) => {

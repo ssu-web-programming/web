@@ -9,7 +9,9 @@ import {
   initRecFunc,
   selectRecFunc,
   selectRecFuncSlice,
-  selectSubRecFunc
+  selectSubRecFunc,
+  recType,
+  recBaseType
 } from '../../store/slices/recFuncSlice';
 import icon_arrow_down from '../../img/ico_arrow_down_small.svg';
 import icon_arrow_up from '../../img/ico_arrow_up_small.svg';
@@ -82,21 +84,22 @@ const CommentWrapper = styled.div`
   box-sizing: border-box;
 `;
 
-export interface recType {
-  id: string;
-  title: string;
-  icon?: string;
-}
-
 export const firstRecList = [
   {
     id: 'paragraph',
     title: 'Sentence',
     icon: icon_sentence,
-    selectedIcon: icon_sentence_purple
+    selectedIcon: icon_sentence_purple,
+    hasSubRec: false
   },
-  { id: 'list', title: 'List', icon: icon_list, selectedIcon: icon_list_purple },
-  { id: 'table', title: 'Table', icon: icon_table, selectedIcon: icon_table_purple }
+  { id: 'list', title: 'List', icon: icon_list, selectedIcon: icon_list_purple, hasSubRec: false },
+  {
+    id: 'table',
+    title: 'Table',
+    icon: icon_table,
+    selectedIcon: icon_table_purple,
+    hasSubRec: false
+  }
 ];
 
 export const REC_ID_LIST = {
@@ -112,31 +115,36 @@ const recList = [
     id: REC_ID_LIST.RESUME_WRITING,
     title: 'AddContent',
     icon: icon_resume,
-    selectedIcon: icon_resume_purple
+    selectedIcon: icon_resume_purple,
+    hasSubRec: false
   },
   {
     id: REC_ID_LIST.SUMMARY,
     title: 'Summary',
     icon: icon_summary,
-    selectedIcon: icon_summary_purple
+    selectedIcon: icon_summary_purple,
+    hasSubRec: false
   },
   {
     id: REC_ID_LIST.TRANSLATE,
     title: 'Translate',
     icon: icon_translation,
-    selectedIcon: icon_translation_purple
+    selectedIcon: icon_translation_purple,
+    hasSubRec: true
   },
   {
     id: REC_ID_LIST.CHANGE_TEXT_STYLE,
     title: 'ChangeStyle',
     icon: icon_style,
-    selectedIcon: icon_style_purple
+    selectedIcon: icon_style_purple,
+    hasSubRec: true
   },
   {
     id: REC_ID_LIST.MODIFY_TEXT,
     title: 'Grammar',
     icon: icon_spelingcheck,
-    selectedIcon: icon_spelingcheck_purple
+    selectedIcon: icon_spelingcheck_purple,
+    hasSubRec: false
   }
 ];
 
@@ -254,7 +262,7 @@ const FucRecBox = ({ isFormRec }: { isFormRec: boolean }) => {
     dispatch(selectRecFunc(func));
   };
 
-  const setSelectedSubFunc = (func: recType | null) => {
+  const setSelectedSubFunc = (func: recBaseType | null) => {
     dispatch(selectSubRecFunc(func));
   };
 
@@ -309,13 +317,10 @@ const FucRecBox = ({ isFormRec }: { isFormRec: boolean }) => {
                         if (selectedRecFunction?.id !== rec.id) setSelectedFunc(rec);
                         else if (selectedRecFunction?.id === rec.id) setSelectedFunc(null);
 
-                        if (
-                          selectedRecFunction?.id !== rec.id &&
-                          recSubList.filter((sub) => sub.id === rec.id).length > 0
-                        ) {
+                        setSelectedSubFunc(null);
+
+                        if (selectedRecFunction?.id !== rec.id && rec.hasSubRec) {
                           setIsSubPage(true);
-                        } else {
-                          dispatch(selectSubRecFunc(null));
                         }
                       }}
                       cssExt={css`

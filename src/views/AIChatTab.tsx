@@ -300,7 +300,9 @@ const AIChatTab = () => {
     }
   };
 
-  const validInput = () => {
+  const validCheckSubmit = () => {
+    if (selectedRecFunction?.hasSubRec && !selectedSubRecFunction) return false;
+
     if (chatHistory.length === 1 && chatInput.length === 0) return false;
     else if (chatInput.length === 0 && !selectedRecFunction) return false;
     else return true;
@@ -648,7 +650,7 @@ const AIChatTab = () => {
               value={chatInput}
               onKeyDown={(e: React.KeyboardEvent<HTMLElement>) => {
                 if (e.key === 'Enter' && e.ctrlKey) {
-                  if (validInput()) {
+                  if (validCheckSubmit()) {
                     setIsActiveInput(false);
 
                     submitChat();
@@ -669,12 +671,9 @@ const AIChatTab = () => {
             />
             {!loadingInfo && isActiveInput && (
               <SubmitButton
-                disabled={
-                  (chatHistory.length === 1 && chatInput.length === 0) ||
-                  (chatHistory.length > 1 && chatInput.length === 0 && selectedRecFunction === null)
-                }
+                disabled={!validCheckSubmit()}
                 onClick={() => {
-                  if (validInput()) {
+                  if (validCheckSubmit()) {
                     setIsActiveInput(false);
 
                     submitChat();
