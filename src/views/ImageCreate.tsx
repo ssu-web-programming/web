@@ -510,7 +510,15 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
               {selectImageRatioItemList.map((item) => {
                 return (
                   <ContainerItem key={item.id} onClick={() => setSelectedRatio(item.id)}>
-                    <ItemIconBox width={81} height={48} isSelected={item.id === selectedRatio}>
+                    <ItemIconBox
+                      cssExt={css`
+                        border: ${item.id === selectedRatio && 'solid 1px var(--ai-purple-80-sub)'};
+                        width: 81px;
+                        height: 48px;
+                      `}
+                      width={81}
+                      height={48}
+                      isSelected={item.id === selectedRatio}>
                       <img
                         src={item.id === selectedRatio ? item.selectedImgItem : item.imgItem}
                         alt=""></img>
