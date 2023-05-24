@@ -1,21 +1,23 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 
+type CREATING_TYPE = 'none' | 'Chating' | 'Write' | 'CreateImage';
+
 interface TabType {
-  isLoading: boolean;
+  creating: CREATING_TYPE;
   selectedTabId: string | null;
 }
 
 const tabSlice = createSlice({
   name: 'tab',
-  initialState: { isLoading: false, selectedTabId: null } as TabType,
+  initialState: { creating: 'none', selectedTabId: null } as TabType,
   reducers: {
     initTab: (state) => {
-      state.isLoading = false;
+      state.creating = 'none';
       state.selectedTabId = null;
     },
-    setLoadingTab: (state, action: PayloadAction<boolean>) => {
-      state.isLoading = action.payload;
+    setCreating: (state, action: PayloadAction<CREATING_TYPE>) => {
+      state.creating = action.payload;
     },
     selectTab: (state, action: PayloadAction<string>) => {
       state.selectedTabId = action.payload;
@@ -23,6 +25,6 @@ const tabSlice = createSlice({
   }
 });
 
-export const { initTab, setLoadingTab, selectTab } = tabSlice.actions;
+export const { initTab, setCreating, selectTab } = tabSlice.actions;
 export const selectTabSlice = (state: RootState) => state.tab;
 export default tabSlice.reducer;

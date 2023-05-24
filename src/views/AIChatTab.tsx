@@ -40,7 +40,7 @@ import {
   alignItemEnd,
   flex
 } from '../style/cssCommon';
-import { setLoadingTab } from '../store/slices/tabSlice';
+import { setCreating } from '../store/slices/tabSlice';
 import { CHAT_STREAM_API, JSON_CONTENT_TYPE } from '../api/constant';
 import { calLeftCredit, insertDoc } from '../util/common';
 import icon_sand from '../img/ico_send.svg';
@@ -318,7 +318,7 @@ const AIChatTab = () => {
 
   const submitChat = async (chat?: Chat) => {
     try {
-      dispatch(setLoadingTab(true));
+      dispatch(setCreating('Chating'));
       setChatInput('');
 
       let input = chat
@@ -425,7 +425,7 @@ const AIChatTab = () => {
       setLoadingInfo(null);
       stopRef.current = false;
       dispatch(initRecFunc());
-      dispatch(setLoadingTab(false));
+      dispatch(setCreating('none'));
       toggleActiveInput(false);
 
       if (chat) setRetryOrigin(null);

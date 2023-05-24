@@ -55,6 +55,7 @@ import { useTranslation } from 'react-i18next';
 import { calLeftCredit } from '../util/common';
 import useErrorHandle from '../components/hooks/useErrorHandle';
 import { INVALID_PROMPT } from '../error/error';
+import { setCreating } from '../store/slices/tabSlice';
 
 const exampleList = [
   'Flight',
@@ -329,7 +330,7 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
   const [descInput, setDescInput] = useState<string>(contents ? contents : '');
   const [selectedStyle, setSelectedStyle] = useState<string>('none');
   const [selectedRatio, setSelectedRatio] = useState<string>('512x512');
-  const [creating, setCreating] = useState(false);
+  const [creating, setCreatingImage] = useState(false);
   const dispatch = useAppDispatch();
   const { currentListId, currentItemIdx, history } = useAppSelector(selectT2IHIstory);
   const errorHandle = useErrorHandle();
@@ -341,7 +342,8 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
       try {
         const assistantId = uuidv4();
 
-        setCreating(true);
+        setCreatingImage(true);
+        dispatch(setCreating('CreateImage'));
 
         const apiBody: any = {
           prompt: remake ? remake?.input : descInput,
@@ -393,12 +395,14 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
           dispatch(updateT2ICurListId(assistantId));
           dispatch(updateT2ICurItemIndex(0));
 
-          setCreating(false);
+          setCreatingImage(false);
+          dispatch(setCreating('none'));
         }
       } catch (error: any) {
         dispatch(updateT2ICurListId(null));
         dispatch(updateT2ICurItemIndex(null));
-        setCreating(false);
+        setCreatingImage(false);
+        dispatch(setCreating('none'));
         errorHandle(error);
       }
     },
