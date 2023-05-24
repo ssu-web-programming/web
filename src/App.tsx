@@ -15,6 +15,7 @@ import { activeToast } from './store/slices/toastSlice';
 import OfflineView from './components/OfflineView';
 import gI18n, { convertLangFromLangCode } from './locale';
 import { selectTabSlice } from './store/slices/tabSlice';
+import { updateT2ICurItemIndex, updateT2ICurListId } from './store/slices/txt2imgHistory';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -35,7 +36,14 @@ function App() {
             case 'openAiTools':
             case 'openTextToImg': {
               if (creating === 'none') {
-                const path = cmd === `openAiTools` ? `/aiWrite` : `/txt2img`;
+                let path = ``;
+                if (cmd === `openAiTools`) {
+                  path = `/aiWrite`;
+                } else {
+                  path = `/txt2img`;
+                  dispatch(updateT2ICurListId(null));
+                  dispatch(updateT2ICurItemIndex(null));
+                }
                 const time = new Date().getTime();
                 movePage(body);
                 navigate(path, {
