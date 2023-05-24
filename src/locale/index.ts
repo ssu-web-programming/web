@@ -26,14 +26,10 @@ export const getLangCodeFromUA = () => {
 export const convertLangFromLangCode = (code: string | undefined) => {
   try {
     const lower = code?.toLowerCase();
-    switch (lower) {
-      case 'ko-kore-kr':
-      case 'ko-kr':
-      case 'ko_kr':
-      case 'ko':
-        return LANG_KO_KR;
-      default:
-        return LANG_EN_US;
+    if (lower?.startsWith('ko')) {
+      return LANG_KO_KR;
+    } else {
+      return LANG_EN_US;
     }
   } catch (err) {}
 };
