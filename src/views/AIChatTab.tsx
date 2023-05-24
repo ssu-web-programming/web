@@ -50,6 +50,7 @@ import icon_credit from '../img/ico_credit.svg';
 import { useTranslation } from 'react-i18next';
 import useErrorHandle from '../components/hooks/useErrorHandle';
 import { firstRecList } from '../img/aiChat/FuncRecBox';
+import { updateDefaultInput } from '../store/slices/chatHistorySlice';
 
 const INPUT_HEIGHT = 120;
 const TEXT_MAX_HEIGHT = 268;
@@ -260,7 +261,7 @@ const AIChatTab = () => {
       toggleActiveInput(true);
       dispatch(resetDefaultInput());
     }
-  }, [defaultInput]);
+  }, []);
 
   useEffect(() => {
     chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -318,6 +319,7 @@ const AIChatTab = () => {
   const submitChat = async (chat?: Chat) => {
     try {
       dispatch(setLoadingTab(true));
+      setChatInput('');
 
       let input = chat
         ? chat.input
@@ -647,7 +649,6 @@ const AIChatTab = () => {
               onKeyDown={(e: React.KeyboardEvent<HTMLElement>) => {
                 if (e.key === 'Enter' && e.ctrlKey) {
                   if (validInput()) {
-                    setChatInput('');
                     setIsActiveInput(false);
 
                     submitChat();
@@ -662,6 +663,9 @@ const AIChatTab = () => {
 
                 if (isDefaultInput && e.target.value.length === 0) setIsDefaultInput(false);
               }}
+              onBlur={() => {
+                if (chatInput.length > 0) dispatch(updateDefaultInput(chatInput));
+              }}
             />
             {!loadingInfo && isActiveInput && (
               <SubmitButton
@@ -671,7 +675,6 @@ const AIChatTab = () => {
                 }
                 onClick={() => {
                   if (validInput()) {
-                    setChatInput('');
                     setIsActiveInput(false);
 
                     submitChat();
