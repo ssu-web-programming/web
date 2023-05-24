@@ -1,4 +1,4 @@
-import { ERR_INVALID_SESSION, ERR_NOT_ONLINE } from '../../error/error';
+import { ERR_INVALID_SESSION, ERR_NOT_ONLINE, INVALID_PROMPT } from '../../error/error';
 import { setOnlineStatus } from '../../store/slices/network';
 import { activeToast } from '../../store/slices/toastSlice';
 import { useAppDispatch } from '../../store/store';
@@ -21,12 +21,12 @@ const useErrorHandle = () => {
         msg = 'Invalid Session';
         break;
       }
+      case INVALID_PROMPT: {
+        msg = t(`Txt2ImgTab.ToastMsg.ForbiddenWord`);
+        break;
+      }
       default: {
         switch (error.status) {
-          case 400:
-            // return '400 Bad Request';
-            msg = t(`Txt2ImgTab.ToastMsg.ForbiddenWord`);
-            break;
           case 401:
             msg = '401 Unauthorized';
             break;

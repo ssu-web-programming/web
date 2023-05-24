@@ -54,6 +54,7 @@ import useApiWrapper from '../api/useApiWrapper';
 import { useTranslation } from 'react-i18next';
 import { calLeftCredit } from '../util/common';
 import useErrorHandle from '../components/hooks/useErrorHandle';
+import { INVALID_PROMPT } from '../error/error';
 
 const exampleList = [
   'Flight',
@@ -361,7 +362,8 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
         const body = await res.json();
 
         if (res.status !== 200) {
-          throw res;
+          if (body?.error?.message === 'invalid_prompts') throw new Error(INVALID_PROMPT);
+          else throw res;
         }
 
         const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
