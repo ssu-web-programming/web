@@ -3,6 +3,7 @@
   "InsertFail": "문서 내 삽입 위치를 선택해주세요!",
   "Write": "작성",
   "Chating": "채팅",
+  "CreateImage": "이미지 생성하기",
   "ShowExam": "예시문구 보기",
   "FormList": {
     "Sentence": "문장",

@@ -64,7 +64,7 @@ export default function TabPage({
   tabList: TabItemType[];
 }) {
   const dispatch = useAppDispatch();
-  const { isLoading, selectedTabId } = useAppSelector(selectTabSlice);
+  const { creating, selectedTabId } = useAppSelector(selectTabSlice);
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -84,7 +84,7 @@ export default function TabPage({
               key={item.id}
               selected={item.id === selectedTabId}
               onClick={() => {
-                if (!isLoading) dispatch(selectTab(item.id));
+                if (creating === 'none') dispatch(selectTab(item.id));
                 else {
                   dispatch(
                     activeToast({

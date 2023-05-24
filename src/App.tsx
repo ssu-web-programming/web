@@ -14,11 +14,13 @@ import { useTranslation } from 'react-i18next';
 import { activeToast } from './store/slices/toastSlice';
 import OfflineView from './components/OfflineView';
 import gI18n, { convertLangFromLangCode } from './locale';
+import { selectTabSlice } from './store/slices/tabSlice';
 
 function App() {
   const dispatch = useAppDispatch();
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   const toast = useAppSelector(selectToast);
+  const { creating } = useAppSelector(selectTabSlice);
   const navigate = useNavigate();
   const movePage = useMoveChatTab();
 
@@ -30,12 +32,22 @@ function App() {
         switch (cmd) {
           case 'openAiTools':
           case 'openTextToImg': {
-            const path = cmd === `openAiTools` ? `/aiWrite` : `/txt2img`;
-            const time = new Date().getTime();
-            movePage(body);
-            navigate(path, {
-              state: { body, time }
-            });
+            if (creating === 'none') {
+              const path = cmd === `openAiTools` ? `/aiWrite` : `/txt2img`;
+              const time = new Date().getTime();
+              movePage(body);
+              navigate(path, {
+                state: { body, time }
+              });
+            } else {
+              dispatch(
+                activeToast({
+                  active: true,
+                  msg: t(`ToastMsg.TabLoadedAndWait`, { tab: t(creating) }),
+                  isError: true
+                })
+              );
+            }
             break;
           }
           case 'showToast': {

@@ -43,7 +43,7 @@ import {
 } from '../style/cssCommon';
 import RecreatingButton from '../components/RecreatingButton';
 import { useMoveChatTab } from '../components/hooks/useMovePage';
-import { setLoadingTab } from '../store/slices/tabSlice';
+import { setCreating } from '../store/slices/tabSlice';
 import Loading from '../components/Loading';
 import { JSON_CONTENT_TYPE, CHAT_STREAM_API } from '../api/constant';
 import { calLeftCredit, insertDoc } from '../util/common';
@@ -161,7 +161,7 @@ const AIWriteTab = () => {
   const [selectedLength, setSelectedLength] = useState<LengthListType>(lengthList[0]);
   const { t } = useTranslation();
 
-  const { isLoading } = useAppSelector(selectTabSlice);
+  const { creating } = useAppSelector(selectTabSlice);
   const errorHandle = useErrorHandle();
 
   const stopRef = useRef<boolean>(false);
@@ -200,7 +200,7 @@ const AIWriteTab = () => {
       );
       dispatch(setCurrentWrite(assistantId));
 
-      dispatch(setLoadingTab(true));
+      dispatch(setCreating('Write'));
 
       const res = await apiWrapper(CHAT_STREAM_API, {
         headers: {
@@ -273,13 +273,13 @@ const AIWriteTab = () => {
         endRef?.current?.scrollIntoView({ behavior: 'smooth' });
       }
 
-      if (!stopRef.current) dispatch(setLoadingTab(false));
+      if (!stopRef.current) dispatch(setCreating('none'));
     } catch (error: any) {
       dispatch(resetCurrentWrite());
       errorHandle(error);
     } finally {
       stopRef.current = false;
-      dispatch(setLoadingTab(false));
+      dispatch(setCreating('none'));
     }
   };
 
@@ -395,7 +395,7 @@ const AIWriteTab = () => {
         <ResWrapper>
           <RowBox>
             <SubTitle subTitle={t(`WriteTab.PreviewWriting`)} />
-            {!isLoading && (
+            {creating === 'none' && (
               <RecreatingButton
                 onClick={() => {
                   // dispatch(initWriteHistory()); // 같은 주제끼리만 저장할지 의논 필요
@@ -406,7 +406,7 @@ const AIWriteTab = () => {
             )}
           </RowBox>
           <ResultBox>
-            {currentWrite.result.length === 0 && isLoading ? (
+            {currentWrite.result.length === 0 && creating === 'Write' ? (
               <LoadingWrapper>
                 <Loading>{t(`WriteTab.LoadingMsg`)}</Loading>
               </LoadingWrapper>
@@ -416,7 +416,7 @@ const AIWriteTab = () => {
               </ResultWrapper>
             )}
             <div>
-              {currentWrite.result.length > 0 && isLoading && (
+              {currentWrite.result.length > 0 && creating === 'Write' && (
                 <StopButton
                   cssExt={css`
                     margin: 0 auto;
@@ -428,7 +428,7 @@ const AIWriteTab = () => {
                   }}
                 />
               )}
-              {(!isLoading || currentWrite.result.length > 0) && <ColumDivider />}
+              {(creating === 'none' || currentWrite.result.length > 0) && <ColumDivider />}
               <RowBox
                 cssExt={css`
                   ${alignItemCenter}
@@ -445,7 +445,7 @@ const AIWriteTab = () => {
                   )}
                 </LengthWrapper>
 
-                {!isLoading && (
+                {creating === 'none' && (
                   <RightBox>
                     <Icon
                       cssExt={css`
@@ -500,7 +500,7 @@ const AIWriteTab = () => {
               </RowBox>
             </div>
           </ResultBox>
-          {!isLoading && (
+          {creating === 'none' && (
             <>
               <RowBox
                 cssExt={css`
