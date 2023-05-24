@@ -296,7 +296,7 @@ const AIChatTab = () => {
   }, []);
 
   useEffect(() => {
-    if (isDefaultInput && chatInput.length > 0) handleResizeHeight();
+    handleResizeHeight();
   }, [chatInput]);
 
   const handleResizeHeight = () => {
@@ -671,7 +671,6 @@ const AIChatTab = () => {
               }}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 setChatInput(e.target.value.slice(0, INPUT_MAX_LENGTH));
-                handleResizeHeight();
 
                 if (isDefaultInput && e.target.value.length === 0) setIsDefaultInput(false);
               }}
