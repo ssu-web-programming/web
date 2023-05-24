@@ -78,7 +78,7 @@
     }
   },
   "Txt2ImgTab": {
-    "CreateImage": "이미지 생성",
+    "CreateImage": "이미지 생성하기",
     "WritingImageDesc": "이미지 설명 작성하기",
     "WriteImageDesc": "생성할 이미지의 설명을 입력해주세요.",
     "ChooseStyle": "스타일 선택하기",
@@ -142,7 +142,7 @@
     "CompleteInsert": "내용 삽입이 완료 되었습니다.",
     "ErrorMsg": "오류가 발생했습니다. 잠시 후 다시 시도해 주세요. ({{code}} : {{msg}})"
   },
-  "Download": "다운로드",
+  "Download": "다운로드 하기",
   "AITools": "AI 도구",
   "AIWrite": "AI 작성",
   "Test": "테스트",
