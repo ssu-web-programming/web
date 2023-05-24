@@ -36,7 +36,7 @@
     "UseVariableForm": "Create your response in various formats.",
     "InputPlaceholder": "Please ask anything.",
     "TipList": {
-      "1ChatingCredit": "N credit(s) will be deducted per conversation.",
+      "1ChatingCredit": "credit(s) will be deducted per conversation.",
       "EnterInfo": "Use Enter to break the line.",
       "CtrlEnterInfo": "Enter Ctrl+Enter to open a conversation.",
       "DoSepecificQuestion": "Make your question in more detail to get a better response.",
