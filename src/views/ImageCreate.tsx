@@ -428,6 +428,7 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
               <SubTitle subTitle={t(`Txt2ImgTab.WritingImageDesc`)} />
             </SubTitleArea>
             <ExTextbox
+              placeholder={t(`Txt2ImgTab.WriteImageDesc`) || ''}
               exampleList={exampleList}
               maxtTextLen={1000}
               value={descInput}
