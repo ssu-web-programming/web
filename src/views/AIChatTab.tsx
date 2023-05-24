@@ -261,7 +261,7 @@ const AIChatTab = () => {
       toggleActiveInput(true);
       dispatch(resetDefaultInput());
     }
-  }, []);
+  }, [defaultInput]);
 
   useEffect(() => {
     chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -665,9 +665,9 @@ const AIChatTab = () => {
 
                 if (isDefaultInput && e.target.value.length === 0) setIsDefaultInput(false);
               }}
-              onBlur={() => {
-                if (chatInput.length > 0) dispatch(updateDefaultInput(chatInput));
-              }}
+              // onBlur={() => {
+              //   if (chatInput.length > 0) dispatch(updateDefaultInput(chatInput));
+              // }}
             />
             {!loadingInfo && isActiveInput && (
               <SubmitButton
