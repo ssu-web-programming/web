@@ -38,7 +38,8 @@ import {
   justiSpaceBetween,
   justiCenter,
   flexGrow,
-  flexShrink
+  flexShrink,
+  alignItemEnd
 } from '../style/cssCommon';
 import RecreatingButton from '../components/RecreatingButton';
 import { useMoveChatTab } from '../components/hooks/useMovePage';
@@ -405,7 +406,7 @@ const AIWriteTab = () => {
             )}
           </RowBox>
           <ResultBox>
-            {currentWrite.result.length === 0 ? (
+            {currentWrite.result.length === 0 && isLoading ? (
               <LoadingWrapper>
                 <Loading>{t(`WriteTab.LoadingMsg`)}</Loading>
               </LoadingWrapper>
@@ -414,70 +415,71 @@ const AIWriteTab = () => {
                 <PreMarkdown text={currentWrite.result} endRef={endRef} />
               </ResultWrapper>
             )}
-            {currentWrite.result.length > 0 && (
-              <div>
-                {isLoading && (
-                  <StopButton
-                    cssExt={css`
-                      margin: 0 auto;
-                      margin-bottom: 16px;
-                      margin-top: 16px;
-                    `}
-                    onClick={() => {
-                      stopRef.current = true;
-                    }}
-                  />
-                )}
-
-                <ColumDivider />
-                <RowBox
+            <div>
+              {currentWrite.result.length > 0 && isLoading && (
+                <StopButton
                   cssExt={css`
-                    ${alignItemCenter}
-                    color: var(--gray-gray-70);
-                    font-size: 13px;
-                    height: 35px;
+                    margin: 0 auto;
+                    margin-bottom: 16px;
+                    margin-top: 16px;
+                  `}
+                  onClick={() => {
+                    stopRef.current = true;
+                  }}
+                />
+              )}
+              {(!isLoading || currentWrite.result.length > 0) && <ColumDivider />}
+              <RowBox
+                cssExt={css`
+                  ${alignItemCenter}
+                  color: var(--gray-gray-70);
+                  font-size: 13px;
+                  height: 35px;
 
-                    padding: 8px 12px;
-                    box-sizing: border-box;
-                  `}>
-                  <LengthWrapper>
-                    {t(`WriteTab.LengthInfo`, { length: currentWrite?.result.length })}
-                  </LengthWrapper>
-                  {!isLoading && (
-                    <RightBox>
-                      <Icon
-                        cssExt={css`
-                          width: 16px;
-                          height: 16px;
-                          margin-right: 11px;
-                          opacity: ${currentIndex === 0 && '0.3'};
-                        `}
-                        iconSrc={icon_prev}
-                        onClick={() => {
-                          if (currentIndex > 0) {
-                            dispatch(setCurrentWrite(history[currentIndex - 1]?.id));
-                          }
-                        }}
-                      />
-                      <div>
-                        {history.findIndex((write) => write.id === currentWriteId) + 1}/
-                        {history.length}
-                      </div>
-                      <Icon
-                        cssExt={css`
-                          width: 16px;
-                          height: 16px;
-                          margin-left: 11px;
-                          opacity: ${currentIndex === history.length - 1 && '0.3'};
-                        `}
-                        iconSrc={icon_next}
-                        onClick={() => {
-                          if (currentIndex < history.length - 1) {
-                            dispatch(setCurrentWrite(history[currentIndex + 1]?.id));
-                          }
-                        }}
-                      />
-                      {/* <CopyIcon
+                  padding: 8px 12px;
+                  box-sizing: border-box;
+                `}>
+                <LengthWrapper>
+                  {currentWrite.result.length > 0 && (
+                    <>{t(`WriteTab.LengthInfo`, { length: currentWrite?.result.length })}</>
+                  )}
+                </LengthWrapper>
+
+                {!isLoading && (
+                  <RightBox>
+                    <Icon
+                      cssExt={css`
+                        width: 16px;
+                        height: 16px;
+                        margin-right: 11px;
+                        opacity: ${currentIndex === 0 && '0.3'};
+                      `}
+                      iconSrc={icon_prev}
+                      onClick={() => {
+                        if (currentIndex > 0) {
+                          dispatch(setCurrentWrite(history[currentIndex - 1]?.id));
+                        }
+                      }}
+                    />
+                    <div>
+                      {history.findIndex((write) => write.id === currentWriteId) + 1}/
+                      {history.length}
+                    </div>
+                    <Icon
+                      cssExt={css`
+                        width: 16px;
+                        height: 16px;
+                        margin-left: 11px;
+                        opacity: ${currentIndex === history.length - 1 && '0.3'};
+                      `}
+                      iconSrc={icon_next}
+                      onClick={() => {
+                        if (currentIndex < history.length - 1) {
+                          dispatch(setCurrentWrite(history[currentIndex + 1]?.id));
+                        }
+                      }}
+                    />
+                    {/* <CopyIcon
                           cssExt={css`
                             margin-left: 12px;
                           `}
@@ -493,13 +495,12 @@ const AIWriteTab = () => {
                             );
                           }}
                         /> */}
-                    </RightBox>
-                  )}
-                </RowBox>
-              </div>
-            )}
+                  </RightBox>
+                )}
+              </RowBox>
+            </div>
           </ResultBox>
-          {currentWrite?.result.length > 0 && !isLoading && (
+          {!isLoading && (
             <>
               <RowBox
                 cssExt={css`
