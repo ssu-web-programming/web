@@ -4,7 +4,7 @@ import Wrapper from './components/Wrapper';
 import ToastMsg from './components/ToastMsg';
 import { useAppDispatch, useAppSelector } from './store/store';
 import { selectToast } from './store/slices/toastSlice';
-import { useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { setBridgeMessage } from './store/slices/bridge';
 import TextToImage from './pages/TextToImage';
 import GlobalStyle from './style/globalStyle';
@@ -24,66 +24,74 @@ function App() {
   const navigate = useNavigate();
   const movePage = useMoveChatTab();
 
-  const procMsg = async (msg: any) => {
-    try {
-      const { cmd, body } = msg;
-      if (cmd && cmd !== '') {
-        dispatch(setBridgeMessage({ cmd, body: JSON.stringify(body) }));
-        switch (cmd) {
-          case 'openAiTools':
-          case 'openTextToImg': {
-            if (creating === 'none') {
-              const path = cmd === `openAiTools` ? `/aiWrite` : `/txt2img`;
-              const time = new Date().getTime();
-              movePage(body);
-              navigate(path, {
-                state: { body, time }
-              });
-            } else {
+  const procMsg = useRef<(msg: any) => void>();
+  procMsg.current = useCallback(
+    async (msg: any) => {
+      try {
+        const { cmd, body } = msg;
+        if (cmd && cmd !== '') {
+          dispatch(setBridgeMessage({ cmd, body: JSON.stringify(body) }));
+          switch (cmd) {
+            case 'openAiTools':
+            case 'openTextToImg': {
+              if (creating === 'none') {
+                const path = cmd === `openAiTools` ? `/aiWrite` : `/txt2img`;
+                const time = new Date().getTime();
+                movePage(body);
+                navigate(path, {
+                  state: { body, time }
+                });
+              } else {
+                dispatch(
+                  activeToast({
+                    active: true,
+                    msg: t(`ToastMsg.TabLoadedAndWait`, { tab: t(creating) }),
+                    isError: true
+                  })
+                );
+              }
+              break;
+            }
+            case 'showToast': {
+              const msg = i18n.t(body);
               dispatch(
                 activeToast({
                   active: true,
-                  msg: t(`ToastMsg.TabLoadedAndWait`, { tab: t(creating) }),
+                  msg,
                   isError: true
                 })
               );
+              break;
             }
-            break;
-          }
-          case 'showToast': {
-            const msg = i18n.t(body);
-            dispatch(
-              activeToast({
-                active: true,
-                msg,
-                isError: true
-              })
-            );
-            break;
-          }
-          case 'changeLang': {
-            const lang = convertLangFromLangCode(body);
-            gI18n.changeLanguage(lang);
-            break;
-          }
-          default: {
-            break;
+            case 'changeLang': {
+              const lang = convertLangFromLangCode(body);
+              gI18n.changeLanguage(lang);
+              break;
+            }
+            default: {
+              break;
+            }
           }
         }
+      } catch (err) {
+        console.log(err);
       }
-    } catch (err) {
-      console.log(err);
-    }
-  };
+    },
+    [creating]
+  );
 
   useEffect(() => {
     document.addEventListener('CustomBridgeEvent', (e: any) => {
-      procMsg(e.detail);
+      if (procMsg.current) {
+        procMsg.current(e.detail);
+      }
     });
     window.addEventListener(
       'message',
       (e) => {
-        procMsg(e.data);
+        if (procMsg.current) {
+          procMsg.current(e.data);
+        }
       },
       false
     );
