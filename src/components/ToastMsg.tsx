@@ -13,10 +13,10 @@ const Fade = keyframes`
   0% {
       opacity: 0;
   }
-  00%{
+  20%{
     opacity: 1;
   }
-  99%{
+  80%{
     opacity: 1;
   }
   100% {
@@ -24,7 +24,7 @@ const Fade = keyframes`
   }
 `;
 
-const TIME = 50000;
+const TIME = 5000;
 
 const ToastMsgWrapper = styled.div<{ isError: boolean }>`
   ${alignItemCenter}
@@ -34,7 +34,7 @@ const ToastMsgWrapper = styled.div<{ isError: boolean }>`
   top: 92px;
 
   word-wrap: break-word;
-  white-space: pre-wrap;
+  /* white-space: pre-wrap; */
   width: 360px;
   ${flex}
   ${flexShrink}
