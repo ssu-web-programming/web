@@ -255,9 +255,10 @@ const AIChatTab = () => {
     if (defaultInput && defaultInput.length > 0 && !loadingInfo) {
       // setActiveInput(true);
       setChatInput(defaultInput);
-      dispatch(resetDefaultInput());
       textRef?.current?.focus();
+
       toggleActiveInput(true);
+      dispatch(resetDefaultInput());
     }
   }, [defaultInput]);
 
@@ -278,8 +279,17 @@ const AIChatTab = () => {
     }
 
     if (defaultInput) setIsDefaultInput(true);
+
+    return () => {
+      setIsDefaultInput(false);
+    };
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (isDefaultInput && chatInput.length > 0) handleResizeHeight();
+  }, [chatInput]);
 
   const handleResizeHeight = () => {
     if (textRef.current) {
