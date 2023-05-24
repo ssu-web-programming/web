@@ -56,6 +56,7 @@ import { calLeftCredit } from '../util/common';
 import useErrorHandle from '../components/hooks/useErrorHandle';
 import { INVALID_PROMPT } from '../error/error';
 import { setCreating } from '../store/slices/tabSlice';
+import LinkText from '../components/LinkText';
 
 const exampleList = [
   'Flight',
@@ -660,9 +661,11 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
             </GenButton>
           </RowContainer>
           <RightBox>
-            <div style={{ color: '#8769ba', fontSize: '11px' }}>
-              Powered By <b>Stable Diffusion</b>
-            </div>
+            <LinkText url={t(`MoveToLimitInfo`)}>
+              <div style={{ color: '#8769ba', fontSize: '11px' }}>
+                Powered By <b>Stable Diffusion</b>
+              </div>
+            </LinkText>
           </RightBox>
         </>
       )}
