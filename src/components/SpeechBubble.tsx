@@ -92,6 +92,10 @@ const SpeechBubble = ({
                 width: 32px;
                 height: 32px;
               `}
+              imgCssExt={css`
+                width: 32px;
+                height: 32px;
+              `}
             />
           </Profile>
         )}
