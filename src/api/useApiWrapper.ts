@@ -8,7 +8,6 @@ export default function useApiWrapper() {
       }
       const resSession = await window._Bridge.checkSession(api);
       if (!resSession || !resSession.success) {
-        console.log(`apiWrapper[resSession] : ${JSON.stringify(resSession)}`);
         throw new Error(ERR_INVALID_SESSION);
       }
 

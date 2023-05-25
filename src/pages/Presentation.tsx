@@ -48,7 +48,6 @@ const IMAGE_STYLE_OPTION = ['현실적인', '일러스트', '예술적인'];
 
 export default function Presentation() {
   const { t, ready } = useTranslation();
-  console.log(ready);
   const [subject, setSubject] = useState<string>('');
   const [pageCount, setPageCount] = useState<number>();
   const [imageStlye, setImageStyle] = useState<string>();

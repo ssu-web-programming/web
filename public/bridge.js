@@ -130,9 +130,7 @@ const getDelegator = (api, arg) => {
           return window.parent.postMessage(JSON.stringify({ api, arg }), '*');
         }
       }
-    } catch (err) {
-      console.log(`Error in getDelegator : ${err}`);
-    }
+    } catch (err) {}
   };
 };
 
@@ -188,27 +186,21 @@ window._Bridge = {
     try {
       const delegator = getDelegator('initComplete');
       delegator();
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
   },
 
   insertText: (text) => {
     try {
       const delegator = getDelegator('insertText', text);
       delegator();
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
   },
 
   insertHtml: (html) => {
     try {
       const delegator = getDelegator('insertHtml', html);
       delegator();
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
   },
 
   downloadImage: async (img) => {
@@ -216,9 +208,7 @@ window._Bridge = {
       const text = await fileToString(img);
       const delegator = getDelegator('downloadImage', text);
       delegator();
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
   },
 
   insertImage: async (img) => {
@@ -226,18 +216,14 @@ window._Bridge = {
       const text = await fileToString(img);
       const delegator = getDelegator('insertImage', text);
       delegator();
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
   },
 
   openWindow: (target) => {
     try {
       const delegator = getDelegator('openWindow', target);
       delegator();
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
   },
 
   openDoc: async (doc) => {
@@ -245,18 +231,14 @@ window._Bridge = {
       const text = await fileToString(doc);
       const delegator = getDelegator('openDoc', text);
       delegator();
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
   },
 
   closePanel: (history) => {
     try {
       const delegator = getDelegator('closePanel', history);
       delegator();
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
   }
 };
 
@@ -269,9 +251,7 @@ function callbackMessage(msg) {
         item.callback(msg, id);
       }
     }
-  } catch (err) {
-    console.log(err);
-  }
+  } catch (err) {}
 }
 
 function receiveMessage(msg) {
@@ -285,7 +265,5 @@ function receiveMessage(msg) {
 window.addEventListener('message', (msg) => {
   try {
     callbackMessage(msg.data);
-  } catch (err) {
-    console.log(err);
-  }
+  } catch (err) {}
 });
