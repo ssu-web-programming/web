@@ -275,17 +275,6 @@ const AIChatTab = () => {
   }, [chatHistory, isActiveInput, loadingInfo]);
 
   useEffect(() => {
-    if (chatHistory.length === 0) {
-      dispatch(
-        initChatHistory({
-          id: uuidv4(),
-          role: 'assistant',
-          result: t(`ChatingTab.AIGreeting`),
-          input: ''
-        })
-      );
-    }
-
     if (defaultInput) setIsDefaultInput(true);
 
     return () => {
@@ -310,7 +299,7 @@ const AIChatTab = () => {
   const validCheckSubmit = () => {
     if (selectedRecFunction?.hasSubRec && !selectedSubRecFunction) return false;
 
-    if (chatHistory.length === 1 && chatInput.length === 0) return false;
+    if (chatHistory.length === 0 && chatInput.length === 0) return false;
     else if (chatInput.length === 0 && !selectedRecFunction) return false;
     else return true;
   };
@@ -318,7 +307,7 @@ const AIChatTab = () => {
   const getPreProcessing = (chat?: Chat) => {
     if (chat?.preProcessing) {
       return chat.preProcessing;
-    } else if (chatHistory.length === 1) {
+    } else if (chatHistory.length === 0) {
       return { type: 'just_chat', arg1: selectedRecFunction?.id };
     } else if (selectedRecFunction) {
       return { type: selectedRecFunction.id, arg1: selectedSubRecFunction?.id };
@@ -506,7 +495,8 @@ const AIChatTab = () => {
           toggleActiveInput(false);
           // dispatch(closeRecFunc());
         }}>
-        {chatHistory.map((chat, index) => (
+        <SpeechBubble loadingMsg={undefined} text={t(`ChatingTab.AIGreeting`)} isUser={false} />
+        {chatHistory.map((chat) => (
           <SpeechBubble
             loadingMsg={loadingInfo?.id === chat.id ? loadingInfo.msg : undefined}
             key={chat.id}
@@ -514,8 +504,7 @@ const AIChatTab = () => {
             isUser={chat.role === 'user'}
             innerChild={
               // chat.id !== loadingInfo?.id &&
-              chat.role === 'assistant' &&
-              index > 1 && (
+              chat.role === 'assistant' && (
                 <>
                   <ColumDivider />
                   <RowWrapBox
@@ -588,7 +577,7 @@ const AIChatTab = () => {
                 </>
               )
             }>
-            {chat.role !== 'user' && index !== 0 && loadingInfo?.id !== chat.id && (
+            {chat.role !== 'user' && loadingInfo?.id !== chat.id && (
               <RightBox
                 cssExt={css`
                   margin-top: 9px;
@@ -612,7 +601,7 @@ const AIChatTab = () => {
       <div style={{ position: 'relative', display: 'flex' }}>
         <FloatingBox>
           {isActiveInput && !loadingInfo ? (
-            <FuncRecBox isFormRec={!isDefaultInput && chatHistory.length <= 1} />
+            <FuncRecBox isFormRec={!isDefaultInput && chatHistory.length === 0} />
           ) : (
             !loadingInfo &&
             chatInput.length === 0 && (
