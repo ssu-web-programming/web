@@ -31,8 +31,8 @@ const useErrorHandle = () => {
             msg = '401 Unauthorized';
             break;
           case 429:
-            const { leftCredit, deductionCredit } = calLeftCredit(error.header);
-            if (leftCredit === 0) {
+            const { leftCredit, deductionCredit } = calLeftCredit(error.headers);
+            if (!leftCredit) {
               msg = <NoCredit />;
             } else {
               msg = t(`ToastMsg.NoCredit`, { credit: deductionCredit });
