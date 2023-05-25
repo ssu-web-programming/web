@@ -49,7 +49,7 @@ const resources = {
 i18n.use(LanguageDetector).use(initReactI18next).init({
   resources,
   lng: lang,
-  fallbackLng: 'en'
+  fallbackLng: 'ko'
 });
 
 export default i18n;
