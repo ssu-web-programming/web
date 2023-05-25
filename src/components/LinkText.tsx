@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { flex, justiEnd } from '../style/cssCommon';
+import { getLangCodeFromParams } from '../locale';
 
 const LinkTextWrapper = styled.div`
   ${flex}
@@ -16,8 +17,6 @@ interface LinkTextProps {
 
 const LinkText = ({ url, children }: LinkTextProps) => {
   const handleOpenNewTab = (url: string) => {
-    window.open(url, '_blank', 'noopener, noreferrer');
-    console.log(url);
     window._Bridge.openWindow(url);
   };
 
