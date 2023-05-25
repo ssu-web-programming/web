@@ -35,7 +35,7 @@ const useErrorHandle = () => {
             if (!leftCredit) {
               msg = <NoCredit />;
             } else {
-              msg = t(`ToastMsg.NoCredit`, { credit: deductionCredit });
+              msg = <NoCredit>{t(`ToastMsg.NoCredit`, { credit: deductionCredit })}</NoCredit>;
             }
             break;
           case 500:
