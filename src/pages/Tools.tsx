@@ -34,12 +34,12 @@ export default function Tools() {
       comp: <AIChatTab />,
       icon: icon_chat,
       selectedIcon: icon_chat_purple
-    },
-    {
-      id: 'test',
-      name: t(`Test`),
-      comp: <AITest />
     }
+    // {
+    //   id: 'test',
+    //   name: t(`Test`),
+    //   comp: <AITest />
+    // }
   ];
 
   useEffect(() => {
