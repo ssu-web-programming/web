@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>ico_copy</title>
+    <defs>
+        <path d="M11,0 L11,13 L0,13 L0,11 L8,11 L8,0 L11,0 Z" id="path-1"></path>
+    </defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="ico/16/copy">
+            <g id="Group" transform="translate(4.000000, 3.000000)">
+                <mask id="mask-2" fill="white">
+                    <use xlink:href="#path-1"></use>
+                </mask>
+                <g id="Combined-Shape"></g>
+                <path d="M8,0.665 C8.36865007,0.665 8.70240007,0.814424965 8.94398755,1.05601245 C9.18557504,1.29759993 9.335,1.63134993 9.335,2 L9.335,11 C9.335,11.3686501 9.18557504,11.7024001 8.94398755,11.9439876 C8.70240007,12.185575 8.36865007,12.335 8,12.335 L2,12.335 C1.63134993,12.335 1.29759993,12.185575 1.05601245,11.9439876 C0.814424965,11.7024001 0.665,11.3686501 0.665,11 L0.665,2 C0.665,1.63134993 0.814424965,1.29759993 1.05601245,1.05601245 C1.29759993,0.814424965 1.63134993,0.665 2,0.665 Z" id="Rectangle" stroke="#454C53" stroke-width="1.33" mask="url(#mask-2)"></path>
+            </g>
+            <rect id="Rectangle" stroke="#454C53" stroke-width="1.33" x="1.665" y="0.665" width="8.67" height="11.67" rx="2"></rect>
+        </g>
+    </g>
+</svg>

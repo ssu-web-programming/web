@@ -1,80 +1,50 @@
-import styled, { css } from 'styled-components';
-import Wrapper from '../components/Wrapper';
-import { ReactElement, useState } from 'react';
 import AIChatTab from '../views/AIChatTab';
 import AIWriteTab from '../views/AIWriteTab';
+import AITest from '../views/AITest';
+import TabLayout, { TabItemType } from '../components/layout/TabLayout';
+import icon_chat from '../img/ico_chat.svg';
+import icon_chat_purple from '../img/ico_chat_purple.svg';
+import icon_creating_text from '../img/ico_creating_text.svg';
+import icon_creating_text_purple from '../img/ico_creating_text_purple.svg';
+import { useEffect } from 'react';
+import { useAppDispatch } from '../store/store';
+import { selectTab } from '../store/slices/tabSlice';
+import { useTranslation } from 'react-i18next';
 
-const Contents = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-`;
-
-const Header = styled.div`
-  padding: 20px 10px 20px 10px;
-  display: flex;
-  justify-content: space-between;
-`;
-
-const TabList = styled.div`
-  display: flex;
-  justify-content: flex-start;
-`;
-
-const TabItem = styled.div<{ selected: boolean }>`
-  flex: 1;
-  ${({ selected }) =>
-    selected &&
-    css`
-      color: blue;
-    `}
-`;
-
-const Body = styled.div`
-  flex: 1;
-`;
-
-interface AiWriteTabItem {
-  id: string;
-  name: string;
-  comp: ReactElement;
-}
-
-const TAB_ITEMS: AiWriteTabItem[] = [
-  {
-    id: 'write',
-    name: '작성',
-    comp: <AIWriteTab />
-  },
-  {
-    id: 'chat',
-    name: '채팅',
-    comp: <AIChatTab />
-  }
-];
+export const TAB_ITEM_VAL = {
+  WRITE: 'write',
+  CHAT: 'chat'
+};
 
 export default function Tools() {
-  const [selectedTab, setSelectedTab] = useState<AiWriteTabItem>(TAB_ITEMS[0]);
+  const dispatch = useAppDispatch();
+  const { t } = useTranslation();
 
-  return (
-    <Wrapper>
-      <Contents>
-        <Header>
-          <div>AI Tools | AI Write</div> <div>Close</div>
-        </Header>
-        <TabList>
-          {TAB_ITEMS.map((item) => (
-            <TabItem
-              key={item.id}
-              selected={item.id === selectedTab.id}
-              onClick={() => setSelectedTab(item)}>
-              {item.name}
-            </TabItem>
-          ))}
-        </TabList>
-        <Body style={{ border: 'solid 1px red' }}>{selectedTab.comp}</Body>
-      </Contents>
-    </Wrapper>
-  );
+  const TAB_LIST: TabItemType[] = [
+    {
+      id: TAB_ITEM_VAL.WRITE,
+      name: t(`Write`),
+      comp: <AIWriteTab />,
+      icon: icon_creating_text,
+      selectedIcon: icon_creating_text_purple
+    },
+    {
+      id: TAB_ITEM_VAL.CHAT,
+      name: t(`Chating`),
+      comp: <AIChatTab />,
+      icon: icon_chat,
+      selectedIcon: icon_chat_purple
+    }
+    // {
+    //   id: 'test',
+    //   name: t(`Test`),
+    //   comp: <AITest />
+    // }
+  ];
+
+  useEffect(() => {
+    dispatch(selectTab(TAB_ITEM_VAL.CHAT));
+  }, []);
+
+  return <TabLayout title={t('AITools')} subTitle={'AI Write'} tabList={TAB_LIST} />;
 }

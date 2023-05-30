@@ -1,3 +1,153 @@
 {
-  "PageCount": "Page Count"
+  "PageCount": "Page Count",
+  "InsertFail": "Please set the cursor in the document!",
+  "Write": "Fill out",
+  "Chating": "Chat",
+  "CreateImage": "Create image",
+  "ShowExam": "example sentences",
+  "FormList": {
+    "Sentence": "Sentence",
+    "List": "Table of Contents",
+    "Table": "Table"
+  },
+  "WriteTab": {
+    "WriteTopic": "Draft a topic",
+    "WriteTextboxPlacehold": "Enter a topic of your article to write.",
+    "SelectForm": "Set article type",
+    "SelectResultLength": "Select number of characters (including blanks)",
+    "Length": {
+      "Short": "Short",
+      "Medium": "Medium",
+      "Long": "Long"
+    },
+    "WritingArticle": "Post an article",
+    "PreviewWriting": "Preview",
+    "LoadingMsg": "Polaris Office AI will write a composition with the article you wrote!",
+    "LengthInfo": "{{length}} characters",
+    "ReEnterTopic": "Re-enter a topic",
+    "Recreating": "Create again",
+    "InsertDoc": "Insert in doc",
+    "MoveToChating": "More with chat",
+    "ToSameTopic": "I will work on it again with the same topic!"
+  },
+  "ChatingTab": {
+    "AIGreeting": "Hello, I am Polaris AI Chat. I'm here to help you create a document easy and fast.",
+    "UseMoreAI": "Use more AI features.",
+    "UseVariableForm": "Create your response in various formats.",
+    "InputPlaceholder": "Please ask anything.",
+    "TipList": {
+      "1ChatingCredit": "credit(s) will be deducted per conversation.",
+      "EnterInfo": "Use Enter to break the line.",
+      "CtrlEnterInfo": "Enter Ctrl+Enter to open a conversation.",
+      "DoSepecificQuestion": "Make your question in more detail to get a better response.",
+      "DateInfo": "Content for events after September 2021 may be incorrect."
+    },
+    "LoadingMsg": {
+      "Creating": "Content creation in progress.",
+      "ReCreating": "Creating a content again...",
+      "ContitnueWriting": "Start adding content...",
+      "ContitnueWriting_input": "Start adding content including your content...",
+      "Summary": "Start summarizing content...",
+      "Summary_input": "Start summarizing with applying content...",
+      "Translate": "Translate content into {{language}}…",
+      "Translate_input": "Add your content to translate into {{language}}…",
+      "ChangeStyle": "Changing content to ‘{{style}}’ tone…",
+      "ChangeStyle_input": "Change to ‘{{style}}’ tone with applying your content...",
+      "Grammar": "Start correcting spelling/grammar…",
+      "Grammar_input": "Start correcting spelling/grammar with applying your content…"
+    },
+    "FuncRecBtn": {
+      "AddContent": "Add Content",
+      "Summary": "Summarizing",
+      "Translate": "Translate",
+      "ChangeStyle": "Change language tone",
+      "Grammar": "Correct spelling/grammar",
+      "SubFuncRec": {
+        "Korean": "Korean",
+        "English": "English",
+        "Chinese": "Chinese",
+        "Indonesian": "Indonesian",
+        "Brazil": "Portuguese (Brazil)",
+        "German": "German",
+        "Japanese": "Japanese",
+        "Spanish": "Spanish",
+        "BusinessStyle": "Business tone",
+        "Friendly": "Friendly",
+        "Simply": "Briefly",
+        "Poetically": "Poetic"
+      }
+    }
+  },
+  "Txt2ImgTab": {
+    "CreateImage": "Create image",
+    "WritingImageDesc": "Write image description",
+    "WriteImageDesc": "Enter a description of image to create.",
+    "ChooseStyle": "Select style",
+    "StyleList": {
+      "None": "None",
+      "Picture": "Picture",
+      "ConceptArt": "Concept art",
+      "3D": "3D",
+      "Anime": "Animation",
+      "Retro": "Retro",
+      "WaterPainting": "Watercolor painting",
+      "OilPainting": "Oil painting"
+    },
+    "ChooseRatio": "Select image ratio",
+    "RatioList": {
+      "Squre": "Square",
+      "Horizontal": "Horizontal",
+      "Vertical": "Vertical"
+    },
+    "LoadingMsg": "Polaris Office AI is creating an image based on your input. Please wait a moment.",
+    "PreviewImage": "Preview image",
+    "ToastMsg": {
+      "StartCreatingImage": "An image will be created.",
+      "CompleteCreatingImage": "Image creation completed. Select a job you want.",
+      "CompleteInsertImage": "Inserting image in document is completed.",
+      "ForbiddenWord": "The image description contains inappropriate words.",
+      "GPTExceededLimit": "An error occurred because the number of characters chatted exceeded the limit. Please try again."
+    }
+  },
+  "ExampleList": {
+    "Health": "five effective ways to build healthy habits",
+    "DeliveryIdea": "Brainstorm some ideas on how to market delivery service and tell me the pros of each idea.",
+    "Novel": "Synopsis of novel of which topic is 'sea when it is rainy'",
+    "InterviewTopic": "List of 10 questions for CEO of an online second hand clothes shopping site",
+    "RecommendGift": "Suggest what would be good for my parent's birthday gift.",
+    "CreateDoc": "How to create a document efficiently",
+    "AITech": "Summarize what I should research for AI technology advancement.",
+    "Recipe": "Recipe of a delicious aglio olio pasta",
+    "BusinessChart": "Create table of contents for new business plan",
+    "CreateReport": "How to write an email to report meeting results",
+    "Flight": "a flying airplane,  a pencil drawing, HQ ",
+    "Tiger": "picture of a tiger enjoying sunbathing in the city, concept art, 4K",
+    "Panda": "Panda on a beach drawn by Leonardo da Vinci",
+    "City": "Futuristic cyberpunk cityscape, skyscraper, skyline, 4K ",
+    "Puppy": "a cute and lovely puppy, comics, fantasy, artStation style ",
+    "Space": "lion shape, galaxy, spiral, the universe, nebula, star, smoke, iridescent, elaborated detail, 8k",
+    "House": "House, concept art, matte painting, HQ, 4k",
+    "NewYear": "New year celebration festival at river, fireworks, drone show, surreal, 8k, high definition",
+    "ComicPoster": "Harry Potter poster in a comic concept, 4K, HQ"
+  },
+  "ToastMsg": {
+    "UsedAllCredit": "You have used all your credits.",
+    "CheckCreditPolicy": "Check credit policy >",
+    "NoCredit": "Insufficient credits, {{credit}} credits needed to continue.",
+    "TabLoadedAndWait": "AI is creating a content in the {{tab}}. Please wait for a while to finish, or abort the process and try again.",
+    "StartCreating": "A content will be created. {{deductionCredit}} credits have been used. (remaining credits: {{leftCredit}})",
+    "AboutCredit": "{{deductionCredit}} credits have been used. (remaining credits :{{leftCredit}})",
+    "AIError": "Unsuccessful to create a content by Polaris Office AI. Please try again.",
+    "StopMsg": "Writing content aborted. Select a job you want.",
+    "SuccessMsg": "Writing content completed. Select a job you want.",
+    "CompleteCopy": "Copy completed.",
+    "CompleteInsert": "Insert completed.",
+    "ErrorMsg": "An error has occurred. Please try again later. ({{code}} : {{msg}})"
+  },
+  "Download": "Download",
+  "AITools": "AI Tools",
+  "AIWrite": "AI Write",
+  "Test": "Test",
+  "Additional": "more",
+  "MoveToLimitInfo": "https://polarisofficehelp.zendesk.com/hc/en-us/articles/6736284040335-Limitations-on-Polaris-Office-AI"
 }

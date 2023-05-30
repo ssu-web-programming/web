@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>ico_arrow_prev</title>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="ico/16/arrow_prev" stroke="#72787F" stroke-width="1.33">
+            <polyline id="Path" transform="translate(7.000000, 8.000000) scale(-1, 1) rotate(-270.000000) translate(-7.000000, -8.000000) " points="1 11 7 5 13 11"></polyline>
+        </g>
+    </g>
+</svg>

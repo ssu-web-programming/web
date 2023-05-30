@@ -1,38 +1,56 @@
 import styled, { CSSProp } from 'styled-components';
+import { alignItemCenter } from '../style/cssCommon';
 
 const TextAreaWrapper = styled.textarea<{ cssExt: any }>`
   resize: none;
   outline: none;
+  ::placeholder {
+    font-size: 13px;
+    color: var(--gray-gray-60-03);
+    ${alignItemCenter}
+  }
+  font-size: 13px;
 
   ${({ cssExt }: any) => cssExt && cssExt}
 `;
 
 interface TextAreaProps {
   value: string | number;
-  onChange: Function;
-  onKeyUp?: React.KeyboardEventHandler;
+  onChange?: Function;
+  onClick?: Function;
+  onKeyDown?: Function;
   cssExt?: CSSProp<any>;
   rows?: number;
-  ref?: any;
+  textRef?: React.RefObject<HTMLTextAreaElement> | null;
   disable?: boolean;
+  onBlur?: Function;
+  placeholder?: string;
 }
 
 const TextArea = ({
   value,
   onChange,
-  onKeyUp,
+  onClick,
+  onKeyDown,
   cssExt,
-  rows,
-  ref,
-  disable = false
+  rows = 5,
+  textRef,
+  disable = false,
+  onBlur,
+  placeholder
 }: TextAreaProps) => {
   return (
     <TextAreaWrapper
-      ref={ref}
+      onClick={(e) => onClick && onClick(e)}
+      placeholder={placeholder}
+      onBlur={() => {
+        onBlur && onBlur();
+      }}
+      ref={textRef}
       cssExt={cssExt}
       value={value}
-      onChange={(e) => onChange(e)}
-      onKeyUp={onKeyUp}
+      onChange={(e) => onChange && onChange(e)}
+      onKeyDown={(e) => onKeyDown && onKeyDown(e)}
       rows={rows}
       disabled={disable}
     />

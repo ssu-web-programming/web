@@ -1,10 +1,13 @@
 import styled from 'styled-components';
+import { flex, justiEnd } from '../style/cssCommon';
+import { getLangCodeFromParams } from '../locale';
 
 const LinkTextWrapper = styled.div`
-  display: flex;
+  ${flex}
   color: black;
   cursor: pointer;
-  text-decoration: underline;
+  width: fit-content;
+  ${justiEnd}
 `;
 
 interface LinkTextProps {
@@ -14,7 +17,7 @@ interface LinkTextProps {
 
 const LinkText = ({ url, children }: LinkTextProps) => {
   const handleOpenNewTab = (url: string) => {
-    window.open(url, '_blank', 'noopener, noreferrer');
+    window._Bridge.openWindow(url);
   };
 
   return <LinkTextWrapper onClick={() => handleOpenNewTab(url)}>{children}</LinkTextWrapper>;

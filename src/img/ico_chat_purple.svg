@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>ico_chat</title>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="ico/16/chat">
+            <path d="M12,1.665 C12.9209348,1.665 13.7546848,2.03828259 14.3582011,2.64179888 C14.9617174,3.24531518 15.335,4.07906518 15.335,5 L15.335,9 C15.335,9.92093482 14.9617174,10.7546848 14.3582011,11.3582011 C13.7546848,11.9617174 12.9209348,12.335 12,12.335 L7.2986542,12.335 L4.15754488,14.4290729 L3.52346034,12.3012879 C2.64619133,12.1760653 1.87950372,11.7089217 1.36137848,11.0398958 C0.924701594,10.4760396 0.665,9.76832614 0.665,9 L0.665,5 C0.665,4.07906518 1.03828259,3.24531518 1.64179888,2.64179888 C2.24531518,2.03828259 3.07906518,1.665 4,1.665 Z" id="Combined-Shape" stroke="#8a56ea" stroke-width="1.33" transform="translate(8.000000, 8.500000) scale(-1, 1) translate(-8.000000, -8.500000) "></path>
+            <circle id="Oval" fill="#8a56ea" cx="5" cy="7" r="1"></circle>
+            <circle id="Oval" fill="#8a56ea" cx="8" cy="7" r="1"></circle>
+            <circle id="Oval" fill="#8a56ea" cx="11" cy="7" r="1"></circle>
+        </g>
+    </g>
+</svg>
