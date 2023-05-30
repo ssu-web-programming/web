@@ -13,6 +13,7 @@ import Icon from '../components/Icon';
 import { useRef, useState } from 'react';
 import OpenAILinkText from '../components/OpenAILinkText';
 import { useDispatch } from 'react-redux';
+import { encode } from 'gpt-tokenizer';
 import { activeToast } from '../store/slices/toastSlice';
 import { v4 as uuidv4 } from 'uuid';
 import {
@@ -182,6 +183,7 @@ const AIWriteTab = () => {
 
   const submitSubject = async (inputParam?: WriteType) => {
     try {
+      let resultText = '';
       const assistantId = uuidv4();
 
       let input = '';
@@ -210,7 +212,7 @@ const AIWriteTab = () => {
 
       dispatch(setCreating('Write'));
 
-      const res = await apiWrapper(CHAT_STREAM_API, {
+      const { res, logger } = await apiWrapper(CHAT_STREAM_API, {
         headers: {
           ...JSON_CONTENT_TYPE,
           'User-Agent': navigator.userAgent
@@ -266,6 +268,13 @@ const AIWriteTab = () => {
 
         if (done) {
           // setProcessState(PROCESS_STATE.COMPLETE_GENERATE);
+          const input_token = encode(input);
+          const output_token = encode(resultText);
+          logger({
+            dp: 'ai.write',
+            input_token: input_token.length,
+            output_token: output_token.length
+          });
           break;
         }
 
@@ -278,6 +287,7 @@ const AIWriteTab = () => {
             preProcessing: preProc
           })
         );
+        resultText += decodeStr;
 
         endRef?.current?.scrollIntoView({ behavior: 'smooth' });
       }

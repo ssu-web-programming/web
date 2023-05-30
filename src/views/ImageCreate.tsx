@@ -2,7 +2,7 @@ import ExTextbox from '../components/ExTextbox';
 import { useCallback, useState } from 'react';
 import styled, { css } from 'styled-components';
 import SubTitle from '../components/SubTitle';
-
+import { encode } from 'gpt-tokenizer';
 import iconStyleNone from '../img/text2Img/non_select.svg';
 import iconStyleNonePurple from '../img/text2Img/non_select_purple.svg';
 import iconStylePhoto from '../img/text2Img/photo@2x.png';
@@ -379,7 +379,7 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
         if (selectedStyle !== 'none')
           apiBody['style_preset'] = remake ? remake.style : selectedStyle;
 
-        const res = await apiWrapper(TEXT_TO_IMAGE_API, {
+        const { res, logger } = await apiWrapper(TEXT_TO_IMAGE_API, {
           headers: {
             ...JSON_CONTENT_TYPE,
             'User-Agent': navigator.userAgent
@@ -394,6 +394,12 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
           if (body?.error?.code === 'invalid_prompt') throw new Error(INVALID_PROMPT);
           else throw res;
         }
+
+        const input_token = encode(descInput);
+        logger({
+          dp: 'ai.text_to_image',
+          input_token: input_token.length
+        });
 
         const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
         dispatch(

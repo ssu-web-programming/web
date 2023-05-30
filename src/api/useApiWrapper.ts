@@ -1,7 +1,8 @@
 import { ERR_INVALID_SESSION, ERR_NOT_ONLINE } from '../error/error';
+import usePostSplunkLog from './usePostSplunkLog';
 
 export default function useApiWrapper() {
-  return async function apiWrapper(api: string, option: any) {
+  return async function apiWrapper(api: string, option: any, logger = usePostSplunkLog) {
     try {
       if (!navigator.onLine) {
         throw new Error(ERR_NOT_ONLINE);
@@ -11,14 +12,18 @@ export default function useApiWrapper() {
         throw new Error(ERR_INVALID_SESSION);
       }
 
+      const AID = resSession.sessionInfo['AID'];
+      const BID = resSession.sessionInfo['BID'];
+      const SID = resSession.sessionInfo['SID'];
+
       const session: any = {};
-      session['X-PO-AI-MayFlower-Auth-AID'] = resSession.sessionInfo['AID'];
-      session['X-PO-AI-MayFlower-Auth-BID'] = resSession.sessionInfo['BID'];
-      session['X-PO-AI-MayFlower-Auth-SID'] = resSession.sessionInfo['SID'];
+      session['X-PO-AI-MayFlower-Auth-AID'] = AID;
+      session['X-PO-AI-MayFlower-Auth-BID'] = BID;
+      session['X-PO-AI-MayFlower-Auth-SID'] = SID;
 
       const _option = { ...option, headers: { ...option.headers, ...session } };
       const res = await fetch(api, _option);
-      return res;
+      return { res, logger: logger({ bid: BID, sid: SID }) };
     } catch (err: any) {
       throw err;
     }

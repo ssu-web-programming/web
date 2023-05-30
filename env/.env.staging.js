@@ -1,5 +1,8 @@
+const REACT_APP_USE_LOGGER_SPLUNK = true;
+const REACT_APP_USE_LOGGER_MODE_VF = true;
+
 module.exports = new Promise((resolve, reject) => {
-  resolve();
+  resolve({ REACT_APP_USE_LOGGER_SPLUNK, REACT_APP_USE_LOGGER_VF });
   // Promise.all([common_promise]).then((resultArr) => {
   //   const common = resultArr[0];
   //   resolve({

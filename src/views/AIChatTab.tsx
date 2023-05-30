@@ -40,6 +40,7 @@ import {
   alignItemEnd,
   flex
 } from '../style/cssCommon';
+import { encode } from 'gpt-tokenizer';
 import { setCreating } from '../store/slices/tabSlice';
 import { CHAT_STREAM_API, JSON_CONTENT_TYPE } from '../api/constant';
 import { calLeftCredit, insertDoc } from '../util/common';
@@ -317,6 +318,7 @@ const AIChatTab = () => {
 
   const submitChat = async (chat?: Chat) => {
     try {
+      let resultText = '';
       dispatch(setCreating('Chating'));
       setChatInput('');
 
@@ -356,7 +358,7 @@ const AIChatTab = () => {
         })
       );
 
-      const res = await apiWrapper(CHAT_STREAM_API, {
+      const { res, logger } = await apiWrapper(CHAT_STREAM_API, {
         headers: {
           ...JSON_CONTENT_TYPE,
           'User-Agent': navigator.userAgent
@@ -411,6 +413,13 @@ const AIChatTab = () => {
         const { value, done } = await reader.read();
         if (done) {
           // setProcessState(PROCESS_STATE.COMPLETE_GENERATE);
+          const input_token = encode(chatInput);
+          const output_token = encode(resultText);
+          logger({
+            dp: 'ai.write',
+            input_token: input_token.length,
+            output_token: output_token.length
+          });
           break;
         }
 
@@ -418,6 +427,7 @@ const AIChatTab = () => {
         dispatch(
           updateChat({ id: assistantId, role: 'assistant', result: decodeStr, input: input })
         );
+        resultText += decodeStr;
       }
     } catch (error: any) {
       errorHandle(error);
