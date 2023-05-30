@@ -51,6 +51,7 @@ import { useTranslation } from 'react-i18next';
 import useErrorHandle from '../components/hooks/useErrorHandle';
 import { firstRecList } from '../img/aiChat/FuncRecBox';
 import { updateDefaultInput } from '../store/slices/chatHistorySlice';
+import { GPT_EXCEEDED_LIMIT } from '../error/error';
 
 const TEXT_MAX_HEIGHT = 268;
 
@@ -374,7 +375,8 @@ const AIChatTab = () => {
       });
 
       if (res.status !== 200) {
-        throw res;
+        if (res.status === 400) throw new Error(GPT_EXCEEDED_LIMIT);
+        else throw res;
       }
 
       const { deductionCredit, leftCredit } = calLeftCredit(res.headers);

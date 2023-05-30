@@ -57,6 +57,7 @@ import { calLeftCredit, insertDoc } from '../util/common';
 import useApiWrapper from '../api/useApiWrapper';
 import { useTranslation } from 'react-i18next';
 import useErrorHandle from '../components/hooks/useErrorHandle';
+import { GPT_EXCEEDED_LIMIT } from '../error/error';
 
 const WriteInputPage = styled.div`
   ${flexColumn}
@@ -228,7 +229,8 @@ const AIWriteTab = () => {
       });
 
       if (res.status !== 200) {
-        throw res;
+        if (res.status === 400) throw new Error(GPT_EXCEEDED_LIMIT);
+        else throw res;
       }
 
       const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
