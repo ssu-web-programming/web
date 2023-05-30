@@ -105,7 +105,8 @@
       "StartCreatingImage": "An image will be created.",
       "CompleteCreatingImage": "Image creation completed. Select a job you want.",
       "CompleteInsertImage": "Inserting image in document is completed.",
-      "ForbiddenWord": "The image description contains inappropriate words."
+      "ForbiddenWord": "The image description contains inappropriate words.",
+      "GPTExceededLimit": "An error occurred because the number of characters chatted exceeded the limit. Please try again."
     }
   },
   "ExampleList": {

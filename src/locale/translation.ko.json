@@ -105,7 +105,8 @@
       "StartCreatingImage": "이미지를 생성합니다.",
       "CompleteCreatingImage": "이미지 생성 완료. 원하는 작업을 실행하세요.",
       "CompleteInsertImage": "이미지가 문서에 삽입이 완료 되었습니다.",
-      "ForbiddenWord": "이미지 설명에 부적절한 단어가 포함되어 있습니다. "
+      "ForbiddenWord": "이미지 설명에 부적절한 단어가 포함되어 있습니다. ",
+      "GPTExceededLimit": "채팅한 글자 수가 제한을 초과하여 오류가 발생했습니다. 다시 시도해 주세요."
     }
   },
   "ExampleList": {
