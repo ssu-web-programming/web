@@ -141,3 +141,15 @@ export const flexShrink = css`
   -webkit-flex: 1;
   flex-shrink: 1;
 `;
+
+export const grid = css`
+  display: -webkit-grid;
+  display: grid;
+`;
+
+export const grid3Btn = css`
+  ${grid}
+
+  -webkit-grid-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
+`;

@@ -46,7 +46,8 @@ import {
   justiCenter,
   flexGrow,
   flexShrink,
-  alignItemEnd
+  alignItemEnd,
+  grid3Btn
 } from '../style/cssCommon';
 import RecreatingButton from '../components/RecreatingButton';
 import { useMoveChatTab } from '../components/hooks/useMovePage';
@@ -119,14 +120,6 @@ const ResultWrapper = styled.div`
   box-sizing: border-box;
 `;
 
-const RowStartBox = styled(RowBox)`
-  ${justiStart}
-  /* margin: 8px 0px 16px 0px; */
-  box-sizing: border-box;
-  gap: 8px;
-  ${justiStart}
-`;
-
 const ResWrapper = styled.div`
   ${flexColumn}
   padding: 16px;
@@ -140,6 +133,13 @@ const ResWrapper = styled.div`
 
 const TitleInputSet = styled.div`
   ${flexColumn}
+  gap: 8px;
+`;
+
+export const Grid3BtnContainer = styled.div`
+  ${grid3Btn}
+
+  width: 100%;
   gap: 8px;
 `;
 
@@ -314,14 +314,13 @@ const AIWriteTab = () => {
 
           <TitleInputSet>
             <SubTitle subTitle={t(`WriteTab.SelectForm`)} />
-            <RowStartBox>
+            <Grid3BtnContainer>
               {firstRecList.map((form) => (
                 <IconButton
                   iconCssExt={css`
                     background-color: ${selectedForm.id === form.id
                       ? 'var(--ai-purple-97-list-over)'
                       : 'var(--gray-gray-20)'};
-                    height: 48px;
                     box-sizing: border-box;
                   `}
                   key={form.id}
@@ -333,12 +332,12 @@ const AIWriteTab = () => {
                   icon={selectedForm.id === form.id ? form.selectedIcon : form.icon}
                 />
               ))}
-            </RowStartBox>
+            </Grid3BtnContainer>
           </TitleInputSet>
 
           <TitleInputSet>
             <SubTitle subTitle={t(`WriteTab.SelectResultLength`)} />
-            <RowStartBox>
+            <Grid3BtnContainer>
               {lengthList.map((length, index) => (
                 <Button
                   key={index}
@@ -367,14 +366,17 @@ const AIWriteTab = () => {
                     line-height: 1.54;
                     letter-spacing: normal;
 
-                    width: 111px;
-                    height: 28px;
                     box-sizing: border-box;
+
+                    width: 100%;
+                    padding: 4px 0px;
+                    ${flexShrink}
+                    ${flexGrow}
                   `}>
                   {t(`WriteTab.Length.${length.title}`)}
                 </Button>
               ))}
-            </RowStartBox>
+            </Grid3BtnContainer>
           </TitleInputSet>
 
           <div>

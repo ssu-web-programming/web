@@ -42,9 +42,12 @@ import {
   flexColumn,
   justiSpaceBetween,
   flexWrap,
-  alignItemCenter
+  alignItemCenter,
+  grid3Btn
 } from '../../style/cssCommon';
 import { useTranslation } from 'react-i18next';
+import { flexShrink } from '../../style/cssCommon';
+import { flexGrow } from '../../style/cssCommon';
 
 const Wrapper = styled.div`
   border-radius: 0;
@@ -63,6 +66,7 @@ const Wrapper = styled.div`
 export const RowWrapBox = styled.div<{ cssExt?: any }>`
   ${flexWrap}
   ${justiSpaceBetween}
+  ${alignItemCenter}
 
   width: 100%;
   ${({ cssExt }) => cssExt && cssExt}
@@ -81,6 +85,13 @@ const CommentWrapper = styled.div`
   /* height: 48px; */
   /* margin-bottom: 14px; */
   box-sizing: border-box;
+`;
+
+const Grid3BtnContainer = styled.div`
+  ${grid3Btn}
+
+  width: 100%;
+  gap: 8px;
 `;
 
 export const firstRecList = [
@@ -162,6 +173,10 @@ export const recSubList = [
       {
         id: 'japanese',
         title: 'Japanese'
+      },
+      {
+        id: 'french',
+        title: 'French'
       },
       {
         id: 'chinese',
@@ -296,8 +311,9 @@ const FucRecBox = ({ isFormRec }: { isFormRec: boolean }) => {
               />
             </RowWrapBox>
             <RowWrapBox>
-              {isFormRec
-                ? firstRecList.map((rec) => (
+              {isFormRec ? (
+                <Grid3BtnContainer>
+                  {firstRecList.map((rec) => (
                     <IconButton
                       title={t(`FormList.${rec.title}`)}
                       key={rec.id}
@@ -307,43 +323,54 @@ const FucRecBox = ({ isFormRec }: { isFormRec: boolean }) => {
                       selected={selectedRecFunction ? selectedRecFunction.id === rec.id : false}
                       icon={rec.id === selectedRecFunction?.id ? rec.selectedIcon : rec.icon}
                     />
-                  ))
-                : !isSubPage &&
-                  recList.map((rec) => (
-                    <Button
-                      key={rec.id}
-                      selected={rec.id === selectedRecFunction?.id}
-                      onClick={() => {
-                        if (selectedRecFunction?.id !== rec.id) setSelectedFunc(rec);
-                        else if (selectedRecFunction?.id === rec.id) setSelectedFunc(null);
-
-                        setSelectedSubFunc(null);
-
-                        if (selectedRecFunction?.id !== rec.id && rec.hasSubRec) {
-                          setIsSubPage(true);
-                        }
-                      }}
-                      cssExt={css`
-                        border: ${rec.id === selectedRecFunction?.id
-                          ? 'solid 1px var(--ai-purple-80-sub)'
-                          : 'none'};
-                        margin: 3px;
-                        height: fit-content;
-                        min-width: fit-content;
-                        height: 28px;
-                        box-sizing: border-box;
-                      `}>
-                      <Icon
-                        iconSrc={rec.id === selectedRecFunction?.id ? rec.selectedIcon : rec.icon}
-                        cssExt={css`
-                          width: 12px;
-                          height: 12px;
-                          margin-right: 6px;
-                        `}
-                      />
-                      <div>{t(`ChatingTab.FuncRecBtn.${rec.title}`)}</div>
-                    </Button>
                   ))}
+                </Grid3BtnContainer>
+              ) : (
+                !isSubPage && (
+                  <RowWrapBox
+                    cssExt={css`
+                      gap: 8px;
+                    `}>
+                    {recList.map((rec) => (
+                      <Button
+                        key={rec.id}
+                        selected={rec.id === selectedRecFunction?.id}
+                        onClick={() => {
+                          if (selectedRecFunction?.id !== rec.id) setSelectedFunc(rec);
+                          else if (selectedRecFunction?.id === rec.id) setSelectedFunc(null);
+
+                          setSelectedSubFunc(null);
+
+                          if (selectedRecFunction?.id !== rec.id && rec.hasSubRec) {
+                            setIsSubPage(true);
+                          }
+                        }}
+                        cssExt={css`
+                          border: ${rec.id === selectedRecFunction?.id
+                            ? 'solid 1px var(--ai-purple-80-sub)'
+                            : 'none'};
+                          height: fit-content;
+                          width: 100%;
+                          min-height: 28px;
+                          box-sizing: border-box;
+                          ${flexShrink}
+                          ${flexGrow}
+                          flex: 30%;
+                        `}>
+                        <Icon
+                          iconSrc={rec.id === selectedRecFunction?.id ? rec.selectedIcon : rec.icon}
+                          cssExt={css`
+                            width: 12px;
+                            height: 12px;
+                            margin-right: 6px;
+                          `}
+                        />
+                        <div>{t(`ChatingTab.FuncRecBtn.${rec.title}`)}</div>
+                      </Button>
+                    ))}
+                  </RowWrapBox>
+                )
+              )}
             </RowWrapBox>
             {isSubPage && (
               <RowBox>
@@ -351,7 +378,9 @@ const FucRecBox = ({ isFormRec }: { isFormRec: boolean }) => {
                   cssExt={css`
                     border: none;
                     background-color: transparent;
-                    min-width: fit-content;
+                    width: 26px;
+                    height: 26px;
+                    box-sizing: border-box;
                   `}
                   onClick={() => {
                     setIsSubPage(false);
@@ -362,11 +391,10 @@ const FucRecBox = ({ isFormRec }: { isFormRec: boolean }) => {
                     cssExt={css`
                       width: 16px;
                       height: 16px;
-                      padding: 5px 3px 5px 1px;
                     `}
                   />
                 </Button>
-                <RowWrapBox>
+                <Grid3BtnContainer>
                   {recSubList
                     .filter((sub) => sub.id === selectedRecFunction?.id)[0]
                     .subList.map((sub) => (
@@ -375,9 +403,8 @@ const FucRecBox = ({ isFormRec }: { isFormRec: boolean }) => {
                           border: ${selectedSubRecFunction?.id === sub.id
                             ? 'solid 1px var(--ai-purple-80-sub)'
                             : 'none'};
-                          margin: 3px;
                           height: fit-content;
-                          min-width: fit-content;
+                          width: 100%;
                         `}
                         selected={selectedSubRecFunction?.id === sub.id}
                         onClick={() => {
@@ -387,7 +414,7 @@ const FucRecBox = ({ isFormRec }: { isFormRec: boolean }) => {
                         {t(`ChatingTab.FuncRecBtn.SubFuncRec.${sub.title}`)}
                       </Button>
                     ))}
-                </RowWrapBox>
+                </Grid3BtnContainer>
               </RowBox>
             )}
           </OpenedBox>

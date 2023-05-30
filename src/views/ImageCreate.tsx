@@ -33,7 +33,8 @@ import {
   alignItemCenter,
   justiSpaceAround,
   flex,
-  flexShrink
+  flexShrink,
+  grid
 } from '../style/cssCommon';
 import Loading from '../components/Loading';
 import Button from '../components/Button';
@@ -327,24 +328,13 @@ const MakingInputWrapper = styled.div`
 `;
 
 const GridContainer = styled.div`
-  display: grid;
+  ${grid}
+
+  -webkit-grid-columns: 1fr 1fr 1fr 1fr;
   grid-template-columns: 1fr 1fr 1fr 1fr;
+
   max-width: fit-content;
-
   gap: 16px 8px;
-`;
-
-const Container4 = styled(GridContainer)`
-  gap: 8px;
-`;
-
-const Container3 = styled.div`
-  grid-column: 1 / 4;
-  grid-row: 1 / 2;
-  width: 100%;
-
-  ${flex}
-  gap: 8px;
 `;
 
 export interface AiImageResponse {
