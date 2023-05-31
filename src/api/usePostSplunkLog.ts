@@ -80,7 +80,8 @@ const useLogger = process.env.REACT_APP_USE_LOGGER_SPLUNK === 'true';
 const usePostSplunkLog = (sessionInfo: SessionInfo) => {
   const logData = {
     ...DEFAULT_LOG_DATA,
-    ctx: { ...DEFAULT_LOG_DATA.ctx, ...sessionInfo }
+    ctx: { ...DEFAULT_LOG_DATA.ctx, bid: sessionInfo.bid, sid: sessionInfo.sid },
+    ui: { ...DEFAULT_LOG_DATA.ui, us: sessionInfo.us, uid: sessionInfo.uid, ul: sessionInfo.ul }
   };
 
   return async (data: SplunkData) => {
