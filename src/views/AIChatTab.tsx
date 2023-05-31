@@ -40,6 +40,7 @@ import {
   alignItemEnd,
   flex
 } from '../style/cssCommon';
+import { calcToken, getElValue } from '../api/usePostSplunkLog';
 import { setCreating } from '../store/slices/tabSlice';
 import { CHAT_STREAM_API, JSON_CONTENT_TYPE } from '../api/constant';
 import { calLeftCredit, insertDoc } from '../util/common';
@@ -316,6 +317,8 @@ const AIChatTab = () => {
   };
 
   const submitChat = async (chat?: Chat) => {
+    let resultText = '';
+    let splunk = null;
     try {
       dispatch(setCreating('Chating'));
       setChatInput('');
@@ -356,7 +359,7 @@ const AIChatTab = () => {
         })
       );
 
-      const res = await apiWrapper(CHAT_STREAM_API, {
+      const { res, logger } = await apiWrapper(CHAT_STREAM_API, {
         headers: {
           ...JSON_CONTENT_TYPE,
           'User-Agent': navigator.userAgent
@@ -373,6 +376,7 @@ const AIChatTab = () => {
         }),
         method: 'POST'
       });
+      splunk = logger;
 
       if (res.status !== 200) {
         if (res.status === 400) throw new Error(GPT_EXCEEDED_LIMIT);
@@ -418,10 +422,23 @@ const AIChatTab = () => {
         dispatch(
           updateChat({ id: assistantId, role: 'assistant', result: decodeStr, input: input })
         );
+        resultText += decodeStr;
       }
     } catch (error: any) {
       errorHandle(error);
     } finally {
+      if (splunk) {
+        const el = getElValue(selectedRecFunction?.id);
+        const input_token = calcToken(chatInput);
+        const output_token = calcToken(resultText);
+        splunk({
+          dp: 'ai.write',
+          el,
+          input_token,
+          output_token
+        });
+      }
+
       setLoadingInfo(null);
       stopRef.current = false;
       dispatch(initRecFunc());
