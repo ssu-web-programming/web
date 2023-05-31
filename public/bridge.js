@@ -156,9 +156,15 @@ window._Bridge = {
               success: false
             });
           } else {
+            const { status, userId, level } = resJson.data.userInfo;
             resolve({
               success: true,
-              sessionInfo: { AID: body['AID'], BID: body['BID'], SID: body['SID'] }
+              sessionInfo: { AID: body['AID'], BID: body['BID'], SID: body['SID'] },
+              userInfo: {
+                us: status,
+                uid: userId,
+                ul: level.toString()
+              }
             });
           }
         } catch (err) {

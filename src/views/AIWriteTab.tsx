@@ -13,7 +13,7 @@ import Icon from '../components/Icon';
 import { useRef, useState } from 'react';
 import OpenAILinkText from '../components/OpenAILinkText';
 import { useDispatch } from 'react-redux';
-import { encode } from 'gpt-tokenizer';
+import { calcToken } from '../api/usePostSplunkLog';
 import { activeToast } from '../store/slices/toastSlice';
 import { v4 as uuidv4 } from 'uuid';
 import {
@@ -268,12 +268,12 @@ const AIWriteTab = () => {
 
         if (done) {
           // setProcessState(PROCESS_STATE.COMPLETE_GENERATE);
-          const input_token = encode(input);
-          const output_token = encode(resultText);
+          const input_token = calcToken(input);
+          const output_token = calcToken(resultText);
           logger({
             dp: 'ai.write',
-            input_token: input_token.length,
-            output_token: output_token.length
+            input_token,
+            output_token
           });
           break;
         }

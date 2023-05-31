@@ -1,3 +1,4 @@
+import { encode } from 'gpt-tokenizer';
 interface SplunkLogDataType {
   ti: {
     v: string;
@@ -32,6 +33,10 @@ interface SplunkLogDataType {
 interface SessionInfo {
   bid: string;
   sid: string;
+
+  us: string;
+  uid: string;
+  ul: string;
 }
 
 interface SplunkData {
@@ -75,7 +80,7 @@ const useLogger = process.env.REACT_APP_USE_LOGGER_SPLUNK === 'true';
 const usePostSplunkLog = (sessionInfo: SessionInfo) => {
   const logData = {
     ...DEFAULT_LOG_DATA,
-    ctx: { ...DEFAULT_LOG_DATA.ctx, bid: sessionInfo.bid, sid: sessionInfo.sid }
+    ctx: { ...DEFAULT_LOG_DATA.ctx, ...sessionInfo }
   };
 
   return async (data: SplunkData) => {
@@ -98,6 +103,14 @@ const usePostSplunkLog = (sessionInfo: SessionInfo) => {
 
     return res;
   };
+};
+
+const MAGIC_NUMBER = 8;
+export const calcToken = (text: string) => {
+  let count = MAGIC_NUMBER;
+  const encoded = encode(text);
+  if (encoded) count += encoded.length;
+  return count;
 };
 
 export default usePostSplunkLog;

@@ -40,7 +40,7 @@ import {
   alignItemEnd,
   flex
 } from '../style/cssCommon';
-import { encode } from 'gpt-tokenizer';
+import { calcToken } from '../api/usePostSplunkLog';
 import { setCreating } from '../store/slices/tabSlice';
 import { CHAT_STREAM_API, JSON_CONTENT_TYPE } from '../api/constant';
 import { calLeftCredit, insertDoc } from '../util/common';
@@ -413,12 +413,12 @@ const AIChatTab = () => {
         const { value, done } = await reader.read();
         if (done) {
           // setProcessState(PROCESS_STATE.COMPLETE_GENERATE);
-          const input_token = encode(chatInput);
-          const output_token = encode(resultText);
+          const input_token = calcToken(chatInput);
+          const output_token = calcToken(resultText);
           logger({
             dp: 'ai.write',
-            input_token: input_token.length,
-            output_token: output_token.length
+            input_token,
+            output_token
           });
           break;
         }

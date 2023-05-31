@@ -23,7 +23,7 @@ export default function useApiWrapper() {
 
       const _option = { ...option, headers: { ...option.headers, ...session } };
       const res = await fetch(api, _option);
-      return { res, logger: logger({ bid: BID, sid: SID }) };
+      return { res, logger: logger({ bid: BID, sid: SID, ...resSession.userInfo }) };
     } catch (err: any) {
       throw err;
     }
