@@ -182,11 +182,12 @@ const AIWriteTab = () => {
   const { history, currentWriteId } = useAppSelector(selectWriteHistorySlice);
 
   const submitSubject = async (inputParam?: WriteType) => {
+    let resultText = '';
+    let splunk = null;
+    let input = '';
     try {
-      let resultText = '';
       const assistantId = uuidv4();
 
-      let input = '';
       let preProc = {
         type: '',
         arg1: '',
@@ -229,6 +230,7 @@ const AIWriteTab = () => {
         }),
         method: 'POST'
       });
+      splunk = logger;
 
       if (res.status !== 200) {
         if (res.status === 400) throw new Error(GPT_EXCEEDED_LIMIT);
@@ -268,13 +270,7 @@ const AIWriteTab = () => {
 
         if (done) {
           // setProcessState(PROCESS_STATE.COMPLETE_GENERATE);
-          const input_token = calcToken(input);
-          const output_token = calcToken(resultText);
-          logger({
-            dp: 'ai.write',
-            input_token,
-            output_token
-          });
+
           break;
         }
 
@@ -297,6 +293,16 @@ const AIWriteTab = () => {
       dispatch(resetCurrentWrite());
       errorHandle(error);
     } finally {
+      if (splunk) {
+        const input_token = calcToken(input);
+        const output_token = calcToken(resultText);
+        splunk({
+          dp: 'ai.write',
+          el: 'create_text',
+          input_token,
+          output_token
+        });
+      }
       stopRef.current = false;
       dispatch(setCreating('none'));
     }

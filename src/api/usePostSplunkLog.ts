@@ -1,4 +1,5 @@
 import { encode } from 'gpt-tokenizer';
+import { REC_ID_LIST } from '../img/aiChat/FuncRecBox';
 interface SplunkLogDataType {
   ti: {
     v: string;
@@ -14,6 +15,7 @@ interface SplunkLogDataType {
   obj: {
     dc: string;
     dp: string;
+    el?: string;
     dt?: string;
   };
   ctx: {
@@ -42,6 +44,8 @@ interface SessionInfo {
 interface SplunkData {
   dp: string;
 
+  el?: string;
+
   input_token?: number;
   output_token?: number;
 }
@@ -60,7 +64,8 @@ const DEFAULT_LOG_DATA: SplunkLogDataType = {
   },
   obj: {
     dc: Math.floor(Math.random() * 10000000000000000).toString(),
-    dp: ''
+    dp: '',
+    el: undefined
   },
   ctx: {
     ts: 0,
@@ -89,6 +94,7 @@ const usePostSplunkLog = (sessionInfo: SessionInfo) => {
 
     logData.ctx.ts = parseInt(new Date().getTime().toString().substring(0, 10));
     logData.obj.dp = data.dp;
+    logData.obj.el = data.el;
 
     logData.cobj.input_token = data.input_token;
     logData.cobj.output_token = data.output_token;
@@ -112,6 +118,23 @@ export const calcToken = (text: string) => {
   const encoded = encode(text);
   if (encoded) count += encoded.length;
   return count;
+};
+
+export const getElValue = (select: string | undefined) => {
+  switch (select) {
+    case REC_ID_LIST.RESUME_WRITING:
+      return 'chat_overwrite';
+    case REC_ID_LIST.SUMMARY:
+      return 'chat_summary';
+    case REC_ID_LIST.TRANSLATE:
+      return 'chat_translation';
+    case REC_ID_LIST.CHANGE_TEXT_STYLE:
+      return 'chat_changestyle';
+    case REC_ID_LIST.MODIFY_TEXT:
+      return 'chat_modifyspelling';
+    default:
+      return 'chat_general';
+  }
 };
 
 export default usePostSplunkLog;
