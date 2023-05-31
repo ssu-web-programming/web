@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { flex, justiEnd } from '../style/cssCommon';
-import { getLangCodeFromParams } from '../locale';
 
 const LinkTextWrapper = styled.div`
   ${flex}
