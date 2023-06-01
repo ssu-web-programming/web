@@ -13,10 +13,10 @@ const Fade = keyframes`
   0% {
       opacity: 0;
   }
-  20%{
+  10%{
     opacity: 1;
   }
-  80%{
+  90%{
     opacity: 1;
   }
   100% {
@@ -36,6 +36,7 @@ const ToastMsgWrapper = styled.div<{ isError: boolean }>`
   word-wrap: break-word;
   /* white-space: pre-wrap; */
   width: 360px;
+  max-width: 80%;
   ${flex}
   ${flexShrink}
   ${flexGrow}
@@ -68,6 +69,7 @@ const ToastText = styled.div`
   ${flex}
 
   width: 280px;
+  max-width: 80%;
   margin-left: 28px;
   height: fit-content;
   line-height: normal;
