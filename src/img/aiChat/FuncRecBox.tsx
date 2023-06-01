@@ -176,16 +176,16 @@ export const recSubList = [
         title: 'Japanese'
       },
       {
-        id: 'french',
-        title: 'French'
-      },
-      {
         id: 'chinese',
         title: 'Chinese'
       },
       {
         id: 'spanish',
         title: 'Spanish'
+      },
+      {
+        id: 'french',
+        title: 'French'
       },
       {
         id: 'indonesian',
