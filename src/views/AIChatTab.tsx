@@ -7,7 +7,6 @@ import {
   Chat,
   INPUT_MAX_LENGTH,
   appendChat,
-  initChatHistory,
   resetDefaultInput,
   selectChatHistory,
   updateChat
@@ -16,7 +15,7 @@ import { v4 as uuidv4 } from 'uuid';
 import Button from '../components/Button';
 import OpenAILinkText from '../components/OpenAILinkText';
 import ExButton from '../components/ExButton';
-import FuncRecBox, { REC_ID_LIST, RowWrapBox } from '../img/aiChat/FuncRecBox';
+import FuncRecBox, { REC_ID_LIST, RowWrapBox } from '../components/FuncRecBox';
 import {
   activeRecFunc,
   inactiveRecFunc,
@@ -44,13 +43,11 @@ import { setCreating } from '../store/slices/tabSlice';
 import { CHAT_STREAM_API, JSON_CONTENT_TYPE } from '../api/constant';
 import { calLeftCredit, insertDoc } from '../util/common';
 import icon_sand from '../img/ico_send.svg';
-import { setBridgeMessage } from '../store/slices/bridge';
 import useApiWrapper from '../api/useApiWrapper';
 import icon_credit from '../img/ico_credit.svg';
 import { useTranslation } from 'react-i18next';
 import useErrorHandle from '../components/hooks/useErrorHandle';
-import { firstRecList } from '../img/aiChat/FuncRecBox';
-import { updateDefaultInput } from '../store/slices/chatHistorySlice';
+import { formRecList } from '../components/FuncRecBox';
 import { GPT_EXCEEDED_LIMIT } from '../error/error';
 
 const TEXT_MAX_HEIGHT = 268;
@@ -441,7 +438,7 @@ const AIChatTab = () => {
   const selectLoadingMsg = (isRetry: boolean) => {
     if (isRetry) return t(`ChatingTab.LoadingMsg.ReCreating`);
 
-    const isFirstRec = firstRecList.filter((rec) => rec.id === selectedRecFunction?.id).length > 0;
+    const isFirstRec = formRecList.filter((rec) => rec.id === selectedRecFunction?.id).length > 0;
     if (isFirstRec || (!isFirstRec && !selectedRecFunction && chatInput.length > 0)) {
       return t(`ChatingTab.LoadingMsg.Creating`);
     }
@@ -559,7 +556,6 @@ const AIChatTab = () => {
                           cssExt={css`
                             ${purpleBtnCss}
                             min-width: 135px;
-                            /* margin: 0px; */
                           `}
                           onClick={() => {
                             insertDoc(chat.result);

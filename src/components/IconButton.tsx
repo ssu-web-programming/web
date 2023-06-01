@@ -1,6 +1,7 @@
 import styled, { CSSProp, css } from 'styled-components';
 import Icon from './Icon';
 import { alignItemCenter, flexColumn, flexGrow, flexShrink } from '../style/cssCommon';
+import { noBorderBtnCss } from './NoBorderButton';
 
 const Wrapper = styled.div<{ cssExt: any; selected: boolean }>`
   ${flexColumn}
@@ -52,7 +53,6 @@ const IconButton = ({
           margin-bottom: 8px;
           background-color: #fff;
           border-radius: 4px;
-          border: ${selected ? `solid 1px var(--ai-purple-80-sub)` : ''};
           background-color: ${selected ? `var(--ai-purple-97-list-over)` : ''};
           width: 100%;
           /* max-width: 110px; */
@@ -60,6 +60,9 @@ const IconButton = ({
           padding: 12px 0px;
           ${flexShrink}
           ${flexGrow}
+
+          ${noBorderBtnCss(selected)}
+
           ${iconCssExt}
         `}
         imgCssExt={css`
