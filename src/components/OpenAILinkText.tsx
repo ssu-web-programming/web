@@ -2,7 +2,8 @@ import Icon from './Icon';
 import LinkText from './LinkText';
 import icon_openai from '../img/logo_open_ai.svg';
 import styled, { css } from 'styled-components';
-import { flex, justiEnd } from '../style/cssCommon';
+import { flex } from '../style/cssCommon';
+import { useTranslation } from 'react-i18next';
 
 const Wrapper = styled.div`
   ${flex}
@@ -15,12 +16,11 @@ const Wrapper = styled.div`
   margin-right: 3px;
 `;
 
-const OPEN_API_LINK =
-  'https://polarisofficehelp.zendesk.com/hc/ko/sections/6735266225039-Polaris-Office-AI-Usage-policy';
-
 const OpenAILinkText = () => {
+  const { t } = useTranslation();
+
   return (
-    <LinkText url={OPEN_API_LINK}>
+    <LinkText url={t(`MoveToLimitInfo`)}>
       <Wrapper>Powered By</Wrapper>
       <Icon
         cssExt={css`
