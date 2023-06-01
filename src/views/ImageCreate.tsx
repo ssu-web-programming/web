@@ -34,7 +34,9 @@ import {
   justiSpaceAround,
   flex,
   flexShrink,
-  grid
+  grid,
+  flexGrow,
+  alignItemStart
 } from '../style/cssCommon';
 import Loading from '../components/Loading';
 import Button from '../components/Button';
@@ -182,14 +184,23 @@ const RowContainer = styled.div<{
 
 const ContainerItem = styled.div`
   ${flexColumn}
-  ${alignItemCenter}
+  ${alignItemStart}
 
   gap: 8px;
+`;
+
+const RatioBtnConatainer = styled.div`
+  ${flexColumn}
+  ${flexShrink}
+  ${flexGrow}
+
+  width: 100%;
 `;
 
 const ItemTitle = styled.div<{ isSelected: boolean }>`
   ${justiCenter}
   ${alignItemCenter}
+  width: 100%;
 
   font-weight: bold;
 
@@ -327,14 +338,18 @@ const MakingInputWrapper = styled.div`
   gap: 16px;
 `;
 
-const GridContainer = styled.div`
+const GridContainer = styled.div<{
+  cssExt?: any;
+}>`
   ${grid}
 
-  -webkit-grid-columns: 1fr 1fr 1fr 1fr;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  -webkit-grid-columns: repeat(auto-fit,minmax(81px, auto));
+  grid-template-columns: repeat(auto-fit, minmax(81px, auto));
 
-  max-width: fit-content;
+  width: 100%;
   gap: 16px 8px;
+
+  ${({ cssExt }) => cssExt && cssExt}
 `;
 
 export interface AiImageResponse {
@@ -466,27 +481,29 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
               {selectStyleItemList.map((item) => {
                 return (
                   <ContainerItem key={item.id} onClick={() => setSelectedStyle(item.id)}>
-                    <ItemIconBox
-                      cssExt={css`
-                        border: ${item.id === 'none' &&
-                        item.id === selectedStyle &&
-                        'solid 1px var(--ai-purple-80-sub)'};
+                    <div>
+                      <ItemIconBox
+                        cssExt={css`
+                          border: ${item.id === 'none' &&
+                          item.id === selectedStyle &&
+                          'solid 1px var(--ai-purple-80-sub)'};
 
-                        max-width: 81px;
-                        height: 80px;
-                      `}
-                      isSelected={item.id === selectedStyle}>
-                      <img
-                        style={{
-                          width: item.id === 'none' ? '24px' : '100%',
-                          height: item.id === 'none' ? '24px' : '100%'
-                        }}
-                        src={item.id === selectedStyle ? item.selectedImgItem : item.imgItem}
-                        alt=""></img>
-                    </ItemIconBox>
-                    <ItemTitle isSelected={item.id === selectedStyle}>
-                      {t(`Txt2ImgTab.StyleList.${item.title}`)}
-                    </ItemTitle>
+                          width: 81px;
+                          height: 80px;
+                        `}
+                        isSelected={item.id === selectedStyle}>
+                        <img
+                          style={{
+                            width: item.id === 'none' ? '24px' : '100%',
+                            height: item.id === 'none' ? '24px' : '100%'
+                          }}
+                          src={item.id === selectedStyle ? item.selectedImgItem : item.imgItem}
+                          alt=""></img>
+                      </ItemIconBox>
+                      <ItemTitle isSelected={item.id === selectedStyle}>
+                        {t(`Txt2ImgTab.StyleList.${item.title}`)}
+                      </ItemTitle>
+                    </div>
                   </ContainerItem>
                 );
               })}
@@ -497,28 +514,40 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
               <SubTitle subTitle={t('Txt2ImgTab.ChooseRatio')} />
             </SubTitleArea>
             <RowContainer>
-              {selectImageRatioItemList.map((item) => {
-                return (
-                  <ContainerItem key={item.id} onClick={() => setSelectedRatio(item.id)}>
-                    <ItemIconBox
-                      cssExt={css`
-                        border: ${item.id === selectedRatio && 'solid 1px var(--ai-purple-80-sub)'};
-                        width: 81px;
-                        height: 48px;
-                      `}
-                      width={81}
-                      height={48}
-                      isSelected={item.id === selectedRatio}>
-                      <img
-                        src={item.id === selectedRatio ? item.selectedImgItem : item.imgItem}
-                        alt=""></img>
-                    </ItemIconBox>
-                    <ItemTitle isSelected={item.id === selectedRatio}>
-                      {t(`Txt2ImgTab.RatioList.${item.title}`)}
-                    </ItemTitle>
-                  </ContainerItem>
-                );
-              })}
+              <GridContainer
+                cssExt={css`
+                  -webkit-grid-columns: 1fr 1fr 1fr 1fr;
+                  grid-template-columns: 1fr 1fr 1fr 1fr;
+
+                  grid-template-columns: repeat(auto-fit, minmax(81px, 4));
+                `}>
+                {selectImageRatioItemList.map((item) => {
+                  return (
+                    <ContainerItem key={item.id} onClick={() => setSelectedRatio(item.id)}>
+                      <RatioBtnConatainer>
+                        <ItemIconBox
+                          cssExt={css`
+                            border: ${item.id === selectedRatio &&
+                            'solid 1px var(--ai-purple-80-sub)'};
+                            padding: 12px 0px;
+
+                            ${flexShrink}
+                            ${flexGrow}
+                            width: 100%;
+                          `}
+                          isSelected={item.id === selectedRatio}>
+                          <img
+                            src={item.id === selectedRatio ? item.selectedImgItem : item.imgItem}
+                            alt=""></img>
+                        </ItemIconBox>
+                        <ItemTitle isSelected={item.id === selectedRatio}>
+                          {t(`Txt2ImgTab.RatioList.${item.title}`)}
+                        </ItemTitle>
+                      </RatioBtnConatainer>
+                    </ContainerItem>
+                  );
+                })}
+              </GridContainer>
             </RowContainer>
           </SelectOptionArea>
           <Button

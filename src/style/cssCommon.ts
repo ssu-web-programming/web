@@ -109,6 +109,14 @@ export const justiEnd = css`
   justify-content: flex-end;
 `;
 
+export const alignItemStart = css`
+  ${flex}
+  -webkit-box-align: start;
+  -moz-align-items: start;
+  -ms-flex-align: start;
+  align-items: flex-start;
+`;
+
 export const alignItemCenter = css`
   ${flex}
   /* [정렬] 교차축 - 가운데 기준 */

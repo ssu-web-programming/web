@@ -316,21 +316,23 @@ const AIWriteTab = () => {
             <SubTitle subTitle={t(`WriteTab.SelectForm`)} />
             <Grid3BtnContainer>
               {firstRecList.map((form) => (
-                <IconButton
-                  iconCssExt={css`
-                    background-color: ${selectedForm.id === form.id
-                      ? 'var(--ai-purple-97-list-over)'
-                      : 'var(--gray-gray-20)'};
-                    box-sizing: border-box;
-                  `}
-                  key={form.id}
-                  title={t(`FormList.${form.title}`)}
-                  onClick={() => {
-                    setSelectedForm(form);
-                  }}
-                  selected={selectedForm ? (selectedForm.id === form.id ? true : false) : false}
-                  icon={selectedForm.id === form.id ? form.selectedIcon : form.icon}
-                />
+                <div>
+                  <IconButton
+                    iconCssExt={css`
+                      background-color: ${selectedForm.id === form.id
+                        ? 'var(--ai-purple-97-list-over)'
+                        : 'var(--gray-gray-20)'};
+                      box-sizing: border-box;
+                    `}
+                    key={form.id}
+                    title={t(`FormList.${form.title}`)}
+                    onClick={() => {
+                      setSelectedForm(form);
+                    }}
+                    selected={selectedForm ? (selectedForm.id === form.id ? true : false) : false}
+                    icon={selectedForm.id === form.id ? form.selectedIcon : form.icon}
+                  />
+                </div>
               ))}
             </Grid3BtnContainer>
           </TitleInputSet>

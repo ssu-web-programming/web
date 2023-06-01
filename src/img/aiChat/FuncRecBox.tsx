@@ -74,6 +74,7 @@ export const RowWrapBox = styled.div<{ cssExt?: any }>`
 
 const OpenedBox = styled(RowWrapBox)`
   max-height: 138px;
+  overflow-y: auto;
 `;
 
 const CommentWrapper = styled.div`
@@ -314,15 +315,17 @@ const FucRecBox = ({ isFormRec }: { isFormRec: boolean }) => {
               {isFormRec ? (
                 <Grid3BtnContainer>
                   {firstRecList.map((rec) => (
-                    <IconButton
-                      title={t(`FormList.${rec.title}`)}
-                      key={rec.id}
-                      onClick={() => {
-                        setSelectedFunc(rec);
-                      }}
-                      selected={selectedRecFunction ? selectedRecFunction.id === rec.id : false}
-                      icon={rec.id === selectedRecFunction?.id ? rec.selectedIcon : rec.icon}
-                    />
+                    <div>
+                      <IconButton
+                        title={t(`FormList.${rec.title}`)}
+                        key={rec.id}
+                        onClick={() => {
+                          setSelectedFunc(rec);
+                        }}
+                        selected={selectedRecFunction ? selectedRecFunction.id === rec.id : false}
+                        icon={rec.id === selectedRecFunction?.id ? rec.selectedIcon : rec.icon}
+                      />
+                    </div>
                   ))}
                 </Grid3BtnContainer>
               ) : (

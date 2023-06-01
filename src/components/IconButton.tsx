@@ -10,6 +10,7 @@ const Wrapper = styled.div<{ cssExt: any; selected: boolean }>`
     selected ? 'var(--ai-purple-50-main)' : 'var(--gray-gray-80-02)'};
   font-weight: ${({ selected }: { selected: Boolean }) => selected && 'bold'};
   font-size: 12px;
+  text-align: center;
 
   &:hover {
     cursor: pointer;
