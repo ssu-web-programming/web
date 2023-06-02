@@ -1,8 +1,9 @@
 const REACT_APP_USE_LOGGER_SPLUNK = true;
 const REACT_APP_USE_LOGGER_MODE_VF = false;
+const GENERATE_SOURCEMAP = false;
 
 module.exports = new Promise((resolve, reject) => {
-  resolve({ REACT_APP_USE_LOGGER_SPLUNK, REACT_APP_USE_LOGGER_MODE_VF });
+  resolve({ REACT_APP_USE_LOGGER_SPLUNK, REACT_APP_USE_LOGGER_MODE_VF, GENERATE_SOURCEMAP });
   // Promise.all([common_promise]).then((resultArr) => {
   //   const common = resultArr[0];
   //   resolve({
