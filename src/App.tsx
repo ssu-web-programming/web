@@ -39,13 +39,17 @@ function App() {
                 let path = ``;
                 if (cmd === `openAiTools`) {
                   path = `/aiWrite`;
+                  if (body && body !== '') {
+                    movePage(body);
+                  }
                 } else {
                   path = `/txt2img`;
-                  dispatch(updateT2ICurListId(null));
-                  dispatch(updateT2ICurItemIndex(null));
+                  if (body && body !== '') {
+                    dispatch(updateT2ICurListId(null));
+                    dispatch(updateT2ICurItemIndex(null));
+                  }
                 }
                 const time = new Date().getTime();
-                movePage(body);
                 navigate(path, {
                   state: { body, time }
                 });

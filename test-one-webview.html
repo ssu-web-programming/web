@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" style="width: 100%; height: 100%">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body style="width: 100%; height: 100%; padding: 30px; box-sizing: border-box">
+    <div style="position: relative; width: 100%; height: 100%; box-sizing: border-box">
+      <h1>Panel Test</h1>
+      <div style="width: 100%; height: 100%; display: flex; flex-direction: column; gap: 20px">
+        <div style="display: flex; flex-direction: row">
+          <input id="openAiToolsInput" type="text" />
+          <button id="openAiToolsButton">openAiTools</button>
+        </div>
+        <div style="display: flex; flex-direction: row">
+          <input id="openTextToImgInput" type="text" />
+          <button id="openTextToImgButton">openTextToImg</button>
+        </div>
+      </div>
+      <iframe
+        id="polaris_office_ai_panel"
+        width="400px"
+        height="90%"
+        style="position: absolute; right: 0px; top: 0px; display: none"
+      ></iframe>
+    </div>
+  </body>
+  <script>
+    const target = 'http://localhost:3000/aiWrite';
+
+    const openAiToolsButton = document.getElementById('openAiToolsButton');
+    const openAiToolsInput = document.getElementById('openAiToolsInput');
+    const openTextToImgButton = document.getElementById('openTextToImgButton');
+    const openTextToImgInput = document.getElementById('openTextToImgInput');
+    let panel = document.getElementById('polaris_office_ai_panel');
+    window.onload = () => {
+      panel.src = target;
+    };
+
+    const post = (msg) => {
+      panel.contentWindow.postMessage(msg, '*');
+    };
+
+    openPanel = (msg) => {
+      panel.style.display = 'block';
+      post(msg);
+    };
+
+    openAiToolsButton.addEventListener('click', () => {
+      openPanel({
+        cmd: 'openAiTools',
+        body: openAiToolsInput.value
+      });
+    });
+
+    openTextToImgButton.addEventListener('click', () => {
+      openPanel({
+        cmd: 'openTextToImg',
+        body: openTextToImgInput.value
+      });
+    });
+
+    window.addEventListener('message', (e) => {
+      const msg = JSON.parse(e.data);
+      switch (msg.api) {
+        case 'closePanel': {
+          panel.style.display = 'none';
+          break;
+        }
+      }
+    });
+  </script>
+</html>
