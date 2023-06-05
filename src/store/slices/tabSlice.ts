@@ -3,6 +3,11 @@ import { RootState } from '../store';
 
 type CREATING_TYPE = 'none' | 'Chating' | 'Write' | 'CreateImage';
 
+export const TAB_ITEM_VAL = {
+  WRITE: 'write',
+  CHAT: 'chat'
+};
+
 interface TabType {
   creating: CREATING_TYPE;
   selectedTabId: string | null;
@@ -10,7 +15,7 @@ interface TabType {
 
 const tabSlice = createSlice({
   name: 'tab',
-  initialState: { creating: 'none', selectedTabId: null } as TabType,
+  initialState: { creating: 'none', selectedTabId: TAB_ITEM_VAL.CHAT } as TabType,
   reducers: {
     initTab: (state) => {
       state.creating = 'none';

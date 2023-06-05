@@ -1,6 +1,5 @@
-import { TAB_ITEM_VAL } from '../../pages/Tools';
 import { updateDefaultInput } from '../../store/slices/chatHistorySlice';
-import { selectTab } from '../../store/slices/tabSlice';
+import { TAB_ITEM_VAL, selectTab } from '../../store/slices/tabSlice';
 import { useAppDispatch } from '../../store/store';
 
 export const useMoveChatTab = () => {
