@@ -15,22 +15,21 @@ const Body = styled.button<{ width?: number; height?: number; selected: boolean;
 
   width: fit-content;
   border-radius: 4px;
-  border: solid 1px var(--gray-gray-50);
+  border: none;
+  box-shadow: 0 0 0 1px var(--gray-gray-50) inset;
   background-color: #fff;
   color: black;
   font-size: 13px;
   color: var(--gray-gray-90-01);
   padding: 6px;
-  /* flex: 1 1 fit-content; */
   ${flexGrow}
   ${flexShrink}
   flex-basis: fit-content;
-  /* margin: 3px; */
 
   ${({ width, height, selected }) => css`
     width: ${width} ? ${width}px : fit-content;
     height: ${height} ? ${height}px: fit-content;
-    border: ${selected ? `solid 1px var(--ai-purple-80-sub)` : ''};
+    box-shadow: ${selected && ' 0 0 0 1px var(--ai-purple-80-sub) inset'};
     background-color: ${selected ? `var(--ai-purple-97-list-over)` : ''};
     color: ${selected ? `var(--ai-purple-50-main)` : ''};
     font-weight: ${selected ? `bold` : ''};

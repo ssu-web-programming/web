@@ -16,6 +16,7 @@ export const userSelectCss = css`
 export const purpleBtnCss = css`
   background-image: linear-gradient(to left, #a86cea, var(--ai-purple-50-main));
   color: #fff;
+  box-shadow: none;
 `;
 
 export const TableCss = css`
@@ -109,6 +110,14 @@ export const justiEnd = css`
   justify-content: flex-end;
 `;
 
+export const alignItemStart = css`
+  ${flex}
+  -webkit-box-align: start;
+  -moz-align-items: start;
+  -ms-flex-align: start;
+  align-items: flex-start;
+`;
+
 export const alignItemCenter = css`
   ${flex}
   /* [정렬] 교차축 - 가운데 기준 */
@@ -140,4 +149,16 @@ export const flexGrow = css`
 export const flexShrink = css`
   -webkit-flex: 1;
   flex-shrink: 1;
+`;
+
+export const grid = css`
+  display: -webkit-grid;
+  display: grid;
+`;
+
+export const grid3Btn = css`
+  ${grid}
+
+  -webkit-grid-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
 `;

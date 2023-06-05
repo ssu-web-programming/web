@@ -28,7 +28,7 @@ import { useAppSelector } from '../store/store';
 import { selectTabSlice } from '../store/slices/tabSlice';
 import ExTextbox from '../components/ExTextbox';
 import IconButton from '../components/IconButton';
-import { firstRecList } from '../img/aiChat/FuncRecBox';
+import { formRecList } from '../components/FuncRecBox';
 import icon_write from '../img/ico_creating_text_white.svg';
 import icon_prev from '../img/ico_arrow_prev.svg';
 import icon_next from '../img/ico_arrow_next.svg';
@@ -40,14 +40,13 @@ import {
   TableCss,
   flexColumn,
   flex,
-  justiStart,
   alignItemCenter,
   purpleBtnCss,
   justiSpaceBetween,
   justiCenter,
   flexGrow,
   flexShrink,
-  alignItemEnd
+  grid3Btn
 } from '../style/cssCommon';
 import RecreatingButton from '../components/RecreatingButton';
 import { useMoveChatTab } from '../components/hooks/useMovePage';
@@ -59,6 +58,7 @@ import useApiWrapper from '../api/useApiWrapper';
 import { useTranslation } from 'react-i18next';
 import useErrorHandle from '../components/hooks/useErrorHandle';
 import { GPT_EXCEEDED_LIMIT } from '../error/error';
+import NoBorderButton from '../components/NoBorderButton';
 
 const WriteInputPage = styled.div`
   ${flexColumn}
@@ -120,14 +120,6 @@ const ResultWrapper = styled.div`
   box-sizing: border-box;
 `;
 
-const RowStartBox = styled(RowBox)`
-  ${justiStart}
-  /* margin: 8px 0px 16px 0px; */
-  box-sizing: border-box;
-  gap: 8px;
-  ${justiStart}
-`;
-
 const ResWrapper = styled.div`
   ${flexColumn}
   padding: 16px;
@@ -141,6 +133,13 @@ const ResWrapper = styled.div`
 
 const TitleInputSet = styled.div`
   ${flexColumn}
+  gap: 8px;
+`;
+
+export const Grid3BtnContainer = styled.div`
+  ${grid3Btn}
+
+  width: 100%;
   gap: 8px;
 `;
 
@@ -166,7 +165,7 @@ const subjectMaxLength = 1000;
 const AIWriteTab = () => {
   const apiWrapper = useApiWrapper();
   const [subject, setSubject] = useState<string>('');
-  const [selectedForm, setSelectedForm] = useState<FormListType>(firstRecList[0]);
+  const [selectedForm, setSelectedForm] = useState<FormListType>(formRecList[0]);
   const [selectedLength, setSelectedLength] = useState<LengthListType>(lengthList[0]);
   const { t } = useTranslation();
 
@@ -330,33 +329,34 @@ const AIWriteTab = () => {
 
           <TitleInputSet>
             <SubTitle subTitle={t(`WriteTab.SelectForm`)} />
-            <RowStartBox>
-              {firstRecList.map((form) => (
-                <IconButton
-                  iconCssExt={css`
-                    background-color: ${selectedForm.id === form.id
-                      ? 'var(--ai-purple-97-list-over)'
-                      : 'var(--gray-gray-20)'};
-                    height: 48px;
-                    box-sizing: border-box;
-                  `}
-                  key={form.id}
-                  title={t(`FormList.${form.title}`)}
-                  onClick={() => {
-                    setSelectedForm(form);
-                  }}
-                  selected={selectedForm ? (selectedForm.id === form.id ? true : false) : false}
-                  icon={selectedForm.id === form.id ? form.selectedIcon : form.icon}
-                />
+            <Grid3BtnContainer>
+              {formRecList.map((form) => (
+                <div>
+                  <IconButton
+                    iconCssExt={css`
+                      background-color: ${selectedForm.id === form.id
+                        ? 'var(--ai-purple-97-list-over)'
+                        : 'var(--gray-gray-20)'};
+                      box-sizing: border-box;
+                    `}
+                    key={form.id}
+                    title={t(`FormList.${form.title}`)}
+                    onClick={() => {
+                      setSelectedForm(form);
+                    }}
+                    selected={selectedForm ? (selectedForm.id === form.id ? true : false) : false}
+                    icon={selectedForm.id === form.id ? form.selectedIcon : form.icon}
+                  />
+                </div>
               ))}
-            </RowStartBox>
+            </Grid3BtnContainer>
           </TitleInputSet>
 
           <TitleInputSet>
             <SubTitle subTitle={t(`WriteTab.SelectResultLength`)} />
-            <RowStartBox>
+            <Grid3BtnContainer>
               {lengthList.map((length, index) => (
-                <Button
+                <NoBorderButton
                   key={index}
                   onClick={() => {
                     setSelectedLength(length);
@@ -369,9 +369,7 @@ const AIWriteTab = () => {
                       : false
                   }
                   cssExt={css`
-                    border: ${selectedLength?.length === length.length
-                      ? 'solid 1px var(--ai-purple-80-sub)'
-                      : 'none'};
+                    border: none;
                     background-color: ${selectedLength && selectedLength.length === length.length
                       ? `var(--ai-purple-97-list-over)`
                       : 'var(--gray-gray-20)'};
@@ -383,14 +381,17 @@ const AIWriteTab = () => {
                     line-height: 1.54;
                     letter-spacing: normal;
 
-                    width: 111px;
-                    height: 28px;
                     box-sizing: border-box;
+
+                    width: 100%;
+                    padding: 4px 0px;
+                    ${flexShrink}
+                    ${flexGrow}
                   `}>
                   {t(`WriteTab.Length.${length.title}`)}
-                </Button>
+                </NoBorderButton>
               ))}
-            </RowStartBox>
+            </Grid3BtnContainer>
           </TitleInputSet>
 
           <div>
