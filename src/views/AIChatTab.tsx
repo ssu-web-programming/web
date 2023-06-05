@@ -93,10 +93,6 @@ const FloatingBox = styled.div`
 
 const InputBox = styled.div<{ activeInputWrap: boolean }>`
   box-sizing: border-box;
-  /* padding: ${({ activeInputWrap }: { activeInputWrap: boolean }) =>
-    activeInputWrap ? '5px 5px 0px 5px' : '5px'}; */
-  /* padding: 5px; */
-  /* min-height: 30px; */
   ${alignItemCenter}
 
   height: fit-content;
@@ -287,6 +283,13 @@ const AIChatTab = () => {
     handleResizeHeight();
   }, [chatInput]);
 
+  useEffect(() => {
+    if (isActiveInput && textRef?.current) {
+      textRef.current.focus();
+      handleResizeHeight();
+    }
+  }, [isActiveInput]);
+
   const handleResizeHeight = () => {
     if (textRef.current) {
       textRef.current.style.height = 'auto';
@@ -445,12 +448,6 @@ const AIChatTab = () => {
       if (chat) setRetryOrigin(null);
     }
   };
-
-  useEffect(() => {
-    if (isActiveInput && textRef?.current) {
-      textRef.current.focus();
-    }
-  }, [isActiveInput]);
 
   const selectLoadingMsg = (isRetry: boolean) => {
     if (isRetry) return t(`ChatingTab.LoadingMsg.ReCreating`);
@@ -664,6 +661,7 @@ const AIChatTab = () => {
 
                 &:disabled {
                   background-color: #fff;
+                  font-size: 13px;
                 }
               `}
               value={chatInput}
