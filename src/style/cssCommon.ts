@@ -16,6 +16,7 @@ export const userSelectCss = css`
 export const purpleBtnCss = css`
   background-image: linear-gradient(to left, #a86cea, var(--ai-purple-50-main));
   color: #fff;
+  border: none;
 `;
 
 export const TableCss = css`
