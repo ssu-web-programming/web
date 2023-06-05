@@ -11,7 +11,6 @@ const StopButton = ({ onClick, cssExt }: { onClick: Function; cssExt?: CSSProp }
         width: 73px;
         height: 28px;
         border-radius: 4px;
-        border: solid 1px var(--gray-gray-50);
         background-color: #fff;
         box-sizing: border-box;
         ${flex}

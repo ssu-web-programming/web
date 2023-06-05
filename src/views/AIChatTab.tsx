@@ -7,7 +7,6 @@ import {
   Chat,
   INPUT_MAX_LENGTH,
   appendChat,
-  initChatHistory,
   resetDefaultInput,
   selectChatHistory,
   updateChat
@@ -16,7 +15,7 @@ import { v4 as uuidv4 } from 'uuid';
 import Button from '../components/Button';
 import OpenAILinkText from '../components/OpenAILinkText';
 import ExButton from '../components/ExButton';
-import FuncRecBox, { REC_ID_LIST, RowWrapBox } from '../img/aiChat/FuncRecBox';
+import FuncRecBox, { REC_ID_LIST, RowWrapBox } from '../components/FuncRecBox';
 import {
   activeRecFunc,
   inactiveRecFunc,
@@ -40,17 +39,16 @@ import {
   alignItemEnd,
   flex
 } from '../style/cssCommon';
+import { calcToken, getElValue } from '../api/usePostSplunkLog';
 import { setCreating } from '../store/slices/tabSlice';
 import { CHAT_STREAM_API, JSON_CONTENT_TYPE } from '../api/constant';
 import { calLeftCredit, insertDoc } from '../util/common';
 import icon_sand from '../img/ico_send.svg';
-import { setBridgeMessage } from '../store/slices/bridge';
 import useApiWrapper from '../api/useApiWrapper';
 import icon_credit from '../img/ico_credit.svg';
 import { useTranslation } from 'react-i18next';
 import useErrorHandle from '../components/hooks/useErrorHandle';
-import { firstRecList } from '../img/aiChat/FuncRecBox';
-import { updateDefaultInput } from '../store/slices/chatHistorySlice';
+import { formRecList } from '../components/FuncRecBox';
 import { GPT_EXCEEDED_LIMIT } from '../error/error';
 
 const TEXT_MAX_HEIGHT = 268;
@@ -316,6 +314,8 @@ const AIChatTab = () => {
   };
 
   const submitChat = async (chat?: Chat) => {
+    let resultText = '';
+    let splunk = null;
     try {
       dispatch(setCreating('Chating'));
       setChatInput('');
@@ -356,7 +356,7 @@ const AIChatTab = () => {
         })
       );
 
-      const res = await apiWrapper(CHAT_STREAM_API, {
+      const { res, logger } = await apiWrapper(CHAT_STREAM_API, {
         headers: {
           ...JSON_CONTENT_TYPE,
           'User-Agent': navigator.userAgent
@@ -373,6 +373,7 @@ const AIChatTab = () => {
         }),
         method: 'POST'
       });
+      splunk = logger;
 
       if (res.status !== 200) {
         if (res.status === 400) throw new Error(GPT_EXCEEDED_LIMIT);
@@ -418,10 +419,23 @@ const AIChatTab = () => {
         dispatch(
           updateChat({ id: assistantId, role: 'assistant', result: decodeStr, input: input })
         );
+        resultText += decodeStr;
       }
     } catch (error: any) {
       errorHandle(error);
     } finally {
+      if (splunk) {
+        const el = getElValue(selectedRecFunction?.id);
+        const input_token = calcToken(chatInput);
+        const output_token = calcToken(resultText);
+        splunk({
+          dp: 'ai.write',
+          el,
+          input_token,
+          output_token
+        });
+      }
+
       setLoadingInfo(null);
       stopRef.current = false;
       dispatch(initRecFunc());
@@ -441,7 +455,7 @@ const AIChatTab = () => {
   const selectLoadingMsg = (isRetry: boolean) => {
     if (isRetry) return t(`ChatingTab.LoadingMsg.ReCreating`);
 
-    const isFirstRec = firstRecList.filter((rec) => rec.id === selectedRecFunction?.id).length > 0;
+    const isFirstRec = formRecList.filter((rec) => rec.id === selectedRecFunction?.id).length > 0;
     if (isFirstRec || (!isFirstRec && !selectedRecFunction && chatInput.length > 0)) {
       return t(`ChatingTab.LoadingMsg.Creating`);
     }
