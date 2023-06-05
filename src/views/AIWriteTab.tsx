@@ -13,6 +13,7 @@ import Icon from '../components/Icon';
 import { useRef, useState } from 'react';
 import OpenAILinkText from '../components/OpenAILinkText';
 import { useDispatch } from 'react-redux';
+import { calcToken } from '../api/usePostSplunkLog';
 import { activeToast } from '../store/slices/toastSlice';
 import { v4 as uuidv4 } from 'uuid';
 import {
@@ -181,10 +182,12 @@ const AIWriteTab = () => {
   const { history, currentWriteId } = useAppSelector(selectWriteHistorySlice);
 
   const submitSubject = async (inputParam?: WriteType) => {
+    let resultText = '';
+    let splunk = null;
+    let input = '';
     try {
       const assistantId = uuidv4();
 
-      let input = '';
       let preProc = {
         type: '',
         arg1: '',
@@ -210,7 +213,7 @@ const AIWriteTab = () => {
 
       dispatch(setCreating('Write'));
 
-      const res = await apiWrapper(CHAT_STREAM_API, {
+      const { res, logger } = await apiWrapper(CHAT_STREAM_API, {
         headers: {
           ...JSON_CONTENT_TYPE,
           'User-Agent': navigator.userAgent
@@ -227,6 +230,7 @@ const AIWriteTab = () => {
         }),
         method: 'POST'
       });
+      splunk = logger;
 
       if (res.status !== 200) {
         if (res.status === 400) throw new Error(GPT_EXCEEDED_LIMIT);
@@ -266,6 +270,7 @@ const AIWriteTab = () => {
 
         if (done) {
           // setProcessState(PROCESS_STATE.COMPLETE_GENERATE);
+
           break;
         }
 
@@ -278,6 +283,7 @@ const AIWriteTab = () => {
             preProcessing: preProc
           })
         );
+        resultText += decodeStr;
 
         endRef?.current?.scrollIntoView({ behavior: 'smooth' });
       }
@@ -287,6 +293,16 @@ const AIWriteTab = () => {
       dispatch(resetCurrentWrite());
       errorHandle(error);
     } finally {
+      if (splunk) {
+        const input_token = calcToken(input);
+        const output_token = calcToken(resultText);
+        splunk({
+          dp: 'ai.write',
+          el: 'create_text',
+          input_token,
+          output_token
+        });
+      }
       stopRef.current = false;
       dispatch(setCreating('none'));
     }

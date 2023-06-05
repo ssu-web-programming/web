@@ -19,6 +19,7 @@
     "cheerio": "^1.0.0-rc.12",
     "env-cmd": "^10.1.0",
     "esm": "^3.2.25",
+    "gpt-tokenizer": "^2.0.0",
     "i18next": "^22.4.14",
     "i18next-browser-languagedetector": "^7.0.1",
     "marked": "^5.0.1",
@@ -37,8 +38,10 @@
     "xml2js": "^0.5.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "env-cmd -f ./env/.env.dev.js react-scripts start",
+    "build": "env-cmd -f ./env/.env.dev.js react-scripts build",
+    "build:staging": "env-cmd -f ./env/.env.staging.js react-scripts build",
+    "build:prod": "env-cmd -f ./env/.env.prod.js react-scripts build",
     "dev": "yarn build && nodemon --watch ./build/**/*.js --exec \"ts-node\" server/server.ts",
     "build:all": "node -r esm ./scripts/buildByEnv.js aws_s3"
   },
