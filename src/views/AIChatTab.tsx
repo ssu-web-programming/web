@@ -558,7 +558,9 @@ const AIChatTab = () => {
                         {retryOrigin !== chat.id && (
                           <Button
                             cssExt={css`
-                              min-width: 135px;
+                              min-width: 127.7px;
+                              height: 28px;
+                              box-sizing: border-box;
                               /* margin: 0px; */
                             `}
                             isCredit={true}
@@ -572,7 +574,10 @@ const AIChatTab = () => {
                         <Button
                           cssExt={css`
                             ${purpleBtnCss}
-                            min-width: 135px;
+                            min-width: 127.7px;
+                            height: 28px;
+                            box-sizing: border-box;
+                            /* margin: 0px; */
                           `}
                           onClick={() => {
                             insertDoc(chat.result);

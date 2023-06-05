@@ -16,7 +16,7 @@ const Wrapper = styled.div<{ isUser: boolean }>`
   align-self: ${({ isUser }: { isUser: boolean }) => isUser && 'flex-end'};
 
   margin: ${({ isUser }: { isUser: boolean }) =>
-    isUser ? '16px 25px 0px 48px' : '16px 30px 0px 8px'};
+    isUser ? '16px 10px 0px 48px' : '16px 30px 0px 8px'};
 `;
 
 const Profile = styled.div`
@@ -27,6 +27,7 @@ const Profile = styled.div`
   padding: 4px 4px 4px;
   border-radius: 10px;
   background-color: var(--ai-purple-95-list-pressed);
+  box-sizing: border-box;
 `;
 
 const SpeechBubbleWrapper = styled.div<{ cssExt: any; isUser: boolean }>`
@@ -89,12 +90,12 @@ const SpeechBubble = ({
             <Icon
               iconSrc={loadingMsg ? icon_ai_loading : icon_ai}
               cssExt={css`
-                width: 32px;
-                height: 32px;
+                /* width: 32px;
+                height: 32px; */
               `}
               imgCssExt={css`
-                width: 32px;
-                height: 32px;
+                width: 24px;
+                height: 24px;
               `}
             />
           </Profile>

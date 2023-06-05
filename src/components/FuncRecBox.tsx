@@ -360,9 +360,8 @@ const FucRecBox = ({ isFormRec }: { isFormRec: boolean }) => {
                           }
                         }}
                         cssExt={css`
-                          height: fit-content;
                           width: 100%;
-                          min-height: 28px;
+                          height: 28px;
                           ${flexShrink}
                           ${flexGrow}
                           flex: 30%;
