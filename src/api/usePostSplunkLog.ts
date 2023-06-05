@@ -1,5 +1,5 @@
 import { encode } from 'gpt-tokenizer';
-import { REC_ID_LIST } from '../img/aiChat/FuncRecBox';
+import { REC_ID_LIST } from '../components/FuncRecBox';
 interface SplunkLogDataType {
   ti: {
     v: string;
