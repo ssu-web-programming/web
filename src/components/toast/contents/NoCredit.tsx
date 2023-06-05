@@ -7,12 +7,12 @@ const TextLink = styled.p`
   }
 `;
 
-export default function NoCredit() {
+export default function NoCredit({ children }: { children?: React.ReactNode }) {
   const { t } = useTranslation();
 
   return (
     <div>
-      <p>{t(`ToastMsg.UsedAllCredit`)}</p>
+      {children ? children : <p>{t(`ToastMsg.UsedAllCredit`)}</p>}
       <TextLink
         onClick={() => {
           window._Bridge.openWindow(`credit`);
