@@ -20,7 +20,10 @@ import { calLeftCredit } from '../util/common';
 import useErrorHandle from '../components/hooks/useErrorHandle';
 import { INVALID_PROMPT } from '../error/error';
 import { setCreating } from '../store/slices/tabSlice';
-import ImageCreateInput from '../components/txt2img/ImageCreateInput';
+import ImageCreateInput, {
+  ratioItemList,
+  styleItemList
+} from '../components/txt2img/ImageCreateInput';
 import ImageCreateResult from '../components/txt2img/ImageCreateResult';
 
 const Body = styled.div`
@@ -57,11 +60,19 @@ export interface AiImageResponse {
   data: string;
 }
 
+export interface T2IOptionType {
+  descInput: string;
+  style: string;
+  ratio: string;
+}
+
 const ImageCreate = ({ contents }: { contents?: string }) => {
   const apiWrapper = useApiWrapper();
-  const [descInput, setDescInput] = useState<string>(contents ? contents : '');
-  const [selectedStyle, setSelectedStyle] = useState<string>('none');
-  const [selectedRatio, setSelectedRatio] = useState<string>('512x512');
+  const [selectedOptions, setSelectedOptions] = useState<T2IOptionType>({
+    descInput: '',
+    style: styleItemList[0].id,
+    ratio: ratioItemList[0].id
+  });
   const [creating, setCreatingImage] = useState(false);
   const dispatch = useAppDispatch();
   const { currentListId, currentItemIdx, history } = useAppSelector(selectT2IHIstory);
@@ -78,11 +89,11 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
         dispatch(setCreating('CreateImage'));
 
         const apiBody: any = {
-          prompt: remake ? remake?.input : descInput,
-          imgSize: remake ? remake?.ratio : selectedRatio
+          prompt: remake ? remake?.input : selectedOptions.descInput,
+          imgSize: remake ? remake?.ratio : selectedOptions.ratio
         };
-        if (selectedStyle !== 'none')
-          apiBody['style_preset'] = remake ? remake.style : selectedStyle;
+        if (selectedOptions.style !== 'none')
+          apiBody['style_preset'] = remake ? remake.style : selectedOptions.style;
 
         const { res, logger } = await apiWrapper(TEXT_TO_IMAGE_API, {
           headers: {
@@ -100,7 +111,7 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
           else throw res;
         }
 
-        const input_token = calcToken(descInput);
+        const input_token = calcToken(selectedOptions.descInput);
         logger({
           dp: 'ai.text_to_image',
           input_token
@@ -125,9 +136,9 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
             addT2I({
               id: assistantId,
               list: images,
-              input: remake ? remake?.input : descInput,
-              style: remake ? remake?.style : selectedStyle,
-              ratio: remake ? remake?.ratio : selectedRatio
+              input: remake ? remake?.input : selectedOptions.descInput,
+              style: remake ? remake?.style : selectedOptions.style,
+              ratio: remake ? remake?.ratio : selectedOptions.ratio
             })
           );
           dispatch(updateT2ICurListId(assistantId));
@@ -144,7 +155,7 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
         errorHandle(error);
       }
     },
-    [descInput, selectedRatio, selectedStyle]
+    [selectedOptions]
   );
 
   const currentHistory =
@@ -166,20 +177,16 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
       ) : !currentHistory ? (
         <ImageCreateInput
           history={history}
-          descInput={descInput}
-          setDescInput={setDescInput}
-          setSelectedStyle={setSelectedStyle}
-          selectedStyle={selectedStyle}
-          setSelectedRatio={setSelectedRatio}
-          selectedRatio={selectedRatio}
+          selectedOptions={selectedOptions}
+          setSelectedOptions={setSelectedOptions}
           createAiImage={createAiImage}
         />
       ) : (
         <ImageCreateResult
           history={history}
           currentHistory={currentHistory}
-          currentItemIdx={currentItemIdx}
           currentListId={currentListId}
+          currentItemIdx={currentItemIdx}
           createAiImage={createAiImage}
         />
       )}

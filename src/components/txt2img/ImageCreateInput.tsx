@@ -25,7 +25,7 @@ import {
   justiCenter,
   purpleBtnCss
 } from '../../style/cssCommon';
-import { RowContainer, SubTitleArea } from '../../views/ImageCreate';
+import { RowContainer, SubTitleArea, T2IOptionType } from '../../views/ImageCreate';
 import SubTitle from '../SubTitle';
 import ShowResult from '../ShowResult';
 import { useAppDispatch } from '../../store/store';
@@ -161,7 +161,7 @@ const exampleList = [
   'ComicPoster'
 ];
 
-const selectStyleItemList = [
+export const styleItemList = [
   {
     id: 'none',
     title: 'None',
@@ -212,7 +212,7 @@ const selectStyleItemList = [
   }
 ];
 
-const selectImageRatioItemList = [
+export const ratioItemList = [
   {
     id: '512x512',
     title: 'Squre',
@@ -235,25 +235,18 @@ const selectImageRatioItemList = [
 
 const ImageCreateInput = ({
   history,
-  descInput,
-  setDescInput,
-  setSelectedStyle,
-  selectedStyle,
-  setSelectedRatio,
-  selectedRatio,
+  selectedOptions,
+  setSelectedOptions,
   createAiImage
 }: {
   history: T2IType[];
-  descInput: string;
-  selectedStyle: string;
-  selectedRatio: string;
-  setDescInput: Function;
-  setSelectedStyle: Function;
-  setSelectedRatio: Function;
+  selectedOptions: T2IOptionType;
+  setSelectedOptions: Function;
   createAiImage: Function;
 }) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
+  const { descInput, style, ratio } = selectedOptions;
 
   return (
     <MakingInputWrapper>
@@ -273,7 +266,11 @@ const ImageCreateInput = ({
           exampleList={exampleList}
           maxtTextLen={1000}
           value={descInput}
-          setValue={setDescInput}
+          setValue={(val: string) => {
+            setSelectedOptions((prev: T2IOptionType) => {
+              return { ...prev, descInput: val };
+            });
+          }}
         />
       </SelectOptionArea>
       <SelectOptionArea>
@@ -281,29 +278,35 @@ const ImageCreateInput = ({
           <SubTitle subTitle={t('Txt2ImgTab.ChooseStyle')} />
         </SubTitleArea>
         <GridContainer>
-          {selectStyleItemList.map((item) => {
+          {styleItemList.map((item) => {
             return (
-              <ContainerItem key={item.id} onClick={() => setSelectedStyle(item.id)}>
+              <ContainerItem
+                key={item.id}
+                onClick={() =>
+                  setSelectedOptions((prev: T2IOptionType) => {
+                    return { ...prev, style: item.id };
+                  })
+                }>
                 <div>
                   <ItemIconBox
                     cssExt={css`
                       border: ${item.id === 'none' &&
-                      item.id === selectedStyle &&
+                      item.id === style &&
                       'solid 1px var(--ai-purple-80-sub)'};
 
                       width: 81px;
                       height: 80px;
                     `}
-                    isSelected={item.id === selectedStyle}>
+                    isSelected={item.id === style}>
                     <img
                       style={{
                         width: item.id === 'none' ? '24px' : '100%',
                         height: item.id === 'none' ? '24px' : '100%'
                       }}
-                      src={item.id === selectedStyle ? item.selectedImgItem : item.imgItem}
+                      src={item.id === style ? item.selectedImgItem : item.imgItem}
                       alt=""></img>
                   </ItemIconBox>
-                  <ItemTitle isSelected={item.id === selectedStyle}>
+                  <ItemTitle isSelected={item.id === style}>
                     {t(`Txt2ImgTab.StyleList.${item.title}`)}
                   </ItemTitle>
                 </div>
@@ -324,25 +327,31 @@ const ImageCreateInput = ({
 
               grid-template-columns: repeat(auto-fit, minmax(81px, 4));
             `}>
-            {selectImageRatioItemList.map((item) => {
+            {ratioItemList.map((item) => {
               return (
-                <ContainerItem key={item.id} onClick={() => setSelectedRatio(item.id)}>
+                <ContainerItem
+                  key={item.id}
+                  onClick={() =>
+                    setSelectedOptions((prev: T2IOptionType) => {
+                      return { ...prev, ratio: item.id };
+                    })
+                  }>
                   <RatioBtnConatainer>
                     <ItemIconBox
                       cssExt={css`
-                        border: ${item.id === selectedRatio && 'solid 1px var(--ai-purple-80-sub)'};
+                        border: ${item.id === ratio && 'solid 1px var(--ai-purple-80-sub)'};
                         padding: 12px 0px;
 
                         ${flexShrink}
                         ${flexGrow}
                             width: 100%;
                       `}
-                      isSelected={item.id === selectedRatio}>
+                      isSelected={item.id === ratio}>
                       <img
-                        src={item.id === selectedRatio ? item.selectedImgItem : item.imgItem}
+                        src={item.id === ratio ? item.selectedImgItem : item.imgItem}
                         alt=""></img>
                     </ItemIconBox>
-                    <ItemTitle isSelected={item.id === selectedRatio}>
+                    <ItemTitle isSelected={item.id === ratio}>
                       {t(`Txt2ImgTab.RatioList.${item.title}`)}
                     </ItemTitle>
                   </RatioBtnConatainer>
