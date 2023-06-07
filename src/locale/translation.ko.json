@@ -143,7 +143,8 @@
     "SuccessMsg": "작성 완료. 원하는 작업을 실행하세요.",
     "CompleteCopy": "내용 복사가 완료되었습니다.",
     "CompleteInsert": "내용 삽입이 완료 되었습니다.",
-    "ErrorMsg": "오류가 발생했습니다. 잠시 후 다시 시도해 주세요. ({{code}} : {{msg}})"
+    "ErrorMsg": "오류가 발생했습니다. 잠시 후 다시 시도해 주세요. ({{code}} : {{msg}})",
+    "UnauthorizedMsg": "이 기능을 사용하려면 로그인이 필요합니다. 현재 로그인되어 있는지 다시 한 번 확인해주세요."
   },
   "Download": "다운로드 하기",
   "AITools": "AI 도구",

@@ -143,7 +143,8 @@
     "SuccessMsg": "Writing content completed. Select a job you want.",
     "CompleteCopy": "Copy completed.",
     "CompleteInsert": "Insert completed.",
-    "ErrorMsg": "An error has occurred. Please try again later. ({{code}} : {{msg}})"
+    "ErrorMsg": "An error has occurred. Please try again later. ({{code}} : {{msg}})",
+    "UnauthorizedMsg": "You need to be logged in to use this feature. Please check your login status again."
   },
   "Download": "Download",
   "AITools": "AI Tools",

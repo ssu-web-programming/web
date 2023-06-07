@@ -37,7 +37,7 @@ const useErrorHandle = () => {
       default: {
         switch (error.status) {
           case 401:
-            msg = '401 Unauthorized';
+            msg = t(`ToastMsg.UnauthorizedMsg`);
             break;
           case 429:
             const { leftCredit, deductionCredit } = calLeftCredit(error.headers);
