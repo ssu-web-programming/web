@@ -59,6 +59,7 @@ import { useTranslation } from 'react-i18next';
 import useErrorHandle from '../components/hooks/useErrorHandle';
 import { GPT_EXCEEDED_LIMIT } from '../error/error';
 import NoBorderButton from '../components/NoBorderButton';
+import ShowResult from '../components/ShowResult';
 
 const WriteInputPage = styled.div`
   ${flexColumn}
@@ -314,7 +315,18 @@ const AIWriteTab = () => {
       {!currentWriteId ? (
         <WriteInputPage>
           <TitleInputSet>
-            <SubTitle subTitle={t(`WriteTab.WriteTopic`)} />
+            <RowBox
+              cssExt={css`
+                ${justiSpaceBetween}
+              `}>
+              <SubTitle subTitle={t(`WriteTab.WriteTopic`)} />
+              <ShowResult
+                disable={history.length === 0}
+                onClick={() => {
+                  dispatch(setCurrentWrite(history[0].id));
+                }}
+              />
+            </RowBox>
             <InputArea>
               <ExTextbox
                 exampleList={exampleList}

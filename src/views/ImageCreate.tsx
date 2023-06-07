@@ -61,6 +61,7 @@ import useErrorHandle from '../components/hooks/useErrorHandle';
 import { INVALID_PROMPT } from '../error/error';
 import { setCreating } from '../store/slices/tabSlice';
 import LinkText from '../components/LinkText';
+import ShowResult from '../components/ShowResult';
 
 const exampleList = [
   'Flight',
@@ -470,6 +471,13 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
           <SelectOptionArea>
             <SubTitleArea>
               <SubTitle subTitle={t(`Txt2ImgTab.WritingImageDesc`)} />
+              <ShowResult
+                disable={history.length === 0}
+                onClick={() => {
+                  dispatch(updateT2ICurListId(history[0].id));
+                  dispatch(updateT2ICurItemIndex(0));
+                }}
+              />
             </SubTitleArea>
             <ExTextbox
               placeholder={t(`Txt2ImgTab.WriteImageDesc`) || ''}
