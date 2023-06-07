@@ -44,6 +44,12 @@ export interface LengthListType {
   length: string;
 }
 
+export interface OptionsType {
+  input: string;
+  form: FormListType;
+  length: LengthListType;
+}
+
 export const lengthList = [
   { title: 'Short', length: 'short' },
   { title: 'Medium', length: 'medium' },
@@ -52,9 +58,11 @@ export const lengthList = [
 
 const AIWriteTab = () => {
   const apiWrapper = useApiWrapper();
-  const [subject, setSubject] = useState<string>('');
-  const [selectedForm, setSelectedForm] = useState<FormListType>(formRecList[0]);
-  const [selectedLength, setSelectedLength] = useState<LengthListType>(lengthList[0]);
+  const [selectedOptions, setSelectedOptions] = useState<OptionsType>({
+    input: '',
+    form: formRecList[0],
+    length: lengthList[0]
+  });
   const { t } = useTranslation();
 
   const errorHandle = useErrorHandle();
@@ -84,11 +92,11 @@ const AIWriteTab = () => {
         input = inputParam.input;
         preProc = inputParam.preProcessing;
       } else {
-        input = subject;
+        input = selectedOptions.input;
         preProc = {
           type: 'create_text',
-          arg1: selectedForm.id, // id로 수정
-          arg2: selectedLength.length.toString()
+          arg1: selectedOptions.form.id, // id로 수정
+          arg2: selectedOptions.length.length.toString()
         };
       }
 
@@ -203,18 +211,13 @@ const AIWriteTab = () => {
       {!currentWriteId ? (
         <AIWriteInput
           history={history}
-          subject={subject}
-          setSubject={setSubject}
-          selectedForm={selectedForm}
-          setSelectedForm={setSelectedForm}
-          setSelectedLength={setSelectedLength}
-          selectedLength={selectedLength}
+          selectedOptions={selectedOptions}
+          setSelectedOptions={setSelectedOptions}
           submitSubject={submitSubject}
         />
       ) : (
         <AiWriteResult
           history={history}
-          endRef={endRef}
           onClickStop={onClickStop}
           currentWriteId={currentWriteId}
           submitSubject={submitSubject}

@@ -89,14 +89,12 @@ const ResWrapper = styled.div`
 
 const AiWriteResult = ({
   history,
-  endRef,
   onClickStop,
   currentWriteId,
   submitSubject,
   moveChat
 }: {
   history: WriteType[];
-  endRef: React.RefObject<HTMLDivElement>;
   onClickStop: Function;
   currentWriteId: string;
   submitSubject: Function;
@@ -130,7 +128,7 @@ const AiWriteResult = ({
           </LoadingWrapper>
         ) : (
           <ResultWrapper>
-            <PreMarkdown text={currentWrite.result} endRef={endRef} />
+            <PreMarkdown text={currentWrite.result} />
           </ResultWrapper>
         )}
         <div>

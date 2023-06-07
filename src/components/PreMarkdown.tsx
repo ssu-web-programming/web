@@ -13,13 +13,7 @@ const Pre = styled.div`
   }
 `;
 
-const PreMarkdown = ({
-  text,
-  endRef
-}: {
-  text: string;
-  endRef?: React.RefObject<HTMLDivElement> | null;
-}) => {
+const PreMarkdown = ({ text }: { text: string }) => {
   return (
     <Pre
       style={{
@@ -29,9 +23,11 @@ const PreMarkdown = ({
         fontSize: '13px',
         margin: '0px',
         padding: '0px'
+      }}
+      ref={(el) => {
+        if (el) el.scrollTo(0, el.scrollHeight);
       }}>
       <ReactMarkdown remarkPlugins={[remarkGfm]}>{text}</ReactMarkdown>
-      {endRef && <div ref={endRef} />}
     </Pre>
   );
 };

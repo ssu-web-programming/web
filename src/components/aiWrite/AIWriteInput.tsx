@@ -14,12 +14,7 @@ import ShowResult from '../ShowResult';
 import { useAppDispatch } from '../../store/store';
 import { WriteType, setCurrentWrite } from '../../store/slices/writeHistorySlice';
 import ExTextbox from '../ExTextbox';
-import {
-  FormListType,
-  Grid3BtnContainer,
-  LengthListType,
-  lengthList
-} from '../../views/AIWriteTab';
+import { Grid3BtnContainer, OptionsType, lengthList } from '../../views/AIWriteTab';
 import { formRecList } from '../FuncRecBox';
 import IconButton from '../IconButton';
 import NoBorderButton from '../NoBorderButton';
@@ -51,25 +46,18 @@ const subjectMaxLength = 1000;
 
 const AIWriteInput = ({
   history,
-  subject,
-  setSubject,
-  selectedForm,
-  setSelectedForm,
-  setSelectedLength,
-  selectedLength,
+  selectedOptions,
+  setSelectedOptions,
   submitSubject
 }: {
   history: WriteType[];
-  subject: string;
-  selectedForm: FormListType;
-  selectedLength: LengthListType;
-  setSubject: Function;
-  setSelectedForm: Function;
-  setSelectedLength: Function;
+  selectedOptions: OptionsType;
+  setSelectedOptions: Function;
   submitSubject: Function;
 }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const { input, form: selectedForm, length: selectedLength } = selectedOptions;
 
   return (
     <WriteInputPage>
@@ -90,10 +78,12 @@ const AIWriteInput = ({
           <ExTextbox
             exampleList={exampleList}
             maxtTextLen={subjectMaxLength}
-            value={subject}
+            value={input}
             placeholder={t(`WriteTab.WriteTextboxPlacehold`) || ''}
             setValue={(val: string) => {
-              setSubject(val);
+              setSelectedOptions((prev: OptionsType) => {
+                return { ...prev, input: val };
+              });
             }}></ExTextbox>
         </InputArea>
       </TitleInputSet>
@@ -113,7 +103,9 @@ const AIWriteInput = ({
                 key={form.id}
                 title={t(`FormList.${form.title}`)}
                 onClick={() => {
-                  setSelectedForm(form);
+                  setSelectedOptions((prev: OptionsType) => {
+                    return { ...prev, form: form };
+                  });
                 }}
                 selected={selectedForm ? (selectedForm.id === form.id ? true : false) : false}
                 icon={selectedForm.id === form.id ? form.selectedIcon : form.icon}
@@ -129,7 +121,9 @@ const AIWriteInput = ({
             <NoBorderButton
               key={index}
               onClick={() => {
-                setSelectedLength(length);
+                setSelectedOptions((prev: OptionsType) => {
+                  return { ...prev, length: length };
+                });
               }}
               selected={
                 selectedLength ? (selectedLength.length === length.length ? true : false) : false
@@ -162,7 +156,7 @@ const AIWriteInput = ({
 
       <div>
         <Button
-          disable={subject.length === 0}
+          disable={input.length === 0}
           isCredit={true}
           cssExt={css`
             ${purpleBtnCss}
@@ -170,7 +164,7 @@ const AIWriteInput = ({
             margin-top: 4px;
           `}
           onClick={() => {
-            if (subject.length === 0) {
+            if (input.length === 0) {
               return;
             }
 
