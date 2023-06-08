@@ -7,6 +7,7 @@ import {
   Chat,
   INPUT_MAX_LENGTH,
   appendChat,
+  removeChat,
   resetDefaultInput,
   selectChatHistory,
   updateChat
@@ -25,7 +26,6 @@ import {
 import { activeToast } from '../store/slices/toastSlice';
 import icon_ai from '../img/ico_ai.svg';
 import Icon from '../components/Icon';
-import CopyIcon from '../components/CopyIcon';
 import StopButton from '../components/StopButton';
 import {
   TableCss,
@@ -319,17 +319,18 @@ const AIChatTab = () => {
   const submitChat = async (chat?: Chat) => {
     let resultText = '';
     let splunk = null;
+    const assistantId = uuidv4();
+    const userId = uuidv4();
+    let input = chat
+      ? chat.input
+      : chatInput.length > 0
+      ? chatInput
+      : chatHistory[chatHistory.length - 1].result;
+
     try {
       dispatch(setCreating('Chating'));
       setChatInput('');
 
-      let input = chat
-        ? chat.input
-        : chatInput.length > 0
-        ? chatInput
-        : chatHistory[chatHistory.length - 1].result;
-
-      const assistantId = uuidv4();
       const msg = selectLoadingMsg(chat ? true : false);
       setLoadingInfo({ id: assistantId, msg: msg });
 
@@ -341,7 +342,7 @@ const AIChatTab = () => {
       if (!chat && chatInput.length > 0) {
         dispatch(
           appendChat({
-            id: uuidv4(),
+            id: userId,
             role: 'user',
             result: input,
             input: input,
@@ -426,6 +427,17 @@ const AIChatTab = () => {
       }
     } catch (error: any) {
       errorHandle(error);
+
+      const isAssistantChat = chatHistory?.filter((history) => history.id === assistantId)[0]
+        ?.result;
+      if (isAssistantChat && isAssistantChat?.length === 0) {
+        dispatch(removeChat(userId));
+        dispatch(removeChat(assistantId));
+        if (input) {
+          setChatInput(input);
+          setIsActiveInput(true);
+        }
+      }
     } finally {
       if (splunk) {
         const el = getElValue(selectedRecFunction?.id);
@@ -443,7 +455,7 @@ const AIChatTab = () => {
       stopRef.current = false;
       dispatch(initRecFunc());
       dispatch(setCreating('none'));
-      toggleActiveInput(false);
+      // toggleActiveInput(false);
 
       if (chat) setRetryOrigin(null);
     }
