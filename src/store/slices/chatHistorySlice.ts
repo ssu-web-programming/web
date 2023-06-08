@@ -44,6 +44,9 @@ const chatHistorySlice = createSlice({
         return chat;
       });
     },
+    removeChat: (state, action: PayloadAction<string>) => {
+      state.history = state.history.filter((chat) => chat.id !== action.payload);
+    },
     updateDefaultInput: (state, action: PayloadAction<string>) => {
       state.defaultInput = action.payload.slice(0, INPUT_MAX_LENGTH);
     },
@@ -53,7 +56,13 @@ const chatHistorySlice = createSlice({
   }
 });
 
-export const { initChatHistory, appendChat, updateChat, updateDefaultInput, resetDefaultInput } =
-  chatHistorySlice.actions;
+export const {
+  initChatHistory,
+  appendChat,
+  updateChat,
+  updateDefaultInput,
+  resetDefaultInput,
+  removeChat
+} = chatHistorySlice.actions;
 export const selectChatHistory = (state: RootState) => state.chatHistory;
 export default chatHistorySlice.reducer;
