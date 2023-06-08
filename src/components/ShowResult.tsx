@@ -3,8 +3,11 @@ import icon_arrow_right from '../img/ico_arrow_right.png';
 import { css } from 'styled-components';
 import Button, { ButtonProps } from './Button';
 import { TextBtnCss } from '../style/cssCommon';
+import { useTranslation } from 'react-i18next';
 
 const ShowResult = (props: ButtonProps) => {
+  const { t } = useTranslation();
+
   return (
     <Button
       {...props}
@@ -21,7 +24,7 @@ const ShowResult = (props: ButtonProps) => {
 
         ${props.cssExt}
       `}>
-      결과 다시보기
+      {t(`ShowResult`)}
       {/* 고해상도 icon 요청 필요 */}
       <Icon
         cssExt={css`
