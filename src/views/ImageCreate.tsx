@@ -184,7 +184,6 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
       ) : (
         <ImageCreateResult
           history={history}
-          currentHistory={currentHistory}
           currentListId={currentListId}
           currentItemIdx={currentItemIdx}
           createAiImage={createAiImage}

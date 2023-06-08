@@ -86,20 +86,20 @@ const ImageList = styled.div`
 
 const ImageCreateResult = ({
   history,
-  currentHistory,
   currentItemIdx,
   createAiImage,
   currentListId
 }: {
   history: T2IType[];
-  currentHistory: T2IType;
   currentListId: string | null;
   currentItemIdx: number | null;
   createAiImage: Function;
 }) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
+
   const curListIndex = history.findIndex((list) => list.id === currentListId);
+  const curHistory = history[curListIndex];
 
   return (
     <>
@@ -112,7 +112,7 @@ const ImageCreateResult = ({
           }}
         />
       </SubTitleArea>
-      <ImageDesc>{currentHistory.input}</ImageDesc>
+      <ImageDesc>{curHistory.input}</ImageDesc>
       <RowBox
         cssExt={css`
           ${justiCenter}
@@ -158,7 +158,7 @@ const ImageCreateResult = ({
         {currentItemIdx !== null && (
           <img
             style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-            src={`data:${currentHistory.list[currentItemIdx].contentType};base64,${currentHistory.list[currentItemIdx].data}`}
+            src={`data:${curHistory.list[currentItemIdx].contentType};base64,${curHistory.list[currentItemIdx].data}`}
             alt=""></img>
         )}
       </ImagePreview>
@@ -174,7 +174,7 @@ const ImageCreateResult = ({
             }
           }}
         />
-        {currentHistory.list.map((img, index) => (
+        {curHistory.list.map((img, index) => (
           <img
             onClick={() => {
               dispatch(updateT2ICurItemIndex(index));
@@ -205,7 +205,7 @@ const ImageCreateResult = ({
         <Button
           isCredit={true}
           onClick={() => {
-            createAiImage(currentHistory);
+            createAiImage(curHistory);
           }}>
           {t(`WriteTab.Recreating`)}
         </Button>
@@ -213,12 +213,12 @@ const ImageCreateResult = ({
           onClick={async () => {
             try {
               if (currentItemIdx === null) throw new Error('invalid currentItemIdx');
-              const selected = currentHistory.list[currentItemIdx];
+              const selected = curHistory.list[currentItemIdx];
 
               if (!selected) throw new Error('invalid target');
 
               const res = await fetch(
-                `data:${currentHistory.list[currentItemIdx].contentType};base64,${currentHistory.list[currentItemIdx].data}`
+                `data:${curHistory.list[currentItemIdx].contentType};base64,${curHistory.list[currentItemIdx].data}`
               );
               const blob = await res.blob();
               window._Bridge.downloadImage(blob);
@@ -232,12 +232,12 @@ const ImageCreateResult = ({
           onClick={async () => {
             try {
               if (currentItemIdx === null) throw new Error('invalid currentItemIdx');
-              const selected = currentHistory.list[currentItemIdx];
+              const selected = curHistory.list[currentItemIdx];
 
               if (!selected) throw new Error('invalid target');
 
               const res = await fetch(
-                `data:${currentHistory.list[currentItemIdx].contentType};base64,${currentHistory.list[currentItemIdx].data}`
+                `data:${curHistory.list[currentItemIdx].contentType};base64,${curHistory.list[currentItemIdx].data}`
               );
               const blob = await res.blob();
               window._Bridge.insertImage(blob);
