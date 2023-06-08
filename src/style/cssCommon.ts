@@ -20,6 +20,16 @@ export const purpleBtnCss = css`
   box-shadow: none;
 `;
 
+export const TextBtnCss = css`
+  border: none;
+  box-shadow: none;
+  display: flex;
+  width: fit-content;
+  height: fit-content;
+  flex-grow: 0;
+  flex-shrink: 0;
+`;
+
 export const TableCss = css`
   table {
     border-collapse: collapse;
