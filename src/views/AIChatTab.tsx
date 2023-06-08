@@ -428,9 +428,9 @@ const AIChatTab = () => {
     } catch (error: any) {
       errorHandle(error);
 
-      const isAssistantChat = chatHistory?.filter((history) => history.id === assistantId)[0]
+      const assistantResult = chatHistory?.filter((history) => history.id === assistantId)[0]
         ?.result;
-      if (isAssistantChat && isAssistantChat?.length === 0) {
+      if (!assistantResult || assistantResult?.length === 0) {
         dispatch(removeChat(userId));
         dispatch(removeChat(assistantId));
         if (input) {
