@@ -138,7 +138,7 @@
     "TabLoadedAndWait": "AI is creating a content in the {{tab}}. Please wait for a while to finish, or abort the process and try again.",
     "StartCreating": "A content will be created. {{deductionCredit}} credits have been used. (remaining credits: {{leftCredit}})",
     "AboutCredit": "{{deductionCredit}} credits have been used. (remaining credits :{{leftCredit}})",
-    "AIError": "Unsuccessful to create a content by Polaris Office AI. Please try again.",
+    "AIError": "Failed to generate AI , please try again!",
     "StopMsg": "Writing content aborted. Select a job you want.",
     "SuccessMsg": "Writing content completed. Select a job you want.",
     "CompleteCopy": "Copy completed.",

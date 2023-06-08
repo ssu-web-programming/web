@@ -138,7 +138,7 @@
     "TabLoadedAndWait": "현재 {{tab}}탭에서 내용을 생성 중에 있습니다. 완료를 기다리거나, 생성을 멈추고 다시 시도해주세요.",
     "StartCreating": "내용을 생성 합니다. {{deductionCredit}} 크레딧이 차감되었습니다. (잔여 크레딧 :{{leftCredit}})",
     "AboutCredit": "{{deductionCredit}} 크레딧이 차감되었습니다. (잔여 크레딧 :{{leftCredit}})",
-    "AIError": "폴라리스 오피스 AI의 생성이 잘 되지 않았습니다. 다시 시도해보세요.",
+    "AIError": "AI 결과 생성에 실패했습니다. 다시 시도해주세요!",
     "StopMsg": "작성 중지. 원하는 작업을 실행하세요.",
     "SuccessMsg": "작성 완료. 원하는 작업을 실행하세요.",
     "CompleteCopy": "내용 복사가 완료되었습니다.",
