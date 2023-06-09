@@ -1,17 +1,10 @@
-<svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-        <filter x="-3.6%" y="-27.5%" width="107.2%" height="165%" filterUnits="objectBoundingBox" id="72clih2i9a">
-            <feOffset dy="2" in="SourceAlpha" result="shadowOffsetOuter1"/>
-            <feGaussianBlur stdDeviation="4" in="shadowOffsetOuter1" result="shadowBlurOuter1"/>
-            <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0" in="shadowBlurOuter1" result="shadowMatrixOuter1"/>
-            <feMerge>
-                <feMergeNode in="shadowMatrixOuter1"/>
-                <feMergeNode in="SourceGraphic"/>
-            </feMerge>
-        </filter>
-    </defs>
-    <g transform="translate(-12 -12)" filter="url(#72clih2i9a)" stroke="#449916" fill="none" fill-rule="evenodd" stroke-linecap="round">
-        <path d="M23.07 13.708a7 7 0 1 0 3.675 8.17" stroke-width="1.75"/>
-        <path stroke-width="2" stroke-linejoin="round" d="M17.012 19 20 21.976l7-6.262"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>ico_toast_completion</title>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
+        <g id="Group-7" stroke="#449916" transform="translate(1.000000, 1.000000)">
+            <path d="M10.070714,0.707713169 C9.14360694,0.254424516 8.10151548,0 7,0 C3.13400675,0 0,3.13400675 0,7 C0,10.8659932 3.13400675,14 7,14 C10.2155064,14 12.9246291,11.831914 13.7452618,8.87784866" id="Path" stroke-width="1.75"></path>
+            <polyline id="Path" stroke-width="2" stroke-linejoin="round" points="4.01208496 6 7 8.97638702 14 2.71392059"></polyline>
+        </g>
     </g>
 </svg>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>ico_changing_newchat</title>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="ico/16/ai_changing_newchat" transform="translate(0.2776, 0)" stroke="#6f3ad0" stroke-width="1.33">
+            <g id="Group-2" transform="translate(0, 1)">
+                <path d="M12,0.665 C12.9209348,0.665 13.7546848,1.03828259 14.3582011,1.64179888 C14.9617174,2.24531518 15.335,3.07906518 15.335,4 L15.335,8 C15.335,8.92093482 14.9617174,9.75468482 14.3582011,10.3582011 C13.7546848,10.9617174 12.9209348,11.335 12,11.335 L7.2986542,11.335 L4.15754488,13.4290729 L3.52346034,11.3012879 C2.64619133,11.1760653 1.87950372,10.7089217 1.36137848,10.0398958 C0.924701594,9.47603958 0.665,8.76832614 0.665,8 L0.665,4 C0.665,3.07906518 1.03828259,2.24531518 1.64179888,1.64179888 C2.24531518,1.03828259 3.07906518,0.665 4,0.665 Z" id="Combined-Shape" transform="translate(8, 7.5) scale(-1, 1) translate(-8, -7.5)"></path>
+            </g>
+            <g id="Group" transform="translate(5.25, 4.25)" stroke-linecap="round">
+                <line x1="-2.77721341e-16" y1="2.75" x2="5.5" y2="2.75" id="Line"></line>
+                <line x1="2.75" y1="0" x2="2.75" y2="5.5" id="Line-Copy"></line>
+            </g>
+        </g>
+    </g>
+</svg>

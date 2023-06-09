@@ -1,5 +1,5 @@
 import Icon from './Icon';
-import icon_arrow_right from '../img/ico_arrow_right.png';
+import icon_arrow_right from '../img/ico_front.svg';
 import { css } from 'styled-components';
 import Button, { ButtonProps } from './Button';
 import { TextBtnCss } from '../style/cssCommon';
