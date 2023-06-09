@@ -12,7 +12,7 @@ import InvalidAccess from './pages/InvalidAccess';
 import { useMoveChatTab } from './components/hooks/useMovePage';
 import { useTranslation } from 'react-i18next';
 import { activeToast } from './store/slices/toastSlice';
-import OfflineView from './components/OfflineView';
+import Offline from './pages/Offline';
 import gI18n, { convertLangFromLangCode } from './locale';
 import { selectTabSlice } from './store/slices/tabSlice';
 import { updateT2ICurItemIndex, updateT2ICurListId } from './store/slices/txt2imgHistory';
@@ -117,8 +117,8 @@ function App() {
           <Route path="/txt2img" element={<TextToImage></TextToImage>}></Route>
           <Route path="*" element={<InvalidAccess></InvalidAccess>}></Route>
         </Routes>
+        <Offline></Offline>
         {toast.active && <ToastMsg msg={toast.msg} isError={toast.isError} />}
-        <OfflineView></OfflineView>
       </Wrapper>
     </>
   );
