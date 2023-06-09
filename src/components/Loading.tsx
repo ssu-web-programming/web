@@ -2,17 +2,27 @@ import styled, { CSSProp, css } from 'styled-components';
 // import ai_loading from '../img/ai_motion_mid_56.webp';
 import ai_loading from '../img/ezgif.com-gif-maker.png';
 import Icon from './Icon';
-import { alignItemCenter, flexColumn, justiCenter } from '../style/cssCommon';
+import { alignItemCenter, flex, flexColumn, justiCenter } from '../style/cssCommon';
 
 const Wrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  font-size: 13px;
+  font-weight: 500;
+
+  ${flex}
   ${flexColumn}
   ${justiCenter}
   ${alignItemCenter}
   
   color: var(--ai-purple-50-main);
-  word-wrap: break-word;
+  word-break: keep-all;
   text-align: center;
-  font-size: 13px;
+`;
+
+const Contents = styled.div`
+  width: 196px;
+  text-align: center;
 `;
 
 const Loading = ({ children, cssExt }: { children?: React.ReactNode; cssExt?: CSSProp }) => {
@@ -29,7 +39,7 @@ const Loading = ({ children, cssExt }: { children?: React.ReactNode; cssExt?: CS
           height: 56px;
         `}
       />
-      {children}
+      <Contents>{children}</Contents>
     </Wrapper>
   );
 };

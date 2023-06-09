@@ -204,9 +204,13 @@ const ImageCreateResult = ({
       <RowContainer>
         <Button
           isCredit={true}
-          onClick={() => {
-            createAiImage(curHistory);
-          }}>
+          onClick={() =>
+            createAiImage({
+              input: curHistory.input,
+              style: curHistory.style,
+              ratio: curHistory.ratio
+            })
+          }>
           {t(`WriteTab.Recreating`)}
         </Button>
         <Button

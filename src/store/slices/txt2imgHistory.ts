@@ -1,12 +1,19 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store';
-import { AiImageResponse } from '../../views/ImageCreate';
 
-export interface T2IType {
-  id: string;
+interface AiImageResponse {
+  contentType: string;
+  data: string;
+}
+
+export interface T2IOptionType {
   input: string;
-  ratio: string;
   style: string;
+  ratio: string;
+}
+
+export interface T2IType extends T2IOptionType {
+  id: string;
   list: AiImageResponse[];
 }
 
@@ -45,5 +52,5 @@ const txtimgHistorySlice = createSlice({
 
 export const { initT2IHistory, addT2I, updateT2ICurListId, updateT2ICurItemIndex } =
   txtimgHistorySlice.actions;
-export const selectT2IHIstory = (state: RootState) => state.txtimgHistory;
+export const selectT2IHistory = (state: RootState) => state.txtimgHistory;
 export default txtimgHistorySlice.reducer;
