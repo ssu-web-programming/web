@@ -6,7 +6,6 @@ import {
   flexColumn,
   flexGrow,
   flexShrink,
-  justiCenter,
   justiSpaceBetween,
   purpleBtnCss
 } from '../../style/cssCommon';
@@ -51,22 +50,6 @@ const ResultBox = styled.div`
   ${TableCss}
 `;
 
-const LoadingWrapper = styled.div`
-  width: 100%;
-  height: 100%;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--ai-purple-50-main);
-  word-wrap: break-word;
-  div {
-    width: 196px;
-    text-align: center;
-  }
-  ${flexColumn}
-  ${justiCenter}
-  ${alignItemCenter}
-`;
-
 const ResultWrapper = styled.div`
   ${flex}
   overflow: auto;
@@ -107,6 +90,10 @@ const AiWriteResult = ({
   const currentWrite = history.filter((write: any) => write.id === currentWriteId)[0];
   const currentIndex = history.findIndex((write: any) => write.id === currentWriteId);
 
+  if (currentWrite.result.length === 0 && creating !== 'none') {
+    return <Loading>{t(`WriteTab.LoadingMsg`)}</Loading>;
+  }
+
   return (
     <ResWrapper>
       <RowBox>
@@ -122,78 +109,71 @@ const AiWriteResult = ({
         )}
       </RowBox>
       <ResultBox>
-        {currentWrite.result.length === 0 && creating === 'Write' ? (
-          <LoadingWrapper>
-            <Loading>{t(`WriteTab.LoadingMsg`)}</Loading>
-          </LoadingWrapper>
-        ) : (
-          <ResultWrapper>
-            <PreMarkdown text={currentWrite.result} />
-          </ResultWrapper>
-        )}
-        <div>
-          {currentWrite.result.length > 0 && creating === 'Write' && (
-            <StopButton
-              cssExt={css`
-                margin: 0 auto;
-                margin-bottom: 16px;
-                margin-top: 16px;
-              `}
-              onClick={onClickStop}
-            />
-          )}
-          {(creating === 'none' || currentWrite.result.length > 0) && <ColumDivider />}
-          <RowBox
+        <ResultWrapper>
+          <PreMarkdown text={currentWrite.result} />
+        </ResultWrapper>
+        {currentWrite.result.length > 0 && creating === 'Write' && (
+          <StopButton
             cssExt={css`
-              ${alignItemCenter}
-              color: var(--gray-gray-70);
-              font-size: 13px;
-              height: 35px;
+              margin: 0 auto;
+              margin-bottom: 16px;
+              margin-top: 16px;
+            `}
+            onClick={onClickStop}
+          />
+        )}
+        {(creating === 'none' || currentWrite.result.length > 0) && <ColumDivider />}
+        <RowBox
+          cssExt={css`
+            ${alignItemCenter}
+            color: var(--gray-gray-70);
+            font-size: 13px;
+            height: 35px;
 
-              padding: 8px 12px;
-              box-sizing: border-box;
-            `}>
-            <BoldLengthWrapper>
-              {currentWrite.result.length > 0 && (
-                <>{t(`WriteTab.LengthInfo`, { length: currentWrite?.result.length })}</>
-              )}
-            </BoldLengthWrapper>
+            padding: 8px 12px;
+            box-sizing: border-box;
+          `}>
+          <BoldLengthWrapper>
+            {currentWrite.result.length > 0 && (
+              <>{t(`WriteTab.LengthInfo`, { length: currentWrite?.result.length })}</>
+            )}
+          </BoldLengthWrapper>
 
-            {creating === 'none' && (
-              <RightBox>
-                <Icon
-                  cssExt={css`
-                    width: 16px;
-                    height: 16px;
-                    margin-right: 11px;
-                    opacity: ${currentIndex === 0 && '0.3'};
-                  `}
-                  iconSrc={icon_prev}
-                  onClick={() => {
-                    if (currentIndex > 0) {
-                      dispatch(setCurrentWrite(history[currentIndex - 1]?.id));
-                    }
-                  }}
-                />
-                <div>
-                  {history.findIndex((write: any) => write.id === currentWriteId) + 1}/
-                  {history.length}
-                </div>
-                <Icon
-                  cssExt={css`
-                    width: 16px;
-                    height: 16px;
-                    margin-left: 11px;
-                    opacity: ${currentIndex === history.length - 1 && '0.3'};
-                  `}
-                  iconSrc={icon_next}
-                  onClick={() => {
-                    if (currentIndex < history.length - 1) {
-                      dispatch(setCurrentWrite(history[currentIndex + 1]?.id));
-                    }
-                  }}
-                />
-                {/* <CopyIcon
+          {creating === 'none' && (
+            <RightBox>
+              <Icon
+                cssExt={css`
+                  width: 16px;
+                  height: 16px;
+                  margin-right: 11px;
+                  opacity: ${currentIndex === 0 && '0.3'};
+                `}
+                iconSrc={icon_prev}
+                onClick={() => {
+                  if (currentIndex > 0) {
+                    dispatch(setCurrentWrite(history[currentIndex - 1]?.id));
+                  }
+                }}
+              />
+              <div>
+                {history.findIndex((write: any) => write.id === currentWriteId) + 1}/
+                {history.length}
+              </div>
+              <Icon
+                cssExt={css`
+                  width: 16px;
+                  height: 16px;
+                  margin-left: 11px;
+                  opacity: ${currentIndex === history.length - 1 && '0.3'};
+                `}
+                iconSrc={icon_next}
+                onClick={() => {
+                  if (currentIndex < history.length - 1) {
+                    dispatch(setCurrentWrite(history[currentIndex + 1]?.id));
+                  }
+                }}
+              />
+              {/* <CopyIcon
                           cssExt={css`
                             margin-left: 12px;
                           `}
@@ -209,10 +189,9 @@ const AiWriteResult = ({
                             );
                           }}
                         /> */}
-              </RightBox>
-            )}
-          </RowBox>
-        </div>
+            </RightBox>
+          )}
+        </RowBox>
       </ResultBox>
       {creating === 'none' && (
         <>

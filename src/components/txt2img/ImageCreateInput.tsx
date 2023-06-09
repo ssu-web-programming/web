@@ -25,11 +25,12 @@ import {
   justiCenter,
   purpleBtnCss
 } from '../../style/cssCommon';
-import { RowContainer, SubTitleArea, T2IOptionType } from '../../views/ImageCreate';
+import { RowContainer, SubTitleArea } from '../../views/ImageCreate';
 import SubTitle from '../SubTitle';
 import ShowResult from '../ShowResult';
 import { useAppDispatch } from '../../store/store';
 import {
+  T2IOptionType,
   T2IType,
   updateT2ICurItemIndex,
   updateT2ICurListId
@@ -37,6 +38,7 @@ import {
 import ExTextbox from '../ExTextbox';
 import Button from '../Button';
 import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
 
 const MakingInputWrapper = styled.div`
   ${flexColumn}
@@ -235,18 +237,20 @@ export const ratioItemList = [
 
 const ImageCreateInput = ({
   history,
-  selectedOptions,
-  setSelectedOptions,
   createAiImage
 }: {
   history: T2IType[];
-  selectedOptions: T2IOptionType;
-  setSelectedOptions: Function;
   createAiImage: Function;
 }) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
-  const { descInput, style, ratio } = selectedOptions;
+
+  const [selectedOptions, setSelectedOptions] = useState<T2IOptionType>({
+    input: '',
+    style: styleItemList[0].id,
+    ratio: ratioItemList[0].id
+  });
+  const { input, style, ratio } = selectedOptions;
 
   return (
     <MakingInputWrapper>
@@ -265,11 +269,9 @@ const ImageCreateInput = ({
           placeholder={t(`Txt2ImgTab.WriteImageDesc`) || ''}
           exampleList={exampleList}
           maxtTextLen={1000}
-          value={descInput}
+          value={input}
           setValue={(val: string) => {
-            setSelectedOptions((prev: T2IOptionType) => {
-              return { ...prev, descInput: val };
-            });
+            setSelectedOptions((prev) => ({ ...prev, input: val }));
           }}
         />
       </SelectOptionArea>
@@ -282,11 +284,7 @@ const ImageCreateInput = ({
             return (
               <ContainerItem
                 key={item.id}
-                onClick={() =>
-                  setSelectedOptions((prev: T2IOptionType) => {
-                    return { ...prev, style: item.id };
-                  })
-                }>
+                onClick={() => setSelectedOptions((prev) => ({ ...prev, style: item.id }))}>
                 <div>
                   <ItemIconBox
                     cssExt={css`
@@ -331,11 +329,7 @@ const ImageCreateInput = ({
               return (
                 <ContainerItem
                   key={item.id}
-                  onClick={() =>
-                    setSelectedOptions((prev: T2IOptionType) => {
-                      return { ...prev, ratio: item.id };
-                    })
-                  }>
+                  onClick={() => setSelectedOptions((prev) => ({ ...prev, ratio: item.id }))}>
                   <RatioBtnConatainer>
                     <ItemIconBox
                       cssExt={css`
@@ -364,10 +358,8 @@ const ImageCreateInput = ({
       <Button
         isCredit={true}
         icon={iconCreatingWhite}
-        onClick={() => {
-          createAiImage();
-        }}
-        disable={descInput.length === 0}
+        onClick={() => createAiImage(selectedOptions)}
+        disable={input.length === 0}
         cssExt={css`
           width: 100%;
           box-sizing: border-box;
