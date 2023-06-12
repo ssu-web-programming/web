@@ -70,6 +70,10 @@ const ResWrapper = styled.div`
   gap: 8px;
 `;
 
+const ResultInfo = styled.div`
+  ${flexColumn}
+`;
+
 const AiWriteResult = ({
   history,
   onClickStop,
@@ -112,68 +116,69 @@ const AiWriteResult = ({
         <ResultWrapper>
           <PreMarkdown text={currentWrite.result} />
         </ResultWrapper>
-        {currentWrite.result.length > 0 && creating === 'Write' && (
-          <StopButton
+        <ResultInfo>
+          {currentWrite.result.length > 0 && creating === 'Write' && (
+            <StopButton
+              cssExt={css`
+                margin: 0 auto;
+                margin-bottom: 16px;
+                margin-top: 16px;
+              `}
+              onClick={onClickStop}
+            />
+          )}
+          {(creating === 'none' || currentWrite.result.length > 0) && <ColumDivider />}
+          <RowBox
             cssExt={css`
-              margin: 0 auto;
-              margin-bottom: 16px;
-              margin-top: 16px;
-            `}
-            onClick={onClickStop}
-          />
-        )}
-        {(creating === 'none' || currentWrite.result.length > 0) && <ColumDivider />}
-        <RowBox
-          cssExt={css`
-            ${alignItemCenter}
-            color: var(--gray-gray-70);
-            font-size: 13px;
-            height: 35px;
+              ${alignItemCenter}
+              color: var(--gray-gray-70);
+              font-size: 13px;
+              height: 35px;
 
-            padding: 8px 12px;
-            box-sizing: border-box;
-          `}>
-          <BoldLengthWrapper>
-            {currentWrite.result.length > 0 && (
-              <>{t(`WriteTab.LengthInfo`, { length: currentWrite?.result.length })}</>
-            )}
-          </BoldLengthWrapper>
+              padding: 8px 12px;
+              box-sizing: border-box;
+            `}>
+            <BoldLengthWrapper>
+              {currentWrite.result.length > 0 && (
+                <>{t(`WriteTab.LengthInfo`, { length: currentWrite?.result.length })}</>
+              )}
+            </BoldLengthWrapper>
 
-          {creating === 'none' && (
-            <RightBox>
-              <Icon
-                cssExt={css`
-                  width: 16px;
-                  height: 16px;
-                  margin-right: 11px;
-                  opacity: ${currentIndex === 0 && '0.3'};
-                `}
-                iconSrc={icon_prev}
-                onClick={() => {
-                  if (currentIndex > 0) {
-                    dispatch(setCurrentWrite(history[currentIndex - 1]?.id));
-                  }
-                }}
-              />
-              <div>
-                {history.findIndex((write: any) => write.id === currentWriteId) + 1}/
-                {history.length}
-              </div>
-              <Icon
-                cssExt={css`
-                  width: 16px;
-                  height: 16px;
-                  margin-left: 11px;
-                  opacity: ${currentIndex === history.length - 1 && '0.3'};
-                `}
-                iconSrc={icon_next}
-                onClick={() => {
-                  if (currentIndex < history.length - 1) {
-                    dispatch(setCurrentWrite(history[currentIndex + 1]?.id));
-                  }
-                }}
-              />
-              {/* <CopyIcon
+            {creating === 'none' && (
+              <RightBox>
+                <Icon
+                  cssExt={css`
+                    width: 16px;
+                    height: 16px;
+                    margin-right: 11px;
+                    opacity: ${currentIndex === 0 && '0.3'};
+                  `}
+                  iconSrc={icon_prev}
+                  onClick={() => {
+                    if (currentIndex > 0) {
+                      dispatch(setCurrentWrite(history[currentIndex - 1]?.id));
+                    }
+                  }}
+                />
+                <div>
+                  {history.findIndex((write: any) => write.id === currentWriteId) + 1}/
+                  {history.length}
+                </div>
+                <Icon
+                  cssExt={css`
+                    width: 16px;
+                    height: 16px;
+                    margin-left: 11px;
+                    opacity: ${currentIndex === history.length - 1 && '0.3'};
+                  `}
+                  iconSrc={icon_next}
+                  onClick={() => {
+                    if (currentIndex < history.length - 1) {
+                      dispatch(setCurrentWrite(history[currentIndex + 1]?.id));
+                    }
+                  }}
+                />
+                {/* <CopyIcon
                           cssExt={css`
                             margin-left: 12px;
                           `}
@@ -189,9 +194,10 @@ const AiWriteResult = ({
                             );
                           }}
                         /> */}
-            </RightBox>
-          )}
-        </RowBox>
+              </RightBox>
+            )}
+          </RowBox>
+        </ResultInfo>
       </ResultBox>
       {creating === 'none' && (
         <>
