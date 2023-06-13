@@ -24,7 +24,15 @@ td,
 th 
 {
   border-radius: 6px;
-  border: 1px solid #555;
+  border: 1px solid #e0d1ff;
+  padding: 15px 10px;
+}
+th
+{
+  border: 1px solid #e0d1ff;
+  color: #6f3ad0;
+  background: #f5f1fd;
+  padding: 10px 10px;
 }
 </style>
 </head>
