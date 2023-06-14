@@ -1,4 +1,4 @@
-import { ReactElement } from 'react';
+import { useState } from 'react';
 import AIChatTab from '../views/AIChatTab';
 import AIWriteTab from '../views/AIWriteTab';
 import icon_chat from '../img/ico_chat.svg';
@@ -16,6 +16,12 @@ import Icon from '../components/Icon';
 import Tabs from '../components/tabs/Tabs';
 import MenuItem from '../components/items/MenuItem';
 import TabPanel from '../components/tabs/TabPanel';
+import {
+  ChatOptions,
+  DEFAULT_WRITE_OPTION_FORM_VALUE,
+  DEFAULT_WRITE_OPTION_LENGTH_VALUE,
+  WriteOptions
+} from '../components/FuncRecBox';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -31,7 +37,6 @@ const Body = styled.div`
 interface TabListProps {
   id: AI_WRITE_TAB_TYPE;
   name: string;
-  comp: ReactElement;
   icon?: string;
   selectedIcon?: string;
 }
@@ -40,18 +45,26 @@ const TAB_LIST: TabListProps[] = [
   {
     id: 'write',
     name: `Write`,
-    comp: <AIWriteTab />,
     icon: icon_creating_text,
     selectedIcon: icon_creating_text_purple
   },
   {
     id: 'chat',
     name: `Chating`,
-    comp: <AIChatTab />,
     icon: icon_chat,
     selectedIcon: icon_chat_purple
   }
 ];
+
+const initWriteOptions: WriteOptions = {
+  input: '',
+  form: DEFAULT_WRITE_OPTION_FORM_VALUE,
+  length: DEFAULT_WRITE_OPTION_LENGTH_VALUE
+};
+
+const initChatOptions: ChatOptions = {
+  input: ''
+};
 
 export default function Tools() {
   const { t } = useTranslation();
@@ -59,24 +72,27 @@ export default function Tools() {
   const { creating, selectedTabId } = useAppSelector(selectTabSlice);
   const currentTab = TAB_LIST.find((tab) => tab.id === selectedTabId);
 
+  const [writeOptions, setWriteOptions] = useState<WriteOptions>(initWriteOptions);
+  const [chatOptions, setChatOptions] = useState<ChatOptions>(initChatOptions);
+
+  const onChangeTab = (id: string) => {
+    if (creating === 'none') {
+      dispatch(selectTab(id as AI_WRITE_TAB_TYPE));
+    } else {
+      dispatch(
+        activeToast({
+          active: true,
+          msg: t(`ToastMsg.TabLoadedAndWait`, { tab: currentTab?.name }),
+          isError: true
+        })
+      );
+    }
+  };
+
   return (
     <Wrapper>
       <Header title={t('AITools')} subTitle={'AI Write'}></Header>
-      <Tabs
-        selected={selectedTabId}
-        onChange={(id) => {
-          if (creating === 'none') {
-            dispatch(selectTab(id as AI_WRITE_TAB_TYPE));
-          } else {
-            dispatch(
-              activeToast({
-                active: true,
-                msg: t(`ToastMsg.TabLoadedAndWait`, { tab: currentTab?.name }),
-                isError: true
-              })
-            );
-          }
-        }}>
+      <Tabs selected={selectedTabId} onChange={onChangeTab}>
         {TAB_LIST.map((tab) => (
           <MenuItem key={tab.id} id={tab.id} value={tab.name}>
             {tab.icon && (
@@ -97,7 +113,10 @@ export default function Tools() {
         <TabPanel selected={selectedTabId}>
           {TAB_LIST.map((tab) => (
             <MenuItem key={tab.id} id={tab.id} value={tab.name}>
-              {tab.comp}
+              {tab.id === 'write' && (
+                <AIWriteTab options={writeOptions} setOptions={setWriteOptions} />
+              )}
+              {tab.id === 'chat' && <AIChatTab options={chatOptions} setOptions={setChatOptions} />}
             </MenuItem>
           ))}
         </TabPanel>

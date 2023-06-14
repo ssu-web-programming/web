@@ -14,8 +14,8 @@ import ShowResult from '../ShowResult';
 import { useAppDispatch } from '../../store/store';
 import { WriteType, setCurrentWrite } from '../../store/slices/writeHistorySlice';
 import ExTextbox from '../ExTextbox';
-import { Grid3BtnContainer, OptionsType, lengthList } from '../../views/AIWriteTab';
-import { formRecList } from '../FuncRecBox';
+import { Grid3BtnContainer } from '../../views/AIWriteTab';
+import { WriteOptions, formRecList, lengthList } from '../FuncRecBox';
 import IconButton from '../IconButton';
 import NoBorderButton from '../NoBorderButton';
 import Button from '../Button';
@@ -51,8 +51,8 @@ const AIWriteInput = ({
   submitSubject
 }: {
   history: WriteType[];
-  selectedOptions: OptionsType;
-  setSelectedOptions: Function;
+  selectedOptions: WriteOptions;
+  setSelectedOptions: React.Dispatch<React.SetStateAction<WriteOptions>>;
   submitSubject: Function;
 }) => {
   const { t } = useTranslation();
@@ -81,7 +81,7 @@ const AIWriteInput = ({
             value={input}
             placeholder={t(`WriteTab.WriteTextboxPlacehold`) || ''}
             setValue={(val: string) => {
-              setSelectedOptions((prev: OptionsType) => {
+              setSelectedOptions((prev) => {
                 return { ...prev, input: val };
               });
             }}></ExTextbox>
@@ -103,7 +103,7 @@ const AIWriteInput = ({
                 key={form.id}
                 title={t(`FormList.${form.title}`)}
                 onClick={() => {
-                  setSelectedOptions((prev: OptionsType) => {
+                  setSelectedOptions((prev) => {
                     return { ...prev, form: form };
                   });
                 }}
@@ -121,7 +121,7 @@ const AIWriteInput = ({
             <NoBorderButton
               key={index}
               onClick={() => {
-                setSelectedOptions((prev: OptionsType) => {
+                setSelectedOptions((prev) => {
                   return { ...prev, length: length };
                 });
               }}

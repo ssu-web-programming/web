@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { calcToken } from '../api/usePostSplunkLog';
 import { activeToast } from '../store/slices/toastSlice';
@@ -13,7 +13,6 @@ import {
   updateWriteHistory
 } from '../store/slices/writeHistorySlice';
 import { useAppSelector } from '../store/store';
-import { formRecList } from '../components/FuncRecBox';
 import { grid3Btn } from '../style/cssCommon';
 import { useMoveChatTab } from '../components/hooks/useMovePage';
 import { setCreating } from '../store/slices/tabSlice';
@@ -25,6 +24,7 @@ import useErrorHandle from '../components/hooks/useErrorHandle';
 import { GPT_EXCEEDED_LIMIT } from '../error/error';
 import AiWriteResult from '../components/aiWrite/AiWriteResult';
 import AIWriteInput from '../components/aiWrite/AIWriteInput';
+import { WriteOptions } from '../components/FuncRecBox';
 
 export const Grid3BtnContainer = styled.div`
   ${grid3Btn}
@@ -33,36 +33,15 @@ export const Grid3BtnContainer = styled.div`
   gap: 8px;
 `;
 
-export interface FormListType {
-  id: string;
-  icon?: string;
-  title: string;
+interface WriteTabProps {
+  options: WriteOptions;
+  setOptions: React.Dispatch<React.SetStateAction<WriteOptions>>;
 }
 
-export interface LengthListType {
-  title: string;
-  length: string;
-}
-
-export interface OptionsType {
-  input: string;
-  form: FormListType;
-  length: LengthListType;
-}
-
-export const lengthList = [
-  { title: 'Short', length: 'short' },
-  { title: 'Medium', length: 'medium' },
-  { title: 'Long', length: 'long' }
-];
-
-const AIWriteTab = () => {
+const AIWriteTab = (props: WriteTabProps) => {
   const apiWrapper = useApiWrapper();
-  const [selectedOptions, setSelectedOptions] = useState<OptionsType>({
-    input: '',
-    form: formRecList[0],
-    length: lengthList[0]
-  });
+
+  const { options: selectedOptions, setOptions: setSelectedOptions } = props;
   const { t } = useTranslation();
 
   const errorHandle = useErrorHandle();

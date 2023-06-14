@@ -106,14 +106,35 @@ const Grid3BtnContainer = styled.div`
   gap: 8px;
 `;
 
+interface FormListType {
+  id: string;
+  icon?: string;
+  title: string;
+  selectedIcon: string;
+  hasSubRec: boolean;
+}
+
+interface LengthListType {
+  title: string;
+  length: string;
+}
+
+export interface WriteOptions {
+  input: string;
+  form: FormListType;
+  length: LengthListType;
+}
+
+export const DEFAULT_WRITE_OPTION_FORM_VALUE: FormListType = {
+  id: 'paragraph',
+  title: 'Sentence',
+  icon: icon_sentence,
+  selectedIcon: icon_sentence_purple,
+  hasSubRec: false
+};
+
 export const formRecList = [
-  {
-    id: 'paragraph',
-    title: 'Sentence',
-    icon: icon_sentence,
-    selectedIcon: icon_sentence_purple,
-    hasSubRec: false
-  },
+  DEFAULT_WRITE_OPTION_FORM_VALUE,
   { id: 'list', title: 'List', icon: icon_list, selectedIcon: icon_list_purple, hasSubRec: false },
   {
     id: 'table',
@@ -123,6 +144,21 @@ export const formRecList = [
     hasSubRec: false
   }
 ];
+
+export const DEFAULT_WRITE_OPTION_LENGTH_VALUE: LengthListType = {
+  title: 'Short',
+  length: 'short'
+};
+
+export const lengthList = [
+  DEFAULT_WRITE_OPTION_LENGTH_VALUE,
+  { title: 'Medium', length: 'medium' },
+  { title: 'Long', length: 'long' }
+];
+
+export interface ChatOptions {
+  input: string;
+}
 
 export const REC_ID_LIST = {
   RESUME_WRITING: 'resume_writing',
