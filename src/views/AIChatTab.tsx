@@ -16,7 +16,7 @@ import { v4 as uuidv4 } from 'uuid';
 import Button from '../components/Button';
 import OpenAILinkText from '../components/OpenAILinkText';
 import ExButton from '../components/ExButton';
-import FuncRecBox, { REC_ID_LIST, RowWrapBox } from '../components/FuncRecBox';
+import FuncRecBox, { ChatOptions, REC_ID_LIST, RowWrapBox } from '../components/FuncRecBox';
 import {
   activeRecFunc,
   inactiveRecFunc,
@@ -215,7 +215,12 @@ const chatTipList = [
   'DateInfo'
 ];
 
-const AIChatTab = () => {
+interface WriteTabProps {
+  options: ChatOptions;
+  setOptions: React.Dispatch<React.SetStateAction<ChatOptions>>;
+}
+
+const AIChatTab = (props: WriteTabProps) => {
   const dispatch = useAppDispatch();
   const apiWrapper = useApiWrapper();
   const { history: chatHistory, defaultInput } = useAppSelector(selectChatHistory);
@@ -223,7 +228,10 @@ const AIChatTab = () => {
   const { t } = useTranslation();
   const errorHandle = useErrorHandle();
 
-  const [chatInput, setChatInput] = useState<string>('');
+  const {
+    options: { input: chatInput },
+    setOptions: setChatInput
+  } = props;
   const [isActiveInput, setIsActiveInput] = useState<boolean>(false);
   const [loadingInfo, setLoadingInfo] = useState<{ id: string; msg: string } | null>(null);
   const [retryOrigin, setRetryOrigin] = useState<string | null>(null);
@@ -257,7 +265,7 @@ const AIChatTab = () => {
   useEffect(() => {
     if (defaultInput && defaultInput.length > 0 && !loadingInfo) {
       // setActiveInput(true);
-      setChatInput(defaultInput);
+      setChatInput({ input: defaultInput });
       textRef?.current?.focus();
 
       toggleActiveInput(true);
@@ -329,7 +337,7 @@ const AIChatTab = () => {
 
     try {
       dispatch(setCreating('Chating'));
-      setChatInput('');
+      setChatInput({ input: '' });
 
       const msg = selectLoadingMsg(chat ? true : false);
       setLoadingInfo({ id: assistantId, msg: msg });
@@ -434,7 +442,7 @@ const AIChatTab = () => {
         dispatch(removeChat(userId));
         dispatch(removeChat(assistantId));
         if (input) {
-          setChatInput(input);
+          setChatInput({ input });
           setIsActiveInput(true);
         }
       }
@@ -689,7 +697,7 @@ const AIChatTab = () => {
                 }
               }}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setChatInput(e.target.value.slice(0, INPUT_MAX_LENGTH));
+                setChatInput({ input: e.target.value.slice(0, INPUT_MAX_LENGTH) });
 
                 if (isDefaultInput && e.target.value.length === 0) setIsDefaultInput(false);
               }}
@@ -746,7 +754,7 @@ const AIChatTab = () => {
               <ExButton
                 disable={chatInput.length > 0}
                 exampleList={exampleList}
-                setExam={setChatInput}
+                setExam={(text: string) => setChatInput({ input: text })}
               />
             </RowWrapBox>
           )}

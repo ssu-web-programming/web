@@ -2,29 +2,25 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 
 type CREATING_TYPE = 'none' | 'Chating' | 'Write' | 'CreateImage';
-
-export const TAB_ITEM_VAL = {
-  WRITE: 'write',
-  CHAT: 'chat'
-};
+export type AI_WRITE_TAB_TYPE = 'write' | 'chat';
 
 interface TabType {
   creating: CREATING_TYPE;
-  selectedTabId: string | null;
+  selectedTabId: AI_WRITE_TAB_TYPE;
 }
 
 const tabSlice = createSlice({
   name: 'tab',
-  initialState: { creating: 'none', selectedTabId: TAB_ITEM_VAL.CHAT } as TabType,
+  initialState: { creating: 'none', selectedTabId: 'chat' } as TabType,
   reducers: {
     initTab: (state) => {
       state.creating = 'none';
-      state.selectedTabId = null;
+      state.selectedTabId = 'chat';
     },
     setCreating: (state, action: PayloadAction<CREATING_TYPE>) => {
       state.creating = action.payload;
     },
-    selectTab: (state, action: PayloadAction<string>) => {
+    selectTab: (state, action: PayloadAction<AI_WRITE_TAB_TYPE>) => {
       state.selectedTabId = action.payload;
     }
   }
