@@ -774,7 +774,7 @@ const AIChatTab = (props: WriteTabProps) => {
                 height: 34px;
                 padding: 0px 3px 0px 9px;
                 box-sizing: border-box;
-                border-top: 1px solid var(--ai-purple-97-list-over);
+                border-top: 1px solid var(--ai-purple-99-bg-light);
                 ${alignItemCenter}
               `}>
               <LengthWrapper isError={chatInput.length >= INPUT_MAX_LENGTH}>
