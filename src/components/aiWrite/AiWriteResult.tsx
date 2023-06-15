@@ -94,10 +94,6 @@ const AiWriteResult = ({
   const currentWrite = history.filter((write: any) => write.id === currentWriteId)[0];
   const currentIndex = history.findIndex((write: any) => write.id === currentWriteId);
 
-  if (currentWrite.result.length === 0 && creating !== 'none') {
-    return <Loading>{t(`WriteTab.LoadingMsg`)}</Loading>;
-  }
-
   return (
     <ResWrapper>
       <RowBox>
@@ -113,6 +109,9 @@ const AiWriteResult = ({
         )}
       </RowBox>
       <ResultBox>
+        {currentWrite.result.length === 0 && creating !== 'none' && (
+          <Loading>{t(`WriteTab.LoadingMsg`)}</Loading>
+        )}
         <ResultWrapper>
           <PreMarkdown text={currentWrite.result} />
         </ResultWrapper>
