@@ -148,6 +148,10 @@
     "ErrorMsg": "오류가 발생했습니다. 잠시 후 다시 시도해 주세요. ({{code}} : {{msg}})",
     "UnauthorizedMsg": "이 기능을 사용하려면 로그인이 필요합니다. 현재 로그인되어 있는지 다시 한 번 확인해주세요."
   },
+  "Offline": {
+    "UnstableConnection": "서비스 접속이 원활하지 않습니다.",
+    "CheckNetwork": "사용중인 네트워크 상태를 확인해주세요."
+  },
   "Download": "다운로드 하기",
   "AITools": "AI 도구",
   "AIWrite": "AI 작성",
