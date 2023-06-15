@@ -89,8 +89,8 @@ export default function Offline() {
           </svg>
         </div>
         <TextWrapper>
-          <p>서비스 접속이 원활하지 않습니다.</p>
-          <p>사용중인 네트워크 상태를 확인해주세요.</p>
+          <p>{t(`Offline.UnstableConnection`)}</p>
+          <p>{t(`Offline.CheckNetwork`)}</p>
         </TextWrapper>
       </Contents>
     </Wrapper>
