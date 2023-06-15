@@ -8,7 +8,7 @@ export interface ChatPreProcessing {
 export interface Chat {
   id: string;
   result: string;
-  role: 'assistant' | 'user';
+  role: 'assistant' | 'user' | 'info';
   input: string;
   preProcessing?: ChatPreProcessing;
 }

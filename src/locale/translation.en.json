@@ -35,6 +35,7 @@
     "UseMoreAI": "Use more AI features.",
     "UseVariableForm": "Create your response in various formats.",
     "InputPlaceholder": "Please ask anything.",
+    "InfoChat": "Start a new chat! What topic would you like to talk about?",
     "TipList": {
       "1ChatingCredit": "credit(s) will be deducted per conversation.",
       "EnterInfo": "Use Enter to break the line.",
@@ -62,6 +63,7 @@
       "Translate": "Translate",
       "ChangeStyle": "Change language tone",
       "Grammar": "Correct spelling/grammar",
+      "ChatReset": "Start New Chat",
       "SubFuncRec": {
         "Korean": "Korean",
         "English": "English",

@@ -239,6 +239,8 @@ const AIChatTab = (props: WriteTabProps) => {
     chatTipList[Math.floor(Math.random() * chatTipList.length)]
   );
   const [isDefaultInput, setIsDefaultInput] = useState<boolean>(false);
+
+  const historyStart = useRef<number>(0);
   const chatEndRef = useRef<any>();
   const stopRef = useRef<boolean>(false);
   const textRef = useRef<HTMLTextAreaElement>(null);
@@ -317,6 +319,8 @@ const AIChatTab = (props: WriteTabProps) => {
   const getPreProcessing = (chat?: Chat) => {
     if (chat?.preProcessing) {
       return chat.preProcessing;
+    } else if (selectedRecFunction && selectedRecFunction.id === REC_ID_LIST.START_NEW_CHATING) {
+      return { type: 'just_chat' };
     } else if (chatHistory.length === 0) {
       return { type: 'just_chat', arg1: selectedRecFunction?.id };
     } else if (selectedRecFunction) {
@@ -325,6 +329,21 @@ const AIChatTab = (props: WriteTabProps) => {
   };
 
   const submitChat = async (chat?: Chat) => {
+    if (selectedRecFunction?.id === REC_ID_LIST.START_NEW_CHATING) {
+      const infoText = t('ChatingTab.InfoChat');
+      dispatch(
+        appendChat({
+          id: uuidv4(),
+          role: 'info',
+          result: infoText,
+          input: infoText
+        })
+      );
+      dispatch(initRecFunc());
+
+      if (chatInput.length === 0) return;
+    }
+
     let resultText = '';
     let splunk = null;
     const assistantId = uuidv4();
@@ -335,6 +354,9 @@ const AIChatTab = (props: WriteTabProps) => {
       ? chatInput
       : chatHistory[chatHistory.length - 1].result;
 
+    if (selectedRecFunction?.id === REC_ID_LIST.START_NEW_CHATING) {
+      historyStart.current = chatHistory.length;
+    }
     try {
       dispatch(setCreating('Chating'));
       setChatInput({ input: '' });
@@ -375,7 +397,9 @@ const AIChatTab = (props: WriteTabProps) => {
         }, //   responseType: 'stream',
         body: JSON.stringify({
           history: [
-            ...chatHistory.map((chat) => ({ content: chat.result, role: chat.role })),
+            ...chatHistory
+              .filter((history, index) => index >= historyStart.current)
+              .map((chat) => ({ content: chat.result, role: chat.role })),
             {
               content: input,
               role: 'user',
@@ -433,6 +457,8 @@ const AIChatTab = (props: WriteTabProps) => {
         );
         resultText += decodeStr;
       }
+
+      dispatch(initRecFunc());
     } catch (error: any) {
       errorHandle(error);
 
@@ -461,7 +487,6 @@ const AIChatTab = (props: WriteTabProps) => {
 
       setLoadingInfo(null);
       stopRef.current = false;
-      dispatch(initRecFunc());
       dispatch(setCreating('none'));
       // toggleActiveInput(false);
 
@@ -473,7 +498,11 @@ const AIChatTab = (props: WriteTabProps) => {
     if (isRetry) return t(`ChatingTab.LoadingMsg.ReCreating`);
 
     const isFirstRec = formRecList.filter((rec) => rec.id === selectedRecFunction?.id).length > 0;
-    if (isFirstRec || (!isFirstRec && !selectedRecFunction && chatInput.length > 0)) {
+    if (
+      isFirstRec ||
+      (!isFirstRec && !selectedRecFunction && chatInput.length > 0) ||
+      (selectedRecFunction?.id === REC_ID_LIST.START_NEW_CHATING && chatInput.length > 0)
+    ) {
       return t(`ChatingTab.LoadingMsg.Creating`);
     }
 
@@ -614,7 +643,7 @@ const AIChatTab = (props: WriteTabProps) => {
                 </>
               )
             }>
-            {chat.role !== 'user' && loadingInfo?.id !== chat.id && (
+            {chat.role === 'assistant' && loadingInfo?.id !== chat.id && (
               <RightBox
                 cssExt={css`
                   margin-top: 9px;

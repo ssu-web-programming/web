@@ -13,30 +13,32 @@ import {
   recType,
   recBaseType
 } from '../store/slices/recFuncSlice';
-import icon_arrow_down from '..//img/ico_arrow_down_small.svg';
-import icon_arrow_up from '..//img/ico_arrow_up_small.svg';
-import icon_ai from '..//img/ico_ai.svg';
-import icon_prev from '..//img/ico_arrow_prev.svg';
+import icon_arrow_down from '../img/ico_arrow_down_small.svg';
+import icon_arrow_up from '../img/ico_arrow_up_small.svg';
+import icon_ai from '../img/ico_ai.svg';
+import icon_prev from '../img/ico_arrow_prev.svg';
 import Icon from './Icon';
 import IconButton from './IconButton';
 
-import icon_sentence from '..//img/aiChat/ico_sentence.svg';
-import icon_table from '..//img/aiChat/ico_table.svg';
-import icon_list from '..//img/aiChat/ico_table_of_contents.svg';
-import icon_resume from '..//img/aiChat/ico_ai_resume.svg';
-import icon_spelingcheck from '..//img/aiChat/ico_ai_spellingcheck.svg';
-import icon_summary from '..//img/aiChat/ico_ai_summary.svg';
-import icon_translation from '..//img/aiChat/ico_ai_translation.svg';
-import icon_style from '..//img/aiChat/ico_changing_style.svg';
+import icon_sentence from '../img/aiChat/ico_sentence.svg';
+import icon_table from '../img/aiChat/ico_table.svg';
+import icon_list from '../img/aiChat/ico_table_of_contents.svg';
+import icon_resume from '../img/aiChat/ico_ai_resume.svg';
+import icon_spelingcheck from '../img/aiChat/ico_ai_spellingcheck.svg';
+import icon_summary from '../img/aiChat/ico_ai_summary.svg';
+import icon_translation from '../img/aiChat/ico_ai_translation.svg';
+import icon_style from '../img/aiChat/ico_changing_style.svg';
+import icon_sentence_purple from '../img/aiChat/ico_sentence_purple.svg';
+import icon_table_purple from '../img/aiChat/ico_table_purple.svg';
+import icon_list_purple from '../img/aiChat/ico_table_of_contents_purple.svg';
+import icon_resume_purple from '../img/aiChat/ico_ai_resume_purple.svg';
+import icon_spelingcheck_purple from '../img/aiChat/ico_ai_spellingcheck_purple.svg';
+import icon_summary_purple from '../img/aiChat/ico_ai_summary_purple.svg';
+import icon_translation_purple from '../img/aiChat/ico_ai_translation_purple.svg';
+import icon_style_purple from '../img/aiChat/ico_changing_style_purple.svg';
+import icon_new_chat from '../img/ico_newchat.svg';
+import icon_new_chat_purple from '../img/ico_newchat_purple.svg';
 
-import icon_sentence_purple from '..//img/aiChat/ico_sentence_purple.svg';
-import icon_table_purple from '..//img/aiChat/ico_table_purple.svg';
-import icon_list_purple from '..//img/aiChat/ico_table_of_contents_purple.svg';
-import icon_resume_purple from '..//img/aiChat/ico_ai_resume_purple.svg';
-import icon_spelingcheck_purple from '..//img/aiChat/ico_ai_spellingcheck_purple.svg';
-import icon_summary_purple from '..//img/aiChat/ico_ai_summary_purple.svg';
-import icon_translation_purple from '..//img/aiChat/ico_ai_translation_purple.svg';
-import icon_style_purple from '..//img/aiChat/ico_changing_style_purple.svg';
 import {
   justiCenter,
   flexColumn,
@@ -165,7 +167,8 @@ export const REC_ID_LIST = {
   SUMMARY: 'summary',
   TRANSLATE: 'translate',
   CHANGE_TEXT_STYLE: 'change_text_style',
-  MODIFY_TEXT: 'modify_text'
+  MODIFY_TEXT: 'modify_text',
+  START_NEW_CHATING: 'start_new_chating'
 };
 
 const recList = [
@@ -202,6 +205,13 @@ const recList = [
     title: 'Grammar',
     icon: icon_spelingcheck,
     selectedIcon: icon_spelingcheck_purple,
+    hasSubRec: false
+  },
+  {
+    id: REC_ID_LIST.START_NEW_CHATING,
+    title: 'ChatReset',
+    icon: icon_new_chat,
+    selectedIcon: icon_new_chat_purple,
     hasSubRec: false
   }
 ];
@@ -398,9 +408,10 @@ const FucRecBox = ({ isFormRec }: { isFormRec: boolean }) => {
                         cssExt={css`
                           width: 100%;
                           height: 28px;
-                          ${flexShrink}
-                          ${flexGrow}
-                          flex: 30%;
+                          ${alignItemCenter}
+                          ${rec.id !== REC_ID_LIST.START_NEW_CHATING && flexShrink}
+                          ${rec.id !== REC_ID_LIST.START_NEW_CHATING && flexGrow}
+                          flex: ${rec.id !== REC_ID_LIST.START_NEW_CHATING ? '30%' : 'none'};
                         `}>
                         <Icon
                           iconSrc={rec.id === selectedRecFunction?.id ? rec.selectedIcon : rec.icon}

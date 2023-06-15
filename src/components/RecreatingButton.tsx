@@ -1,5 +1,5 @@
 import Icon from './Icon';
-import icon_recreating from '../img/ico_recreating.svg';
+import icon_recreating from '../img/ico_back.svg';
 import styled, { css } from 'styled-components';
 import { alignItemCenter, flex } from '../style/cssCommon';
 import { useTranslation } from 'react-i18next';
