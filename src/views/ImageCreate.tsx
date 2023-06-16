@@ -52,7 +52,7 @@ export const RowContainer = styled.div<{
   ${({ cssExt }) => cssExt && cssExt}
 `;
 
-const ImageCreate = ({ contents }: { contents?: string }) => {
+const ImageCreate = ({ contents = '' }: { contents: string }) => {
   const apiWrapper = useApiWrapper();
   const { creating } = useAppSelector(selectTabSlice);
   const dispatch = useAppDispatch();
@@ -141,7 +141,7 @@ const ImageCreate = ({ contents }: { contents?: string }) => {
   return (
     <Body>
       {!isResultView ? (
-        <ImageCreateInput history={history} createAiImage={createAiImage} />
+        <ImageCreateInput history={history} createAiImage={createAiImage} contents={contents} />
       ) : (
         <ImageCreateResult
           history={history}

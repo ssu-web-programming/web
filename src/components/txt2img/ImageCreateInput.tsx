@@ -236,9 +236,11 @@ export const ratioItemList = [
 ];
 
 const ImageCreateInput = ({
+  contents,
   history,
   createAiImage
 }: {
+  contents: string;
   history: T2IType[];
   createAiImage: Function;
 }) => {
@@ -246,7 +248,7 @@ const ImageCreateInput = ({
   const { t } = useTranslation();
 
   const [selectedOptions, setSelectedOptions] = useState<T2IOptionType>({
-    input: '',
+    input: contents,
     style: styleItemList[0].id,
     ratio: ratioItemList[0].id
   });
