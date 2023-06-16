@@ -9,30 +9,32 @@ const ShowResult = (props: ButtonProps) => {
   const { t } = useTranslation();
 
   return (
-    <Button
-      {...props}
-      cssExt={css`
-        font-size: 12px;
-        font-weight: normal;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
-        letter-spacing: normal;
-        color: var(--gray-gray-80-02);
-
-        ${TextBtnCss}
-
-        ${props.cssExt}
-      `}>
-      {t(`ShowResult`)}
-      {/* 고해상도 icon 요청 필요 */}
-      <Icon
+    <div>
+      <Button
+        {...props}
         cssExt={css`
-          margin-left: 5px;
-        `}
-        iconSrc={icon_arrow_right}
-      />
-    </Button>
+          font-size: 12px;
+          font-weight: normal;
+          font-stretch: normal;
+          font-style: normal;
+          line-height: normal;
+          letter-spacing: normal;
+          color: var(--gray-gray-80-02);
+
+          ${TextBtnCss}
+
+          ${props.cssExt}
+        `}>
+        {t(`ShowResult`)}
+        {/* 고해상도 icon 요청 필요 */}
+        <Icon
+          cssExt={css`
+            margin-left: 5px;
+          `}
+          iconSrc={icon_arrow_right}
+        />
+      </Button>
+    </div>
   );
 };
 
