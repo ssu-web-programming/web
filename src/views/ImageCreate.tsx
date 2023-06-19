@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { calcToken } from '../api/usePostSplunkLog';
 import { flexColumn, justiSpaceBetween, flexWrap, alignItemCenter } from '../style/cssCommon';
@@ -20,7 +20,10 @@ import { calLeftCredit } from '../util/common';
 import useErrorHandle from '../components/hooks/useErrorHandle';
 import { INVALID_PROMPT } from '../error/error';
 import { selectTabSlice, setCreating } from '../store/slices/tabSlice';
-import ImageCreateInput from '../components/txt2img/ImageCreateInput';
+import ImageCreateInput, {
+  ratioItemList,
+  styleItemList
+} from '../components/txt2img/ImageCreateInput';
 import ImageCreateResult from '../components/txt2img/ImageCreateResult';
 
 const Body = styled.div`
@@ -52,7 +55,7 @@ export const RowContainer = styled.div<{
   ${({ cssExt }) => cssExt && cssExt}
 `;
 
-const ImageCreate = ({ contents = '' }: { contents: string }) => {
+const ImageCreate = ({ contents }: { contents: string }) => {
   const apiWrapper = useApiWrapper();
   const { creating } = useAppSelector(selectTabSlice);
   const dispatch = useAppDispatch();
@@ -60,6 +63,12 @@ const ImageCreate = ({ contents = '' }: { contents: string }) => {
   const errorHandle = useErrorHandle();
 
   const { t } = useTranslation();
+
+  const [selectedOptions, setSelectedOptions] = useState<T2IOptionType>({
+    input: contents,
+    style: styleItemList[0].id,
+    ratio: ratioItemList[0].id
+  });
 
   const createAiImage = useCallback(
     async (option: T2IOptionType) => {
@@ -132,6 +141,16 @@ const ImageCreate = ({ contents = '' }: { contents: string }) => {
     [apiWrapper, dispatch, errorHandle, t]
   );
 
+  useEffect(() => {
+    if (contents) {
+      setSelectedOptions({
+        input: contents,
+        style: styleItemList[0].id,
+        ratio: ratioItemList[0].id
+      });
+    }
+  }, [contents]);
+
   if (creating !== 'none') {
     return <Loading>{t(`Txt2ImgTab.LoadingMsg`)}</Loading>;
   }
@@ -141,7 +160,12 @@ const ImageCreate = ({ contents = '' }: { contents: string }) => {
   return (
     <Body>
       {!isResultView ? (
-        <ImageCreateInput history={history} createAiImage={createAiImage} contents={contents} />
+        <ImageCreateInput
+          history={history}
+          createAiImage={createAiImage}
+          options={selectedOptions}
+          setOptions={setSelectedOptions}
+        />
       ) : (
         <ImageCreateResult
           history={history}

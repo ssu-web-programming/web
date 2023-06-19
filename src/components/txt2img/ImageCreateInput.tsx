@@ -236,23 +236,20 @@ export const ratioItemList = [
 ];
 
 const ImageCreateInput = ({
-  contents,
+  options,
+  setOptions,
   history,
   createAiImage
 }: {
-  contents: string;
+  options: T2IOptionType;
+  setOptions: React.Dispatch<React.SetStateAction<T2IOptionType>>;
   history: T2IType[];
   createAiImage: Function;
 }) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
 
-  const [selectedOptions, setSelectedOptions] = useState<T2IOptionType>({
-    input: contents,
-    style: styleItemList[0].id,
-    ratio: ratioItemList[0].id
-  });
-  const { input, style, ratio } = selectedOptions;
+  const { input, style, ratio } = options;
 
   return (
     <MakingInputWrapper>
@@ -273,7 +270,7 @@ const ImageCreateInput = ({
           maxtTextLen={1000}
           value={input}
           setValue={(val: string) => {
-            setSelectedOptions((prev) => ({ ...prev, input: val }));
+            setOptions((prev) => ({ ...prev, input: val }));
           }}
         />
       </SelectOptionArea>
@@ -286,7 +283,7 @@ const ImageCreateInput = ({
             return (
               <ContainerItem
                 key={item.id}
-                onClick={() => setSelectedOptions((prev) => ({ ...prev, style: item.id }))}>
+                onClick={() => setOptions((prev) => ({ ...prev, style: item.id }))}>
                 <div>
                   <ItemIconBox
                     cssExt={css`
@@ -331,7 +328,7 @@ const ImageCreateInput = ({
               return (
                 <ContainerItem
                   key={item.id}
-                  onClick={() => setSelectedOptions((prev) => ({ ...prev, ratio: item.id }))}>
+                  onClick={() => setOptions((prev) => ({ ...prev, ratio: item.id }))}>
                   <RatioBtnConatainer>
                     <ItemIconBox
                       cssExt={css`
@@ -360,7 +357,7 @@ const ImageCreateInput = ({
       <Button
         isCredit={true}
         icon={iconCreatingWhite}
-        onClick={() => createAiImage(selectedOptions)}
+        onClick={() => createAiImage(options)}
         disable={input.length === 0}
         cssExt={css`
           width: 100%;
