@@ -70,7 +70,8 @@ const AIWriteInput = ({
           <ShowResult
             disable={history.length === 0}
             onClick={() => {
-              dispatch(setCurrentWrite(history[0].id));
+              const last = history[history.length - 1];
+              if (last) dispatch(setCurrentWrite(last.id));
             }}
           />
         </RowBox>
