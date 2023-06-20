@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
+import { openNewWindow } from '../../../util/common';
 
 const TextLink = styled.p`
   &:hover {
@@ -15,7 +16,7 @@ export default function NoCredit({ children }: { children?: React.ReactNode }) {
       {children ? children : <p>{t(`ToastMsg.UsedAllCredit`)}</p>}
       <TextLink
         onClick={() => {
-          window._Bridge.openWindow(`credit`);
+          openNewWindow(`credit`);
         }}>
         {t(`ToastMsg.CheckCreditPolicy`)}
       </TextLink>
