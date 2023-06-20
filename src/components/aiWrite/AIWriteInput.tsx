@@ -92,7 +92,7 @@ const AIWriteInput = ({
         <SubTitle subTitle={t(`WriteTab.SelectForm`)} />
         <Grid3BtnContainer>
           {formRecList.map((form) => (
-            <div>
+            <div key={form.id}>
               <IconButton
                 iconCssExt={css`
                   background-color: ${selectedForm.id === form.id
