@@ -14,7 +14,7 @@ import {
   updateWriteHistory
 } from '../store/slices/writeHistorySlice';
 import { useAppSelector } from '../store/store';
-import { grid3Btn } from '../style/cssCommon';
+import { flexColumn, grid3Btn } from '../style/cssCommon';
 import { useMoveChatTab } from '../components/hooks/useMovePage';
 import { setCreating } from '../store/slices/tabSlice';
 import { JSON_CONTENT_TYPE, CHAT_STREAM_API } from '../api/constant';
@@ -32,6 +32,12 @@ export const Grid3BtnContainer = styled.div`
 
   width: 100%;
   gap: 8px;
+`;
+
+const TabWrapper = styled.div`
+  ${flexColumn}
+  height: 100%;
+  overflow-x: hidden;
 `;
 
 interface WriteTabProps {
@@ -195,7 +201,7 @@ const AIWriteTab = (props: WriteTabProps) => {
   };
 
   return (
-    <>
+    <TabWrapper>
       {!currentWriteId ? (
         <AIWriteInput
           history={history}
@@ -212,7 +218,7 @@ const AIWriteTab = (props: WriteTabProps) => {
           moveChat={moveChat}
         />
       )}
-    </>
+    </TabWrapper>
   );
 };
 

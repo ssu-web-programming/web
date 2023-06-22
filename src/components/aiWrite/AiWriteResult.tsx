@@ -31,19 +31,23 @@ import {
 import { insertDoc } from '../../util/common';
 import { activeToast } from '../../store/slices/toastSlice';
 import { selectTabSlice } from '../../store/slices/tabSlice';
+import { selectBanner } from '../../store/slices/banner';
+import PSEventBannerWrite from '../PS/PSEventBannerWrite';
+
+const Wrapper = styled.div`
+  ${flexColumn}
+  background-color: var(--ai-purple-99-bg-light);
+  height: 100%;
+`;
 
 const ResultBox = styled.div`
   width: 100%;
-  max-height: 70%;
   flex: 1;
   border-radius: 4px;
   background-color: #fff;
-  /* padding: 8px 12px 0px 12px; */
   box-sizing: border-box;
   margin-bottom: 8px;
-  height: 620px;
-  ${flexGrow}
-  ${flexShrink}
+  height: 60%;
   ${flexColumn}
   ${justiSpaceBetween}
 
@@ -57,6 +61,7 @@ const ResultWrapper = styled.div`
   width: 100%;
   padding: 8px 12px;
   box-sizing: border-box;
+  height: fit-content;
 `;
 
 const ResWrapper = styled.div`
@@ -64,10 +69,18 @@ const ResWrapper = styled.div`
   padding: 16px;
   width: 100%;
   height: 100%;
+  overflow: auto;
   box-sizing: border-box;
   background-color: var(--ai-purple-99-bg-light);
 
   gap: 8px;
+`;
+
+const ButtonBox = styled.div<{ creating: boolean }>`
+  ${flexColumn}
+  gap: 8px;
+
+  visibility: ${({ creating }: { creating: boolean }) => (creating ? 'hidden' : 'visible')};
 `;
 
 const ResultInfo = styled.div`
@@ -90,94 +103,96 @@ const AiWriteResult = ({
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { creating } = useAppSelector(selectTabSlice);
+  const { active: bannerActive } = useAppSelector(selectBanner);
 
   const currentWrite = history.filter((write: any) => write.id === currentWriteId)[0];
   const currentIndex = history.findIndex((write: any) => write.id === currentWriteId);
 
   return (
-    <ResWrapper>
-      <RowBox>
-        <SubTitle subTitle={t(`WriteTab.PreviewWriting`)} />
-        {creating === 'none' && (
-          <RecreatingButton
-            onClick={() => {
-              // dispatch(initWriteHistory()); // 같은 주제끼리만 저장할지 의논 필요
-              // initAllInput();
-              dispatch(resetCurrentWrite());
-            }}
-          />
-        )}
-      </RowBox>
-      <ResultBox>
-        {currentWrite.result.length === 0 && creating !== 'none' && (
-          <Loading>{t(`WriteTab.LoadingMsg`)}</Loading>
-        )}
-        <ResultWrapper>
-          <PreMarkdown text={currentWrite.result} />
-        </ResultWrapper>
-        <ResultInfo>
-          {currentWrite.result.length > 0 && creating === 'Write' && (
-            <StopButton
-              cssExt={css`
-                margin: 0 auto;
-                margin-bottom: 16px;
-                margin-top: 16px;
-              `}
-              onClick={onClickStop}
+    <Wrapper>
+      <ResWrapper>
+        <RowBox>
+          <SubTitle subTitle={t(`WriteTab.PreviewWriting`)} />
+          {creating === 'none' && (
+            <RecreatingButton
+              onClick={() => {
+                // dispatch(initWriteHistory()); // 같은 주제끼리만 저장할지 의논 필요
+                // initAllInput();
+                dispatch(resetCurrentWrite());
+              }}
             />
           )}
-          {(creating === 'none' || currentWrite.result.length > 0) && <ColumDivider />}
-          <RowBox
-            cssExt={css`
-              ${alignItemCenter}
-              color: var(--gray-gray-70);
-              font-size: 13px;
-              height: 35px;
+        </RowBox>
+        <ResultBox>
+          {currentWrite.result.length === 0 && creating !== 'none' && (
+            <Loading>{t(`WriteTab.LoadingMsg`)}</Loading>
+          )}
+          <ResultWrapper>
+            <PreMarkdown text={currentWrite.result} />
+          </ResultWrapper>
+          <ResultInfo>
+            {currentWrite.result.length > 0 && creating === 'Write' && (
+              <StopButton
+                cssExt={css`
+                  margin: 0 auto;
+                  margin-bottom: 16px;
+                  margin-top: 16px;
+                `}
+                onClick={onClickStop}
+              />
+            )}
+            {(creating === 'none' || currentWrite.result.length > 0) && <ColumDivider />}
+            <RowBox
+              cssExt={css`
+                ${alignItemCenter}
+                color: var(--gray-gray-70);
+                font-size: 13px;
+                height: 35px;
 
-              padding: 8px 12px;
-              box-sizing: border-box;
-            `}>
-            <BoldLengthWrapper>
-              {currentWrite.result.length > 0 && (
-                <>{t(`WriteTab.LengthInfo`, { length: currentWrite?.result.length })}</>
-              )}
-            </BoldLengthWrapper>
+                padding: 8px 12px;
+                box-sizing: border-box;
+              `}>
+              <BoldLengthWrapper>
+                {currentWrite.result.length > 0 && (
+                  <>{t(`WriteTab.LengthInfo`, { length: currentWrite?.result.length })}</>
+                )}
+              </BoldLengthWrapper>
 
-            {creating === 'none' && (
-              <RightBox>
-                <Icon
-                  cssExt={css`
-                    width: 16px;
-                    height: 16px;
-                    margin-right: 11px;
-                    opacity: ${currentIndex === 0 && '0.3'};
-                  `}
-                  iconSrc={icon_prev}
-                  onClick={() => {
-                    if (currentIndex > 0) {
-                      dispatch(setCurrentWrite(history[currentIndex - 1]?.id));
-                    }
-                  }}
-                />
-                <div>
-                  {history.findIndex((write: any) => write.id === currentWriteId) + 1}/
-                  {history.length}
-                </div>
-                <Icon
-                  cssExt={css`
-                    width: 16px;
-                    height: 16px;
-                    margin-left: 11px;
-                    opacity: ${currentIndex === history.length - 1 && '0.3'};
-                  `}
-                  iconSrc={icon_next}
-                  onClick={() => {
-                    if (currentIndex < history.length - 1) {
-                      dispatch(setCurrentWrite(history[currentIndex + 1]?.id));
-                    }
-                  }}
-                />
-                {/* <CopyIcon
+              {creating === 'none' && (
+                <RightBox>
+                  <Icon
+                    cssExt={css`
+                      width: 16px;
+                      height: 16px;
+                      margin-right: 11px;
+                      opacity: ${currentIndex === 0 && '0.3'};
+                    `}
+                    iconSrc={icon_prev}
+                    onClick={() => {
+                      if (currentIndex > 0) {
+                        dispatch(setCurrentWrite(history[currentIndex - 1]?.id));
+                      }
+                    }}
+                  />
+                  <div>
+                    {history.findIndex((write: any) => write.id === currentWriteId) + 1}/
+                    {history.length}
+                  </div>
+                  <Icon
+                    cssExt={css`
+                      width: 16px;
+                      height: 16px;
+                      margin-left: 11px;
+                      opacity: ${currentIndex === history.length - 1 && '0.3'};
+                    `}
+                    iconSrc={icon_next}
+                    onClick={() => {
+                      if (currentIndex < history.length - 1) {
+                        dispatch(setCurrentWrite(history[currentIndex + 1]?.id));
+                      }
+                    }}
+                  />
+                  {/* <CopyIcon
                           cssExt={css`
                             margin-left: 12px;
                           `}
@@ -193,13 +208,12 @@ const AiWriteResult = ({
                             );
                           }}
                         /> */}
-              </RightBox>
-            )}
-          </RowBox>
-        </ResultInfo>
-      </ResultBox>
-      {creating === 'none' && (
-        <>
+                </RightBox>
+              )}
+            </RowBox>
+          </ResultInfo>
+        </ResultBox>
+        <ButtonBox creating={creating !== 'none'}>
           <RowBox
             cssExt={css`
               gap: 8px;
@@ -251,9 +265,10 @@ const AiWriteResult = ({
           <RightBox>
             <OpenAILinkText />
           </RightBox>
-        </>
-      )}
-    </ResWrapper>
+        </ButtonBox>
+      </ResWrapper>
+      {bannerActive && currentWriteId && creating !== 'Write' && <PSEventBannerWrite />}
+    </Wrapper>
   );
 };
 

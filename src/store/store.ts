@@ -8,6 +8,9 @@ import writeHistory from './slices/writeHistorySlice';
 import tab from './slices/tabSlice';
 import txtimgHistory from './slices/txt2imgHistory';
 import network from './slices/network';
+import confirm from './slices/confirm';
+import loadingSpinner from './slices/loadingSpinner';
+import banner from './slices/banner';
 
 const store = configureStore({
   reducer: {
@@ -18,7 +21,10 @@ const store = configureStore({
     tab,
     bridge,
     txtimgHistory,
-    network
+    network,
+    confirm,
+    loadingSpinner,
+    banner
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false })
 });
