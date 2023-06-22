@@ -40,7 +40,7 @@ import {
   flex
 } from '../style/cssCommon';
 import { calcToken, getElValue } from '../api/usePostSplunkLog';
-import { setCreating } from '../store/slices/tabSlice';
+import { selectTabSlice, setCreating } from '../store/slices/tabSlice';
 import { CHAT_STREAM_API, JSON_CONTENT_TYPE } from '../api/constant';
 import { calLeftCredit, insertDoc } from '../util/common';
 import icon_sand from '../img/ico_send.svg';
@@ -225,6 +225,7 @@ const AIChatTab = (props: WriteTabProps) => {
   const apiWrapper = useApiWrapper();
   const { history: chatHistory, defaultInput } = useAppSelector(selectChatHistory);
   const { selectedRecFunction, selectedSubRecFunction } = useAppSelector(selectRecFuncSlice);
+  const { creating } = useAppSelector(selectTabSlice);
   const { t } = useTranslation();
   const errorHandle = useErrorHandle();
 
@@ -613,7 +614,8 @@ const AIChatTab = (props: WriteTabProps) => {
                             onClick={() => {
                               submitChat(chat);
                               setRetryOrigin(chat.id);
-                            }}>
+                            }}
+                            disable={creating === 'Chating'}>
                             {t(`WriteTab.Recreating`)}
                           </Button>
                         )}
