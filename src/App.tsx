@@ -49,9 +49,8 @@ function App() {
                     dispatch(updateT2ICurItemIndex(null));
                   }
                 }
-                const time = new Date().getTime();
                 navigate(path, {
-                  state: { body, time }
+                  state: { body }
                 });
               } else {
                 dispatch(
