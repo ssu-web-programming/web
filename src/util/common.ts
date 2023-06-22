@@ -64,3 +64,7 @@ export const calLeftCredit = (headers: any) => {
     leftCredit: leftCredit
   };
 };
+
+export const openNewWindow = (url: string) => {
+  window._Bridge.openWindow(url);
+};

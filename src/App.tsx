@@ -10,20 +10,27 @@ import TextToImage from './pages/TextToImage';
 import GlobalStyle from './style/globalStyle';
 import InvalidAccess from './pages/InvalidAccess';
 import { useMoveChatTab } from './components/hooks/useMovePage';
-import { useTranslation } from 'react-i18next';
+import { getI18n, useTranslation } from 'react-i18next';
 import { activeToast } from './store/slices/toastSlice';
 import Offline from './pages/Offline';
-import gI18n, { convertLangFromLangCode } from './locale';
+import gI18n, { LANG_KO_KR, convertLangFromLangCode } from './locale';
 import { selectTabSlice } from './store/slices/tabSlice';
 import { updateT2ICurItemIndex, updateT2ICurListId } from './store/slices/txt2imgHistory';
+import Spinner from './components/Spinner';
+import Confirm from './components/Confirm';
+import useApiWrapper from './api/useApiWrapper';
+import { BANNER_ACTIVE_API } from './api/constant';
+import { setBanner } from './store/slices/banner';
 
 function App() {
   const dispatch = useAppDispatch();
   const { i18n, t } = useTranslation();
   const toast = useAppSelector(selectToast);
   const { creating } = useAppSelector(selectTabSlice);
+
   const navigate = useNavigate();
   const movePage = useMoveChatTab();
+  const apiWrapper = useApiWrapper();
 
   const procMsg = useRef<(msg: any) => void>();
   procMsg.current = useCallback(
@@ -107,6 +114,17 @@ function App() {
     window._Bridge.initComplete();
   }, []);
 
+  const setPSEventActive = async () => {
+    const res = await apiWrapper(BANNER_ACTIVE_API, {});
+    const resJson = await res.res.json();
+
+    dispatch(setBanner(resJson.data.enable && getI18n().resolvedLanguage === LANG_KO_KR));
+  };
+
+  useEffect(() => {
+    setPSEventActive();
+  }, []);
+
   return (
     <>
       <GlobalStyle></GlobalStyle>
@@ -118,6 +136,8 @@ function App() {
         </Routes>
         <Offline></Offline>
         {toast.active && <ToastMsg msg={toast.msg} isError={toast.isError} />}
+        <Spinner />
+        <Confirm />
       </Wrapper>
     </>
   );

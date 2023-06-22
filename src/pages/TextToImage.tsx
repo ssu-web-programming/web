@@ -4,21 +4,31 @@ import { useLocation } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { flexColumn } from '../style/cssCommon';
+import PSEventBannerT2I from '../components/PS/PSEventBannerT2I';
+import { selectBanner } from '../store/slices/banner';
+import { useAppSelector } from '../store/store';
+import { selectTabSlice } from '../store/slices/tabSlice';
+import { selectT2IHistory } from '../store/slices/txt2imgHistory';
 
 const Wrapper = styled.div`
   width: 100%;
   height: 100%;
+
+  overflow-y: auto;
+  overflow-x: hidden;
   ${flexColumn}
 `;
 
 const Body = styled.div`
   flex: 1;
-  overflow: auto;
 `;
 
 const TextToImage = () => {
   const location = useLocation();
   const { t } = useTranslation();
+  const { active: bannerActive } = useAppSelector(selectBanner);
+  const { creating } = useAppSelector(selectTabSlice);
+  const { currentListId } = useAppSelector(selectT2IHistory);
 
   return (
     <Wrapper>
@@ -26,6 +36,7 @@ const TextToImage = () => {
       <Body>
         <ImageCreate contents={location.state?.body || ''} />
       </Body>
+      {bannerActive && creating !== 'CreateImage' && currentListId && <PSEventBannerT2I />}
     </Wrapper>
   );
 };
