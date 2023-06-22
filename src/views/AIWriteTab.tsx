@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 import {
   WriteType,
   addWriteHistory,
+  removeWriteHistory,
   resetCurrentWrite,
   selectWriteHistorySlice,
   setCurrentWrite,
@@ -58,34 +59,34 @@ const AIWriteTab = (props: WriteTabProps) => {
     let resultText = '';
     let splunk = null;
     let input = '';
-    try {
-      const assistantId = uuidv4();
 
-      let preProc = {
-        type: '',
-        arg1: '',
-        arg2: ''
+    const assistantId = uuidv4();
+
+    let preProc = {
+      type: '',
+      arg1: '',
+      arg2: ''
+    };
+
+    if (inputParam) {
+      input = inputParam.input;
+      preProc = inputParam.preProcessing;
+    } else {
+      input = selectedOptions.input;
+      preProc = {
+        type: 'create_text',
+        arg1: selectedOptions.form.id, // id로 수정
+        arg2: selectedOptions.length.length.toString()
       };
+    }
 
-      if (inputParam) {
-        input = inputParam.input;
-        preProc = inputParam.preProcessing;
-      } else {
-        input = selectedOptions.input;
-        preProc = {
-          type: 'create_text',
-          arg1: selectedOptions.form.id, // id로 수정
-          arg2: selectedOptions.length.length.toString()
-        };
-      }
+    dispatch(
+      addWriteHistory({ id: assistantId, input: input, preProcessing: preProc, result: '' })
+    );
+    dispatch(setCurrentWrite(assistantId));
+    dispatch(setCreating('Write'));
 
-      dispatch(
-        addWriteHistory({ id: assistantId, input: input, preProcessing: preProc, result: '' })
-      );
-      dispatch(setCurrentWrite(assistantId));
-
-      dispatch(setCreating('Write'));
-
+    try {
       const { res, logger } = await apiWrapper(CHAT_STREAM_API, {
         headers: {
           ...JSON_CONTENT_TYPE,
@@ -165,6 +166,14 @@ const AIWriteTab = (props: WriteTabProps) => {
     } catch (error: any) {
       dispatch(resetCurrentWrite());
       errorHandle(error);
+
+      const assistantResult = history?.filter((write) => write.id === assistantId)[0]?.result;
+      if (!assistantResult || assistantResult?.length === 0) {
+        dispatch(removeWriteHistory(assistantId));
+      }
+      if (input) {
+        setSelectedOptions((prev) => ({ ...prev, input: input }));
+      }
     } finally {
       if (splunk) {
         const input_token = calcToken(input);
