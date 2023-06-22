@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import SpeechBubble from '../components/SpeechBubble';
 import TextArea from '../components/TextArea';
 import { useAppDispatch, useAppSelector } from '../store/store';
@@ -180,7 +180,6 @@ const SubmitButton = styled.button<{ disabled: boolean }>`
     cursor: pointer;
   }
 
-  /* ${alignItemEnd} */
   ${flex}
   ${alignItemCenter}
   ${justiCenter}
@@ -241,7 +240,6 @@ const AIChatTab = (props: WriteTabProps) => {
   );
   const [isDefaultInput, setIsDefaultInput] = useState<boolean>(false);
 
-  const historyStart = useRef<number>(0);
   const chatEndRef = useRef<any>();
   const stopRef = useRef<boolean>(false);
   const textRef = useRef<HTMLTextAreaElement>(null);
@@ -301,6 +299,13 @@ const AIChatTab = (props: WriteTabProps) => {
     }
   }, [isActiveInput]);
 
+  const isFormRec = useMemo(() => {
+    return (
+      (!isDefaultInput && chatHistory.length === 0) ||
+      chatHistory[chatHistory.length - 1].role === 'reset'
+    );
+  }, [isDefaultInput, chatHistory]);
+
   const handleResizeHeight = () => {
     if (textRef.current) {
       textRef.current.style.height = 'auto';
@@ -322,7 +327,7 @@ const AIChatTab = (props: WriteTabProps) => {
       return chat.preProcessing;
     } else if (selectedRecFunction && selectedRecFunction.id === REC_ID_LIST.START_NEW_CHATING) {
       return { type: 'just_chat' };
-    } else if (chatHistory.length === 0) {
+    } else if (isFormRec) {
       return { type: 'just_chat', arg1: selectedRecFunction?.id };
     } else if (selectedRecFunction) {
       return { type: selectedRecFunction.id, arg1: selectedSubRecFunction?.id };
@@ -330,12 +335,15 @@ const AIChatTab = (props: WriteTabProps) => {
   };
 
   const submitChat = async (chat?: Chat) => {
+    let history = [...chatHistory];
+
     if (selectedRecFunction?.id === REC_ID_LIST.START_NEW_CHATING) {
       const infoText = t('ChatingTab.InfoChat');
+
       dispatch(
         appendChat({
           id: uuidv4(),
-          role: 'info',
+          role: 'reset',
           result: infoText,
           input: infoText
         })
@@ -343,6 +351,13 @@ const AIChatTab = (props: WriteTabProps) => {
       dispatch(initRecFunc());
 
       if (chatInput.length === 0) return;
+    } else {
+      const resetId = history.reverse().find((chat) => chat.role === 'reset')?.id;
+
+      if (resetId) {
+        const resetIndex = chatHistory.findIndex((chat) => chat.id === resetId);
+        history = chatHistory.slice(resetIndex + 1, chatHistory.length);
+      }
     }
 
     let resultText = '';
@@ -355,42 +370,39 @@ const AIChatTab = (props: WriteTabProps) => {
       ? chatInput
       : chatHistory[chatHistory.length - 1].result;
 
-    if (selectedRecFunction?.id === REC_ID_LIST.START_NEW_CHATING) {
-      historyStart.current = chatHistory.length;
-    }
-    try {
-      dispatch(setCreating('Chating'));
-      setChatInput({ input: '' });
+    dispatch(setCreating('Chating'));
+    setChatInput({ input: '' });
 
-      const msg = selectLoadingMsg(chat ? true : false);
-      setLoadingInfo({ id: assistantId, msg: msg });
+    const msg = selectLoadingMsg(chat ? true : false);
+    setLoadingInfo({ id: assistantId, msg: msg });
 
-      handleResizeHeight();
-      if (textRef.current) textRef.current.style.height = 'auto';
+    handleResizeHeight();
+    if (textRef.current) textRef.current.style.height = 'auto';
 
-      let preProc = getPreProcessing(chat);
+    let preProc = getPreProcessing(chat);
 
-      if (!chat && chatInput.length > 0) {
-        dispatch(
-          appendChat({
-            id: userId,
-            role: 'user',
-            result: input,
-            input: input,
-            preProcessing: preProc
-          })
-        );
-      }
+    if (!chat && chatInput.length > 0) {
       dispatch(
         appendChat({
-          id: assistantId,
-          role: 'assistant',
-          result: '',
+          id: userId,
+          role: 'user',
+          result: input,
           input: input,
           preProcessing: preProc
         })
       );
+    }
+    dispatch(
+      appendChat({
+        id: assistantId,
+        role: 'assistant',
+        result: '',
+        input: input,
+        preProcessing: preProc
+      })
+    );
 
+    try {
       const { res, logger } = await apiWrapper(CHAT_STREAM_API, {
         headers: {
           ...JSON_CONTENT_TYPE,
@@ -398,8 +410,8 @@ const AIChatTab = (props: WriteTabProps) => {
         }, //   responseType: 'stream',
         body: JSON.stringify({
           history: [
-            ...chatHistory
-              .filter((history, index) => index >= historyStart.current)
+            ...history
+              .filter((history) => history.role !== 'reset')
               .map((chat) => ({ content: chat.result, role: chat.role })),
             {
               content: input,
@@ -625,7 +637,6 @@ const AIChatTab = (props: WriteTabProps) => {
                             min-width: 127.7px;
                             height: 28px;
                             box-sizing: border-box;
-                            /* margin: 0px; */
                           `}
                           onClick={() => {
                             insertDoc(chat.result);
@@ -669,7 +680,7 @@ const AIChatTab = (props: WriteTabProps) => {
       <div style={{ position: 'relative', display: 'flex' }}>
         <FloatingBox>
           {isActiveInput && !loadingInfo ? (
-            <FuncRecBox isFormRec={!isDefaultInput && chatHistory.length === 0} />
+            <FuncRecBox isFormRec={isFormRec} />
           ) : (
             !loadingInfo &&
             chatInput.length === 0 && (
@@ -732,9 +743,6 @@ const AIChatTab = (props: WriteTabProps) => {
 
                 if (isDefaultInput && e.target.value.length === 0) setIsDefaultInput(false);
               }}
-              // onBlur={() => {
-              //   if (chatInput.length > 0) dispatch(updateDefaultInput(chatInput));
-              // }}
             />
             {!loadingInfo && isActiveInput && (
               <SubmitButton

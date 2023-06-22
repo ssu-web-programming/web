@@ -348,7 +348,7 @@ const FucRecBox = ({ isFormRec }: { isFormRec: boolean }) => {
   useEffect(() => {
     if (isFormRec) setSelectedFunc(formRecList[0]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isFormRec]);
 
   return (
     <Wrapper>
@@ -372,7 +372,7 @@ const FucRecBox = ({ isFormRec }: { isFormRec: boolean }) => {
               {isFormRec ? (
                 <Grid3BtnContainer>
                   {formRecList.map((rec) => (
-                    <div>
+                    <div key={rec.id}>
                       <IconButton
                         title={t(`FormList.${rec.title}`)}
                         key={rec.id}
@@ -455,6 +455,7 @@ const FucRecBox = ({ isFormRec }: { isFormRec: boolean }) => {
                     .filter((sub) => sub.id === selectedRecFunction?.id)[0]
                     .subList.map((sub) => (
                       <NoBorderButton
+                        key={sub.id}
                         cssExt={css`
                           border: none;
                           height: fit-content;
