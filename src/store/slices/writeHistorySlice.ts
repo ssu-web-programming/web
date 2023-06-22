@@ -45,6 +45,9 @@ const writeHistorySlice = createSlice({
         return history;
       });
     },
+    removeWriteHistory: (state, action: PayloadAction<string>) => {
+      state.history = state.history.filter((history) => history.id !== action.payload);
+    },
     setCurrentWrite: (state, action: PayloadAction<string>) => {
       state.currentWriteId = action.payload;
     },
@@ -59,7 +62,8 @@ export const {
   addWriteHistory,
   updateWriteHistory,
   setCurrentWrite,
-  resetCurrentWrite
+  resetCurrentWrite,
+  removeWriteHistory
 } = writeHistorySlice.actions;
 export const selectWriteHistorySlice = (state: RootState) => state.writeHistory;
 export default writeHistorySlice.reducer;
