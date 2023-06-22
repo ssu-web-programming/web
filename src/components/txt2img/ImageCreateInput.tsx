@@ -259,8 +259,11 @@ const ImageCreateInput = ({
           <ShowResult
             disable={history.length === 0}
             onClick={() => {
-              dispatch(updateT2ICurListId(history[0].id));
-              dispatch(updateT2ICurItemIndex(0));
+              const last = history[history.length - 1];
+              if (last) {
+                dispatch(updateT2ICurListId(last.id));
+                dispatch(updateT2ICurItemIndex(0));
+              }
             }}
           />
         </SubTitleArea>
