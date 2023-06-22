@@ -302,7 +302,7 @@ const AIChatTab = (props: WriteTabProps) => {
   const isFormRec = useMemo(() => {
     return (
       (!isDefaultInput && chatHistory.length === 0) ||
-      chatHistory[chatHistory.length - 1].role === 'reset'
+      chatHistory[chatHistory.length - 1]?.role === 'reset'
     );
   }, [isDefaultInput, chatHistory]);
 
