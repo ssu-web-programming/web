@@ -35,12 +35,17 @@ import { selectBanner } from '../../store/slices/banner';
 import PSEventBannerWrite from '../PS/PSEventBannerWrite';
 
 const Wrapper = styled.div`
+  ${flex}
   ${flexColumn}
   background-color: var(--ai-purple-99-bg-light);
   height: 100%;
 `;
 
 const ResultBox = styled.div`
+  ${flex}
+  ${flexColumn}
+  ${justiSpaceBetween}
+
   width: 100%;
   flex: 1;
   border-radius: 4px;
@@ -48,8 +53,6 @@ const ResultBox = styled.div`
   box-sizing: border-box;
   margin-bottom: 8px;
   height: 60%;
-  ${flexColumn}
-  ${justiSpaceBetween}
 
   ${TableCss}
 `;
@@ -65,25 +68,28 @@ const ResultWrapper = styled.div`
 `;
 
 const ResWrapper = styled.div`
+  ${flex}
   ${flexColumn}
+
   padding: 16px;
   width: 100%;
   height: 100%;
   overflow: auto;
   box-sizing: border-box;
   background-color: var(--ai-purple-99-bg-light);
-
   gap: 8px;
 `;
 
 const ButtonBox = styled.div<{ creating: boolean }>`
+  ${flex}
   ${flexColumn}
-  gap: 8px;
 
+  gap: 8px;
   visibility: ${({ creating }: { creating: boolean }) => (creating ? 'hidden' : 'visible')};
 `;
 
 const ResultInfo = styled.div`
+  ${flex}
   ${flexColumn}
 `;
 
@@ -144,7 +150,6 @@ const AiWriteResult = ({
             {(creating === 'none' || currentWrite.result.length > 0) && <ColumDivider />}
             <RowBox
               cssExt={css`
-                ${alignItemCenter}
                 color: var(--gray-gray-70);
                 font-size: 13px;
                 height: 35px;

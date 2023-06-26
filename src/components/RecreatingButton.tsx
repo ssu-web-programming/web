@@ -6,9 +6,10 @@ import { useTranslation } from 'react-i18next';
 
 const Wrapper = styled.div`
   ${flex}
+  ${alignItemCenter}
+  
   font-size: 12px;
   color: var(--gray-gray-80-02);
-  ${alignItemCenter}
   cursor: pointer;
 
   height: 26px;

@@ -45,7 +45,9 @@ import {
   justiSpaceBetween,
   flexWrap,
   alignItemCenter,
-  grid3Btn
+  grid3Btn,
+  flex,
+  grid
 } from '../style/cssCommon';
 import { useTranslation } from 'react-i18next';
 import { flexShrink } from '../style/cssCommon';
@@ -53,8 +55,12 @@ import { flexGrow } from '../style/cssCommon';
 import NoBorderButton from './NoBorderButton';
 
 const Wrapper = styled.div`
-  border-radius: 0;
+  ${flex}
   ${flexColumn}
+  ${justiCenter}
+  
+  width: 100%;
+  border-radius: 0;
   box-sizing: border-box;
 
   background-color: rgba(245, 241, 253, 0.7);
@@ -72,11 +78,10 @@ const Wrapper = styled.div`
   div {
     backdrop-filter: none;
   }
-
-  ${justiCenter}
 `;
 
 export const RowWrapBox = styled.div<{ cssExt?: any }>`
+  ${flex}
   ${flexWrap}
   ${justiSpaceBetween}
   ${alignItemCenter}
@@ -91,17 +96,17 @@ const OpenedBox = styled(RowWrapBox)`
 `;
 
 const CommentWrapper = styled.div`
+  ${flex}
   ${justiCenter}
   ${alignItemCenter}
 
   font-size: 13px;
   color: var(--gray-gray-90-01);
-  /* height: 48px; */
-  /* margin-bottom: 14px; */
   box-sizing: border-box;
 `;
 
 const Grid3BtnContainer = styled.div`
+  ${grid}
   ${grid3Btn}
 
   width: 100%;
@@ -408,6 +413,7 @@ const FucRecBox = ({ isFormRec }: { isFormRec: boolean }) => {
                         cssExt={css`
                           width: 100%;
                           height: 28px;
+                          ${flex}
                           ${alignItemCenter}
                           ${rec.id !== REC_ID_LIST.START_NEW_CHATING && flexShrink}
                           ${rec.id !== REC_ID_LIST.START_NEW_CHATING && flexGrow}

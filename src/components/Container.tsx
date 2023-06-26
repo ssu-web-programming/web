@@ -1,7 +1,8 @@
 import styled from 'styled-components';
-import { alignItemCenter, justiCenter } from '../style/cssCommon';
+import { alignItemCenter, flex, justiCenter } from '../style/cssCommon';
 
 const Wrap = styled.div`
+  ${flex}
   ${justiCenter}
   ${alignItemCenter}
 `;

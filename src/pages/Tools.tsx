@@ -8,7 +8,7 @@ import icon_creating_text_purple from '../img/ico_creating_text_purple.svg';
 import { useTranslation } from 'react-i18next';
 import { AI_WRITE_TAB_TYPE, selectTab, selectTabSlice } from '../store/slices/tabSlice';
 import styled, { css } from 'styled-components';
-import { flexColumn } from '../style/cssCommon';
+import { flex, flexColumn } from '../style/cssCommon';
 import Header from '../components/layout/Header';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import { activeToast } from '../store/slices/toastSlice';
@@ -24,9 +24,11 @@ import {
 } from '../components/FuncRecBox';
 
 const Wrapper = styled.div`
+  ${flex}
+  ${flexColumn}
+  
   width: 100%;
   height: 100%;
-  ${flexColumn}
 `;
 
 const Body = styled.div`

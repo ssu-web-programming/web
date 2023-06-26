@@ -15,7 +15,7 @@ import { useAppSelector } from '../../store/store';
 import { selectT2IHistory } from '../../store/slices/txt2imgHistory';
 import usePSEvent, { openDetailPage } from '../hooks/usePSEvent';
 import { BannerWrapper, GridContainer } from './PSEventBannerWrite';
-import { alignItemStart } from '../../style/cssCommon';
+import { alignItemStart, flex } from '../../style/cssCommon';
 
 const PSEventBannerT2I = () => {
   const { history: imgHistory, currentListId, currentItemIdx } = useAppSelector(selectT2IHistory);
@@ -27,9 +27,10 @@ const PSEventBannerT2I = () => {
         <MainImg
           src={mainImg_icon}
           cssExt={css`
+            ${flex}
+            ${alignItemStart}
             width: 116px;
             height: 60px;
-            ${alignItemStart}
           `}
         />
         <GridContainer>

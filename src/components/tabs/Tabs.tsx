@@ -2,6 +2,7 @@ import { ReactElement } from 'react';
 import styled, { css } from 'styled-components';
 import {
   alignItemCenter,
+  flex,
   flexGrow,
   flexShrink,
   justiCenter,
@@ -10,6 +11,7 @@ import {
 import { MenuItemProps } from '../items/MenuItem';
 
 const Wrapper = styled.div`
+  ${flex}
   ${justiStart}
 
   height: 34px;
@@ -17,7 +19,7 @@ const Wrapper = styled.div`
 `;
 
 const TabItem = styled.div<{ selected: boolean }>`
-  /* flex: 1; */
+  ${flex}
   ${flexGrow}
   ${flexShrink}
   ${alignItemCenter}

@@ -7,6 +7,7 @@ import PreMarkdown from './PreMarkdown';
 import { flexColumn, flex } from '../style/cssCommon';
 
 const Wrapper = styled.div<{ isUser: boolean }>`
+  ${flex}
   ${flexColumn}
 
   width: fit-content;
@@ -14,7 +15,6 @@ const Wrapper = styled.div<{ isUser: boolean }>`
   margin-right: ${({ isUser }: { isUser: boolean }) => !isUser && '30px'};
   margin-left: ${({ isUser }: { isUser: boolean }) => isUser && '48px'};
   align-self: ${({ isUser }: { isUser: boolean }) => isUser && 'flex-end'};
-
   margin: ${({ isUser }: { isUser: boolean }) =>
     isUser ? '16px 10px 0px 48px' : '16px 30px 0px 8px'};
 `;
@@ -31,12 +31,11 @@ const Profile = styled.div`
 `;
 
 const SpeechBubbleWrapper = styled.div<{ cssExt: any; isUser: boolean }>`
+  ${flex}
   ${flexColumn}
   align-self: flex-start;
 
   width: 100%;
-  /* height: 100%; */
-  /* max-width: 80%; */
   box-sizing: border-box;
   border-radius: 10px;
 
@@ -89,10 +88,6 @@ const SpeechBubble = ({
           <Profile>
             <Icon
               iconSrc={loadingMsg ? icon_ai_loading : icon_ai}
-              cssExt={css`
-                /* width: 32px;
-                height: 32px; */
-              `}
               imgCssExt={css`
                 width: 24px;
                 height: 24px;

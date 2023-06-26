@@ -6,9 +6,11 @@ import { selectLoadingSpinner } from '../store/slices/loadingSpinner';
 import { alignItemCenter, flex, flexColumn, justiCenter } from '../style/cssCommon';
 
 const SpinnerWrapper = styled.div`
+  ${flex}
   ${flexColumn}
   ${justiCenter}
   ${alignItemCenter}
+
   position: absolute;
   left: 50%;
   top: 50%;
@@ -30,10 +32,11 @@ const SpinnerWrapper = styled.div`
 `;
 
 const SpinnerImg = styled.img`
+  ${flex}
+
   background-color: white;
   border-radius: 50%;
   margin-bottom: 16px;
-  ${flex}
   width: 66px;
   height: 66px;
 `;

@@ -4,7 +4,7 @@ import { activeLoadingSpinner, initLoadingSpinner } from '../../store/slices/loa
 import { T2IType } from '../../store/slices/txt2imgHistory';
 import { WriteType } from '../../store/slices/writeHistorySlice';
 import { useAppDispatch } from '../../store/store';
-import { alignItemCenter, flexColumn, justiCenter } from '../../style/cssCommon';
+import { alignItemCenter, flex, flexColumn, justiCenter } from '../../style/cssCommon';
 import { openNewWindow } from '../../util/common';
 
 export interface EventFuncType {
@@ -22,6 +22,7 @@ export const openDetailPage = () => {
 };
 
 const ColumBox = styled.div`
+  ${flex}
   ${flexColumn}
   ${justiCenter}
   ${alignItemCenter}

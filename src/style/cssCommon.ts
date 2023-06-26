@@ -68,7 +68,6 @@ export const flex = css`
 `;
 
 export const flexColumn = css`
-  ${flex}
   -webkit-box-orient: vertical;
   -moz-flex-direction: column;
   -ms-flex-direction: column;
@@ -76,8 +75,6 @@ export const flexColumn = css`
 `;
 
 export const flexWrap = css`
-  ${flex}
-
   -webkit-box-lines: multiple;
   -moz-flex-wrap: wrap;
   -ms-flex-wrap: wrap;
@@ -85,7 +82,6 @@ export const flexWrap = css`
 `;
 
 export const justiSpaceBetween = css`
-  ${flex}
   -webkit-box-pack: justify;
   -moz-justify-content: space-between;
   -ms-flex-pack: justify;
@@ -93,7 +89,6 @@ export const justiSpaceBetween = css`
 `;
 
 export const justiSpaceAround = css`
-  ${flex}
   -webkit-box-pack: justify;
   -moz-justify-content: space-around;
   -ms-flex-pack: justify;
@@ -101,28 +96,24 @@ export const justiSpaceAround = css`
 `;
 
 export const justiStart = css`
-  ${flex}
   -webkit-box-pack: start;
   -ms-flex-pack: start;
   justify-content: flex-start;
 `;
 
 export const justiCenter = css`
-  ${flex}
   -webkit-box-pack: center;
   -ms-flex-pack: center;
   justify-content: center;
 `;
 
 export const justiEnd = css`
-  ${flex}
   -webkit-box-pack: end;
   -ms-flex-pack: end;
   justify-content: flex-end;
 `;
 
 export const alignItemStart = css`
-  ${flex}
   -webkit-box-align: start;
   -moz-align-items: start;
   -ms-flex-align: start;
@@ -130,7 +121,6 @@ export const alignItemStart = css`
 `;
 
 export const alignItemCenter = css`
-  ${flex}
   /* [정렬] 교차축 - 가운데 기준 */
   -webkit-box-align: center;
   -moz-align-items: center;
@@ -168,8 +158,6 @@ export const grid = css`
 `;
 
 export const grid3Btn = css`
-  ${grid}
-
   -webkit-grid-columns: 1fr 1fr 1fr;
   grid-template-columns: 1fr 1fr 1fr;
 `;

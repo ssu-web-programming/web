@@ -4,22 +4,34 @@ import { selectNetwork, setOnlineStatus } from '../store/slices/network';
 import { useEffect } from 'react';
 import Header from '../components/layout/Header';
 import { useTranslation } from 'react-i18next';
-import { alignItemCenter, flexColumn, justiCenter } from '../style/cssCommon';
+import {
+  alignItemCenter,
+  flex,
+  flexColumn,
+  flexGrow,
+  flexShrink,
+  justiCenter
+} from '../style/cssCommon';
 
 const Wrapper = styled.div`
+  ${flex}
+  ${flexColumn}
+  
   position: absolute;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
-  ${flexColumn}
 `;
 
 const Contents = styled.div`
-  flex: 1;
+  ${flex}
   ${flexColumn}
   ${justiCenter}
   ${alignItemCenter}
+  ${flexShrink}
+  ${flexGrow}
+
   background-color: white;
 `;
 
