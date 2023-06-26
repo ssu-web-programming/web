@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 
 type CREATING_TYPE = 'none' | 'Chating' | 'Write' | 'CreateImage';
-export type AI_WRITE_TAB_TYPE = 'write' | 'chat';
+export type AI_WRITE_TAB_TYPE = 'write' | 'chat' | 'test';
 
 interface TabType {
   creating: CREATING_TYPE;

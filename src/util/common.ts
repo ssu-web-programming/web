@@ -43,15 +43,22 @@ th
 </body>
 </html>`;
 
-export const insertDoc = async (content: string) => {
+export const markdownToHtml = async (markdown: string) => {
   try {
-    const tt = await marked(content);
+    const converted = await marked(markdown);
     const $ = load(htmlBody);
     const body = $('body');
 
-    body.html(tt);
+    body.html(converted);
 
-    await window._Bridge.insertHtml($.html());
+    return $.html();
+  } catch (err) {}
+};
+
+export const insertDoc = async (markdown: string) => {
+  try {
+    const html = await markdownToHtml(markdown);
+    await window._Bridge.insertHtml(html);
   } catch (error) {}
 };
 

@@ -22,6 +22,7 @@ import {
   DEFAULT_WRITE_OPTION_LENGTH_VALUE,
   WriteOptions
 } from '../components/FuncRecBox';
+import TestDocInsert from '../__test__/TestDocInsert';
 
 const Wrapper = styled.div`
   ${flex}
@@ -55,7 +56,8 @@ const TAB_LIST: TabListProps[] = [
     name: `Chating`,
     icon: icon_chat,
     selectedIcon: icon_chat_purple
-  }
+  },
+  { id: 'test', name: `test`, icon: icon_chat, selectedIcon: icon_chat_purple }
 ];
 
 const initWriteOptions: WriteOptions = {
@@ -119,6 +121,7 @@ export default function Tools() {
                 <AIWriteTab options={writeOptions} setOptions={setWriteOptions} />
               )}
               {tab.id === 'chat' && <AIChatTab options={chatOptions} setOptions={setChatOptions} />}
+              {tab.id === 'test' && <TestDocInsert />}
             </MenuItem>
           ))}
         </TabPanel>
