@@ -6,13 +6,16 @@ import badge_beta from '../../img/badge_beta_ai.svg';
 import { flex, alignItemCenter, justiSpaceBetween } from '../../style/cssCommon';
 
 const Contents = styled.div`
-  padding-left: 10px;
-  height: 48px;
+  ${flex}
   ${justiSpaceBetween}
   ${alignItemCenter}
+  
+  padding-left: 10px;
+  height: 48px;
 `;
 
 const TitleWrapper = styled.div`
+  ${flex}
   ${alignItemCenter}
   /* line-height: 100%; */
   width: fit-content;

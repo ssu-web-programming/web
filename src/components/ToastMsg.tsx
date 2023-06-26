@@ -28,6 +28,10 @@ const TIME = 5000;
 
 const ToastMsgWrapper = styled.div<{ isError: boolean }>`
   ${alignItemCenter}
+  ${flex}
+  ${flexShrink}
+  ${flexGrow}
+  
   position: absolute;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -37,9 +41,7 @@ const ToastMsgWrapper = styled.div<{ isError: boolean }>`
   /* white-space: pre-wrap; */
   width: 360px;
   max-width: 80%;
-  ${flex}
-  ${flexShrink}
-  ${flexGrow}
+
   box-sizing: border-box;
   height: fit-content;
 

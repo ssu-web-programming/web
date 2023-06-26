@@ -18,6 +18,7 @@ import iconCreatingWhite from '../../img/ico_creating_text_white.svg';
 import {
   alignItemCenter,
   alignItemStart,
+  flex,
   flexColumn,
   flexGrow,
   flexShrink,
@@ -38,9 +39,9 @@ import {
 import ExTextbox from '../ExTextbox';
 import Button from '../Button';
 import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
 
 const MakingInputWrapper = styled.div`
+  ${flex}
   ${flexColumn}
   gap: 16px;
 `;
@@ -60,13 +61,15 @@ const GridContainer = styled.div<{
 `;
 
 const SelectOptionArea = styled.div`
-  width: 100%;
+  ${flex}
   ${flexColumn}
 
+  width: 100%;
   gap: 8px;
 `;
 
 const ContainerItem = styled.div`
+  ${flex}
   ${flexColumn}
   ${alignItemStart}
 
@@ -74,6 +77,7 @@ const ContainerItem = styled.div`
 `;
 
 const RatioBtnConatainer = styled.div`
+  ${flex}
   ${flexColumn}
   ${flexShrink}
   ${flexGrow}
@@ -82,12 +86,12 @@ const RatioBtnConatainer = styled.div`
 `;
 
 const ItemTitle = styled.div<{ isSelected: boolean }>`
+  ${flex}
   ${justiCenter}
   ${alignItemCenter}
+  
   width: 100%;
-
   font-weight: bold;
-
   font-size: 12px;
   font-weight: normal;
   font-stretch: normal;
@@ -119,10 +123,12 @@ const ItemIconBox = styled.div<{
   isSelected: boolean;
   cssExt?: any;
 }>`
-  width: 100%;
-  height: 100%;
+  ${flex}
   ${justiCenter}
   ${alignItemCenter}
+  
+  width: 100%;
+  height: 100%;
   border-radius: 4px;
   background-color: var(--gray-gray-20);
   box-sizing: border-box;

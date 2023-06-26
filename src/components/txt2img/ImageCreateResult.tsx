@@ -19,9 +19,11 @@ import { activeToast } from '../../store/slices/toastSlice';
 import LinkText from '../LinkText';
 
 const GenButton = styled.div<{ disabled: boolean }>`
-  position: relative;
+  ${flex}
   ${justiCenter}
   ${alignItemCenter}
+  
+  position: relative;
   width: 100%;
   height: 35px;
   cursor: pointer;
@@ -73,9 +75,11 @@ const ImageDesc = styled.div`
 `;
 
 const ImageList = styled.div`
-  width: 100%;
+  ${flex}
   ${justiSpaceAround}
   ${alignItemCenter}
+  
+  width: 100%;
   height: 84px;
   box-sizing: border-box;
   /* margin-top: 12px; */

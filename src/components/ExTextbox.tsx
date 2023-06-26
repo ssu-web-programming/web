@@ -4,9 +4,10 @@ import TextArea from './TextArea';
 import { LengthWrapper, RowBox } from '../views/AIChatTab';
 import ExButton from './ExButton';
 import { useState } from 'react';
-import { flexColumn } from '../style/cssCommon';
+import { flex, flexColumn } from '../style/cssCommon';
 
 const InputArea = styled.div<{ activeBorder: boolean }>`
+  ${flex}
   ${flexColumn}
 
   box-sizing: border-box;

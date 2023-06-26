@@ -26,6 +26,7 @@ export const BannerWrapper = styled.div`
 `;
 
 export const GridContainer = styled.div`
+  ${flex}
   ${justiCenter}
   ${alignItemCenter}
   ${grid}

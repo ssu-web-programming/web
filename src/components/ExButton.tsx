@@ -1,15 +1,17 @@
 import styled, { css } from 'styled-components';
 import Icon from './Icon';
 import icon_ai_change from '../img/ico_ai_change.svg';
-import { alignItemCenter } from '../style/cssCommon';
+import { alignItemCenter, flex } from '../style/cssCommon';
 import { useTranslation } from 'react-i18next';
 
 const TextButton = styled.button<{ disabled: boolean }>`
+  ${flex}
+  ${alignItemCenter}
+  
   background-color: transparent;
   border: none;
   cursor: pointer;
   font-size: 12px;
-  ${alignItemCenter}
   width: fit-content;
   height: fit-content;
   color: var(--gray-gray-80-02);

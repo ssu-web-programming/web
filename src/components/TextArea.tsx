@@ -1,13 +1,14 @@
 import styled, { CSSProp } from 'styled-components';
-import { alignItemCenter } from '../style/cssCommon';
+import { alignItemCenter, flex } from '../style/cssCommon';
 
 const TextAreaWrapper = styled.textarea<{ cssExt: any }>`
   resize: none;
   outline: none;
   ::placeholder {
+    ${flex}
+    ${alignItemCenter}
     font-size: 13px;
     color: var(--gray-gray-60-03);
-    ${alignItemCenter}
   }
   font-size: 13px;
 

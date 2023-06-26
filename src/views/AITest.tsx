@@ -8,10 +8,12 @@ import { activeToast } from '../store/slices/toastSlice';
 import NoCredit from '../components/toast/contents/NoCredit';
 
 const Body = styled.div`
+  ${flex}
+  ${flexColumn}
+  
   width: 100%;
   height: 100%;
   border: solid 1px gray;
-  ${flexColumn}
 
   padding: 10px 10px 0px 10px;
   gap: 10px;
@@ -23,7 +25,7 @@ const TestButton = styled.button`
 `;
 
 const Result = styled.div`
-  /* flex: 1; */
+  ${flex}
   ${flexColumn}
   ${flexGrow}
   ${flexShrink}

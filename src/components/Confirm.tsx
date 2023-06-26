@@ -16,65 +16,63 @@ import close_icon from '../img/ico_ai_close.svg';
 import { useTranslation } from 'react-i18next';
 
 const ConfirmBox = styled.div`
+  ${flex}
+  ${flexColumn}
+  ${alignItemCenter}
+  ${justiCenter}
+  ${flexGrow}
+  ${flexShrink}
+
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-
-  ${flexColumn}
   background-color: #fff;
-
-  /* width: 348px; */
   width: 90%;
   height: 200px;
-
-  border-radius: 2px;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2);
-  border: solid 1px #a3a3a3;
-
   border-radius: 4px;
   border: solid 1px var(--gray-gray-50);
   background-color: #fff;
   box-sizing: border-box;
-
-  ${flexGrow}
-  ${flexShrink}
-  ${alignItemCenter}
-  ${justiCenter}
 `;
 
 const CloseBtn = styled.div`
+  ${flex}
+  ${justiCenter}
+  ${alignItemCenter}
+  align-self: flex-end;
+
   position: absolute;
   top: 0px;
   right: 0px;
-  ${flex}
 
   img {
     width: 32px;
     height: 32px;
   }
 
-  ${justiCenter}
-  ${alignItemCenter}
-  align-self: flex-end;
   &:hover {
     cursor: pointer;
   }
 `;
 
 const MsgArea = styled.div`
+  ${flex}
+  ${flexColumn}
+  ${flexGrow}
+  ${justiCenter}
+  ${alignItemCenter}
+  
   font-size: 13px;
   color: var(--gray-gray-80-02);
   margin: 18px 0px 24px 0px;
 
   height: fit-content;
-  ${flexColumn}
-  ${flexGrow}
-  ${justiCenter}
-  ${alignItemCenter}
 `;
 
 const ContentArea = styled.div`
+  ${flex}
   ${flexColumn}
   ${justiCenter}
   ${alignItemCenter}

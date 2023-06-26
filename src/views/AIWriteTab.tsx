@@ -14,7 +14,7 @@ import {
   updateWriteHistory
 } from '../store/slices/writeHistorySlice';
 import { useAppSelector } from '../store/store';
-import { flexColumn, grid3Btn } from '../style/cssCommon';
+import { flex, flexColumn, grid, grid3Btn } from '../style/cssCommon';
 import { useMoveChatTab } from '../components/hooks/useMovePage';
 import { setCreating } from '../store/slices/tabSlice';
 import { JSON_CONTENT_TYPE, CHAT_STREAM_API } from '../api/constant';
@@ -28,6 +28,7 @@ import AIWriteInput from '../components/aiWrite/AIWriteInput';
 import { WriteOptions } from '../components/FuncRecBox';
 
 export const Grid3BtnContainer = styled.div`
+  ${grid}
   ${grid3Btn}
 
   width: 100%;
@@ -35,6 +36,7 @@ export const Grid3BtnContainer = styled.div`
 `;
 
 const TabWrapper = styled.div`
+  ${flex}
   ${flexColumn}
   height: 100%;
   overflow-x: hidden;

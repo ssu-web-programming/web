@@ -1,14 +1,16 @@
 import styled from 'styled-components';
-import { alignItemCenter, justiCenter } from '../../style/cssCommon';
+import { alignItemCenter, flex, justiCenter } from '../../style/cssCommon';
 
 const BannerArea = styled.div`
+  ${flex}
+  ${alignItemCenter}
+  ${justiCenter}
+  
   background-color: #171717;
   color: white;
   width: 100%;
   min-width: 320px;
   min-height: 60px;
-  ${alignItemCenter}
-  ${justiCenter}
 `;
 
 export const SubText = styled.img<{ cssExt?: any }>`

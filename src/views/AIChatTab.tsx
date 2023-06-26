@@ -54,10 +54,12 @@ import { GPT_EXCEEDED_LIMIT } from '../error/error';
 const TEXT_MAX_HEIGHT = 268;
 
 const Wrapper = styled.div`
-  width: 100%;
-  height: 100%;
+  ${flex}
   ${flexColumn}
   ${justiSpaceBetween}
+  
+  width: 100%;
+  height: 100%;
   box-sizing: border-box;
   background-color: var(--ai-purple-99-bg-light);
 
@@ -65,9 +67,10 @@ const Wrapper = styled.div`
 `;
 
 const ChatListWrapper = styled.div<{ isLoading: boolean }>`
+  ${flex}
   ${flexColumn}
-  /* ${flexColumn}
-  ${flexGrow} */
+  ${flexGrow}
+  
   position: relative;
 
   width: 100%;
@@ -78,13 +81,14 @@ const ChatListWrapper = styled.div<{ isLoading: boolean }>`
 `;
 
 const FloatingBox = styled.div`
+  ${flex}
+  ${flexGrow}
+  ${flexShrink}
+  
   position: absolute;
   top: 0px;
   width: 100%;
   box-sizing: border-box;
-  /* flex: 1; */
-  ${flexGrow}
-  ${flexShrink}
 
   transform: translate(0, -100%);
   background-color: transparent;
@@ -92,19 +96,20 @@ const FloatingBox = styled.div`
 `;
 
 const InputBox = styled.div<{ activeInputWrap: boolean }>`
-  box-sizing: border-box;
-  ${alignItemCenter}
-
-  height: fit-content;
-  width: 100%;
-  background-color: white;
+  ${flex}
   ${alignItemCenter}
   ${flexColumn}
   ${flexShrink}
+  
+  box-sizing: border-box;
+  height: fit-content;
+  width: 100%;
+  background-color: white;
   box-shadow: 0 -2px 8px 0 rgba(111, 58, 208, 0.11);
 `;
 
 export const RowBox = styled.div<{ cssExt?: any }>`
+  ${flex}
   ${justiSpaceBetween}
   ${alignItemCenter}
   width: 100%;
@@ -113,6 +118,7 @@ export const RowBox = styled.div<{ cssExt?: any }>`
 `;
 
 export const LengthWrapper = styled.div<{ isError?: boolean; cssExt?: any }>`
+  ${flex}
   ${alignItemCenter}
 
   font-size: 12px;
@@ -132,6 +138,7 @@ export const BoldLengthWrapper = styled(LengthWrapper)`
 `;
 
 export const RightBox = styled.div<{ cssExt?: any }>`
+  ${flex}
   ${alignItemCenter}
 
   align-self: flex-end;
@@ -140,6 +147,9 @@ export const RightBox = styled.div<{ cssExt?: any }>`
 `;
 
 const Info = styled.div`
+  ${flex}
+  ${alignItemCenter}
+
   background-color: var(--ai-purple-99-bg-light);
   color: var(--ai-purple-50-main);
   padding: 0px 16px;
@@ -148,15 +158,15 @@ const Info = styled.div`
   height: 48px;
   box-sizing: border-box;
   font-size: 12px;
-
-  ${alignItemCenter}
 `;
 
 const CenterBox = styled.div`
+  ${flex}
+  ${justiCenter};
+
   width: 100%;
   margin-bottom: 16px;
   margin-top: 16px;
-  ${justiCenter};
 `;
 
 export const ColumDivider = styled.div`
@@ -166,6 +176,11 @@ export const ColumDivider = styled.div`
 `;
 
 const SubmitButton = styled.button<{ disabled: boolean }>`
+  ${flex}
+  ${alignItemCenter}
+  ${justiCenter}
+  align-self: flex-end;
+
   margin: 0;
   border: none;
   background-image: linear-gradient(to left, #a86cea, #6f3ad0 100%);
@@ -179,11 +194,6 @@ const SubmitButton = styled.button<{ disabled: boolean }>`
   &:hover {
     cursor: pointer;
   }
-
-  ${flex}
-  ${alignItemCenter}
-  ${justiCenter}
-  align-self: flex-end;
 
   ${({ disabled }) =>
     disabled &&
@@ -712,12 +722,14 @@ const AIChatTab = (props: WriteTabProps) => {
               textRef={textRef}
               rows={1}
               cssExt={css`
-                width: fit-content;
+                ${flex}
+                ${justiCenter}
                 ${flexGrow}
+
+                width: fit-content;
                 border: 0;
                 max-height: ${TEXT_MAX_HEIGHT}px;
                 height: 48px;
-                ${justiCenter}
                 padding: 14px 16px 14px 16px;
                 box-sizing: border-box;
 
@@ -785,7 +797,6 @@ const AIChatTab = (props: WriteTabProps) => {
                 padding: 0px 3px 0px 9px;
                 box-sizing: border-box;
                 border-top: 1px solid var(--ai-purple-99-bg-light);
-                ${alignItemCenter}
               `}>
               <LengthWrapper isError={chatInput.length >= INPUT_MAX_LENGTH}>
                 {chatInput.length}/{INPUT_MAX_LENGTH}

@@ -1,19 +1,23 @@
 import styled from 'styled-components';
-import { alignItemCenter, flexColumn, justiCenter } from '../style/cssCommon';
+import { alignItemCenter, flex, flexColumn, justiCenter } from '../style/cssCommon';
 import Header from '../components/layout/Header';
 import { useTranslation } from 'react-i18next';
 
 const Wrapper = styled.div`
+  ${flex}
+  ${flexColumn}
+  
   width: 100%;
   height: 100%;
-  ${flexColumn}
 `;
 
 const Contents = styled.div`
-  flex: 1;
+  ${flex}
   ${flexColumn}
   ${justiCenter}
   ${alignItemCenter}
+  
+  flex: 1;
 `;
 
 const TextWrapper = styled.div`

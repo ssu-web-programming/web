@@ -1,11 +1,13 @@
 import styled, { CSSProp, css } from 'styled-components';
 import Icon from './Icon';
-import { alignItemCenter, flexColumn, flexGrow, flexShrink } from '../style/cssCommon';
+import { alignItemCenter, flex, flexColumn, flexGrow, flexShrink } from '../style/cssCommon';
 import { noBorderBtnCss } from './NoBorderButton';
 
 const Wrapper = styled.div<{ cssExt: any; selected: boolean }>`
+  ${flex}
   ${flexColumn}
   ${alignItemCenter}
+  
   box-sizing: border-box;
   color: ${({ selected }: { selected: Boolean }) =>
     selected ? 'var(--ai-purple-50-main)' : 'var(--gray-gray-80-02)'};

@@ -1,7 +1,7 @@
 import { useCallback, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { calcToken } from '../api/usePostSplunkLog';
-import { flexColumn, justiSpaceBetween, flexWrap, alignItemCenter } from '../style/cssCommon';
+import { flexColumn, justiSpaceBetween, flexWrap, alignItemCenter, flex } from '../style/cssCommon';
 import Loading from '../components/Loading';
 import { v4 as uuidv4 } from 'uuid';
 import { useAppDispatch, useAppSelector } from '../store/store';
@@ -27,10 +27,11 @@ import ImageCreateInput, {
 import ImageCreateResult from '../components/txt2img/ImageCreateResult';
 
 const Body = styled.div`
+  ${flex}
+  ${flexColumn}
+  
   width: 100%;
   height: 100%;
-  ${flexColumn}
-  /* gap: 17px; */
   padding: 16px;
   box-sizing: border-box;
 
@@ -39,17 +40,20 @@ const Body = styled.div`
 `;
 
 export const SubTitleArea = styled.div`
-  width: 100%;
+  ${flex}
   ${justiSpaceBetween}
   ${alignItemCenter}
+
+  width: 100%;
 `;
 
 export const RowContainer = styled.div<{
   cssExt?: any;
 }>`
-  width: '100%';
+  ${flex}
   ${flexWrap}
-
+  
+  width: '100%';
   gap: 8px;
 
   ${({ cssExt }) => cssExt && cssExt}

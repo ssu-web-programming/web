@@ -3,14 +3,17 @@ import styled, { CSSProp, css } from 'styled-components';
 import Icon from './Icon';
 import icon_credit from '../img/ico_credit.svg';
 import { RowBox } from '../views/AIChatTab';
-import { alignItemCenter, flexGrow, flexShrink, justiCenter } from '../style/cssCommon';
+import { alignItemCenter, flex, flexGrow, flexShrink, justiCenter } from '../style/cssCommon';
 
 // const DEFAULT_WIDTH = 200;
 // const DEFAULT_HEIGHT = 60;
 
 const Body = styled.button<{ width?: number; height?: number; selected: boolean; cssExt: any }>`
+  ${flex}
   ${justiCenter}
   ${alignItemCenter}
+  ${flexGrow}
+  ${flexShrink}
   color: white;
 
   width: fit-content;
@@ -22,8 +25,7 @@ const Body = styled.button<{ width?: number; height?: number; selected: boolean;
   font-size: 13px;
   color: var(--gray-gray-90-01);
   padding: 6px;
-  ${flexGrow}
-  ${flexShrink}
+
   flex-basis: fit-content;
 
   ${({ width, height, selected }) => css`

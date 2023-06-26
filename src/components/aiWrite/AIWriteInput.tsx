@@ -1,12 +1,5 @@
 import styled, { css } from 'styled-components';
-import {
-  flex,
-  flexColumn,
-  flexGrow,
-  flexShrink,
-  justiSpaceBetween,
-  purpleBtnCss
-} from '../../style/cssCommon';
+import { flex, flexColumn, flexGrow, flexShrink, purpleBtnCss } from '../../style/cssCommon';
 import { RowBox, exampleList } from '../../views/AIChatTab';
 import { useTranslation } from 'react-i18next';
 import SubTitle from '../SubTitle';
@@ -22,6 +15,7 @@ import Button from '../Button';
 import icon_write from '../../img/ico_creating_text_white.svg';
 
 const WriteInputPage = styled.div`
+  ${flex}
   ${flexColumn}
   padding: 16px;
   width: 100%;
@@ -38,6 +32,7 @@ const InputArea = styled.div`
 `;
 
 const TitleInputSet = styled.div`
+  ${flex}
   ${flexColumn}
   gap: 8px;
 `;
@@ -62,10 +57,7 @@ const AIWriteInput = ({
   return (
     <WriteInputPage>
       <TitleInputSet>
-        <RowBox
-          cssExt={css`
-            ${justiSpaceBetween}
-          `}>
+        <RowBox>
           <SubTitle subTitle={t(`WriteTab.WriteTopic`)} />
           <ShowResult
             disable={history.length === 0}
@@ -146,8 +138,6 @@ const AIWriteInput = ({
 
                 width: 100%;
                 padding: 4px 0px;
-                ${flexShrink}
-                ${flexGrow}
               `}>
               {t(`WriteTab.Length.${length.title}`)}
             </NoBorderButton>
