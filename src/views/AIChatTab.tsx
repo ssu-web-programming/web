@@ -158,6 +158,7 @@ const Info = styled.div`
   height: 48px;
   box-sizing: border-box;
   font-size: 12px;
+  width: 100%;
 `;
 
 const CenterBox = styled.div`
