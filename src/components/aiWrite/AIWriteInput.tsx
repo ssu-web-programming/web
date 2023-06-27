@@ -87,12 +87,6 @@ const AIWriteInput = ({
           {formRecList.map((form) => (
             <div key={form.id}>
               <IconButton
-                iconCssExt={css`
-                  background-color: ${selectedForm.id === form.id
-                    ? 'var(--ai-purple-97-list-over)'
-                    : 'var(--gray-gray-20)'};
-                  box-sizing: border-box;
-                `}
                 key={form.id}
                 title={t(`FormList.${form.title}`)}
                 onClick={() => {

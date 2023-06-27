@@ -86,14 +86,7 @@ export default function Button(props: React.PropsWithChildren<ButtonProps>) {
           ${justiCenter}
           ${flexGrow}
         `}>
-        {icon && (
-          <Icon
-            iconSrc={icon}
-            cssExt={css`
-              margin-right: 6px;
-            `}
-          />
-        )}
+        {icon && <Icon iconSrc={icon} size="sm" />}
         {children}
       </RowBox>
       {isCredit && (
@@ -103,6 +96,7 @@ export default function Button(props: React.PropsWithChildren<ButtonProps>) {
             right: 6px;
             flex: none;
           `}
+          size="sm"
           iconSrc={icon_credit}
         />
       )}

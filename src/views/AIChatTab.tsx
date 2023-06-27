@@ -113,6 +113,7 @@ export const RowBox = styled.div<{ cssExt?: any }>`
   ${justiSpaceBetween}
   ${alignItemCenter}
   width: 100%;
+  gap: 6px;
 
   ${({ cssExt }) => cssExt && cssExt}
 `;
@@ -143,6 +144,7 @@ export const RightBox = styled.div<{ cssExt?: any }>`
 
   align-self: flex-end;
   /* margin-top: 9px; */
+  gap: 11px;
   ${({ cssExt }) => cssExt && cssExt}
 `;
 
@@ -159,6 +161,7 @@ const Info = styled.div`
   box-sizing: border-box;
   font-size: 12px;
   width: 100%;
+  gap: 8px;
 `;
 
 const CenterBox = styled.div`
@@ -602,21 +605,6 @@ const AIChatTab = (props: WriteTabProps) => {
                       <BoldLengthWrapper>
                         {t(`WriteTab.LengthInfo`, { length: chat.result.length })}
                       </BoldLengthWrapper>
-                      {/* {chat.id !== loadingResId && (
-                      <CopyIcon
-                        onClick={() => {
-                          //TODO: 복사 로직
-
-                          dispatch(
-                            activeToast({
-                              active: true,
-                              msg: t(`ToastMsg.CompleteCopy`),
-                              isError: false
-                            })
-                          );
-                        }}
-                      />
-                    )} */}
                     </RowBox>
 
                     {chat.id !== loadingInfo?.id && (
@@ -696,14 +684,7 @@ const AIChatTab = (props: WriteTabProps) => {
             !loadingInfo &&
             chatInput.length === 0 && (
               <Info>
-                <Icon
-                  iconSrc={icon_ai}
-                  cssExt={css`
-                    width: 16px;
-                    height: 20px;
-                    margin: 0 8px 0 0px;
-                  `}
-                />
+                <Icon iconSrc={icon_ai} size="sm" />
                 {t(`ChatingTab.TipList.${chatTip}`)}
               </Info>
             )
@@ -768,24 +749,14 @@ const AIChatTab = (props: WriteTabProps) => {
                   }
                 }}
                 style={{ display: 'flex', position: 'relative', cursor: 'pointer' }}>
-                <Icon
-                  imgCssExt={css`
-                    ${flex}
-                    align-self: center;
-                  `}
-                  iconSrc={icon_sand}
-                />
+                <Icon iconSrc={icon_sand} size="md" />
                 <Icon
                   iconSrc={icon_credit}
+                  size={14}
                   cssExt={css`
-                    ${flex}
                     position: absolute;
                     bottom: 3px;
                     right: 4px;
-                  `}
-                  imgCssExt={css`
-                    width: 14px;
-                    height: 14px;
                   `}
                 />
               </SubmitButton>

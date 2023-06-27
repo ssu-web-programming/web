@@ -1,7 +1,7 @@
 import Icon from './Icon';
 import icon_recreating from '../img/ico_back.svg';
-import styled, { css } from 'styled-components';
-import { alignItemCenter, flex } from '../style/cssCommon';
+import styled from 'styled-components';
+import { alignItemCenter, flex, justiCenter } from '../style/cssCommon';
 import { useTranslation } from 'react-i18next';
 
 const Wrapper = styled.div`
@@ -16,6 +16,13 @@ const Wrapper = styled.div`
   line-height: 100%;
 `;
 
+const Contents = styled.div`
+  ${flex}
+  ${justiCenter}
+  ${alignItemCenter}
+  gap: 4px;
+`;
+
 const RecreatingButton = ({ onClick }: { onClick: Function }) => {
   const { t } = useTranslation();
   return (
@@ -23,15 +30,10 @@ const RecreatingButton = ({ onClick }: { onClick: Function }) => {
       onClick={() => {
         onClick();
       }}>
-      <Icon
-        cssExt={css`
-          width: 16px;
-          height: 16px;
-          margin-right: 4px;
-        `}
-        iconSrc={icon_recreating}
-      />
-      {t(`WriteTab.ReEnterTopic`)}
+      <Contents>
+        <Icon size="sm" iconSrc={icon_recreating} />
+        {t(`WriteTab.ReEnterTopic`)}
+      </Contents>
     </Wrapper>
   );
 };

@@ -106,24 +106,22 @@ const ToastMsg = ({ msg, isError }: { msg: string | React.ReactNode; isError: bo
       {isVisible && (
         <ToastMsgWrapper isError={isError}>
           <Icon
+            size="sm"
             cssExt={css`
               position: absolute;
               top: 12px;
               left: 12px;
-              width: 16px;
-              height: 16px;
               align-self: flex-start;
             `}
             iconSrc={isError ? icon_warnning : icon_pass}
           />
           <ToastText>{msg}</ToastText>
           <Icon
+            size="lg"
             cssExt={css`
               position: absolute;
               top: 4px;
               right: 4px;
-              width: 32px;
-              height: 32px;
             `}
             iconSrc={isError ? icon_close_red : icon_close_green}
             onClick={() => setIsVisible(false)}

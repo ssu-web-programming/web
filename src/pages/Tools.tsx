@@ -100,14 +100,7 @@ export default function Tools() {
         {TAB_LIST.map((tab) => (
           <MenuItem key={tab.id} id={tab.id} value={tab.name}>
             {tab.icon && (
-              <Icon
-                iconSrc={tab.id === selectedTabId ? tab.selectedIcon : tab.icon}
-                cssExt={css`
-                  width: 16px;
-                  height: 16px;
-                  padding-right: 7px;
-                `}
-              />
+              <Icon iconSrc={tab.id === selectedTabId ? tab.selectedIcon : tab.icon} size="sm" />
             )}
             <div>{t(`${tab.name}`)}</div>
           </MenuItem>
