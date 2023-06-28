@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
-import Button from './Button';
 import { RowBox } from '../views/AIChatTab';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import {
@@ -303,23 +302,12 @@ const CommentFlip = ({
           width: fit-content;
           line-height: 100%;
         `}>
-        <Icon
-          cssExt={css`
-            width: 16px;
-            height: 20px;
-            margin: 0 6px 0 0;
-          `}
-          iconSrc={icon_ai}
-        />
+        <Icon size="sm" iconSrc={icon_ai} />
         {comment}
       </RowBox>
       <Icon
         iconSrc={icon}
-        cssExt={css`
-          width: 16px;
-          height: 16px;
-          margin-left: 4px;
-        `}
+        size="sm"
         onClick={() => {
           onclick();
         }}
@@ -419,15 +407,15 @@ const FucRecBox = ({ isFormRec }: { isFormRec: boolean }) => {
                           ${rec.id !== REC_ID_LIST.START_NEW_CHATING && flexGrow}
                           flex: ${rec.id !== REC_ID_LIST.START_NEW_CHATING ? '30%' : 'none'};
                         `}>
-                        <Icon
-                          iconSrc={rec.id === selectedRecFunction?.id ? rec.selectedIcon : rec.icon}
-                          cssExt={css`
-                            width: 16px;
-                            height: 16px;
-                            margin-right: 6px;
-                          `}
-                        />
-                        <div>{t(`ChatingTab.FuncRecBtn.${rec.title}`)}</div>
+                        <div style={{ display: 'flex', gap: '6px' }}>
+                          <Icon
+                            iconSrc={
+                              rec.id === selectedRecFunction?.id ? rec.selectedIcon : rec.icon
+                            }
+                            size="sm"
+                          />
+                          <div>{t(`ChatingTab.FuncRecBtn.${rec.title}`)}</div>
+                        </div>
                       </NoBorderButton>
                     ))}
                   </RowWrapBox>
@@ -448,13 +436,7 @@ const FucRecBox = ({ isFormRec }: { isFormRec: boolean }) => {
                     setIsSubPage(false);
                     resetAll();
                   }}>
-                  <Icon
-                    iconSrc={icon_prev}
-                    cssExt={css`
-                      width: 16px;
-                      height: 16px;
-                    `}
-                  />
+                  <Icon iconSrc={icon_prev} size="sm" />
                 </NoBorderButton>
                 <Grid3BtnContainer>
                   {recSubList

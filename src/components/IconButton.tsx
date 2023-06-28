@@ -1,79 +1,64 @@
-import styled, { CSSProp, css } from 'styled-components';
+import styled, { css } from 'styled-components';
 import Icon from './Icon';
-import { alignItemCenter, flex, flexColumn, flexGrow, flexShrink } from '../style/cssCommon';
-import { noBorderBtnCss } from './NoBorderButton';
+import { alignItemCenter, flex, flexColumn } from '../style/cssCommon';
 
-const Wrapper = styled.div<{ cssExt: any; selected: boolean }>`
+const IconWrapper = styled.div`
+  width: 100%;
+  height: 48px;
+
+  margin-bottom: 8px;
+  border-radius: 4px;
+
+  box-sizing: border-box;
+  padding: 12px 0px;
+`;
+
+const Wrapper = styled.div<{ selected: boolean }>`
   ${flex}
   ${flexColumn}
   ${alignItemCenter}
+
   
-  box-sizing: border-box;
-  color: ${({ selected }: { selected: Boolean }) =>
-    selected ? 'var(--ai-purple-50-main)' : 'var(--gray-gray-80-02)'};
-  font-weight: ${({ selected }: { selected: Boolean }) => selected && 'bold'};
+  ${({ selected }) =>
+    selected
+      ? css`
+          color: var(--ai-purple-50-main);
+          font-weight: bold;
+          ${IconWrapper} {
+            background-color: var(--ai-purple-97-list-over);
+            box-shadow: 0 0 0 1px var(--ai-purple-80-sub) inset;
+          }
+        `
+      : css`
+          color: var(--gray-gray-80-02);
+          ${IconWrapper} {
+            background-color: var(--gray-gray-20);
+            box-shadow: 0 0 0 1px transparent inset;
+          }
+        `}
+        
   font-size: 12px;
   text-align: center;
 
   &:hover {
     cursor: pointer;
   }
-
-  ${({ cssExt }: any) => cssExt && cssExt};
 `;
 
 interface IconButtonProps {
-  cssExt?: CSSProp<any>;
-  children?: React.ReactNode;
   selected?: boolean;
   onClick: Function;
   icon?: string;
   title: string;
-  iconCssExt?: CSSProp<any>;
 }
 
-const IconButton = ({
-  cssExt,
-  children,
-  selected = false,
-  onClick,
-  icon,
-  title,
-  iconCssExt
-}: IconButtonProps) => {
+const IconButton = ({ selected = false, onClick, icon, title }: IconButtonProps) => {
   return (
-    <Wrapper
-      onClick={() => {
-        onClick();
-      }}
-      selected={selected}
-      cssExt={cssExt}>
-      <Icon
-        iconSrc={icon}
-        cssExt={css`
-          box-sizing: border-box;
-          margin-bottom: 8px;
-          background-color: #fff;
-          border-radius: 4px;
-          background-color: ${selected ? `var(--ai-purple-97-list-over)` : ''};
-          width: 100%;
-          /* max-width: 110px; */
-          height: 48px;
-          padding: 12px 0px;
-          ${flexShrink}
-          ${flexGrow}
-
-          ${noBorderBtnCss(selected)}
-
-          ${iconCssExt}
-        `}
-        imgCssExt={css`
-          width: 24px;
-          height: 24px;
-        `}
-      />
+    <Wrapper onClick={() => onClick()} selected={selected}>
+      <IconWrapper>
+        <Icon iconSrc={icon} size="md" />
+      </IconWrapper>
       {title}
-      {children && children}
     </Wrapper>
   );
 };

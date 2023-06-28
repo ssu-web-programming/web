@@ -1,49 +1,58 @@
 import styled, { CSSProp, css } from 'styled-components';
-import { flex, justiCenter } from '../style/cssCommon';
 
-const IconWrapper = styled.div<{ cssExt: any }>`
-  ${flex}
-  ${justiCenter}
-
-  width: fit-content;
+const IconImg = styled.img<{ size: any; cssExt: any }>`
+  ${(props) => props.size}
   ${({ cssExt }: any) => cssExt && cssExt}
 `;
 
-const IconImg = styled.img<{ cssExt: any }>`
-  ${({ cssExt }: any) => cssExt && cssExt}
-`;
+const SIZES = {
+  sm: css`
+    width: 16px;
+    height: 16px;
+  `,
+  md: css`
+    width: 24px;
+    height: 24px;
+  `,
+  lg: css`
+    width: 32px;
+    height: 32px;
+  `
+};
+
+type IconSize = 'sm' | 'md' | 'lg';
 
 interface IconProps {
+  size?: IconSize | number;
   iconSrc: any;
   cssExt?: CSSProp<any>;
   onClick?: Function;
   imgCssExt?: CSSProp<any>;
 }
 
-const Icon = ({ iconSrc, cssExt, imgCssExt, onClick }: IconProps) => {
+const Icon = ({ size = 'md', iconSrc, cssExt, onClick }: IconProps) => {
+  const sizeStyle =
+    typeof size === 'string'
+      ? SIZES[size]
+      : css`
+          width: ${size}px;
+          height: ${size}px;
+        `;
+
   return (
-    <IconWrapper
+    <IconImg
+      src={iconSrc}
       onClick={(e: React.MouseEvent) => {
         onClick && onClick(e);
       }}
+      size={sizeStyle}
       cssExt={css`
+        ${cssExt && cssExt}
         &:hover {
           ${onClick && 'cursor: pointer'}
         }
-
-        ${cssExt && cssExt}
-      `}>
-      <IconImg
-        src={iconSrc}
-        cssExt={css`
-          &:hover {
-            ${onClick && 'cursor: pointer'}
-          }
-
-          ${imgCssExt && imgCssExt}
-        `}
-      />
-    </IconWrapper>
+      `}
+    />
   );
 };
 

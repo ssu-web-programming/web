@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import Icon from '../Icon';
 import icon_ai from '../../img/ico_ai.svg';
 import icon_ai_close from '../../img/ico_ai_close.svg';
@@ -11,6 +11,7 @@ const Contents = styled.div`
   ${alignItemCenter}
   
   padding-left: 10px;
+  padding-right: 5px;
   height: 48px;
 `;
 
@@ -65,39 +66,16 @@ export default function Header(props: HeaderProps) {
   return (
     <Contents>
       <TitleWrapper>
-        <Icon
-          iconSrc={icon_ai}
-          cssExt={css`
-            width: 32px;
-            height: 32px;
-            object-fit: contain;
-          `}
-        />
+        <Icon iconSrc={icon_ai} size="lg" />
         <Title>{title}</Title>
-        <Icon
-          iconSrc={badge_beta}
-          cssExt={css`
-            width: 34px;
-            height: 16px;
-            margin: 9px 0px 7px 0px;
-            object-fit: contain;
-          `}
-        />
+        <img src={badge_beta} alt="Beta" />
         {subTitle && (
           <>
             <Divider /> <SubTitle>{subTitle}</SubTitle>
           </>
         )}
       </TitleWrapper>
-      <Icon
-        iconSrc={icon_ai_close}
-        cssExt={css`
-          width: 32px;
-          height: 32px;
-          margin-right: 5px;
-        `}
-        onClick={() => window._Bridge.closePanel()}
-      />
+      <Icon iconSrc={icon_ai_close} size="lg" onClick={() => window._Bridge.closePanel()} />
     </Contents>
   );
 }

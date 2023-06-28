@@ -16,6 +16,7 @@ const TextButton = styled.button<{ disabled: boolean }>`
   height: fit-content;
   color: var(--gray-gray-80-02);
   line-height: 100%;
+  gap: 4px;
 
   ${({ disabled }: { disabled: boolean }) =>
     disabled &&
@@ -42,12 +43,7 @@ const ExButton = ({ exampleList, setExam, disable }: ExButtonProps) => {
         const text = exampleList[Math.floor(Math.random() * exampleList.length)];
         setExam(t(`ExampleList.${text}`));
       }}>
-      <Icon
-        iconSrc={icon_ai_change}
-        cssExt={css`
-          margin-right: 4px;
-        `}
-      />
+      <Icon iconSrc={icon_ai_change} size="sm" />
       <div>{t(`ShowExam`)}</div>
     </TextButton>
   );

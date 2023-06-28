@@ -33,6 +33,7 @@ const TabItem = styled.div<{ selected: boolean }>`
     background-color: #f7f8f9;
   }
   box-sizing: border-box;
+  gap: 7px;
   ${({ selected }) =>
     selected &&
     css`

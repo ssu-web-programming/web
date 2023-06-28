@@ -166,10 +166,8 @@ const AiWriteResult = ({
               {creating === 'none' && (
                 <RightBox>
                   <Icon
+                    size="sm"
                     cssExt={css`
-                      width: 16px;
-                      height: 16px;
-                      margin-right: 11px;
                       opacity: ${currentIndex === 0 && '0.3'};
                     `}
                     iconSrc={icon_prev}
@@ -184,10 +182,8 @@ const AiWriteResult = ({
                     {history.length}
                   </div>
                   <Icon
+                    size="sm"
                     cssExt={css`
-                      width: 16px;
-                      height: 16px;
-                      margin-left: 11px;
                       opacity: ${currentIndex === history.length - 1 && '0.3'};
                     `}
                     iconSrc={icon_next}
@@ -197,22 +193,6 @@ const AiWriteResult = ({
                       }
                     }}
                   />
-                  {/* <CopyIcon
-                          cssExt={css`
-                            margin-left: 12px;
-                          `}
-                          onClick={() => {
-                            // TODO: 복사 로직
-
-                            dispatch(
-                              activeToast({
-                                active: true,
-                                msg: t(`ToastMsg.CompleteCopy`),
-                                isError: false
-                              })
-                            );
-                          }}
-                        /> */}
                 </RightBox>
               )}
             </RowBox>

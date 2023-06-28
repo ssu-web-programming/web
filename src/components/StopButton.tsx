@@ -26,15 +26,8 @@ const StopButton = ({ onClick, cssExt }: { onClick: Function; cssExt?: CSSProp }
       onClick={() => {
         onClick();
       }}>
-      <Icon
-        iconSrc={icon_stop}
-        cssExt={css`
-          width: 16px;
-          height: 16px;
-          margin-right: 4px;
-        `}
-      />
-      Stop
+      <Icon iconSrc={icon_stop} size="sm" />
+      <div style={{ marginLeft: '4px' }}>Stop</div>
     </Button>
   );
 };

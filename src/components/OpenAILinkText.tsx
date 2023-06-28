@@ -1,7 +1,6 @@
-import Icon from './Icon';
 import LinkText from './LinkText';
 import icon_openai from '../img/logo_open_ai.svg';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { flex } from '../style/cssCommon';
 import { useTranslation } from 'react-i18next';
 
@@ -22,13 +21,7 @@ const OpenAILinkText = () => {
   return (
     <LinkText url={t(`MoveToLimitInfo`)}>
       <Wrapper>Powered By</Wrapper>
-      <Icon
-        cssExt={css`
-          width: 59px;
-          height: 16px;
-        `}
-        iconSrc={icon_openai}
-      />
+      <img src={icon_openai} alt="Open AI" />
     </LinkText>
   );
 };

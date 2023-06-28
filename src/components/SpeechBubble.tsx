@@ -86,13 +86,7 @@ const SpeechBubble = ({
       <RowBox>
         {!isUser && (
           <Profile>
-            <Icon
-              iconSrc={loadingMsg ? icon_ai_loading : icon_ai}
-              imgCssExt={css`
-                width: 24px;
-                height: 24px;
-              `}
-            />
+            <Icon iconSrc={loadingMsg ? icon_ai_loading : icon_ai} size="md" />
           </Profile>
         )}
         <SpeechBubbleWrapper cssExt={cssExt} isUser={isUser}>

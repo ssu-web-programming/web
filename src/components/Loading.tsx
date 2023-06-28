@@ -18,6 +18,7 @@ const Wrapper = styled.div`
   color: var(--ai-purple-50-main);
   word-break: keep-all;
   text-align: center;
+  gap: 8px;
 `;
 
 const Contents = styled.div`
@@ -25,20 +26,10 @@ const Contents = styled.div`
   text-align: center;
 `;
 
-const Loading = ({ children, cssExt }: { children?: React.ReactNode; cssExt?: CSSProp }) => {
+const Loading = ({ children }: { children?: React.ReactNode }) => {
   return (
     <Wrapper>
-      <Icon
-        iconSrc={ai_loading}
-        cssExt={css`
-          margin-bottom: 8px;
-          ${cssExt}
-        `}
-        imgCssExt={css`
-          width: 56px;
-          height: 56px;
-        `}
-      />
+      <Icon iconSrc={ai_loading} size={56} />
       <Contents>{children}</Contents>
     </Wrapper>
   );

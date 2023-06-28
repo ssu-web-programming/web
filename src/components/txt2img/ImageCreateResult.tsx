@@ -122,13 +122,11 @@ const ImageCreateResult = ({
           ${justiCenter}
           font-size: 13px;
           color: var(--gray-gray-70);
+          gap: 12px;
         `}>
         <Icon
+          size="sm"
           cssExt={css`
-            width: 16px;
-            height: 16px;
-            padding: 6px 3px 6px 5px;
-            margin-right: 12px;
             opacity: ${curListIndex === 0 && '0.3'};
           `}
           iconSrc={iconPrev}
@@ -142,11 +140,8 @@ const ImageCreateResult = ({
           {curListIndex + 1}/{history.length}
         </div>
         <Icon
+          size="sm"
           cssExt={css`
-            width: 16px;
-            height: 16px;
-            padding: 6px 3px 6px 5px;
-            margin-left: 12px;
             opacity: ${curListIndex === history.length - 1 && '0.3'};
           `}
           iconSrc={iconNext}
@@ -169,6 +164,7 @@ const ImageCreateResult = ({
       <ImageList>
         <Icon
           iconSrc={iconPrev}
+          size="md"
           cssExt={css`
             opacity: ${currentItemIdx === 0 && '0.3'};
           `}
@@ -195,6 +191,7 @@ const ImageCreateResult = ({
         ))}
         <Icon
           iconSrc={iconNext}
+          size="md"
           cssExt={css`
             opacity: ${currentItemIdx === 3 && '0.3'};
           `}
