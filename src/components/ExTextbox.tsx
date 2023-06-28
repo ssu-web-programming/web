@@ -2,9 +2,10 @@ import styled, { css } from 'styled-components';
 import SubTitle from './SubTitle';
 import TextArea from './TextArea';
 import { LengthWrapper, RowBox } from '../views/AIChatTab';
-import ExButton from './ExButton';
+import ChangeExampleButton from './buttons/ChangeExampleButton';
 import { useState } from 'react';
 import { flex, flexColumn } from '../style/cssCommon';
+import { useTranslation } from 'react-i18next';
 
 const InputArea = styled.div<{ activeBorder: boolean }>`
   ${flex}
@@ -47,7 +48,13 @@ const ExTextbox = ({
   placeholder,
   rows
 }: ExTextboxProps) => {
+  const { t } = useTranslation();
   const [activeTextbox, setActiveTextbox] = useState<boolean>(false);
+
+  const refreshExampleText = () => {
+    const text = exampleList[Math.floor(Math.random() * exampleList.length)];
+    setValue(t(`ExampleList.${text}`));
+  };
 
   return (
     <>
@@ -76,7 +83,7 @@ const ExTextbox = ({
           <LengthWrapper isError={value.length >= maxtTextLen}>
             {value.length}/{maxtTextLen}
           </LengthWrapper>
-          <ExButton disable={value.length > 0} exampleList={exampleList} setExam={setValue} />
+          <ChangeExampleButton disable={value.length > 0} onClick={refreshExampleText} />
         </TopBorer>
       </InputArea>
     </>

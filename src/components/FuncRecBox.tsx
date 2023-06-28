@@ -17,8 +17,6 @@ import icon_arrow_up from '../img/ico_arrow_up_small.svg';
 import icon_ai from '../img/ico_ai.svg';
 import icon_prev from '../img/ico_arrow_prev.svg';
 import Icon from './Icon';
-import IconButton from './IconButton';
-
 import icon_sentence from '../img/aiChat/ico_sentence.svg';
 import icon_table from '../img/aiChat/ico_table.svg';
 import icon_list from '../img/aiChat/ico_table_of_contents.svg';
@@ -51,7 +49,10 @@ import {
 import { useTranslation } from 'react-i18next';
 import { flexShrink } from '../style/cssCommon';
 import { flexGrow } from '../style/cssCommon';
-import NoBorderButton from './NoBorderButton';
+import Button from './buttons/Button';
+import IconTextButton from './buttons/IconTextButton';
+import Grid from './layout/Grid';
+import IconBoxTextButton from './buttons/IconBoxTextButton';
 
 const Wrapper = styled.div`
   ${flex}
@@ -114,7 +115,7 @@ const Grid3BtnContainer = styled.div`
 
 interface FormListType {
   id: string;
-  icon?: string;
+  icon: string;
   title: string;
   selectedIcon: string;
   hasSubRec: boolean;
@@ -363,21 +364,21 @@ const FucRecBox = ({ isFormRec }: { isFormRec: boolean }) => {
             </RowWrapBox>
             <RowWrapBox>
               {isFormRec ? (
-                <Grid3BtnContainer>
+                <Grid col={formRecList.length}>
                   {formRecList.map((rec) => (
-                    <div key={rec.id}>
-                      <IconButton
-                        title={t(`FormList.${rec.title}`)}
-                        key={rec.id}
-                        onClick={() => {
-                          setSelectedFunc(rec);
-                        }}
-                        selected={selectedRecFunction ? selectedRecFunction.id === rec.id : false}
-                        icon={rec.id === selectedRecFunction?.id ? rec.selectedIcon : rec.icon}
-                      />
-                    </div>
+                    <IconBoxTextButton
+                      key={rec.id}
+                      variant="white"
+                      width="full"
+                      height={48}
+                      iconSize="md"
+                      iconSrc={rec.id === selectedRecFunction?.id ? rec.selectedIcon : rec.icon}
+                      selected={selectedRecFunction ? selectedRecFunction.id === rec.id : false}
+                      onClick={() => setSelectedFunc(rec)}>
+                      {t(`FormList.${rec.title}`)}
+                    </IconBoxTextButton>
                   ))}
-                </Grid3BtnContainer>
+                </Grid>
               ) : (
                 !isSubPage && (
                   <RowWrapBox
@@ -385,8 +386,11 @@ const FucRecBox = ({ isFormRec }: { isFormRec: boolean }) => {
                       gap: 8px;
                     `}>
                     {recList.map((rec) => (
-                      <NoBorderButton
+                      <IconTextButton
+                        width="full"
                         key={rec.id}
+                        iconSrc={rec.id === selectedRecFunction?.id ? rec.selectedIcon : rec.icon}
+                        iconPos="left"
                         selected={rec.id === selectedRecFunction?.id}
                         onClick={() => {
                           if (selectedRecFunction?.id !== rec.id) setSelectedFunc(rec);
@@ -399,24 +403,14 @@ const FucRecBox = ({ isFormRec }: { isFormRec: boolean }) => {
                           }
                         }}
                         cssExt={css`
-                          width: 100%;
-                          height: 28px;
                           ${flex}
                           ${alignItemCenter}
                           ${rec.id !== REC_ID_LIST.START_NEW_CHATING && flexShrink}
                           ${rec.id !== REC_ID_LIST.START_NEW_CHATING && flexGrow}
                           flex: ${rec.id !== REC_ID_LIST.START_NEW_CHATING ? '30%' : 'none'};
                         `}>
-                        <div style={{ display: 'flex', gap: '6px' }}>
-                          <Icon
-                            iconSrc={
-                              rec.id === selectedRecFunction?.id ? rec.selectedIcon : rec.icon
-                            }
-                            size="sm"
-                          />
-                          <div>{t(`ChatingTab.FuncRecBtn.${rec.title}`)}</div>
-                        </div>
-                      </NoBorderButton>
+                        {t(`ChatingTab.FuncRecBtn.${rec.title}`)}
+                      </IconTextButton>
                     ))}
                   </RowWrapBox>
                 )
@@ -424,38 +418,30 @@ const FucRecBox = ({ isFormRec }: { isFormRec: boolean }) => {
             </RowWrapBox>
             {isSubPage && (
               <RowBox>
-                <NoBorderButton
-                  cssExt={css`
-                    border: none;
-                    background-color: transparent;
-                    width: 26px;
-                    height: 26px;
-                    box-sizing: border-box;
-                  `}
+                <Button
+                  width={26}
+                  height={26}
+                  variant="transparent"
                   onClick={() => {
                     setIsSubPage(false);
                     resetAll();
                   }}>
                   <Icon iconSrc={icon_prev} size="sm" />
-                </NoBorderButton>
+                </Button>
                 <Grid3BtnContainer>
                   {recSubList
                     .filter((sub) => sub.id === selectedRecFunction?.id)[0]
                     .subList.map((sub) => (
-                      <NoBorderButton
+                      <Button
+                        width="full"
                         key={sub.id}
-                        cssExt={css`
-                          border: none;
-                          height: fit-content;
-                          width: 100%;
-                        `}
                         selected={selectedSubRecFunction?.id === sub.id}
                         onClick={() => {
                           if (selectedSubRecFunction?.id !== sub.id) setSelectedSubFunc(sub);
                           else if (selectedSubRecFunction?.id === sub.id) setSelectedSubFunc(null);
                         }}>
                         {t(`ChatingTab.FuncRecBtn.SubFuncRec.${sub.title}`)}
-                      </NoBorderButton>
+                      </Button>
                     ))}
                 </Grid3BtnContainer>
               </RowBox>

@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import Wrapper from '../components/Wrapper';
 import InputText from '../components/InputText';
 import { useState } from 'react';
-import Button from '../components/Button';
+import Button from '../components/buttons/Button';
 import Container from '../components/Container';
 import { useTranslation } from 'react-i18next';
 
@@ -30,7 +30,7 @@ const Footer = styled.div`
 const InputItem = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 5px; ;
+  gap: 5px;
 `;
 
 const Title = styled.div`
