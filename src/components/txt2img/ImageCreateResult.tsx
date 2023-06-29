@@ -8,15 +8,17 @@ import {
 } from '../../store/slices/txt2imgHistory';
 import { RowContainer, SubTitleArea } from '../../views/ImageCreate';
 import SubTitle from '../SubTitle';
-import RecreatingButton from '../RecreatingButton';
+import ReturnButton from '../buttons/ReturnButton';
 import { useTranslation } from 'react-i18next';
 import styled, { css } from 'styled-components';
 import { alignItemCenter, flex, justiCenter, justiSpaceAround } from '../../style/cssCommon';
 import { RightBox, RowBox } from '../../views/AIChatTab';
 import Icon from '../Icon';
-import Button from '../Button';
+import Button from '../buttons/Button';
 import { activeToast } from '../../store/slices/toastSlice';
 import LinkText from '../LinkText';
+import CreditButton from '../buttons/CreditButton';
+import Grid from '../layout/Grid';
 
 const GenButton = styled.div<{ disabled: boolean }>`
   ${flex}
@@ -109,7 +111,7 @@ const ImageCreateResult = ({
     <>
       <SubTitleArea>
         <SubTitle subTitle={t(`Txt2ImgTab.PreviewImage`)} />
-        <RecreatingButton
+        <ReturnButton
           onClick={() => {
             dispatch(updateT2ICurListId(null));
             dispatch(updateT2ICurItemIndex(null));
@@ -203,36 +205,41 @@ const ImageCreateResult = ({
         />
       </ImageList>
       <RowContainer>
-        <Button
-          isCredit={true}
-          onClick={() =>
-            createAiImage({
-              input: curHistory.input,
-              style: curHistory.style,
-              ratio: curHistory.ratio
-            })
-          }>
-          {t(`WriteTab.Recreating`)}
-        </Button>
-        <Button
-          onClick={async () => {
-            try {
-              if (currentItemIdx === null) throw new Error('invalid currentItemIdx');
-              const selected = curHistory.list[currentItemIdx];
+        <Grid col={2}>
+          <CreditButton
+            width="full"
+            borderType="gray"
+            onClick={() =>
+              createAiImage({
+                input: curHistory.input,
+                style: curHistory.style,
+                ratio: curHistory.ratio
+              })
+            }>
+            {t(`WriteTab.Recreating`)}
+          </CreditButton>
+          <Button
+            width="full"
+            borderType="gray"
+            onClick={async () => {
+              try {
+                if (currentItemIdx === null) throw new Error('invalid currentItemIdx');
+                const selected = curHistory.list[currentItemIdx];
 
-              if (!selected) throw new Error('invalid target');
+                if (!selected) throw new Error('invalid target');
 
-              const res = await fetch(
-                `data:${curHistory.list[currentItemIdx].contentType};base64,${curHistory.list[currentItemIdx].data}`
-              );
-              const blob = await res.blob();
-              window._Bridge.downloadImage(blob);
-            } catch (err) {
-              // TODO : error handle
-            }
-          }}>
-          {t(`Download`)}
-        </Button>
+                const res = await fetch(
+                  `data:${curHistory.list[currentItemIdx].contentType};base64,${curHistory.list[currentItemIdx].data}`
+                );
+                const blob = await res.blob();
+                window._Bridge.downloadImage(blob);
+              } catch (err) {
+                // TODO : error handle
+              }
+            }}>
+            {t(`Download`)}
+          </Button>
+        </Grid>
         <GenButton
           onClick={async () => {
             try {

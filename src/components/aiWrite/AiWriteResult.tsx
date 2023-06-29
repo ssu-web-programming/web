@@ -1,24 +1,15 @@
 import styled, { css } from 'styled-components';
-import {
-  TableCss,
-  alignItemCenter,
-  flex,
-  flexColumn,
-  flexGrow,
-  flexShrink,
-  justiSpaceBetween,
-  purpleBtnCss
-} from '../../style/cssCommon';
+import { TableCss, flex, flexColumn, justiSpaceBetween } from '../../style/cssCommon';
 import { BoldLengthWrapper, ColumDivider, RightBox, RowBox } from '../../views/AIChatTab';
 import SubTitle from '../SubTitle';
 import Loading from '../Loading';
 import PreMarkdown from '../PreMarkdown';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../../store/store';
-import RecreatingButton from '../RecreatingButton';
-import StopButton from '../StopButton';
+import ReturnButton from '../buttons/ReturnButton';
+import StopButton from '../buttons/StopButton';
 import Icon from '../Icon';
-import Button from '../Button';
+import Button from '../buttons/Button';
 import OpenAILinkText from '../OpenAILinkText';
 import icon_prev from '../../img/ico_arrow_prev.svg';
 import icon_next from '../../img/ico_arrow_next.svg';
@@ -33,6 +24,10 @@ import { activeToast } from '../../store/slices/toastSlice';
 import { selectTabSlice } from '../../store/slices/tabSlice';
 import { selectBanner } from '../../store/slices/banner';
 import PSEventBannerWrite from '../PS/PSEventBannerWrite';
+import CreditButton from '../buttons/CreditButton';
+import IconTextButton from '../buttons/IconTextButton';
+import Grid from '../layout/Grid';
+import React from 'react';
 
 const Wrapper = styled.div`
   ${flex}
@@ -101,7 +96,7 @@ const AiWriteResult = ({
   moveChat
 }: {
   history: WriteType[];
-  onClickStop: Function;
+  onClickStop: React.MouseEventHandler<HTMLButtonElement>;
   currentWriteId: string;
   submitSubject: Function;
   moveChat: Function;
@@ -119,15 +114,7 @@ const AiWriteResult = ({
       <ResWrapper>
         <RowBox>
           <SubTitle subTitle={t(`WriteTab.PreviewWriting`)} />
-          {creating === 'none' && (
-            <RecreatingButton
-              onClick={() => {
-                // dispatch(initWriteHistory()); // 같은 주제끼리만 저장할지 의논 필요
-                // initAllInput();
-                dispatch(resetCurrentWrite());
-              }}
-            />
-          )}
+          {creating === 'none' && <ReturnButton onClick={() => dispatch(resetCurrentWrite())} />}
         </RowBox>
         <ResultBox>
           {currentWrite.result.length === 0 && creating !== 'none' && (
@@ -138,14 +125,9 @@ const AiWriteResult = ({
           </ResultWrapper>
           <ResultInfo>
             {currentWrite.result.length > 0 && creating === 'Write' && (
-              <StopButton
-                cssExt={css`
-                  margin: 0 auto;
-                  margin-bottom: 16px;
-                  margin-top: 16px;
-                `}
-                onClick={onClickStop}
-              />
+              <div style={{ margin: '0 auto', marginBottom: '16px', marginTop: '16px' }}>
+                <StopButton onClick={onClickStop} />
+              </div>
             )}
             {(creating === 'none' || currentWrite.result.length > 0) && <ColumDivider />}
             <RowBox
@@ -199,27 +181,18 @@ const AiWriteResult = ({
           </ResultInfo>
         </ResultBox>
         <ButtonBox creating={creating !== 'none'}>
-          <RowBox
-            cssExt={css`
-              gap: 8px;
-            `}>
-            <Button
-              cssExt={css`
-                margin: 0px;
-              `}
-              isCredit={true}
-              onClick={() => {
-                submitSubject(currentWrite);
-              }}>
+          <Grid col={2}>
+            <CreditButton
+              width="full"
+              borderType="gray"
+              onClick={() => submitSubject(currentWrite)}>
               {t(`WriteTab.Recreating`)}
-            </Button>
+            </CreditButton>
             <Button
-              cssExt={css`
-                margin: 0px;
-              `}
+              width="full"
+              borderType="gray"
               onClick={() => {
                 insertDoc(currentWrite.result);
-
                 dispatch(
                   activeToast({
                     active: true,
@@ -230,22 +203,15 @@ const AiWriteResult = ({
               }}>
               {t(`WriteTab.InsertDoc`)}
             </Button>
-          </RowBox>
+          </Grid>
           <div>
-            <Button
-              icon={icon_chat_white}
-              cssExt={css`
-                flex: none;
-                width: 100%;
-                box-sizing: border-box;
-                margin: 0;
-                ${purpleBtnCss}
-              `}
-              onClick={() => {
-                moveChat(currentWrite.result);
-              }}>
+            <IconTextButton
+              width="full"
+              variant="purpleGradient"
+              iconSrc={icon_chat_white}
+              onClick={() => moveChat(currentWrite.result)}>
               {t(`WriteTab.MoveToChating`)}
-            </Button>
+            </IconTextButton>
           </div>
           <RightBox>
             <OpenAILinkText />

@@ -20,7 +20,7 @@ const SIZES = {
   `
 };
 
-type IconSize = 'sm' | 'md' | 'lg';
+export type IconSize = 'sm' | 'md' | 'lg';
 
 interface IconProps {
   size?: IconSize | number;

@@ -20,15 +20,12 @@ import {
   alignItemStart,
   flex,
   flexColumn,
-  flexGrow,
-  flexShrink,
   grid,
-  justiCenter,
-  purpleBtnCss
+  justiCenter
 } from '../../style/cssCommon';
 import { RowContainer, SubTitleArea } from '../../views/ImageCreate';
 import SubTitle from '../SubTitle';
-import ShowResult from '../ShowResult';
+import ShowResultButton from '../buttons/ShowResultButton';
 import { useAppDispatch } from '../../store/store';
 import {
   T2IOptionType,
@@ -37,8 +34,11 @@ import {
   updateT2ICurListId
 } from '../../store/slices/txt2imgHistory';
 import ExTextbox from '../ExTextbox';
-import Button from '../Button';
 import { useTranslation } from 'react-i18next';
+import CreditButton from '../buttons/CreditButton';
+import Icon from '../Icon';
+import Grid from '../layout/Grid';
+import IconBoxTextButton from '../buttons/IconBoxTextButton';
 
 const MakingInputWrapper = styled.div`
   ${flex}
@@ -74,15 +74,6 @@ const ContainerItem = styled.div`
   ${alignItemStart}
 
   gap: 8px;
-`;
-
-const RatioBtnConatainer = styled.div`
-  ${flex}
-  ${flexColumn}
-  ${flexShrink}
-  ${flexGrow}
-
-  width: 100%;
 `;
 
 const ItemTitle = styled.div<{ isSelected: boolean }>`
@@ -262,7 +253,7 @@ const ImageCreateInput = ({
       <SelectOptionArea>
         <SubTitleArea>
           <SubTitle subTitle={t(`Txt2ImgTab.WritingImageDesc`)} />
-          <ShowResult
+          <ShowResultButton
             disable={history.length === 0}
             onClick={() => {
               const last = history[history.length - 1];
@@ -326,56 +317,33 @@ const ImageCreateInput = ({
           <SubTitle subTitle={t('Txt2ImgTab.ChooseRatio')} />
         </SubTitleArea>
         <RowContainer>
-          <GridContainer
-            cssExt={css`
-              -webkit-grid-columns: 1fr 1fr 1fr 1fr;
-              grid-template-columns: 1fr 1fr 1fr 1fr;
-
-              grid-template-columns: repeat(auto-fit, minmax(81px, 4));
-            `}>
-            {ratioItemList.map((item) => {
-              return (
-                <ContainerItem
-                  key={item.id}
-                  onClick={() => setOptions((prev) => ({ ...prev, ratio: item.id }))}>
-                  <RatioBtnConatainer>
-                    <ItemIconBox
-                      cssExt={css`
-                        border: ${item.id === ratio && 'solid 1px var(--ai-purple-80-sub)'};
-                        padding: 12px 0px;
-
-                        ${flexShrink}
-                        ${flexGrow}
-                            width: 100%;
-                      `}
-                      isSelected={item.id === ratio}>
-                      <img
-                        src={item.id === ratio ? item.selectedImgItem : item.imgItem}
-                        alt=""></img>
-                    </ItemIconBox>
-                    <ItemTitle isSelected={item.id === ratio}>
-                      {t(`Txt2ImgTab.RatioList.${item.title}`)}
-                    </ItemTitle>
-                  </RatioBtnConatainer>
-                </ContainerItem>
-              );
-            })}
-          </GridContainer>
+          <Grid col={4}>
+            {ratioItemList.map((item) => (
+              <IconBoxTextButton
+                key={item.id}
+                variant="gray"
+                width="full"
+                height={50}
+                iconSize="md"
+                iconSrc={item.id === ratio ? item.selectedImgItem : item.imgItem}
+                onClick={() => setOptions((prev) => ({ ...prev, ratio: item.id }))}
+                selected={item.id === ratio}>
+                {t(`Txt2ImgTab.RatioList.${item.title}`)}
+              </IconBoxTextButton>
+            ))}
+          </Grid>
         </RowContainer>
       </SelectOptionArea>
-      <Button
-        isCredit={true}
-        icon={iconCreatingWhite}
+      <CreditButton
+        width="full"
+        variant="purpleGradient"
         onClick={() => createAiImage(options)}
-        disable={input.length === 0}
-        cssExt={css`
-          width: 100%;
-          box-sizing: border-box;
-          flex: none;
-          ${purpleBtnCss}
-        `}>
-        {t(`Txt2ImgTab.CreateImage`)}
-      </Button>
+        disable={input.length === 0}>
+        <div style={{ display: 'flex', gap: '5px' }}>
+          <Icon size="sm" iconSrc={iconCreatingWhite}></Icon>
+          {t(`Txt2ImgTab.CreateImage`)}
+        </div>
+      </CreditButton>
     </MakingInputWrapper>
   );
 };

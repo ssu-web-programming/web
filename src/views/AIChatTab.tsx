@@ -13,9 +13,9 @@ import {
   updateChat
 } from '../store/slices/chatHistorySlice';
 import { v4 as uuidv4 } from 'uuid';
-import Button from '../components/Button';
+import Button from '../components/buttons/Button';
 import OpenAILinkText from '../components/OpenAILinkText';
-import ExButton from '../components/ExButton';
+import ChangeExampleButton from '../components/buttons/ChangeExampleButton';
 import FuncRecBox, { ChatOptions, REC_ID_LIST, RowWrapBox } from '../components/FuncRecBox';
 import {
   activeRecFunc,
@@ -26,7 +26,7 @@ import {
 import { activeToast } from '../store/slices/toastSlice';
 import icon_ai from '../img/ico_ai.svg';
 import Icon from '../components/Icon';
-import StopButton from '../components/StopButton';
+import StopButton from '../components/buttons/StopButton';
 import {
   TableCss,
   justiCenter,
@@ -34,9 +34,7 @@ import {
   flexGrow,
   flexShrink,
   alignItemCenter,
-  purpleBtnCss,
   justiSpaceBetween,
-  alignItemEnd,
   flex
 } from '../style/cssCommon';
 import { calcToken, getElValue } from '../api/usePostSplunkLog';
@@ -50,6 +48,8 @@ import { useTranslation } from 'react-i18next';
 import useErrorHandle from '../components/hooks/useErrorHandle';
 import { formRecList } from '../components/FuncRecBox';
 import { GPT_EXCEEDED_LIMIT } from '../error/error';
+import CreditButton from '../components/buttons/CreditButton';
+import Grid from '../components/layout/Grid';
 
 const TEXT_MAX_HEIGHT = 268;
 
@@ -261,6 +261,11 @@ const AIChatTab = (props: WriteTabProps) => {
   const toggleActiveInput = (isActive: boolean) => {
     setIsActiveInput(isActive);
     dispatch(isActive ? activeRecFunc() : inactiveRecFunc());
+  };
+
+  const refreshExampleText = () => {
+    const text = exampleList[Math.floor(Math.random() * exampleList.length)];
+    setChatInput({ input: t(`ExampleList.${text}`) });
   };
 
   useEffect(() => {
@@ -600,6 +605,7 @@ const AIChatTab = (props: WriteTabProps) => {
                     cssExt={css`
                       padding: 9px 12px 12px 12px;
                       box-sizing: border-box;
+                      gap: 8px;
                     `}>
                     <RowBox>
                       <BoldLengthWrapper>
@@ -608,35 +614,22 @@ const AIChatTab = (props: WriteTabProps) => {
                     </RowBox>
 
                     {chat.id !== loadingInfo?.id && (
-                      <RowWrapBox
-                        cssExt={css`
-                          margin-top: 8px;
-                          gap: 4px 8px;
-                        `}>
+                      <Grid col={2}>
                         {retryOrigin !== chat.id && (
-                          <Button
-                            cssExt={css`
-                              min-width: 127.7px;
-                              height: 28px;
-                              box-sizing: border-box;
-                              /* margin: 0px; */
-                            `}
-                            isCredit={true}
+                          <CreditButton
+                            width="full"
+                            borderType="gray"
                             onClick={() => {
                               submitChat(chat);
                               setRetryOrigin(chat.id);
                             }}
                             disable={creating === 'Chating'}>
                             {t(`WriteTab.Recreating`)}
-                          </Button>
+                          </CreditButton>
                         )}
                         <Button
-                          cssExt={css`
-                            ${purpleBtnCss}
-                            min-width: 127.7px;
-                            height: 28px;
-                            box-sizing: border-box;
-                          `}
+                          width="full"
+                          variant="purpleGradient"
                           onClick={() => {
                             insertDoc(chat.result);
                             dispatch(
@@ -649,7 +642,7 @@ const AIChatTab = (props: WriteTabProps) => {
                           }}>
                           {t(`WriteTab.InsertDoc`)}
                         </Button>
-                      </RowWrapBox>
+                      </Grid>
                     )}
                   </RowWrapBox>
                 </>
@@ -773,11 +766,7 @@ const AIChatTab = (props: WriteTabProps) => {
               <LengthWrapper isError={chatInput.length >= INPUT_MAX_LENGTH}>
                 {chatInput.length}/{INPUT_MAX_LENGTH}
               </LengthWrapper>
-              <ExButton
-                disable={chatInput.length > 0}
-                exampleList={exampleList}
-                setExam={(text: string) => setChatInput({ input: text })}
-              />
+              <ChangeExampleButton disable={chatInput.length > 0} onClick={refreshExampleText} />
             </RowWrapBox>
           )}
         </InputBox>

@@ -1,18 +1,20 @@
-import styled, { css } from 'styled-components';
-import { flex, flexColumn, flexGrow, flexShrink, purpleBtnCss } from '../../style/cssCommon';
+import styled from 'styled-components';
+import { flex, flexColumn } from '../../style/cssCommon';
 import { RowBox, exampleList } from '../../views/AIChatTab';
 import { useTranslation } from 'react-i18next';
 import SubTitle from '../SubTitle';
-import ShowResult from '../ShowResult';
+import ShowResultButton from '../buttons/ShowResultButton';
 import { useAppDispatch } from '../../store/store';
 import { WriteType, setCurrentWrite } from '../../store/slices/writeHistorySlice';
 import ExTextbox from '../ExTextbox';
 import { Grid3BtnContainer } from '../../views/AIWriteTab';
 import { WriteOptions, formRecList, lengthList } from '../FuncRecBox';
-import IconButton from '../IconButton';
-import NoBorderButton from '../NoBorderButton';
-import Button from '../Button';
 import icon_write from '../../img/ico_creating_text_white.svg';
+import CreditButton from '../buttons/CreditButton';
+import Icon from '../Icon';
+import Button from '../buttons/Button';
+import IconBoxTextButton from '../buttons/IconBoxTextButton';
+import Grid from '../layout/Grid';
 
 const WriteInputPage = styled.div`
   ${flex}
@@ -59,7 +61,7 @@ const AIWriteInput = ({
       <TitleInputSet>
         <RowBox>
           <SubTitle subTitle={t(`WriteTab.WriteTopic`)} />
-          <ShowResult
+          <ShowResultButton
             disable={history.length === 0}
             onClick={() => {
               const last = history[history.length - 1];
@@ -80,84 +82,53 @@ const AIWriteInput = ({
             }}></ExTextbox>
         </InputArea>
       </TitleInputSet>
-
       <TitleInputSet>
         <SubTitle subTitle={t(`WriteTab.SelectForm`)} />
-        <Grid3BtnContainer>
+        <Grid col={formRecList.length}>
           {formRecList.map((form) => (
-            <div key={form.id}>
-              <IconButton
-                key={form.id}
-                title={t(`FormList.${form.title}`)}
-                onClick={() => {
-                  setSelectedOptions((prev) => {
-                    return { ...prev, form: form };
-                  });
-                }}
-                selected={selectedForm ? (selectedForm.id === form.id ? true : false) : false}
-                icon={selectedForm.id === form.id ? form.selectedIcon : form.icon}
-              />
-            </div>
+            <IconBoxTextButton
+              key={form.id}
+              variant="gray"
+              width="full"
+              height={48}
+              iconSize="md"
+              onClick={() => setSelectedOptions((prev) => ({ ...prev, form: form }))}
+              selected={selectedForm ? (selectedForm.id === form.id ? true : false) : false}
+              iconSrc={selectedForm.id === form.id ? form.selectedIcon : form.icon}>
+              {t(`FormList.${form.title}`)}
+            </IconBoxTextButton>
           ))}
-        </Grid3BtnContainer>
+        </Grid>
       </TitleInputSet>
       <TitleInputSet>
         <SubTitle subTitle={t(`WriteTab.SelectResultLength`)} />
         <Grid3BtnContainer>
           {lengthList.map((length, index) => (
-            <NoBorderButton
+            <Button
+              width="full"
+              variant="gray"
               key={index}
-              onClick={() => {
-                setSelectedOptions((prev) => {
-                  return { ...prev, length: length };
-                });
-              }}
+              onClick={() => setSelectedOptions((prev) => ({ ...prev, length: length }))}
               selected={
                 selectedLength ? (selectedLength.length === length.length ? true : false) : false
-              }
-              cssExt={css`
-                border: none;
-                background-color: ${selectedLength && selectedLength.length === length.length
-                  ? `var(--ai-purple-97-list-over)`
-                  : 'var(--gray-gray-20)'};
-                flex: none;
-                font-size: 13px;
-                font-weight: ${selectedLength?.length === length.length ? 'border' : 'none'};
-                font-stretch: normal;
-                font-style: normal;
-                line-height: 1.54;
-                letter-spacing: normal;
-
-                box-sizing: border-box;
-
-                width: 100%;
-                padding: 4px 0px;
-              `}>
+              }>
               {t(`WriteTab.Length.${length.title}`)}
-            </NoBorderButton>
+            </Button>
           ))}
         </Grid3BtnContainer>
       </TitleInputSet>
 
-      <div>
-        <Button
+      <div style={{ paddingTop: '4px' }}>
+        <CreditButton
+          width="full"
           disable={input.length === 0}
-          isCredit={true}
-          cssExt={css`
-            ${purpleBtnCss}
-            width: 100%;
-            margin-top: 4px;
-          `}
-          onClick={() => {
-            if (input.length === 0) {
-              return;
-            }
-
-            submitSubject();
-          }}
-          icon={icon_write}>
-          {t(`WriteTab.WritingArticle`)}
-        </Button>
+          variant="purpleGradient"
+          onClick={() => submitSubject()}>
+          <div style={{ display: 'flex', gap: '5px' }}>
+            <Icon size="sm" iconSrc={icon_write}></Icon>
+            {t(`WriteTab.WritingArticle`)}
+          </div>
+        </CreditButton>
       </div>
     </WriteInputPage>
   );

@@ -1,0 +1,171 @@
+import React from 'react';
+import styled, {
+  CSSProp,
+  FlattenInterpolation,
+  FlattenSimpleInterpolation,
+  ThemedStyledProps,
+  css
+} from 'styled-components';
+import { alignItemCenter, flex, justiCenter, userSelectCss } from '../../style/cssCommon';
+
+const Body = styled.button<{
+  w: FlattenSimpleInterpolation;
+  h?: FlattenSimpleInterpolation;
+  variant: FlattenInterpolation<ThemedStyledProps<{ selected: boolean }, any>>;
+  border: FlattenInterpolation<ThemedStyledProps<{ selected: boolean }, any>>;
+  selected: boolean;
+  disabled: boolean;
+  cssExt: any;
+}>`
+  ${flex}
+  ${justiCenter}
+  ${alignItemCenter}
+
+  ${userSelectCss}
+
+  border-radius: 4px;
+  border: none;
+  padding: 6px;
+
+  font-size: 13px;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.54;
+  letter-spacing: normal;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  ${(props) => props.w}
+  ${(props) => props.h}
+
+  ${(props) => props.variant}
+  ${(props) => props.border}
+
+  ${({ selected }) =>
+    selected &&
+    css`
+      background-color: var(--ai-purple-97-list-over);
+      color: var(--ai-purple-50-main);
+      font-weight: bold;
+    `}
+
+  ${({ disabled }) =>
+    disabled &&
+    css`
+      opacity: 0.3;
+      pointer-events: none;
+    `}
+
+  ${({ cssExt }) => cssExt && cssExt}
+`;
+
+type ButtonSize = 'sm' | 'md' | 'lg' | 'full' | 'fit';
+const SIZES = {
+  sm: css`
+    width: 200px;
+  `,
+  md: css`
+    width: 250px;
+  `,
+  lg: css`
+    width: 300px;
+  `,
+  full: css`
+    width: 100%;
+  `,
+  fit: css`
+    width: fit-content;
+  `
+};
+
+type ButtonVariant = 'white' | 'purpleGradient' | 'gray' | 'transparent';
+const VARIANTS = {
+  white: css<{ selected: boolean }>`
+    background-color: ${({ selected }) => (selected ? `white` : `white`)};
+    color: var(--gray-gray-90-01);
+  `,
+  purpleGradient: css<{ selected: boolean }>`
+    background-image: ${({ selected }) =>
+      selected ? `white` : `linear-gradient(to left, #a86cea, var(--ai-purple-50-main))`};
+    color: white;
+  `,
+  gray: css<{ selected: boolean }>`
+    background-color: ${({ selected }) =>
+      selected ? `var(--ai-purple-97-list-over)` : `var(--gray-gray-20)`};
+    color: var(--gray-gray-90-01);
+  `,
+  transparent: css<{ selected: boolean }>`
+    background-color: ${({ selected }) => (selected ? `transparent` : `transparent`)};
+    color: var(--gray-gray-90-01);
+  `
+};
+
+type ButtonBorderType = 'none' | 'gray';
+const BORDER_TYPES = {
+  none: css<{ selected: boolean }>`
+    box-shadow: ${({ selected }) =>
+      selected ? `0 0 0 1px var(--ai-purple-80-sub) inset` : `0 0 0 1px transparent inset`};
+  `,
+  gray: css<{ selected: boolean }>`
+    box-shadow: ${({ selected }) =>
+      selected ? `0 0 0 1px var(--ai-purple-80-sub) inset` : `0 0 0 1px var(--gray-gray-50) inset`};
+  `
+};
+
+const DEFAULT_BUTTON_HEIGHT = 28;
+
+export interface ButtonProps {
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  selected?: boolean;
+  width?: ButtonSize | number;
+  height?: number;
+  variant?: ButtonVariant;
+  borderType?: ButtonBorderType;
+  cssExt?: CSSProp<any>;
+  disable?: boolean;
+}
+
+export default function Button(props: React.PropsWithChildren<ButtonProps>) {
+  const {
+    onClick,
+    selected = false,
+    width = 'md',
+    height = DEFAULT_BUTTON_HEIGHT,
+    variant = 'white',
+    borderType = 'none',
+    children,
+    cssExt,
+    disable = false
+  } = props;
+
+  const w =
+    typeof width === 'string'
+      ? SIZES[width]
+      : css`
+          width: ${width}px;
+        `;
+
+  const h = css`
+    height: ${height}px;
+  `;
+
+  const variantValue = VARIANTS[variant];
+
+  const border = BORDER_TYPES[borderType];
+
+  return (
+    <Body
+      disabled={disable}
+      cssExt={cssExt}
+      w={w}
+      h={h}
+      selected={selected}
+      variant={variantValue}
+      border={border}
+      onClick={onClick}>
+      {children}
+    </Body>
+  );
+}
