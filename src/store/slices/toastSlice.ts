@@ -1,25 +1,25 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store';
+import { ToastType } from '../../components/toast/Toast';
 
-interface ToastType {
-  active: boolean;
-  isError: boolean;
+interface ToastProps {
+  type: ToastType;
   msg: string | React.ReactNode;
 }
 
+const initState: ToastProps = {
+  type: 'none',
+  msg: ''
+};
+
 const toastSlice = createSlice({
   name: 'toast',
-  initialState: { active: false, msg: '', isError: false } as ToastType,
+  initialState: initState,
   reducers: {
-    initToast: (state) => {
-      state.active = false;
-      state.msg = '';
-    },
-    activeToast: (state, action: PayloadAction<ToastType>) => {
-      const { active, msg, isError } = action.payload;
-      state.active = active;
-      state.msg = msg;
-      state.isError = isError;
+    initToast: () => initState,
+    activeToast: (state, action: PayloadAction<ToastProps>) => {
+      state = { ...action.payload };
+      return state;
     }
   }
 });

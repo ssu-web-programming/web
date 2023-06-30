@@ -122,12 +122,11 @@ const AIWriteTab = (props: WriteTabProps) => {
       const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
       dispatch(
         activeToast({
-          active: true,
+          type: 'info',
           msg: t(`ToastMsg.StartCreating`, {
             deductionCredit: deductionCredit,
             leftCredit: leftCredit
-          }),
-          isError: false
+          })
         })
       );
 
@@ -140,13 +139,7 @@ const AIWriteTab = (props: WriteTabProps) => {
 
         if (stopRef?.current) {
           reader.cancel();
-          dispatch(
-            activeToast({
-              active: true,
-              msg: t(`ToastMsg.StopMsg`),
-              isError: false
-            })
-          );
+          dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.StopMsg`) }));
           break;
         }
 

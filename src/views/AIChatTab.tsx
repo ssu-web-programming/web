@@ -451,12 +451,11 @@ const AIChatTab = (props: WriteTabProps) => {
       const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
       dispatch(
         activeToast({
-          active: true,
+          type: 'info',
           msg: t(`ToastMsg.StartCreating`, {
             deductionCredit: deductionCredit,
             leftCredit: leftCredit
-          }),
-          isError: false
+          })
         })
       );
 
@@ -467,13 +466,7 @@ const AIChatTab = (props: WriteTabProps) => {
         // if (isFull) break;
         if (stopRef.current) {
           reader.cancel();
-          dispatch(
-            activeToast({
-              active: true,
-              msg: t(`ToastMsg.StopMsg`),
-              isError: false
-            })
-          );
+          dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.StopMsg`) }));
           break;
         }
 
@@ -633,11 +626,7 @@ const AIChatTab = (props: WriteTabProps) => {
                           onClick={() => {
                             insertDoc(chat.result);
                             dispatch(
-                              activeToast({
-                                active: true,
-                                msg: t(`ToastMsg.CompleteInsert`),
-                                isError: false
-                              })
+                              activeToast({ type: 'info', msg: t(`ToastMsg.CompleteInsert`) })
                             );
                           }}>
                           {t(`WriteTab.InsertDoc`)}
