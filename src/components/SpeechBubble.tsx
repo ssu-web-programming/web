@@ -1,4 +1,4 @@
-import styled, { CSSProp, css } from 'styled-components';
+import styled, { FlattenSimpleInterpolation } from 'styled-components';
 import { RowBox } from '../views/AIChatTab';
 import Icon from './Icon';
 import icon_ai from '../img/ico_ai.svg';
@@ -30,7 +30,7 @@ const Profile = styled.div`
   box-sizing: border-box;
 `;
 
-const SpeechBubbleWrapper = styled.div<{ cssExt: any; isUser: boolean }>`
+const SpeechBubbleWrapper = styled.div<{ cssExt?: FlattenSimpleInterpolation; isUser: boolean }>`
   ${flex}
   ${flexColumn}
   align-self: flex-start;
@@ -44,7 +44,7 @@ const SpeechBubbleWrapper = styled.div<{ cssExt: any; isUser: boolean }>`
   color: ${({ isUser }: { isUser: boolean }) => isUser && 'white'};
   overflow-x: auto;
 
-  ${({ cssExt }: any) => cssExt && cssExt}
+  ${({ cssExt }) => cssExt && cssExt}
 `;
 
 const MarkDownWrapper = styled.div`
@@ -66,7 +66,7 @@ interface SpeechBubbleProps {
   text: string;
   isUser: boolean;
   loadingMsg?: string;
-  cssExt?: CSSProp<any>;
+  cssExt?: FlattenSimpleInterpolation;
   children?: React.ReactNode;
   innerChild?: React.ReactNode;
 }

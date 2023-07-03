@@ -1,8 +1,8 @@
-import styled, { CSSProp, css } from 'styled-components';
+import styled, { FlattenSimpleInterpolation, css } from 'styled-components';
 
-const IconImg = styled.img<{ size: any; cssExt: any }>`
+const IconImg = styled.img<{ size: any; cssExt: FlattenSimpleInterpolation }>`
   ${(props) => props.size}
-  ${({ cssExt }: any) => cssExt && cssExt}
+  ${({ cssExt }) => cssExt && cssExt}
 `;
 
 const SIZES = {
@@ -25,9 +25,9 @@ export type IconSize = 'sm' | 'md' | 'lg';
 interface IconProps {
   size?: IconSize | number;
   iconSrc: any;
-  cssExt?: CSSProp<any>;
+  cssExt?: FlattenSimpleInterpolation;
   onClick?: Function;
-  imgCssExt?: CSSProp<any>;
+  imgCssExt?: FlattenSimpleInterpolation;
 }
 
 const Icon = ({ size = 'md', iconSrc, cssExt, onClick }: IconProps) => {

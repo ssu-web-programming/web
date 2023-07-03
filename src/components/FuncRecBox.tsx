@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import styled, { css } from 'styled-components';
+import styled, { FlattenSimpleInterpolation, css } from 'styled-components';
 import { RowBox } from '../views/AIChatTab';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import {
@@ -80,7 +80,7 @@ const Wrapper = styled.div`
   }
 `;
 
-export const RowWrapBox = styled.div<{ cssExt?: any }>`
+export const RowWrapBox = styled.div<{ cssExt?: FlattenSimpleInterpolation }>`
   ${flex}
   ${flexWrap}
   ${justiSpaceBetween}

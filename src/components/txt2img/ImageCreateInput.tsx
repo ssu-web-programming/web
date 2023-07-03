@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled, { FlattenSimpleInterpolation, css } from 'styled-components';
 import iconStyleNone from '../../img/text2Img/non_select.svg';
 import iconStyleNonePurple from '../../img/text2Img/non_select_purple.svg';
 import iconStylePhoto from '../../img/text2Img/photo@2x.png';
@@ -47,7 +47,7 @@ const MakingInputWrapper = styled.div`
 `;
 
 const GridContainer = styled.div<{
-  cssExt?: any;
+  cssExt?: FlattenSimpleInterpolation;
 }>`
   ${grid}
 
@@ -112,7 +112,7 @@ const ItemIconBox = styled.div<{
   width?: number;
   height?: number;
   isSelected: boolean;
-  cssExt?: any;
+  cssExt?: FlattenSimpleInterpolation;
 }>`
   ${flex}
   ${justiCenter}

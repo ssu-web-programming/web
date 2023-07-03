@@ -1,7 +1,7 @@
-import styled, { CSSProp } from 'styled-components';
+import styled, { FlattenSimpleInterpolation } from 'styled-components';
 import { alignItemCenter, flex } from '../style/cssCommon';
 
-const TextAreaWrapper = styled.textarea<{ cssExt: any }>`
+const TextAreaWrapper = styled.textarea<{ cssExt?: FlattenSimpleInterpolation }>`
   resize: none;
   outline: none;
   ::placeholder {
@@ -12,7 +12,7 @@ const TextAreaWrapper = styled.textarea<{ cssExt: any }>`
   }
   font-size: 13px;
 
-  ${({ cssExt }: any) => cssExt && cssExt}
+  ${({ cssExt }) => cssExt && cssExt}
 `;
 
 interface TextAreaProps {
@@ -20,7 +20,7 @@ interface TextAreaProps {
   onChange?: Function;
   onClick?: Function;
   onKeyDown?: Function;
-  cssExt?: CSSProp<any>;
+  cssExt?: FlattenSimpleInterpolation;
   rows?: number;
   textRef?: React.RefObject<HTMLTextAreaElement> | null;
   disable?: boolean;

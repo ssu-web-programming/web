@@ -1,5 +1,5 @@
 import { useCallback, useState, useEffect } from 'react';
-import styled from 'styled-components';
+import styled, { FlattenSimpleInterpolation } from 'styled-components';
 import { calcToken } from '../api/usePostSplunkLog';
 import { flexColumn, justiSpaceBetween, flexWrap, alignItemCenter, flex } from '../style/cssCommon';
 import Loading from '../components/Loading';
@@ -48,7 +48,7 @@ export const SubTitleArea = styled.div`
 `;
 
 export const RowContainer = styled.div<{
-  cssExt?: any;
+  cssExt?: FlattenSimpleInterpolation;
 }>`
   ${flex}
   ${flexWrap}

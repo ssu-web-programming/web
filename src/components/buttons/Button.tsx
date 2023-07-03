@@ -1,6 +1,5 @@
 import React from 'react';
 import styled, {
-  CSSProp,
   FlattenInterpolation,
   FlattenSimpleInterpolation,
   ThemedStyledProps,
@@ -15,7 +14,7 @@ const Body = styled.button<{
   border: FlattenInterpolation<ThemedStyledProps<{ selected: boolean }, any>>;
   selected: boolean;
   disabled: boolean;
-  cssExt: any;
+  cssExt?: FlattenSimpleInterpolation;
 }>`
   ${flex}
   ${justiCenter}
@@ -123,7 +122,7 @@ export interface ButtonProps {
   height?: number;
   variant?: ButtonVariant;
   borderType?: ButtonBorderType;
-  cssExt?: CSSProp<any>;
+  cssExt?: FlattenSimpleInterpolation;
   disable?: boolean;
 }
 
