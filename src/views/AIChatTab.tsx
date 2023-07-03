@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled, { FlattenSimpleInterpolation, css } from 'styled-components';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import SpeechBubble from '../components/SpeechBubble';
 import TextArea from '../components/TextArea';
@@ -108,7 +108,7 @@ const InputBox = styled.div<{ activeInputWrap: boolean }>`
   box-shadow: 0 -2px 8px 0 rgba(111, 58, 208, 0.11);
 `;
 
-export const RowBox = styled.div<{ cssExt?: any }>`
+export const RowBox = styled.div<{ cssExt?: FlattenSimpleInterpolation }>`
   ${flex}
   ${justiSpaceBetween}
   ${alignItemCenter}
@@ -118,7 +118,7 @@ export const RowBox = styled.div<{ cssExt?: any }>`
   ${({ cssExt }) => cssExt && cssExt}
 `;
 
-export const LengthWrapper = styled.div<{ isError?: boolean; cssExt?: any }>`
+export const LengthWrapper = styled.div<{ isError?: boolean; cssExt?: FlattenSimpleInterpolation }>`
   ${flex}
   ${alignItemCenter}
 
@@ -138,7 +138,7 @@ export const BoldLengthWrapper = styled(LengthWrapper)`
   font-weight: 500;
 `;
 
-export const RightBox = styled.div<{ cssExt?: any }>`
+export const RightBox = styled.div<{ cssExt?: FlattenSimpleInterpolation }>`
   ${flex}
   ${alignItemCenter}
 
