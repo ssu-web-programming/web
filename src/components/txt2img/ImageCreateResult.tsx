@@ -178,6 +178,7 @@ const ImageCreateResult = ({
         />
         {curHistory.list.map((img, index) => (
           <img
+            key={index}
             onClick={() => {
               dispatch(updateT2ICurItemIndex(index));
             }}

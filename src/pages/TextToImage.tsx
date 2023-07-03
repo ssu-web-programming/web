@@ -4,7 +4,7 @@ import { useLocation } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { flex, flexColumn } from '../style/cssCommon';
-import PSEventBannerT2I from '../components/PS/PSEventBannerT2I';
+import PSEventBannerT2I from '../external/PS/PSEventBannerT2I';
 import { selectBanner } from '../store/slices/banner';
 import { useAppSelector } from '../store/store';
 import { selectTabSlice } from '../store/slices/tabSlice';

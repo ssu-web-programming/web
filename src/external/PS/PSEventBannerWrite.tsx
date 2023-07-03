@@ -12,7 +12,7 @@ import detailBtn_icon from '../../img/PS/button_detail.svg';
 import shareBtn_icon from '../../img/PS/button_share.svg';
 import mainImg_icon from '../../img/PS/img_speaker1.svg';
 import { selectWriteHistorySlice } from '../../store/slices/writeHistorySlice';
-import usePSEvent, { openDetailPage } from '../hooks/usePSEvent';
+import usePSEvent, { openDetailPage } from '../../components/hooks/usePSEvent';
 import { useAppSelector } from '../../store/store';
 import { alignItemCenter, flex, grid, justiCenter } from '../../style/cssCommon';
 

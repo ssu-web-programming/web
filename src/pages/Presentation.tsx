@@ -1,9 +1,7 @@
 import styled from 'styled-components';
-import Wrapper from '../components/Wrapper';
 import InputText from '../components/InputText';
 import { useState } from 'react';
 import Button from '../components/buttons/Button';
-import Container from '../components/Container';
 import { useTranslation } from 'react-i18next';
 
 const Contents = styled.div`
@@ -53,7 +51,7 @@ export default function Presentation() {
   const [imageStlye, setImageStyle] = useState<string>();
 
   return (
-    <Wrapper>
+    <>
       <Contents>
         <Header>header area</Header>
         <Body>
@@ -96,7 +94,7 @@ export default function Presentation() {
           </InputItem>
         </Body>
         <Footer>
-          <Container>
+          <>
             <Button
               onClick={() =>
                 alert(
@@ -109,9 +107,9 @@ export default function Presentation() {
               }>
               AI Presentation 만들기
             </Button>
-          </Container>
+          </>
         </Footer>
       </Contents>
-    </Wrapper>
+    </>
   );
 }

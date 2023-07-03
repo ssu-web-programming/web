@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Dim from './Dim';
+import Blanket from './Blanket';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import { initConfirm, selectConfirm } from '../store/slices/confirm';
 import {
@@ -116,10 +116,10 @@ const Confirm = () => {
     <>
       {active && (
         <>
-          <Dim />
+          <Blanket />
           <ConfirmBox>
             <CloseBtn onClick={close}>
-              <img src={close_icon} />
+              <img src={close_icon} alt="confirm close button" />
             </CloseBtn>
             <ContentArea>
               <ErrorIcon src={error_icon} />

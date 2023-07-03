@@ -13,7 +13,7 @@ import shareBtn_icon from '../../img/PS/button_share.svg';
 import mainImg_icon from '../../img/PS/img_speaker2.svg';
 import { useAppSelector } from '../../store/store';
 import { selectT2IHistory } from '../../store/slices/txt2imgHistory';
-import usePSEvent, { openDetailPage } from '../hooks/usePSEvent';
+import usePSEvent, { openDetailPage } from '../../components/hooks/usePSEvent';
 import { BannerWrapper, GridContainer } from './PSEventBannerWrite';
 import { alignItemStart, flex } from '../../style/cssCommon';
 
