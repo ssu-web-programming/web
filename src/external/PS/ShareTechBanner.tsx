@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { FlattenSimpleInterpolation } from 'styled-components';
 import { alignItemCenter, flex, justiCenter } from '../../style/cssCommon';
 
 const BannerArea = styled.div`
@@ -13,21 +13,21 @@ const BannerArea = styled.div`
   min-height: 60px;
 `;
 
-export const SubText = styled.img<{ cssExt?: any }>`
+export const SubText = styled.img<{ cssExt?: FlattenSimpleInterpolation }>`
   width: 73px;
   height: 16px;
 
   ${({ cssExt }) => cssExt && cssExt}
 `;
 
-export const MainText = styled.img<{ cssExt?: any }>`
+export const MainText = styled.img<{ cssExt?: FlattenSimpleInterpolation }>`
   width: 136px;
   height: 17px;
 
   ${({ cssExt }) => cssExt && cssExt}
 `;
 
-export const DetailBtn = styled.img<{ cssExt?: any }>`
+export const DetailBtn = styled.img<{ cssExt?: FlattenSimpleInterpolation }>`
   width: 73px;
   height: 16px;
   &:hover {
@@ -37,7 +37,7 @@ export const DetailBtn = styled.img<{ cssExt?: any }>`
   ${({ cssExt }) => cssExt && cssExt}
 `;
 
-export const ShareBtn = styled.img<{ cssExt?: any }>`
+export const ShareBtn = styled.img<{ cssExt?: FlattenSimpleInterpolation }>`
   width: 138px;
   height: 17px;
   &:hover {
@@ -47,7 +47,7 @@ export const ShareBtn = styled.img<{ cssExt?: any }>`
   ${({ cssExt }) => cssExt && cssExt}
 `;
 
-export const MainImg = styled.img<{ cssExt?: any }>`
+export const MainImg = styled.img<{ cssExt?: FlattenSimpleInterpolation }>`
   width: 73px;
   height: 16px;
 
