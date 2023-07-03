@@ -61,13 +61,7 @@ const useErrorHandle = () => {
       }
     }
 
-    dispatch(
-      activeToast({
-        active: true,
-        msg,
-        isError: true
-      })
-    );
+    dispatch(activeToast({ type: 'error', msg }));
   };
 };
 

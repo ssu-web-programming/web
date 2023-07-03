@@ -85,9 +85,8 @@ export default function Tools() {
     } else {
       dispatch(
         activeToast({
-          active: true,
-          msg: t(`ToastMsg.TabLoadedAndWait`, { tab: currentTab?.name }),
-          isError: true
+          type: 'error',
+          msg: t(`ToastMsg.TabLoadedAndWait`, { tab: currentTab?.name })
         })
       );
     }

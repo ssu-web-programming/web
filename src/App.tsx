@@ -1,7 +1,7 @@
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import Tools from './pages/Tools';
 import Wrapper from './components/Wrapper';
-import ToastMsg from './components/ToastMsg';
+import Toast from './components/toast/Toast';
 import { useAppDispatch, useAppSelector } from './store/store';
 import { selectToast } from './store/slices/toastSlice';
 import { useCallback, useEffect, useRef } from 'react';
@@ -25,7 +25,6 @@ import { setBanner } from './store/slices/banner';
 function App() {
   const dispatch = useAppDispatch();
   const { i18n, t } = useTranslation();
-  const toast = useAppSelector(selectToast);
   const { creating } = useAppSelector(selectTabSlice);
 
   const navigate = useNavigate();
@@ -62,9 +61,8 @@ function App() {
               } else {
                 dispatch(
                   activeToast({
-                    active: true,
-                    msg: t(`ToastMsg.TabLoadedAndWait`, { tab: t(creating) }),
-                    isError: true
+                    type: 'error',
+                    msg: t(`ToastMsg.TabLoadedAndWait`, { tab: t(creating) })
                   })
                 );
               }
@@ -72,13 +70,7 @@ function App() {
             }
             case 'showToast': {
               const msg = i18n.t(body);
-              dispatch(
-                activeToast({
-                  active: true,
-                  msg,
-                  isError: true
-                })
-              );
+              dispatch(activeToast({ type: 'error', msg }));
               break;
             }
             case 'changeLang': {
@@ -135,7 +127,7 @@ function App() {
           <Route path="*" element={<InvalidAccess></InvalidAccess>}></Route>
         </Routes>
         <Offline></Offline>
-        {toast.active && <ToastMsg msg={toast.msg} isError={toast.isError} />}
+        <Toast />
         <Spinner />
         <Confirm />
       </Wrapper>

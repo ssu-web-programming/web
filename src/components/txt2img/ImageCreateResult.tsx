@@ -255,11 +255,7 @@ const ImageCreateResult = ({
               window._Bridge.insertImage(blob);
 
               dispatch(
-                activeToast({
-                  active: true,
-                  msg: t(`Txt2ImgTab.ToastMsg.CompleteInsertImage`),
-                  isError: false
-                })
+                activeToast({ type: 'info', msg: t(`Txt2ImgTab.ToastMsg.CompleteInsertImage`) })
               );
             } catch (err) {
               // TODO : error handle

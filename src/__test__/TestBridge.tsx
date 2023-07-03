@@ -67,13 +67,7 @@ export default function AITest() {
   }, []);
 
   const onToastLink = () => {
-    dispatch(
-      activeToast({
-        active: true,
-        msg: <NoCredit></NoCredit>,
-        isError: true
-      })
-    );
+    dispatch(activeToast({ type: 'error', msg: <NoCredit></NoCredit> }));
   };
 
   const onInsertText = () => {
