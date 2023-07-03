@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const DimBG = styled.div`
+const BlanketBG = styled.div`
   position: absolute;
   left: 50%;
   transform: translate(-50%, -100%);
@@ -12,12 +12,12 @@ const DimBG = styled.div`
 
 const Dim = ({ children, onClick }: { children?: React.ReactNode; onClick?: Function }) => {
   return (
-    <DimBG
+    <BlanketBG
       onClick={() => {
         onClick && onClick();
       }}>
       {children}
-    </DimBG>
+    </BlanketBG>
   );
 };
 

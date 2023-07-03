@@ -1,9 +1,7 @@
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import Tools from './pages/Tools';
-import Wrapper from './components/Wrapper';
 import Toast from './components/toast/Toast';
 import { useAppDispatch, useAppSelector } from './store/store';
-import { selectToast } from './store/slices/toastSlice';
 import { useCallback, useEffect, useRef } from 'react';
 import { setBridgeMessage } from './store/slices/bridge';
 import TextToImage from './pages/TextToImage';
@@ -120,7 +118,7 @@ function App() {
   return (
     <>
       <GlobalStyle></GlobalStyle>
-      <Wrapper>
+      <>
         <Routes>
           <Route path="/aiWrite" element={<Tools></Tools>}></Route>
           <Route path="/txt2img" element={<TextToImage></TextToImage>}></Route>
@@ -130,7 +128,7 @@ function App() {
         <Toast />
         <Spinner />
         <Confirm />
-      </Wrapper>
+      </>
     </>
   );
 }

@@ -1,6 +1,6 @@
 import spinner from '../img/spinner.webp';
 import styled from 'styled-components';
-import Dim from './Dim';
+import Blanket from './Blanket';
 import { useAppSelector } from '../store/store';
 import { selectLoadingSpinner } from '../store/slices/loadingSpinner';
 import { alignItemCenter, flex, flexColumn, justiCenter } from '../style/cssCommon';
@@ -48,7 +48,7 @@ const Spinner = () => {
     <>
       {active && (
         <>
-          <Dim />
+          <Blanket />
           <SpinnerWrapper>
             <SpinnerImg src={spinner} alt="loading" />
             {msg}

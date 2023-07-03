@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import Wrapper from '../components/Wrapper';
 import { useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import { selectBridgeMessage, setBridgeMessage } from '../store/slices/bridge';
@@ -140,7 +139,7 @@ export default function AITest() {
   };
 
   return (
-    <Wrapper>
+    <>
       <Body>
         <Result>
           {bridgeSelector.map((item, index) => (
@@ -159,6 +158,6 @@ export default function AITest() {
           <TestButton onClick={onClosePanel}>closePanel</TestButton>
         </Row>
       </Body>
-    </Wrapper>
+    </>
   );
 }
