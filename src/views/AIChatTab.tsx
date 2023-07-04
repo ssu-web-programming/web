@@ -607,7 +607,7 @@ const AIChatTab = (props: WriteTabProps) => {
                     </RowBox>
 
                     {chat.id !== loadingInfo?.id && (
-                      <Grid col={2}>
+                      <Grid col={retryOrigin !== chat.id ? 2 : 1}>
                         {retryOrigin !== chat.id && (
                           <CreditButton
                             width="full"
