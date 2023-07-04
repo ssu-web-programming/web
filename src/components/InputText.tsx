@@ -15,7 +15,7 @@ const Body = styled.input<{ size: number }>`
 
 interface InputProps {
   value: string;
-  onChange: Function;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   size?: number;
   placeholder?: string;
 }
@@ -26,7 +26,7 @@ export default function InputText(props: InputProps) {
     <Body
       type="text"
       value={value}
-      onChange={(e) => onChange(e.target.value)}
+      onChange={onChange}
       placeholder={placeholder ? placeholder : undefined}
       size={size || DEFAULT_SIZE}></Body>
   );

@@ -26,7 +26,7 @@ interface IconProps {
   size?: IconSize | number;
   iconSrc: any;
   cssExt?: FlattenSimpleInterpolation;
-  onClick?: Function;
+  onClick?: (e: React.MouseEvent) => void;
   imgCssExt?: FlattenSimpleInterpolation;
 }
 

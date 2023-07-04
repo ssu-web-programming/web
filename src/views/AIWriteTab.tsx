@@ -14,8 +14,7 @@ import {
   updateWriteHistory
 } from '../store/slices/writeHistorySlice';
 import { useAppSelector } from '../store/store';
-import { flex, flexColumn, grid, grid3Btn } from '../style/cssCommon';
-import { useMoveChatTab } from '../components/hooks/useMovePage';
+import { flex, flexColumn } from '../style/cssCommon';
 import { setCreating } from '../store/slices/tabSlice';
 import { JSON_CONTENT_TYPE, CHAT_STREAM_API } from '../api/constant';
 import { calLeftCredit } from '../util/common';
@@ -25,15 +24,7 @@ import useErrorHandle from '../components/hooks/useErrorHandle';
 import { GPT_EXCEEDED_LIMIT } from '../error/error';
 import AiWriteResult from '../components/aiWrite/AiWriteResult';
 import AIWriteInput from '../components/aiWrite/AIWriteInput';
-import { WriteOptions } from '../components/FuncRecBox';
-
-export const Grid3BtnContainer = styled.div`
-  ${grid}
-  ${grid3Btn}
-
-  width: 100%;
-  gap: 8px;
-`;
+import { WriteOptions } from '../components/chat/RecommendBox/FormRec';
 
 const TabWrapper = styled.div`
   ${flex}
@@ -57,8 +48,6 @@ const AIWriteTab = (props: WriteTabProps) => {
 
   const stopRef = useRef<boolean>(false);
   const endRef = useRef<any>();
-
-  const moveChat = useMoveChatTab();
 
   const dispatch = useDispatch();
   const { history, currentWriteId } = useAppSelector(selectWriteHistorySlice);
@@ -210,7 +199,6 @@ const AIWriteTab = (props: WriteTabProps) => {
           onClickStop={onClickStop}
           currentWriteId={currentWriteId}
           submitSubject={submitSubject}
-          moveChat={moveChat}
         />
       )}
     </TabWrapper>

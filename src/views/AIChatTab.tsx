@@ -13,10 +13,8 @@ import {
   updateChat
 } from '../store/slices/chatHistorySlice';
 import { v4 as uuidv4 } from 'uuid';
-import Button from '../components/buttons/Button';
-import OpenAILinkText from '../components/OpenAILinkText';
 import ChangeExampleButton from '../components/buttons/ChangeExampleButton';
-import FuncRecBox, { ChatOptions, REC_ID_LIST, RowWrapBox } from '../components/FuncRecBox';
+import ChatRecommend, { RowWrapBox } from '../components/chat/RecommendBox/ChatRecommend';
 import {
   activeRecFunc,
   inactiveRecFunc,
@@ -38,18 +36,15 @@ import {
   flex
 } from '../style/cssCommon';
 import { calcToken, getElValue } from '../api/usePostSplunkLog';
-import { selectTabSlice, setCreating } from '../store/slices/tabSlice';
+import { setCreating } from '../store/slices/tabSlice';
 import { CHAT_STREAM_API, JSON_CONTENT_TYPE } from '../api/constant';
-import { calLeftCredit, insertDoc } from '../util/common';
-import icon_sand from '../img/ico_send.svg';
+import { calLeftCredit } from '../util/common';
 import useApiWrapper from '../api/useApiWrapper';
-import icon_credit from '../img/ico_credit.svg';
 import { useTranslation } from 'react-i18next';
 import useErrorHandle from '../components/hooks/useErrorHandle';
-import { formRecList } from '../components/FuncRecBox';
 import { GPT_EXCEEDED_LIMIT } from '../error/error';
-import CreditButton from '../components/buttons/CreditButton';
-import Grid from '../components/layout/Grid';
+import SendCoinButton from '../components/buttons/SendCoinButton';
+import { REC_ID_LIST } from '../components/chat/RecommendBox/FunctionRec';
 
 const TEXT_MAX_HEIGHT = 268;
 
@@ -78,6 +73,8 @@ const ChatListWrapper = styled.div<{ isLoading: boolean }>`
   box-sizing: border-box;
   overflow-x: hidden;
   padding-bottom: ${({ isLoading }: { isLoading: boolean }) => (isLoading ? '0px' : '66px')};
+  gap: 16px;
+  padding-top: 16px;
 `;
 
 const FloatingBox = styled.div`
@@ -143,8 +140,8 @@ export const RightBox = styled.div<{ cssExt?: FlattenSimpleInterpolation }>`
   ${alignItemCenter}
 
   align-self: flex-end;
-  /* margin-top: 9px; */
   gap: 11px;
+
   ${({ cssExt }) => cssExt && cssExt}
 `;
 
@@ -159,7 +156,6 @@ const Info = styled.div`
   font-size: 12px;
   height: 48px;
   box-sizing: border-box;
-  font-size: 12px;
   width: 100%;
   gap: 8px;
 `;
@@ -169,8 +165,7 @@ const CenterBox = styled.div`
   ${justiCenter};
 
   width: 100%;
-  margin-bottom: 16px;
-  margin-top: 16px;
+  margin: 16px 0px 16px 0px;
 `;
 
 export const ColumDivider = styled.div`
@@ -179,32 +174,31 @@ export const ColumDivider = styled.div`
   background-color: var(--ai-purple-97-list-over);
 `;
 
-const SubmitButton = styled.button<{ disabled: boolean }>`
-  ${flex}
-  ${alignItemCenter}
-  ${justiCenter}
-  align-self: flex-end;
+const TextBox = styled(RowBox)`
+  textarea {
+    ${flex}
+    ${justiCenter}
+    ${flexGrow}
 
-  margin: 0;
-  border: none;
-  background-image: linear-gradient(to left, #a86cea, #6f3ad0 100%);
-  padding: 6px 10px;
-  width: 40px;
-  height: 32px;
-  box-sizing: border-box;
-  border-radius: 4px;
-  margin-right: 8px;
-  margin-bottom: 8px;
-  &:hover {
-    cursor: pointer;
+    width: fit-content;
+    border: 0;
+    max-height: ${TEXT_MAX_HEIGHT}px;
+    height: 48px;
+    padding: 14px 16px 14px 16px;
+    box-sizing: border-box;
+
+    &:disabled {
+      background-color: #fff;
+      font-size: 13px;
+    }
   }
+`;
 
-  ${({ disabled }) =>
-    disabled &&
-    css`
-      pointer-events: none;
-      opacity: 0.3;
-    `}
+const InputBottomArea = styled(RowWrapBox)`
+  height: 34px;
+  padding: 0px 3px 0px 9px;
+  box-sizing: border-box;
+  border-top: 1px solid var(--ai-purple-99-bg-light);
 `;
 
 export const exampleList = [
@@ -228,6 +222,10 @@ const chatTipList = [
   'DateInfo'
 ];
 
+export interface ChatOptions {
+  input: string;
+}
+
 interface WriteTabProps {
   options: ChatOptions;
   setOptions: React.Dispatch<React.SetStateAction<ChatOptions>>;
@@ -238,7 +236,6 @@ const AIChatTab = (props: WriteTabProps) => {
   const apiWrapper = useApiWrapper();
   const { history: chatHistory, defaultInput } = useAppSelector(selectChatHistory);
   const { selectedRecFunction, selectedSubRecFunction } = useAppSelector(selectRecFuncSlice);
-  const { creating } = useAppSelector(selectTabSlice);
   const { t } = useTranslation();
   const errorHandle = useErrorHandle();
 
@@ -247,7 +244,7 @@ const AIChatTab = (props: WriteTabProps) => {
     setOptions: setChatInput
   } = props;
   const [isActiveInput, setIsActiveInput] = useState<boolean>(false);
-  const [loadingInfo, setLoadingInfo] = useState<{ id: string; msg: string } | null>(null);
+  const [loadingId, setLoadingId] = useState<string | null>(null);
   const [retryOrigin, setRetryOrigin] = useState<string | null>(null);
   const [chatTip, setChatTip] = useState<string>(
     chatTipList[Math.floor(Math.random() * chatTipList.length)]
@@ -269,9 +266,14 @@ const AIChatTab = (props: WriteTabProps) => {
   };
 
   useEffect(() => {
+    if (isActiveInput && textRef?.current) {
+      textRef.current.focus();
+      handleResizeHeight();
+    }
+
     // update chat tip
     const timer = setInterval(() => {
-      if (!loadingInfo && chatInput.length === 0)
+      if (!loadingId && chatInput.length === 0)
         setChatTip(chatTipList[Math.floor(Math.random() * chatTipList.length)]);
     }, 5000);
 
@@ -283,7 +285,7 @@ const AIChatTab = (props: WriteTabProps) => {
   }, [isActiveInput]);
 
   useEffect(() => {
-    if (defaultInput && defaultInput.length > 0 && !loadingInfo) {
+    if (defaultInput && defaultInput.length > 0 && !loadingId) {
       // setActiveInput(true);
       setChatInput({ input: defaultInput });
       textRef?.current?.focus();
@@ -295,7 +297,7 @@ const AIChatTab = (props: WriteTabProps) => {
 
   useEffect(() => {
     chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
-  }, [chatHistory, isActiveInput, loadingInfo]);
+  }, [chatHistory, isActiveInput, loadingId]);
 
   useEffect(() => {
     if (defaultInput) setIsDefaultInput(true);
@@ -310,13 +312,6 @@ const AIChatTab = (props: WriteTabProps) => {
   useEffect(() => {
     handleResizeHeight();
   }, [chatInput]);
-
-  useEffect(() => {
-    if (isActiveInput && textRef?.current) {
-      textRef.current.focus();
-      handleResizeHeight();
-    }
-  }, [isActiveInput]);
 
   const isFormRec = useMemo(() => {
     return (
@@ -334,7 +329,7 @@ const AIChatTab = (props: WriteTabProps) => {
   };
 
   const validCheckSubmit = () => {
-    if (selectedRecFunction?.hasSubRec && !selectedSubRecFunction) return false;
+    if (selectedRecFunction?.subList && !selectedSubRecFunction) return false;
 
     if (chatHistory.length === 0 && chatInput.length === 0) return false;
     else if (chatInput.length === 0 && !selectedRecFunction) return false;
@@ -390,10 +385,8 @@ const AIChatTab = (props: WriteTabProps) => {
       : chatHistory[chatHistory.length - 1].result;
 
     dispatch(setCreating('Chating'));
-    setChatInput({ input: '' });
 
-    const msg = selectLoadingMsg(chat ? true : false);
-    setLoadingInfo({ id: assistantId, msg: msg });
+    setLoadingId(assistantId);
 
     handleResizeHeight();
     if (textRef.current) textRef.current.style.height = 'auto';
@@ -483,6 +476,7 @@ const AIChatTab = (props: WriteTabProps) => {
         resultText += decodeStr;
       }
 
+      setChatInput({ input: '' });
       dispatch(initRecFunc());
     } catch (error: any) {
       errorHandle(error);
@@ -510,146 +504,48 @@ const AIChatTab = (props: WriteTabProps) => {
         });
       }
 
-      setLoadingInfo(null);
+      setLoadingId(null);
       stopRef.current = false;
       dispatch(setCreating('none'));
       // toggleActiveInput(false);
 
-      if (chat) setRetryOrigin(null);
+      setRetryOrigin(null);
     }
   };
 
-  const selectLoadingMsg = (isRetry: boolean) => {
-    if (isRetry) return t(`ChatingTab.LoadingMsg.ReCreating`);
-
-    const isFirstRec = formRecList.filter((rec) => rec.id === selectedRecFunction?.id).length > 0;
-    if (
-      isFirstRec ||
-      (!isFirstRec && !selectedRecFunction && chatInput.length > 0) ||
-      (selectedRecFunction?.id === REC_ID_LIST.START_NEW_CHATING && chatInput.length > 0)
-    ) {
-      return t(`ChatingTab.LoadingMsg.Creating`);
-    }
-
-    let msg = '';
-
-    switch (selectedRecFunction?.id) {
-      case REC_ID_LIST.RESUME_WRITING:
-        if (chatInput.length > 0) msg = t(`ChatingTab.LoadingMsg.ContitnueWriting_input`);
-        else msg = t(`ChatingTab.LoadingMsg.ContitnueWriting`);
-        break;
-      case REC_ID_LIST.SUMMARY:
-        if (chatInput.length > 0) msg = t(`ChatingTab.LoadingMsg.Summary_input`);
-        else msg = t(`ChatingTab.LoadingMsg.Summary`);
-        break;
-      case REC_ID_LIST.TRANSLATE:
-        if (chatInput.length > 0 && selectedSubRecFunction)
-          msg = t(`ChatingTab.LoadingMsg.Translate_input`, {
-            language: t(`ChatingTab.FuncRecBtn.SubFuncRec.${selectedSubRecFunction.title}`)
-          });
-        else if (selectedSubRecFunction)
-          msg = t(`ChatingTab.LoadingMsg.Translate`, {
-            language: t(`ChatingTab.FuncRecBtn.SubFuncRec.${selectedSubRecFunction.title}`)
-          });
-        break;
-      case REC_ID_LIST.CHANGE_TEXT_STYLE:
-        if (chatInput.length > 0 && selectedSubRecFunction)
-          msg = t(`ChatingTab.LoadingMsg.ChangeStyle_input`, {
-            style: t(`ChatingTab.FuncRecBtn.SubFuncRec.${selectedSubRecFunction.title}`)
-          });
-        else if (selectedSubRecFunction)
-          msg = t(`ChatingTab.LoadingMsg.ChangeStyle`, {
-            style: t(`ChatingTab.FuncRecBtn.SubFuncRec.${selectedSubRecFunction.title}`)
-          });
-        break;
-      case REC_ID_LIST.MODIFY_TEXT:
-        if (chatInput.length > 0) msg = t(`ChatingTab.LoadingMsg.Grammar_input`);
-        else msg = t(`ChatingTab.LoadingMsg.Grammar`);
-        break;
-    }
-
-    return msg;
-  };
-
-  const placeholder = t(`ChatingTab.InputPlaceholder`);
+  const placeholder = useMemo(() => t(`ChatingTab.InputPlaceholder`), [t]);
 
   return (
     <Wrapper>
       <ChatListWrapper
         style={{ position: 'relative' }}
-        isLoading={loadingInfo?.id ? true : false}
+        isLoading={loadingId ? true : false}
         onClick={(e) => {
           toggleActiveInput(false);
           // dispatch(closeRecFunc());
         }}>
-        <SpeechBubble loadingMsg={undefined} text={t(`ChatingTab.AIGreeting`)} isUser={false} />
+        <SpeechBubble
+          chat={{
+            id: 'info',
+            result: t(`ChatingTab.AIGreeting`),
+            role: 'info',
+            input: t(`ChatingTab.AIGreeting`)
+          }}
+        />
         {chatHistory.map((chat) => (
           <SpeechBubble
-            loadingMsg={loadingInfo?.id === chat.id ? loadingInfo.msg : undefined}
             key={chat.id}
-            text={chat.role === 'assistant' ? chat.result : chat.input}
-            isUser={chat.role === 'user'}
-            innerChild={
-              // chat.id !== loadingInfo?.id &&
-              chat.role === 'assistant' && (
-                <>
-                  <ColumDivider />
-                  <RowWrapBox
-                    cssExt={css`
-                      padding: 9px 12px 12px 12px;
-                      box-sizing: border-box;
-                      gap: 8px;
-                    `}>
-                    <RowBox>
-                      <BoldLengthWrapper>
-                        {t(`WriteTab.LengthInfo`, { length: chat.result.length })}
-                      </BoldLengthWrapper>
-                    </RowBox>
-
-                    {chat.id !== loadingInfo?.id && (
-                      <Grid col={retryOrigin !== chat.id ? 2 : 1}>
-                        {retryOrigin !== chat.id && (
-                          <CreditButton
-                            width="full"
-                            borderType="gray"
-                            onClick={() => {
-                              submitChat(chat);
-                              setRetryOrigin(chat.id);
-                            }}
-                            disable={creating === 'Chating'}>
-                            {t(`WriteTab.Recreating`)}
-                          </CreditButton>
-                        )}
-                        <Button
-                          width="full"
-                          variant="purpleGradient"
-                          onClick={() => {
-                            insertDoc(chat.result);
-                            dispatch(
-                              activeToast({ type: 'info', msg: t(`ToastMsg.CompleteInsert`) })
-                            );
-                          }}>
-                          {t(`WriteTab.InsertDoc`)}
-                        </Button>
-                      </Grid>
-                    )}
-                  </RowWrapBox>
-                </>
-              )
-            }>
-            {chat.role === 'assistant' && loadingInfo?.id !== chat.id && (
-              <RightBox
-                cssExt={css`
-                  margin-top: 9px;
-                `}>
-                <OpenAILinkText />
-              </RightBox>
-            )}
-          </SpeechBubble>
+            loadingId={loadingId}
+            chat={chat}
+            submitChat={submitChat}
+            retryOrigin={retryOrigin}
+            setRetryOrigin={setRetryOrigin}
+            chatInput={chatInput}
+          />
         ))}
         <div ref={chatEndRef}></div>
       </ChatListWrapper>
-      {loadingInfo && (
+      {loadingId && (
         <CenterBox>
           <StopButton
             onClick={() => {
@@ -660,10 +556,10 @@ const AIChatTab = (props: WriteTabProps) => {
       )}
       <div style={{ position: 'relative', display: 'flex' }}>
         <FloatingBox>
-          {isActiveInput && !loadingInfo ? (
-            <FuncRecBox isFormRec={isFormRec} />
+          {isActiveInput && !loadingId ? (
+            <ChatRecommend isFormRec={isFormRec} />
           ) : (
-            !loadingInfo &&
+            !loadingId &&
             chatInput.length === 0 && (
               <Info>
                 <Icon iconSrc={icon_ai} size="sm" />
@@ -674,89 +570,52 @@ const AIChatTab = (props: WriteTabProps) => {
         </FloatingBox>
 
         <InputBox
-          activeInputWrap={isActiveInput && !loadingInfo}
+          activeInputWrap={isActiveInput && !loadingId}
           style={{ position: 'relative', display: 'flex' }}>
-          <RowBox
+          <TextBox
             onClick={() => {
               toggleActiveInput(true);
             }}>
             <TextArea
-              disable={loadingInfo !== null}
-              placeholder={!loadingInfo ? placeholder || '' : ''}
+              disable={loadingId !== null}
+              placeholder={!loadingId ? placeholder || '' : ''}
               textRef={textRef}
               rows={1}
-              cssExt={css`
-                ${flex}
-                ${justiCenter}
-                ${flexGrow}
-
-                width: fit-content;
-                border: 0;
-                max-height: ${TEXT_MAX_HEIGHT}px;
-                height: 48px;
-                padding: 14px 16px 14px 16px;
-                box-sizing: border-box;
-
-                &:disabled {
-                  background-color: #fff;
-                  font-size: 13px;
-                }
-              `}
-              value={chatInput}
+              value={loadingId !== null ? '' : chatInput}
               onKeyDown={(e: React.KeyboardEvent<HTMLElement>) => {
                 if (e.key === 'Enter' && e.ctrlKey) {
                   if (validCheckSubmit()) {
                     setIsActiveInput(false);
-
                     submitChat();
                   } else {
                     e.preventDefault();
                   }
                 }
               }}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
                 setChatInput({ input: e.target.value.slice(0, INPUT_MAX_LENGTH) });
-
                 if (isDefaultInput && e.target.value.length === 0) setIsDefaultInput(false);
               }}
             />
-            {!loadingInfo && isActiveInput && (
-              <SubmitButton
+            {!loadingId && isActiveInput && (
+              <SendCoinButton
                 disabled={!validCheckSubmit()}
                 onClick={() => {
                   if (validCheckSubmit()) {
                     setIsActiveInput(false);
-
                     submitChat();
                   }
                 }}
-                style={{ display: 'flex', position: 'relative', cursor: 'pointer' }}>
-                <Icon iconSrc={icon_sand} size="md" />
-                <Icon
-                  iconSrc={icon_credit}
-                  size={14}
-                  cssExt={css`
-                    position: absolute;
-                    bottom: 3px;
-                    right: 4px;
-                  `}
-                />
-              </SubmitButton>
+              />
             )}
-          </RowBox>
-          {!loadingInfo && isActiveInput && (
-            <RowWrapBox
-              cssExt={css`
-                height: 34px;
-                padding: 0px 3px 0px 9px;
-                box-sizing: border-box;
-                border-top: 1px solid var(--ai-purple-99-bg-light);
-              `}>
+          </TextBox>
+          {!loadingId && isActiveInput && (
+            <InputBottomArea>
               <LengthWrapper isError={chatInput.length >= INPUT_MAX_LENGTH}>
                 {chatInput.length}/{INPUT_MAX_LENGTH}
               </LengthWrapper>
               <ChangeExampleButton disable={chatInput.length > 0} onClick={refreshExampleText} />
-            </RowWrapBox>
+            </InputBottomArea>
           )}
         </InputBox>
       </div>

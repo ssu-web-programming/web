@@ -1,7 +1,7 @@
 import styled, { FlattenSimpleInterpolation } from 'styled-components';
 import { alignItemCenter, flex } from '../style/cssCommon';
 
-const TextAreaWrapper = styled.textarea<{ cssExt?: FlattenSimpleInterpolation }>`
+const Textarea = styled.textarea<{ cssExt?: FlattenSimpleInterpolation }>`
   resize: none;
   outline: none;
   ::placeholder {
@@ -17,41 +17,39 @@ const TextAreaWrapper = styled.textarea<{ cssExt?: FlattenSimpleInterpolation }>
 
 interface TextAreaProps {
   value: string | number;
-  onChange?: Function;
-  onClick?: Function;
-  onKeyDown?: Function;
+  onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  onClick?: (e: React.MouseEvent) => void;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLElement>) => void;
   cssExt?: FlattenSimpleInterpolation;
   rows?: number;
   textRef?: React.RefObject<HTMLTextAreaElement> | null;
   disable?: boolean;
-  onBlur?: Function;
+  onBlur?: (e: React.FocusEvent<HTMLElement>) => void;
   placeholder?: string;
 }
 
 const TextArea = ({
   value,
-  onChange,
-  onClick,
-  onKeyDown,
+  onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {},
+  onClick = (e: React.MouseEvent) => {},
+  onKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {},
+  onBlur = (e: React.FocusEvent<HTMLElement>) => {},
   cssExt,
   rows = 5,
   textRef,
   disable = false,
-  onBlur,
   placeholder
 }: TextAreaProps) => {
   return (
-    <TextAreaWrapper
-      onClick={(e) => onClick && onClick(e)}
+    <Textarea
+      onClick={onClick}
       placeholder={placeholder}
-      onBlur={() => {
-        onBlur && onBlur();
-      }}
+      onBlur={onBlur}
       ref={textRef}
       cssExt={cssExt}
       value={value}
-      onChange={(e) => onChange && onChange(e)}
-      onKeyDown={(e) => onKeyDown && onKeyDown(e)}
+      onChange={onChange}
+      onKeyDown={onKeyDown}
       rows={rows}
       disabled={disable}
     />

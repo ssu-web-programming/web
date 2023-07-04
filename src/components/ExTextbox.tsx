@@ -1,10 +1,10 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import SubTitle from './SubTitle';
 import TextArea from './TextArea';
-import { LengthWrapper, RowBox } from '../views/AIChatTab';
+import { LengthWrapper } from '../views/AIChatTab';
 import ChangeExampleButton from './buttons/ChangeExampleButton';
 import { useState } from 'react';
-import { flex, flexColumn } from '../style/cssCommon';
+import { alignItemCenter, flex, flexColumn, justiSpaceBetween } from '../style/cssCommon';
 import { useTranslation } from 'react-i18next';
 
 const InputArea = styled.div<{ activeBorder: boolean }>`
@@ -19,9 +19,20 @@ const InputArea = styled.div<{ activeBorder: boolean }>`
   border: ${({ activeBorder }: { activeBorder: boolean }) =>
     activeBorder ? 'solid 1px var(--ai-purple-50-main)' : 'solid 1px var(--gray-gray-50)'};
   width: 100%;
+
+  textarea {
+    box-sizing: border-box;
+    border: none;
+    margin: 8px 12px 8px 12px;
+  }
 `;
 
-const TopBorer = styled(RowBox)`
+const TopBorer = styled.div`
+  ${flex}
+  ${justiSpaceBetween}
+  ${alignItemCenter}
+  width: 100%;
+
   border-top: 1px solid #e8ebed;
   width: 100%;
   box-sizing: border-box;
@@ -32,8 +43,8 @@ const TopBorer = styled(RowBox)`
 interface ExTextboxProps {
   subTitle?: string;
   value: string;
-  maxtTextLen: number;
-  setValue: Function;
+  maxTextLen: number;
+  setValue: (val: string) => void;
   exampleList: string[];
   placeholder?: string;
   rows?: number;
@@ -44,7 +55,7 @@ const ExTextbox = ({
   value,
   setValue,
   exampleList,
-  maxtTextLen,
+  maxTextLen,
   placeholder,
   rows
 }: ExTextboxProps) => {
@@ -53,7 +64,7 @@ const ExTextbox = ({
 
   const refreshExampleText = () => {
     const text = exampleList[Math.floor(Math.random() * exampleList.length)];
-    setValue(t(`ExampleList.${text}`));
+    setValue(t(`ExampleList.${text}`) || '');
   };
 
   return (
@@ -70,18 +81,13 @@ const ExTextbox = ({
           rows={rows}
           placeholder={placeholder}
           value={value}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            setValue && setValue(e.currentTarget.value.slice(0, maxtTextLen));
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+            setValue(e.currentTarget.value.slice(0, maxTextLen));
           }}
-          cssExt={css`
-            box-sizing: border-box;
-            border: none;
-            margin: 8px 12px 8px 12px;
-          `}
         />
         <TopBorer>
-          <LengthWrapper isError={value.length >= maxtTextLen}>
-            {value.length}/{maxtTextLen}
+          <LengthWrapper isError={value.length >= maxTextLen}>
+            {value.length}/{maxTextLen}
           </LengthWrapper>
           <ChangeExampleButton disable={value.length > 0} onClick={refreshExampleText} />
         </TopBorer>

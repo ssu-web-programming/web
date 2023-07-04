@@ -6,9 +6,9 @@
   "CreateImage": "이미지 생성하기",
   "ShowExam": "예시문구 보기",
   "FormList": {
-    "Sentence": "문장",
-    "List": "목차",
-    "Table": "표"
+    "paragraph": "문장",
+    "list": "목차",
+    "table": "표"
   },
   "WriteTab": {
     "WriteTopic": "주제 작성하기",
@@ -58,12 +58,12 @@
       "Grammar_input": "작성한 내용을 반영해서 맞춤법/문법 수정을 시작합니다…"
     },
     "FuncRecBtn": {
-      "AddContent": "이어쓰기",
-      "Summary": "요약하기",
-      "Translate": "번역하기",
-      "ChangeStyle": "문체 변경하기",
-      "Grammar": "맞춤법/문법 수정하기",
-      "ChatReset": "새로운 대화 시작하기",
+      "resume_writing": "이어쓰기",
+      "summary": "요약하기",
+      "translate": "번역하기",
+      "change_text_style": "문체 변경하기",
+      "modify_text": "맞춤법/문법 수정하기",
+      "start_new_chating": "새로운 대화 시작하기",
       "SubFuncRec": {
         "Korean": "한국어",
         "English": "영어",

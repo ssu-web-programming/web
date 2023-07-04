@@ -156,8 +156,3 @@ export const grid = css`
   display: -webkit-grid;
   display: grid;
 `;
-
-export const grid3Btn = css`
-  -webkit-grid-columns: 1fr 1fr 1fr;
-  grid-template-columns: 1fr 1fr 1fr;
-`;

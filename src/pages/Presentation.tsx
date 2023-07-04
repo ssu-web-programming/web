@@ -57,7 +57,12 @@ export default function Presentation() {
         <Body>
           <InputItem>
             <Title>주제 입력</Title>
-            <InputText size={600} value={subject} onChange={setSubject}></InputText>
+            <InputText
+              size={600}
+              value={subject}
+              onChange={(e) => {
+                setSubject(e.target.value);
+              }}></InputText>
           </InputItem>
           <InputItem>
             <Title>{t('PageCount')}</Title>
