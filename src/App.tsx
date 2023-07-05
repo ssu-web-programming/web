@@ -19,6 +19,7 @@ import Confirm from './components/Confirm';
 import useApiWrapper from './api/useApiWrapper';
 import { BANNER_ACTIVE_API } from './api/constant';
 import { setBanner } from './store/slices/banner';
+import Bridge from './util/bridge';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -101,7 +102,7 @@ function App() {
       },
       false
     );
-    window._Bridge.initComplete();
+    Bridge.callBridgeApi('initComplete');
   }, []);
 
   const setPSEventActive = async () => {

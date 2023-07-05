@@ -1,5 +1,6 @@
 import { load } from 'cheerio';
 import { marked } from 'marked';
+import Bridge from './bridge';
 
 const htmlBody = `
 <html>
@@ -58,7 +59,7 @@ export const markdownToHtml = async (markdown: string) => {
 export const insertDoc = async (markdown: string) => {
   try {
     const html = await markdownToHtml(markdown);
-    await window._Bridge.insertHtml(html);
+    await Bridge.callBridgeApi('insertHtml', html);
   } catch (error) {}
 };
 
@@ -73,5 +74,5 @@ export const calLeftCredit = (headers: any) => {
 };
 
 export const openNewWindow = (url: string) => {
-  window._Bridge.openWindow(url);
+  Bridge.callBridgeApi('openWindow', url);
 };
