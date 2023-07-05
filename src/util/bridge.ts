@@ -1,3 +1,12 @@
+import { AppDispatch, RootState, useAppDispatch } from '../store/store';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import { useMoveChatTab } from '../components/hooks/useMovePage';
+import { updateT2ICurItemIndex, updateT2ICurListId } from '../store/slices/txt2imgHistory';
+import { activeToast } from '../store/slices/toastSlice';
+import gI18n, { convertLangFromLangCode } from '../locale';
+import { createAsyncThunk } from '@reduxjs/toolkit';
+
 const UA_PREFIX: string = `__polaris_office_ai_`;
 
 enum ClientType {
@@ -122,7 +131,6 @@ declare global {
   }
 }
 
-// TODO : def body type
 interface CallbackMessage {
   cmdID: BridgeItemID;
   body: any;
@@ -133,31 +141,108 @@ interface ReceiveMessage {
   body: string;
 }
 
-export const initBridgeListener = () => {
-  window.callbackMessage = (msg: CallbackMessage) => {
+export const useInitBridgeListener = () => {
+  const dispatch = useAppDispatch();
+  const { i18n, t } = useTranslation();
+
+  const navigate = useNavigate();
+  const movePage = useMoveChatTab();
+
+  const changePanel = createAsyncThunk<
+    void,
+    ReceiveMessage,
+    {
+      dispatch: AppDispatch;
+      state: RootState;
+    }
+  >('changePanel', async ({ cmd, body }, thunkAPI) => {
+    const {
+      tab: { creating }
+    } = thunkAPI.getState();
+
+    if (creating === 'none') {
+      let path = ``;
+      if (cmd === `openAiTools`) {
+        path = `/aiWrite`;
+        if (body && body !== '') {
+          movePage(body);
+        }
+      } else {
+        path = `/txt2img`;
+        if (body && body !== '') {
+          thunkAPI.dispatch(updateT2ICurListId(null));
+          thunkAPI.dispatch(updateT2ICurItemIndex(null));
+        }
+      }
+      navigate(path, {
+        state: { body }
+      });
+    } else {
+      thunkAPI.dispatch(
+        activeToast({
+          type: 'error',
+          msg: t(`ToastMsg.TabLoadedAndWait`, { tab: t(creating) })
+        })
+      );
+    }
+  });
+
+  const procMsg = async (msg: any) => {
     try {
-      const id = msg.cmdID;
-      if (BridgeList[id]) {
-        const item = BridgeList[id];
-        if (item && item.callback) {
-          item.callback(msg, id);
+      const { cmd, body } = msg;
+      if (cmd && cmd !== '') {
+        switch (cmd) {
+          case 'openAiTools':
+          case 'openTextToImg': {
+            dispatch(changePanel({ cmd, body }));
+            break;
+          }
+          case 'showToast': {
+            const msg = i18n.t(body);
+            dispatch(activeToast({ type: 'error', msg }));
+            break;
+          }
+          case 'changeLang': {
+            const lang = convertLangFromLangCode(body);
+            gI18n.changeLanguage(lang);
+            break;
+          }
+          default: {
+            break;
+          }
         }
       }
     } catch (err) {}
   };
-  window.receiveMessage = (msg: ReceiveMessage) => {
-    document.dispatchEvent(
-      new CustomEvent('CustomBridgeEvent', {
-        detail: msg
-      })
-    );
-  };
 
-  window.addEventListener('message', (msg) => {
-    try {
-      window.callbackMessage(msg.data);
-    } catch (err) {}
-  });
+  return () => {
+    window.callbackMessage = (msg: CallbackMessage) => {
+      try {
+        const id = msg.cmdID;
+        if (BridgeList[id]) {
+          const item = BridgeList[id];
+          if (item && item.callback) {
+            item.callback(msg, id);
+          }
+        }
+      } catch (err) {}
+    };
+    window.receiveMessage = (msg: ReceiveMessage) => {
+      procMsg(msg);
+    };
+
+    window.addEventListener('message', (msg) => {
+      try {
+        if (msg.data.cmdID) {
+          window.callbackMessage(msg.data);
+        } else {
+          procMsg(msg.data);
+        }
+      } catch (err) {}
+    });
+
+    Bridge.callBridgeApi('initComplete');
+  };
 };
 
 interface CheckSessionResponse {
@@ -242,65 +327,6 @@ const Bridge = {
     const apiArg = arg && typeof arg !== 'string' ? await fileToString(arg) : arg;
     callApi(api, apiArg);
   }
-
-  // initComplete: () => {
-  //   try {
-  //     const delegator = getDelegator('initComplete');
-  //     delegator();
-  //   } catch (err) {}
-  // },
-
-  // insertText: (text: string) => {
-  //   try {
-  //     const delegator = getDelegator('insertText', text);
-  //     delegator();
-  //   } catch (err) {}
-  // },
-
-  // insertHtml: (html: string) => {
-  //   try {
-  //     const delegator = getDelegator('insertHtml', html);
-  //     delegator();
-  //   } catch (err) {}
-  // },
-
-  // downloadImage: async (img: Blob) => {
-  //   try {
-  //     const text = await fileToString(img);
-  //     const delegator = getDelegator('downloadImage', text);
-  //     delegator();
-  //   } catch (err) {}
-  // },
-
-  // insertImage: async (img: Blob) => {
-  //   try {
-  //     const text = await fileToString(img);
-  //     const delegator = getDelegator('insertImage', text);
-  //     delegator();
-  //   } catch (err) {}
-  // },
-
-  // openWindow: (target: string) => {
-  //   try {
-  //     const delegator = getDelegator('openWindow', target);
-  //     delegator();
-  //   } catch (err) {}
-  // },
-
-  // openDoc: async (doc: Blob) => {
-  //   try {
-  //     const text = await fileToString(doc);
-  //     const delegator = getDelegator('openDoc', text);
-  //     delegator();
-  //   } catch (err) {}
-  // },
-
-  // closePanel: () => {
-  //   try {
-  //     const delegator = getDelegator('closePanel');
-  //     delegator();
-  //   } catch (err) {}
-  // }
 };
 
 export default Bridge;

@@ -9,7 +9,6 @@ import store from './store/store';
 import './locale';
 import { ThemeProvider } from 'styled-components';
 import { selectTheme } from './theme/theme';
-import { initBridgeListener } from './util/bridge';
 
 declare global {
   interface Window {
@@ -18,8 +17,6 @@ declare global {
     chrome?: any;
   }
 }
-
-initBridgeListener();
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(

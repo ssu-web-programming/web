@@ -5,6 +5,7 @@ import { selectBridgeMessage, setBridgeMessage } from '../store/slices/bridge';
 import { flex, flexColumn, flexGrow, flexShrink } from '../style/cssCommon';
 import { activeToast } from '../store/slices/toastSlice';
 import NoCredit from '../components/toast/contents/NoCredit';
+import Bridge from '../util/bridge';
 
 const Body = styled.div`
   ${flex}
@@ -46,17 +47,6 @@ const Row = styled.div`
   box-sizing: border-box;
 `;
 
-// interface BridgeMessage {
-//   cmd: string;
-//   type: string;
-//   body: string;
-// }
-
-declare global {
-  var _Bridge: any;
-  var fileToString: any;
-}
-
 export default function AITest() {
   const dispatch = useAppDispatch();
   const bridgeSelector = useAppSelector(selectBridgeMessage);
@@ -72,7 +62,7 @@ export default function AITest() {
   const onInsertText = () => {
     try {
       const text = 'hello world!!';
-      window._Bridge.insertText(text);
+      Bridge.callBridgeApi('insertText', text);
       writeLog(`call insertText : ${text}`);
     } catch (err) {
       writeLog(JSON.stringify(err));
@@ -82,7 +72,7 @@ export default function AITest() {
   const onInsertHtml = () => {
     try {
       const html = '<p>hello</p><h1>월드123!!</h1>';
-      window._Bridge.insertHtml(html);
+      Bridge.callBridgeApi('insertHtml', html);
       writeLog(`call insertHtml : ${html}`);
     } catch (err) {
       writeLog(JSON.stringify(err));
@@ -102,8 +92,8 @@ export default function AITest() {
   const onDownloadImage = async () => {
     try {
       const blob = await getBlob('./bo.png');
-      window._Bridge.downloadImage(blob);
-      writeLog(`call onDownloadImage : ${await window.fileToString(blob)}`);
+      Bridge.callBridgeApi('downloadImage', blob);
+      writeLog(`call onDownloadImage : ...`);
     } catch (err) {
       writeLog(JSON.stringify(err));
     }
@@ -112,8 +102,8 @@ export default function AITest() {
   const onInsertImage = async () => {
     try {
       const blob = await getBlob('./bo.png');
-      window._Bridge.insertImage(blob);
-      writeLog(`call onInsertImage : ${await window.fileToString(blob)}`);
+      Bridge.callBridgeApi('insertImage', blob);
+      writeLog(`call onInsertImage : ...`);
     } catch (err) {
       writeLog(JSON.stringify(err));
     }
@@ -122,7 +112,7 @@ export default function AITest() {
   const onOpenDoc = async () => {
     try {
       const blob = await getBlob('./test.pptx');
-      window._Bridge.openDoc(blob);
+      Bridge.callBridgeApi('openDoc', blob);
       writeLog(`call onOpenDoc : type(${blob.type}), size(${blob.size})`);
     } catch (err) {
       writeLog(JSON.stringify(err));
@@ -131,7 +121,7 @@ export default function AITest() {
 
   const onClosePanel = () => {
     try {
-      window._Bridge.closePanel('');
+      Bridge.callBridgeApi('closePanel', '');
       writeLog(`call closePanel`);
     } catch (err) {
       writeLog(JSON.stringify(err));
