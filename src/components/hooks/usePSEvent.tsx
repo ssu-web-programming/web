@@ -6,6 +6,7 @@ import { WriteType } from '../../store/slices/writeHistorySlice';
 import { useAppDispatch } from '../../store/store';
 import { alignItemCenter, flex, flexColumn, justiCenter } from '../../style/cssCommon';
 import { openNewWindow } from '../../util/common';
+import Bridge from '../../util/bridge';
 
 export interface EventFuncType {
   history: WriteType[] | T2IType[];
@@ -83,7 +84,7 @@ const usePSEvent = () => {
     );
 
     try {
-      const resSession = await window._Bridge.checkSession();
+      const resSession = await Bridge.checkSession('PSEvent');
 
       const formData = new FormData();
       formData.append('userId', resSession.userInfo.uid);

@@ -10,6 +10,14 @@ import './locale';
 import { ThemeProvider } from 'styled-components';
 import { selectTheme } from './theme/theme';
 
+declare global {
+  interface Window {
+    Native?: any;
+    webkit?: any;
+    chrome?: any;
+  }
+}
+
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <React.StrictMode>

@@ -19,6 +19,7 @@ import { activeToast } from '../../store/slices/toastSlice';
 import LinkText from '../LinkText';
 import CreditButton from '../buttons/CreditButton';
 import Grid from '../layout/Grid';
+import Bridge from '../../util/bridge';
 
 const GenButton = styled.div<{ disabled: boolean }>`
   ${flex}
@@ -233,7 +234,7 @@ const ImageCreateResult = ({
                   `data:${curHistory.list[currentItemIdx].contentType};base64,${curHistory.list[currentItemIdx].data}`
                 );
                 const blob = await res.blob();
-                window._Bridge.downloadImage(blob);
+                Bridge.callBridgeApi('downloadImage', blob);
               } catch (err) {
                 // TODO : error handle
               }
@@ -253,7 +254,7 @@ const ImageCreateResult = ({
                 `data:${curHistory.list[currentItemIdx].contentType};base64,${curHistory.list[currentItemIdx].data}`
               );
               const blob = await res.blob();
-              window._Bridge.insertImage(blob);
+              Bridge.callBridgeApi('insertImage', blob);
 
               dispatch(
                 activeToast({ type: 'info', msg: t(`Txt2ImgTab.ToastMsg.CompleteInsertImage`) })

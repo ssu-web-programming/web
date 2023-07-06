@@ -1,4 +1,5 @@
 import { ERR_INVALID_SESSION, ERR_NOT_ONLINE } from '../error/error';
+import Bridge from '../util/bridge';
 import usePostSplunkLog from './usePostSplunkLog';
 
 export default function useApiWrapper() {
@@ -7,7 +8,7 @@ export default function useApiWrapper() {
       if (!navigator.onLine) {
         throw new Error(ERR_NOT_ONLINE);
       }
-      const resSession = await window._Bridge.checkSession(api);
+      const resSession = await Bridge.checkSession(api);
       if (!resSession || !resSession.success) {
         throw new Error(ERR_INVALID_SESSION);
       }

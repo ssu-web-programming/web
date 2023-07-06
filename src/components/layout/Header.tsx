@@ -4,6 +4,7 @@ import icon_ai from '../../img/ico_ai.svg';
 import icon_ai_close from '../../img/ico_ai_close.svg';
 import badge_beta from '../../img/badge_beta_ai.svg';
 import { flex, alignItemCenter, justiSpaceBetween } from '../../style/cssCommon';
+import Bridge from '../../util/bridge';
 
 const Contents = styled.div`
   ${flex}
@@ -75,7 +76,11 @@ export default function Header(props: HeaderProps) {
           </>
         )}
       </TitleWrapper>
-      <Icon iconSrc={icon_ai_close} size="lg" onClick={() => window._Bridge.closePanel()} />
+      <Icon
+        iconSrc={icon_ai_close}
+        size="lg"
+        onClick={() => Bridge.callBridgeApi('closePanel', '')}
+      />
     </Contents>
   );
 }
