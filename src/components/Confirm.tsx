@@ -106,7 +106,7 @@ const RetryBtn = styled.button`
 const Confirm = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
-  const { msg, btnFunc, active } = useAppSelector(selectConfirm);
+  const { msg, btnFunc } = useAppSelector(selectConfirm);
 
   const close = () => {
     dispatch(initConfirm());
@@ -114,7 +114,7 @@ const Confirm = () => {
 
   return (
     <>
-      {active && (
+      {msg && (
         <>
           <Blanket />
           <ConfirmBox>

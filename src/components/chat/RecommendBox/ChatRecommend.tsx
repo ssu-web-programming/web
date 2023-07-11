@@ -1,0 +1,189 @@
+import { useState, useEffect } from 'react';
+import styled, { FlattenSimpleInterpolation, css } from 'styled-components';
+import { RowBox } from '../../../views/AIChatTab';
+import { useAppDispatch, useAppSelector } from '../../../store/store';
+import {
+  openRecFunc,
+  closeRecFunc,
+  initRecFunc,
+  selectRecFunc,
+  selectRecFuncSlice,
+  selectSubRecFunc,
+  recType,
+  recSubType
+} from '../../../store/slices/recFuncSlice';
+import icon_arrow_down from '../../../img/ico_arrow_down_small.svg';
+import icon_arrow_up from '../../../img/ico_arrow_up_small.svg';
+import icon_ai from '../../../img/ico_ai.svg';
+import Icon from '../../Icon';
+import {
+  justiCenter,
+  flexColumn,
+  justiSpaceBetween,
+  flexWrap,
+  alignItemCenter,
+  flex
+} from '../../../style/cssCommon';
+import { useTranslation } from 'react-i18next';
+import FunctionRec from './FunctionRec';
+import FormRec, { DEFAULT_WRITE_OPTION_FORM_VALUE } from './FormRec';
+
+const Wrapper = styled.div`
+  ${flex}
+  ${flexColumn}
+  ${justiCenter}
+  
+  width: 100%;
+  border-radius: 0;
+  box-sizing: border-box;
+
+  background-color: rgba(245, 241, 253, 0.7);
+  box-shadow: 0 -2px 8px 0 rgba(111, 58, 208, 0.3);
+  border-radius: 10px 10px 0px 0px;
+  padding: 16px;
+  border-top: solid 1px #fff;
+
+  -webkit-backdrop-filter: blur(10px);
+  -moz-backdrop-filter: blur(10px);
+  -o-backdrop-filter: blur(10px);
+  -ms-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+
+  div {
+    backdrop-filter: none;
+  }
+`;
+
+export const RowWrapBox = styled.div<{ cssExt?: FlattenSimpleInterpolation }>`
+  ${flex}
+  ${flexWrap}
+  ${justiSpaceBetween}
+  ${alignItemCenter}
+
+  width: 100%;
+  ${({ cssExt }) => cssExt && cssExt}
+`;
+
+const OpenedBox = styled(RowWrapBox)`
+  max-height: 138px;
+  overflow-y: auto;
+  padding-top: 16px;
+`;
+
+const CommentWrapper = styled.div`
+  ${flex}
+  ${justiCenter}
+  ${alignItemCenter}
+
+  font-size: 13px;
+  color: var(--gray-gray-90-01);
+  box-sizing: border-box;
+`;
+
+const CommentFlip = ({
+  comment,
+  onClick,
+  icon
+}: {
+  comment: string;
+  onClick: () => void;
+  icon: string;
+}) => {
+  return (
+    <CommentWrapper>
+      <RowBox
+        cssExt={css`
+          ${justiCenter}
+          width: fit-content;
+          line-height: 100%;
+        `}>
+        <Icon size="sm" iconSrc={icon_ai} />
+        {comment}
+      </RowBox>
+      <Icon
+        iconSrc={icon}
+        size="sm"
+        onClick={() => {
+          onClick();
+        }}
+      />
+    </CommentWrapper>
+  );
+};
+
+const ChatRecommend = ({ isFormRec }: { isFormRec: boolean }) => {
+  const dispatch = useAppDispatch();
+  const { selectedRecFunction, selectedSubRecFunction, isOpen } =
+    useAppSelector(selectRecFuncSlice);
+  const { t } = useTranslation();
+
+  const [isSubPage, setIsSubPage] = useState<boolean>(false);
+
+  const setSelectedFunc = (func: recType | null) => {
+    dispatch(selectRecFunc(func));
+  };
+
+  const setSelectedSubFunc = (func: recSubType | null) => {
+    dispatch(selectSubRecFunc(func));
+  };
+
+  const resetAll = () => {
+    dispatch(initRecFunc());
+  };
+
+  const checkSameId = (selectedId: string | undefined, clickId: string): boolean => {
+    if (!selectedId || selectedId !== clickId) return false;
+    return true;
+  };
+
+  useEffect(() => {
+    if (isFormRec) setSelectedFunc({ id: DEFAULT_WRITE_OPTION_FORM_VALUE.id, subList: null });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFormRec]);
+
+  return (
+    <Wrapper>
+      <CommentFlip
+        comment={isFormRec ? t(`ChatingTab.UseVariableForm`) : t(`ChatingTab.UseMoreAI`)}
+        icon={isOpen ? icon_arrow_down : icon_arrow_up}
+        onClick={() => {
+          if (isOpen) dispatch(closeRecFunc());
+          else dispatch(openRecFunc());
+        }}
+      />
+      {isOpen && (
+        <OpenedBox>
+          {isFormRec ? (
+            <FormRec
+              onClick={(rec: recSubType) =>
+                setSelectedFunc({ id: rec.id, icon: rec.icon, subList: null })
+              }
+              selectedRecFunction={selectedRecFunction}
+            />
+          ) : (
+            <FunctionRec
+              isSubPage={isSubPage}
+              onClick={(rec: recType) => {
+                if (rec.subList) setIsSubPage(true);
+
+                setSelectedFunc(checkSameId(selectedRecFunction?.id, rec.id) ? null : rec);
+                setSelectedSubFunc(null);
+              }}
+              onSubClick={(sub: string) => {
+                setSelectedSubFunc(
+                  checkSameId(selectedSubRecFunction?.id, sub) ? null : { id: sub }
+                );
+              }}
+              onClickBack={() => {
+                setIsSubPage(false);
+                resetAll();
+              }}
+            />
+          )}
+        </OpenedBox>
+      )}
+    </Wrapper>
+  );
+};
+
+export default ChatRecommend;

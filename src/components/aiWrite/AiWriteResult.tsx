@@ -28,6 +28,7 @@ import CreditButton from '../buttons/CreditButton';
 import IconTextButton from '../buttons/IconTextButton';
 import Grid from '../layout/Grid';
 import React from 'react';
+import { useMoveChatTab } from '../hooks/useMovePage';
 
 const Wrapper = styled.div`
   ${flex}
@@ -92,19 +93,18 @@ const AiWriteResult = ({
   history,
   onClickStop,
   currentWriteId,
-  submitSubject,
-  moveChat
+  submitSubject
 }: {
   history: WriteType[];
   onClickStop: React.MouseEventHandler<HTMLButtonElement>;
   currentWriteId: string;
-  submitSubject: Function;
-  moveChat: Function;
+  submitSubject: (inputParam?: WriteType) => void;
 }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { creating } = useAppSelector(selectTabSlice);
   const { active: bannerActive } = useAppSelector(selectBanner);
+  const moveChat = useMoveChatTab();
 
   const currentWrite = history.filter((write: any) => write.id === currentWriteId)[0];
   const currentIndex = history.findIndex((write: any) => write.id === currentWriteId);

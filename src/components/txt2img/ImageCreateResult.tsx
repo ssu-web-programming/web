@@ -2,6 +2,7 @@ import { useAppDispatch } from '../../store/store';
 import iconPrev from '../../img/ico_arrow_prev.svg';
 import iconNext from '../../img/ico_arrow_next.svg';
 import {
+  T2IOptionType,
   T2IType,
   updateT2ICurItemIndex,
   updateT2ICurListId
@@ -100,7 +101,7 @@ const ImageCreateResult = ({
   history: T2IType[];
   currentListId: string | null;
   currentItemIdx: number | null;
-  createAiImage: Function;
+  createAiImage: (option: T2IOptionType) => void;
 }) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();

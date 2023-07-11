@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import AIChatTab from '../views/AIChatTab';
+import AIChatTab, { ChatOptions } from '../views/AIChatTab';
 import AIWriteTab from '../views/AIWriteTab';
 import icon_chat from '../img/ico_chat.svg';
 import icon_chat_purple from '../img/ico_chat_purple.svg';
@@ -17,11 +17,10 @@ import Tabs from '../components/tabs/Tabs';
 import MenuItem from '../components/items/MenuItem';
 import TabPanel from '../components/tabs/TabPanel';
 import {
-  ChatOptions,
   DEFAULT_WRITE_OPTION_FORM_VALUE,
   DEFAULT_WRITE_OPTION_LENGTH_VALUE,
   WriteOptions
-} from '../components/FuncRecBox';
+} from '../components/chat/RecommendBox/FormRec';
 import TestDocInsert from '../__test__/TestDocInsert';
 
 const Wrapper = styled.div`

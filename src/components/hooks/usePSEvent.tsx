@@ -12,7 +12,6 @@ export interface EventFuncType {
   history: WriteType[] | T2IType[];
   currentId: string;
   currentIndex?: number;
-  errorCallback?: Function;
   isWrite: boolean;
 }
 
@@ -32,7 +31,7 @@ const ColumBox = styled.div`
 const usePSEvent = () => {
   const dispatch = useAppDispatch();
 
-  const errorCallback = (callback: Function) => {
+  const errorCallback = (callback: () => void) => {
     dispatch(initLoadingSpinner());
     dispatch(
       activeConfirm({

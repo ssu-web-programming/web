@@ -6,9 +6,9 @@
   "CreateImage": "Create image",
   "ShowExam": "example sentences",
   "FormList": {
-    "Sentence": "Sentence",
-    "List": "Table of Contents",
-    "Table": "Table"
+    "paragraph": "Sentence",
+    "list": "Table of Contents",
+    "table": "Table"
   },
   "WriteTab": {
     "WriteTopic": "Draft a topic",
@@ -58,12 +58,12 @@
       "Grammar_input": "Start correcting spelling/grammar with applying your content…"
     },
     "FuncRecBtn": {
-      "AddContent": "Add Content",
-      "Summary": "Summarizing",
-      "Translate": "Translate",
-      "ChangeStyle": "Change language tone",
-      "Grammar": "Correct spelling/grammar",
-      "ChatReset": "Start New Chat",
+      "resume_writing": "Add Content",
+      "summary": "Summarizing",
+      "translate": "Translate",
+      "change_text_style": "Change language tone",
+      "modify_text": "Correct spelling/grammar",
+      "start_new_chating": "Start New Chat",
       "SubFuncRec": {
         "Korean": "Korean",
         "English": "English",

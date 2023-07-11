@@ -7,8 +7,7 @@ import ShowResultButton from '../buttons/ShowResultButton';
 import { useAppDispatch } from '../../store/store';
 import { WriteType, setCurrentWrite } from '../../store/slices/writeHistorySlice';
 import ExTextbox from '../ExTextbox';
-import { Grid3BtnContainer } from '../../views/AIWriteTab';
-import { WriteOptions, formRecList, lengthList } from '../FuncRecBox';
+import { WriteOptions, formRecList, lengthList } from '../chat/RecommendBox/FormRec';
 import icon_write from '../../img/ico_creating_text_white.svg';
 import CreditButton from '../buttons/CreditButton';
 import Icon from '../Icon';
@@ -50,7 +49,7 @@ const AIWriteInput = ({
   history: WriteType[];
   selectedOptions: WriteOptions;
   setSelectedOptions: React.Dispatch<React.SetStateAction<WriteOptions>>;
-  submitSubject: Function;
+  submitSubject: (inputParam?: WriteType) => void;
 }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
@@ -72,13 +71,11 @@ const AIWriteInput = ({
         <InputArea>
           <ExTextbox
             exampleList={exampleList}
-            maxtTextLen={subjectMaxLength}
+            maxTextLen={subjectMaxLength}
             value={input}
             placeholder={t(`WriteTab.WriteTextboxPlacehold`) || ''}
             setValue={(val: string) => {
-              setSelectedOptions((prev) => {
-                return { ...prev, input: val };
-              });
+              setSelectedOptions((prev) => ({ ...prev, input: val }));
             }}></ExTextbox>
         </InputArea>
       </TitleInputSet>
@@ -95,14 +92,14 @@ const AIWriteInput = ({
               onClick={() => setSelectedOptions((prev) => ({ ...prev, form: form }))}
               selected={selectedForm ? (selectedForm.id === form.id ? true : false) : false}
               iconSrc={selectedForm.id === form.id ? form.selectedIcon : form.icon}>
-              {t(`FormList.${form.title}`)}
+              {t(`FormList.${form.id}`)}
             </IconBoxTextButton>
           ))}
         </Grid>
       </TitleInputSet>
       <TitleInputSet>
         <SubTitle subTitle={t(`WriteTab.SelectResultLength`)} />
-        <Grid3BtnContainer>
+        <Grid col={3}>
           {lengthList.map((length, index) => (
             <Button
               width="full"
@@ -112,10 +109,10 @@ const AIWriteInput = ({
               selected={
                 selectedLength ? (selectedLength.length === length.length ? true : false) : false
               }>
-              {t(`WriteTab.Length.${length.title}`)}
+              {t(`WriteTab.Length.${length.id}`)}
             </Button>
           ))}
-        </Grid3BtnContainer>
+        </Grid>
       </TitleInputSet>
 
       <div style={{ paddingTop: '4px' }}>

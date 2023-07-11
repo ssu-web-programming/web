@@ -1,3 +1,4 @@
+import { PropsWithChildren } from 'react';
 import styled from 'styled-components';
 
 const BlanketBG = styled.div`
@@ -10,15 +11,13 @@ const BlanketBG = styled.div`
   height: 100%;
 `;
 
-const Dim = ({ children, onClick }: { children?: React.ReactNode; onClick?: Function }) => {
-  return (
-    <BlanketBG
-      onClick={() => {
-        onClick && onClick();
-      }}>
-      {children}
-    </BlanketBG>
-  );
+const Blanket = (
+  props: PropsWithChildren<{
+    onClick?: () => void;
+  }>
+) => {
+  const { children, onClick = () => {} } = props;
+  return <BlanketBG onClick={onClick}>{children}</BlanketBG>;
 };
 
-export default Dim;
+export default Blanket;

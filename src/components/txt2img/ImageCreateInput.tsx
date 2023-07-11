@@ -241,7 +241,7 @@ const ImageCreateInput = ({
   options: T2IOptionType;
   setOptions: React.Dispatch<React.SetStateAction<T2IOptionType>>;
   history: T2IType[];
-  createAiImage: Function;
+  createAiImage: (option: T2IOptionType) => void;
 }) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
@@ -267,7 +267,7 @@ const ImageCreateInput = ({
         <ExTextbox
           placeholder={t(`Txt2ImgTab.WriteImageDesc`) || ''}
           exampleList={exampleList}
-          maxtTextLen={1000}
+          maxTextLen={1000}
           value={input}
           setValue={(val: string) => {
             setOptions((prev) => ({ ...prev, input: val }));
