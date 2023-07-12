@@ -9,7 +9,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 const UA_PREFIX: string = `__polaris_office_ai_`;
 
-enum ClientType {
+export enum ClientType {
   unknown = 'unknown',
   android = 'android',
   ios = 'ios',
@@ -31,7 +31,7 @@ function getAgentPlatform(userAgent: string) {
   return ClientType.unknown;
 }
 
-const getPlatform = () => getAgentPlatform(navigator.userAgent);
+export const getPlatform = () => getAgentPlatform(navigator.userAgent);
 
 async function fileToString(file: Blob) {
   return new Promise<string>((resolve, reject) => {

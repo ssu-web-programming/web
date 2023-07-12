@@ -45,6 +45,7 @@ import useErrorHandle from '../components/hooks/useErrorHandle';
 import { GPT_EXCEEDED_LIMIT } from '../error/error';
 import SendCoinButton from '../components/buttons/SendCoinButton';
 import { REC_ID_LIST } from '../components/chat/RecommendBox/FunctionRec';
+import { ClientType, getPlatform } from '../util/bridge';
 
 const TEXT_MAX_HEIGHT = 268;
 
@@ -214,14 +215,6 @@ export const exampleList = [
   'CreateReport'
 ];
 
-const chatTipList = [
-  '1ChatingCredit',
-  'EnterInfo',
-  'CtrlEnterInfo',
-  'DoSepecificQuestion',
-  'DateInfo'
-];
-
 export interface ChatOptions {
   input: string;
 }
@@ -238,6 +231,22 @@ const AIChatTab = (props: WriteTabProps) => {
   const { selectedRecFunction, selectedSubRecFunction } = useAppSelector(selectRecFuncSlice);
   const { t } = useTranslation();
   const errorHandle = useErrorHandle();
+
+  const chatTipList = useMemo(() => {
+    const platform = getPlatform();
+
+    const tipList = [
+      '1ChatingCredit',
+      'EnterInfo',
+      'DoSepecificQuestion',
+      'DateInfo',
+      platform === ClientType.ios || platform === ClientType.android
+        ? 'CtrlShiftEnterInfo'
+        : 'CtrlEnterInfo'
+    ];
+
+    return tipList;
+  }, []);
 
   const {
     options: { input: chatInput },
