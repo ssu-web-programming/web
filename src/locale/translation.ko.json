@@ -147,7 +147,8 @@
     "CompleteCopy": "내용 복사가 완료되었습니다.",
     "CompleteInsert": "내용 삽입이 완료 되었습니다.",
     "ErrorMsg": "오류가 발생했습니다. 잠시 후 다시 시도해 주세요. ({{code}} : {{msg}})",
-    "UnauthorizedMsg": "이 기능을 사용하려면 로그인이 필요합니다. 현재 로그인되어 있는지 다시 한 번 확인해주세요."
+    "UnauthorizedMsg": "이 기능을 사용하려면 로그인이 필요합니다. 현재 로그인되어 있는지 다시 한 번 확인해주세요.",
+    "CopyCompleted": "복사가 완료되었습니다."
   },
   "Offline": {
     "UnstableConnection": "서비스 접속이 원활하지 않습니다.",

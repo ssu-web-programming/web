@@ -2,6 +2,7 @@ import styled, { FlattenSimpleInterpolation, css } from 'styled-components';
 import { BoldLengthWrapper, ColumDivider, RowBox } from '../views/AIChatTab';
 import Icon from './Icon';
 import icon_ai from '../img/ico_ai.svg';
+import icon_copy from '../img/ico_copy.svg';
 import icon_ai_loading from '../img/loading_dot_2x.webp';
 import PreMarkdown from './PreMarkdown';
 import { flexColumn, flex, justiSpaceBetween, alignItemCenter } from '../style/cssCommon';
@@ -20,6 +21,7 @@ import { selectTabSlice } from '../store/slices/tabSlice';
 import { formRecList } from './chat/RecommendBox/FormRec';
 import { REC_ID_LIST } from './chat/RecommendBox/FunctionRec';
 import { selectRecFuncSlice } from '../store/slices/recFuncSlice';
+import { useCopyClipboard } from '../util/bridge';
 
 const Wrapper = styled.div<{ isUser: boolean }>`
   ${flex}
@@ -118,6 +120,7 @@ const SpeechBubble = (props: PropsWithChildren<SpeechBubbleProps>) => {
   } = props;
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const copyClipboard = useCopyClipboard();
   const { creating } = useAppSelector(selectTabSlice);
   const { selectedRecFunction, selectedSubRecFunction } = useAppSelector(selectRecFuncSlice);
 
@@ -203,6 +206,9 @@ const SpeechBubble = (props: PropsWithChildren<SpeechBubbleProps>) => {
                   <BoldLengthWrapper>
                     {t(`WriteTab.LengthInfo`, { length: text.length })}
                   </BoldLengthWrapper>
+                  {chat.id !== loadingId && (
+                    <Icon size="sm" iconSrc={icon_copy} onClick={() => copyClipboard(text)}></Icon>
+                  )}
                 </RowBox>
 
                 {chat.id !== loadingId && (
