@@ -1,9 +1,16 @@
-import { css } from 'styled-components';
+import styled, { css } from 'styled-components';
 import { alignItemCenter, flex, justiCenter } from '../../style/cssCommon';
 import Icon from '../Icon';
 import icon_sand from '../../img/ico_send.svg';
 import icon_credit from '../../img/ico_credit.svg';
 import Button from './Button';
+
+const CoinIcon = styled.div`
+  ${flex}
+  position: absolute;
+  bottom: 3px;
+  right: 4px;
+`;
 
 const SendCoinButton = ({
   onClick = () => {},
@@ -35,15 +42,9 @@ const SendCoinButton = ({
         margin: 0px 8px 8px 0px;
       `}>
       <Icon iconSrc={icon_sand} size="md" />
-      <Icon
-        iconSrc={icon_credit}
-        size={14}
-        cssExt={css`
-          position: absolute;
-          bottom: 3px;
-          right: 4px;
-        `}
-      />
+      <CoinIcon>
+        <Icon iconSrc={icon_credit} size={14} />
+      </CoinIcon>
     </Button>
   );
 };

@@ -7,7 +7,7 @@ import icon_creating_text from '../img/ico_creating_text.svg';
 import icon_creating_text_purple from '../img/ico_creating_text_purple.svg';
 import { useTranslation } from 'react-i18next';
 import { AI_WRITE_TAB_TYPE, selectTab, selectTabSlice } from '../store/slices/tabSlice';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { flex, flexColumn } from '../style/cssCommon';
 import Header from '../components/layout/Header';
 import { useAppDispatch, useAppSelector } from '../store/store';
@@ -97,7 +97,7 @@ export default function Tools() {
       <Tabs selected={selectedTabId} onChange={onChangeTab}>
         {TAB_LIST.map((tab) => (
           <MenuItem key={tab.id} id={tab.id} value={tab.name}>
-            {tab.icon && (
+            {tab.icon && tab.selectedIcon && (
               <Icon iconSrc={tab.id === selectedTabId ? tab.selectedIcon : tab.icon} size="sm" />
             )}
             <div>{t(`${tab.name}`)}</div>

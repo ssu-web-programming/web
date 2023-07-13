@@ -1,8 +1,9 @@
 import styled, { FlattenSimpleInterpolation, css } from 'styled-components';
+import { flex } from '../style/cssCommon';
 
-const IconImg = styled.img<{ size: any; cssExt: FlattenSimpleInterpolation }>`
+const IconImg = styled.img<{ size: FlattenSimpleInterpolation }>`
+  ${flex}
   ${(props) => props.size}
-  ${({ cssExt }) => cssExt && cssExt}
 `;
 
 const SIZES = {
@@ -22,15 +23,12 @@ const SIZES = {
 
 export type IconSize = 'sm' | 'md' | 'lg';
 
-interface IconProps {
+export interface IconProps {
   size?: IconSize | number;
-  iconSrc: any;
-  cssExt?: FlattenSimpleInterpolation;
-  onClick?: (e: React.MouseEvent) => void;
-  imgCssExt?: FlattenSimpleInterpolation;
+  iconSrc: string;
 }
 
-const Icon = ({ size = 'md', iconSrc, cssExt, onClick }: IconProps) => {
+const Icon = ({ size = 'md', iconSrc }: IconProps) => {
   const sizeStyle =
     typeof size === 'string'
       ? SIZES[size]
@@ -39,21 +37,7 @@ const Icon = ({ size = 'md', iconSrc, cssExt, onClick }: IconProps) => {
           height: ${size}px;
         `;
 
-  return (
-    <IconImg
-      src={iconSrc}
-      onClick={(e: React.MouseEvent) => {
-        onClick && onClick(e);
-      }}
-      size={sizeStyle}
-      cssExt={css`
-        ${cssExt && cssExt}
-        &:hover {
-          ${onClick && 'cursor: pointer'}
-        }
-      `}
-    />
-  );
+  return <IconImg src={iconSrc} size={sizeStyle} />;
 };
 
 export default Icon;

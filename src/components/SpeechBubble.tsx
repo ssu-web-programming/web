@@ -22,6 +22,7 @@ import { formRecList } from './chat/RecommendBox/FormRec';
 import { REC_ID_LIST } from './chat/RecommendBox/FunctionRec';
 import { selectRecFuncSlice } from '../store/slices/recFuncSlice';
 import { useCopyClipboard } from '../util/bridge';
+import IconButton from './buttons/IconButton';
 
 const Wrapper = styled.div<{ isUser: boolean }>`
   ${flex}
@@ -207,7 +208,11 @@ const SpeechBubble = (props: PropsWithChildren<SpeechBubbleProps>) => {
                     {t(`WriteTab.LengthInfo`, { length: text.length })}
                   </BoldLengthWrapper>
                   {chat.id !== loadingId && (
-                    <Icon size="sm" iconSrc={icon_copy} onClick={() => copyClipboard(text)}></Icon>
+                    <IconButton
+                      iconSize="sm"
+                      iconSrc={icon_copy}
+                      onClick={() => copyClipboard(text)}
+                    />
                   )}
                 </RowBox>
 
