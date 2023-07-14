@@ -12,6 +12,7 @@ import Icon from '../Icon';
 import Button from '../buttons/Button';
 import OpenAILinkText from '../OpenAILinkText';
 import icon_prev from '../../img/ico_arrow_prev.svg';
+import icon_copy from '../../img/ico_copy.svg';
 import icon_next from '../../img/ico_arrow_next.svg';
 import icon_chat_white from '../../img/ico_chat_white.svg';
 import {
@@ -29,6 +30,7 @@ import IconTextButton from '../buttons/IconTextButton';
 import Grid from '../layout/Grid';
 import React from 'react';
 import { useMoveChatTab } from '../hooks/useMovePage';
+import { useCopyClipboard } from '../../util/bridge';
 
 const Wrapper = styled.div`
   ${flex}
@@ -102,6 +104,7 @@ const AiWriteResult = ({
 }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const copyClipboard = useCopyClipboard();
   const { creating } = useAppSelector(selectTabSlice);
   const { active: bannerActive } = useAppSelector(selectBanner);
   const moveChat = useMoveChatTab();
@@ -147,6 +150,10 @@ const AiWriteResult = ({
 
               {creating === 'none' && (
                 <RightBox>
+                  <Icon
+                    size="sm"
+                    iconSrc={icon_copy}
+                    onClick={() => copyClipboard(currentWrite.result)}></Icon>
                   <Icon
                     size="sm"
                     cssExt={css`

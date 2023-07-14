@@ -6,6 +6,7 @@ import { updateT2ICurItemIndex, updateT2ICurListId } from '../store/slices/txt2i
 import { activeToast } from '../store/slices/toastSlice';
 import gI18n, { convertLangFromLangCode } from '../locale';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { makeClipboardData } from './common';
 
 const UA_PREFIX: string = `__polaris_office_ai_`;
 
@@ -94,6 +95,12 @@ const callApi = (api: ApiType, arg?: string) => {
           }
           case 'getSessionInfo': {
             window.webkit.messageHandlers.getSessionInfo.postMessage(arg);
+            break;
+          }
+          case 'copyClipboard': {
+            if (window.webkit.messageHandlers.copyClipboard) {
+              window.webkit.messageHandlers.copyClipboard.postMessage(arg);
+            }
             break;
           }
         }
@@ -268,7 +275,8 @@ type ApiType =
   | 'openWindow'
   | 'openDoc'
   | 'closePanel'
-  | 'getSessionInfo';
+  | 'getSessionInfo'
+  | 'copyClipboard';
 
 const Bridge = {
   checkSession: (api: string) => {
@@ -330,3 +338,14 @@ const Bridge = {
 };
 
 export default Bridge;
+
+export function useCopyClipboard() {
+  const dispatch = useAppDispatch();
+  const { t } = useTranslation();
+
+  return async (markdown: string) => {
+    const clipboardData = await makeClipboardData(markdown);
+    await Bridge.callBridgeApi('copyClipboard', JSON.stringify(clipboardData));
+    dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.CopyCompleted`) }));
+  };
+}

@@ -1,5 +1,6 @@
 import { load } from 'cheerio';
 import { marked } from 'marked';
+import { convert } from 'html-to-text';
 import Bridge from './bridge';
 
 const htmlBody = `
@@ -75,4 +76,17 @@ export const calLeftCredit = (headers: any) => {
 
 export const openNewWindow = (url: string) => {
   Bridge.callBridgeApi('openWindow', url);
+};
+
+export const makeClipboardData = async (markdown: string) => {
+  const html = await markdownToHtml(markdown);
+  let text = undefined;
+  if (html) {
+    text = convert(html);
+  }
+
+  return {
+    text,
+    html
+  };
 };
