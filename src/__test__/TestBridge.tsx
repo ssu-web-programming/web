@@ -17,7 +17,6 @@ const Body = styled.div`
 
   padding: 10px 10px 0px 10px;
   gap: 10px;
-  box-sizing: border-box;
 `;
 
 const TestButton = styled.button`
@@ -31,10 +30,7 @@ const Result = styled.div`
   ${flexShrink}
 
   border: solid 1px gray;
-  box-sizing: border-box;
-
   padding: 10px;
-
   overflow: auto;
 `;
 
@@ -44,7 +40,6 @@ const Row = styled.div`
   overflow-y: hidden;
   overflow-x: auto;
   padding-bottom: 12px;
-  box-sizing: border-box;
 `;
 
 export default function AITest() {

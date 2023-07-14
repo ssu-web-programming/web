@@ -35,10 +35,7 @@ const ToastMsgWrapper = styled.div<{ variant: FlattenSimpleInterpolation }>`
   word-wrap: break-word;
   width: 360px;
   max-width: 80%;
-
-  box-sizing: border-box;
   height: fit-content;
-
   border-radius: 10px;
   padding: 4px;
   animation: ${Fade} ${TIME}ms;
@@ -56,7 +53,6 @@ const IconWrapper = styled.div`
 const ToastText = styled.div`
   flex: 1;
   height: fit-content;
-  line-height: normal;
   padding: 6px 0px;
 `;
 

@@ -6,10 +6,7 @@ const SubTitleWrapper = styled.div`
 
   font-size: 13px;
   font-weight: 500;
-  font-stretch: normal;
-  font-style: normal;
   line-height: 1.54;
-  letter-spacing: normal;
   color: var(--gray-gray-90-01);
 `;
 

@@ -98,6 +98,15 @@ html,
     line-height: 160%;
   }  
 
+  html, *{
+    box-sizing: border-box;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    border: none;
+  }
+ 
 `;
 
 export default GlobalStyle;

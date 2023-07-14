@@ -27,14 +27,10 @@ const Body = styled.button<{
   ${userSelectCss}
 
   border-radius: 4px;
-  border: none;
   padding: 6px;
 
   font-size: 13px;
-  font-stretch: normal;
-  font-style: normal;
   line-height: 1.54;
-  letter-spacing: normal;
 
   &:hover {
     cursor: pointer;

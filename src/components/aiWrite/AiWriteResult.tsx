@@ -1,5 +1,12 @@
 import styled, { css } from 'styled-components';
-import { TableCss, flex, flexColumn, justiSpaceBetween } from '../../style/cssCommon';
+import {
+  TableCss,
+  flex,
+  flexColumn,
+  flexGrow,
+  flexShrink,
+  justiSpaceBetween
+} from '../../style/cssCommon';
 import { BoldLengthWrapper, ColumDivider, RightBox, RowBox } from '../../views/AIChatTab';
 import SubTitle from '../SubTitle';
 import Loading from '../Loading';
@@ -43,12 +50,12 @@ const ResultBox = styled.div`
   ${flex}
   ${flexColumn}
   ${justiSpaceBetween}
+  ${flexShrink}
+  ${flexGrow}
 
   width: 100%;
-  flex: 1;
   border-radius: 4px;
   background-color: #fff;
-  box-sizing: border-box;
   margin-bottom: 8px;
   height: 60%;
 
@@ -61,7 +68,6 @@ const ResultWrapper = styled.div`
   white-space: break-spaces;
   width: 100%;
   padding: 8px 12px;
-  box-sizing: border-box;
   height: fit-content;
 `;
 
@@ -73,7 +79,6 @@ const ResWrapper = styled.div`
   width: 100%;
   height: 100%;
   overflow: auto;
-  box-sizing: border-box;
   background-color: var(--ai-purple-99-bg-light);
   gap: 8px;
 `;
@@ -138,9 +143,7 @@ const AiWriteResult = ({
                 color: var(--gray-gray-70);
                 font-size: 13px;
                 height: 35px;
-
                 padding: 8px 12px;
-                box-sizing: border-box;
               `}>
               <BoldLengthWrapper>
                 {currentWrite.result.length > 0 && (

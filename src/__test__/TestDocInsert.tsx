@@ -15,13 +15,10 @@ const Wrapper = styled.div`
   gap: 5px;
 
   padding: 10px;
-  box-sizing: border-box;
 `;
 
 const Tools = styled.div`
   width: 100%;
-  box-sizing: border-box;
-
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -52,7 +49,6 @@ const Preview = styled.div`
   p {
     margin: 0px;
     padding: 0px;
-    box-sizing: border-box;
   }
   ${TableCss}
 `;

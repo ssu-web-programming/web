@@ -16,12 +16,10 @@ export const userSelectCss = css`
 export const purpleBtnCss = css`
   background-image: linear-gradient(to left, #a86cea, var(--ai-purple-50-main));
   color: #fff;
-  border: none;
   box-shadow: none;
 `;
 
 export const TextBtnCss = css`
-  border: none;
   box-shadow: none;
   display: flex;
   width: fit-content;

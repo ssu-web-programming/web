@@ -71,7 +71,6 @@ const ImageList = styled.div`
   
   width: 100%;
   height: 84px;
-  box-sizing: border-box;
   padding: 12px 0px;
   margin: 12px 0px 12px 0px;
   gap: 0px 8px;
@@ -104,7 +103,6 @@ const FloatOpenDesc = styled.div`
   border: solid 1px var(--gray-gray-50);
   background-color: #fff;
   padding: 8px 12px;
-  box-sizing: border-box;
   overflow-y: auto;
   top: 0px;
 
