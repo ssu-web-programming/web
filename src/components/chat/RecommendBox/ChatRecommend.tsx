@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import styled, { FlattenSimpleInterpolation, css } from 'styled-components';
-import { RowBox } from '../../../views/AIChatTab';
+import styled, { FlattenSimpleInterpolation } from 'styled-components';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
 import {
   openRecFunc,
@@ -27,6 +26,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import FunctionRec from './FunctionRec';
 import FormRec, { DEFAULT_WRITE_OPTION_FORM_VALUE } from './FormRec';
+import IconButton from '../../buttons/IconButton';
 
 const Wrapper = styled.div`
   ${flex}
@@ -74,7 +74,11 @@ const CommentWrapper = styled.div`
   ${flex}
   ${justiCenter}
   ${alignItemCenter}
+  ${justiCenter}
+  align-self: center;
 
+  width: fit-content;
+  line-height: 100%;
   font-size: 13px;
   color: var(--gray-gray-90-01);
   box-sizing: border-box;
@@ -91,22 +95,9 @@ const CommentFlip = ({
 }) => {
   return (
     <CommentWrapper>
-      <RowBox
-        cssExt={css`
-          ${justiCenter}
-          width: fit-content;
-          line-height: 100%;
-        `}>
-        <Icon size="sm" iconSrc={icon_ai} />
-        {comment}
-      </RowBox>
-      <Icon
-        iconSrc={icon}
-        size="sm"
-        onClick={() => {
-          onClick();
-        }}
-      />
+      <Icon iconSrc={icon_ai} size="md" />
+      <span style={{ display: 'flex', margin: '0px 4px 0px 6px' }}>{comment}</span>
+      <IconButton iconSrc={icon} iconSize="sm" onClick={onClick} />
     </CommentWrapper>
   );
 };

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled, {
-  FlattenInterpolation,
   FlattenSimpleInterpolation,
+  FlattenInterpolation,
   ThemedStyledProps,
   css
 } from 'styled-components';
@@ -10,8 +10,12 @@ import { alignItemCenter, flex, justiCenter, userSelectCss } from '../../style/c
 const Body = styled.button<{
   w: FlattenSimpleInterpolation;
   h?: FlattenSimpleInterpolation;
-  variant: FlattenInterpolation<ThemedStyledProps<{ selected: boolean }, any>>;
-  border: FlattenInterpolation<ThemedStyledProps<{ selected: boolean }, any>>;
+  variant: FlattenInterpolation<
+    ThemedStyledProps<{ selected: boolean }, FlattenSimpleInterpolation>
+  >;
+  border: FlattenInterpolation<
+    ThemedStyledProps<{ selected: boolean }, FlattenSimpleInterpolation>
+  >;
   selected: boolean;
   disabled: boolean;
   cssExt?: FlattenSimpleInterpolation;
@@ -60,7 +64,7 @@ const Body = styled.button<{
   ${({ cssExt }) => cssExt && cssExt}
 `;
 
-type ButtonSize = 'sm' | 'md' | 'lg' | 'full' | 'fit';
+export type ButtonSize = 'sm' | 'md' | 'lg' | 'full' | 'fit';
 const SIZES = {
   sm: css`
     width: 200px;
@@ -79,7 +83,7 @@ const SIZES = {
   `
 };
 
-type ButtonVariant = 'white' | 'purpleGradient' | 'gray' | 'transparent';
+export type ButtonVariant = 'white' | 'purpleGradient' | 'gray' | 'transparent';
 const VARIANTS = {
   white: css<{ selected: boolean }>`
     background-color: ${({ selected }) => (selected ? `white` : `white`)};
@@ -101,7 +105,7 @@ const VARIANTS = {
   `
 };
 
-type ButtonBorderType = 'none' | 'gray';
+export type ButtonBorderType = 'none' | 'gray';
 const BORDER_TYPES = {
   none: css<{ selected: boolean }>`
     box-shadow: ${({ selected }) =>
@@ -119,7 +123,7 @@ export interface ButtonProps {
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   selected?: boolean;
   width?: ButtonSize | number;
-  height?: number;
+  height?: number | 'fit';
   variant?: ButtonVariant;
   borderType?: ButtonBorderType;
   cssExt?: FlattenSimpleInterpolation;
@@ -146,9 +150,12 @@ export default function Button(props: React.PropsWithChildren<ButtonProps>) {
           width: ${width}px;
         `;
 
-  const h = css`
-    height: ${height}px;
-  `;
+  const h =
+    height === 'fit'
+      ? SIZES['fit']
+      : css`
+          height: ${height}px;
+        `;
 
   const variantValue = VARIANTS[variant];
 

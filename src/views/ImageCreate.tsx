@@ -32,7 +32,7 @@ const Body = styled.div`
   
   width: 100%;
   height: 100%;
-  padding: 16px;
+  padding: 5px 16px;
   box-sizing: border-box;
 
   overflow-y: auto;
@@ -79,7 +79,11 @@ const ImageCreate = ({ contents }: { contents: string }) => {
       try {
         const assistantId = uuidv4();
         dispatch(setCreating('CreateImage'));
-        const apiBody: any = {
+        const apiBody: {
+          prompt: string;
+          imgSize: string;
+          style_preset?: string;
+        } = {
           prompt: option.input,
           imgSize: option.ratio
         };
@@ -119,7 +123,7 @@ const ImageCreate = ({ contents }: { contents: string }) => {
           })
         );
 
-        const { images } = body.data;
+        const { images, translatedPrompts } = body.data;
         if (images) {
           dispatch(
             addT2I({
@@ -127,7 +131,8 @@ const ImageCreate = ({ contents }: { contents: string }) => {
               list: images,
               input: option.input,
               style: option.style,
-              ratio: option.ratio
+              ratio: option.ratio,
+              translatedPrompts: translatedPrompts
             })
           );
           dispatch(updateT2ICurListId(assistantId));

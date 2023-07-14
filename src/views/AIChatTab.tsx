@@ -260,7 +260,7 @@ const AIChatTab = (props: WriteTabProps) => {
   );
   const [isDefaultInput, setIsDefaultInput] = useState<boolean>(false);
 
-  const chatEndRef = useRef<any>();
+  const chatEndRef = useRef<HTMLDivElement>(null);
   const stopRef = useRef<boolean>(false);
   const textRef = useRef<HTMLTextAreaElement>(null);
 
@@ -305,7 +305,7 @@ const AIChatTab = (props: WriteTabProps) => {
   }, [defaultInput]);
 
   useEffect(() => {
-    chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [chatHistory, isActiveInput, loadingId]);
 
   useEffect(() => {
@@ -571,7 +571,9 @@ const AIChatTab = (props: WriteTabProps) => {
             !loadingId &&
             chatInput.length === 0 && (
               <Info>
-                <Icon iconSrc={icon_ai} size="sm" />
+                <div style={{ display: 'flex', width: '16px', height: '20px', marginRight: '6px' }}>
+                  <Icon iconSrc={icon_ai} />
+                </div>
                 {t(`ChatingTab.TipList.${chatTip}`)}
               </Info>
             )
@@ -587,7 +589,7 @@ const AIChatTab = (props: WriteTabProps) => {
             }}>
             <TextArea
               disable={loadingId !== null}
-              placeholder={!loadingId ? placeholder || '' : ''}
+              placeholder={!loadingId ? placeholder : ''}
               textRef={textRef}
               rows={1}
               value={loadingId !== null ? '' : chatInput}

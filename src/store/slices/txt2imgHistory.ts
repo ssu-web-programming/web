@@ -15,6 +15,7 @@ export interface T2IOptionType {
 export interface T2IType extends T2IOptionType {
   id: string;
   list: AiImageResponse[];
+  translatedPrompts: string;
 }
 
 interface T2IListType {

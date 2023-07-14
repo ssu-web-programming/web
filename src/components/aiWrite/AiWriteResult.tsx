@@ -8,7 +8,6 @@ import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import ReturnButton from '../buttons/ReturnButton';
 import StopButton from '../buttons/StopButton';
-import Icon from '../Icon';
 import Button from '../buttons/Button';
 import OpenAILinkText from '../OpenAILinkText';
 import icon_prev from '../../img/ico_arrow_prev.svg';
@@ -31,6 +30,7 @@ import Grid from '../layout/Grid';
 import React from 'react';
 import { useMoveChatTab } from '../hooks/useMovePage';
 import { useCopyClipboard } from '../../util/bridge';
+import IconButton from '../buttons/IconButton';
 
 const Wrapper = styled.div`
   ${flex}
@@ -109,8 +109,8 @@ const AiWriteResult = ({
   const { active: bannerActive } = useAppSelector(selectBanner);
   const moveChat = useMoveChatTab();
 
-  const currentWrite = history.filter((write: any) => write.id === currentWriteId)[0];
-  const currentIndex = history.findIndex((write: any) => write.id === currentWriteId);
+  const currentWrite = history.filter((write) => write.id === currentWriteId)[0];
+  const currentIndex = history.findIndex((write) => write.id === currentWriteId);
 
   return (
     <Wrapper>
@@ -150,37 +150,33 @@ const AiWriteResult = ({
 
               {creating === 'none' && (
                 <RightBox>
-                  <Icon
-                    size="sm"
+                  <IconButton
+                    iconSize="sm"
                     iconSrc={icon_copy}
-                    onClick={() => copyClipboard(currentWrite.result)}></Icon>
-                  <Icon
-                    size="sm"
-                    cssExt={css`
-                      opacity: ${currentIndex === 0 && '0.3'};
-                    `}
-                    iconSrc={icon_prev}
+                    onClick={() => copyClipboard(currentWrite.result)}
+                  />
+                  <IconButton
+                    disable={currentIndex === 0}
                     onClick={() => {
                       if (currentIndex > 0) {
                         dispatch(setCurrentWrite(history[currentIndex - 1]?.id));
                       }
                     }}
+                    iconSize="sm"
+                    iconSrc={icon_prev}
                   />
                   <div>
-                    {history.findIndex((write: any) => write.id === currentWriteId) + 1}/
-                    {history.length}
+                    {history.findIndex((write) => write.id === currentWriteId) + 1}/{history.length}
                   </div>
-                  <Icon
-                    size="sm"
-                    cssExt={css`
-                      opacity: ${currentIndex === history.length - 1 && '0.3'};
-                    `}
-                    iconSrc={icon_next}
+                  <IconButton
+                    disable={currentIndex === history.length - 1}
                     onClick={() => {
                       if (currentIndex < history.length - 1) {
                         dispatch(setCurrentWrite(history[currentIndex + 1]?.id));
                       }
                     }}
+                    iconSize="sm"
+                    iconSrc={icon_next}
                   />
                 </RightBox>
               )}

@@ -1,4 +1,4 @@
-import styled, { CSSProp, css } from 'styled-components';
+import styled from 'styled-components';
 // import ai_loading from '../img/ai_motion_mid_56.webp';
 import ai_loading from '../img/ezgif.com-gif-maker.png';
 import Icon from './Icon';
