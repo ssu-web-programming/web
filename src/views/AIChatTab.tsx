@@ -363,9 +363,11 @@ const AIChatTab = (props: WriteTabProps) => {
       );
       dispatch(initRecFunc());
 
+      history = [];
+
       if (chatInput.length === 0) return;
     } else {
-      const resetId = history.reverse().find((chat) => chat.role === 'reset')?.id;
+      const resetId = [...history].reverse().find((chat) => chat.role === 'reset')?.id;
 
       if (resetId) {
         const resetIndex = chatHistory.findIndex((chat) => chat.id === resetId);
