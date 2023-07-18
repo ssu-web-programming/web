@@ -44,7 +44,6 @@ const Profile = styled.div`
   padding: 4px 4px 4px;
   border-radius: 10px;
   background-color: var(--ai-purple-95-list-pressed);
-  box-sizing: border-box;
 `;
 
 const SpeechBubbleWrapper = styled.div<{ cssExt?: FlattenSimpleInterpolation; isUser: boolean }>`
@@ -53,9 +52,7 @@ const SpeechBubbleWrapper = styled.div<{ cssExt?: FlattenSimpleInterpolation; is
   align-self: flex-start;
 
   width: 100%;
-  box-sizing: border-box;
   border-radius: 10px;
-
   background-color: ${({ isUser }: { isUser: boolean }) =>
     isUser ? 'var(--ai-purple-70)' : 'white'};
   color: ${({ isUser }: { isUser: boolean }) => isUser && 'white'};
@@ -200,7 +197,6 @@ const SpeechBubble = (props: PropsWithChildren<SpeechBubbleProps>) => {
               <RowWrapBox
                 cssExt={css`
                   padding: 9px 12px 12px 12px;
-                  box-sizing: border-box;
                   gap: 8px;
                 `}>
                 <RowBox>

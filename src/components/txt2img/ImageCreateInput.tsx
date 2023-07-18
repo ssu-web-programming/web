@@ -85,10 +85,6 @@ const ItemTitle = styled.div<{ isSelected: boolean }>`
   font-weight: bold;
   font-size: 12px;
   font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
-  letter-spacing: normal;
   text-align: center;
   font-weight: 400;
   color: var(--gray-gray-80-02);
@@ -122,7 +118,6 @@ const ItemIconBox = styled.div<{
   height: 100%;
   border-radius: 4px;
   background-color: var(--gray-gray-20);
-  box-sizing: border-box;
   overflow: hidden;
   cursor: pointer;
 
@@ -284,29 +279,27 @@ const ImageCreateInput = ({
               <ContainerItem
                 key={item.id}
                 onClick={() => setOptions((prev) => ({ ...prev, style: item.id }))}>
-                <div>
-                  <ItemIconBox
-                    cssExt={css`
-                      border: ${item.id === 'none' &&
-                      item.id === style &&
-                      'solid 1px var(--ai-purple-80-sub)'};
+                <ItemIconBox
+                  cssExt={css`
+                    border: ${item.id === 'none' &&
+                    item.id === style &&
+                    'solid 1px var(--ai-purple-80-sub)'};
 
-                      width: 81px;
-                      height: 80px;
-                    `}
-                    isSelected={item.id === style}>
-                    <img
-                      style={{
-                        width: item.id === 'none' ? '24px' : '100%',
-                        height: item.id === 'none' ? '24px' : '100%'
-                      }}
-                      src={item.id === style ? item.selectedImgItem : item.imgItem}
-                      alt=""></img>
-                  </ItemIconBox>
-                  <ItemTitle isSelected={item.id === style}>
-                    {t(`Txt2ImgTab.StyleList.${item.title}`)}
-                  </ItemTitle>
-                </div>
+                    width: 81px;
+                    height: 80px;
+                  `}
+                  isSelected={item.id === style}>
+                  <img
+                    style={{
+                      width: item.id === 'none' ? '24px' : '100%',
+                      height: item.id === 'none' ? '24px' : '100%'
+                    }}
+                    src={item.id === style ? item.selectedImgItem : item.imgItem}
+                    alt=""></img>
+                </ItemIconBox>
+                <ItemTitle isSelected={item.id === style}>
+                  {t(`Txt2ImgTab.StyleList.${item.title}`)}
+                </ItemTitle>
               </ContainerItem>
             );
           })}

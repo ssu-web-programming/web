@@ -11,18 +11,14 @@ const InputArea = styled.div<{ activeBorder: boolean }>`
   ${flex}
   ${flexColumn}
 
-  box-sizing: border-box;
   /* margin: 10px 0px 10px; */
   border-radius: 4px;
   height: 153px;
-  box-sizing: border-box;
   border: ${({ activeBorder }: { activeBorder: boolean }) =>
     activeBorder ? 'solid 1px var(--ai-purple-50-main)' : 'solid 1px var(--gray-gray-50)'};
   width: 100%;
 
   textarea {
-    box-sizing: border-box;
-    border: none;
     margin: 8px 12px 8px 12px;
   }
 `;
@@ -35,7 +31,7 @@ const TopBorer = styled.div`
 
   border-top: 1px solid #e8ebed;
   width: 100%;
-  box-sizing: border-box;
+
   padding: 0px 6px 0px 11px;
   height: 34px;
 `;

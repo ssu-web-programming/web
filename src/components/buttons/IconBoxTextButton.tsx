@@ -13,11 +13,8 @@ const Wrapper = styled.div`
 const Title = styled.div<{ selected: boolean }>`
   font-size: 12px;
   font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
-  letter-spacing: normal;
   text-align: center;
+
   ${({ selected }) =>
     selected
       ? css`

@@ -28,10 +28,7 @@ const Title = styled.div`
 
   font-size: 16px;
   font-weight: bold;
-  font-stretch: normal;
-  font-style: normal;
   line-height: 100%;
-  letter-spacing: normal;
   color: var(--ai-purple-50-main);
   margin: 3px 7px 5px 4px;
   padding: 0;
@@ -42,10 +39,6 @@ const SubTitle = styled.div`
 
   font-size: 14px;
   font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
-  letter-spacing: normal;
   color: #282828;
   margin: 6px 0 6px 0px;
 `;

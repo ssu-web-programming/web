@@ -34,7 +34,6 @@ const ConfirmBox = styled.div`
   border-radius: 4px;
   border: solid 1px var(--gray-gray-50);
   background-color: #fff;
-  box-sizing: border-box;
 `;
 
 const CloseBtn = styled.div`
@@ -96,7 +95,6 @@ const RetryBtn = styled.button`
   ${flexGrow}
   ${flexShrink}
   margin: 0px 16px 0px 16px;
-  box-sizing: border-box;
 
   &:hover {
     cursor: pointer;

@@ -34,9 +34,7 @@ const SendCoinButton = ({
         align-self: flex-end;
         position: relative;
 
-        box-sizing: border-box;
         border-radius: 4px;
-        border: none;
         background-image: linear-gradient(to left, #a86cea, #6f3ad0 100%);
         padding: 6px 10px;
         margin: 0px 8px 8px 0px;

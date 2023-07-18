@@ -25,9 +25,6 @@ const SpinnerWrapper = styled.div`
 
   font-size: 13px;
   font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
   color: var(--gray-gray-80-02);
 `;
 

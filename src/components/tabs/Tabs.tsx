@@ -28,12 +28,12 @@ const TabItem = styled.div<{ selected: boolean }>`
   font-size: 13px;
   color: var(--gray-gray-90-01);
   cursor: pointer;
+  gap: 7px;
 
   &:hover {
     background-color: #f7f8f9;
   }
-  box-sizing: border-box;
-  gap: 7px;
+
   ${({ selected }) =>
     selected &&
     css`

@@ -25,7 +25,6 @@ const IconButton = (
       width={buttonWidth ? buttonWidth : 'fit'}
       height={buttonHeight ? buttonHeight : 'fit'}
       cssExt={css`
-        box-sizing: border-box;
         padding: 0px;
         margin: 0px;
         ${buttonCssExt}

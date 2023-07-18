@@ -21,8 +21,6 @@ const WriteInputPage = styled.div`
   padding: 16px;
   width: 100%;
   height: 100%;
-  box-sizing: border-box;
-
   gap: 16px;
 `;
 

@@ -56,7 +56,6 @@ const Wrapper = styled.div`
   
   width: 100%;
   height: 100%;
-  box-sizing: border-box;
   background-color: var(--ai-purple-99-bg-light);
 
   ${TableCss}
@@ -66,12 +65,10 @@ const ChatListWrapper = styled.div<{ isLoading: boolean }>`
   ${flex}
   ${flexColumn}
   ${flexGrow}
-  
   position: relative;
 
   width: 100%;
   overflow-y: auto;
-  box-sizing: border-box;
   overflow-x: hidden;
   padding-bottom: ${({ isLoading }: { isLoading: boolean }) => (isLoading ? '0px' : '66px')};
   gap: 16px;
@@ -86,11 +83,8 @@ const FloatingBox = styled.div`
   position: absolute;
   top: 0px;
   width: 100%;
-  box-sizing: border-box;
-
   transform: translate(0, -100%);
   background-color: transparent;
-  box-sizing: border-box;
 `;
 
 const InputBox = styled.div<{ activeInputWrap: boolean }>`
@@ -99,7 +93,6 @@ const InputBox = styled.div<{ activeInputWrap: boolean }>`
   ${flexColumn}
   ${flexShrink}
   
-  box-sizing: border-box;
   height: fit-content;
   width: 100%;
   background-color: white;
@@ -156,7 +149,6 @@ const Info = styled.div`
   line-height: 100%;
   font-size: 12px;
   height: 48px;
-  box-sizing: border-box;
   width: 100%;
   gap: 8px;
 `;
@@ -186,7 +178,6 @@ const TextBox = styled(RowBox)`
     max-height: ${TEXT_MAX_HEIGHT}px;
     height: 48px;
     padding: 14px 16px 14px 16px;
-    box-sizing: border-box;
 
     &:disabled {
       background-color: #fff;
@@ -198,7 +189,6 @@ const TextBox = styled(RowBox)`
 const InputBottomArea = styled(RowWrapBox)`
   height: 34px;
   padding: 0px 3px 0px 9px;
-  box-sizing: border-box;
   border-top: 1px solid var(--ai-purple-99-bg-light);
 `;
 

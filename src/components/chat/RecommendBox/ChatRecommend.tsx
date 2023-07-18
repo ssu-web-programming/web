@@ -35,8 +35,6 @@ const Wrapper = styled.div`
   
   width: 100%;
   border-radius: 0;
-  box-sizing: border-box;
-
   background-color: rgba(245, 241, 253, 0.7);
   box-shadow: 0 -2px 8px 0 rgba(111, 58, 208, 0.3);
   border-radius: 10px 10px 0px 0px;
@@ -81,7 +79,6 @@ const CommentWrapper = styled.div`
   line-height: 100%;
   font-size: 13px;
   color: var(--gray-gray-90-01);
-  box-sizing: border-box;
 `;
 
 const CommentFlip = ({
