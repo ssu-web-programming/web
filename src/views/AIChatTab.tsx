@@ -129,16 +129,6 @@ export const BoldLengthWrapper = styled(LengthWrapper)`
   font-weight: 500;
 `;
 
-export const RightBox = styled.div<{ cssExt?: FlattenSimpleInterpolation }>`
-  ${flex}
-  ${alignItemCenter}
-
-  align-self: flex-end;
-  gap: 11px;
-
-  ${({ cssExt }) => cssExt && cssExt}
-`;
-
 const Info = styled.div`
   ${flex}
   ${alignItemCenter}

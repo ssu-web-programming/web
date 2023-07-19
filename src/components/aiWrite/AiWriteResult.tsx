@@ -1,13 +1,14 @@
 import styled, { css } from 'styled-components';
 import {
   TableCss,
+  alignItemCenter,
   flex,
   flexColumn,
   flexGrow,
   flexShrink,
   justiSpaceBetween
 } from '../../style/cssCommon';
-import { BoldLengthWrapper, ColumDivider, RightBox, RowBox } from '../../views/AIChatTab';
+import { BoldLengthWrapper, ColumDivider, RowBox } from '../../views/AIChatTab';
 import SubTitle from '../SubTitle';
 import Loading from '../Loading';
 import PreMarkdown from '../PreMarkdown';
@@ -35,10 +36,9 @@ import React from 'react';
 import { useMoveChatTab } from '../hooks/useMovePage';
 import { useCopyClipboard } from '../../util/bridge';
 import IconButton from '../buttons/IconButton';
+import ArrowSwitcher from '../ArrowSwitcher';
 
 import { ReactComponent as IconCopy } from '../../img/ico_copy.svg';
-import { ReactComponent as IconPrev } from '../../img/ico_arrow_prev.svg';
-import { ReactComponent as IconNext } from '../../img/ico_arrow_next.svg';
 
 const Wrapper = styled.div`
   ${flex}
@@ -97,6 +97,15 @@ const ResultInfo = styled.div`
   ${flexColumn}
 `;
 
+const RightBox = styled.div`
+  ${flex}
+  ${alignItemCenter}
+
+  align-self: flex-end;
+  gap: 4px;
+  height: 100%;
+`;
+
 const AiWriteResult = ({
   history,
   onClickStop,
@@ -152,35 +161,26 @@ const AiWriteResult = ({
                 )}
               </BoldLengthWrapper>
 
-              {creating === 'none' && (
+              {creating === 'none' && currentIndex !== null && (
                 <RightBox>
                   <IconButton
                     iconSize="sm"
                     iconComponent={IconCopy}
                     onClick={() => copyClipboard(currentWrite.result)}
                   />
-                  <IconButton
-                    disable={currentIndex === 0}
-                    onClick={() => {
-                      if (currentIndex > 0) {
+                  <ArrowSwitcher
+                    size="sm"
+                    type="index"
+                    curListIndex={currentIndex}
+                    listLength={history.length}
+                    onPrev={() => {
+                      if (currentIndex > 0)
                         dispatch(setCurrentWrite(history[currentIndex - 1]?.id));
-                      }
                     }}
-                    iconSize="sm"
-                    iconComponent={IconPrev}
-                  />
-                  <div>
-                    {history.findIndex((write) => write.id === currentWriteId) + 1}/{history.length}
-                  </div>
-                  <IconButton
-                    disable={currentIndex === history.length - 1}
-                    onClick={() => {
-                      if (currentIndex < history.length - 1) {
+                    onNext={() => {
+                      if (currentIndex < history.length - 1)
                         dispatch(setCurrentWrite(history[currentIndex + 1]?.id));
-                      }
                     }}
-                    iconSize="sm"
-                    iconComponent={IconNext}
                   />
                 </RightBox>
               )}
