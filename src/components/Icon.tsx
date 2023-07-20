@@ -6,7 +6,7 @@ const IconImg = styled.img<{ size: FlattenSimpleInterpolation }>`
   ${(props) => props.size}
 `;
 
-const SIZES = {
+export const SIZES = {
   sm: css`
     width: 16px;
     height: 16px;

@@ -2,7 +2,6 @@ import styled, { FlattenSimpleInterpolation, css } from 'styled-components';
 import { BoldLengthWrapper, ColumDivider, RowBox } from '../views/AIChatTab';
 import Icon from './Icon';
 import icon_ai from '../img/ico_ai.svg';
-import icon_copy from '../img/ico_copy.svg';
 import icon_ai_loading from '../img/loading_dot_2x.webp';
 import PreMarkdown from './PreMarkdown';
 import { flexColumn, flex, justiSpaceBetween, alignItemCenter } from '../style/cssCommon';
@@ -23,6 +22,8 @@ import { REC_ID_LIST } from './chat/RecommendBox/FunctionRec';
 import { selectRecFuncSlice } from '../store/slices/recFuncSlice';
 import { useCopyClipboard } from '../util/bridge';
 import IconButton from './buttons/IconButton';
+
+import { ReactComponent as IconCopy } from '../img/ico_copy.svg';
 
 const Wrapper = styled.div<{ isUser: boolean }>`
   ${flex}
@@ -206,7 +207,7 @@ const SpeechBubble = (props: PropsWithChildren<SpeechBubbleProps>) => {
                   {chat.id !== loadingId && (
                     <IconButton
                       iconSize="sm"
-                      iconSrc={icon_copy}
+                      iconComponent={IconCopy}
                       onClick={() => copyClipboard(text)}
                     />
                   )}

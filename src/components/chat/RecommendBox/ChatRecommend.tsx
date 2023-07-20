@@ -11,8 +11,6 @@ import {
   recType,
   recSubType
 } from '../../../store/slices/recFuncSlice';
-import icon_arrow_down from '../../../img/ico_arrow_down_small.svg';
-import icon_arrow_up from '../../../img/ico_arrow_up_small.svg';
 import icon_ai from '../../../img/ico_ai.svg';
 import Icon from '../../Icon';
 import {
@@ -27,6 +25,9 @@ import { useTranslation } from 'react-i18next';
 import FunctionRec from './FunctionRec';
 import FormRec, { DEFAULT_WRITE_OPTION_FORM_VALUE } from './FormRec';
 import IconButton from '../../buttons/IconButton';
+
+import { ReactComponent as IconArrowDown } from '../../../img/ico_arrow_down_small.svg';
+import { ReactComponent as IconArrowUp } from '../../../img/ico_arrow_up_small.svg';
 
 const Wrapper = styled.div`
   ${flex}
@@ -88,13 +89,13 @@ const CommentFlip = ({
 }: {
   comment: string;
   onClick: () => void;
-  icon: string;
+  icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
 }) => {
   return (
     <CommentWrapper>
       <Icon iconSrc={icon_ai} size="md" />
       <span style={{ display: 'flex', margin: '0px 4px 0px 6px' }}>{comment}</span>
-      <IconButton iconSrc={icon} iconSize="sm" onClick={onClick} />
+      <IconButton iconComponent={icon} iconSize="sm" onClick={onClick} />
     </CommentWrapper>
   );
 };
@@ -133,7 +134,7 @@ const ChatRecommend = ({ isFormRec }: { isFormRec: boolean }) => {
     <Wrapper>
       <CommentFlip
         comment={isFormRec ? t(`ChatingTab.UseVariableForm`) : t(`ChatingTab.UseMoreAI`)}
-        icon={isOpen ? icon_arrow_down : icon_arrow_up}
+        icon={isOpen ? IconArrowDown : IconArrowUp}
         onClick={() => {
           if (isOpen) dispatch(closeRecFunc());
           else dispatch(openRecFunc());
