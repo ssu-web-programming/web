@@ -1,10 +1,6 @@
 import { useState } from 'react';
 import AIChatTab, { ChatOptions } from '../views/AIChatTab';
 import AIWriteTab from '../views/AIWriteTab';
-import icon_chat from '../img/ico_chat.svg';
-import icon_chat_purple from '../img/ico_chat_purple.svg';
-import icon_creating_text from '../img/ico_creating_text.svg';
-import icon_creating_text_purple from '../img/ico_creating_text_purple.svg';
 import { useTranslation } from 'react-i18next';
 import { AI_WRITE_TAB_TYPE, selectTab, selectTabSlice } from '../store/slices/tabSlice';
 import styled from 'styled-components';
@@ -12,7 +8,6 @@ import { flex, flexColumn } from '../style/cssCommon';
 import Header from '../components/layout/Header';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import { activeToast } from '../store/slices/toastSlice';
-import Icon from '../components/Icon';
 import Tabs from '../components/tabs/Tabs';
 import MenuItem from '../components/items/MenuItem';
 import TabPanel from '../components/tabs/TabPanel';
@@ -22,6 +17,9 @@ import {
   WriteOptions
 } from '../components/chat/RecommendBox/FormRec';
 import TestDocInsert from '../__test__/TestDocInsert';
+
+import { ReactComponent as IconChat } from '../img/ico_chat.svg';
+import { ReactComponent as IconCreatingText } from '../img/ico_creating_text.svg';
 
 const Wrapper = styled.div`
   ${flex}
@@ -39,24 +37,26 @@ const Body = styled.div`
 interface TabListProps {
   id: AI_WRITE_TAB_TYPE;
   name: string;
-  icon?: string;
-  selectedIcon?: string;
+  icon?: React.FunctionComponentElement<
+    React.FunctionComponent<React.SVGProps<SVGSVGElement> & { title?: string }>
+  >;
 }
 
 const TAB_LIST: TabListProps[] = [
   {
     id: 'write',
     name: `Write`,
-    icon: icon_creating_text,
-    selectedIcon: icon_creating_text_purple
+    icon: <IconCreatingText></IconCreatingText>
   },
   {
     id: 'chat',
     name: `Chating`,
-    icon: icon_chat,
-    selectedIcon: icon_chat_purple
+    icon: <IconChat></IconChat>
   },
-  { id: 'test', name: `test`, icon: icon_chat, selectedIcon: icon_chat_purple }
+  {
+    id: 'test',
+    name: `test`
+  }
 ];
 
 const initWriteOptions: WriteOptions = {
@@ -96,10 +96,7 @@ export default function Tools() {
       <Header title={t('AITools')} subTitle={'AI Write'}></Header>
       <Tabs selected={selectedTabId} onChange={onChangeTab}>
         {TAB_LIST.map((tab) => (
-          <MenuItem key={tab.id} id={tab.id} value={tab.name}>
-            {tab.icon && tab.selectedIcon && (
-              <Icon iconSrc={tab.id === selectedTabId ? tab.selectedIcon : tab.icon} size="sm" />
-            )}
+          <MenuItem key={tab.id} id={tab.id} value={tab.name} icon={tab.icon}>
             <div>{t(`${tab.name}`)}</div>
           </MenuItem>
         ))}

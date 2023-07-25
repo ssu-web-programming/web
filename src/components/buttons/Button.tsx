@@ -79,8 +79,12 @@ const SIZES = {
   `
 };
 
-export type ButtonVariant = 'white' | 'purpleGradient' | 'gray' | 'transparent';
+export type ButtonVariant = 'none' | 'white' | 'purpleGradient' | 'gray' | 'transparent';
 const VARIANTS = {
+  none: css`
+    background-color: transparent;
+    color: unset;
+  `,
   white: css<{ selected: boolean }>`
     background-color: ${({ selected }) => (selected ? `white` : `white`)};
     color: var(--gray-gray-90-01);

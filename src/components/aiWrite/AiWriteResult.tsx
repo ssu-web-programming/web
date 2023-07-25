@@ -17,9 +17,6 @@ import ReturnButton from '../buttons/ReturnButton';
 import StopButton from '../buttons/StopButton';
 import Button from '../buttons/Button';
 import OpenAILinkText from '../OpenAILinkText';
-import icon_prev from '../../img/ico_arrow_prev.svg';
-import icon_copy from '../../img/ico_copy.svg';
-import icon_next from '../../img/ico_arrow_next.svg';
 import icon_chat_white from '../../img/ico_chat_white.svg';
 import {
   WriteType,
@@ -38,6 +35,10 @@ import React from 'react';
 import { useMoveChatTab } from '../hooks/useMovePage';
 import { useCopyClipboard } from '../../util/bridge';
 import IconButton from '../buttons/IconButton';
+
+import { ReactComponent as IconCopy } from '../../img/ico_copy.svg';
+import { ReactComponent as IconPrev } from '../../img/ico_arrow_prev.svg';
+import { ReactComponent as IconNext } from '../../img/ico_arrow_next.svg';
 
 const Wrapper = styled.div`
   ${flex}
@@ -155,7 +156,7 @@ const AiWriteResult = ({
                 <RightBox>
                   <IconButton
                     iconSize="sm"
-                    iconSrc={icon_copy}
+                    iconComponent={IconCopy}
                     onClick={() => copyClipboard(currentWrite.result)}
                   />
                   <IconButton
@@ -166,7 +167,7 @@ const AiWriteResult = ({
                       }
                     }}
                     iconSize="sm"
-                    iconSrc={icon_prev}
+                    iconComponent={IconPrev}
                   />
                   <div>
                     {history.findIndex((write) => write.id === currentWriteId) + 1}/{history.length}
@@ -179,7 +180,7 @@ const AiWriteResult = ({
                       }
                     }}
                     iconSize="sm"
-                    iconSrc={icon_next}
+                    iconComponent={IconNext}
                   />
                 </RightBox>
               )}

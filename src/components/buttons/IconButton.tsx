@@ -1,37 +1,38 @@
-import { FlattenSimpleInterpolation, css } from 'styled-components';
-import Icon, { IconSize } from '../Icon';
-import Button, { ButtonBorderType, ButtonSize, ButtonVariant } from './Button';
+import styled, { css } from 'styled-components';
+import Button, { ButtonProps } from './Button';
+import { IconSize, SIZES } from '../Icon';
 
-const IconButton = (
-  props: React.PropsWithChildren<{
-    onClick?: React.MouseEventHandler<HTMLButtonElement>;
-    selected?: boolean;
-    buttonWidth?: ButtonSize | number;
-    buttonHeight?: number | 'fit';
-    variant?: ButtonVariant;
-    borderType?: ButtonBorderType;
-    buttonCssExt?: FlattenSimpleInterpolation;
-    disable?: boolean;
-    iconSize?: IconSize | number;
-    iconSrc: string;
-  }>
-) => {
-  const { children } = props;
-  const { buttonWidth, buttonHeight, buttonCssExt, iconSize } = props;
+const IconSizeStyle = css<{ size: IconSize }>`
+  ${(props) => SIZES[props.size]}
+`;
+
+const wrapSvg = (svgComponent: React.FunctionComponent<React.SVGProps<SVGSVGElement>>) =>
+  styled(svgComponent)`
+    ${IconSizeStyle}
+  `;
+
+export interface IconButtonProps extends ButtonProps {
+  iconSize?: IconSize;
+  iconComponent: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+}
+
+const IconButton = (props: React.PropsWithChildren<IconButtonProps>) => {
+  const { width, height, cssExt, iconSize = 'sm' } = props;
+
+  const WrappedSvg = wrapSvg(props.iconComponent);
 
   return (
     <Button
-      variant="transparent"
-      width={buttonWidth ? buttonWidth : 'fit'}
-      height={buttonHeight ? buttonHeight : 'fit'}
+      variant="none"
+      width={width ? width : 'fit'}
+      height={height ? height : 'fit'}
       cssExt={css`
         padding: 0px;
         margin: 0px;
-        ${buttonCssExt}
+        ${cssExt}
       `}
       {...props}>
-      <Icon size={iconSize} {...props} />
-      {children}
+      <WrappedSvg size={iconSize}></WrappedSvg>
     </Button>
   );
 };

@@ -1,6 +1,4 @@
 import { useAppDispatch } from '../../store/store';
-import iconPrev from '../../img/ico_arrow_prev.svg';
-import iconNext from '../../img/ico_arrow_next.svg';
 import {
   T2IOptionType,
   T2IType,
@@ -29,10 +27,13 @@ import LinkText from '../LinkText';
 import CreditButton from '../buttons/CreditButton';
 import Grid from '../layout/Grid';
 import Bridge from '../../util/bridge';
-import icon_arrow_down from '../../img/ico_arrow_down_small.svg';
-import icon_arrow_up from '../../img/ico_arrow_up_small.svg';
 import { useMemo, useState } from 'react';
 import IconButton from '../buttons/IconButton';
+
+import { ReactComponent as IconArrowUp } from '../../img/ico_arrow_up_small.svg';
+import { ReactComponent as IconArrowDown } from '../../img/ico_arrow_down_small.svg';
+import { ReactComponent as IconPrev } from '../../img/ico_arrow_prev.svg';
+import { ReactComponent as IconNext } from '../../img/ico_arrow_next.svg';
 
 const ImagePreview = styled.div`
   width: 100%;
@@ -170,40 +171,38 @@ const ImageCreateResult = ({
         </InputDesc>
         <IconButton
           iconSize="sm"
-          iconSrc={showInput ? icon_arrow_up : icon_arrow_down}
-          buttonWidth={24}
-          buttonHeight={24}
+          iconComponent={showInput ? IconArrowUp : IconArrowDown}
+          width={24}
+          height={24}
           variant="white"
-          buttonCssExt={css`
+          cssExt={css`
             border-radius: 12px;
             border: solid 0.9px #c9cdd2;
             align-self: center;
             margin-left: 9px;
             box-shadow: 0 2px 4px 0 rgba(111, 58, 208, 0.2);
           `}
-          onClick={() => {
-            setShowInput((prev) => !prev);
-          }}
+          onClick={() => setShowInput((prev) => !prev)}
         />
       </InputDescBox>
       <ImgListControl>
         <IconButton
-          buttonWidth={30}
-          buttonHeight={26}
+          width={30}
+          height={26}
           disable={curListIndex === 0}
           onClick={() => {
             if (history.length <= 1) return;
             if (curListIndex > 0) dispatch(updateT2ICurListId(history[curListIndex - 1].id));
           }}
           iconSize="sm"
-          iconSrc={iconPrev}
+          iconComponent={IconPrev}
         />
         <div>
           {curListIndex + 1}/{history.length}
         </div>
         <IconButton
-          buttonWidth={30}
-          buttonHeight={26}
+          width={30}
+          height={26}
           disable={curListIndex === history.length - 1}
           onClick={() => {
             if (history.length <= 1) return;
@@ -212,7 +211,7 @@ const ImageCreateResult = ({
               dispatch(updateT2ICurListId(history[curListIndex + 1].id));
           }}
           iconSize="sm"
-          iconSrc={iconNext}
+          iconComponent={IconNext}
         />
       </ImgListControl>
       <ImagePreview>
@@ -225,8 +224,8 @@ const ImageCreateResult = ({
       </ImagePreview>
       <ImageList>
         <IconButton
-          buttonWidth={26}
-          buttonHeight={26}
+          width={26}
+          height={26}
           variant="transparent"
           disable={currentItemIdx === 0}
           onClick={() => {
@@ -234,7 +233,7 @@ const ImageCreateResult = ({
               dispatch(updateT2ICurItemIndex(currentItemIdx - 1));
             }
           }}
-          iconSrc={iconPrev}
+          iconComponent={IconPrev}
           iconSize="sm"
         />
         {curHistory.list.map((img, index) => (
@@ -254,8 +253,8 @@ const ImageCreateResult = ({
             alt=""></img>
         ))}
         <IconButton
-          buttonWidth={26}
-          buttonHeight={26}
+          width={26}
+          height={26}
           variant="transparent"
           disable={currentItemIdx === 3}
           onClick={() => {
@@ -263,7 +262,7 @@ const ImageCreateResult = ({
               dispatch(updateT2ICurItemIndex(currentItemIdx + 1));
             }
           }}
-          iconSrc={iconNext}
+          iconComponent={IconNext}
           iconSize="sm"
         />
       </ImageList>

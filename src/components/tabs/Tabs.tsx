@@ -34,12 +34,20 @@ const TabItem = styled.div<{ selected: boolean }>`
     background-color: #f7f8f9;
   }
 
+  svg {
+    color: var(--gray-gray-80-02);
+  }
+
   ${({ selected }) =>
     selected &&
     css`
       border-bottom: solid 2px var(--ai-purple-80-sub);
       color: var(--ai-purple-50-main);
       font-weight: bold;
+
+      svg {
+        color: var(--ai-purple-70);
+      }
     `}
 `;
 
@@ -57,7 +65,7 @@ export default function Tabs(props: TabProps) {
     <Wrapper>
       {children
         ? children.map((tab) => {
-            const { id, children } = tab.props;
+            const { id, children, icon } = tab.props;
             return (
               <TabItem
                 key={id}
@@ -65,6 +73,7 @@ export default function Tabs(props: TabProps) {
                 onClick={() => {
                   if (onChange) onChange(id);
                 }}>
+                {icon && icon}
                 {children}
               </TabItem>
             );

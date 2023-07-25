@@ -3,12 +3,12 @@ import styled, { FlattenSimpleInterpolation, css, keyframes } from 'styled-compo
 import { initToast, selectToast } from '../../store/slices/toastSlice';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import Icon from '../Icon';
-import icon_close_green from '../../img/ico_ai_close_green.svg';
-import icon_close_red from '../../img/ico_ai_close_red.svg';
 import icon_warnning from '../../img/ico_toast_warning.svg';
 import icon_pass from '../../img/ico_toast_completion.svg';
 import { alignItemStart, flex, flexGrow, flexShrink } from '../../style/cssCommon';
 import IconButton from '../buttons/IconButton';
+
+import { ReactComponent as IconClose } from '../../img/ico_ai_close.svg';
 
 const Fade = keyframes`
   0% {
@@ -54,6 +54,17 @@ const ToastText = styled.div`
   flex: 1;
   height: fit-content;
   padding: 6px 0px;
+`;
+
+const CloseWrapper = styled.div<{ type: ToastType }>`
+  ${(props) =>
+    props.type === 'error'
+      ? css`
+          color: #fb4949;
+        `
+      : css`
+          color: #449916;
+        `}
 `;
 
 export type ToastType = 'none' | 'info' | 'error';
@@ -105,11 +116,9 @@ export default function Toast() {
         <Icon size="sm" iconSrc={toast.type === 'error' ? icon_warnning : icon_pass} />
       </IconWrapper>
       <ToastText>{toast.msg}</ToastText>
-      <IconButton
-        iconSize="lg"
-        iconSrc={toast.type === 'error' ? icon_close_red : icon_close_green}
-        onClick={closeToast}
-      />
+      <CloseWrapper type={toast.type}>
+        <IconButton iconSize="lg" iconComponent={IconClose} onClick={closeToast} />
+      </CloseWrapper>
     </ToastMsgWrapper>
   );
 }
