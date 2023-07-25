@@ -20,7 +20,6 @@ import {
   justiSpaceAround,
   justiSpaceBetween
 } from '../../style/cssCommon';
-import { RightBox } from '../../views/AIChatTab';
 import Button from '../buttons/Button';
 import { activeToast } from '../../store/slices/toastSlice';
 import LinkText from '../LinkText';
@@ -29,11 +28,10 @@ import Grid from '../layout/Grid';
 import Bridge from '../../util/bridge';
 import { useMemo, useState } from 'react';
 import IconButton from '../buttons/IconButton';
+import ArrowSwitcher from '../ArrowSwitcher';
 
 import { ReactComponent as IconArrowUp } from '../../img/ico_arrow_up_small.svg';
 import { ReactComponent as IconArrowDown } from '../../img/ico_arrow_down_small.svg';
-import { ReactComponent as IconPrev } from '../../img/ico_arrow_prev.svg';
-import { ReactComponent as IconNext } from '../../img/ico_arrow_next.svg';
 
 const ImagePreview = styled.div`
   width: 100%;
@@ -113,7 +111,7 @@ const FloatOpenDesc = styled.div`
   z-index: 1;
 `;
 
-const ImgListControl = styled.div`
+const ImgListSwitcher = styled.div`
   ${flex}
   ${justiSpaceBetween}
   ${alignItemCenter}
@@ -124,6 +122,14 @@ const ImgListControl = styled.div`
   color: var(--gray-gray-70);
   gap: 4px;
   margin-top: 8px;
+`;
+
+const LicenseMark = styled.div`
+  ${flex}
+  ${alignItemCenter}
+
+  align-self: flex-end;
+  margin-top: 11px;
 `;
 
 const ImageCreateResult = ({
@@ -146,6 +152,8 @@ const ImageCreateResult = ({
     [history, currentListId]
   );
   const curHistory = useMemo(() => history[curListIndex], [history, curListIndex]);
+
+  if (curListIndex === null || currentItemIdx === null) return <></>;
 
   return (
     <>
@@ -185,35 +193,23 @@ const ImageCreateResult = ({
           onClick={() => setShowInput((prev) => !prev)}
         />
       </InputDescBox>
-      <ImgListControl>
-        <IconButton
-          width={30}
-          height={26}
-          disable={curListIndex === 0}
-          onClick={() => {
+      <ImgListSwitcher>
+        <ArrowSwitcher
+          size="sm"
+          type="index"
+          listLength={history.length}
+          curListIndex={curListIndex}
+          onPrev={() => {
             if (history.length <= 1) return;
             if (curListIndex > 0) dispatch(updateT2ICurListId(history[curListIndex - 1].id));
           }}
-          iconSize="sm"
-          iconComponent={IconPrev}
-        />
-        <div>
-          {curListIndex + 1}/{history.length}
-        </div>
-        <IconButton
-          width={30}
-          height={26}
-          disable={curListIndex === history.length - 1}
-          onClick={() => {
+          onNext={() => {
             if (history.length <= 1) return;
-
             if (curListIndex < history.length - 1)
               dispatch(updateT2ICurListId(history[curListIndex + 1].id));
           }}
-          iconSize="sm"
-          iconComponent={IconNext}
         />
-      </ImgListControl>
+      </ImgListSwitcher>
       <ImagePreview>
         {currentItemIdx !== null && (
           <img
@@ -223,48 +219,35 @@ const ImageCreateResult = ({
         )}
       </ImagePreview>
       <ImageList>
-        <IconButton
-          width={26}
-          height={26}
-          variant="transparent"
-          disable={currentItemIdx === 0}
-          onClick={() => {
-            if (currentItemIdx && currentItemIdx >= 1) {
+        <ArrowSwitcher
+          size="sm"
+          type="imgList"
+          listLength={currentItemIdx !== null ? history[curListIndex]?.list?.length : 0}
+          curListIndex={currentItemIdx}
+          onPrev={() => {
+            if (currentItemIdx !== null && currentItemIdx >= 1)
               dispatch(updateT2ICurItemIndex(currentItemIdx - 1));
-            }
           }}
-          iconComponent={IconPrev}
-          iconSize="sm"
-        />
-        {curHistory.list.map((img, index) => (
-          <img
-            key={index}
-            onClick={() => {
-              dispatch(updateT2ICurItemIndex(index));
-            }}
-            style={{
-              width: '60px',
-              height: '60px',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              opacity: `${index === currentItemIdx ? '1' : '0.6'}`
-            }}
-            src={`data:${img.contentType};base64,${img.data}`}
-            alt=""></img>
-        ))}
-        <IconButton
-          width={26}
-          height={26}
-          variant="transparent"
-          disable={currentItemIdx === 3}
-          onClick={() => {
-            if (currentItemIdx !== null && currentItemIdx <= 2) {
+          onNext={() => {
+            if (currentItemIdx !== null && currentItemIdx <= 2)
               dispatch(updateT2ICurItemIndex(currentItemIdx + 1));
-            }
-          }}
-          iconComponent={IconNext}
-          iconSize="sm"
-        />
+          }}>
+          {curHistory.list.map((img, index) => (
+            <img
+              onClick={() => {
+                dispatch(updateT2ICurItemIndex(index));
+              }}
+              style={{
+                display: 'flex',
+                width: '100%',
+                height: '100%',
+                borderRadius: '4px',
+                opacity: `${index === currentItemIdx ? '1' : '0.6'}`
+              }}
+              src={`data:${img.contentType};base64,${img.data}`}
+              alt=""></img>
+          ))}
+        </ArrowSwitcher>
       </ImageList>
       <RowContainer>
         <Grid col={2}>
@@ -331,16 +314,13 @@ const ImageCreateResult = ({
           {t(`WriteTab.InsertDoc`)}
         </Button>
       </RowContainer>
-      <RightBox
-        cssExt={css`
-          margin-top: 11px;
-        `}>
+      <LicenseMark>
         <LinkText url={t(`MoveToLimitInfo`)}>
           <div style={{ color: '#8769ba', fontSize: '11px' }}>
             Powered By <b>Stable Diffusion</b>
           </div>
         </LinkText>
-      </RightBox>
+      </LicenseMark>
     </>
   );
 };
