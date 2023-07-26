@@ -20,10 +20,11 @@ import { selectTabSlice } from '../store/slices/tabSlice';
 import { formRecList } from './chat/RecommendBox/FormRec';
 import { REC_ID_LIST } from './chat/RecommendBox/FunctionRec';
 import { selectRecFuncSlice } from '../store/slices/recFuncSlice';
-import { useCopyClipboard } from '../util/bridge';
-import IconButton from './buttons/IconButton';
 
-import { ReactComponent as IconCopy } from '../img/ico_copy.svg';
+// clipboard
+// import { useCopyClipboard } from '../util/bridge';
+// import IconButton from './buttons/IconButton';
+// import { ReactComponent as IconCopy } from '../img/ico_copy.svg';
 
 const Wrapper = styled.div<{ isUser: boolean }>`
   ${flex}
@@ -119,7 +120,7 @@ const SpeechBubble = (props: PropsWithChildren<SpeechBubbleProps>) => {
   } = props;
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const copyClipboard = useCopyClipboard();
+  // const copyClipboard = useCopyClipboard();
   const { creating } = useAppSelector(selectTabSlice);
   const { selectedRecFunction, selectedSubRecFunction } = useAppSelector(selectRecFuncSlice);
 
@@ -204,13 +205,13 @@ const SpeechBubble = (props: PropsWithChildren<SpeechBubbleProps>) => {
                   <BoldLengthWrapper>
                     {t(`WriteTab.LengthInfo`, { length: text.length })}
                   </BoldLengthWrapper>
-                  {chat.id !== loadingId && (
+                  {/* {chat.id !== loadingId && (
                     <IconButton
                       iconSize="sm"
                       iconComponent={IconCopy}
                       onClick={() => copyClipboard(text)}
                     />
-                  )}
+                  )} */}
                 </RowBox>
 
                 {chat.id !== loadingId && (

@@ -34,11 +34,12 @@ import IconTextButton from '../buttons/IconTextButton';
 import Grid from '../layout/Grid';
 import React from 'react';
 import { useMoveChatTab } from '../hooks/useMovePage';
-import { useCopyClipboard } from '../../util/bridge';
-import IconButton from '../buttons/IconButton';
 import ArrowSwitcher from '../ArrowSwitcher';
 
-import { ReactComponent as IconCopy } from '../../img/ico_copy.svg';
+// clipboard
+// import { useCopyClipboard } from '../../util/bridge';
+// import IconButton from '../buttons/IconButton';
+// import { ReactComponent as IconCopy } from '../../img/ico_copy.svg';
 
 const Wrapper = styled.div`
   ${flex}
@@ -119,7 +120,7 @@ const AiWriteResult = ({
 }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const copyClipboard = useCopyClipboard();
+  // const copyClipboard = useCopyClipboard();
   const { creating } = useAppSelector(selectTabSlice);
   const { active: bannerActive } = useAppSelector(selectBanner);
   const moveChat = useMoveChatTab();
@@ -163,11 +164,11 @@ const AiWriteResult = ({
 
               {creating === 'none' && currentIndex !== null && (
                 <RightBox>
-                  <IconButton
+                  {/* <IconButton
                     iconSize="sm"
                     iconComponent={IconCopy}
                     onClick={() => copyClipboard(currentWrite.result)}
-                  />
+                  /> */}
                   <ArrowSwitcher
                     size="sm"
                     type="index"
