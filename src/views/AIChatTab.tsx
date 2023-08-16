@@ -33,7 +33,8 @@ import {
   flexShrink,
   alignItemCenter,
   justiSpaceBetween,
-  flex
+  flex,
+  flexWrap
 } from '../style/cssCommon';
 import { calcToken, getElValue } from '../api/usePostSplunkLog';
 import { setCreating } from '../store/slices/tabSlice';
@@ -46,6 +47,8 @@ import { GPT_EXCEEDED_LIMIT } from '../error/error';
 import SendCoinButton from '../components/buttons/SendCoinButton';
 import { REC_ID_LIST } from '../components/chat/RecommendBox/FunctionRec';
 import { ClientType, getPlatform } from '../util/bridge';
+import Button from '../components/buttons/Button';
+import { VersionListType, versionList } from '../components/chat/RecommendBox/FormRec';
 
 const TEXT_MAX_HEIGHT = 268;
 
@@ -125,6 +128,14 @@ export const LengthWrapper = styled.div<{ isError?: boolean; cssExt?: FlattenSim
   ${({ cssExt }) => cssExt && cssExt}
 `;
 
+export const VersionWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+`;
+
 export const BoldLengthWrapper = styled(LengthWrapper)`
   font-weight: 500;
 `;
@@ -176,7 +187,12 @@ const TextBox = styled(RowBox)`
   }
 `;
 
-const InputBottomArea = styled(RowWrapBox)`
+const InputBottomArea = styled.div`
+  width: 100%;
+  ${flex}
+  ${flexWrap}
+  ${justiSpaceBetween}
+  ${alignItemCenter}
   height: 34px;
   padding: 0px 3px 0px 9px;
   border-top: 1px solid var(--ai-purple-99-bg-light);
@@ -197,6 +213,7 @@ export const exampleList = [
 
 export interface ChatOptions {
   input: string;
+  version: VersionListType;
 }
 
 interface WriteTabProps {
@@ -229,7 +246,7 @@ const AIChatTab = (props: WriteTabProps) => {
   }, []);
 
   const {
-    options: { input: chatInput },
+    options: { input: chatInput, version },
     setOptions: setChatInput
   } = props;
   const [isActiveInput, setIsActiveInput] = useState<boolean>(false);
@@ -251,7 +268,7 @@ const AIChatTab = (props: WriteTabProps) => {
 
   const refreshExampleText = () => {
     const text = exampleList[Math.floor(Math.random() * exampleList.length)];
-    setChatInput({ input: t(`ExampleList.${text}`) });
+    setChatInput((prev) => ({ ...prev, input: t(`ExampleList.${text}`) }));
   };
 
   useEffect(() => {
@@ -276,7 +293,7 @@ const AIChatTab = (props: WriteTabProps) => {
   useEffect(() => {
     if (defaultInput && defaultInput.length > 0 && !loadingId) {
       // setActiveInput(true);
-      setChatInput({ input: defaultInput });
+      setChatInput((prev) => ({ ...prev, input: defaultInput }));
       textRef?.current?.focus();
 
       toggleActiveInput(true);
@@ -412,6 +429,7 @@ const AIChatTab = (props: WriteTabProps) => {
           'User-Agent': navigator.userAgent
         }, //   responseType: 'stream',
         body: JSON.stringify({
+          engine: version.version,
           history: [
             ...history
               .filter((history) => history.role !== 'reset')
@@ -467,7 +485,7 @@ const AIChatTab = (props: WriteTabProps) => {
         resultText += decodeStr;
       }
 
-      setChatInput({ input: '' });
+      setChatInput((prev) => ({ ...prev, input: '' }));
       dispatch(initRecFunc());
     } catch (error: any) {
       errorHandle(error);
@@ -478,7 +496,7 @@ const AIChatTab = (props: WriteTabProps) => {
         dispatch(removeChat(userId));
         dispatch(removeChat(assistantId));
         if (input) {
-          setChatInput({ input });
+          setChatInput((prev) => ({ ...prev, input }));
           setIsActiveInput(true);
         }
       }
@@ -586,7 +604,10 @@ const AIChatTab = (props: WriteTabProps) => {
                 }
               }}
               onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
-                setChatInput({ input: e.target.value.slice(0, INPUT_MAX_LENGTH) });
+                setChatInput((prev) => ({
+                  ...prev,
+                  input: e.target.value.slice(0, INPUT_MAX_LENGTH)
+                }));
                 if (isDefaultInput && e.target.value.length === 0) setIsDefaultInput(false);
               }}
             />
@@ -604,9 +625,22 @@ const AIChatTab = (props: WriteTabProps) => {
           </TextBox>
           {!loadingId && isActiveInput && (
             <InputBottomArea>
-              <LengthWrapper isError={chatInput.length >= INPUT_MAX_LENGTH}>
-                {chatInput.length}/{INPUT_MAX_LENGTH}
-              </LengthWrapper>
+              <div style={{ display: 'flex', flexDirection: 'row', gap: '12px' }}>
+                <LengthWrapper isError={chatInput.length >= INPUT_MAX_LENGTH}>
+                  {chatInput.length}/{INPUT_MAX_LENGTH}
+                </LengthWrapper>
+                <VersionWrapper>
+                  {versionList.map((cur) => (
+                    <Button
+                      width="fit"
+                      height={24}
+                      variant={cur.version === version.version ? 'purple' : 'gray'} // no comment
+                      onClick={() => setChatInput((prev) => ({ ...prev, version: cur }))}>
+                      {cur.id}
+                    </Button>
+                  ))}
+                </VersionWrapper>
+              </div>
               <ChangeExampleButton disable={chatInput.length > 0} onClick={refreshExampleText} />
             </InputBottomArea>
           )}

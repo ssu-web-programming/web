@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store';
+import { EngineVersion } from '../../components/chat/RecommendBox/FormRec';
 
 export interface WriteType {
   id: string;
@@ -10,6 +11,7 @@ export interface WriteType {
     arg1: string;
     arg2: string;
   };
+  version: EngineVersion;
 }
 
 interface WriteHistoryType {

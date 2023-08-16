@@ -79,7 +79,17 @@ const SIZES = {
   `
 };
 
-export type ButtonVariant = 'none' | 'white' | 'purpleGradient' | 'gray' | 'transparent';
+export type HeightButtonSize = 'full' | 'fit';
+const HEIGHT_SIZES = {
+  full: css`
+    height: 100%;
+  `,
+  fit: css`
+    height: fit-content;
+  `
+};
+
+export type ButtonVariant = 'none' | 'white' | 'purpleGradient' | 'gray' | 'transparent' | 'purple';
 const VARIANTS = {
   none: css`
     background-color: transparent;
@@ -88,6 +98,11 @@ const VARIANTS = {
   white: css<{ selected: boolean }>`
     background-color: ${({ selected }) => (selected ? `white` : `white`)};
     color: var(--gray-gray-90-01);
+  `,
+  purple: css<{ selected: boolean }>`
+    background-color: ${({ selected }) =>
+      selected ? `var(--ai-purple-50-main)` : `var(--ai-purple-50-main)`};
+    color: white;
   `,
   purpleGradient: css<{ selected: boolean }>`
     background-image: ${({ selected }) =>
@@ -123,7 +138,7 @@ export interface ButtonProps {
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   selected?: boolean;
   width?: ButtonSize | number;
-  height?: number | 'fit';
+  height?: number | HeightButtonSize;
   variant?: ButtonVariant;
   borderType?: ButtonBorderType;
   cssExt?: FlattenSimpleInterpolation;
@@ -151,8 +166,8 @@ export default function Button(props: React.PropsWithChildren<ButtonProps>) {
         `;
 
   const h =
-    height === 'fit'
-      ? SIZES['fit']
+    typeof height === 'string'
+      ? HEIGHT_SIZES[height]
       : css`
           height: ${height}px;
         `;
