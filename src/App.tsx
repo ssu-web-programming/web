@@ -15,6 +15,7 @@ import useApiWrapper from './api/useApiWrapper';
 import { BANNER_ACTIVE_API } from './api/constant';
 import { setBanner } from './store/slices/banner';
 import { useInitBridgeListener } from './util/bridge';
+import AskDoc from './pages/AskDoc';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -43,6 +44,7 @@ function App() {
         <Routes>
           <Route path="/aiWrite" element={<Tools></Tools>}></Route>
           <Route path="/txt2img" element={<TextToImage></TextToImage>}></Route>
+          <Route path="/askdoc" element={<AskDoc></AskDoc>}></Route>
           <Route path="*" element={<InvalidAccess></InvalidAccess>}></Route>
         </Routes>
         <Offline />
