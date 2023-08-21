@@ -208,19 +208,19 @@ export const styleItemList = [
 
 export const ratioItemList = [
   {
-    id: '512x512',
+    id: '1024x1024',
     title: 'Squre',
     imgItem: iconRatioSqure,
     selectedImgItem: iconRatioSqure_purple
   },
   {
-    id: '512x320',
+    id: '1344x768',
     title: 'Horizontal',
     imgItem: iconRatioHorizontal,
     selectedImgItem: iconRatioHorizontal_purple
   },
   {
-    id: '320x512',
+    id: '768x1344',
     title: 'Vertical',
     imgItem: iconRatioVertical,
     selectedImgItem: iconRatioVertical_purple
