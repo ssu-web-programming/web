@@ -17,7 +17,8 @@ import {
   flexShrink,
   alignItemCenter,
   justiSpaceBetween,
-  flex
+  flex,
+  justiStart
 } from '../style/cssCommon';
 import { setCreating } from '../store/slices/tabSlice';
 import { ASKDOC_API, JSON_CONTENT_TYPE } from '../api/constant';
@@ -501,6 +502,9 @@ const AskDoc = () => {
                           width={'full'}
                           height={'full'}
                           variant="gray"
+                          cssExt={css`
+                            ${justiStart}
+                          `}
                           onClick={() => {
                             submitPreprocessing('askDoc', q);
                           }}>
