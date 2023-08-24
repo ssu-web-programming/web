@@ -14,11 +14,13 @@ import TabPanel from '../components/tabs/TabPanel';
 import {
   DEFAULT_WRITE_OPTION_FORM_VALUE,
   DEFAULT_WRITE_OPTION_LENGTH_VALUE,
+  DEFAULT_WRITE_OPTION_VERSION_VALUE,
   WriteOptions
 } from '../components/chat/RecommendBox/FormRec';
 
 import { ReactComponent as IconChat } from '../img/ico_chat.svg';
 import { ReactComponent as IconCreatingText } from '../img/ico_creating_text.svg';
+import DocInsertTest from '../__test__/TestDocInsert';
 
 const Wrapper = styled.div`
   ${flex}
@@ -51,17 +53,23 @@ const TAB_LIST: TabListProps[] = [
     id: 'chat',
     name: `Chating`,
     icon: <IconChat></IconChat>
+  },
+  {
+    id: 'test',
+    name: `Test`
   }
 ];
 
 const initWriteOptions: WriteOptions = {
   input: '',
+  version: DEFAULT_WRITE_OPTION_VERSION_VALUE,
   form: DEFAULT_WRITE_OPTION_FORM_VALUE,
   length: DEFAULT_WRITE_OPTION_LENGTH_VALUE
 };
 
 const initChatOptions: ChatOptions = {
-  input: ''
+  input: '',
+  version: DEFAULT_WRITE_OPTION_VERSION_VALUE
 };
 
 export default function Tools() {
@@ -104,6 +112,7 @@ export default function Tools() {
                 <AIWriteTab options={writeOptions} setOptions={setWriteOptions} />
               )}
               {tab.id === 'chat' && <AIChatTab options={chatOptions} setOptions={setChatOptions} />}
+              {tab.id === 'test' && <DocInsertTest />}
             </MenuItem>
           ))}
         </TabPanel>

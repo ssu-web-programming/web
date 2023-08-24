@@ -7,7 +7,7 @@ import ShowResultButton from '../buttons/ShowResultButton';
 import { useAppDispatch } from '../../store/store';
 import { WriteType, setCurrentWrite } from '../../store/slices/writeHistorySlice';
 import ExTextbox from '../ExTextbox';
-import { WriteOptions, formRecList, lengthList } from '../chat/RecommendBox/FormRec';
+import { WriteOptions, formRecList, lengthList, versionList } from '../chat/RecommendBox/FormRec';
 import icon_write from '../../img/ico_creating_text_white.svg';
 import CreditButton from '../buttons/CreditButton';
 import Icon from '../Icon';
@@ -51,7 +51,12 @@ const AIWriteInput = ({
 }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const { input, form: selectedForm, length: selectedLength } = selectedOptions;
+  const {
+    input,
+    version: selectedVersion,
+    form: selectedForm,
+    length: selectedLength
+  } = selectedOptions;
 
   return (
     <WriteInputPage>
@@ -76,6 +81,21 @@ const AIWriteInput = ({
               setSelectedOptions((prev) => ({ ...prev, input: val }));
             }}></ExTextbox>
         </InputArea>
+      </TitleInputSet>
+      <TitleInputSet>
+        <SubTitle subTitle={t(`WriteTab.SelectVersion`)} />
+        <Grid col={3}>
+          {versionList.map((cur) => (
+            <Button
+              width="full"
+              variant="gray"
+              key={cur.version}
+              onClick={() => setSelectedOptions((prev) => ({ ...prev, version: cur }))}
+              selected={selectedVersion.version === cur.version}>
+              {cur.id}
+            </Button>
+          ))}
+        </Grid>
       </TitleInputSet>
       <TitleInputSet>
         <SubTitle subTitle={t(`WriteTab.SelectForm`)} />

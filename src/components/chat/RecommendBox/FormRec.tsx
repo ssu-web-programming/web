@@ -9,6 +9,13 @@ import IconBoxTextButton from '../../buttons/IconBoxTextButton';
 import { useTranslation } from 'react-i18next';
 import { recSubType, recType } from '../../../store/slices/recFuncSlice';
 
+export type EngineVersion = 'gpt3.5' | 'gpt4';
+
+export interface VersionListType {
+  id: string;
+  version: EngineVersion;
+}
+
 interface FormListType {
   id: string;
   icon: string;
@@ -22,6 +29,7 @@ interface LengthListType {
 
 export interface WriteOptions {
   input: string;
+  version: VersionListType;
   form: FormListType;
   length: LengthListType;
 }
@@ -39,6 +47,19 @@ export const formRecList = [
     id: 'table',
     icon: icon_table,
     selectedIcon: icon_table_purple
+  }
+];
+
+export const DEFAULT_WRITE_OPTION_VERSION_VALUE: VersionListType = {
+  id: 'GPT 3.5',
+  version: 'gpt3.5'
+};
+
+export const versionList: VersionListType[] = [
+  DEFAULT_WRITE_OPTION_VERSION_VALUE,
+  {
+    id: 'GPT 4',
+    version: 'gpt4'
   }
 ];
 

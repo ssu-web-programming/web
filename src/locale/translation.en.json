@@ -13,6 +13,7 @@
   "WriteTab": {
     "WriteTopic": "Draft a topic",
     "WriteTextboxPlacehold": "Enter a topic of your article to write.",
+    "SelectVersion": "Select version",
     "SelectForm": "Set article type",
     "SelectResultLength": "Select number of characters (including blanks)",
     "Length": {
@@ -161,5 +162,22 @@
   "Additional": "more",
   "ShowResult": "View Results",
   "Retry": "Retry",
-  "MoveToLimitInfo": "https://polarisofficehelp.zendesk.com/hc/en-us/articles/6736284040335-Limitations-on-Polaris-Office-AI"
+  "MoveToLimitInfo": "https://polarisofficehelp.zendesk.com/hc/en-us/articles/6736284040335-Limitations-on-Polaris-Office-AI",
+  "AskDoc": {
+    "Greeting": "Hello. This is a Polaris Office AI ASK Doc and I provide accurate answers based on the document. ",
+    "LoadingMsg": {
+      "Info": "Analyzing the document to find better answers! Please hold. It may take up to 3 minutes.",
+      "AskDoc": "Content creation in progress...",
+      "Gpt": "Formulating additional information..."
+    },
+    "ReferencedPage": "Reference page",
+    "GetMoreInformation": "Find additional information",
+    "InitLoadQuestion": "In the form of a list of two questions that people might be curious about, just ask them without answering them.",
+    "InitLoadInfoMention": "Polaris Office AI has found the following questions.",
+    "DefaultQuestion": "What is most important in this document?",
+    "FailedAnalyze": "The service could not be provided due to failure of document analysis. We’ll work tirelessly to provide better service.",
+    "FailedChatPdf": "Document analysis failed. Please try again for a more accurate analysis.",
+    "RetryAnalyze": "Analyze the document again."
+  },
+  "Infinite": "Infinite"
 }
