@@ -288,7 +288,7 @@ const AskDoc = () => {
       setIsActiveInput(true);
       setActiveRetry(false);
     } catch {
-      dispatch(activeToast({ type: 'error', msg: t('AskDoc.FailedChatPdf') }));
+      dispatch(activeToast({ type: 'error', msg: t('AskDoc.FailedAnalyze') }));
       setIsActiveInput(false);
       setActiveRetry(true);
     }
@@ -298,6 +298,11 @@ const AskDoc = () => {
     setLoadingId('init');
 
     switch (status) {
+      case 'failedConvert':
+        dispatch(activeToast({ type: 'error', msg: t('AskDoc.FailedConvert') }));
+        setIsActiveInput(false);
+        setActiveRetry(false);
+        break;
       case 'failedAnalyze':
         dispatch(
           activeToast({
@@ -305,7 +310,8 @@ const AskDoc = () => {
             msg: t('AskDoc.FailedAnalyze')
           })
         );
-        setLoadingId(null);
+        setIsActiveInput(false);
+        setActiveRetry(true);
         break;
       case 'ready':
         setLoadingId('init');
@@ -314,7 +320,7 @@ const AskDoc = () => {
         if (sourceId && questionList.length <= 0) loadInitQuestion();
         break;
     }
-  }, [sourceId, status]);
+  }, [status]);
 
   const handleResizeHeight = () => {
     if (textRef.current) {
@@ -426,7 +432,7 @@ const AskDoc = () => {
       dispatch(
         activeToast({
           type: 'error',
-          msg: t('AskDoc.FailedChatPdf')
+          msg: t('AskDoc.FailedAnalyze')
         })
       );
 
@@ -469,7 +475,7 @@ const AskDoc = () => {
                 input: t(`AskDoc.Greeting`)
               }}
             />
-            {!activeRetry && status !== 'failedAnalyze' && (
+            {!activeRetry && (status === 'ready' || status === 'completeAnalyze') && (
               <AskDocSpeechBubble
                 isLoading={questionList.length <= 0 && loadingId === 'init'}
                 chat={{
