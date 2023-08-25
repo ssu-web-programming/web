@@ -632,6 +632,7 @@ const AIChatTab = (props: WriteTabProps) => {
                 <VersionWrapper>
                   {versionList.map((cur) => (
                     <Button
+                      key={cur.id}
                       width="fit"
                       height={24}
                       variant={cur.version === version.version ? 'purple' : 'gray'} // no comment
