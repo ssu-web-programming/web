@@ -6,10 +6,9 @@ const IconSizeStyle = css<{ size: IconSize }>`
   ${(props) => SIZES[props.size]}
 `;
 
-const wrapSvg = (svgComponent: React.FunctionComponent<React.SVGProps<SVGSVGElement>>) =>
-  styled(svgComponent)`
-    ${IconSizeStyle}
-  `;
+const WrappedSvg = styled.div`
+  ${IconSizeStyle}
+`;
 
 export interface IconButtonProps extends ButtonProps {
   iconSize?: IconSize;
@@ -18,8 +17,6 @@ export interface IconButtonProps extends ButtonProps {
 
 const IconButton = (props: React.PropsWithChildren<IconButtonProps>) => {
   const { width, height, cssExt, iconSize = 'sm' } = props;
-
-  const WrappedSvg = wrapSvg(props.iconComponent);
 
   return (
     <Button
@@ -32,7 +29,7 @@ const IconButton = (props: React.PropsWithChildren<IconButtonProps>) => {
         ${cssExt}
       `}
       {...props}>
-      <WrappedSvg size={iconSize}></WrappedSvg>
+      <WrappedSvg size={iconSize} as={props.iconComponent}></WrappedSvg>
     </Button>
   );
 };
