@@ -206,7 +206,7 @@ const AskDoc = () => {
   const [loadingId, setLoadingId] = useState<string | null>('init');
   const [activeRetry, setActiveRetry] = useState<boolean>(false);
   const [cancleList, setCancleList] = useState<AskDocChat['id'][]>([]);
-  const stopRef = useRef<boolean>(false);
+  const stopRef = useRef<AskDocChat['id'][]>([]);
   const [chatTip, setChatTip] = useState<string>(
     chatTipList[Math.floor(Math.random() * chatTipList.length)]
   );
@@ -250,13 +250,10 @@ const AskDoc = () => {
   }, []);
 
   const loadInitQuestion = async () => {
-    // TODO: async api request and response set
-
-    // file id bridge가 로드했는지 store에서 확인 후 진행해야함.
     if (!status) return;
 
     setLoadingId('init');
-    dispatch(setCreating('Chating'));
+    dispatch(setCreating('AskDoc'));
     setIsActiveInput(false);
     setActiveRetry(false);
 
@@ -350,7 +347,7 @@ const AskDoc = () => {
     const assistantId = uuidv4();
     const userId = uuidv4();
 
-    dispatch(setCreating('Chating'));
+    dispatch(setCreating('AskDoc'));
 
     setLoadingId(assistantId);
     setActiveRetry(false);
@@ -403,8 +400,9 @@ const AskDoc = () => {
         method: 'POST'
       });
 
-      if (stopRef.current) {
+      if (stopRef.current?.indexOf(assistantId) !== -1) {
         dispatch(removeChat(assistantId));
+        stopRef.current = stopRef.current?.filter((id) => id !== assistantId);
         return;
       }
 
@@ -452,6 +450,7 @@ const AskDoc = () => {
       );
 
       setChatInput({ input: '' });
+      setLoadingId(null);
     } catch (error: any) {
       dispatch(
         activeToast({
@@ -471,8 +470,8 @@ const AskDoc = () => {
           setChatInput({ input: chatInput });
         }
       }
-    } finally {
       setLoadingId(null);
+    } finally {
       dispatch(setCreating('none'));
     }
   };
@@ -572,14 +571,12 @@ const AskDoc = () => {
             <CenterBox>
               <StopButton
                 onClick={() => {
-                  stopRef.current = true;
+                  stopRef.current = [...stopRef.current, loadingId];
                   setCancleList((prev) => [...prev, loadingId]);
-                  setLoadingId(null);
                   dispatch(setCreating('none'));
                   setIsActiveInput(true);
 
                   dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.StopMsg`) }));
-                  stopRef.current = false;
                 }}
               />
             </CenterBox>

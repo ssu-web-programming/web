@@ -143,8 +143,10 @@ const AskDocSpeechBubble = (props: PropsWithChildren<AskDocSpeechBubbleProps>) =
         return t('AskDoc.LoadingMsg.AskDoc');
       case 'gpt':
         return t('AskDoc.LoadingMsg.Gpt');
+      default:
+        return t('AskDoc.LoadingMsg.AskDoc');
     }
-  }, []);
+  }, [chat, t]);
 
   const isUser = useMemo(() => chat.role === 'user', [chat.role]);
   const text = useMemo(() => (chat.role === 'assistant' ? chat.result : chat.input), [chat]);
