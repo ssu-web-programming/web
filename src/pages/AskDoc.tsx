@@ -564,7 +564,8 @@ const AskDoc = () => {
             <CenterBox>
               <Button
                 variant="white"
-                width={146}
+                width={'fit'}
+                height={'fit'}
                 borderType="gray"
                 onClick={() => {
                   if (status === 'completeAnalyze' && sourceId) {
