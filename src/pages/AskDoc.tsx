@@ -1,5 +1,5 @@
 import styled, { FlattenSimpleInterpolation, css } from 'styled-components';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useCallback, useMemo, useRef, useState } from 'react';
 import TextArea from '../components/TextArea';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import { v4 as uuidv4 } from 'uuid';
@@ -237,6 +237,18 @@ const AskDoc = () => {
     handleResizeHeight();
   }, [chatInput]);
 
+  const getRefPages = useCallback((contents: string) => {
+    const pages = contents.match(/\[(P\d+\s*,?\s*)*\]/g)?.reduce((acc, cur) => {
+      cur
+        .replace(/\[|\]|p|P|\s/g, '')
+        .split(',')
+        .forEach((p) => acc.push(parseInt(p)));
+
+      return acc;
+    }, [] as number[]);
+    return pages;
+  }, []);
+
   const loadInitQuestion = async () => {
     // TODO: async api request and response set
 
@@ -403,15 +415,27 @@ const AskDoc = () => {
         else throw res;
       }
 
+      const {
+        data: {
+          data: { contents, refs }
+        }
+      } = resultJson;
+
+      const parsedRefPages = getRefPages(contents);
+      let mergedRefPages = refs;
+      if (parsedRefPages && refs) {
+        mergedRefPages = Array.from(new Set([...parsedRefPages, ...refs]));
+      }
+
       dispatch(
         updateChat({
           id: assistantId,
           role: 'assistant',
-          result: resultJson.data.data.contents,
+          result: contents,
           input: chatText ? chatText : chatInput,
           info: {
             request: 'askDoc',
-            page: resultJson.data.data.refs
+            page: mergedRefPages
           }
         })
       );
