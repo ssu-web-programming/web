@@ -438,7 +438,7 @@ const AskDoc = () => {
         })
       );
 
-      const { deductionCredit, leftCredit } = calLeftCredit(resultJson.headers);
+      const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
       dispatch(
         activeToast({
           type: 'info',
