@@ -432,7 +432,7 @@ const AskDoc = () => {
           result: contents,
           input: chatText ? chatText : chatInput,
           info: {
-            request: 'askDoc',
+            request: api,
             page: mergedRefPages
           }
         })
