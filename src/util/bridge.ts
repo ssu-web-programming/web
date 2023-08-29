@@ -116,6 +116,12 @@ const callApi = (api: ApiType, arg?: string | number) => {
             }
             break;
           }
+          case 'shareAnswerState': {
+            if (window.webkit.messageHandlers.shareAnswerState) {
+              window.webkit.messageHandlers.shareAnswerState.postMessage(arg);
+            }
+            break;
+          }
         }
         break;
       }
@@ -309,7 +315,8 @@ type ApiType =
   | 'getSessionInfo'
   | 'copyClipboard'
   | 'movePage'
-  | 'reInitAskDoc';
+  | 'reInitAskDoc'
+  | 'shareAnswerState';
 
 const Bridge = {
   checkSession: (api: string) => {
