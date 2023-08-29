@@ -253,7 +253,7 @@ const AskDoc = () => {
     if (!status) return;
 
     setLoadingId('init');
-    dispatch(setCreating('AskDoc'));
+    dispatch(setCreating('ASKDoc'));
     setIsActiveInput(false);
     setActiveRetry(false);
 
@@ -347,7 +347,7 @@ const AskDoc = () => {
     const assistantId = uuidv4();
     const userId = uuidv4();
 
-    dispatch(setCreating('AskDoc'));
+    dispatch(setCreating('ASKDoc'));
 
     setLoadingId(assistantId);
     setActiveRetry(false);

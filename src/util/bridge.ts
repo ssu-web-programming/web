@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { AppDispatch, RootState, useAppDispatch } from '../store/store';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -167,12 +168,25 @@ interface ReceiveMessage {
   body: string;
 }
 
+type PanelOpenCmd = 'openAiTools' | 'openTextToImg' | 'openAskDoc';
+
 export const useInitBridgeListener = () => {
   const dispatch = useAppDispatch();
   const { i18n, t } = useTranslation();
 
   const navigate = useNavigate();
   const movePage = useMoveChatTab();
+
+  const getPath = useCallback((cmd: PanelOpenCmd) => {
+    switch (cmd) {
+      case 'openAiTools':
+        return '/aiWrite';
+      case 'openTextToImg':
+        return '/txt2img';
+      case 'openAskDoc':
+        return '/askdoc';
+    }
+  }, []);
 
   const changePanel = createAsyncThunk<
     void,
@@ -186,17 +200,13 @@ export const useInitBridgeListener = () => {
       tab: { creating }
     } = thunkAPI.getState();
 
+    const path = getPath(cmd as PanelOpenCmd);
     if (creating === 'none') {
-      let path = ``;
       if (cmd === `openAiTools`) {
-        path = `/aiWrite`;
         if (body && body !== '') {
           movePage(body);
         }
-      } else if (cmd === `openAskDoc`) {
-        path = `/askdoc`;
-      } else {
-        path = `/txt2img`;
+      } else if (cmd === `openTextToImg`) {
         if (body && body !== '') {
           thunkAPI.dispatch(updateT2ICurListId(null));
           thunkAPI.dispatch(updateT2ICurItemIndex(null));
@@ -206,12 +216,14 @@ export const useInitBridgeListener = () => {
         state: { body }
       });
     } else {
-      thunkAPI.dispatch(
-        activeToast({
-          type: 'error',
-          msg: t(`ToastMsg.TabLoadedAndWait`, { tab: t(creating) })
-        })
-      );
+      if (window.location.pathname !== path) {
+        thunkAPI.dispatch(
+          activeToast({
+            type: 'error',
+            msg: t(`ToastMsg.TabLoadedAndWait`, { tab: t(creating) })
+          })
+        );
+      }
     }
   });
 
