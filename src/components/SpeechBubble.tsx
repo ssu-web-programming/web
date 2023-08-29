@@ -224,7 +224,7 @@ const SpeechBubble = (props: PropsWithChildren<SpeechBubbleProps>) => {
                           submitChat(chat);
                           setRetryOrigin(chat.id);
                         }}
-                        disable={creating === 'Chating'}>
+                        disable={creating === 'Chatting'}>
                         {t(`WriteTab.Recreating`)}
                       </CreditButton>
                     )}

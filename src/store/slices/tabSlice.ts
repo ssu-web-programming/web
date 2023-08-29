@@ -2,7 +2,7 @@ import { createSlice, PayloadAction, Middleware } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 import Bridge from '../../util/bridge';
 
-type CREATING_TYPE = 'none' | 'Chating' | 'Write' | 'CreateImage' | 'ASKDoc';
+type CREATING_TYPE = 'none' | 'Chatting' | 'Write' | 'CreateImage' | 'ASKDoc';
 export type AI_WRITE_TAB_TYPE = 'write' | 'chat' | 'test';
 
 interface TabType {

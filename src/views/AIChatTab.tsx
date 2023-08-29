@@ -392,7 +392,7 @@ const AIChatTab = (props: WriteTabProps) => {
       ? chatInput
       : chatHistory[chatHistory.length - 1].result;
 
-    dispatch(setCreating('Chating'));
+    dispatch(setCreating('Chatting'));
 
     setLoadingId(assistantId);
 
