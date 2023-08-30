@@ -51,7 +51,7 @@ const TAB_LIST: TabListProps[] = [
   },
   {
     id: 'chat',
-    name: `Chating`,
+    name: `Chatting`,
     icon: <IconChat></IconChat>
   },
   {
