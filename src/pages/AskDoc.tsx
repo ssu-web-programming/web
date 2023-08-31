@@ -575,6 +575,7 @@ const AskDoc = () => {
                   setCancleList((prev) => [...prev, loadingId]);
                   dispatch(setCreating('none'));
                   setIsActiveInput(true);
+                  setLoadingId(null);
 
                   dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.StopMsg`) }));
                 }}
