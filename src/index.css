@@ -4,6 +4,12 @@ body,
   width: 100%;
   height: 100%;
   margin: 0;
+
+  /* prevent browser auto resizing with font-size */
+  -webkit-text-size-adjust: none; /*Chrome, Safari, newer versions of Opera*/
+  -moz-text-size-adjust: none; /*Firefox*/
+  -ms-text-size-adjust: none; /*Ie*/
+  -o-text-size-adjust: none; /*old versions of Opera*/
 }
 
 input:focus {
