@@ -615,7 +615,7 @@ const AskDoc = () => {
                     }}>
                     <Icon iconSrc={icon_ai} />
                   </div>
-                  {t(`ChatingTab.TipList.${chatTip}`)}
+                  {t(`AskDoc.TipList.${chatTip}`)}
                 </Info>
               )}
             </FloatingBox>
