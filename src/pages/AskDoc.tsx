@@ -202,8 +202,8 @@ const AskDoc = () => {
   }, []);
 
   const { input: chatInput } = options;
-  const [isActiveInput, setIsActiveInput] = useState<boolean>(false);
-  const [loadingId, setLoadingId] = useState<string | null>('init');
+  const [isActiveInput, setIsActiveInput] = useState<boolean>(true);
+  const [loadingId, setLoadingId] = useState<string | null>(null);
   const [activeRetry, setActiveRetry] = useState<boolean>(false);
   const [cancleList, setCancleList] = useState<AskDocChat['id'][]>([]);
   const stopRef = useRef<AskDocChat['id'][]>([]);
@@ -216,11 +216,6 @@ const AskDoc = () => {
 
   const INIT_QUESTION_PROMPT = t('AskDoc.InitLoadQuestion');
   const INIT_DEFAULT_QUESTION = t('AskDoc.DefaultQuestion');
-
-  const toggleActiveInput = (isActive: boolean) => {
-    setIsActiveInput(isActive);
-    dispatch(isActive ? activeRecFunc() : inactiveRecFunc());
-  };
 
   useEffect(() => {
     if (isActiveInput && textRef?.current) {
@@ -309,7 +304,10 @@ const AskDoc = () => {
   };
 
   useEffect(() => {
+    if (questionList.length > 0) return;
+
     setLoadingId('init');
+    setIsActiveInput(false);
 
     switch (status) {
       case 'failedConvert':
@@ -492,7 +490,7 @@ const AskDoc = () => {
             style={{ position: 'relative' }}
             isLoading={loadingId ? true : false}
             onClick={(e) => {
-              toggleActiveInput(false);
+              setIsActiveInput(false);
             }}>
             <AskDocSpeechBubble
               isLoading={false}
@@ -630,7 +628,7 @@ const AskDoc = () => {
               style={{ position: 'relative', display: 'flex' }}>
               <TextBox
                 onClick={() => {
-                  toggleActiveInput(true);
+                  setIsActiveInput(true);
                 }}>
                 <TextArea
                   disable={loadingId !== null}
