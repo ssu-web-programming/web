@@ -1,3 +1,4 @@
+import { useLocation } from 'react-router-dom';
 import {
   ERR_INVALID_SESSION,
   ERR_NOT_ONLINE,
@@ -14,6 +15,7 @@ import { useTranslation } from 'react-i18next';
 const useErrorHandle = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
+  const location = useLocation();
 
   return (error: any) => {
     let msg: string | React.ReactNode = '';
@@ -52,7 +54,8 @@ const useErrorHandle = () => {
             }
             break;
           case 500:
-            msg = t(`ToastMsg.AIError`);
+            if (location.pathname.indexOf('askdoc') > 0) msg = t('AskDoc.FailedAnalyze');
+            else msg = t(`ToastMsg.AIError`);
             break;
           default:
             msg = t(`ToastMsg.ErrorMsg`, { code: error.status, msg: error.statusText });

@@ -42,6 +42,7 @@ import Button from '../components/buttons/Button';
 import icon_credit from '../img/ico_credit.svg';
 import icon_retry from '../img/ico_reanalyze.svg';
 import Bridge from '../util/bridge';
+import useErrorHandle from '../components/hooks/useErrorHandle';
 
 const TEXT_MAX_HEIGHT = 268;
 
@@ -186,6 +187,7 @@ export interface ChatOptions {
 const AskDoc = () => {
   const dispatch = useAppDispatch();
   const apiWrapper = useApiWrapper();
+  const errorHandle = useErrorHandle();
   const {
     askDocHistory: chatHistory,
     questionList,
@@ -294,8 +296,8 @@ const AskDoc = () => {
       dispatch(setCreating('none'));
       setIsActiveInput(true);
       setActiveRetry(false);
-    } catch {
-      dispatch(activeToast({ type: 'error', msg: t('AskDoc.FailedAnalyze') }));
+    } catch (error: any) {
+      errorHandle(error);
       setIsActiveInput(false);
       setActiveRetry(true);
     } finally {
@@ -458,12 +460,7 @@ const AskDoc = () => {
       setChatInput({ input: '' });
       setLoadingId(null);
     } catch (error: any) {
-      dispatch(
-        activeToast({
-          type: 'error',
-          msg: t('AskDoc.FailedAnalyze')
-        })
-      );
+      errorHandle(error);
 
       const assistantResult = chatHistory?.filter((history) => history.id === assistantId)[0]
         ?.result;
