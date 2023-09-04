@@ -4,7 +4,6 @@ import TextArea from '../components/TextArea';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import { v4 as uuidv4 } from 'uuid';
 import { RowWrapBox } from '../components/chat/RecommendBox/ChatRecommend';
-import { activeRecFunc, inactiveRecFunc } from '../store/slices/recFuncSlice';
 import { activeToast } from '../store/slices/toastSlice';
 import icon_ai from '../img/ico_ai.svg';
 import Icon from '../components/Icon';
@@ -21,7 +20,7 @@ import {
   justiStart
 } from '../style/cssCommon';
 import { setCreating } from '../store/slices/tabSlice';
-import { ASKDOC_API, JSON_CONTENT_TYPE } from '../api/constant';
+import { ASKDOC_API, ASKDOC_INIT_QUESTION_API, JSON_CONTENT_TYPE } from '../api/constant';
 import { calLeftCredit } from '../util/common';
 import useApiWrapper from '../api/useApiWrapper';
 import { useTranslation } from 'react-i18next';
@@ -257,22 +256,14 @@ const AskDoc = () => {
     setActiveRetry(false);
 
     try {
-      const { res } = await apiWrapper(ASKDOC_API, {
+      const { res } = await apiWrapper(ASKDOC_INIT_QUESTION_API, {
         headers: {
           ...JSON_CONTENT_TYPE,
           'User-Agent': navigator.userAgent
         },
         body: JSON.stringify({
           sourceId: sourceId,
-          history: [
-            {
-              content: INIT_QUESTION_PROMPT,
-              role: 'user',
-              preProcessing: {
-                type: 'document_chat'
-              }
-            }
-          ]
+          prompt: INIT_QUESTION_PROMPT
         }),
         method: 'POST'
       });
@@ -283,9 +274,9 @@ const AskDoc = () => {
         else throw res;
       }
 
-      if (resultJson?.data?.data?.contents) {
+      if (resultJson?.data?.contents) {
         const reg = /\d+\./;
-        const result = resultJson.data.data.contents
+        const result = resultJson.data.contents
           .split(reg)
           .filter((res: string) => res !== ' ' && res.length > 0)
           .slice(0, initQuestionLen - 1);
