@@ -250,6 +250,8 @@ const AskDoc = () => {
   }, []);
 
   const loadInitQuestion = async () => {
+    const initQuestionLen = 3;
+
     if (!status) return;
 
     setLoadingId('init');
@@ -288,7 +290,8 @@ const AskDoc = () => {
         const reg = /\d+\./;
         const result = resultJson.data.data.contents
           .split(reg)
-          .filter((res: string) => res !== ' ' && res.length > 0);
+          .filter((res: string) => res !== ' ' && res.length > 0)
+          .slice(0, initQuestionLen - 1);
         dispatch(setQuestionList([INIT_DEFAULT_QUESTION, ...result]));
       }
 
