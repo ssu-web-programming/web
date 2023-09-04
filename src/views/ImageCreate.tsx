@@ -116,7 +116,7 @@ const ImageCreate = ({ contents }: { contents: string }) => {
             msg: ` ${t(`Txt2ImgTab.ToastMsg.StartCreatingImage`)} 
              ${t(`ToastMsg.AboutCredit`, {
                deductionCredit: deductionCredit,
-               leftCredit: leftCredit
+               leftCredit: leftCredit === '-1' ? t('Unlimited') : leftCredit
              })}`
           })
         );
