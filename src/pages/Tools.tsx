@@ -20,7 +20,6 @@ import {
 
 import { ReactComponent as IconChat } from '../img/ico_chat.svg';
 import { ReactComponent as IconCreatingText } from '../img/ico_creating_text.svg';
-import DocInsertTest from '../__test__/TestDocInsert';
 
 const Wrapper = styled.div`
   ${flex}
@@ -53,10 +52,6 @@ const TAB_LIST: TabListProps[] = [
     id: 'chat',
     name: `Chatting`,
     icon: <IconChat></IconChat>
-  },
-  {
-    id: 'test',
-    name: `Test`
   }
 ];
 
@@ -112,7 +107,6 @@ export default function Tools() {
                 <AIWriteTab options={writeOptions} setOptions={setWriteOptions} />
               )}
               {tab.id === 'chat' && <AIChatTab options={chatOptions} setOptions={setChatOptions} />}
-              {tab.id === 'test' && <DocInsertTest />}
             </MenuItem>
           ))}
         </TabPanel>
