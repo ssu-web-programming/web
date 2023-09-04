@@ -382,8 +382,10 @@ const AskDoc = () => {
       })
     );
 
+    let splunk = null;
+
     try {
-      let { res } = await apiWrapper(ASKDOC_API, {
+      let { res, logger } = await apiWrapper(ASKDOC_API, {
         headers: {
           ...JSON_CONTENT_TYPE,
           'User-Agent': navigator.userAgent
@@ -402,6 +404,7 @@ const AskDoc = () => {
         }),
         method: 'POST'
       });
+      splunk = logger;
 
       if (stopRef.current?.indexOf(assistantId) !== -1) {
         dispatch(removeChat(assistantId));
@@ -476,6 +479,12 @@ const AskDoc = () => {
       setLoadingId(null);
     } finally {
       dispatch(setCreating('none'));
+      if (splunk) {
+        splunk({
+          dp: 'ai.askdoc',
+          el: 'chat_askdoc'
+        });
+      }
     }
   };
 
