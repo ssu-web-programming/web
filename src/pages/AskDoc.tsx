@@ -449,7 +449,7 @@ const AskDoc = () => {
           type: 'info',
           msg: t(`ToastMsg.StartCreating`, {
             deductionCredit: deductionCredit,
-            leftCredit: leftCredit === '-1' ? t('Infinite') : leftCredit
+            leftCredit: leftCredit === '-1' ? t('Unlimited') : leftCredit
           })
         })
       );

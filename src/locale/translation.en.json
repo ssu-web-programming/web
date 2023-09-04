@@ -178,7 +178,10 @@
     "DefaultQuestion": "What is most important in this document?",
     "FailedConvert": "The service could not be provided due to failure of document analysis. We’ll work tirelessly to provide better service.",
     "FailedAnalyze": "Document analysis failed. Please try again for a more accurate analysis.",
-    "RetryAnalyze": "Analyze the document again."
+    "RetryAnalyze": "Analyze the document again.",
+    "TipList": {
+      "1ChatingCredit": "4credit(s) will be deducted per conversation."
+    }
   },
-  "Infinite": "Infinite"
+  "Unlimited": "Unlimited"
 }
