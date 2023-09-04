@@ -303,6 +303,8 @@ const AskDoc = () => {
       dispatch(activeToast({ type: 'error', msg: t('AskDoc.FailedAnalyze') }));
       setIsActiveInput(false);
       setActiveRetry(true);
+    } finally {
+      dispatch(setCreating('none'));
     }
   };
 
