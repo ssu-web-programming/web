@@ -490,9 +490,9 @@ const AskDoc = () => {
               setIsActiveInput(false);
             }}>
             <AskDocSpeechBubble
-              isLoading={false}
+              loadingId={loadingId}
               chat={{
-                id: 'info',
+                id: 'greeting',
                 result: t(`AskDoc.Greeting`),
                 role: 'info',
                 input: t(`AskDoc.Greeting`)
@@ -500,9 +500,9 @@ const AskDoc = () => {
             />
             {!activeRetry && (status === 'ready' || status === 'completeAnalyze') && (
               <AskDocSpeechBubble
-                isLoading={questionList.length <= 0 && loadingId === 'init'}
+                loadingId={loadingId}
                 chat={{
-                  id: 'info',
+                  id: 'init',
                   result: '',
                   role: 'info',
                   input: ''
@@ -527,6 +527,7 @@ const AskDoc = () => {
                       }}>
                       {questionList?.map((q) => (
                         <Button
+                          disable={loadingId !== null}
                           key={q}
                           width={'full'}
                           height={'full'}
@@ -559,7 +560,7 @@ const AskDoc = () => {
               .map((chat) => (
                 <AskDocSpeechBubble
                   key={chat.id}
-                  isLoading={loadingId === chat.id}
+                  loadingId={loadingId}
                   chat={chat}
                   onMore={() => {
                     submitPreprocessing('gpt', chat.input);

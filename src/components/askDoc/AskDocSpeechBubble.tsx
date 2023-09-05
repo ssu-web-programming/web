@@ -122,14 +122,14 @@ const BoldLengthWrapper = styled.div<{ isError?: boolean }>`
 `;
 
 interface AskDocSpeechBubbleProps {
-  isLoading: boolean;
+  loadingId: string | null;
   cssExt?: FlattenSimpleInterpolation;
   chat: AskDocChat;
   onMore?: () => void;
 }
 
 const AskDocSpeechBubble = (props: PropsWithChildren<AskDocSpeechBubbleProps>) => {
-  const { isLoading, chat, children, onMore } = props;
+  const { loadingId, chat, children, onMore } = props;
   const { t } = useTranslation();
   // const copyClipboard = useCopyClipboard();
 
@@ -148,6 +148,7 @@ const AskDocSpeechBubble = (props: PropsWithChildren<AskDocSpeechBubbleProps>) =
     }
   }, [chat, t]);
 
+  const isLoading = useMemo(() => loadingId === chat.id, [chat.id, loadingId]);
   const isUser = useMemo(() => chat.role === 'user', [chat.role]);
   const text = useMemo(() => (chat.role === 'assistant' ? chat.result : chat.input), [chat]);
 
@@ -214,7 +215,11 @@ const AskDocSpeechBubble = (props: PropsWithChildren<AskDocSpeechBubbleProps>) =
                     </div>
                   )}
                   <Grid col={1}>
-                    <CreditButton width="full" variant="purpleGradient" onClick={onMore}>
+                    <CreditButton
+                      width="full"
+                      variant="purpleGradient"
+                      onClick={onMore}
+                      disable={loadingId !== null}>
                       {t('AskDoc.GetMoreInformation')}
                     </CreditButton>
                   </Grid>
