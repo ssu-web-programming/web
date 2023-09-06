@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import Icon from '../Icon';
 import icon_ai from '../../img/ico_ai.svg';
-import badge_beta from '../../img/badge_beta_ai.svg';
 import { flex, alignItemCenter, justiSpaceBetween } from '../../style/cssCommon';
 import Bridge from '../../util/bridge';
 import IconButton from '../buttons/IconButton';
@@ -31,7 +30,7 @@ const Title = styled.div`
   font-weight: bold;
   line-height: 100%;
   color: var(--ai-purple-50-main);
-  margin: 3px 7px 5px 4px;
+  margin: 3px 0px 5px 4px;
   padding: 0;
 `;
 
@@ -67,7 +66,6 @@ export default function Header(props: HeaderProps) {
       <TitleWrapper>
         <Icon iconSrc={icon_ai} size="lg" />
         <Title>{title}</Title>
-        <img src={badge_beta} alt="Beta" />
         {subTitle && (
           <>
             <Divider /> <SubTitle>{subTitle}</SubTitle>
