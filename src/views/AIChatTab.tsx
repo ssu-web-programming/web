@@ -74,7 +74,7 @@ const ChatListWrapper = styled.div<{ isLoading: boolean }>`
   overflow-y: auto;
   overflow-x: hidden;
   padding-bottom: ${({ isLoading }: { isLoading: boolean }) => (isLoading ? '0px' : '66px')};
-  gap: 16px;
+  /* gap: 16px; */
   padding-top: 16px;
 `;
 

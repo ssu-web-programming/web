@@ -23,6 +23,8 @@ const Wrapper = styled.div<{ isUser: boolean }>`
   ${flex}
   ${flexColumn}
 
+  min-height: fit-content;
+
   width: fit-content;
   max-width: 100%;
   margin-right: ${({ isUser }: { isUser: boolean }) => !isUser && '30px'};
@@ -30,6 +32,10 @@ const Wrapper = styled.div<{ isUser: boolean }>`
   align-self: ${({ isUser }: { isUser: boolean }) => isUser && 'flex-end'};
   margin: ${({ isUser }: { isUser: boolean }) =>
     isUser ? '0px 10px 0px 48px' : '0px 30px 0px 8px'};
+
+  & + & {
+    margin-top: 16px;
+  }
 `;
 
 const Profile = styled.div`
