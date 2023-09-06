@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { AppDispatch, RootState, useAppDispatch } from '../store/store';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -7,6 +8,7 @@ import { activeToast } from '../store/slices/toastSlice';
 import gI18n, { convertLangFromLangCode } from '../locale';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { makeClipboardData } from './common';
+import { AskDocStatus, setSrouceId, setStatus } from '../store/slices/askDoc';
 
 const UA_PREFIX: string = `__polaris_office_ai_`;
 
@@ -50,7 +52,7 @@ async function fileToString(file: Blob) {
   });
 }
 
-const callApi = (api: ApiType, arg?: string) => {
+const callApi = (api: ApiType, arg?: string | number) => {
   try {
     const platform = getPlatform();
     switch (platform) {
@@ -103,6 +105,24 @@ const callApi = (api: ApiType, arg?: string) => {
             }
             break;
           }
+          case 'movePage': {
+            if (window.webkit.messageHandlers.movePage) {
+              window.webkit.messageHandlers.movePage.postMessage(arg);
+            }
+            break;
+          }
+          case 'reInitAskDoc': {
+            if (window.webkit.messageHandlers.reInitAskDoc) {
+              window.webkit.messageHandlers.reInitAskDoc.postMessage(arg);
+            }
+            break;
+          }
+          case 'shareAnswerState': {
+            if (window.webkit.messageHandlers.shareAnswerState) {
+              window.webkit.messageHandlers.shareAnswerState.postMessage(arg);
+            }
+            break;
+          }
         }
         break;
       }
@@ -148,12 +168,25 @@ interface ReceiveMessage {
   body: string;
 }
 
+type PanelOpenCmd = 'openAiTools' | 'openTextToImg' | 'openAskDoc';
+
 export const useInitBridgeListener = () => {
   const dispatch = useAppDispatch();
   const { i18n, t } = useTranslation();
 
   const navigate = useNavigate();
   const movePage = useMoveChatTab();
+
+  const getPath = useCallback((cmd: PanelOpenCmd) => {
+    switch (cmd) {
+      case 'openAiTools':
+        return '/aiWrite';
+      case 'openTextToImg':
+        return '/txt2img';
+      case 'openAskDoc':
+        return '/askdoc';
+    }
+  }, []);
 
   const changePanel = createAsyncThunk<
     void,
@@ -167,15 +200,13 @@ export const useInitBridgeListener = () => {
       tab: { creating }
     } = thunkAPI.getState();
 
+    const path = getPath(cmd as PanelOpenCmd);
     if (creating === 'none') {
-      let path = ``;
       if (cmd === `openAiTools`) {
-        path = `/aiWrite`;
         if (body && body !== '') {
           movePage(body);
         }
-      } else {
-        path = `/txt2img`;
+      } else if (cmd === `openTextToImg`) {
         if (body && body !== '') {
           thunkAPI.dispatch(updateT2ICurListId(null));
           thunkAPI.dispatch(updateT2ICurItemIndex(null));
@@ -185,12 +216,14 @@ export const useInitBridgeListener = () => {
         state: { body }
       });
     } else {
-      thunkAPI.dispatch(
-        activeToast({
-          type: 'error',
-          msg: t(`ToastMsg.TabLoadedAndWait`, { tab: t(creating) })
-        })
-      );
+      if (window.location.pathname !== path) {
+        thunkAPI.dispatch(
+          activeToast({
+            type: 'error',
+            msg: t(`ToastMsg.TabLoadedAndWait`, { tab: t(creating) })
+          })
+        );
+      }
     }
   });
 
@@ -200,7 +233,8 @@ export const useInitBridgeListener = () => {
       if (cmd && cmd !== '') {
         switch (cmd) {
           case 'openAiTools':
-          case 'openTextToImg': {
+          case 'openTextToImg':
+          case 'openAskDoc': {
             dispatch(changePanel({ cmd, body }));
             break;
           }
@@ -212,6 +246,21 @@ export const useInitBridgeListener = () => {
           case 'changeLang': {
             const lang = convertLangFromLangCode(body);
             gI18n.changeLanguage(lang);
+            break;
+          }
+          case 'initAskDoc': {
+            const sourceId = body;
+            dispatch(setSrouceId(sourceId));
+            break;
+          }
+          case 'askDocState': {
+            switch (body as AskDocStatus) {
+              case 'failedConvert':
+              case 'failedAnalyze': {
+                dispatch(setStatus(body));
+                break;
+              }
+            }
             break;
           }
           default: {
@@ -276,7 +325,10 @@ type ApiType =
   | 'openDoc'
   | 'closePanel'
   | 'getSessionInfo'
-  | 'copyClipboard';
+  | 'copyClipboard'
+  | 'movePage'
+  | 'reInitAskDoc'
+  | 'shareAnswerState';
 
 const Bridge = {
   checkSession: (api: string) => {
@@ -331,8 +383,9 @@ const Bridge = {
     });
   },
 
-  callBridgeApi: async (api: ApiType, arg?: string | Blob) => {
-    const apiArg = arg && typeof arg !== 'string' ? await fileToString(arg) : arg;
+  callBridgeApi: async (api: ApiType, arg?: string | number | Blob) => {
+    const apiArg =
+      arg && typeof arg !== 'string' && typeof arg !== 'number' ? await fileToString(arg) : arg;
     callApi(api, apiArg);
   }
 };

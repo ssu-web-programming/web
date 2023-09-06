@@ -24,7 +24,7 @@ import useErrorHandle from '../components/hooks/useErrorHandle';
 import { GPT_EXCEEDED_LIMIT } from '../error/error';
 import AiWriteResult from '../components/aiWrite/AiWriteResult';
 import AIWriteInput from '../components/aiWrite/AIWriteInput';
-import { WriteOptions } from '../components/chat/RecommendBox/FormRec';
+import { EngineVersion, WriteOptions } from '../components/chat/RecommendBox/FormRec';
 
 const TabWrapper = styled.div`
   ${flex}
@@ -56,6 +56,7 @@ const AIWriteTab = (props: WriteTabProps) => {
     let resultText = '';
     let splunk = null;
     let input = '';
+    let version: EngineVersion = 'gpt3.5';
 
     const assistantId = uuidv4();
 
@@ -68,6 +69,7 @@ const AIWriteTab = (props: WriteTabProps) => {
     if (inputParam) {
       input = inputParam.input;
       preProc = inputParam.preProcessing;
+      version = inputParam.version;
     } else {
       input = selectedOptions.input;
       preProc = {
@@ -75,10 +77,17 @@ const AIWriteTab = (props: WriteTabProps) => {
         arg1: selectedOptions.form.id, // id로 수정
         arg2: selectedOptions.length.length.toString()
       };
+      version = selectedOptions.version.version;
     }
 
     dispatch(
-      addWriteHistory({ id: assistantId, input: input, preProcessing: preProc, result: '' })
+      addWriteHistory({
+        id: assistantId,
+        input: input,
+        preProcessing: preProc,
+        result: '',
+        version
+      })
     );
     dispatch(setCurrentWrite(assistantId));
     dispatch(setCreating('Write'));
@@ -89,8 +98,8 @@ const AIWriteTab = (props: WriteTabProps) => {
           ...JSON_CONTENT_TYPE,
           'User-Agent': navigator.userAgent
         },
-        //   responseType: 'stream',
         body: JSON.stringify({
+          engine: version,
           history: [
             {
               content: input,
@@ -114,7 +123,7 @@ const AIWriteTab = (props: WriteTabProps) => {
           type: 'info',
           msg: t(`ToastMsg.StartCreating`, {
             deductionCredit: deductionCredit,
-            leftCredit: leftCredit
+            leftCredit: leftCredit === '-1' ? t('Unlimited') : leftCredit
           })
         })
       );
@@ -144,7 +153,8 @@ const AIWriteTab = (props: WriteTabProps) => {
             id: assistantId,
             result: decodeStr,
             input: input,
-            preProcessing: preProc
+            preProcessing: preProc,
+            version
           })
         );
         resultText += decodeStr;

@@ -2,8 +2,9 @@
   "PageCount": "페이지 수",
   "InsertFail": "문서 내 삽입 위치를 선택해주세요!",
   "Write": "작성",
-  "Chating": "채팅",
+  "Chatting": "채팅",
   "CreateImage": "이미지 생성하기",
+  "ASKDoc": "ASK Doc",
   "ShowExam": "예시문구 보기",
   "FormList": {
     "paragraph": "문장",
@@ -13,6 +14,7 @@
   "WriteTab": {
     "WriteTopic": "주제 작성하기",
     "WriteTextboxPlacehold": "작성할 글의 주제를 입력하세요",
+    "SelectVersion": "버전 선택",
     "SelectForm": "글 형식 정하기",
     "SelectResultLength": "작성 될 글자 수 선택하기 (공백포함)",
     "Length": {
@@ -161,5 +163,25 @@
   "Additional": "추가",
   "ShowResult": "결과 다시보기",
   "Retry": "다시 시도",
-  "MoveToLimitInfo": "https://polarisofficehelp.zendesk.com/hc/ko/articles/6736284040335-%ED%8F%B4%EB%9D%BC%EB%A6%AC%EC%8A%A4%EC%98%A4%ED%94%BC%EC%8A%A4-AI-%EC%A0%9C%ED%95%9C%EC%82%AC%ED%95%AD"
+  "MoveToLimitInfo": "https://polarisofficehelp.zendesk.com/hc/ko/articles/6736284040335-%ED%8F%B4%EB%9D%BC%EB%A6%AC%EC%8A%A4%EC%98%A4%ED%94%BC%EC%8A%A4-AI-%EC%A0%9C%ED%95%9C%EC%82%AC%ED%95%AD",
+  "AskDoc": {
+    "Greeting": "안녕하세요. 문서를 기반으로 정확한 답변을 제공하는 폴라리스 오피스 AI ASK Doc 입니다.",
+    "LoadingMsg": {
+      "Info": "더 좋은 답변을 위해 문서를 분석하고 있습니다! 잠시만 기다려 주세요. 최대 3분까지 소요될 수 있습니다.",
+      "AskDoc": "내용을 생성 중입니다...",
+      "Gpt": "추가 정보를 생성 중입니다..."
+    },
+    "ReferencedPage": "참고 페이지",
+    "GetMoreInformation": "추가 정보 알아보기",
+    "InitLoadQuestion": "사람들이 궁금해 할만한 질문을 2가지를 리스트 형태로 답변 없이 질문만 알려줘.",
+    "InitLoadInfoMention": "폴라리스 오피스 AI가 이런 질문들을 찾았어요.",
+    "DefaultQuestion": "이 문서에서 가장 중요한 내용은 무엇이야?",
+    "FailedConvert": "문서 분석에 실패하여, 서비스를 제공할 수 없습니다. 더 나은 서비스를 위해 노력하겠습니다.",
+    "FailedAnalyze": "문서 분석에 실패했습니다. 정확한 분석을 위해 다시 한번 시도해주세요.",
+    "RetryAnalyze": "문서 다시 분석하기",
+    "TipList": {
+      "1ChatingCredit": "대화 1회당 4크레딧이 차감됩니다."
+    }
+  },
+  "Unlimited": "무제한"
 }

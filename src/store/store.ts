@@ -5,12 +5,13 @@ import toast from './slices/toastSlice';
 import bridge from './slices/bridge';
 import recFunction from './slices/recFuncSlice';
 import writeHistory from './slices/writeHistorySlice';
-import tab from './slices/tabSlice';
+import tab, { shareAnswerState } from './slices/tabSlice';
 import txtimgHistory from './slices/txt2imgHistory';
 import network from './slices/network';
 import confirm from './slices/confirm';
 import loadingSpinner from './slices/loadingSpinner';
 import banner from './slices/banner';
+import askDoc from './slices/askDoc';
 
 const store = configureStore({
   reducer: {
@@ -24,9 +25,11 @@ const store = configureStore({
     network,
     confirm,
     loadingSpinner,
-    banner
+    banner,
+    askDoc
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({ serializableCheck: false }).concat(shareAnswerState),
   devTools: process.env.NODE_ENV !== 'production'
 });
 

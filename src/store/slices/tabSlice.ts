@@ -1,7 +1,8 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, Middleware } from '@reduxjs/toolkit';
 import { RootState } from '../store';
+import Bridge from '../../util/bridge';
 
-type CREATING_TYPE = 'none' | 'Chating' | 'Write' | 'CreateImage';
+type CREATING_TYPE = 'none' | 'Chatting' | 'Write' | 'CreateImage' | 'ASKDoc';
 export type AI_WRITE_TAB_TYPE = 'write' | 'chat' | 'test';
 
 interface TabType {
@@ -29,3 +30,10 @@ const tabSlice = createSlice({
 export const { initTab, setCreating, selectTab } = tabSlice.actions;
 export const selectTabSlice = (state: RootState) => state.tab;
 export default tabSlice.reducer;
+
+export const shareAnswerState: Middleware = () => (next) => (action) => {
+  if (action.type === 'tab/setCreating') {
+    Bridge.callBridgeApi('shareAnswerState', action.payload);
+  }
+  return next(action);
+};
