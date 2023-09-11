@@ -29,6 +29,7 @@ interface SplunkLogDataType {
     input_token?: number;
     output_token?: number;
     env?: string;
+    gpt_ver?: number;
   };
 }
 
@@ -48,6 +49,7 @@ interface SplunkData {
 
   input_token?: number;
   output_token?: number;
+  gpt_ver?: number;
 }
 
 const DEFAULT_LOG_DATA: SplunkLogDataType = {
@@ -76,7 +78,8 @@ const DEFAULT_LOG_DATA: SplunkLogDataType = {
   },
   cobj: {
     input_token: undefined,
-    output_token: undefined
+    output_token: undefined,
+    gpt_ver: undefined
   }
 };
 
@@ -98,6 +101,8 @@ const usePostSplunkLog = (sessionInfo: SessionInfo) => {
 
     logData.cobj.input_token = data.input_token;
     logData.cobj.output_token = data.output_token;
+    logData.cobj.gpt_ver = data.gpt_ver;
+
     if (isVfMode) logData.cobj.env = 'vf';
 
     const res = await fetch('https://log.polarisoffice.com/api/2/logcollect/collector', {
@@ -118,6 +123,16 @@ export const calcToken = (text: string) => {
   const encoded = encode(text);
   if (encoded) count += encoded.length;
   return count;
+};
+
+export const parseGptVer = (version: string) => {
+  try {
+    const gptVer = new RegExp(/gpt([0-9]*[.]?[0-9]+)/g).exec(version);
+    const gpt_ver = gptVer && gptVer[1] ? parseFloat(gptVer[1]) : 0;
+    return gpt_ver;
+  } catch (err) {
+    return 0;
+  }
 };
 
 export const getElValue = (select: string | undefined) => {
