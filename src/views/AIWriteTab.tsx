@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useRef } from 'react';
 import { useDispatch } from 'react-redux';
-import { calcToken } from '../api/usePostSplunkLog';
+import { calcToken, parseGptVer } from '../api/usePostSplunkLog';
 import { activeToast } from '../store/slices/toastSlice';
 import { v4 as uuidv4 } from 'uuid';
 import {
@@ -178,11 +178,14 @@ const AIWriteTab = (props: WriteTabProps) => {
       if (splunk) {
         const input_token = calcToken(input);
         const output_token = calcToken(resultText);
+        const gpt_ver = parseGptVer(version);
+
         splunk({
           dp: 'ai.write',
           el: 'create_text',
           input_token,
-          output_token
+          output_token,
+          gpt_ver
         });
       }
       stopRef.current = false;

@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store';
+import { EngineVersion } from '../../components/chat/RecommendBox/FormRec';
 
 export interface ChatPreProcessing {
   type?: string;
@@ -11,6 +12,7 @@ export interface Chat {
   role: 'assistant' | 'user' | 'reset' | 'info';
   input: string;
   preProcessing?: ChatPreProcessing;
+  version?: EngineVersion;
 }
 
 interface ChatHistoryState {

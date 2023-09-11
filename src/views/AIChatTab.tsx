@@ -36,7 +36,7 @@ import {
   flex,
   flexWrap
 } from '../style/cssCommon';
-import { calcToken, getElValue } from '../api/usePostSplunkLog';
+import { calcToken, getElValue, parseGptVer } from '../api/usePostSplunkLog';
 import { setCreating } from '../store/slices/tabSlice';
 import { CHAT_STREAM_API, JSON_CONTENT_TYPE } from '../api/constant';
 import { calLeftCredit } from '../util/common';
@@ -392,6 +392,8 @@ const AIChatTab = (props: WriteTabProps) => {
       ? chatInput
       : chatHistory[chatHistory.length - 1].result;
 
+    const gptVer = chat ? chat.version : version.version;
+
     dispatch(setCreating('Chatting'));
 
     setLoadingId(assistantId);
@@ -408,7 +410,8 @@ const AIChatTab = (props: WriteTabProps) => {
           role: 'user',
           result: input,
           input: input,
-          preProcessing: preProc
+          preProcessing: preProc,
+          version: gptVer
         })
       );
     }
@@ -418,7 +421,8 @@ const AIChatTab = (props: WriteTabProps) => {
         role: 'assistant',
         result: '',
         input: input,
-        preProcessing: preProc
+        preProcessing: preProc,
+        version: gptVer
       })
     );
 
@@ -429,7 +433,7 @@ const AIChatTab = (props: WriteTabProps) => {
           'User-Agent': navigator.userAgent
         }, //   responseType: 'stream',
         body: JSON.stringify({
-          engine: version.version,
+          engine: gptVer,
           history: [
             ...history
               .filter((history) => history.role !== 'reset')
@@ -505,11 +509,14 @@ const AIChatTab = (props: WriteTabProps) => {
         const el = getElValue(selectedRecFunction?.id);
         const input_token = calcToken(chatInput);
         const output_token = calcToken(resultText);
+        const gpt_ver = parseGptVer(gptVer!);
+
         splunk({
           dp: 'ai.write',
           el,
           input_token,
-          output_token
+          output_token,
+          gpt_ver
         });
       }
 
