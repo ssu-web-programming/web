@@ -119,10 +119,14 @@ const usePostSplunkLog = (sessionInfo: SessionInfo) => {
 
 const MAGIC_NUMBER = 8;
 export const calcToken = (text: string) => {
-  let count = MAGIC_NUMBER;
-  const encoded = encode(text);
-  if (encoded) count += encoded.length;
-  return count;
+  try {
+    let count = MAGIC_NUMBER;
+    const encoded = encode(text);
+    if (encoded) count += encoded.length;
+    return count;
+  } catch (err) {
+    return 0;
+  }
 };
 
 export const parseGptVer = (version: string) => {
