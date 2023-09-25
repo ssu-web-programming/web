@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 import Button, { ButtonProps } from './Button';
 import { IconSize, SIZES } from '../Icon';
 
-const IconSizeStyle = css<{ size: IconSize }>`
+export const IconSizeStyle = css<{ size: IconSize }>`
   ${(props) => SIZES[props.size]}
 `;
 

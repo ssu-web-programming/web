@@ -14,7 +14,7 @@ import {
 } from '../store/slices/chatHistorySlice';
 import { v4 as uuidv4 } from 'uuid';
 import ChangeExampleButton from '../components/buttons/ChangeExampleButton';
-import ChatRecommend, { RowWrapBox } from '../components/chat/RecommendBox/ChatRecommend';
+import ChatRecommend from '../components/chat/RecommendBox/ChatRecommend';
 import {
   activeRecFunc,
   inactiveRecFunc,
@@ -49,6 +49,7 @@ import { REC_ID_LIST } from '../components/chat/RecommendBox/FunctionRec';
 import { ClientType, getPlatform } from '../util/bridge';
 import Button from '../components/buttons/Button';
 import { VersionListType, versionList } from '../components/chat/RecommendBox/FormRec';
+import DropDownButton from '../components/buttons/DropDownButton';
 
 const TEXT_MAX_HEIGHT = 268;
 
@@ -191,6 +192,7 @@ const InputBottomArea = styled.div`
   width: 100%;
   ${flex}
   ${flexWrap}
+  ${justiCenter}
   ${justiSpaceBetween}
   ${alignItemCenter}
   height: 34px;
@@ -531,6 +533,18 @@ const AIChatTab = (props: WriteTabProps) => {
 
   const placeholder = useMemo(() => t(`ChatingTab.InputPlaceholder`), [t]);
 
+  const groupVersionList = useMemo(() => {
+    return versionList.reduce((acc: { group: string; list: VersionListType[] }[], cur) => {
+      if (cur.group !== null) {
+        const prevGroup = acc.findIndex((a) => cur.group === a.group);
+        if (prevGroup >= 0) {
+          acc[prevGroup].list.push(cur);
+        } else acc.push({ group: cur.group, list: [cur] });
+      }
+      return acc;
+    }, []);
+  }, []);
+
   return (
     <Wrapper>
       <ChatListWrapper
@@ -637,16 +651,36 @@ const AIChatTab = (props: WriteTabProps) => {
                   {chatInput.length}/{INPUT_MAX_LENGTH}
                 </LengthWrapper>
                 <VersionWrapper>
-                  {versionList.map((cur) => (
-                    <Button
-                      key={cur.id}
-                      width="fit"
-                      height={24}
-                      variant={cur.version === version.version ? 'purple' : 'gray'} // no comment
-                      onClick={() => setChatInput((prev) => ({ ...prev, version: cur }))}>
-                      {cur.id}
-                    </Button>
-                  ))}
+                  <>
+                    {groupVersionList.map((group) => {
+                      return (
+                        <DropDownButton<VersionListType>
+                          width={77}
+                          height="full"
+                          key={group.group}
+                          list={group.list}
+                          onItemClick={(item: VersionListType) => {
+                            setChatInput((prev) => ({ ...prev, version: item }));
+                          }}
+                          selectedId={version.id}
+                          defaultId={group.list[0].id}
+                        />
+                      );
+                    })}
+                    {versionList.filter((version) => version.group === null).length > 0 &&
+                      versionList
+                        .filter((version) => version.group === null)
+                        .map((cur: VersionListType) => (
+                          <Button
+                            key={cur.id}
+                            width="fit"
+                            height={24}
+                            variant={cur.version === version.version ? 'purple' : 'gray'} // no comment
+                            onClick={() => setChatInput((prev) => ({ ...prev, version: cur }))}>
+                            {cur.id}
+                          </Button>
+                        ))}
+                  </>
                 </VersionWrapper>
               </div>
               <ChangeExampleButton disable={chatInput.length > 0} onClick={refreshExampleText} />

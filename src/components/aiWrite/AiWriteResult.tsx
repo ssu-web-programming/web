@@ -220,7 +220,7 @@ const AiWriteResult = ({
           </RightBox>
         </ButtonBox>
       </ResWrapper>
-      {bannerActive && currentWriteId && creating !== 'Write' && <PSEventBannerWrite />}
+      {/* {bannerActive && currentWriteId && creating !== 'Write' && <PSEventBannerWrite />} */}
     </Wrapper>
   );
 };
