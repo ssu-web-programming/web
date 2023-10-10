@@ -17,6 +17,8 @@ interface SplunkLogDataType {
     dp: string;
     el?: string;
     dt?: string;
+    ec?: string;
+    ea?: string;
   };
   ctx: {
     ts: number;
@@ -46,6 +48,8 @@ interface SplunkData {
   dp: string;
 
   el?: string;
+  ec?: string;
+  ea?: string;
 
   input_token?: number;
   output_token?: number;
@@ -98,6 +102,8 @@ const usePostSplunkLog = (sessionInfo: SessionInfo) => {
     logData.ctx.ts = parseInt(new Date().getTime().toString().substring(0, 10));
     logData.obj.dp = data.dp;
     logData.obj.el = data.el;
+    logData.obj.ec = data.ec;
+    logData.obj.ea = data.ea;
 
     logData.cobj.input_token = data.input_token;
     logData.cobj.output_token = data.output_token;

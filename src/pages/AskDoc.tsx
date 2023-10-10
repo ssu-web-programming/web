@@ -246,6 +246,7 @@ const AskDoc = () => {
   }, []);
 
   const loadInitQuestion = async () => {
+    let splunk = null;
     const initQuestionLen = 3;
 
     if (!status) return;
@@ -256,7 +257,7 @@ const AskDoc = () => {
     setActiveRetry(false);
 
     try {
-      const { res } = await apiWrapper(ASKDOC_INIT_QUESTION_API, {
+      const { res, logger } = await apiWrapper(ASKDOC_INIT_QUESTION_API, {
         headers: {
           ...JSON_CONTENT_TYPE,
           'User-Agent': navigator.userAgent
@@ -267,6 +268,7 @@ const AskDoc = () => {
         }),
         method: 'POST'
       });
+      splunk = logger;
       const resultJson = await res.json();
 
       if (res.status !== 200) {
@@ -291,6 +293,14 @@ const AskDoc = () => {
       errorHandle(error);
       setIsActiveInput(false);
       setActiveRetry(true);
+      if (splunk) {
+        splunk({
+          dp: 'ai.askdoc',
+          ec: 'system',
+          ea: 'result',
+          el: 'chat_askdoc.gen_failed'
+        });
+      }
     } finally {
       dispatch(setCreating('none'));
     }
