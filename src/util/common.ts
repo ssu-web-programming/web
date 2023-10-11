@@ -90,3 +90,20 @@ export const makeClipboardData = async (markdown: string) => {
     html
   };
 };
+
+const CHAT_PDF_PAGE_PARSE_REG = /\[(P\d+\s*,?\s*)*\]/g;
+export const parseRefPages = (contents: string) => {
+  const pages = contents.match(CHAT_PDF_PAGE_PARSE_REG)?.reduce((acc, cur) => {
+    cur
+      .replace(/\[|\]|p|P|\s/g, '')
+      .split(',')
+      .forEach((p) => acc.push(parseInt(p)));
+
+    return acc;
+  }, [] as number[]);
+  return pages;
+};
+
+export const removeRefPages = (contents: string) => {
+  return contents.replaceAll(CHAT_PDF_PAGE_PARSE_REG, '');
+};
