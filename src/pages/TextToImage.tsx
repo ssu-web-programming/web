@@ -39,7 +39,7 @@ const TextToImage = () => {
       <Body>
         <ImageCreate contents={location.state?.body || ''} />
       </Body>
-      {bannerActive && creating !== 'CreateImage' && currentListId && <PSEventBannerT2I />}
+      {/* {bannerActive && creating !== 'CreateImage' && currentListId && <PSEventBannerT2I />} */}
     </Wrapper>
   );
 };

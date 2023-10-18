@@ -9,11 +9,12 @@ import IconBoxTextButton from '../../buttons/IconBoxTextButton';
 import { useTranslation } from 'react-i18next';
 import { recSubType, recType } from '../../../store/slices/recFuncSlice';
 
-export type EngineVersion = 'gpt3.5' | 'gpt4';
+export type EngineVersion = 'gpt3.5' | 'gpt4' | 'clovax';
 
 export interface VersionListType {
   id: string;
   version: EngineVersion;
+  group: 'gpt' | null;
 }
 
 interface FormListType {
@@ -52,14 +53,21 @@ export const formRecList = [
 
 export const DEFAULT_WRITE_OPTION_VERSION_VALUE: VersionListType = {
   id: 'GPT 3.5',
-  version: 'gpt3.5'
+  version: 'gpt3.5',
+  group: 'gpt'
 };
 
 export const versionList: VersionListType[] = [
   DEFAULT_WRITE_OPTION_VERSION_VALUE,
   {
-    id: 'GPT 4',
-    version: 'gpt4'
+    id: 'GPT 4.0',
+    version: 'gpt4',
+    group: 'gpt'
+  },
+  {
+    id: 'CLOVA X',
+    version: 'clovax',
+    group: null
   }
 ];
 
