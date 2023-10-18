@@ -28,13 +28,14 @@ import { insertDoc } from '../../util/common';
 import { activeToast } from '../../store/slices/toastSlice';
 import { selectTabSlice } from '../../store/slices/tabSlice';
 import { selectBanner } from '../../store/slices/banner';
-import PSEventBannerWrite from '../../external/PS/PSEventBannerWrite';
+// import PSEventBannerWrite from '../../external/PS/PSEventBannerWrite';
 import CreditButton from '../buttons/CreditButton';
 import IconTextButton from '../buttons/IconTextButton';
 import Grid from '../layout/Grid';
 import React from 'react';
 import { useMoveChatTab } from '../hooks/useMovePage';
 import ArrowSwitcher from '../ArrowSwitcher';
+import ClovaXLinkText from '../ClovaXLinkText';
 
 // clipboard
 // import { useCopyClipboard } from '../../util/bridge';
@@ -216,7 +217,7 @@ const AiWriteResult = ({
             </IconTextButton>
           </div>
           <RightBox>
-            <OpenAILinkText />
+            {currentWrite.version === 'clovax' ? <ClovaXLinkText /> : <OpenAILinkText />}
           </RightBox>
         </ButtonBox>
       </ResWrapper>
