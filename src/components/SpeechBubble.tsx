@@ -20,6 +20,7 @@ import { selectTabSlice } from '../store/slices/tabSlice';
 import { formRecList } from './chat/RecommendBox/FormRec';
 import { REC_ID_LIST } from './chat/RecommendBox/FunctionRec';
 import { selectRecFuncSlice } from '../store/slices/recFuncSlice';
+import ClovaXLinkText from './ClovaXLinkText';
 
 // clipboard
 // import { useCopyClipboard } from '../util/bridge';
@@ -254,7 +255,7 @@ const SpeechBubble = (props: PropsWithChildren<SpeechBubbleProps>) => {
 
       {chat.role === 'assistant' && !loadingMsg && (
         <LisenceRight>
-          <OpenAILinkText />
+          {chat.version === 'clovax' ? <ClovaXLinkText /> : <OpenAILinkText />}
         </LisenceRight>
       )}
     </Wrapper>
