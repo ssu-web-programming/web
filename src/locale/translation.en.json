@@ -43,8 +43,7 @@
       "EnterInfo": "Use Enter to break the line.",
       "CtrlEnterInfo": "Enter Ctrl+Enter to open a conversation.",
       "CtrlShiftEnterInfo": "Enter Ctrl+Shift+Enter to open a conversation.",
-      "DoSepecificQuestion": "Make your question in more detail to get a better response.",
-      "DateInfo": "Content for events after September 2021 may be incorrect."
+      "DoSepecificQuestion": "Make your question in more detail to get a better response."
     },
     "LoadingMsg": {
       "Creating": "Content creation in progress.",
