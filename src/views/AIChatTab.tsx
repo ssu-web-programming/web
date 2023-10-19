@@ -238,7 +238,6 @@ const AIChatTab = (props: WriteTabProps) => {
       '1ChatingCredit',
       'EnterInfo',
       'DoSepecificQuestion',
-      'DateInfo',
       platform === ClientType.ios || platform === ClientType.android
         ? 'CtrlShiftEnterInfo'
         : 'CtrlEnterInfo'

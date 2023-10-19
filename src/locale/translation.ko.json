@@ -43,8 +43,7 @@
       "EnterInfo": "Enter로 줄을 바꾸세요",
       "CtrlEnterInfo": "Ctrl+Enter를 눌러 대화를 할 수 있습니다.",
       "CtrlShiftEnterInfo": "Ctrl+Shift+Enter를 눌러 대화를 할 수 있습니다.",
-      "DoSepecificQuestion": "구체적인 질문으로 더 좋은 답변을 받아보세요.",
-      "DateInfo": "2021년 9월 이후의 사건은 부정확할 수 있습니다."
+      "DoSepecificQuestion": "구체적인 질문으로 더 좋은 답변을 받아보세요."
     },
     "LoadingMsg": {
       "Creating": "내용을 생성 중입니다…",
