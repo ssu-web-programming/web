@@ -1,5 +1,5 @@
 import styled, { FlattenSimpleInterpolation, css } from 'styled-components';
-import { useEffect, useCallback, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import TextArea from '../components/TextArea';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import { v4 as uuidv4 } from 'uuid';
@@ -20,8 +20,8 @@ import {
   justiStart
 } from '../style/cssCommon';
 import { setCreating } from '../store/slices/tabSlice';
-import { ASKDOC_API, ASKDOC_INIT_QUESTION_API, JSON_CONTENT_TYPE } from '../api/constant';
-import { calLeftCredit } from '../util/common';
+import { ASKDOC_API, JSON_CONTENT_TYPE } from '../api/constant';
+import { calLeftCredit, parseRefPages } from '../util/common';
 import useApiWrapper from '../api/useApiWrapper';
 import { useTranslation } from 'react-i18next';
 import { GPT_EXCEEDED_LIMIT } from '../error/error';
@@ -33,7 +33,6 @@ import {
   appendChat,
   removeChat,
   selectAskDoc,
-  setQuestionList,
   updateChat
 } from '../store/slices/askDoc';
 import AskDocSpeechBubble from '../components/askDoc/AskDocSpeechBubble';
@@ -42,6 +41,7 @@ import icon_credit from '../img/ico_credit.svg';
 import icon_retry from '../img/ico_reanalyze.svg';
 import Bridge from '../util/bridge';
 import useErrorHandle from '../components/hooks/useErrorHandle';
+import useLoadInitQuestion from '../components/hooks/useLoadInitQuestion';
 
 const TEXT_MAX_HEIGHT = 268;
 
@@ -194,6 +194,7 @@ const AskDoc = () => {
     status
   } = useAppSelector(selectAskDoc);
   const { t } = useTranslation();
+  const loadInitQuestion = useLoadInitQuestion();
   const [options, setChatInput] = useState<ChatOptions>({
     input: ''
   });
@@ -215,9 +216,6 @@ const AskDoc = () => {
   const chatEndRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLTextAreaElement>(null);
 
-  const INIT_QUESTION_PROMPT = t('AskDoc.InitLoadQuestion');
-  const INIT_DEFAULT_QUESTION = t('AskDoc.DefaultQuestion');
-
   useEffect(() => {
     if (isActiveInput && textRef?.current) {
       textRef.current.focus();
@@ -233,76 +231,20 @@ const AskDoc = () => {
     handleResizeHeight();
   }, [chatInput]);
 
-  const getRefPages = useCallback((contents: string) => {
-    const pages = contents.match(/\[(P\d+\s*,?\s*)*\]/g)?.reduce((acc, cur) => {
-      cur
-        .replace(/\[|\]|p|P|\s/g, '')
-        .split(',')
-        .forEach((p) => acc.push(parseInt(p)));
-
-      return acc;
-    }, [] as number[]);
-    return pages;
-  }, []);
-
-  const loadInitQuestion = async () => {
-    let splunk = null;
-    const initQuestionLen = 3;
-
-    if (!status) return;
-
+  const onLoadInitQuestion = async () => {
     setLoadingId('init');
-    dispatch(setCreating('ASKDoc'));
     setIsActiveInput(false);
     setActiveRetry(false);
 
     try {
-      const { res, logger } = await apiWrapper(ASKDOC_INIT_QUESTION_API, {
-        headers: {
-          ...JSON_CONTENT_TYPE,
-          'User-Agent': navigator.userAgent
-        },
-        body: JSON.stringify({
-          sourceId: sourceId,
-          prompt: INIT_QUESTION_PROMPT
-        }),
-        method: 'POST'
-      });
-      splunk = logger;
-      const resultJson = await res.json();
-
-      if (res.status !== 200) {
-        if (res.status === 400) throw new Error(GPT_EXCEEDED_LIMIT);
-        else throw res;
-      }
-
-      if (resultJson?.data?.contents) {
-        const reg = /\d+\./;
-        const result = resultJson.data.contents
-          .split(reg)
-          .filter((res: string) => res !== ' ' && res.length > 0)
-          .slice(0, initQuestionLen - 1);
-        dispatch(setQuestionList([INIT_DEFAULT_QUESTION, ...result]));
-      }
+      await loadInitQuestion(sourceId);
 
       setLoadingId(null);
-      dispatch(setCreating('none'));
       setIsActiveInput(true);
       setActiveRetry(false);
     } catch (error: any) {
-      errorHandle(error);
       setIsActiveInput(false);
       setActiveRetry(true);
-      if (splunk) {
-        splunk({
-          dp: 'ai.askdoc',
-          ec: 'system',
-          ea: 'result',
-          el: 'chat_askdoc.gen_failed'
-        });
-      }
-    } finally {
-      dispatch(setCreating('none'));
     }
   };
 
@@ -332,7 +274,7 @@ const AskDoc = () => {
         setLoadingId('init');
         break;
       case 'completeAnalyze':
-        if (sourceId && questionList.length <= 0) loadInitQuestion();
+        if (sourceId && questionList.length <= 0) onLoadInitQuestion();
         break;
     }
   }, [status]);
@@ -428,7 +370,7 @@ const AskDoc = () => {
         }
       } = resultJson;
 
-      const parsedRefPages = getRefPages(contents);
+      const parsedRefPages = parseRefPages(contents);
       let mergedRefPages = refs;
       if (parsedRefPages && refs) {
         mergedRefPages = Array.from(new Set([...parsedRefPages, ...refs]));
@@ -602,7 +544,7 @@ const AskDoc = () => {
                 borderType="gray"
                 onClick={() => {
                   if (status === 'completeAnalyze' && sourceId) {
-                    loadInitQuestion();
+                    onLoadInitQuestion();
                   } else if (status === 'failedConvert' || status === 'failedAnalyze') {
                     setLoadingId('init');
                     Bridge.callBridgeApi('reInitAskDoc', '');

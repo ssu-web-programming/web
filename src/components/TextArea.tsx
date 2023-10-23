@@ -26,6 +26,7 @@ interface TextAreaProps {
   disable?: boolean;
   onBlur?: (e: React.FocusEvent<HTMLElement>) => void;
   placeholder?: string;
+  resize?: boolean;
 }
 
 const TextArea = ({
@@ -38,8 +39,16 @@ const TextArea = ({
   rows = 5,
   textRef,
   disable = false,
-  placeholder
+  placeholder,
+  resize = false
 }: TextAreaProps) => {
+  if (resize && textRef?.current) {
+    textRef.current.style.height = 'auto';
+    if (value !== '') {
+      textRef.current.style.height = textRef.current.scrollHeight + 'px';
+    }
+  }
+
   return (
     <Textarea
       onClick={onClick}
