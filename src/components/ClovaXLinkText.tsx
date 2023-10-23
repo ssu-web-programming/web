@@ -1,14 +1,13 @@
-import { useTranslation } from 'react-i18next';
 import LinkText from './LinkText';
-import { alignItemCenter, flex, justiCenter } from '../style/cssCommon';
+import { flex } from '../style/cssCommon';
 import styled from 'styled-components';
-import ico_clovax_primary from '../img/HyperCLOVA X_Logotype_Primary.png';
+import ico_clovax_primary from '../img/hyperClovaX_logotype_primary.svg';
+import ico_navercloud from '../img/naver_cloud_ci_green.svg';
 
 const Wrapper = styled.div`
   ${flex}
-  ${justiCenter}
-  ${alignItemCenter}
 
+  vertical-align: middle;
   font-family: Pretendard;
   font-size: 11px;
   font-weight: 500;
@@ -17,21 +16,31 @@ const Wrapper = styled.div`
   margin-right: 3px;
   height: fit-content;
   width: fit-content;
-  gap: 3px;
+  gap: 5px;
 `;
 
-const ClovaxLogo = styled.img`
+const HCXLogo = styled.img`
   ${flex}
   align-self: center;
-  height: 11px;
+  width: 80px;
+  height: fit-content;
 `;
 
+const NaverCloudLogo = styled(HCXLogo)`
+  height: 9px;
+  width: fit-content;
+`;
+
+const CLOVA_URL = 'https://clova.ai/hyperclova';
+
 const ClovaXLinkText = () => {
-  const { t } = useTranslation();
   return (
-    <LinkText url={t(`MoveToLimitInfo`)}>
-      <Wrapper>Powered By</Wrapper>
-      <ClovaxLogo src={ico_clovax_primary} alt="ClovaX" />
+    <LinkText url={CLOVA_URL}>
+      <Wrapper>
+        <p>Powered By</p>
+        <HCXLogo src={ico_clovax_primary} alt="ClovaX" />
+        <NaverCloudLogo src={ico_navercloud} alt="NaverCloud" />
+      </Wrapper>
     </LinkText>
   );
 };
