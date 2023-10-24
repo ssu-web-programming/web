@@ -1,5 +1,8 @@
 import { encode } from 'gpt-tokenizer';
 import { REC_ID_LIST } from '../components/chat/RecommendBox/FunctionRec';
+import { EngineVersion } from '../components/chat/RecommendBox/FormRec';
+
+export type LLMVersion = string | number;
 interface SplunkLogDataType {
   ti: {
     v: string;
@@ -31,7 +34,7 @@ interface SplunkLogDataType {
     input_token?: number;
     output_token?: number;
     env?: string;
-    gpt_ver?: number;
+    gpt_ver?: LLMVersion;
   };
 }
 
@@ -53,7 +56,7 @@ interface SplunkData {
 
   input_token?: number;
   output_token?: number;
-  gpt_ver?: number;
+  gpt_ver?: LLMVersion;
 }
 
 const DEFAULT_LOG_DATA: SplunkLogDataType = {
@@ -135,13 +138,14 @@ export const calcToken = (text: string) => {
   }
 };
 
-export const parseGptVer = (version: string) => {
+export const parseGptVer = (version: EngineVersion): LLMVersion => {
   try {
+    if (version === 'clovax') return 'CLOVA';
     const gptVer = new RegExp(/gpt([0-9]*[.]?[0-9]+)/g).exec(version);
     const gpt_ver = gptVer && gptVer[1] ? parseFloat(gptVer[1]) : 0;
     return gpt_ver;
   } catch (err) {
-    return 0;
+    return 'unknown';
   }
 };
 
