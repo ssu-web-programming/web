@@ -262,8 +262,7 @@ const VoiceDoc = () => {
         method: 'POST'
       });
 
-      const blob = await res.blob();
-      return blob;
+      return res;
     } catch (err) {
       throw new Error('Error in Make Voice');
     }
@@ -408,8 +407,9 @@ const VoiceDoc = () => {
         mergedRefPages = Array.from(new Set([...parsedRefPages, ...refs]));
       }
 
-      const audio = await reqVoiceRes(result);
-      const url = window.URL.createObjectURL(audio);
+      const resAudio = await reqVoiceRes(result);
+      const audioBlob = await resAudio.blob();
+      const url = window.URL.createObjectURL(audioBlob);
       const mp3 = new Audio(url);
       mp3.play();
 
@@ -426,12 +426,13 @@ const VoiceDoc = () => {
         })
       );
 
-      const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
+      const { deductionCredit: answerDeductionCredit } = calLeftCredit(res.headers);
+      const { deductionCredit: audioDeductionCredit, leftCredit } = calLeftCredit(resAudio.headers);
       dispatch(
         activeToast({
           type: 'info',
           msg: t(`ToastMsg.StartCreating`, {
-            deductionCredit: deductionCredit,
+            deductionCredit: `${parseInt(answerDeductionCredit) + parseInt(audioDeductionCredit)}`,
             leftCredit: leftCredit === '-1' ? t('Unlimited') : leftCredit
           })
         })
@@ -639,7 +640,7 @@ const VoiceDoc = () => {
         </RecognizeBtnArea> */}
         <InfoArea>
           <Icon iconSrc={icon_ai} />
-          {t(`AskDoc.TipList.1ChatingCredit`)}
+          {t(`AskDoc.TipList.1VoiceCredit`)}
         </InfoArea>
       </Body>
     </Wrapper>

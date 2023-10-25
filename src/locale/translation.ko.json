@@ -179,7 +179,8 @@
     "FailedAnalyze": "문서 분석에 실패했습니다. 정확한 분석을 위해 다시 한번 시도해주세요.",
     "RetryAnalyze": "문서 다시 분석하기",
     "TipList": {
-      "1ChatingCredit": "대화 1회당 4크레딧이 차감됩니다."
+      "1ChatingCredit": "대화 1회당 4크레딧이 차감됩니다.",
+      "1VoiceCredit": "음성안내가 추가되어 대화 1회당 8크레딧이 차감됩니다."
     }
   },
   "Unlimited": "무제한"

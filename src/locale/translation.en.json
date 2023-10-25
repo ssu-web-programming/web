@@ -179,7 +179,8 @@
     "FailedAnalyze": "Document analysis failed. Please try again for a more accurate analysis.",
     "RetryAnalyze": "Analyze the document again.",
     "TipList": {
-      "1ChatingCredit": "4credit(s) will be deducted per conversation."
+      "1ChatingCredit": "4credit(s) will be deducted per conversation.",
+      "1VoiceCredit": "8credit(s) will be deducted per conversation."
     }
   },
   "Unlimited": "Unlimited"

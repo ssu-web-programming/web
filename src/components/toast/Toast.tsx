@@ -44,6 +44,8 @@ const ToastMsgWrapper = styled.div<{ variant: FlattenSimpleInterpolation }>`
   box-shadow: 0 2px 8px 0 var(--black-10);
 
   ${(props) => props.variant}
+
+  z-index: 50;
 `;
 
 const IconWrapper = styled.div`
