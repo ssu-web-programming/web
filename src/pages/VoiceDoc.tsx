@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { RowWrapBox } from '../components/chat/RecommendBox/ChatRecommend';
 import { activeToast } from '../store/slices/toastSlice';
 import icon_ai from '../img/ico_ai.svg';
-import icon_mic from '../img/aiChat/mic.png';
+// import icon_mic from '../img/aiChat/mic.png';
 import Icon from '../components/Icon';
 import StopButton from '../components/buttons/StopButton';
 import {
@@ -148,25 +148,25 @@ const LengthWrapper = styled.div<{ isError?: boolean }>`
     `}
 `;
 
-const RecognizeBtnArea = styled.div`
-  ${flex}
-  ${justiCenter}
-  ${alignItemCenter}
-  height: 80px;
-`;
+// const RecognizeBtnArea = styled.div`
+//   ${flex}
+//   ${justiCenter}
+//   ${alignItemCenter}
+//   height: 80px;
+// `;
 
-const RecognizeBtn = styled.div`
-  width: 64px;
-  height: 64px;
-  border-radius: 40px;
-  background-color: white;
+// const RecognizeBtn = styled.div`
+//   width: 64px;
+//   height: 64px;
+//   border-radius: 40px;
+//   background-color: white;
 
-  box-shadow: 0px 2px 4px 0px #6f3ad033;
+//   box-shadow: 0px 2px 4px 0px #6f3ad033;
 
-  &:hover {
-    cursor: pointer;
-  }
-`;
+//   &:hover {
+//     cursor: pointer;
+//   }
+// `;
 
 const InfoArea = styled.div`
   ${flex}
@@ -446,10 +446,10 @@ const VoiceDoc = () => {
       if (!assistantResult || assistantResult?.length === 0) {
         dispatch(removeChat(userId));
         dispatch(removeChat(assistantId));
-        setIsActiveInput(true);
       }
       setLoadingId(null);
     } finally {
+      setIsActiveInput(true);
       dispatch(setCreating('none'));
       if (splunk) {
         splunk({
@@ -627,7 +627,7 @@ const VoiceDoc = () => {
             )}
           </ChatWrapper>
         </ChatArea>
-        <RecognizeBtnArea>
+        {/* <RecognizeBtnArea>
           <RecognizeBtn
             onClick={() => {
               if (loadingId === null && textRef?.current) {
@@ -636,7 +636,7 @@ const VoiceDoc = () => {
             }}>
             <img src={icon_mic} alt="mic"></img>
           </RecognizeBtn>
-        </RecognizeBtnArea>
+        </RecognizeBtnArea> */}
         <InfoArea>
           <Icon iconSrc={icon_ai} />
           {t(`AskDoc.TipList.1ChatingCredit`)}
