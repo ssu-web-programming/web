@@ -239,10 +239,10 @@ const VoiceDoc = () => {
   const textRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
-    if (isActiveInput && textRef?.current) {
+    if (isActiveInput && textRef?.current && loadingId === null) {
       textRef.current.focus();
     }
-  }, [isActiveInput]);
+  }, [isActiveInput, loadingId]);
 
   useEffect(() => {
     new Audio(AudioInit).play();
