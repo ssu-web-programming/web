@@ -6,14 +6,12 @@ import { useEffect } from 'react';
 import TextToImage from './pages/TextToImage';
 import GlobalStyle from './style/globalStyle';
 import InvalidAccess from './pages/InvalidAccess';
-import { getI18n } from 'react-i18next';
 import Offline from './pages/Offline';
-import { LANG_KO_KR } from './locale';
 import Spinner from './components/Spinner';
 import Confirm from './components/Confirm';
 import useApiWrapper from './api/useApiWrapper';
-import { BANNER_ACTIVE_API } from './api/constant';
-import { setBanner } from './store/slices/banner';
+import { BANNER_ACTIVE_API, JSON_CONTENT_TYPE } from './api/constant';
+import { setBanner, setUserLevel } from './store/slices/banner';
 import { useInitBridgeListener } from './util/bridge';
 import AskDoc from './pages/AskDoc';
 import VoiceDoc from './pages/VoiceDoc';
@@ -27,15 +25,28 @@ function App() {
     initBridgeListener();
   }, []);
 
-  const setPSEventActive = async () => {
-    const res = await apiWrapper(BANNER_ACTIVE_API, {});
-    const resJson = await res.res.json();
+  const updateEventBannerStatus = async () => {
+    try {
+      const { res, userInfo } = await apiWrapper(BANNER_ACTIVE_API, {
+        headers: {
+          ...JSON_CONTENT_TYPE,
+          'User-Agent': navigator.userAgent
+        },
+        body: JSON.stringify({
+          type: 'banner'
+        }),
+        method: 'POST'
+      });
 
-    dispatch(setBanner(resJson.data.enable && getI18n().resolvedLanguage === LANG_KO_KR));
+      dispatch(setUserLevel(userInfo.ul));
+
+      const resJson = await res.json();
+      dispatch(setBanner(resJson.data.enable));
+    } catch {}
   };
 
   useEffect(() => {
-    setPSEventActive();
+    updateEventBannerStatus();
   }, []);
 
   return (

@@ -4,11 +4,9 @@ import { useLocation } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { flex, flexColumn, flexGrow, flexShrink } from '../style/cssCommon';
-import PSEventBannerT2I from '../external/PS/PSEventBannerT2I';
 import { selectBanner } from '../store/slices/banner';
 import { useAppSelector } from '../store/store';
-import { selectTabSlice } from '../store/slices/tabSlice';
-import { selectT2IHistory } from '../store/slices/txt2imgHistory';
+import AiEventBanner, { AI_EVENT_BANNER_TARGET_LEVEL } from '../external/AiEvent/AiEventBanner';
 
 const Wrapper = styled.div`
   ${flex}
@@ -29,9 +27,7 @@ const Body = styled.div`
 const TextToImage = () => {
   const location = useLocation();
   const { t } = useTranslation();
-  const { active: bannerActive } = useAppSelector(selectBanner);
-  const { creating } = useAppSelector(selectTabSlice);
-  const { currentListId } = useAppSelector(selectT2IHistory);
+  const { active: isBannerActive, userLevel } = useAppSelector(selectBanner);
 
   return (
     <Wrapper>
@@ -39,7 +35,9 @@ const TextToImage = () => {
       <Body>
         <ImageCreate contents={location.state?.body || ''} />
       </Body>
-      {/* {bannerActive && creating !== 'CreateImage' && currentListId && <PSEventBannerT2I />} */}
+      {isBannerActive && userLevel === AI_EVENT_BANNER_TARGET_LEVEL && (
+        <AiEventBanner tab="ai.text_to_image" />
+      )}
     </Wrapper>
   );
 };
