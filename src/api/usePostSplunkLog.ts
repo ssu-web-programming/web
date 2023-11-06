@@ -47,19 +47,22 @@ interface SessionInfo {
   ul: string;
 }
 
-interface SplunkData {
+export interface SplunkData {
   dp: string;
 
   el?: string;
   ec?: string;
   ea?: string;
+  t?: string;
 
   input_token?: number;
   output_token?: number;
   gpt_ver?: LLMVersion;
+
+  dt?: string;
 }
 
-const DEFAULT_LOG_DATA: SplunkLogDataType = {
+export const DEFAULT_LOG_DATA: SplunkLogDataType = {
   ti: {
     v: '1.1',
     t: 'e'
@@ -74,6 +77,7 @@ const DEFAULT_LOG_DATA: SplunkLogDataType = {
   obj: {
     dc: Math.floor(Math.random() * 10000000000000000).toString(),
     dp: '',
+    dt: undefined,
     el: undefined
   },
   ctx: {
@@ -107,6 +111,8 @@ const usePostSplunkLog = (sessionInfo: SessionInfo) => {
     logData.obj.el = data.el;
     logData.obj.ec = data.ec;
     logData.obj.ea = data.ea;
+    logData.obj.dt = data.dt;
+    logData.ti.t = data.t ? data.t : DEFAULT_LOG_DATA.ti.t;
 
     logData.cobj.input_token = data.input_token;
     logData.cobj.output_token = data.output_token;

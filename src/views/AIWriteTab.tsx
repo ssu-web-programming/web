@@ -25,6 +25,8 @@ import { GPT_EXCEEDED_LIMIT } from '../error/error';
 import AiWriteResult from '../components/aiWrite/AiWriteResult';
 import AIWriteInput from '../components/aiWrite/AIWriteInput';
 import { EngineVersion, WriteOptions } from '../components/chat/RecommendBox/FormRec';
+import AiEventBanner, { AI_EVENT_BANNER_TARGET_LEVEL } from '../external/AiEvent/AiEventBanner';
+import { selectBanner } from '../store/slices/banner';
 
 const TabWrapper = styled.div`
   ${flex}
@@ -51,6 +53,7 @@ const AIWriteTab = (props: WriteTabProps) => {
 
   const dispatch = useDispatch();
   const { history, currentWriteId } = useAppSelector(selectWriteHistorySlice);
+  const { active: isBannerActive, userLevel } = useAppSelector(selectBanner);
 
   const submitSubject = async (inputParam?: WriteType) => {
     let resultText = '';
@@ -213,6 +216,9 @@ const AIWriteTab = (props: WriteTabProps) => {
           currentWriteId={currentWriteId}
           submitSubject={submitSubject}
         />
+      )}
+      {isBannerActive && userLevel === AI_EVENT_BANNER_TARGET_LEVEL && (
+        <AiEventBanner tab="ai.write" />
       )}
     </TabWrapper>
   );
