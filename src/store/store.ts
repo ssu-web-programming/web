@@ -2,7 +2,6 @@ import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import chatHistory from './slices/chatHistorySlice';
 import toast from './slices/toastSlice';
-import bridge from './slices/bridge';
 import recFunction from './slices/recFuncSlice';
 import writeHistory from './slices/writeHistorySlice';
 import tab, { shareAnswerState } from './slices/tabSlice';
@@ -20,7 +19,6 @@ const store = configureStore({
     recFunction,
     writeHistory,
     tab,
-    bridge,
     txtimgHistory,
     network,
     confirm,
