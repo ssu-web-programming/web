@@ -36,20 +36,19 @@ import {
   flex,
   flexWrap
 } from '../style/cssCommon';
-import { calcToken, getElValue, parseGptVer } from '../api/usePostSplunkLog';
+import { postSplunkLog, calcToken, getElValue, parseGptVer } from '../api/usePostSplunkLog';
 import { setCreating } from '../store/slices/tabSlice';
-import { CHAT_STREAM_API, JSON_CONTENT_TYPE } from '../api/constant';
 import { calLeftCredit } from '../util/common';
-import useApiWrapper from '../api/useApiWrapper';
 import { useTranslation } from 'react-i18next';
 import useErrorHandle from '../components/hooks/useErrorHandle';
-import { GPT_EXCEEDED_LIMIT } from '../error/error';
 import SendCoinButton from '../components/buttons/SendCoinButton';
 import { REC_ID_LIST } from '../components/chat/RecommendBox/FunctionRec';
-import { ClientType, getPlatform } from '../util/bridge';
+import Bridge, { ClientType, getPlatform } from '../util/bridge';
 import Button from '../components/buttons/Button';
 import { VersionListType, versionList } from '../components/chat/RecommendBox/FormRec';
 import DropDownButton from '../components/buttons/DropDownButton';
+import { Requestor, requestChatStream, streaming } from '../api';
+import { useShowCreditToast } from '../components/hooks/useShowCreditToast';
 
 const TEXT_MAX_HEIGHT = 268;
 
@@ -225,11 +224,11 @@ interface WriteTabProps {
 
 const AIChatTab = (props: WriteTabProps) => {
   const dispatch = useAppDispatch();
-  const apiWrapper = useApiWrapper();
   const { history: chatHistory, defaultInput } = useAppSelector(selectChatHistory);
   const { selectedRecFunction, selectedSubRecFunction } = useAppSelector(selectRecFuncSlice);
   const { t } = useTranslation();
   const errorHandle = useErrorHandle();
+  const showCreditToast = useShowCreditToast();
 
   const chatTipList = useMemo(() => {
     const platform = getPlatform();
@@ -259,7 +258,7 @@ const AIChatTab = (props: WriteTabProps) => {
   const [isDefaultInput, setIsDefaultInput] = useState<boolean>(false);
 
   const chatEndRef = useRef<HTMLDivElement>(null);
-  const stopRef = useRef<boolean>(false);
+  const requestor = useRef<Requestor | null>(null);
   const textRef = useRef<HTMLTextAreaElement>(null);
 
   const toggleActiveInput = (isActive: boolean) => {
@@ -355,6 +354,11 @@ const AIChatTab = (props: WriteTabProps) => {
     } else return { type: 'just_chat' };
   };
 
+  const onStop = () => {
+    requestor.current?.abort();
+    dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.StopMsg`) }));
+  };
+
   const submitChat = async (chat?: Chat) => {
     let history = [...chatHistory];
 
@@ -384,7 +388,6 @@ const AIChatTab = (props: WriteTabProps) => {
     }
 
     let resultText = '';
-    let splunk = null;
     const assistantId = uuidv4();
     const userId = uuidv4();
     let input = chat
@@ -428,12 +431,9 @@ const AIChatTab = (props: WriteTabProps) => {
     );
 
     try {
-      const { res, logger } = await apiWrapper(CHAT_STREAM_API, {
-        headers: {
-          ...JSON_CONTENT_TYPE,
-          'User-Agent': navigator.userAgent
-        }, //   responseType: 'stream',
-        body: JSON.stringify({
+      const sessionInfo = await Bridge.checkSession('');
+      try {
+        requestor.current = requestChatStream(sessionInfo, {
           engine: gptVer,
           history: [
             ...history
@@ -445,53 +445,45 @@ const AIChatTab = (props: WriteTabProps) => {
               preProcessing: preProc
             }
           ]
-        }),
-        method: 'POST'
-      });
-      splunk = logger;
+        });
 
-      if (res.status !== 200) {
-        if (res.status === 400) throw new Error(GPT_EXCEEDED_LIMIT);
-        else throw res;
-      }
+        const res = await requestor.current.request();
 
-      const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
-      dispatch(
-        activeToast({
-          type: 'info',
-          msg: t(`ToastMsg.StartCreating`, {
-            deductionCredit: deductionCredit,
-            leftCredit: leftCredit === '-1' ? t('Unlimited') : leftCredit
-          })
-        })
-      );
+        const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
+        showCreditToast(deductionCredit, leftCredit);
 
-      const reader = res.body?.getReader();
-      var enc = new TextDecoder('utf-8');
+        await streaming(res, (contents) => {
+          dispatch(
+            updateChat({ id: assistantId, role: 'assistant', result: contents, input: input })
+          );
+          resultText += contents;
+        });
 
-      while (reader) {
-        // if (isFull) break;
-        if (stopRef.current) {
-          reader.cancel();
-          dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.StopMsg`) }));
-          break;
+        setChatInput((prev) => ({ ...prev, input: '' }));
+        dispatch(initRecFunc());
+      } catch (err) {
+        if (requestor.current?.isAborted() === true) {
+          setChatInput((prev) => ({ ...prev, input: '' }));
+          dispatch(initRecFunc());
+        } else {
+          throw err;
         }
+      } finally {
+        requestor.current = null;
 
-        const { value, done } = await reader.read();
-        if (done) {
-          // setProcessState(PROCESS_STATE.COMPLETE_GENERATE);
-          break;
-        }
+        const el = getElValue(selectedRecFunction?.id);
+        const input_token = calcToken(chatInput);
+        const output_token = calcToken(resultText);
+        const gpt_ver = parseGptVer(gptVer!);
 
-        const decodeStr = enc.decode(value);
-        dispatch(
-          updateChat({ id: assistantId, role: 'assistant', result: decodeStr, input: input })
-        );
-        resultText += decodeStr;
+        postSplunkLog(sessionInfo, {
+          dp: 'ai.write',
+          el,
+          input_token,
+          output_token,
+          gpt_ver
+        });
       }
-
-      setChatInput((prev) => ({ ...prev, input: '' }));
-      dispatch(initRecFunc());
     } catch (error: any) {
       errorHandle(error);
 
@@ -506,26 +498,8 @@ const AIChatTab = (props: WriteTabProps) => {
         }
       }
     } finally {
-      if (splunk) {
-        const el = getElValue(selectedRecFunction?.id);
-        const input_token = calcToken(chatInput);
-        const output_token = calcToken(resultText);
-        const gpt_ver = parseGptVer(gptVer!);
-
-        splunk({
-          dp: 'ai.write',
-          el,
-          input_token,
-          output_token,
-          gpt_ver
-        });
-      }
-
       setLoadingId(null);
-      stopRef.current = false;
       dispatch(setCreating('none'));
-      // toggleActiveInput(false);
-
       setRetryOrigin(null);
     }
   };
@@ -576,11 +550,7 @@ const AIChatTab = (props: WriteTabProps) => {
       </ChatListWrapper>
       {loadingId && (
         <CenterBox>
-          <StopButton
-            onClick={() => {
-              stopRef.current = true;
-            }}
-          />
+          <StopButton onClick={onStop} />
         </CenterBox>
       )}
       <div style={{ position: 'relative', display: 'flex' }}>
