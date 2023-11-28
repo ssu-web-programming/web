@@ -1,6 +1,7 @@
 import { encode } from 'gpt-tokenizer';
 import { REC_ID_LIST } from '../components/chat/RecommendBox/FunctionRec';
 import { EngineVersion } from '../components/chat/RecommendBox/FormRec';
+import { CheckSessionResponse } from '../util/bridge';
 
 export type LLMVersion = string | number;
 interface SplunkLogDataType {
@@ -130,6 +131,49 @@ const usePostSplunkLog = (sessionInfo: SessionInfo) => {
 
     return res;
   };
+};
+
+const convertSessionInfo = (response: CheckSessionResponse) => ({
+  bid: response.sessionInfo.BID,
+  sid: response.sessionInfo.SID,
+  ...response.userInfo
+});
+
+export const postSplunkLog = async (sessionResponse: CheckSessionResponse, data: SplunkData) => {
+  try {
+    if (!useLogger) return;
+
+    const sessionInfo = convertSessionInfo(sessionResponse);
+    const logData = {
+      ...DEFAULT_LOG_DATA,
+      ctx: { ...DEFAULT_LOG_DATA.ctx, bid: sessionInfo.bid, sid: sessionInfo.sid },
+      ui: { ...DEFAULT_LOG_DATA.ui, us: sessionInfo.us, uid: sessionInfo.uid, ul: sessionInfo.ul }
+    };
+
+    logData.ctx.ts = parseInt(new Date().getTime().toString().substring(0, 10));
+    logData.obj.dp = data.dp;
+    logData.obj.el = data.el;
+    logData.obj.ec = data.ec;
+    logData.obj.ea = data.ea;
+    logData.obj.dt = data.dt;
+    logData.ti.t = data.t ? data.t : DEFAULT_LOG_DATA.ti.t;
+
+    logData.cobj.input_token = data.input_token;
+    logData.cobj.output_token = data.output_token;
+    logData.cobj.gpt_ver = data.gpt_ver;
+
+    if (isVfMode) logData.cobj.env = 'vf';
+
+    const res = await fetch('https://log.polarisoffice.com/api/2/logcollect/collector', {
+      headers: {
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify(logData),
+      method: 'POST'
+    });
+
+    return res;
+  } catch (err) {}
 };
 
 const MAGIC_NUMBER = 8;

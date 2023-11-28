@@ -42,6 +42,7 @@ import icon_retry from '../img/ico_reanalyze.svg';
 import Bridge from '../util/bridge';
 import useErrorHandle from '../components/hooks/useErrorHandle';
 import useLoadInitQuestion from '../components/hooks/useLoadInitQuestion';
+import { useShowCreditToast } from '../components/hooks/useShowCreditToast';
 
 const TEXT_MAX_HEIGHT = 268;
 
@@ -187,6 +188,7 @@ const AskDoc = () => {
   const dispatch = useAppDispatch();
   const apiWrapper = useApiWrapper();
   const errorHandle = useErrorHandle();
+  const showCreditToast = useShowCreditToast();
   const {
     askDocHistory: chatHistory,
     questionList,
@@ -390,15 +392,7 @@ const AskDoc = () => {
       );
 
       const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
-      dispatch(
-        activeToast({
-          type: 'info',
-          msg: t(`ToastMsg.StartCreating`, {
-            deductionCredit: deductionCredit,
-            leftCredit: leftCredit === '-1' ? t('Unlimited') : leftCredit
-          })
-        })
-      );
+      showCreditToast(deductionCredit, leftCredit);
 
       setChatInput({ input: '' });
       setLoadingId(null);

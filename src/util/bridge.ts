@@ -301,7 +301,7 @@ export const useInitBridgeListener = () => {
   };
 };
 
-interface CheckSessionResponse {
+export interface CheckSessionResponse {
   success: boolean;
   sessionInfo: {
     AID: string;

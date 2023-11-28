@@ -45,6 +45,7 @@ import useLoadInitQuestion from '../components/hooks/useLoadInitQuestion';
 
 import AudioInit from '../audio/init.mpga';
 import AudioCompleteAnalyze from '../audio/completeAnalyze.mpga';
+import { useShowCreditToast } from '../components/hooks/useShowCreditToast';
 
 const TEXT_MAX_HEIGHT = 268;
 
@@ -204,6 +205,7 @@ const VoiceDoc = () => {
   const dispatch = useAppDispatch();
   const apiWrapper = useApiWrapper();
   const errorHandle = useErrorHandle();
+  const showCreditToast = useShowCreditToast();
   const loadInitQuestion = useLoadInitQuestion();
   const { askDocHistory, questionList, sourceId, status } = useAppSelector(selectAskDoc);
   const { t } = useTranslation();
@@ -414,14 +416,9 @@ const VoiceDoc = () => {
 
       const { deductionCredit: answerDeductionCredit } = calLeftCredit(res.headers);
       const { deductionCredit: audioDeductionCredit, leftCredit } = calLeftCredit(resAudio.headers);
-      dispatch(
-        activeToast({
-          type: 'info',
-          msg: t(`ToastMsg.StartCreating`, {
-            deductionCredit: `${parseInt(answerDeductionCredit) + parseInt(audioDeductionCredit)}`,
-            leftCredit: leftCredit === '-1' ? t('Unlimited') : leftCredit
-          })
-        })
+      showCreditToast(
+        `${parseInt(answerDeductionCredit) + parseInt(audioDeductionCredit)}`,
+        leftCredit
       );
 
       setLoadingId(null);

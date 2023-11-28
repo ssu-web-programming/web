@@ -2,16 +2,19 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 import { EngineVersion } from '../../components/chat/RecommendBox/FormRec';
 
-export interface ChatPreProcessing {
+export interface StreamPreprocessing {
   type?: string;
-  arg?: string;
+  arg1?: string;
+  arg2?: string;
 }
+
+export type ChatResultType = string;
 export interface Chat {
   id: string;
-  result: string;
+  result: ChatResultType;
   role: 'assistant' | 'user' | 'reset' | 'info';
   input: string;
-  preProcessing?: ChatPreProcessing;
+  preProcessing?: StreamPreprocessing;
   version?: EngineVersion;
 }
 
