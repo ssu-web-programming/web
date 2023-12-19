@@ -1,5 +1,5 @@
 import LinkText from './LinkText';
-import { flex } from '../style/cssCommon';
+import { alignItemCenter, flex } from '../style/cssCommon';
 import styled from 'styled-components';
 import ico_clovax_primary from '../img/hyperClovaX_logotype_primary.svg';
 import ico_navercloud from '../img/naver_cloud_ci_green.svg';
@@ -17,18 +17,22 @@ const Wrapper = styled.div`
   height: fit-content;
   width: fit-content;
   gap: 5px;
+  ${alignItemCenter}
 `;
 
 const HCXLogo = styled.img`
   ${flex}
   align-self: center;
+  height: 10px;
   width: 80px;
-  height: fit-content;
+
+  margin-top: 1px;
 `;
 
 const NaverCloudLogo = styled(HCXLogo)`
-  height: 9px;
-  width: fit-content;
+  width: 80px;
+
+  margin-top: 0px;
 `;
 
 const CLOVA_URL = 'https://clova.ai/hyperclova';
