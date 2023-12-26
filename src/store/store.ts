@@ -12,6 +12,7 @@ import loadingSpinner from './slices/loadingSpinner';
 import banner from './slices/banner';
 import askDoc from './slices/askDoc';
 
+import askDocModal from './slices/askDocModalsSlice';
 const store = configureStore({
   reducer: {
     chatHistory,
@@ -25,6 +26,7 @@ const store = configureStore({
     loadingSpinner,
     banner,
     askDoc
+    askDocModal,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }).concat(shareAnswerState),
