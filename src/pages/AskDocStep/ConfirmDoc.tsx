@@ -9,8 +9,11 @@ import { useLayoutEffect } from 'react';
 import Loading from '../../components/Loading';
 import { usePollingExtractText } from '../../components/hooks/useCreateVectorData';
 import usePercentage from '../../components/hooks/usePercentage';
+import { getLangCodeFromParams, getLangCodeFromUA, LANG_KO_KR } from '../../locale';
 export const ConfirmDoc = () => {
   const { t } = useTranslation();
+  const paramLang = getLangCodeFromParams() || getLangCodeFromUA();
+  const isLangKo = paramLang?.includes(LANG_KO_KR);
   const navigate = useNavigate();
 
   const { isSuccess, isLoading } = usePollingExtractText();
@@ -27,11 +30,20 @@ export const ConfirmDoc = () => {
       <GuideMessage>
         <h1>{t('AskDocStep.Step2.MainText')}</h1>
         <SubText>
-          <Icon iconSrc={Logo} size="sm" />
-          <p>
-            <b> Polaris Drive </b>
-            {t('AskDocStep.Step2.SubText')}
-          </p>
+          {isLangKo ? (
+            <>
+              <Icon iconSrc={Logo} size="sm" />
+              <b> Polaris Drive </b>
+              <p>{t('AskDocStep.Step2.SubText')}</p>
+            </>
+          ) : (
+            <>
+              <p>{t('AskDocStep.Step2.SubText1')}</p>
+              <Icon iconSrc={Logo} size="sm" />
+              <b> Polaris Drive. </b>
+              <p>{t('AskDocStep.Step2.SubText2')}</p>
+            </>
+          )}
         </SubText>
       </GuideMessage>
       {percentage > 90 && <Loading>{t('AskDocStep.Step2.LoadingText')}</Loading>}
@@ -45,12 +57,17 @@ export const ConfirmDoc = () => {
 export default ConfirmDoc;
 
 const SubText = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 4px;
+  font-size: 14px;
+
   img {
-    float: left;
     margin-top: 2px;
   }
 
   b {
-    padding-left: 4px;
+    color: #6f3ad0;
   }
 `;
