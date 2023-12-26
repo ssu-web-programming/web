@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { AppDispatch, RootState, useAppDispatch } from '../store/store';
+import { AppDispatch, RootState, useAppDispatch, useAppSelector } from '../store/store';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useMoveChatTab } from '../components/hooks/useMovePage';
@@ -9,6 +9,8 @@ import gI18n, { convertLangFromLangCode } from '../locale';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { makeClipboardData } from './common';
 import { AskDocStatus, setSrouceId, setStatus } from '../store/slices/askDoc';
+import { filesSelector, setFiles } from '../store/slices/askDocAnalyzeFiesSlice';
+import { initComplete } from '../store/slices/initFlagSlice';
 
 const UA_PREFIX: string = `__polaris_office_ai_`;
 
@@ -34,7 +36,14 @@ function getAgentPlatform(userAgent: string) {
   return ClientType.unknown;
 }
 
+function getAgentVersion(userAgent: string) {
+  const versionPattern = /Version\/(\d+(\.\d+)*)/;
+  const match = userAgent.match(versionPattern);
+  return match ? match[1] : null;
+}
+
 export const getPlatform = () => getAgentPlatform(navigator.userAgent);
+export const getVersion = () => getAgentVersion(navigator.userAgent);
 
 async function fileToString(file: Blob) {
   return new Promise<string>((resolve, reject) => {
@@ -65,6 +74,10 @@ const callApi = (api: ApiType, arg?: string | number) => {
         switch (api) {
           case 'initComplete': {
             window.webkit.messageHandlers.initComplete.postMessage(arg);
+            break;
+          }
+          case 'analyzeFiles': {
+            window.webkit.messageHandlers.analyzeFiles.postMessage(arg);
             break;
           }
           case 'insertText': {
@@ -176,7 +189,6 @@ export const useInitBridgeListener = () => {
 
   const navigate = useNavigate();
   const movePage = useMoveChatTab();
-
   const getPath = useCallback((cmd: PanelOpenCmd) => {
     switch (cmd) {
       case 'openAiTools':
@@ -184,6 +196,16 @@ export const useInitBridgeListener = () => {
       case 'openTextToImg':
         return '/txt2img';
       case 'openAskDoc':
+        const platform = getPlatform();
+        const version = getVersion();
+        if (
+          (platform === ClientType.android && version === '9.8.6') ||
+          (platform === ClientType.ios && version === '9.7.14') ||
+          platform === ClientType.windows ||
+          platform === ClientType.mac
+        ) {
+          return '/AskDocStep';
+        }
         return '/askdoc';
     }
   }, []);
@@ -263,6 +285,19 @@ export const useInitBridgeListener = () => {
             }
             break;
           }
+          case 'analyzeFiles': {
+            dispatch(
+              setFiles({
+                isLoading: false,
+                files: body.files,
+                isSuccsess: true,
+                fileStatus: null,
+                userId: body.userId,
+                isInitialized: true
+              })
+            );
+            break;
+          }
           default: {
             break;
           }
@@ -298,6 +333,11 @@ export const useInitBridgeListener = () => {
     });
 
     Bridge.callBridgeApi('initComplete');
+    dispatch(
+      initComplete({
+        isInit: true
+      })
+    );
   };
 };
 
@@ -328,7 +368,8 @@ type ApiType =
   | 'copyClipboard'
   | 'movePage'
   | 'reInitAskDoc'
-  | 'shareAnswerState';
+  | 'shareAnswerState'
+  | 'analyzeFiles';
 
 const Bridge = {
   checkSession: (api: string) => {

@@ -11,8 +11,10 @@ import confirm from './slices/confirm';
 import loadingSpinner from './slices/loadingSpinner';
 import banner from './slices/banner';
 import askDoc from './slices/askDoc';
-
 import askDocModal from './slices/askDocModalsSlice';
+import askDocAnalyzeFiesSlice from './slices/askDocAnalyzeFiesSlice';
+import initFlagSlice from './slices/initFlagSlice';
+import askDocSummary from './slices/askDocSummary';
 const store = configureStore({
   reducer: {
     chatHistory,
@@ -25,8 +27,11 @@ const store = configureStore({
     confirm,
     loadingSpinner,
     banner,
-    askDoc
+    askDoc,
     askDocModal,
+    askDocAnalyzeFiesSlice,
+    askDocSummary,
+    initFlagSlice
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }).concat(shareAnswerState),
