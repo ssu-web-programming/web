@@ -183,5 +183,51 @@
       "1VoiceCredit": "8credit(s) will be deducted per conversation."
     }
   },
-  "Unlimited": "Unlimited"
+  "Unlimited": "Unlimited",
+  "AskDocStep": {
+    "Step1": {
+      "MainText": "There is an edit history in the document.",
+      "SubText": "Would you like to reanalyze to incorporate the edited content?",
+      "ButtonTextChecked": "Reanalyze the selected document.",
+      "ButtonTextUnChecked": "Use the existing analysis document."
+    },
+    "Step2": {
+      "MainText": "Reviewing the document.\n Please wait a moment.",
+      "SubText": "checking the document on <b>Polaris Drive.</b>\n Please wait a moment.",
+      "LoadingText": "Finalizing documentation checks……"
+    },
+    "Step3": {
+      "MainText": "Document analysis is beginning.",
+      "SubText1": "문서 분석 시",
+      "SubText2": ", 질문 1회에",
+      "SubText3": "이 필요하며, 한번 분석한 문서는 추가 크레딧 없이 사용 가능 합니다.",
+      "ButtonText": "분석을 시작합니다."
+    },
+    "Step4": {
+      "MainText": "Analyzing the document\n for a better response.",
+      "Noti": "문서 분석이 완료되었습니다. \n {{credit}} 크레딧이 차감되었습니다. (잔여 크레딧: {{leftCredit}})",
+      "Loading_AnalyzeDoc": "Document analysis in progress",
+      "Loading_Keyword": "문서 내 중요한 질문 찾는 중",
+      "Loading_Done": "곧 결과 화면으로 이동합니다."
+    },
+    "Modal": {
+      "Over1000": "For accurate document analysis, <span className='important'>a minimum of 1,000 characters</span> is required. Please provide additional content for the document.",
+      "Under300": "The document analysis is not possible as the document exceeds <span className='important'>300 pages</span>.<br /> Please reduce the number of pages in the document.",
+      "NeedCredit": "Insufficient Credits. Requires <span className='credit'>a minimum of 5 credits</span> for using ASK Doc.",
+      "UpgradePlan": "Upgrade subscription plan",
+      "FailAnalyze": "Document analysis has failed.",
+      "AgainAnalyze": "Reanalyzing the document.",
+      "CheckCredit": "Please check the credits.",
+      "Close": "Close",
+      "DefaultError": "The service could not be provided due to failure of document analysis.<br />We’ll work tirelessly to provide better service.",
+      "CheckDocument": "Check the document again.",
+      "SameNameInDrive": "A file with the same name in Polaris Drive. Would you like to overwrite the current file?",
+      "CoverThisFile": "Overwrite the current file",
+      "Ignore": "Ignore and proceed",
+      "LackUsage": "Insufficient Polaris Drive capacity, preventing document analysis. Consider upgrading your plan for more storage space.",
+      "UploadFail": "The document upload has failed.<br />Please try again.",
+      "TryAgain": "Try again",
+      "ServiceNotification": "Service Notification"
+    }
+  }
 }

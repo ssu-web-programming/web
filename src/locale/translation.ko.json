@@ -181,7 +181,54 @@
     "TipList": {
       "1ChatingCredit": "대화 1회당 4크레딧이 차감됩니다.",
       "1VoiceCredit": "음성안내가 추가되어 대화 1회당 8크레딧이 차감됩니다."
-    }
+    },
+    "Unlimited": "무제한"
   },
-  "Unlimited": "무제한"
+  "AskDocStep": {
+    "Step1": {
+      "MainText": "문서에 편집 기록이 있습니다.",
+      "SubText": "편집 내용을 반영하기 위해 다시 분석하시겠습니까?",
+      "ButtonTextChecked": "선택한 문서를 다시 분석 할게요.",
+      "ButtonTextUnChecked": "기존 분석 문서를 사용 할게요."
+    },
+    "Step2": {
+      "MainText": "문서를 확인하고 있습니다.\n 잠시만 기다려주세요.",
+      "SubText": "에서 문서를 확인 중입니다. 잠시만 기다려 주세요.",
+      "LoadingText": "문서 확인 마무리 중입니다..."
+    },
+    "Step3": {
+      "MainText": "문서 분석을 시작합니다.",
+      "SubText1": "문서 분석 시",
+      "SubText2": ", 질문 1회에",
+      "SubText3": "이 필요하며, 한번 분석한 문서는 추가 크레딧 없이 사용 가능 합니다.",
+      "ButtonText": "분석을 시작합니다."
+    },
+    "Step4": {
+      "MainText": "더 좋은 답변을 위해\n문서를 분석하고 있습니다.",
+      "Noti": "문서 분석이 완료되었습니다. \n {{credit}} 크레딧이 차감되었습니다. (잔여 크레딧: {{leftCredit}})",
+      "Loading_AnalyzeDoc": "문서 분석 중",
+      "Loading_Keyword": "문서 내 중요한 질문 찾는 중",
+      "Loading_Done": "곧 결과 화면으로 이동합니다."
+    },
+    "Modal": {
+      "Over1000": "정확한 문서 분석을 위해 <span class='important'>최소 1,000자</span> 이상의 글자가 필요합니다. 문서에 추가 내용을 작성해 주세요.",
+      "Under300": "문서 페이지가 <span class='important'>300페이지</span>를 초과하여 문서 분석이 불가능합니다.<br />문서 페이지 수를 줄여주세요.",
+      "NeedCredit": "크레딧이 부족합니다.<br /> ASK Doc 문서 분석 시 <span class='credit'>최소 5크레딧</span>이 필요합니다.",
+      "UpgradePlan": "요금제 업그레이드 바로가기",
+      "FailAnalyze": "문서 분석에 실패했어요.",
+      "AgainAnalyze": "문서 다시 분석하기",
+      "FailedAnalyze": "문서 분석에 실패했습니다.<br /> 정확한 분석을 위해 다시 한번 시도해주세요.",
+      "CheckCredit": "크레딧을 확인해 주세요.",
+      "Close": "닫기",
+      "DefaultError": "문서 분석에 실패하여, 서비스를 제공할 수 없습니다.<br />더 나은 서비스를 위해 노력하겠습니다.",
+      "CheckDocument": "문서를 다시 확인해 주세요.",
+      "SameNameInDrive": "Polaris Drive 내 같은 이름이 파일이 있습니다. 현재 파일로 덮어쓸까요?",
+      "CoverThisFile": "현재 파일로 덮어쓰기",
+      "Ignore": "무시하고 진행",
+      "LackUsage": "Polaris Drive 용량이 부족하여 문서 분석을 진행할 수 없습니다. 요금제 업그레이드로 더 많은 용량을 이용해 보세요.",
+      "UploadFail": "문서 업로드에 실패했습니다.<br />다시 한번 시도해 주세요.",
+      "TryAgain": "다시 시도하기",
+      "ServiceNotification": "서비스 알림"
+    }
+  }
 }
