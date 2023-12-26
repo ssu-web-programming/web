@@ -107,3 +107,11 @@ export const parseRefPages = (contents: string) => {
 export const removeRefPages = (contents: string) => {
   return contents.replaceAll(CHAT_PDF_PAGE_PARSE_REG, '');
 };
+
+export const setCookie = (cname: string, cvalue: string, exdays: number) => {
+  const d = new Date();
+  d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
+  let expires = 'expires=' + d.toUTCString();
+  const domain = 'polarisoffice.com';
+  document.cookie = cname + '=' + cvalue + ';' + expires + ';path=/;' + 'domain=' + domain + ';';
+};
