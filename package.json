@@ -26,6 +26,7 @@
     "marked": "^5.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-gtm-module": "^2.0.11",
     "react-i18next": "^12.2.0",
     "react-markdown": "^8.0.7",
     "react-redux": "^8.0.5",
@@ -67,12 +68,17 @@
   "devDependencies": {
     "@types/express": "^4.17.17",
     "@types/html-to-text": "^9.0.1",
+    "@types/react-gtm-module": "^2.0.3",
     "express": "^4.18.2",
+    "msw": "^2.0.9",
     "nodemon": "^2.0.22",
     "ts-node": "^10.9.1"
   },
   "engines": {
     "node": ">= 19.3.0"
   },
-  "proxy": "https://vf-berlin.polarisoffice.com"
+  "proxy": "https://vf-berlin.polarisoffice.com",
+  "msw": {
+    "workerDirectory": "public"
+  }
 }
