@@ -1,4 +1,4 @@
-import { css } from 'styled-components';
+import styled, { FlattenSimpleInterpolation, css } from 'styled-components';
 
 export const userSelectCss = css`
   -webkit-user-drag: none;
@@ -153,4 +153,14 @@ export const flexShrink = css`
 export const grid = css`
   display: -webkit-grid;
   display: grid;
+`;
+
+export const RowBox = styled.div<{ cssExt?: FlattenSimpleInterpolation }>`
+  ${flex}
+  ${justiSpaceBetween}
+  ${alignItemCenter}
+  width: 100%;
+  gap: 6px;
+
+  ${({ cssExt }) => cssExt && cssExt}
 `;

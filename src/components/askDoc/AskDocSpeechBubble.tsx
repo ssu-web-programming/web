@@ -3,10 +3,15 @@ import Icon from '../Icon';
 import icon_ai from '../../img/ico_ai.svg';
 import icon_ai_loading from '../../img/loading_dot_2x.webp';
 import PreMarkdown from '../PreMarkdown';
-import { flexColumn, flex, justiSpaceBetween, alignItemCenter } from '../../style/cssCommon';
+import {
+  flexColumn,
+  flex,
+  justiSpaceBetween,
+  alignItemCenter,
+  flexWrap
+} from '../../style/cssCommon';
 // import OpenAILinkText from '../OpenAILinkText';
 import { PropsWithChildren, useMemo } from 'react';
-import { RowWrapBox } from '../chat/RecommendBox/ChatRecommend';
 import { useTranslation } from 'react-i18next';
 import Grid from '../layout/Grid';
 import CreditButton from '../buttons/CreditButton';
@@ -14,28 +19,28 @@ import { AskDocChat } from '../../store/slices/askDoc';
 import Button from '../buttons/Button';
 import Bridge from '../../util/bridge';
 
-// clipboard
-// import { useCopyClipboard } from '../util/bridge';
-// import IconButton from './buttons/IconButton';
-// import { ReactComponent as IconCopy } from '../img/ico_copy.svg';
-
 const Wrapper = styled.div<{ isUser: boolean }>`
   ${flex}
   ${flexColumn}
 
   min-height: fit-content;
-
   width: fit-content;
   max-width: 100%;
-  margin-right: ${({ isUser }: { isUser: boolean }) => !isUser && '30px'};
-  margin-left: ${({ isUser }: { isUser: boolean }) => isUser && '48px'};
-  align-self: ${({ isUser }: { isUser: boolean }) => isUser && 'flex-end'};
-  margin: ${({ isUser }: { isUser: boolean }) =>
-    isUser ? '0px 10px 0px 48px' : '0px 30px 0px 8px'};
 
   & + & {
     margin-top: 16px;
   }
+
+  ${({ isUser }) =>
+    isUser
+      ? css`
+          margin: 0px 10px 0px 48px;
+          align-self: flex-end;
+        `
+      : css`
+          margin: 0px 30px 0px 8px;
+          align-self: flex-start;
+        `};
 `;
 
 const Profile = styled.div`
@@ -60,8 +65,8 @@ const AskDocSpeechBubbleWrapper = styled.div<{
     isUser ? 'var(--ai-purple-70)' : 'white'};
   color: ${({ isUser }: { isUser: boolean }) => isUser && 'white'};
   overflow-x: auto;
-
   font-size: 13px;
+
   & > div {
     padding: 8px 12px;
   }
@@ -88,28 +93,10 @@ const BubbleArea = styled.div`
   gap: 8px;
 `;
 
-const LisenceRight = styled.div`
-  ${flex}
-  ${alignItemCenter}
-  
-  align-self: flex-end;
-  margin-top: 9px;
-`;
-
 const ColumDivider = styled.span`
   width: 100%;
   height: 1px;
   background-color: var(--ai-purple-97-list-over);
-`;
-
-const RowBox = styled.div<{ cssExt?: FlattenSimpleInterpolation }>`
-  ${flex}
-  ${justiSpaceBetween}
-  ${alignItemCenter}
-  width: 100%;
-  gap: 6px;
-
-  ${({ cssExt }) => cssExt && cssExt}
 `;
 
 const BoldLengthWrapper = styled.div<{ isError?: boolean }>`
@@ -129,7 +116,6 @@ const BoldLengthWrapper = styled.div<{ isError?: boolean }>`
 
 interface AskDocSpeechBubbleProps {
   loadingId: string | null;
-  cssExt?: FlattenSimpleInterpolation;
   chat: AskDocChat;
   onMore?: () => void;
 }
@@ -137,7 +123,6 @@ interface AskDocSpeechBubbleProps {
 const AskDocSpeechBubble = (props: PropsWithChildren<AskDocSpeechBubbleProps>) => {
   const { loadingId, chat, children, onMore } = props;
   const { t } = useTranslation();
-  // const copyClipboard = useCopyClipboard();
 
   const loadingMsg = useMemo(() => {
     if (chat.role === 'info') {
@@ -158,6 +143,9 @@ const AskDocSpeechBubble = (props: PropsWithChildren<AskDocSpeechBubbleProps>) =
   const isUser = useMemo(() => chat.role === 'user', [chat.role]);
   const text = useMemo(() => (chat.role === 'assistant' ? chat.result : chat.input), [chat]);
 
+  // console.log(text);
+  // console.log(isLoading);
+  // console.log(loadingId);
   return (
     <Wrapper isUser={isUser}>
       <BubbleArea>
@@ -176,24 +164,9 @@ const AskDocSpeechBubble = (props: PropsWithChildren<AskDocSpeechBubbleProps>) =
           {chat.role === 'assistant' && (
             <>
               <ColumDivider />
-              <RowWrapBox
-                cssExt={css`
-                  padding: 9px 12px 12px 12px;
-                  gap: 8px;
-                `}>
-                <RowBox>
-                  <BoldLengthWrapper>
-                    {t(`WriteTab.LengthInfo`, { length: text.length })}
-                  </BoldLengthWrapper>
-                  {/* {chat.id !== loadingId && (
-                    <IconButton
-                      iconSize="sm"
-                      iconComponent={IconCopy}
-                      onClick={() => copyClipboard(text)}
-                    />
-                  )} */}
-                </RowBox>
-              </RowWrapBox>
+              <BoldLengthWrapper>
+                {t(`WriteTab.LengthInfo`, { length: text.length })}
+              </BoldLengthWrapper>
               <ColumDivider />
               {!isLoading && chat?.info?.request === 'askDoc' && (
                 <>
@@ -204,12 +177,10 @@ const AskDocSpeechBubble = (props: PropsWithChildren<AskDocSpeechBubbleProps>) =
                         {chat.info.page.map((p, index) => (
                           <Button
                             key={index}
-                            width={'fit'}
+                            width={64}
                             variant="gray"
                             cssExt={css`
-                              font-size: 13px;
                               color: var(--gray-gray-80-02);
-                              width: 64px;
                             `}
                             onClick={() => {
                               Bridge.callBridgeApi('movePage', p);
