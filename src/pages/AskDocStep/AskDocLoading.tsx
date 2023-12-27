@@ -34,17 +34,18 @@ const AskDocLoading = () => {
 
   useLayoutEffect(() => {
     // 문서 편집 기록이 없는 경우
-    const movePage = (data: Data | null) => {
-      if (data && data.resultCode === 0 && data.fileRevision === data.maxFileRevision) {
+    const movePage = (data: Data) => {
+      if (data.resultCode === 0 && data.fileRevision === data.maxFileRevision) {
         if (data.status === 'AVAILABLE') return navigate('/AskDocStep/Chat');
         if (data.status === 'TEXT_DONE') return navigate('/AskDocStep/StartAnalysisDoc');
         if (data.status === null) return navigate('/AskDocStep/ConfirmDoc');
         return navigate('/AskDocStep/ProgressAnalysisDoc');
       }
-      if (data && data.status === null) return navigate('/AskDocStep/ConfirmDoc');
       return navigate('/AskDocStep/CheckDocHistory');
     };
-    movePage(data);
+    if (data) {
+      movePage(data);
+    }
   }, [data, navigate]);
 
   return <FallbackComponent />;
