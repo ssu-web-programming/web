@@ -42,6 +42,7 @@ const AskDocLoading = () => {
         return navigate('/AskDocStep/ProgressAnalysisDoc');
       }
       if (data && data.status === null) return navigate('/AskDocStep/ConfirmDoc');
+      return navigate('/AskDocStep/CheckDocHistory');
     };
     movePage(data);
   }, [data, navigate]);
