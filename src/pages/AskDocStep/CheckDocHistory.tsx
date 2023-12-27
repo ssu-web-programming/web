@@ -6,9 +6,9 @@ import { useState } from 'react';
 import CheckBox from '../../components/CheckBox';
 import styled from 'styled-components';
 import { alignItemCenter, flex, flexColumn, justiStart } from '../../style/cssCommon';
-import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { filesSelector, setFiles } from '../../store/slices/askDocAnalyzeFiesSlice';
+import useLangParameterNavigate from '../../components/hooks/useLangParameterNavigate';
 
 type File = {
   fileId: string;
@@ -24,7 +24,7 @@ export type AskDocContext = {
 export const CheckDocHistory = () => {
   const { t } = useTranslation();
   // const { openModal, closeModal } = useModal();
-  const navigator = useNavigate();
+  const { navigate } = useLangParameterNavigate();
   const { files, maxFileRevision, isLoading, isSuccsess, fileStatus, userId, isInitialized } =
     useAppSelector(filesSelector);
   const dispatch = useAppDispatch();
@@ -51,12 +51,12 @@ export const CheckDocHistory = () => {
         })
       );
 
-      return navigator('/AskDocStep/ConfirmDoc?lang=ko');
+      return navigate('/AskDocStep/ConfirmDoc');
     } else {
-      if (fileStatus === 'AVAILABLE') return navigator('/AskDocStep/Chat?lang=ko');
-      if (fileStatus === 'TEXT_DONE') return navigator('/AskDocStep/StartAnalysisDoc?lang=ko');
-      if (fileStatus === null) return navigator('/AskDocStep/ConfirmDoc?lang=ko');
-      return navigator('/AskDocStep/ProgressAnalysisDoc?lang=ko');
+      if (fileStatus === 'AVAILABLE') return navigate('/AskDocStep/Chat');
+      if (fileStatus === 'TEXT_DONE') return navigate('/AskDocStep/StartAnalysisDoc');
+      if (fileStatus === null) return navigate('/AskDocStep/ConfirmDoc');
+      return navigate('/AskDocStep/ProgressAnalysisDoc');
     }
   };
 

@@ -1,6 +1,5 @@
 import { Wrapper, GuideMessage, Footer } from '../../style/askDoc';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 import ProgressBar from '../../components/ProgressBar';
 import Icon from '../../components/Icon';
 import Logo from '../../img/askDoc/ico_polaris_logo.svg';
@@ -9,9 +8,10 @@ import { useLayoutEffect } from 'react';
 import Loading from '../../components/Loading';
 import { usePollingExtractText } from '../../components/hooks/useCreateVectorData';
 import usePercentage from '../../components/hooks/usePercentage';
+import useLangParameterNavigate from '../../components/hooks/useLangParameterNavigate';
 export const ConfirmDoc = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+  const { navigate } = useLangParameterNavigate();
 
   const { isSuccess, isLoading } = usePollingExtractText();
   const { percentage } = usePercentage(isLoading, isSuccess);

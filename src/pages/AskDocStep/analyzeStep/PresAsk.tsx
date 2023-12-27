@@ -4,19 +4,19 @@ import { useAskDocRequestHandler } from '../../../components/hooks/useCreateVect
 import { ASKDOC_ALL_COMPLETE_ANALYZING } from '../../../api/constant';
 import { IFileStatus } from '../../../store/slices/askDocAnalyzeFiesSlice';
 import usePercentage from '../../../components/hooks/usePercentage';
-import { useNavigate } from 'react-router';
 import { useAppDispatch } from '../../../store/store';
 import { activeToast } from '../../../store/slices/toastSlice';
 import useAskDocErrorHandler from '../../../components/hooks/useAskDocErrorHandler';
 import { useTranslation } from 'react-i18next';
 import { setCreating } from '../../../store/slices/tabSlice';
+import useLangParameterNavigate from '../../../components/hooks/useLangParameterNavigate';
 
 type Props = {
   onNext: Dispatch<SetStateAction<'ready' | IFileStatus>>;
 };
 
 const PreAsk = ({ onNext }: Props) => {
-  const navigate = useNavigate();
+  const { navigate } = useLangParameterNavigate();
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const errorHandle = useAskDocErrorHandler();

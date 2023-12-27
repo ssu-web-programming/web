@@ -5,14 +5,14 @@ import AskDocButton from '../../components/buttons/AskDocButton';
 import Credit from '../../img/ico_credit.svg';
 import Icon from '../../components/Icon';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import useLangParameterNavigate from '../../components/hooks/useLangParameterNavigate';
 
 export const StartAnalysisDoc = () => {
   const { t } = useTranslation();
-  const navigator = useNavigate();
+  const { navigate } = useLangParameterNavigate();
 
   const handleClick = () => {
-    navigator('/AskDocStep/ProgressAnalysisDoc?lang=ko');
+    navigate('/AskDocStep/ProgressAnalysisDoc');
   };
 
   return (

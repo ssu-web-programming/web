@@ -1,11 +1,12 @@
 import { useLayoutEffect } from 'react';
 import CheckDocHistorySkeleton from './CheckDocHistorySkeleton';
-import { useNavigate } from 'react-router-dom';
+
 import TagManager from 'react-gtm-module';
 import { WrapperPage } from '../../style/askDoc';
 import useGetAskDocFiles, { Data } from '../../components/hooks/useGetAskDocFiles';
 import { useAppSelector } from '../../store/store';
 import { filesSelector } from '../../store/slices/askDocAnalyzeFiesSlice';
+import useLangParameterNavigate from '../../components/hooks/useLangParameterNavigate';
 export const FallbackComponent = () => {
   return (
     <WrapperPage>
@@ -15,7 +16,7 @@ export const FallbackComponent = () => {
 };
 
 const AskDocLoading = () => {
-  const navigate = useNavigate();
+  const { navigate } = useLangParameterNavigate();
   const { data } = useGetAskDocFiles();
   const { userId } = useAppSelector(filesSelector);
 
