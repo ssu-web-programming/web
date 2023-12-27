@@ -181,7 +181,10 @@
     "TipList": {
       "1ChatingCredit": "4credit(s) will be deducted per conversation.",
       "1VoiceCredit": "8credit(s) will be deducted per conversation."
-    }
+    },
+    "Summary": "Summary",
+    "Keyword": "Keyword",
+    "Questions": "Document Recommended Questions"
   },
   "Unlimited": "Unlimited",
   "AskDocStep": {
@@ -199,22 +202,23 @@
     },
     "Step3": {
       "MainText": "Document analysis is beginning.",
-      "SubText1": "문서 분석 시",
-      "SubText2": ", 질문 1회에",
-      "SubText3": "이 필요하며, 한번 분석한 문서는 추가 크레딧 없이 사용 가능 합니다.",
-      "ButtonText": "분석을 시작합니다."
+      "SubText1": "Document analysis requires",
+      "SubText2": " and each question",
+      "SubText3": " Once a document has been analyzed, it can be used without additional credits.",
+      "ButtonText": "Analysis is starting.",
+      "Credit": "{{credit}} Credits"
     },
     "Step4": {
       "MainText": "Analyzing the document\n for a better response.",
-      "Noti": "문서 분석이 완료되었습니다. \n {{credit}} 크레딧이 차감되었습니다. (잔여 크레딧: {{leftCredit}})",
-      "Loading_AnalyzeDoc": "Document analysis in progress",
-      "Loading_Keyword": "문서 내 중요한 질문 찾는 중",
-      "Loading_Done": "곧 결과 화면으로 이동합니다."
+      "Noti": "Document analysis has been completed. \n {{credit}} credits have been used. (remaining credits: {{leftCredit}})",
+      "Loading_AnalyzeDoc": "Document analysis in progress...",
+      "Loading_Keyword": "Searching for imfortant questions within the document...",
+      "Loading_Done": "Moving to the results screen shortly."
     },
     "Modal": {
-      "Over1000": "For accurate document analysis, <span className='important'>a minimum of 1,000 characters</span> is required. Please provide additional content for the document.",
-      "Under300": "The document analysis is not possible as the document exceeds <span className='important'>300 pages</span>.<br /> Please reduce the number of pages in the document.",
-      "NeedCredit": "Insufficient Credits. Requires <span className='credit'>a minimum of 5 credits</span> for using ASK Doc.",
+      "Over1000": "For accurate document analysis, <span class='important'>a minimum of 1,000 characters</span> is required. Please provide additional content for the document.",
+      "Under300": "The document analysis is not possible as the document exceeds <span class='important'>300 pages</span>.<br /> Please reduce the number of pages in the document.",
+      "NeedCredit": "Insufficient Credits. Requires <span class='credit'>a minimum of 5 credits</span> for using ASK Doc.",
       "UpgradePlan": "Upgrade subscription plan",
       "FailAnalyze": "Document analysis has failed.",
       "AgainAnalyze": "Reanalyzing the document.",

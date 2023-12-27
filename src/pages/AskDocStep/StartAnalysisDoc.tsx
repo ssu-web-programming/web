@@ -9,7 +9,7 @@ import useLangParameterNavigate from '../../components/hooks/useLangParameterNav
 
 export const StartAnalysisDoc = () => {
   const { t } = useTranslation();
-  const { navigate } = useLangParameterNavigate();
+  const { navigate, isLangKo } = useLangParameterNavigate();
 
   const handleClick = () => {
     navigate('/AskDocStep/ProgressAnalysisDoc');
@@ -23,12 +23,14 @@ export const StartAnalysisDoc = () => {
           <span>{t('AskDocStep.Step3.SubText1')}</span>
           <Highlight>
             <Icon iconSrc={Credit} size="sm" />
-            <strong> 5 크레딧</strong>
+            <strong>{`${t('AskDocStep.Step3.Credit', { credit: 5 })},`}</strong>
           </Highlight>
           {t('AskDocStep.Step3.SubText2')}
           <Highlight>
             <Icon iconSrc={Credit} size="sm" />
-            <strong> 4 크레딧</strong>
+            <strong>
+              {`${t('AskDocStep.Step3.Credit', { credit: 4 })}${isLangKo ? '' : '.'}`}
+            </strong>
           </Highlight>
           {t('AskDocStep.Step3.SubText3')}
         </SubText>
@@ -46,9 +48,7 @@ export const StartAnalysisDoc = () => {
 export default StartAnalysisDoc;
 
 const SubText = styled.div`
-  span {
-    line-height: 21px;
-  }
+  line-height: 21px;
   font-size: 14px;
 `;
 

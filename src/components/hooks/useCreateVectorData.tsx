@@ -10,9 +10,9 @@ import {
 } from '../../api/constant';
 import { ERR_NOT_ONLINE, ERR_INVALID_SESSION } from '../../error/error';
 import Bridge from '../../util/bridge';
-import useModal from './useModal';
 import { setCreating } from '../../store/slices/tabSlice';
 import useErrorHandle from './useErrorHandle';
+import useAskDocErrorHandler from './useAskDocErrorHandler';
 
 interface IBody {
   fileId: string;
@@ -125,11 +125,12 @@ export const useAskDocRequestHandler = (api: string) => {
 
 export const usePollingExtractText = () => {
   const timerIdRef = useRef<any>(null);
-  const { openModal, closeModal } = useModal();
   const [isPollingEnabled, setIsPollingEnabled] = useState(true);
   const dispatch = useAppDispatch();
   const errorHandle = useErrorHandle();
   const { data, isLoading } = useAskDocRequestHandler(ASKDOC_EXTRACT_TEXT);
+  const askDocErrorHandle = useAskDocErrorHandler();
+  askDocErrorHandle(data);
   const [isSuccess, setIsSuccess] = useState(true);
   const { files, userId } = useAppSelector(filesSelector);
 
@@ -158,40 +159,7 @@ export const usePollingExtractText = () => {
             setIsPollingEnabled(false);
           }
         } else {
-          console.log(resultCode);
-          console.log(status);
-          let type:
-            | 'overpage'
-            | 'remine'
-            | 'samefile'
-            | 'upgrade'
-            | 'analyzefail'
-            | 'uploadfail'
-            | 'default' = 'default';
-          if (resultCode === 15302) type = 'remine';
-          if (resultCode === 15303) type = 'overpage';
-
-          openModal({
-            type,
-            props: {
-              buttonOnclick: () => {
-                closeModal(type);
-                dispatch(setCreating('none'));
-                dispatch(
-                  setFiles({
-                    isLoading: true,
-                    files: [],
-                    userId: '',
-                    isSuccsess: false,
-                    fileStatus: null,
-                    maxFileRevision: 0,
-                    isInitialized: true
-                  })
-                );
-                Bridge.callBridgeApi('closePanel', 'shutDown');
-              }
-            }
-          });
+          askDocErrorHandle({ code: 'fail', data: { resultCode, status } });
           setIsSuccess(false);
           setIsPollingEnabled(false);
         }
@@ -233,6 +201,7 @@ export const usePollingExtractText = () => {
   return {
     data,
     isSuccess: !isPollingEnabled && data.code === 'success' && isSuccess,
-    isLoading: isPollingEnabled
+    isLoading: isPollingEnabled && isLoading,
+    textExtractLoading: isLoading
   };
 };

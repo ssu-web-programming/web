@@ -182,7 +182,10 @@
       "1ChatingCredit": "대화 1회당 4크레딧이 차감됩니다.",
       "1VoiceCredit": "음성안내가 추가되어 대화 1회당 8크레딧이 차감됩니다."
     },
-    "Unlimited": "무제한"
+    "Unlimited": "무제한",
+    "Summary": "핵심 요약",
+    "Keyword": "키워드",
+    "Questions": "문서 내 추천 질문"
   },
   "AskDocStep": {
     "Step1": {
@@ -199,15 +202,16 @@
     "Step3": {
       "MainText": "문서 분석을 시작합니다.",
       "SubText1": "문서 분석 시",
-      "SubText2": ", 질문 1회에",
-      "SubText3": "이 필요하며, 한번 분석한 문서는 추가 크레딧 없이 사용 가능 합니다.",
-      "ButtonText": "분석을 시작합니다."
+      "SubText2": " 질문 1회에",
+      "SubText3": "이 필요하며, 한번 분석한 문서는 추가 크레딧 없이 사용 가능합니다.",
+      "ButtonText": "분석을 시작합니다.",
+      "Credit": "{{credit}} 크레딧"
     },
     "Step4": {
       "MainText": "더 좋은 답변을 위해\n문서를 분석하고 있습니다.",
       "Noti": "문서 분석이 완료되었습니다. \n {{credit}} 크레딧이 차감되었습니다. (잔여 크레딧: {{leftCredit}})",
-      "Loading_AnalyzeDoc": "문서 분석 중",
-      "Loading_Keyword": "문서 내 중요한 질문 찾는 중",
+      "Loading_AnalyzeDoc": "문서 분석 중...",
+      "Loading_Keyword": "문서 내 중요한 질문 찾는 중...",
       "Loading_Done": "곧 결과 화면으로 이동합니다."
     },
     "Modal": {

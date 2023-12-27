@@ -89,11 +89,11 @@ export const QuestionList = ({
           {isIncludeSummary && (
             <Summary>
               <div>
-                <SubTitle>핵심 요약</SubTitle>
+                <SubTitle>{t('AskDoc.Summary')}</SubTitle>
                 <div>{summary}</div>
               </div>
               <div>
-                <SubTitle>키워드</SubTitle>
+                <SubTitle>{t('AskDoc.Keyword')}</SubTitle>
                 <KeywordWrap>
                   {keywords.map((keyword, index) => {
                     return (
@@ -112,7 +112,7 @@ export const QuestionList = ({
             </Summary>
           )}
           <List>
-            <SubTitle>문서 내 추천 질문</SubTitle>
+            <SubTitle>{t('AskDoc.Questions')}</SubTitle>
             {questions?.map((q) => (
               <Button
                 disable={isLoading}

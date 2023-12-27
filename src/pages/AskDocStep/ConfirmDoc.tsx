@@ -9,10 +9,10 @@ import Loading from '../../components/Loading';
 import { usePollingExtractText } from '../../components/hooks/useCreateVectorData';
 import usePercentage from '../../components/hooks/usePercentage';
 import useLangParameterNavigate from '../../components/hooks/useLangParameterNavigate';
+
 export const ConfirmDoc = () => {
   const { t } = useTranslation();
-  const { navigate } = useLangParameterNavigate();
-
+  const { navigate, isLangKo } = useLangParameterNavigate();
   const { isSuccess, isLoading } = usePollingExtractText();
   const { percentage } = usePercentage(isLoading, isSuccess);
 
@@ -27,11 +27,22 @@ export const ConfirmDoc = () => {
       <GuideMessage>
         <h1>{t('AskDocStep.Step2.MainText')}</h1>
         <SubText>
-          <>
-            <Icon iconSrc={Logo} size="sm" />
-            <b> Polaris Drive </b>
-            <p>{t('AskDocStep.Step2.SubText')}</p>
-          </>
+          {isLangKo ? (
+            <div className={'ko'}>
+              <Icon iconSrc={Logo} size="sm" />
+              <p>
+                <b> Polaris Drive </b>
+                {t('AskDocStep.Step2.SubText')}
+              </p>
+            </div>
+          ) : (
+            <div className={'en'}>
+              <p>{t('AskDocStep.Step2.SubText1')}</p>
+              <Icon iconSrc={Logo} size="sm" />
+              <b> Polaris Drive. </b>
+              <p>{t('AskDocStep.Step2.SubText2')}</p>
+            </div>
+          )}
         </SubText>
       </GuideMessage>
       {percentage > 90 && <Loading>{t('AskDocStep.Step2.LoadingText')}</Loading>}
@@ -45,17 +56,30 @@ export const ConfirmDoc = () => {
 export default ConfirmDoc;
 
 const SubText = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 4px;
-  font-size: 14px;
+  .ko {
+    font-size: 14px;
+    img {
+      float: left;
+    }
 
-  img {
-    margin-top: 2px;
+    b {
+      padding-left: 4px;
+    }
   }
 
-  b {
-    color: #6f3ad0;
+  .en {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 4px;
+    font-size: 14px;
+
+    img {
+      margin-top: 2px;
+    }
+
+    b {
+      color: #6f3ad0;
+    }
   }
 `;
