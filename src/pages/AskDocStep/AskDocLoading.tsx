@@ -41,6 +41,7 @@ const AskDocLoading = () => {
         if (data.status === null) return navigate('/AskDocStep/ConfirmDoc');
         return navigate('/AskDocStep/ProgressAnalysisDoc');
       }
+      if (data && data.status === null) return navigate('/AskDocStep/ConfirmDoc');
       return navigate('/AskDocStep/CheckDocHistory');
     };
     if (data) {
