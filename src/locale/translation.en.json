@@ -182,7 +182,7 @@
       "1ChatingCredit": "4credit(s) will be deducted per conversation.",
       "1VoiceCredit": "8credit(s) will be deducted per conversation."
     },
-    "Summary": "Summary",
+    "Summary": "Key Summary",
     "Keyword": "Keyword",
     "Questions": "Document Recommended Questions"
   },
@@ -212,7 +212,7 @@
       "MainText": "Analyzing the document\n for a better response.",
       "Noti": "Document analysis has been completed. \n {{credit}} credits have been used. (remaining credits: {{leftCredit}})",
       "Loading_AnalyzeDoc": "Document analysis in progress...",
-      "Loading_Keyword": "Searching for imfortant questions within the document...",
+      "Loading_Keyword": "Searching for important questions within the document...",
       "Loading_Done": "Moving to the results screen shortly."
     },
     "Modal": {

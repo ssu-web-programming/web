@@ -9,9 +9,9 @@ const OverPageErrorModal = ({ buttonOnclick }: Props) => {
   const text = t('AskDocStep.Modal.Under300');
   return (
     <ErrorModal
-      title="문서를 다시 확인해주세요."
+      title={t('AskDocStep.Modal.CheckDocument')}
       isTwoButton={false}
-      buttonName="닫기"
+      buttonName={t('AskDocStep.Modal.Close')}
       buttonOnClick={buttonOnclick}>
       <>
         <p dangerouslySetInnerHTML={{ __html: text }}></p>
