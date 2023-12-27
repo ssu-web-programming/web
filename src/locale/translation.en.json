@@ -193,7 +193,8 @@
     },
     "Step2": {
       "MainText": "Reviewing the document.\n Please wait a moment.",
-      "SubText": "checking the document on <b>Polaris Drive.</b>\n Please wait a moment.",
+      "SubText1": "checking the document on",
+      "SubText2": "Please wait a moment.",
       "LoadingText": "Finalizing documentation checks……"
     },
     "Step3": {
