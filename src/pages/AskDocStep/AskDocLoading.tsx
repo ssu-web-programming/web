@@ -26,9 +26,7 @@ const AskDocLoading = () => {
     };
     TagManager.dataLayer({
       dataLayer: {
-        user_id: userId,
-        user_level: '8',
-        lastLoggedIn: '1701842400'
+        user_id: userId
       }
     });
     TagManager.initialize(tagManagerArgs);
@@ -44,7 +42,6 @@ const AskDocLoading = () => {
         return navigate('/AskDocStep/ProgressAnalysisDoc');
       }
       if (data && data.status === null) return navigate('/AskDocStep/ConfirmDoc');
-      return navigate('/AskDocStep/CheckDocHistory');
     };
     movePage(data);
   }, [data, navigate]);
