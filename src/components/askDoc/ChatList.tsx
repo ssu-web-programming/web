@@ -16,6 +16,7 @@ import Icon from '../Icon';
 import icon_retry from '../../img/ico_reanalyze.svg';
 import useDownScroll from '../hooks/useDownScroll';
 import { summarySelector } from '../../store/slices/askDocSummary';
+import useLangParameterNavigate from '../hooks/useLangParameterNavigate';
 
 const ChatListWrapper = styled.div<{ isLoading: boolean }>`
   ${flex}
@@ -46,7 +47,9 @@ export const ChatList = ({
   isIncludeSummary,
   setIsActiveInput,
   handleClickQuestion,
-  stopRef
+  stopRef,
+  onPlayAudio,
+  setOnPlayAudio
 }: {
   loadingId: string | null;
   setLoadingId: Dispatch<SetStateAction<string | null>>;
@@ -55,8 +58,11 @@ export const ChatList = ({
   setIsActiveInput: Dispatch<SetStateAction<boolean>>;
   handleClickQuestion: (api: 'gpt' | 'askDoc', chatText?: string) => {};
   stopRef: MutableRefObject<string[]>;
+  onPlayAudio: HTMLAudioElement | null;
+  setOnPlayAudio: (audio: HTMLAudioElement | null) => void;
 }) => {
   const { t } = useTranslation();
+  const { isTesla } = useLangParameterNavigate();
   const dispatch = useAppDispatch();
   const downScroll = useDownScroll();
   const chatEndRef = useRef<HTMLDivElement>(null);
@@ -78,6 +84,11 @@ export const ChatList = ({
       setLoadingId(null);
 
       dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.StopMsg`) }));
+    }
+
+    if (isTesla && onPlayAudio) {
+      onPlayAudio.pause();
+      setOnPlayAudio(null);
     }
   };
 
