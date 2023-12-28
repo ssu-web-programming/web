@@ -1,7 +1,7 @@
-import { MutableRefObject, useState } from 'react';
+import { Dispatch, MutableRefObject, SetStateAction, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { filesSelector } from '../../store/slices/askDocAnalyzeFiesSlice';
-import { ASKDCO_ASK_QUESTION, JSON_CONTENT_TYPE } from '../../api/constant';
+import { ASKDCO_ASK_QUESTION, JSON_CONTENT_TYPE, VOICEDOC_MAKE_VOICE } from '../../api/constant';
 import useApiWrapper from '../../api/useApiWrapper';
 import useErrorHandle from './useErrorHandle';
 import { setCreating } from '../../store/slices/tabSlice';
@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { activeToast } from '../../store/slices/toastSlice';
 import NoCredit from '../toast/contents/NoCredit';
 import { useShowCreditToast } from './useShowCreditToast';
+import useLangParameterNavigate from './useLangParameterNavigate';
 
 export const useChatAskdoc = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -21,6 +22,7 @@ export const useChatAskdoc = () => {
   const errorHandle = useErrorHandle();
   const showCreditToast = useShowCreditToast();
   const { t } = useTranslation();
+  const { isTesla } = useLangParameterNavigate();
 
   const submitChat = async (
     api: 'gpt' | 'askDoc',
@@ -28,6 +30,8 @@ export const useChatAskdoc = () => {
     userId: string,
     userChatText: string,
     stopRef: MutableRefObject<string[]>,
+    reqVoiceRes: (text: string) => Promise<Response>,
+    playVoiceRes: (res: Blob) => void,
     chatText?: string
   ) => {
     dispatch(
@@ -116,6 +120,8 @@ export const useChatAskdoc = () => {
         let isExistPages = false;
         let arrNumbers: number[] = [];
 
+        let answer_tesla = '';
+
         while (true) {
           const { done, value } = await reader.read();
           if (done) break;
@@ -142,18 +148,22 @@ export const useChatAskdoc = () => {
             }
 
             if (!isExistPages) {
-              dispatch(
-                updateChat({
-                  id: assistantId,
-                  role: 'assistant',
-                  result: data,
-                  input: chatText ? chatText : userChatText,
-                  info: {
-                    request: api,
-                    page: [...arrNumbers]
-                  }
-                })
-              );
+              if (isTesla) {
+                answer_tesla += data;
+              } else {
+                dispatch(
+                  updateChat({
+                    id: assistantId,
+                    role: 'assistant',
+                    result: data,
+                    input: chatText ? chatText : userChatText,
+                    info: {
+                      request: api,
+                      page: [...arrNumbers]
+                    }
+                  })
+                );
+              }
             }
 
             if (isExistPages) {
@@ -183,6 +193,26 @@ export const useChatAskdoc = () => {
           dispatch(removeChat(assistantId));
           stopRef.current = stopRef.current?.filter((id) => id !== assistantId);
           return;
+        }
+
+        // 차량모드는 음성재생으로 인해 스트리밍을 지원하지 않음
+        if (isTesla) {
+          const resAudio = await reqVoiceRes(answer_tesla);
+          const audioBlob = await resAudio.blob();
+          playVoiceRes(audioBlob);
+
+          dispatch(
+            updateChat({
+              id: assistantId,
+              role: 'assistant',
+              result: answer_tesla,
+              input: chatText ? chatText : userChatText,
+              info: {
+                request: api,
+                page: [...arrNumbers]
+              }
+            })
+          );
         }
 
         setIsSuccess(true);
