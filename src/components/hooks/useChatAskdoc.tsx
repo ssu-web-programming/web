@@ -124,11 +124,19 @@ export const useChatAskdoc = () => {
           const data = result.split('data:').filter(Boolean);
 
           data.map((data) => {
-            if (data === '<PO_ANSWER_START>' || data === '<PO_ANSWER_END>') {
+            if (
+              data === '<PO_ANSWER_START>' ||
+              data === '<PO_ANSWER_END>' ||
+              data === '</PO_ANSWER_END>'
+            ) {
               return;
             }
 
-            if (data === '<PO_PAGENUM_START>' || data === '<PO_PAGENUM_END>') {
+            if (
+              data === '<PO_PAGENUM_START>' ||
+              data === '<PO_PAGENUM_END>' ||
+              data === '</PO_PAGENUM_END>'
+            ) {
               isExistPages = true;
               return;
             }
