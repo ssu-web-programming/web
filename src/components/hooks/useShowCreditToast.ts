@@ -7,7 +7,7 @@ export const useShowCreditToast = () => {
   const dispatch = useAppDispatch();
 
   return function (consumed: string, left: string) {
-    const leftCredit = left === '-1' ? t('Unlimited') : left;
+    const leftCredit = left === '-1' ? t('AskDoc.Unlimited') : left;
     dispatch(
       activeToast({
         type: 'info',

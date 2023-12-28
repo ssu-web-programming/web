@@ -181,7 +181,58 @@
     "TipList": {
       "1ChatingCredit": "4credit(s) will be deducted per conversation.",
       "1VoiceCredit": "8credit(s) will be deducted per conversation."
-    }
+    },
+    "Summary": "Key Summary",
+    "Keyword": "Keyword",
+    "Questions": "Document Recommended Questions"
   },
-  "Unlimited": "Unlimited"
+  "Unlimited": "Unlimited",
+  "AskDocStep": {
+    "Step1": {
+      "MainText": "There is an edit history in the document.",
+      "SubText": "Would you like to reanalyze to incorporate the edited content?",
+      "ButtonTextChecked": "Reanalyze the selected document.",
+      "ButtonTextUnChecked": "Use the existing analysis document."
+    },
+    "Step2": {
+      "MainText": "Reviewing the document.\n Please wait a moment.",
+      "SubText1": "checking the document on",
+      "SubText2": "Please wait a moment.",
+      "LoadingText": "Finalizing documentation checks……"
+    },
+    "Step3": {
+      "MainText": "Document analysis is beginning.",
+      "SubText1": "Document analysis requires",
+      "SubText2": " and each question",
+      "SubText3": " Once a document has been analyzed, it can be used without additional credits.",
+      "ButtonText": "Analysis is starting.",
+      "Credit": "{{credit}} Credits"
+    },
+    "Step4": {
+      "MainText": "Analyzing the document\n for a better response.",
+      "Noti": "Document analysis has been completed. \n {{credit}} credits have been used. (remaining credits: {{leftCredit}})",
+      "Loading_AnalyzeDoc": "Document analysis in progress...",
+      "Loading_Keyword": "Searching for important questions within the document...",
+      "Loading_Done": "Moving to the results screen shortly."
+    },
+    "Modal": {
+      "Over1000": "For accurate document analysis, <span class='important'>a minimum of 1,000 characters</span> is required. Please provide additional content for the document.",
+      "Under300": "The document analysis is not possible as the document exceeds <span class='important'>300 pages</span>.<br /> Please reduce the number of pages in the document.",
+      "NeedCredit": "Insufficient Credits. Requires <span class='credit'>a minimum of 5 credits</span> for using ASK Doc.",
+      "UpgradePlan": "Upgrade subscription plan",
+      "FailAnalyze": "Document analysis has failed.",
+      "AgainAnalyze": "Reanalyzing the document.",
+      "CheckCredit": "Please check the credits.",
+      "Close": "Close",
+      "DefaultError": "The service could not be provided due to failure of document analysis.<br />We’ll work tirelessly to provide better service.",
+      "CheckDocument": "Check the document again.",
+      "SameNameInDrive": "A file with the same name in Polaris Drive. Would you like to overwrite the current file?",
+      "CoverThisFile": "Overwrite the current file",
+      "Ignore": "Ignore and proceed",
+      "LackUsage": "Insufficient Polaris Drive capacity, preventing document analysis. Consider upgrading your plan for more storage space.",
+      "UploadFail": "The document upload has failed.<br />Please try again.",
+      "TryAgain": "Try again",
+      "ServiceNotification": "Service Notification"
+    }
+  }
 }

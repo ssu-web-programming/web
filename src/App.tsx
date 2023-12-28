@@ -13,8 +13,15 @@ import useApiWrapper from './api/useApiWrapper';
 import { BANNER_ACTIVE_API, JSON_CONTENT_TYPE } from './api/constant';
 import { setBanner, setUserLevel } from './store/slices/banner';
 import { useInitBridgeListener } from './util/bridge';
-import AskDoc from './pages/AskDoc';
+import AskDocHome from './pages/AskDocStep/AskDocHome';
 import VoiceDoc from './pages/VoiceDoc';
+import CheckDocHistory from './pages/AskDocStep/CheckDocHistory';
+import ConfirmDoc from './pages/AskDocStep/ConfirmDoc';
+import ProgressAnalysisDoc from './pages/AskDocStep/ProgressAnalysisDoc';
+import StartAnalysisDoc from './pages/AskDocStep/StartAnalysisDoc';
+import AskDoc from './pages/AskDoc';
+import Chat from './pages/AskDocStep/Chat';
+import AskDocLoading from './pages/AskDocStep/AskDocLoading';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -56,7 +63,15 @@ function App() {
         <Routes>
           <Route path="/aiWrite" element={<Tools></Tools>}></Route>
           <Route path="/txt2img" element={<TextToImage></TextToImage>}></Route>
-          <Route path="/askdoc" element={<AskDoc></AskDoc>}></Route>
+          <Route path="/askdoc" element={<AskDoc />} />
+          <Route path="/AskDocStep" element={<AskDocHome />}>
+            <Route index element={<AskDocLoading />} />
+            <Route path="/AskDocStep/CheckDocHistory" element={<CheckDocHistory />} />
+            <Route path="/AskDocStep/ConfirmDoc" element={<ConfirmDoc />} />
+            <Route path="/AskDocStep/ProgressAnalysisDoc" element={<ProgressAnalysisDoc />} />
+            <Route path="/AskDocStep/StartAnalysisDoc" element={<StartAnalysisDoc />} />
+            <Route path="/AskDocStep/Chat" element={<Chat />} />
+          </Route>
           <Route path="/voicedoc" element={<VoiceDoc></VoiceDoc>}></Route>
           <Route path="*" element={<InvalidAccess></InvalidAccess>}></Route>
         </Routes>

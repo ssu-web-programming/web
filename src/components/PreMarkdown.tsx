@@ -9,6 +9,7 @@ const Pre = styled.div`
   p {
     margin: 0px;
     padding: 0px;
+    word-break: break-all;
   }
 `;
 
