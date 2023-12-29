@@ -1,12 +1,12 @@
 import { useEffect, Dispatch, SetStateAction } from 'react';
-import ProgressBar from '../../../components/ProgressBar';
-import useAskDocRequestHandler from '../../../components/hooks/useAskDocRequestHandler';
+import ProgressBar from '../../ProgressBar';
+import useAskDocRequestHandler from '../../hooks/useAskDocRequestHandler';
 import { ASKDOC_MAKE_SUMMARY } from '../../../api/constant';
 import { IFileStatus } from '../../../store/slices/askDocAnalyzeFiesSlice';
-import usePercentage from '../../../components/hooks/usePercentage';
+import usePercentage from '../../hooks/usePercentage';
 import { useAppDispatch } from '../../../store/store';
 import { setSummary } from '../../../store/slices/askDocSummary';
-import useAskDocErrorHandler from '../../../components/hooks/useAskDocErrorHandler';
+import useAskDocErrorHandler from '../../hooks/useAskDocErrorHandler';
 type Props = {
   onNext: Dispatch<SetStateAction<'ready' | IFileStatus>>;
 };
