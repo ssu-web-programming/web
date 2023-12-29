@@ -6,9 +6,9 @@ import Logo from '../../img/askDoc/ico_polaris_logo.svg';
 import styled from 'styled-components';
 import { useLayoutEffect } from 'react';
 import Loading from '../../components/Loading';
-import { usePollingExtractText } from '../../components/hooks/useCreateVectorData';
 import usePercentage from '../../components/hooks/usePercentage';
 import useLangParameterNavigate from '../../components/hooks/useLangParameterNavigate';
+import usePollingExtractText from '../../components/hooks/usePollingExtractText';
 
 export const ConfirmDoc = () => {
   const { t } = useTranslation();
