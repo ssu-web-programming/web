@@ -1,7 +1,8 @@
 import { useEffect, Dispatch, SetStateAction } from 'react';
 
-import ProgressBar from '../../../components/ProgressBar';
 import useAskDocRequestHandler from '../../../components/hooks/useAskDocRequestHandler';
+
+import ProgressBar from '../../ProgressBar';
 import { ASKDOC_MAKE_SUMMARY } from '../../../api/constant';
 import { IFileStatus } from '../../../store/slices/askDocAnalyzeFiesSlice';
 import usePercentage from '../../hooks/usePercentage';
