@@ -1,4 +1,4 @@
-import Skeleton from '../../components/Skeleton';
+import Skeleton from '../Skeleton';
 import { Wrapper, GuideMessage, Footer } from '../../style/askDoc';
 import { alignItemCenter, flex, flexColumn, justiStart } from '../../style/cssCommon';
 import styled from 'styled-components';

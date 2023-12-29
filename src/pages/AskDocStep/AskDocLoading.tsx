@@ -1,5 +1,5 @@
 import { useLayoutEffect } from 'react';
-import CheckDocHistorySkeleton from './CheckDocHistorySkeleton';
+import CheckDocHistorySkeleton from '../../components/askDoc/CheckDocHistorySkeleton';
 
 import TagManager from 'react-gtm-module';
 import { WrapperPage } from '../../style/askDoc';
