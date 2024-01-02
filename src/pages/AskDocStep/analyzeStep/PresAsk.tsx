@@ -33,7 +33,7 @@ const PreAsk = ({ onNext }: Props) => {
           type: 'info',
           msg: t(`ToastMsg.StartCreating`, {
             deductionCredit: 5,
-            leftCredit: data.data.credit === '-1' ? t('AskDoc.Unlimited') : data.data.credit
+            leftCredit: data.data.credit === '-1' ? t('Unlimited') : data.data.credit
           })
         })
       );
