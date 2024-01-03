@@ -147,6 +147,11 @@ export const ChatList = ({
           <StopButton onClick={onStop} />
         </CenterBox>
       )}
+      {isTesla && onPlayAudio && (
+        <CenterBox>
+          <StopButton onClick={onStop} />
+        </CenterBox>
+      )}
       {isActiveRetry && (
         <CenterBox>
           <Button
