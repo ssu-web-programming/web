@@ -110,7 +110,6 @@ const AskDoc = () => {
     const audioBlob = new Audio(url);
     audioBlob.addEventListener('ended', () => setOnPlayAudio(null));
     setOnPlayAudio(audioBlob);
-    console.log('set');
     audioBlob.play();
   };
 
