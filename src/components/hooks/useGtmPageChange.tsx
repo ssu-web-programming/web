@@ -3,6 +3,7 @@ import TagManager from 'react-gtm-module';
 import { useLocation } from 'react-router';
 import { useAppSelector } from '../../store/store';
 import { filesSelector } from '../../store/slices/askDocAnalyzeFiesSlice';
+import { getPlatform } from '../../util/bridge';
 
 const useGtmPageChange = () => {
   const { userId } = useAppSelector(filesSelector);
@@ -16,7 +17,8 @@ const useGtmPageChange = () => {
           userId,
           userProject: 'project',
           page: 'home',
-          event: 'view_user_info'
+          event: 'view_user_info',
+          OSName: getPlatform()
         }
       };
       TagManager.dataLayer(tagManagerArgs);
