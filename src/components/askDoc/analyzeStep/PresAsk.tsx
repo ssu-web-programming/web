@@ -1,15 +1,17 @@
 import { useEffect, Dispatch, SetStateAction } from 'react';
-import ProgressBar from '../../../components/ProgressBar';
-import { useAskDocRequestHandler } from '../../../components/hooks/useCreateVectorData';
+
+import ProgressBar from '../../ProgressBar';
+import useAskDocRequestHandler from '../../hooks/useAskDocRequestHandler';
+
 import { ASKDOC_ALL_COMPLETE_ANALYZING } from '../../../api/constant';
 import { IFileStatus } from '../../../store/slices/askDocAnalyzeFiesSlice';
-import usePercentage from '../../../components/hooks/usePercentage';
+import usePercentage from '../../hooks/usePercentage';
 import { useAppDispatch } from '../../../store/store';
 import { activeToast } from '../../../store/slices/toastSlice';
-import useAskDocErrorHandler from '../../../components/hooks/useAskDocErrorHandler';
+import useAskDocErrorHandler from '../../hooks/useAskDocErrorHandler';
 import { useTranslation } from 'react-i18next';
 import { setCreating } from '../../../store/slices/tabSlice';
-import useLangParameterNavigate from '../../../components/hooks/useLangParameterNavigate';
+import useLangParameterNavigate from '../../hooks/useLangParameterNavigate';
 
 type Props = {
   onNext: Dispatch<SetStateAction<'ready' | IFileStatus>>;

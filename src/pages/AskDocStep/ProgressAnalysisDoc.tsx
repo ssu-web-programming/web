@@ -2,9 +2,9 @@ import { useTranslation } from 'react-i18next';
 import { Footer, GuideMessage, Wrapper } from '../../style/askDoc';
 import Loading from '../../components/Loading';
 import { useState } from 'react';
-import CreateVector from './analyzeStep/CreateVector';
-import Keyword from './analyzeStep/Keyword';
-import PreAsk from './analyzeStep/PresAsk';
+import CreateVector from '../../components/askDoc/analyzeStep/CreateVector';
+import Keyword from '../../components/askDoc/analyzeStep/Keyword';
+import PreAsk from '../../components/askDoc/analyzeStep/PresAsk';
 import { useAppSelector } from '../../store/store';
 import { IFileStatus, filesSelector } from '../../store/slices/askDocAnalyzeFiesSlice';
 

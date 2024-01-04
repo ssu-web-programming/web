@@ -120,7 +120,7 @@ export const ChatBottom = ({
     if (isActiveInput && textRef?.current) {
       textRef?.current.focus();
       resizeHeight(textRef);
-      setIsActiveInput(isTesla);
+      if (isTesla) setIsActiveInput(true);
     }
   }, [isActiveInput]);
 
