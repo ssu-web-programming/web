@@ -16,10 +16,12 @@ import { useTranslation } from 'react-i18next';
 import { Dispatch, RefObject, SetStateAction, useEffect, useMemo, useRef } from 'react';
 import { RowWrapBox } from '../chat/RecommendBox/ChatRecommend';
 import useResizeHeight from '../hooks/useResizeHeight';
+import useLangParameterNavigate from '../hooks/useLangParameterNavigate';
+import AudioInit from '../../audio/init.mpga';
 
 const TEXT_MAX_HEIGHT = 268;
 
-const InputBox = styled.div<{ activeInputWrap: boolean }>`
+const InputBox = styled.div<{ activeInputWrap: boolean; isTesla: boolean }>`
   ${flex}
   ${alignItemCenter}
   ${flexColumn}
@@ -30,6 +32,12 @@ const InputBox = styled.div<{ activeInputWrap: boolean }>`
   position: relative;
   background-color: white;
   box-shadow: 0 -2px 8px 0 rgba(111, 58, 208, 0.11);
+  border-radius: ${(props) => (props.isTesla ? '8px' : 'none')};
+  margin: ${(props) => (props.isTesla ? '5px' : '0')};
+
+  textarea {
+    border-radius: ${(props) => (props.isTesla ? '8px' : 'none')};
+  }
 `;
 
 export const RowBox = styled.div<{ cssExt?: FlattenSimpleInterpolation }>`
@@ -97,14 +105,22 @@ export const ChatBottom = ({
   setChatInput: Dispatch<SetStateAction<string>>;
 }) => {
   const { t } = useTranslation();
+  const { isTesla } = useLangParameterNavigate();
   const resizeHeight = useResizeHeight();
 
   const textRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
+    if (isTesla) {
+      new Audio(AudioInit).play();
+    }
+  }, []);
+
+  useEffect(() => {
     if (isActiveInput && textRef?.current) {
-      textRef.current.focus();
+      textRef?.current.focus();
       resizeHeight(textRef);
+      if (isTesla) setIsActiveInput(true);
     }
   }, [isActiveInput]);
 
@@ -122,7 +138,7 @@ export const ChatBottom = ({
   return (
     <div style={{ position: 'relative', display: 'flex' }}>
       <Tip />
-      <InputBox activeInputWrap={isActiveInput && !loadingId}>
+      <InputBox activeInputWrap={isActiveInput && !loadingId} isTesla={isTesla}>
         <TextBox
           onClick={() => {
             setIsActiveInput(true);
