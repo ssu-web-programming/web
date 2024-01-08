@@ -210,7 +210,7 @@
     },
     "Step4": {
       "MainText": "Analyzing the document\n for a better response.",
-      "Noti": "Document analysis has been completed. \n {{credit}} credits have been used. (remaining credits: {{leftCredit}})",
+      "Noti": "Document analysis has been completed. \n {{deductionCredit}} credits have been used. (remaining credits: {{leftCredit}})",
       "Loading_AnalyzeDoc": "Document analysis in progress...",
       "Loading_Keyword": "Searching for important questions within the document...",
       "Loading_Done": "Moving to the results screen shortly."

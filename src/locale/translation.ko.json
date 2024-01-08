@@ -209,7 +209,7 @@
     },
     "Step4": {
       "MainText": "더 좋은 답변을 위해\n문서를 분석하고 있습니다.",
-      "Noti": "문서 분석이 완료되었습니다. \n {{credit}} 크레딧이 차감되었습니다. (잔여 크레딧: {{leftCredit}})",
+      "Noti": "문서 분석이 완료되었습니다. \n {{deductionCredit}} 크레딧이 차감되었습니다. (잔여 크레딧: {{leftCredit}})",
       "Loading_AnalyzeDoc": "문서 분석 중...",
       "Loading_Keyword": "문서 내 중요한 질문 찾는 중...",
       "Loading_Done": "곧 결과 화면으로 이동합니다."
