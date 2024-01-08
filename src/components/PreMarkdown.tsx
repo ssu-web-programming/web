@@ -1,5 +1,5 @@
 import remarkGfm from 'remark-gfm';
-import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
+import Markdown from 'react-markdown';
 import styled from 'styled-components';
 
 const Pre = styled.div`
@@ -27,7 +27,13 @@ const PreMarkdown = ({ text }: { text: string }) => {
       ref={(el) => {
         if (el) el.scrollTo(0, el.scrollHeight);
       }}>
-      <ReactMarkdown remarkPlugins={[remarkGfm]}>{text}</ReactMarkdown>
+      <Markdown
+        components={{
+          a: 'span'
+        }}
+        remarkPlugins={[remarkGfm]}>
+        {text}
+      </Markdown>
     </Pre>
   );
 };

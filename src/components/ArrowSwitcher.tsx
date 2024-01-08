@@ -1,9 +1,8 @@
 import { ReactComponent as IconPrev } from '../img/ico_arrow_prev.svg';
 import { ReactComponent as IconNext } from '../img/ico_arrow_next.svg';
 import IconButton from './buttons/IconButton';
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, ReactElement } from 'react';
 import { ButtonProps } from './buttons/Button';
-import { ReactElement } from 'react-markdown/lib/react-markdown';
 import { IconSize } from './Icon';
 
 type SwitcherType = 'index' | 'imgList';
