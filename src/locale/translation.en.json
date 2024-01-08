@@ -164,7 +164,7 @@
   "Retry": "Retry",
   "MoveToLimitInfo": "https://polarisofficehelp.zendesk.com/hc/en-us/articles/6736284040335-Limitations-on-Polaris-Office-AI",
   "AskDoc": {
-    "Greeting": "Hello. This is a Polaris Office AI ASK Doc and I provide accurate answers based on the document. ",
+    "Greeting": "Hello. This is a Polaris Office AI ASK Doc and I provide answers based on the document.",
     "LoadingMsg": {
       "Info": "Analyzing the document to find better answers! Please hold. It may take up to 3 minutes.",
       "AskDoc": "Content creation in progress...",
@@ -174,6 +174,7 @@
     "GetMoreInformation": "Find additional information",
     "InitLoadQuestion": "In the form of a list of two questions that people might be curious about, just ask them without answering them.",
     "InitLoadInfoMention": "Polaris Office AI has found the following questions.",
+    "InitLoadInfoContent": "Polaris Office AI has found the following contents.",
     "DefaultQuestion": "What is most important in this document?",
     "FailedConvert": "The service could not be provided due to failure of document analysis. We’ll work tirelessly to provide better service.",
     "FailedAnalyze": "Document analysis failed. Please try again for a more accurate analysis.",

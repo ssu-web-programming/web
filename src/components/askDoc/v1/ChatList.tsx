@@ -1,22 +1,21 @@
 import AskDocSpeechBubble from './AskDocSpeechBubble';
 import { QuestionList } from './QuestionList';
 import styled from 'styled-components';
-import { flex, flexColumn, flexGrow, justiCenter } from '../../style/cssCommon';
-import { useAppSelector } from '../../store/store';
-import { AskDocChat, selectAskDoc } from '../../store/slices/askDoc';
-import StopButton from '../buttons/StopButton';
-import { setCreating } from '../../store/slices/tabSlice';
-import { activeToast } from '../../store/slices/toastSlice';
+import { flex, flexColumn, flexGrow, justiCenter } from '../../../style/cssCommon';
+import { useAppSelector } from '../../../store/store';
+import { AskDocChat, selectAskDoc } from '../../../store/slices/askDoc';
+import StopButton from '../../buttons/StopButton';
+import { setCreating } from '../../../store/slices/tabSlice';
+import { activeToast } from '../../../store/slices/toastSlice';
 import { Dispatch, MutableRefObject, useRef, SetStateAction, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAppDispatch } from '../../store/store';
-import Button from '../buttons/Button';
-import Bridge from '../../util/bridge';
-import Icon from '../Icon';
-import icon_retry from '../../img/ico_reanalyze.svg';
-import useDownScroll from '../hooks/useDownScroll';
-import { summarySelector } from '../../store/slices/askDocSummary';
-import useLangParameterNavigate from '../hooks/useLangParameterNavigate';
+import { useAppDispatch } from '../../../store/store';
+import Button from '../../buttons/Button';
+import Bridge from '../../../util/bridge';
+import Icon from '../../Icon';
+import icon_retry from '../../../img/ico_reanalyze.svg';
+import useDownScroll from '../../hooks/useDownScroll';
+import useLangParameterNavigate from '../../hooks/useLangParameterNavigate';
 
 const ChatListWrapper = styled.div<{ isLoading: boolean }>`
   ${flex}
