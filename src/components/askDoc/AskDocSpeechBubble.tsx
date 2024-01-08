@@ -143,9 +143,6 @@ const AskDocSpeechBubble = (props: PropsWithChildren<AskDocSpeechBubbleProps>) =
   const isUser = useMemo(() => chat.role === 'user', [chat.role]);
   const text = useMemo(() => (chat.role === 'assistant' ? chat.result : chat.input), [chat]);
 
-  // console.log(text);
-  // console.log(isLoading);
-  // console.log(loadingId);
   return (
     <Wrapper isUser={isUser}>
       <BubbleArea>
@@ -165,7 +162,7 @@ const AskDocSpeechBubble = (props: PropsWithChildren<AskDocSpeechBubbleProps>) =
             <>
               <ColumDivider />
               <BoldLengthWrapper>
-                {t(`WriteTab.LengthInfo`, { length: text.length })}
+                {t(`WriteTab.LengthInfo`, { length: text.trim().length })}
               </BoldLengthWrapper>
               <ColumDivider />
               {!isLoading && chat?.info?.request === 'askDoc' && (
