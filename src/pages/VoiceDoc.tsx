@@ -35,7 +35,7 @@ import {
   selectAskDoc,
   updateChat
 } from '../store/slices/askDoc';
-import AskDocSpeechBubble from '../components/askDoc/AskDocSpeechBubble';
+import AskDocSpeechBubble from '../components/askDoc/v2/AskDocSpeechBubble';
 import Button from '../components/buttons/Button';
 import icon_credit from '../img/ico_credit.svg';
 import icon_retry from '../img/ico_reanalyze.svg';

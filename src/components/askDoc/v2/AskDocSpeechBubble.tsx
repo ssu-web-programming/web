@@ -1,23 +1,16 @@
-import styled, { FlattenSimpleInterpolation, css } from 'styled-components';
-import Icon from '../Icon';
-import icon_ai from '../../img/ico_ai.svg';
-import icon_ai_loading from '../../img/loading_dot_2x.webp';
-import PreMarkdown from '../PreMarkdown';
-import {
-  flexColumn,
-  flex,
-  justiSpaceBetween,
-  alignItemCenter,
-  flexWrap
-} from '../../style/cssCommon';
-// import OpenAILinkText from '../OpenAILinkText';
+import styled, { css } from 'styled-components';
+import Icon from '../../Icon';
+import icon_ai from '../../../img/ico_ai.svg';
+import icon_ai_loading from '../../../img/loading_dot_2x.webp';
+import PreMarkdown from '../../PreMarkdown';
+import { flexColumn, flex, justiSpaceBetween, alignItemCenter } from '../../../style/cssCommon';
 import { PropsWithChildren, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import Grid from '../layout/Grid';
-import CreditButton from '../buttons/CreditButton';
-import { AskDocChat } from '../../store/slices/askDoc';
-import Button from '../buttons/Button';
-import Bridge from '../../util/bridge';
+import Grid from '../../layout/Grid';
+import CreditButton from '../../buttons/CreditButton';
+import { AskDocChat } from '../../../store/slices/askDoc';
+import Button from '../../buttons/Button';
+import Bridge from '../../../util/bridge';
 
 const Wrapper = styled.div<{ isUser: boolean }>`
   ${flex}
@@ -60,6 +53,7 @@ const AskDocSpeechBubbleWrapper = styled.div<{
   align-self: flex-start;
 
   width: 100%;
+  margin-right: 12px;
   border-radius: 10px;
   background-color: ${({ isUser }: { isUser: boolean }) =>
     isUser ? 'var(--ai-purple-70)' : 'white'};
@@ -78,6 +72,7 @@ const MarkDownWrapper = styled.div`
 
 const LoadingMsg = styled.div`
   ${flex}
+  ${alignItemCenter}
 
   font-size: 13px;
   font-weight: 500;

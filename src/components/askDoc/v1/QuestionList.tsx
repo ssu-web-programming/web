@@ -6,13 +6,13 @@ import {
   flexColumn,
   justiCenter,
   justiStart
-} from '../../style/cssCommon';
-import Button from '../buttons/Button';
-import Icon from '../Icon';
-import icon_credit from '../../img/ico_credit.svg';
+} from '../../../style/cssCommon';
+import Button from '../../buttons/Button';
+import Icon from '../../Icon';
+import icon_credit from '../../../img/ico_credit.svg';
 import { useTranslation } from 'react-i18next';
-import { useAppSelector } from '../../store/store';
-import { summarySelector } from '../../store/slices/askDocSummary';
+import { useAppSelector } from '../../../store/store';
+import { summarySelector } from '../../../store/slices/askDocSummary';
 
 const Title = styled.div`
   color: var(--ai-purple-50-main);

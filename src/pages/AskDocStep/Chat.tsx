@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { useEffect, useRef, useState } from 'react';
 import { useAppSelector } from '../../store/store';
 import { v4 as uuidv4 } from 'uuid';
-import { ChatList } from '../../components/askDoc/ChatList';
+import { ChatList } from '../../components/askDoc/v2/ChatList';
 import { ChatBottom } from '../../components/askDoc/ChatBottom';
 
 import {
@@ -12,7 +12,7 @@ import {
   flex,
   alignItemCenter
 } from '../../style/cssCommon';
-import { AskDocChat, removeChat, selectAskDoc } from '../../store/slices/askDoc';
+import { AskDocChat, selectAskDoc } from '../../store/slices/askDoc';
 import { summarySelector } from '../../store/slices/askDocSummary';
 import { filesSelector } from '../../store/slices/askDocAnalyzeFiesSlice';
 import { useChatAskdoc } from '../../components/hooks/useChatAskdoc';
@@ -65,7 +65,6 @@ const AskDoc = () => {
   const apiWrapper = useApiWrapper();
   const submitAskDoc = useChatAskdoc();
   const { isTesla } = useLangParameterNavigate();
-  const { askDocHistory: chatHistory } = useAppSelector(selectAskDoc);
   const { fileStatus } = useAppSelector(filesSelector);
   const { questions } = useAppSelector(summarySelector);
   const [userChatText, setUserChatText] = useState('');
@@ -159,7 +158,6 @@ const AskDoc = () => {
             loadingId={loadingId}
             setLoadingId={setLoadingId}
             isActiveRetry={activeRetry}
-            isIncludeSummary={true}
             setIsActiveInput={setIsActiveInput}
             handleClickQuestion={onSubmitAskdocChat}
             stopRef={stopRef}

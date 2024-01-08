@@ -1,7 +1,7 @@
 import { Dispatch, MutableRefObject, SetStateAction, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { filesSelector } from '../../store/slices/askDocAnalyzeFiesSlice';
-import { ASKDCO_ASK_QUESTION, JSON_CONTENT_TYPE, VOICEDOC_MAKE_VOICE } from '../../api/constant';
+import { ASKDCO_ASK_QUESTION, JSON_CONTENT_TYPE } from '../../api/constant';
 import useApiWrapper from '../../api/useApiWrapper';
 import useErrorHandle from './useErrorHandle';
 import { setCreating } from '../../store/slices/tabSlice';
