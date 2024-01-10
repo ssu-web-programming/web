@@ -15,10 +15,10 @@ const useGtmPageChange = () => {
         gtmId: process.env.REACT_APP_GTM_ID,
         dataLayer: {
           userId,
-          userProject: 'project',
-          page: 'home',
+          userProject: 'AskDoc',
+          page_path: location.pathname,
           event: 'view_user_info',
-          OSName: getPlatform()
+          OSName: getPlatform() === 'unknown' ? 'web' : getPlatform()
         }
       };
       TagManager.dataLayer(tagManagerArgs);
