@@ -116,7 +116,7 @@ export const setCookie = (cname: string, cvalue: string, exdays: number) => {
   document.cookie = cname + '=' + cvalue + ';' + expires + ';path=/;' + 'domain=' + domain + ';';
 };
 
-export const isHigerVersion = (targetVersion: string, currentVersion: string | null) => {
+export const isHigherVersion = (targetVersion: string, currentVersion: string | null) => {
   if (currentVersion === null) return false;
 
   const [targetMajor, targetMinor, targetPatch] = targetVersion.split('.').map(Number);
