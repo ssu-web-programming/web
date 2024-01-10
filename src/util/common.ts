@@ -119,13 +119,12 @@ export const setCookie = (cname: string, cvalue: string, exdays: number) => {
 export const isHigerVersion = (targetVersion: string, currentVersion: string | null) => {
   if (currentVersion === null) return false;
 
-  const [targetMajor, targetMinor, targetPatch] = targetVersion.split('.');
-  const [currentMajor, currentMinor, currentPatch] = currentVersion.split('.');
-  if (
-    Number(targetMajor) <= Number(currentMajor) &&
-    Number(targetMinor) <= Number(currentMinor) &&
-    Number(targetPatch) <= Number(currentPatch)
-  )
+  const [targetMajor, targetMinor, targetPatch] = targetVersion.split('.').map(Number);
+  const [currentMajor, currentMinor, currentPatch] = currentVersion.split('.').map(Number);
+  if (targetMajor < currentMajor) return true;
+  if (targetMinor < currentMinor) return true;
+  if (targetPatch < currentPatch) return true;
+  if (targetMajor === currentMajor && targetMinor === currentMinor && targetPatch === currentPatch)
     return true;
   return false;
 };
