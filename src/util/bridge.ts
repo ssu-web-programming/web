@@ -7,7 +7,7 @@ import { updateT2ICurItemIndex, updateT2ICurListId } from '../store/slices/txt2i
 import { activeToast } from '../store/slices/toastSlice';
 import gI18n, { convertLangFromLangCode } from '../locale';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { makeClipboardData } from './common';
+import { isHigherVersion, makeClipboardData } from './common';
 import { AskDocStatus, setSrouceId, setStatus } from '../store/slices/askDoc';
 import { filesSelector, setFiles } from '../store/slices/askDocAnalyzeFiesSlice';
 import { initComplete } from '../store/slices/initFlagSlice';
@@ -199,8 +199,8 @@ export const useInitBridgeListener = () => {
         const platform = getPlatform();
         const version = getVersion();
         if (
-          (platform === ClientType.android && version === '9.8.6') ||
-          (platform === ClientType.ios && version === '9.7.14') ||
+          (platform === ClientType.android && isHigherVersion('9.8.6', version)) ||
+          (platform === ClientType.ios && isHigherVersion('9.7.14', version)) ||
           platform === ClientType.windows ||
           platform === ClientType.mac
         ) {

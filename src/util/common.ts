@@ -115,3 +115,16 @@ export const setCookie = (cname: string, cvalue: string, exdays: number) => {
   const domain = 'polarisoffice.com';
   document.cookie = cname + '=' + cvalue + ';' + expires + ';path=/;' + 'domain=' + domain + ';';
 };
+
+export const isHigherVersion = (targetVersion: string, currentVersion: string | null) => {
+  if (currentVersion === null) return false;
+
+  const [targetMajor, targetMinor, targetPatch] = targetVersion.split('.').map(Number);
+  const [currentMajor, currentMinor, currentPatch] = currentVersion.split('.').map(Number);
+  if (targetMajor < currentMajor) return true;
+  if (targetMinor < currentMinor) return true;
+  if (targetPatch < currentPatch) return true;
+  if (targetMajor === currentMajor && targetMinor === currentMinor && targetPatch === currentPatch)
+    return true;
+  return false;
+};
