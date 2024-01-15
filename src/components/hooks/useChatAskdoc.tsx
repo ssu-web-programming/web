@@ -11,6 +11,8 @@ import { activeToast } from '../../store/slices/toastSlice';
 import NoCredit from '../toast/contents/NoCredit';
 import { useShowCreditToast } from './useShowCreditToast';
 import useLangParameterNavigate from './useLangParameterNavigate';
+import { getPlatform } from '../../util/bridge';
+import TagManager from 'react-gtm-module';
 
 export const useChatAskdoc = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -112,6 +114,27 @@ export const useChatAskdoc = () => {
             dispatch(removeChat(assistantId));
             return;
           }
+        } else {
+          if (response?.resultCode === 15308) {
+            const tagManagerArgs = {
+              gtmId: process.env.REACT_APP_GTM_ID,
+              dataLayer: {
+                userId,
+                userProject: 'project',
+                page: 'home',
+                event: 'aiservice_askdoc_engine_no_result',
+                OSName: getPlatform()
+              }
+            };
+            TagManager.dataLayer(tagManagerArgs);
+          }
+
+          dispatch(
+            activeToast({
+              type: 'error',
+              msg: <p>{t(`ToastMsg.ServiceErrorMsg`)}</p>
+            })
+          );
         }
       }
 
@@ -187,6 +210,40 @@ export const useChatAskdoc = () => {
               }
             }
           });
+
+          const errText = data[data.length - 1];
+          try {
+            const json = JSON.parse(errText);
+            if (json.resultCode === '15306') {
+              const tagManagerArgs = {
+                gtmId: process.env.REACT_APP_GTM_ID,
+                dataLayer: {
+                  userId,
+                  userProject: 'project',
+                  page: 'home',
+                  event: 'aiservice_askdoc_moderation_in_prompt',
+                  OSName: getPlatform()
+                }
+              };
+              TagManager.dataLayer(tagManagerArgs);
+            }
+
+            if (json.resultCode === '15307') {
+              const tagManagerArgs = {
+                gtmId: process.env.REACT_APP_GTM_ID,
+                dataLayer: {
+                  userId,
+                  userProject: 'project',
+                  page: 'home',
+                  event: 'aiservice_askdoc_moderation_in_context',
+                  OSName: getPlatform()
+                }
+              };
+              TagManager.dataLayer(tagManagerArgs);
+            }
+          } catch (e) {
+            // do nothing
+          }
         }
 
         if (stopRef.current?.indexOf(assistantId) !== -1) {
