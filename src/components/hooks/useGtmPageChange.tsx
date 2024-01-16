@@ -17,7 +17,7 @@ const useGtmPageChange = () => {
           user_id: userId,
           userProject: 'AskDoc',
           page: 'home',
-          page_path: location.pathname + '/',
+          page_path: location.pathname,
           event: 'view_user_info',
           OSName: getPlatform() === 'unknown' ? 'web' : getPlatform()
         }
