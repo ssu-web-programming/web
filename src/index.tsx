@@ -9,6 +9,7 @@ import store from './store/store';
 import './locale';
 import { ThemeProvider } from 'styled-components';
 import { selectTheme } from './theme/theme';
+import { HelmetProvider } from 'react-helmet-async';
 
 declare global {
   interface Window {
@@ -37,7 +38,9 @@ root.render(
   <ThemeProvider theme={selectTheme()}>
     <Provider store={store}>
       <BrowserRouter>
-        <App />
+        <HelmetProvider>
+          <App />
+        </HelmetProvider>
       </BrowserRouter>
     </Provider>
   </ThemeProvider>

@@ -9,6 +9,7 @@ import { alignItemCenter, flex, flexColumn, justiStart } from '../../style/cssCo
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { filesSelector, setFiles } from '../../store/slices/askDocAnalyzeFiesSlice';
 import useLangParameterNavigate from '../../components/hooks/useLangParameterNavigate';
+import { Helmet } from 'react-helmet-async';
 
 type File = {
   fileId: string;
@@ -66,6 +67,9 @@ export const CheckDocHistory = () => {
 
   return (
     <Wrapper background={false}>
+      <Helmet>
+        <title>CheckDocHistory</title>
+      </Helmet>
       <GuideMessage>
         <h1>{t('AskDocStep.Step1.MainText')}</h1>
         <p>{t('AskDocStep.Step1.SubText')}</p>
