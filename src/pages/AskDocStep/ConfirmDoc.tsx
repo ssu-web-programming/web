@@ -9,6 +9,7 @@ import Loading from '../../components/Loading';
 import usePercentage from '../../components/hooks/usePercentage';
 import useLangParameterNavigate from '../../components/hooks/useLangParameterNavigate';
 import usePollingExtractText from '../../components/hooks/usePollingExtractText';
+import { Helmet } from 'react-helmet-async';
 
 export const ConfirmDoc = () => {
   const { t } = useTranslation();
@@ -24,6 +25,9 @@ export const ConfirmDoc = () => {
 
   return (
     <Wrapper background={false}>
+      <Helmet>
+        <title>ConfirmDoc</title>
+      </Helmet>
       <GuideMessage>
         <h1>{t('AskDocStep.Step2.MainText')}</h1>
         <SubText>

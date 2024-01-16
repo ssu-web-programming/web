@@ -6,6 +6,7 @@ import Credit from '../../img/ico_credit.svg';
 import Icon from '../../components/Icon';
 import styled from 'styled-components';
 import useLangParameterNavigate from '../../components/hooks/useLangParameterNavigate';
+import { Helmet } from 'react-helmet-async';
 
 export const StartAnalysisDoc = () => {
   const { t } = useTranslation();
@@ -17,6 +18,9 @@ export const StartAnalysisDoc = () => {
 
   return (
     <Wrapper background={false}>
+      <Helmet>
+        <title>StartAnalysisDoc</title>
+      </Helmet>
       <GuideMessage>
         <h1>{t('AskDocStep.Step3.MainText')}</h1>
         <SubText>

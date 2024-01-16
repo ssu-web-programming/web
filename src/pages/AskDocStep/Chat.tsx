@@ -22,6 +22,7 @@ import icon_ai from '../../img/ico_ai.svg';
 import { useTranslation } from 'react-i18next';
 import { JSON_CONTENT_TYPE, VOICEDOC_MAKE_VOICE } from '../../api/constant';
 import useApiWrapper from '../../api/useApiWrapper';
+import { Helmet } from 'react-helmet-async';
 
 const Wrapper = styled.div`
   ${flex}
@@ -142,6 +143,9 @@ const AskDoc = () => {
 
   return (
     <WrapperPage>
+      <Helmet>
+        <title>Chat</title>
+      </Helmet>
       <Body>
         <Wrapper>
           {isTesla && (

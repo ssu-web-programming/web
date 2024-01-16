@@ -7,6 +7,7 @@ import Keyword from '../../components/askDoc/analyzeStep/Keyword';
 import PreAsk from '../../components/askDoc/analyzeStep/PresAsk';
 import { useAppSelector } from '../../store/store';
 import { IFileStatus, filesSelector } from '../../store/slices/askDocAnalyzeFiesSlice';
+import { Helmet } from 'react-helmet-async';
 
 export const ProgressAnalysisDoc = () => {
   const { t } = useTranslation();
@@ -23,6 +24,9 @@ export const ProgressAnalysisDoc = () => {
 
   return (
     <Wrapper background={false}>
+      <Helmet>
+        <title>ProgressAnalysisDoc</title>
+      </Helmet>
       <GuideMessage>
         <h1>{t('AskDocStep.Step4.MainText')}</h1>
       </GuideMessage>
