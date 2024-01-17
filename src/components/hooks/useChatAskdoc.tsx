@@ -13,6 +13,7 @@ import { useShowCreditToast } from './useShowCreditToast';
 import useLangParameterNavigate from './useLangParameterNavigate';
 import { getPlatform } from '../../util/bridge';
 import TagManager from 'react-gtm-module';
+import { useLocation } from 'react-router';
 
 export const useChatAskdoc = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -25,6 +26,7 @@ export const useChatAskdoc = () => {
   const showCreditToast = useShowCreditToast();
   const { t } = useTranslation();
   const { isTesla } = useLangParameterNavigate();
+  const location = useLocation();
 
   const submitChat = async (
     api: 'gpt' | 'askDoc',
@@ -119,11 +121,12 @@ export const useChatAskdoc = () => {
             const tagManagerArgs = {
               gtmId: process.env.REACT_APP_GTM_ID,
               dataLayer: {
-                userId,
-                userProject: 'project',
+                user_id: userId,
+                userProject: 'AskDoc',
                 page: 'home',
+                page_path: location.pathname,
                 event: 'aiservice_askdoc_engine_no_result',
-                OSName: getPlatform()
+                OSName: getPlatform() === 'unknown' ? 'web' : getPlatform()
               }
             };
             TagManager.dataLayer(tagManagerArgs);
@@ -214,29 +217,31 @@ export const useChatAskdoc = () => {
           const errText = data[data.length - 1];
           try {
             const json = JSON.parse(errText);
-            if (json.resultCode === '15306') {
+            if (json.resultCode === 15306) {
               const tagManagerArgs = {
                 gtmId: process.env.REACT_APP_GTM_ID,
                 dataLayer: {
-                  userId,
-                  userProject: 'project',
+                  user_id: userId,
+                  userProject: 'AskDoc',
                   page: 'home',
+                  page_path: location.pathname,
                   event: 'aiservice_askdoc_moderation_in_prompt',
-                  OSName: getPlatform()
+                  OSName: getPlatform() === 'unknown' ? 'web' : getPlatform()
                 }
               };
               TagManager.dataLayer(tagManagerArgs);
             }
 
-            if (json.resultCode === '15307') {
+            if (json.resultCode === 15307) {
               const tagManagerArgs = {
                 gtmId: process.env.REACT_APP_GTM_ID,
                 dataLayer: {
-                  userId,
-                  userProject: 'project',
+                  user_id: userId,
+                  userProject: 'AskDoc',
                   page: 'home',
+                  page_path: location.pathname,
                   event: 'aiservice_askdoc_moderation_in_context',
-                  OSName: getPlatform()
+                  OSName: getPlatform() === 'unknown' ? 'web' : getPlatform()
                 }
               };
               TagManager.dataLayer(tagManagerArgs);
