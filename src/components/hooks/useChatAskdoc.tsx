@@ -19,7 +19,7 @@ export const useChatAskdoc = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isSuccess, setIsSuccess] = useState(true);
 
-  const { files } = useAppSelector(filesSelector);
+  const { files, userId } = useAppSelector(filesSelector);
   const dispatch = useAppDispatch();
   const apiWrapper = useApiWrapper();
   const errorHandle = useErrorHandle();
@@ -28,10 +28,24 @@ export const useChatAskdoc = () => {
   const { isTesla } = useLangParameterNavigate();
   const location = useLocation();
 
+  function createTagManagerArgs(eventValue: string) {
+    return {
+      gtmId: process.env.REACT_APP_GTM_ID,
+      dataLayer: {
+        user_id: userId,
+        userProject: 'AskDoc',
+        page: 'home',
+        page_path: location.pathname,
+        event: eventValue,
+        OSName: getPlatform() === 'unknown' ? 'web' : getPlatform()
+      }
+    };
+  }
+
   const submitChat = async (
     api: 'gpt' | 'askDoc',
     assistantId: string,
-    userId: string,
+    UID: string,
     userChatText: string,
     stopRef: MutableRefObject<string[]>,
     reqVoiceRes: (text: string) => Promise<Response>,
@@ -40,7 +54,7 @@ export const useChatAskdoc = () => {
   ) => {
     dispatch(
       appendChat({
-        id: userId,
+        id: UID,
         role: 'user',
         result: chatText ? chatText : userChatText,
         input: chatText ? chatText : userChatText,
@@ -118,18 +132,7 @@ export const useChatAskdoc = () => {
           }
         } else {
           if (response?.resultCode === 15308) {
-            const tagManagerArgs = {
-              gtmId: process.env.REACT_APP_GTM_ID,
-              dataLayer: {
-                user_id: userId,
-                userProject: 'AskDoc',
-                page: 'home',
-                page_path: location.pathname,
-                event: 'aiservice_askdoc_engine_no_result',
-                OSName: getPlatform() === 'unknown' ? 'web' : getPlatform()
-              }
-            };
-            TagManager.dataLayer(tagManagerArgs);
+            TagManager.dataLayer(createTagManagerArgs('aiservice_askdoc_engine_no_result'));
           }
 
           dispatch(
@@ -218,33 +221,13 @@ export const useChatAskdoc = () => {
           try {
             const json = JSON.parse(errText);
             if (json.resultCode === 15306) {
-              const tagManagerArgs = {
-                gtmId: process.env.REACT_APP_GTM_ID,
-                dataLayer: {
-                  user_id: userId,
-                  userProject: 'AskDoc',
-                  page: 'home',
-                  page_path: location.pathname,
-                  event: 'aiservice_askdoc_moderation_in_prompt',
-                  OSName: getPlatform() === 'unknown' ? 'web' : getPlatform()
-                }
-              };
-              TagManager.dataLayer(tagManagerArgs);
+              TagManager.dataLayer(createTagManagerArgs('aiservice_askdoc_moderation_in_prompt'));
+              break;
             }
 
             if (json.resultCode === 15307) {
-              const tagManagerArgs = {
-                gtmId: process.env.REACT_APP_GTM_ID,
-                dataLayer: {
-                  user_id: userId,
-                  userProject: 'AskDoc',
-                  page: 'home',
-                  page_path: location.pathname,
-                  event: 'aiservice_askdoc_moderation_in_context',
-                  OSName: getPlatform() === 'unknown' ? 'web' : getPlatform()
-                }
-              };
-              TagManager.dataLayer(tagManagerArgs);
+              TagManager.dataLayer(createTagManagerArgs('aiservice_askdoc_moderation_in_context'));
+              break;
             }
           } catch (e) {
             // do nothing
