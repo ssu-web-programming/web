@@ -6,6 +6,7 @@
   "CreateImage": "이미지 생성하기",
   "ASKDoc": "ASK Doc",
   "ShowExam": "예시문구 보기",
+  "Confirm": "확인",
   "FormList": {
     "paragraph": "문장",
     "list": "목차",
@@ -236,5 +237,9 @@
       "TryAgain": "다시 시도하기",
       "ServiceNotification": "서비스 알림"
     }
+  },
+  "EOS": {
+    "ASKDocEOSTitle": "ASK Doc V1 서비스 종료",
+    "ASKDocEOSDesc": "앱 업데이트 후 새롭게 개선된 ASK Doc V2를 만나보세요."
   }
 }

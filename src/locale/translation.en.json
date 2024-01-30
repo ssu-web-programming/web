@@ -6,6 +6,7 @@
   "CreateImage": "Create image",
   "ASKDoc": "ASK Doc",
   "ShowExam": "example sentences",
+  "Confirm": "Confirm",
   "FormList": {
     "paragraph": "Sentence",
     "list": "Table of Contents",
@@ -236,5 +237,9 @@
       "TryAgain": "Try again",
       "ServiceNotification": "Service Notification"
     }
+  },
+  "EOS": {
+    "ASKDocEOSTitle": "ASK Doc V1 Service Ended",
+    "ASKDocEOSDesc": "Meet the newly improved ASK Doc V2 after updating the app."
   }
 }

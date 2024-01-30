@@ -43,6 +43,7 @@ import Bridge from '../util/bridge';
 import useErrorHandle from '../components/hooks/useErrorHandle';
 import useLoadInitQuestion from '../components/hooks/useLoadInitQuestion';
 import { useShowCreditToast } from '../components/hooks/useShowCreditToast';
+import ico_askdoc_64 from '../img/askDoc/ico_askdoc_64.svg';
 
 const TEXT_MAX_HEIGHT = 268;
 
@@ -54,6 +55,8 @@ const Wrapper = styled.div`
   width: 100%;
   height: 100%;
   background-color: var(--ai-purple-99-bg-light);
+
+  position: relative;
 
   ${TableCss}
 `;
@@ -180,6 +183,57 @@ const Body = styled.div`
   overflow: auto;
 `;
 
+const Blanket = styled.div`
+  width: 100%;
+  height: 100%;
+
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: rgba(0, 0, 0, 0.5);
+`;
+
+const Alert = styled.div`
+  display: flex;
+  width: 320px;
+  padding: 24px;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.1);
+
+  div {
+    color: var(--Homepage-Gray-Gray90-01, #26282b);
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 27px;
+
+    p:first-child {
+      color: var(--Homepage-Gray-Gray90-01, #26282b);
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 27px;
+
+      margin-bottom: 8px;
+    }
+
+    p:nth-child(2) {
+      color: var(--Homepage-Gray-Gray80-02, #454c53);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 21px;
+    }
+  }
+`;
+
 export interface ChatOptions {
   input: string;
 }
@@ -234,6 +288,7 @@ const AskDoc = () => {
   }, [chatInput]);
 
   const onLoadInitQuestion = async () => {
+    return;
     setLoadingId('init');
     setIsActiveInput(false);
     setActiveRetry(false);
@@ -615,6 +670,26 @@ const AskDoc = () => {
               )}
             </InputBox>
           </div>
+          <Blanket>
+            <Alert>
+              <div>
+                <p>{t(`EOS.ASKDocEOSTitle`)}</p>
+                <p>{t(`EOS.ASKDocEOSDesc`)}</p>
+              </div>
+              <img src={ico_askdoc_64} alt="icon"></img>
+              <Button
+                variant="gray"
+                height={40}
+                onClick={() => Bridge.callBridgeApi('closePanel', '')}
+                width={'full'}
+                cssExt={css`
+                  font-size: 14px;
+                  color: var(--Homepage-Gray-Gray90-01, #26282b);
+                `}>
+                {t(`Confirm`)}
+              </Button>
+            </Alert>
+          </Blanket>
         </Wrapper>
       </Body>
     </WrapperPage>
