@@ -2,7 +2,7 @@ import { EngineVersion } from '../components/chat/RecommendBox/FormRec';
 import { GPT_EXCEEDED_LIMIT } from '../error/error';
 import { Chat, ChatResultType, StreamPreprocessing } from '../store/slices/chatHistorySlice';
 import { CheckSessionResponse } from '../util/bridge';
-import { CHAT_STREAM_API } from './constant';
+import { ALLI_RESPONSE_STREAM_API, AI_WRITE_RESPONSE_STREAM_API } from './constant';
 
 const requestApi = async (api: string, init: RequestInit) => await fetch(api, init);
 
@@ -20,10 +20,24 @@ interface ChatStreamContents extends Pick<Chat, 'role'> {
   preProcessing?: StreamPreprocessing;
 }
 
-interface ChatStreamArg {
-  engine?: EngineVersion;
-  history: ChatStreamContents[];
+interface AiWriteChatStreamArg {
+  api: typeof AI_WRITE_RESPONSE_STREAM_API;
+  arg: {
+    engine?: EngineVersion;
+    history: ChatStreamContents[];
+  };
 }
+
+interface AlliChatStreamArg {
+  api: typeof ALLI_RESPONSE_STREAM_API;
+  arg: {
+    appId: string;
+    inputs: any;
+    lang: string;
+  };
+}
+
+type ChatStreamArg = AiWriteChatStreamArg | AlliChatStreamArg;
 
 export interface Requestor {
   request: () => Promise<Response>;
@@ -43,11 +57,11 @@ export const requestChatStream = (session: CheckSessionResponse, arg: ChatStream
           'User-Agent': navigator.userAgent,
           ...sessionHeader
         },
-        body: JSON.stringify(arg),
+        body: JSON.stringify(arg.arg),
         method: 'POST'
       };
 
-      const response = await requestApi(CHAT_STREAM_API, init);
+      const response = await requestApi(arg.api, init);
 
       if (response.status !== 200) {
         if (response.status === 400) throw new Error(GPT_EXCEEDED_LIMIT);

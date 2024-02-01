@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { AppDispatch, RootState, useAppDispatch, useAppSelector } from '../store/store';
+import { AppDispatch, RootState, useAppDispatch } from '../store/store';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useMoveChatTab } from '../components/hooks/useMovePage';
@@ -9,7 +9,7 @@ import gI18n, { convertLangFromLangCode } from '../locale';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { isHigherVersion, makeClipboardData } from './common';
 import { AskDocStatus, setSrouceId, setStatus } from '../store/slices/askDoc';
-import { filesSelector, setFiles } from '../store/slices/askDocAnalyzeFiesSlice';
+import { setFiles } from '../store/slices/askDocAnalyzeFiesSlice';
 import { initComplete } from '../store/slices/initFlagSlice';
 
 const UA_PREFIX: string = `__polaris_office_ai_`;
@@ -181,7 +181,7 @@ interface ReceiveMessage {
   body: string;
 }
 
-type PanelOpenCmd = 'openAiTools' | 'openTextToImg' | 'openAskDoc';
+type PanelOpenCmd = 'openAiTools' | 'openTextToImg' | 'openAskDoc' | 'openAlli';
 
 export const useInitBridgeListener = () => {
   const dispatch = useAppDispatch();
@@ -207,6 +207,8 @@ export const useInitBridgeListener = () => {
           return '/AskDocStep';
         }
         return '/askdoc';
+      case 'openAlli':
+        return '/alli';
     }
   }, []);
 
@@ -256,7 +258,8 @@ export const useInitBridgeListener = () => {
         switch (cmd) {
           case 'openAiTools':
           case 'openTextToImg':
-          case 'openAskDoc': {
+          case 'openAskDoc':
+          case 'openAlli': {
             dispatch(changePanel({ cmd, body }));
             break;
           }

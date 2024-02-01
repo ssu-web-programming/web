@@ -28,6 +28,7 @@ import { Requestor, requestChatStream, streaming } from '../api';
 import { useShowCreditToast } from '../components/hooks/useShowCreditToast';
 import Bridge from '../util/bridge';
 import { StreamPreprocessing } from '../store/slices/chatHistorySlice';
+import { AI_WRITE_RESPONSE_STREAM_API } from '../api/constant';
 
 const TabWrapper = styled.div`
   ${flex}
@@ -94,14 +95,17 @@ const AIWriteTab = (props: WriteTabProps) => {
       const sessionInfo = await Bridge.checkSession('');
       try {
         requestor.current = requestChatStream(sessionInfo, {
-          engine: version,
-          history: [
-            {
-              content: input,
-              role: 'user',
-              preProcessing: preProc
-            }
-          ]
+          api: AI_WRITE_RESPONSE_STREAM_API,
+          arg: {
+            engine: version,
+            history: [
+              {
+                content: input,
+                role: 'user',
+                preProcessing: preProc
+              }
+            ]
+          }
         });
 
         const res = await requestor.current.request();

@@ -22,6 +22,7 @@ import StartAnalysisDoc from './pages/AskDocStep/StartAnalysisDoc';
 import AskDoc from './pages/AskDoc';
 import Chat from './pages/AskDocStep/Chat';
 import AskDocLoading from './pages/AskDocStep/AskDocLoading';
+import Alli from './pages/Alli/Alli';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -64,6 +65,7 @@ function App() {
           <Route path="/aiWrite" element={<Tools></Tools>}></Route>
           <Route path="/txt2img" element={<TextToImage></TextToImage>}></Route>
           <Route path="/askdoc" element={<AskDoc />} />
+          <Route path="/alli" element={<Alli />} />
           <Route path="/AskDocStep" element={<AskDocHome />}>
             <Route index element={<AskDocLoading />} />
             <Route path="/AskDocStep/CheckDocHistory" element={<CheckDocHistory />} />
