@@ -108,7 +108,7 @@ const AppDesc = styled.div`
   margin-bottom: 32px;
 `;
 
-const AppList = styled.div`
+const AppList = styled.ul`
   width: 100%;
   height: 100%;
   display: flex;
@@ -118,6 +118,12 @@ const AppList = styled.div`
 
   overflow-y: auto;
 `;
+
+const AppItemWrapper = styled.li`
+  list-style: none;
+  margin: 0;
+`;
+
 const AppItem = styled.div`
   width: 100%;
   padding: 20px 0px;
@@ -131,7 +137,7 @@ const AppItem = styled.div`
   }
 `;
 
-const AppInfo = styled.div`
+const AppDetail = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
@@ -239,7 +245,7 @@ export interface ResponseAppInputInfo {
   options: ResponseAppInputOption[];
 }
 
-interface ResponseAppInfo {
+interface AppInfo {
   id: string;
   name: string;
   type: string;
@@ -248,6 +254,11 @@ interface ResponseAppInfo {
   appFrom: string;
   appUrl: string;
   inputs: ResponseAppInputInfo[];
+  icon?: string;
+}
+
+interface AppComponent extends AppInfo {
+  component?: React.ReactNode;
 }
 
 type AlliAppIcon = {
@@ -359,13 +370,6 @@ const AlliAppIcons: AlliAppIcon[] = [
   }
 ];
 
-interface AppComponentInfo extends ResponseAppInfo {
-  component?: React.ReactNode;
-  icon?: string;
-}
-
-type AppComponentInfoList = AppComponentInfo[];
-
 const theme = createTheme({
   typography: {
     fontFamily: `'Noto Sans KR', 'Apple SD Gothic Neo', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -408,12 +412,10 @@ export default function Alli() {
   const showCreditToast = useShowCreditToast();
   const errorHandle = useErrorHandle();
 
-  const [responseAppList, setResponseAppList] = useState<ResponseAppInfo[]>([]);
-  const [appComponentList, setAppComponentList] = useState<AppComponentInfoList>([]);
+  const [appList, setAppList] = useState<AppInfo[]>([]);
+  const [selectedApp, setSelectedApp] = useState<AppComponent>();
 
   const [uuid, setUuid] = useState<string>('');
-
-  const [selectedApp, setSelectedApp] = useState<AppComponentInfo>();
 
   const [inputs, setInputs] = useState<any>({});
   const [result, setResult] = useState<string>('');
@@ -432,12 +434,24 @@ export default function Alli() {
   };
   const lang = getlang();
 
-  const refresh = () => {
+  const selectApp = (appInfo: AppInfo) => {
+    if (appInfo.inputs) {
+      setSelectedApp({
+        ...appInfo,
+        component: uiBuild(appInfo.inputs, setInputs)
+      });
+      const initVal = appInfo.inputs.reduce((acc, cur) => ({ ...acc, [cur.value]: undefined }), {});
+      setInputs(initVal);
+    }
+  };
+
+  const refresh = (appInfo?: AppInfo) => {
     setInputs({});
     setResult('');
-    const components = makeComponent(responseAppList);
-    setAppComponentList(components);
     setUuid(uuidv4());
+    if (appInfo) {
+      selectApp(appInfo);
+    }
   };
 
   const goBack = () => {
@@ -445,7 +459,7 @@ export default function Alli() {
     setSelectedApp(undefined);
   };
 
-  const loadAppList = async () => {
+  const getAppList = async () => {
     try {
       const { res } = await apiWrapper(`/api/v2/alli/apps?lang=${lang}`, {
         headers: {
@@ -461,11 +475,10 @@ export default function Alli() {
     }
   };
 
-  const makeComponent = (appList: ResponseAppInfo[]) => {
-    const ret = appList.map((appInfo: ResponseAppInfo) => {
+  const makeAppListIcon = (appList: AppInfo[]) => {
+    const ret = appList.map((appInfo: AppInfo) => {
       return {
         ...appInfo,
-        component: uiBuild(appInfo.inputs, setInputs),
         icon: AlliAppIcons.find((icon) => icon.id[lang] === appInfo.id)?.icon
       };
     });
@@ -473,10 +486,9 @@ export default function Alli() {
   };
 
   const initialize = async () => {
-    const list = await loadAppList();
-    setResponseAppList(list);
-    const components = makeComponent(list);
-    setAppComponentList(components);
+    const responseList = await getAppList();
+    const appList = makeAppListIcon(responseList);
+    setAppList(appList);
   };
 
   useEffect(() => {
@@ -524,6 +536,9 @@ export default function Alli() {
     dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.StopMsg`) }));
   };
 
+  const hasEmpty = (inputs: any) =>
+    Object.values(inputs).some((val) => val === undefined || val === '');
+
   return (
     <ThemeProvider theme={theme}>
       <Wrapper>
@@ -531,18 +546,18 @@ export default function Alli() {
         <Body>
           {!selectedApp ? (
             <AppList>
-              {appComponentList.length > 0 ? (
-                appComponentList.map((item, index) => (
-                  <>
+              {appList.length > 0 ? (
+                appList.map((item, index) => (
+                  <AppItemWrapper key={item.name}>
                     {index !== 0 && <Divider />}
-                    <AppItem onClick={() => setSelectedApp(item)}>
+                    <AppItem onClick={() => selectApp(item)}>
                       <img src={item.icon} alt="" width={24} height={24}></img>
-                      <AppInfo>
+                      <AppDetail>
                         <div>{item.name}</div>
                         <div>{item.description}</div>
-                      </AppInfo>
+                      </AppDetail>
                     </AppItem>
-                  </>
+                  </AppItemWrapper>
                 ))
               ) : (
                 <Loading></Loading>
@@ -602,7 +617,7 @@ export default function Alli() {
                       src={AppIconRefresh}
                       width={15}
                       height={15}
-                      onClick={refresh}
+                      onClick={() => refresh(selectedApp)}
                       alt="refresh"></img>
                   </RefreshButton>
                 </RefreshArea>
@@ -621,7 +636,7 @@ export default function Alli() {
                     {streamingStatus !== 'none' ? t('StopGenerate') : t('Back')}
                   </Button>
                   <CreditButton
-                    disable={streamingStatus !== 'none'}
+                    disable={streamingStatus !== 'none' || hasEmpty(inputs)}
                     variant="purpleGradient"
                     width={'full'}
                     height={40}
