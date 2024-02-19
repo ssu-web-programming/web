@@ -6,7 +6,6 @@ import uiBuild from './builder';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Divider } from '@mui/material';
 import { marked } from 'marked';
-import { v4 as uuidv4 } from 'uuid';
 
 import AppIconRefresh from '../../img/alli/alli-icon-refresh.svg';
 import AlliIconCandidate from '../../img/alli/appIcon/alli-icon-candidate.svg';
@@ -257,10 +256,6 @@ interface AppInfo {
   icon?: string;
 }
 
-interface AppComponent extends AppInfo {
-  component?: React.ReactNode;
-}
-
 type AlliAppIcon = {
   id: {
     ko: string;
@@ -413,9 +408,7 @@ export default function Alli() {
   const errorHandle = useErrorHandle();
 
   const [appList, setAppList] = useState<AppInfo[]>([]);
-  const [selectedApp, setSelectedApp] = useState<AppComponent>();
-
-  const [uuid, setUuid] = useState<string>('');
+  const [selectedApp, setSelectedApp] = useState<AppInfo>();
 
   const [inputs, setInputs] = useState<any>({});
   const [result, setResult] = useState<string>('');
@@ -436,19 +429,23 @@ export default function Alli() {
 
   const selectApp = (appInfo: AppInfo) => {
     if (appInfo.inputs) {
-      setSelectedApp({
-        ...appInfo,
-        component: uiBuild(appInfo.inputs, setInputs)
-      });
-      const initVal = appInfo.inputs.reduce((acc, cur) => ({ ...acc, [cur.value]: undefined }), {});
+      const initVal = appInfo.inputs.reduce((acc, cur) => {
+        return {
+          ...acc,
+          [cur.value]:
+            cur.value === 'language'
+              ? cur.options.find((opt) => opt.value.toLowerCase().startsWith(lang))?.value
+              : undefined
+        };
+      }, {});
       setInputs(initVal);
     }
+    setSelectedApp(appInfo);
   };
 
   const refresh = (appInfo?: AppInfo) => {
     setInputs({});
     setResult('');
-    setUuid(uuidv4());
     if (appInfo) {
       selectApp(appInfo);
     }
@@ -539,6 +536,8 @@ export default function Alli() {
   const hasEmpty = (inputs: any) =>
     Object.values(inputs).some((val) => val === undefined || val === '');
 
+  const inputComponents = selectedApp ? uiBuild(selectedApp.inputs, setInputs, inputs) : undefined;
+
   return (
     <ThemeProvider theme={theme}>
       <Wrapper>
@@ -573,7 +572,7 @@ export default function Alli() {
               }}>
               <AppName>{selectedApp.name}</AppName>
               <AppDesc>{selectedApp.description}</AppDesc>
-              {selectedApp?.component && <div key={uuid}>{selectedApp.component}</div>}
+              {inputComponents && inputComponents}
               {result && (
                 <ResultArea>
                   <Divider sx={{ margin: '32px 0px' }} />
@@ -586,6 +585,7 @@ export default function Alli() {
                       }
                     }}></RunResult>
                   <Button
+                    disable={streamingStatus !== 'none'}
                     variant="gray"
                     width={'full'}
                     height={40}

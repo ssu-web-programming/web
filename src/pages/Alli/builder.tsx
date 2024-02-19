@@ -16,34 +16,46 @@ const Legend = styled.legend`
   margin-bottom: 4px;
 `;
 
+interface BuilderProps {
+  inputs: any;
+  setInputs: (val: string) => void;
+  info: ResponseAppInputInfo;
+}
+
 type ComponentType = 'text' | 'paragraph' | 'single';
 
 type Template = {
   inputType: ComponentType;
-  component: (setInputs: (val: string) => void, opts?: ResponseAppInputOption[]) => React.ReactNode;
+  component: (props: BuilderProps) => React.ReactNode;
 };
 const template: Template[] = [
   {
     inputType: 'text',
-    component: (setInputs) => (
-      <TextField size="small" fullWidth onChange={(e) => setInputs(e.target.value)} />
+    component: ({ inputs, setInputs, info }) => (
+      <TextField
+        size="small"
+        fullWidth
+        value={inputs[info.value] || ''}
+        onChange={(e) => setInputs(e.target.value)}
+      />
     )
   },
   {
     inputType: 'paragraph',
-    component: (setInputs) => (
+    component: ({ inputs, setInputs, info }) => (
       <TextField
         multiline
         rows={8}
         fullWidth
+        value={inputs[info.value] || ''}
         onChange={(e) => setInputs(e.target.value)}></TextField>
     )
   },
   {
     inputType: 'single',
-    component: (setInputs, opts?) => (
-      <Select size="small" fullWidth>
-        {opts?.map((opt) => (
+    component: ({ inputs, setInputs, info }) => (
+      <Select size="small" fullWidth value={inputs[info.value] || ''}>
+        {info.options.map((opt) => (
           <MenuItem key={opt.name} value={opt.value} onClick={() => setInputs(opt.value)}>
             {opt.name}
           </MenuItem>
@@ -62,17 +74,19 @@ const wrapper = (legend: string, component: React.ReactNode) => (
 
 export default function build(
   props: ResponseAppInputInfo[],
-  setInputs: React.Dispatch<React.SetStateAction<any>>
+  setInputs: React.Dispatch<React.SetStateAction<any>>,
+  inputs: any
 ): React.ReactNode {
   const result = props.map((prop) => {
     const found = template.find((t) => t.inputType === prop.inputType);
     return found ? (
       wrapper(
         prop.name,
-        found.component(
-          (val) => setInputs((prev: any) => ({ ...prev, [prop.value]: val })),
-          prop.options
-        )
+        found.component({
+          inputs,
+          setInputs: (val) => setInputs((prev: any) => ({ ...prev, [prop.value]: val })),
+          info: prop
+        })
       )
     ) : (
       <></>
