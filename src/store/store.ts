@@ -15,6 +15,8 @@ import askDocModal from './slices/askDocModalsSlice';
 import askDocAnalyzeFiesSlice from './slices/askDocAnalyzeFiesSlice';
 import initFlagSlice from './slices/initFlagSlice';
 import askDocSummary from './slices/askDocSummary';
+import alliApps from './slices/alliApps';
+
 const store = configureStore({
   reducer: {
     chatHistory,
@@ -31,7 +33,8 @@ const store = configureStore({
     askDocModal,
     askDocAnalyzeFiesSlice,
     askDocSummary,
-    initFlagSlice
+    initFlagSlice,
+    alliApps
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }).concat(shareAnswerState),

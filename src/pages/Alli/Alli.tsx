@@ -42,6 +42,7 @@ import {
   getLangCodeFromParams,
   getLangCodeFromUA
 } from '../../locale';
+import { selectAlliApps, setAlliApps, setSelectedApp } from '../../store/slices/alliApps';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -244,7 +245,7 @@ export interface ResponseAppInputInfo {
   options: ResponseAppInputOption[];
 }
 
-interface AppInfo {
+export interface AppInfo {
   id: string;
   name: string;
   type: string;
@@ -405,10 +406,8 @@ export default function Alli() {
 
   const { isInit } = useAppSelector(initFlagSelector);
   const showCreditToast = useShowCreditToast();
+  const { apps, selectedApp } = useAppSelector(selectAlliApps);
   const errorHandle = useErrorHandle();
-
-  const [appList, setAppList] = useState<AppInfo[]>([]);
-  const [selectedApp, setSelectedApp] = useState<AppInfo>();
 
   const [inputs, setInputs] = useState<any>({});
   const [result, setResult] = useState<string>('');
@@ -440,7 +439,7 @@ export default function Alli() {
       }, {});
       setInputs(initVal);
     }
-    setSelectedApp(appInfo);
+    dispatch(setSelectedApp(appInfo));
   };
 
   const refresh = (appInfo?: AppInfo) => {
@@ -453,7 +452,7 @@ export default function Alli() {
 
   const goBack = () => {
     refresh();
-    setSelectedApp(undefined);
+    dispatch(setSelectedApp(null));
   };
 
   const getAppList = async () => {
@@ -483,9 +482,11 @@ export default function Alli() {
   };
 
   const initialize = async () => {
-    const responseList = await getAppList();
-    const appList = makeAppListIcon(responseList);
-    setAppList(appList);
+    if (!apps) {
+      const responseList = await getAppList();
+      const appList = makeAppListIcon(responseList);
+      dispatch(setAlliApps(appList));
+    }
   };
 
   useEffect(() => {
@@ -545,8 +546,8 @@ export default function Alli() {
         <Body>
           {!selectedApp ? (
             <AppList>
-              {appList.length > 0 ? (
-                appList.map((item, index) => (
+              {apps ? (
+                apps.map((item, index) => (
                   <AppItemWrapper key={item.name}>
                     {index !== 0 && <Divider />}
                     <AppItem onClick={() => selectApp(item)}>
