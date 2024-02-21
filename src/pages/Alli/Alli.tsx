@@ -62,6 +62,7 @@ const Body = styled.div`
   overflow-y: auto;
 
   padding: 40px 0px;
+  position: relative;
 `;
 
 const AppContents = styled.div`
@@ -74,8 +75,6 @@ const AppContents = styled.div`
   padding: 0px 24px;
 
   overflow-y: auto;
-
-  position: relative;
 `;
 
 const MakingOverlap = styled.div`
@@ -649,12 +648,12 @@ export default function Alli() {
                   </CreditButton>
                 </Buttons>
               </Footer>
-              {streamingStatus === 'request' && (
-                <MakingOverlap>
-                  <Loading></Loading>
-                </MakingOverlap>
-              )}
             </AppContents>
+          )}
+          {streamingStatus === 'request' && (
+            <MakingOverlap>
+              <Loading></Loading>
+            </MakingOverlap>
           )}
         </Body>
       </Wrapper>
