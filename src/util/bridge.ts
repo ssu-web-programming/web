@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { AppDispatch, RootState, useAppDispatch } from '../store/store';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useMoveChatTab } from '../components/hooks/useMovePage';
 import { updateT2ICurItemIndex, updateT2ICurListId } from '../store/slices/txt2imgHistory';
 import { activeToast } from '../store/slices/toastSlice';
@@ -188,6 +188,7 @@ export const useInitBridgeListener = () => {
   const { i18n, t } = useTranslation();
 
   const navigate = useNavigate();
+  const location = useLocation();
   const movePage = useMoveChatTab();
   const getPath = useCallback((cmd: PanelOpenCmd) => {
     switch (cmd) {
@@ -236,7 +237,7 @@ export const useInitBridgeListener = () => {
           thunkAPI.dispatch(updateT2ICurItemIndex(null));
         }
       }
-      navigate(path, {
+      navigate(`${path}${location.search}`, {
         state: { body }
       });
     } else {

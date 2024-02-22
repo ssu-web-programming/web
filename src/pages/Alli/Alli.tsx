@@ -42,7 +42,13 @@ import {
   getLangCodeFromParams,
   getLangCodeFromUA
 } from '../../locale';
-import { selectAlliApps, setAlliApps, setSelectedApp } from '../../store/slices/alliApps';
+import {
+  resetCreateResult,
+  selectAlliApps,
+  setAlliApps,
+  setCreateResult,
+  setSelectedApp
+} from '../../store/slices/alliApps';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -405,11 +411,11 @@ export default function Alli() {
 
   const { isInit } = useAppSelector(initFlagSelector);
   const showCreditToast = useShowCreditToast();
-  const { apps, selectedApp } = useAppSelector(selectAlliApps);
+  const { apps, selectedApp, createResult } = useAppSelector(selectAlliApps);
   const errorHandle = useErrorHandle();
 
-  const [inputs, setInputs] = useState<any>({});
-  const [result, setResult] = useState<string>('');
+  const [inputs, setInputs] = useState<any>(createResult.inputs);
+  const [result, setResult] = useState<string>(createResult.output);
 
   const [streamingStatus, setStreamingStatus] = useState<StreamingStatus>('none');
 
@@ -442,6 +448,7 @@ export default function Alli() {
   };
 
   const refresh = (appInfo?: AppInfo) => {
+    dispatch(resetCreateResult());
     setInputs({});
     setResult('');
     if (appInfo) {
@@ -495,6 +502,7 @@ export default function Alli() {
   }, [isInit]);
 
   const requestAlliRun = async (appId: string, inputs: any) => {
+    let resultText = '';
     try {
       setStreamingStatus('request');
       const sessionInfo = await Bridge.checkSession('');
@@ -512,6 +520,7 @@ export default function Alli() {
         setStreamingStatus('streaming');
         await streaming(res, (contents) => {
           setResult((prev) => prev + contents);
+          resultText += contents;
         });
       } catch (err) {
         if (requestor.current?.isAborted() === true) {
@@ -520,6 +529,7 @@ export default function Alli() {
         }
       } finally {
         requestor.current = null;
+        dispatch(setCreateResult({ inputs, output: resultText }));
       }
     } catch (err) {
       errorHandle(err);
