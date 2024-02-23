@@ -12,7 +12,9 @@ export const getLangCodeFromParams = () => {
     const params = new URL(window.location.href).searchParams;
     const lang = params.get('lang');
     return lang;
-  } catch (err) {}
+  } catch (err) {
+    throw err;
+  }
 };
 
 export const getLangCodeFromUA = () => {
@@ -20,7 +22,9 @@ export const getLangCodeFromUA = () => {
     const parse = /Polaris\/\d.?\d \(.*,\s?(.*-.*)\)/g.exec(navigator.userAgent);
     if (!parse) return undefined;
     return parse[1];
-  } catch (err) {}
+  } catch (err) {
+    throw err;
+  }
 };
 
 export const convertLangFromLangCode = (code: string | undefined) => {
@@ -31,11 +35,20 @@ export const convertLangFromLangCode = (code: string | undefined) => {
     } else {
       return LANG_EN_US;
     }
-  } catch (err) {}
+  } catch (err) {
+    return LANG_EN_US;
+  }
 };
 
-const paramLang = getLangCodeFromParams() || getLangCodeFromUA();
-const lang = convertLangFromLangCode(paramLang);
+const getLang = () => {
+  try {
+    const paramLang = getLangCodeFromParams() || getLangCodeFromUA();
+    return convertLangFromLangCode(paramLang);
+  } catch (err) {
+    return LANG_EN_US;
+  }
+};
+export const lang = getLang();
 
 const resources = {
   ko: {

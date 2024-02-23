@@ -1,30 +1,15 @@
 import styled, { css } from 'styled-components';
 import Header from '../../components/layout/Header';
 import { useTranslation } from 'react-i18next';
-import { useEffect, useRef, useState } from 'react';
+import { Suspense, useRef, useState } from 'react';
 import uiBuild from './builder';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Divider } from '@mui/material';
 import { marked } from 'marked';
 
 import AppIconRefresh from '../../img/alli/alli-icon-refresh.svg';
-import AlliIconCandidate from '../../img/alli/appIcon/alli-icon-candidate.svg';
-import AlliIconCopyrighting from '../../img/alli/appIcon/alli-icon-copyrighting.svg';
-import AlliIconCrew from '../../img/alli/appIcon/alli-icon-crew.svg';
-import AlliIconEvent from '../../img/alli/appIcon/alli-icon-event.svg';
-import AlliIconLaw from '../../img/alli/appIcon/alli-icon-law.svg';
-import AlliIconManual from '../../img/alli/appIcon/alli-icon-manual.svg';
-import AlliIconNoti from '../../img/alli/appIcon/alli-icon-noti.svg';
-import AlliIconPrivacy from '../../img/alli/appIcon/alli-icon-privacy.svg';
-import AlliIconPromotion from '../../img/alli/appIcon/alli-icon-promotion.svg';
-import AlliIconPush from '../../img/alli/appIcon/alli-icon-push.svg';
-import AlliIconSentence from '../../img/alli/appIcon/alli-icon-sentence.svg';
-import AlliIconTranslator from '../../img/alli/appIcon/alli-icon-translator.svg';
-import AlliIconWelcome from '../../img/alli/appIcon/alli-icon-welcome.svg';
-import AlliIconEmail from '../../img/alli/appIcon/alli-icon-email.svg';
 
 import Button from '../../components/buttons/Button';
-import useApiWrapper from '../../api/useApiWrapper';
 import Bridge from '../../util/bridge';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { initFlagSelector } from '../../store/slices/initFlagSlice';
@@ -36,19 +21,14 @@ import { calLeftCredit, insertDoc } from '../../util/common';
 import { useShowCreditToast } from '../../components/hooks/useShowCreditToast';
 import useErrorHandle from '../../components/hooks/useErrorHandle';
 import { activeToast } from '../../store/slices/toastSlice';
-import {
-  LANG_EN_US,
-  convertLangFromLangCode,
-  getLangCodeFromParams,
-  getLangCodeFromUA
-} from '../../locale';
+import { lang } from '../../locale';
 import {
   resetCreateResult,
   selectAlliApps,
-  setAlliApps,
   setCreateResult,
   setSelectedApp
 } from '../../store/slices/alliApps';
+import AlliApps from './AlliApps';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -111,58 +91,6 @@ const AppDesc = styled.div`
   text-align: left;
 
   margin-bottom: 32px;
-`;
-
-const AppList = styled.ul`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-
-  padding: 0px 24px;
-
-  overflow-y: auto;
-`;
-
-const AppItemWrapper = styled.li`
-  list-style: none;
-  margin: 0;
-`;
-
-const AppItem = styled.div`
-  width: 100%;
-  padding: 20px 0px;
-
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-
-  &:hover {
-    cursor: pointer;
-  }
-`;
-
-const AppDetail = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  text-align: left;
-
-  margin-left: 12px;
-
-  div:first-child {
-    font-size: 16px;
-    font-weight: 700;
-    line-height: 24px;
-    letter-spacing: -0.04em;
-    margin-bottom: 4px;
-  }
-
-  font-size: 13px;
-  font-weight: 400;
-  line-height: 20px;
-  letter-spacing: -0.02em;
 `;
 
 const ResultArea = styled.div`
@@ -262,115 +190,6 @@ export interface AppInfo {
   icon?: string;
 }
 
-type AlliAppIcon = {
-  id: {
-    ko: string;
-    en: string;
-  };
-  icon: string;
-};
-
-const AlliAppIcons: AlliAppIcon[] = [
-  {
-    id: {
-      ko: 'TExNQXBwOjY1YWE1NGFlOTU1MGU3YmU1ZmY4NTM1ZA==',
-      en: 'TExNQXBwOjY1Y2VmMWIzNDcwOWJhMDY5NzlhMGUyZg=='
-    },
-    icon: AlliIconCandidate
-  },
-  {
-    id: {
-      ko: 'TExNQXBwOjY1YWE1NWJlZWZlZGI3ODEyNjI1YWZjMA==',
-      en: 'TExNQXBwOjY1Y2VmNGYzZjlhMmVlMTE4ZDg3OTZmMA=='
-    },
-    icon: AlliIconCopyrighting
-  },
-  {
-    id: {
-      ko: 'TExNQXBwOjY1YWE1NGNjN2M0ZWFhNDJlZmNjMTRlZg==',
-      en: 'TExNQXBwOjY1Y2VmMmM4MTIxMGQ2MzRlODNhMzBjZg=='
-    },
-    icon: AlliIconCrew
-  },
-  {
-    id: {
-      ko: 'TExNQXBwOjY1YWE1NjYzZGY3ZDA0OTlkNGM2N2EzZg==',
-      en: 'TExNQXBwOjY1Y2VmOGIxNDcwOWJhMDY5NzlmNGE3ZA=='
-    },
-    icon: AlliIconEvent
-  },
-  {
-    id: {
-      ko: 'TExNQXBwOjY1NjU0MzdmM2YxNGI4ZjE4MjhhNTJmNA==',
-      en: 'TExNQXBwOjY1Y2VlZjA0YWRlYWY3NWMxZmIyYWI2ZQ=='
-    },
-    icon: AlliIconLaw
-  },
-  {
-    id: {
-      ko: 'TExNQXBwOjY1ODNkN2ZlYmI0NmNkYzM1ZTYwMWQxMg==',
-      en: 'TExNQXBwOjY1Y2VmZDA2ZjlhMmVlMTE4ZDhiMTljMw=='
-    },
-    icon: AlliIconManual
-  },
-  {
-    id: {
-      ko: 'TExNQXBwOjY1YWE1NGMxYWM0ZjdlYTdjMWE0NTUxZA==',
-      en: 'TExNQXBwOjY1Y2VmNTljMDdlZGU1MWM2YmYxNzEyMA=='
-    },
-    icon: AlliIconNoti
-  },
-  {
-    id: {
-      ko: 'TExNQXBwOjY1YWE1NDA1ZWM2N2Q2NGEzOTlmNTJlOA==',
-      en: 'TExNQXBwOjY1Y2VlZmU2ZmI5MDBjZDczYWZlYWIzZQ=='
-    },
-    icon: AlliIconPrivacy
-  },
-  {
-    id: {
-      ko: 'TExNQXBwOjY1YWE1NGVhNTE0YzlhNTAzMGZjODg5NA==',
-      en: 'TExNQXBwOjY1Y2VmNzAyZTljYzBlZTJiNTBlMTBkNw=='
-    },
-    icon: AlliIconPromotion
-  },
-  {
-    id: {
-      ko: 'TExNQXBwOjY1YWE1NTlhYzM4NTBlZWZkZjM1MmQ0Ng==',
-      en: 'TExNQXBwOjY1Y2VmOTQxZDg2OTk2MThjY2RjYTAzOA=='
-    },
-    icon: AlliIconPush
-  },
-  {
-    id: {
-      ko: 'TExNQXBwOjY1ODNmMmYyZWU1ZGIzMjdhOWU1NjYzYw==',
-      en: 'TExNQXBwOjY1Y2VmMGQ0OWZlNzQ0NjdjZDJjNmU1Mg=='
-    },
-    icon: AlliIconSentence
-  },
-  {
-    id: {
-      ko: 'TExNQXBwOjY1YWE1NTgzZDI5YWRhYWEzOTc5N2IxMg==',
-      en: 'TExNQXBwOjY1Y2VmODUxZDgwZGNhZTMwMDZhYjM3ZA=='
-    },
-    icon: AlliIconTranslator
-  },
-  {
-    id: {
-      ko: 'TExNQXBwOjY1YWE1NThlZDI5YWRhYWEzOTc5ODVjNQ==',
-      en: 'TExNQXBwOjY1Y2VmMzNmZDg2OTk2MThjY2Q5ZmE0NQ=='
-    },
-    icon: AlliIconWelcome
-  },
-  {
-    id: {
-      ko: 'TExNQXBwOjY1YWE1NTc0ZDI3ZDNlMjcwNjI2ZDQ1MQ==',
-      en: 'TExNQXBwOjY1Y2VlZWEzNDEzYTE5ZjcwOTdlMWFiYQ=='
-    },
-    icon: AlliIconEmail
-  }
-];
-
 const theme = createTheme({
   typography: {
     fontFamily: `'Noto Sans KR', 'Apple SD Gothic Neo', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -407,12 +226,12 @@ type StreamingStatus = 'none' | 'request' | 'streaming';
 export default function Alli() {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
-  const apiWrapper = useApiWrapper();
+
+  const errorHandle = useErrorHandle();
+  const showCreditToast = useShowCreditToast();
 
   const { isInit } = useAppSelector(initFlagSelector);
-  const showCreditToast = useShowCreditToast();
-  const { apps, selectedApp, createResult } = useAppSelector(selectAlliApps);
-  const errorHandle = useErrorHandle();
+  const { selectedApp, createResult } = useAppSelector(selectAlliApps);
 
   const [inputs, setInputs] = useState<any>(createResult.inputs);
   const [result, setResult] = useState<string>(createResult.output);
@@ -420,16 +239,6 @@ export default function Alli() {
   const [streamingStatus, setStreamingStatus] = useState<StreamingStatus>('none');
 
   const requestor = useRef<Requestor | null>(null);
-
-  const getlang = () => {
-    try {
-      const paramLang = getLangCodeFromParams() || getLangCodeFromUA();
-      return convertLangFromLangCode(paramLang) || LANG_EN_US;
-    } catch (err) {
-      return LANG_EN_US;
-    }
-  };
-  const lang = getlang();
 
   const selectApp = (appInfo: AppInfo) => {
     if (appInfo.inputs) {
@@ -460,46 +269,6 @@ export default function Alli() {
     refresh();
     dispatch(setSelectedApp(null));
   };
-
-  const getAppList = async () => {
-    try {
-      const { res } = await apiWrapper(`/api/v2/alli/apps?lang=${lang}`, {
-        headers: {
-          'content-type': 'application/json',
-          'User-Agent': navigator.userAgent
-        },
-        method: 'GET'
-      });
-      const resJson = await res.json();
-      return resJson.data.appList;
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const makeAppListIcon = (appList: AppInfo[]) => {
-    const ret = appList.map((appInfo: AppInfo) => {
-      return {
-        ...appInfo,
-        icon: AlliAppIcons.find((icon) => icon.id[lang] === appInfo.id)?.icon
-      };
-    });
-    return ret;
-  };
-
-  const initialize = async () => {
-    if (!apps) {
-      const responseList = await getAppList();
-      const appList = makeAppListIcon(responseList);
-      dispatch(setAlliApps(appList));
-    }
-  };
-
-  useEffect(() => {
-    if (isInit === true) {
-      initialize();
-    }
-  }, [isInit]);
 
   const requestAlliRun = async (appId: string, inputs: any) => {
     let resultText = '';
@@ -554,25 +323,13 @@ export default function Alli() {
         <Header title={t('AITools')} subTitle={'AI Apps'}></Header>
         <Body>
           {!selectedApp ? (
-            <AppList>
-              {apps ? (
-                apps.map((item, index) => (
-                  <AppItemWrapper key={item.name}>
-                    {index !== 0 && <Divider />}
-                    <AppItem onClick={() => selectApp(item)}>
-                      <img src={item.icon} alt="" width={24} height={24}></img>
-                      <AppDetail>
-                        <div>{item.name}</div>
-                        <div>{item.description}</div>
-                      </AppDetail>
-                    </AppItem>
-                  </AppItemWrapper>
-                ))
-              ) : (
-                <Loading></Loading>
-              )}
-              <PoweredBy>Powered By Alli</PoweredBy>
-            </AppList>
+            isInit ? (
+              <Suspense fallback={<Loading></Loading>}>
+                <AlliApps onSelect={selectApp}></AlliApps>
+              </Suspense>
+            ) : (
+              <Loading></Loading>
+            )
           ) : (
             <AppContents
               ref={(el) => {
@@ -620,9 +377,7 @@ export default function Alli() {
               <PoweredBy>Powered By Alli</PoweredBy>
               <Footer>
                 <RefreshArea>
-                  <RefreshButton
-                    disabled={streamingStatus !== 'none'}
-                    style={{ backgroundColor: '#6F3AD0', width: '40px', height: '40px' }}>
+                  <RefreshButton disabled={streamingStatus !== 'none'}>
                     <img
                       src={AppIconRefresh}
                       width={15}
