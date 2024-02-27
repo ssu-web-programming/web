@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 import Header from '../../components/layout/Header';
 import { useTranslation } from 'react-i18next';
-import { Suspense, useRef, useState } from 'react';
+import { Suspense, useMemo, useRef, useState } from 'react';
 import uiBuild from './builder';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Divider } from '@mui/material';
@@ -317,6 +317,12 @@ export default function Alli() {
 
   const inputComponents = selectedApp ? uiBuild(selectedApp.inputs, setInputs, inputs) : undefined;
 
+  const markedRenderer = useMemo(() => {
+    const renderer = new marked.Renderer();
+    renderer.link = (href, title, text) => `<a href="javascript:void(0)">${text}</a>`;
+    return renderer;
+  }, []);
+
   return (
     <ThemeProvider theme={theme}>
       <Wrapper>
@@ -347,7 +353,9 @@ export default function Alli() {
                   <RunResult
                     ref={(el) => {
                       if (el) {
-                        const html = marked(result);
+                        const html = marked(result, {
+                          renderer: markedRenderer
+                        });
                         el.innerHTML = html;
                       }
                     }}></RunResult>
