@@ -385,13 +385,10 @@ export default function Alli() {
               <PoweredBy>Powered By Alli</PoweredBy>
               <Footer>
                 <RefreshArea>
-                  <RefreshButton disabled={streamingStatus !== 'none'}>
-                    <img
-                      src={AppIconRefresh}
-                      width={15}
-                      height={15}
-                      onClick={() => refresh(selectedApp)}
-                      alt="refresh"></img>
+                  <RefreshButton
+                    disabled={streamingStatus !== 'none'}
+                    onClick={() => refresh(selectedApp)}>
+                    <img src={AppIconRefresh} width={15} height={15} alt="refresh"></img>
                   </RefreshButton>
                 </RefreshArea>
                 <Buttons>
