@@ -10,6 +10,7 @@ import './locale';
 import { ThemeProvider } from 'styled-components';
 import { selectTheme } from './theme/theme';
 import { HelmetProvider } from 'react-helmet-async';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 declare global {
   interface Window {
@@ -20,7 +21,7 @@ declare global {
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
-
+const queryClient = new QueryClient();
 // async function deferRender() {
 //   if (process.env.NODE_ENV !== 'development') {
 //     return;
@@ -37,11 +38,13 @@ root.render(
   // <React.StrictMode>
   <ThemeProvider theme={selectTheme()}>
     <Provider store={store}>
-      <BrowserRouter>
-        <HelmetProvider>
-          <App />
-        </HelmetProvider>
-      </BrowserRouter>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <HelmetProvider>
+            <App />
+          </HelmetProvider>
+        </BrowserRouter>
+      </QueryClientProvider>
     </Provider>
   </ThemeProvider>
   // </React.StrictMode>
