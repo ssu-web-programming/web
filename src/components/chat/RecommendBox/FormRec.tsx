@@ -52,22 +52,22 @@ export const formRecList = [
 ];
 
 export const DEFAULT_WRITE_OPTION_VERSION_VALUE: VersionListType = {
-  id: 'CLOVA X',
-  version: 'clovax',
-  group: null
+  id: 'GPT 3.5',
+  version: 'gpt3.5',
+  group: 'gpt'
 };
 
 export const versionList: VersionListType[] = [
   DEFAULT_WRITE_OPTION_VERSION_VALUE,
   {
-    id: 'GPT 3.5',
-    version: 'gpt3.5',
-    group: 'gpt'
-  },
-  {
     id: 'GPT 4.0',
     version: 'gpt4',
     group: 'gpt'
+  },
+  {
+    id: 'CLOVA X',
+    version: 'clovax',
+    group: null
   }
 ];
 
