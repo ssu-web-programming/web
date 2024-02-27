@@ -72,6 +72,17 @@ const AppDetail = styled.div`
   letter-spacing: -0.02em;
 `;
 
+const PoweredBy = styled.div`
+  margin-top: 8px;
+  margin-bottom: 24px;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 13px;
+  letter-spacing: 0px;
+  text-align: right;
+  color: #8769ba;
+`;
+
 type AlliAppIcon = {
   id: {
     ko: string;
@@ -226,6 +237,7 @@ export default function AppList(props: AppListProps) {
           </AppItem>
         </AppItemWrapper>
       ))}
+      <PoweredBy>Powered By Alli</PoweredBy>
     </Wrapper>
   );
 }
