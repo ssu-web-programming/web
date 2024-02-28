@@ -29,7 +29,6 @@ import {
   setSelectedApp
 } from '../../store/slices/alliApps';
 import AlliApps from './AlliApps';
-import TagManager from 'react-gtm-module';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -240,10 +239,6 @@ export default function Alli() {
   const [streamingStatus, setStreamingStatus] = useState<StreamingStatus>('none');
 
   const requestor = useRef<Requestor | null>(null);
-
-  TagManager.initialize({
-    gtmId: process.env.REACT_APP_GTM_ID_AI_APPS as string
-  });
 
   const selectApp = (appInfo: AppInfo) => {
     if (appInfo.inputs) {
