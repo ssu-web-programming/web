@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 import Header from '../../components/layout/Header';
 import { useTranslation } from 'react-i18next';
-import { Suspense, useMemo, useRef, useState } from 'react';
+import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import uiBuild from './builder';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Divider } from '@mui/material';
@@ -29,6 +29,7 @@ import {
   setSelectedApp
 } from '../../store/slices/alliApps';
 import AlliApps from './AlliApps';
+import ga, { init } from '../../util/gaConnect';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -254,6 +255,7 @@ export default function Alli() {
       setInputs(initVal);
     }
     dispatch(setSelectedApp(appInfo));
+    ga.event({ category: 'AI Apps', action: 'App Select', label: appInfo.id });
   };
 
   const refresh = (appInfo?: AppInfo) => {
@@ -263,6 +265,11 @@ export default function Alli() {
     if (appInfo) {
       selectApp(appInfo);
     }
+    ga.event({
+      category: 'AI Apps',
+      action: appInfo ? 'App Refresh' : 'Back to App List',
+      label: selectedApp?.id
+    });
   };
 
   const goBack = () => {
@@ -304,6 +311,7 @@ export default function Alli() {
       errorHandle(err);
     } finally {
       setStreamingStatus('none');
+      ga.event({ category: 'AI Apps', action: 'App Run', label: appId });
     }
   };
 
@@ -321,6 +329,11 @@ export default function Alli() {
     const renderer = new marked.Renderer();
     renderer.link = (href, title, text) => `<a href="javascript:void(0)">${text}</a>`;
     return renderer;
+  }, []);
+
+  useEffect(() => {
+    init();
+    ga.event({ category: 'AI Apps', action: 'App List' });
   }, []);
 
   return (
@@ -387,7 +400,9 @@ export default function Alli() {
                 <RefreshArea>
                   <RefreshButton
                     disabled={streamingStatus !== 'none'}
-                    onClick={() => refresh(selectedApp)}>
+                    onClick={() => {
+                      refresh(selectedApp);
+                    }}>
                     <img src={AppIconRefresh} width={15} height={15} alt="refresh"></img>
                   </RefreshButton>
                 </RefreshArea>
