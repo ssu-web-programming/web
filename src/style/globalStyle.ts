@@ -67,7 +67,7 @@ html,
       }
 
   code {
-    white-space: pre-wrap;
+    white-space: normal;
   }
 
   ol, ul{
