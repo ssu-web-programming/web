@@ -14,7 +14,7 @@ import TabPanel from '../components/tabs/TabPanel';
 import {
   DEFAULT_WRITE_OPTION_FORM_VALUE,
   DEFAULT_WRITE_OPTION_LENGTH_VALUE,
-  DEFAULT_WRITE_OPTION_VERSION_VALUE,
+  versionList,
   WriteOptions
 } from '../components/chat/RecommendBox/FormRec';
 
@@ -57,14 +57,14 @@ const TAB_LIST: TabListProps[] = [
 
 const initWriteOptions: WriteOptions = {
   input: '',
-  version: DEFAULT_WRITE_OPTION_VERSION_VALUE,
+  version: versionList[0],
   form: DEFAULT_WRITE_OPTION_FORM_VALUE,
   length: DEFAULT_WRITE_OPTION_LENGTH_VALUE
 };
 
 const initChatOptions: ChatOptions = {
   input: '',
-  version: DEFAULT_WRITE_OPTION_VERSION_VALUE
+  version: versionList[0]
 };
 
 export default function Tools() {

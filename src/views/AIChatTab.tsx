@@ -626,7 +626,7 @@ const AIChatTab = (props: WriteTabProps) => {
                 <VersionWrapper>
                   <>
                     {groupVersionList.map((group) => {
-                      return (
+                      return group.list.length > 1 ? (
                         <DropDownButton<VersionListType>
                           width={77}
                           height="full"
@@ -638,21 +638,19 @@ const AIChatTab = (props: WriteTabProps) => {
                           selectedId={version.id}
                           defaultId={group.list[0].id}
                         />
+                      ) : (
+                        <Button
+                          key={group.list[0].id}
+                          width="fit"
+                          height={24}
+                          variant={group.list[0].version === version.version ? 'purple' : 'gray'} // no comment
+                          onClick={() =>
+                            setChatInput((prev) => ({ ...prev, version: group.list[0] }))
+                          }>
+                          {group.list[0].id}
+                        </Button>
                       );
                     })}
-                    {versionList.filter((version) => version.group === null).length > 0 &&
-                      versionList
-                        .filter((version) => version.group === null)
-                        .map((cur: VersionListType) => (
-                          <Button
-                            key={cur.id}
-                            width="fit"
-                            height={24}
-                            variant={cur.version === version.version ? 'purple' : 'gray'} // no comment
-                            onClick={() => setChatInput((prev) => ({ ...prev, version: cur }))}>
-                            {cur.id}
-                          </Button>
-                        ))}
                   </>
                 </VersionWrapper>
               </div>

@@ -8,13 +8,14 @@ import icon_list_purple from '../../../img/aiChat/ico_table_of_contents_purple.s
 import IconBoxTextButton from '../../buttons/IconBoxTextButton';
 import { useTranslation } from 'react-i18next';
 import { recSubType, recType } from '../../../store/slices/recFuncSlice';
+import { LANG_KO_KR, lang } from '../../../locale';
 
 export type EngineVersion = 'gpt3.5' | 'gpt4' | 'clovax';
 
 export interface VersionListType {
   id: string;
   version: EngineVersion;
-  group: 'gpt' | null;
+  group: 'gpt' | 'clova' | null;
 }
 
 interface FormListType {
@@ -51,25 +52,26 @@ export const formRecList = [
   }
 ];
 
-export const DEFAULT_WRITE_OPTION_VERSION_VALUE: VersionListType = {
+const versionGpt3: VersionListType = {
   id: 'GPT 3.5',
   version: 'gpt3.5',
   group: 'gpt'
 };
+const versionGpt4: VersionListType = {
+  id: 'GPT 4.0',
+  version: 'gpt4',
+  group: 'gpt'
+};
+const versionClova: VersionListType = {
+  id: 'CLOVA X',
+  version: 'clovax',
+  group: 'clova'
+};
 
-export const versionList: VersionListType[] = [
-  DEFAULT_WRITE_OPTION_VERSION_VALUE,
-  {
-    id: 'GPT 4.0',
-    version: 'gpt4',
-    group: 'gpt'
-  },
-  {
-    id: 'CLOVA X',
-    version: 'clovax',
-    group: null
-  }
-];
+export const versionList: VersionListType[] =
+  lang === LANG_KO_KR
+    ? [versionClova, versionGpt3, versionGpt4]
+    : [versionGpt3, versionGpt4, versionClova];
 
 export const DEFAULT_WRITE_OPTION_LENGTH_VALUE: LengthListType = {
   id: 'Short',
