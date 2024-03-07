@@ -19,6 +19,7 @@ import AlliIconSentence from '../../img/alli/appIcon/alli-icon-sentence.svg';
 import AlliIconTranslator from '../../img/alli/appIcon/alli-icon-translator.svg';
 import AlliIconWelcome from '../../img/alli/appIcon/alli-icon-welcome.svg';
 import AlliIconEmail from '../../img/alli/appIcon/alli-icon-email.svg';
+import AlliIconGoodWord from '../../img/alli/appIcon/alli-icon-good-word.svg';
 
 const Wrapper = styled.ul`
   width: 100%;
@@ -189,6 +190,13 @@ const AlliAppIcons: AlliAppIcon[] = [
       en: 'TExNQXBwOjY1Y2VlZWEzNDEzYTE5ZjcwOTdlMWFiYQ=='
     },
     icon: AlliIconEmail
+  },
+  {
+    id: {
+      ko: 'TExNQXBwOjY1ZTkyODliOWJkMDVkZWQyZTI5MWRmMg==',
+      en: 'TExNQXBwOjY1ZTkyOTllZTk5YzMyNjI4MDljOTY1YQ=='
+    },
+    icon: AlliIconGoodWord
   }
 ];
 
