@@ -1,11 +1,10 @@
 import styled, { css } from 'styled-components';
 import Header from '../../components/layout/Header';
 import { useTranslation } from 'react-i18next';
-import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import uiBuild from './builder';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Divider } from '@mui/material';
-import { marked } from 'marked';
 
 import AppIconRefresh from '../../img/alli/alli-icon-refresh.svg';
 
@@ -17,7 +16,7 @@ import CreditButton from '../../components/buttons/CreditButton';
 import Loading from '../../components/Loading';
 import { ALLI_RESPONSE_STREAM_API } from '../../api/constant';
 import { Requestor, requestChatStream, streaming } from '../../api';
-import { calLeftCredit, insertDoc } from '../../util/common';
+import { calLeftCredit, insertDoc, markdownToHtml } from '../../util/common';
 import { useShowCreditToast } from '../../components/hooks/useShowCreditToast';
 import useErrorHandle from '../../components/hooks/useErrorHandle';
 import { activeToast } from '../../store/slices/toastSlice';
@@ -325,12 +324,6 @@ export default function Alli() {
 
   const inputComponents = selectedApp ? uiBuild(selectedApp.inputs, setInputs, inputs) : undefined;
 
-  const markedRenderer = useMemo(() => {
-    const renderer = new marked.Renderer();
-    renderer.link = (href, title, text) => `<a href="javascript:void(0)">${text}</a>`;
-    return renderer;
-  }, []);
-
   useEffect(() => {
     init();
     ga.event({ category: 'AI Apps', action: 'App List' });
@@ -364,12 +357,10 @@ export default function Alli() {
                   <Divider sx={{ margin: '32px 0px' }} />
                   <ResultTitle>{t('Result')}</ResultTitle>
                   <RunResult
-                    ref={(el) => {
+                    ref={async (el) => {
                       if (el) {
-                        const html = marked(result, {
-                          renderer: markedRenderer
-                        });
-                        el.innerHTML = html;
+                        const html = await markdownToHtml(result);
+                        if (html) el.innerHTML = html;
                       }
                     }}></RunResult>
                   <Button
