@@ -45,9 +45,14 @@ th
 </body>
 </html>`;
 
+const renderer = new marked.Renderer();
+renderer.link = (href, title, text) => `<a href="javascript:void(0)">${text}</a>`;
+renderer.code = (code, language) =>
+  `<div>${code.replaceAll(`\n`, `<br>`).replaceAll(` `, `&nbsp;`)}</div>`;
+
 export const markdownToHtml = async (markdown: string) => {
   try {
-    const converted = await marked(markdown);
+    const converted = await marked(markdown, { renderer });
     const $ = load(htmlBody);
     const body = $('body');
 
