@@ -23,6 +23,7 @@ import { useTranslation } from 'react-i18next';
 import { JSON_CONTENT_TYPE, VOICEDOC_MAKE_VOICE } from '../../api/constant';
 import useApiWrapper from '../../api/useApiWrapper';
 import { Helmet } from 'react-helmet-async';
+import AiEventBanner from '../../external/AiEvent/AiEventBanner';
 
 const Wrapper = styled.div`
   ${flex}
@@ -184,6 +185,7 @@ const AskDoc = () => {
               {t(`AskDoc.TipList.1VoiceCredit`)}
             </InfoArea>
           )}
+          <AiEventBanner tab="ai.ask_doc" />
         </Wrapper>
       </Body>
     </WrapperPage>

@@ -32,7 +32,7 @@ const Body = styled.div`
   
   width: 100%;
   height: 100%;
-  padding: 5px 16px;
+  padding: 5px 16px 16px 16px;
   overflow-y: auto;
   overflow-x: hidden;
 `;

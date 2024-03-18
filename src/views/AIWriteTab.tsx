@@ -184,9 +184,9 @@ const AIWriteTab = (props: WriteTabProps) => {
           submitSubject={submitSubject}
         />
       )}
-      {isBannerActive && userLevel === AI_EVENT_BANNER_TARGET_LEVEL && (
-        <AiEventBanner tab="ai.write" />
-      )}
+      {/* {isBannerActive && userLevel === AI_EVENT_BANNER_TARGET_LEVEL && ( */}
+      <AiEventBanner tab="ai.write" />
+      {/* )} */}
     </TabWrapper>
   );
 };

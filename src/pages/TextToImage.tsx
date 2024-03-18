@@ -35,9 +35,9 @@ const TextToImage = () => {
       <Body>
         <ImageCreate contents={location.state?.body || ''} />
       </Body>
-      {isBannerActive && userLevel === AI_EVENT_BANNER_TARGET_LEVEL && (
-        <AiEventBanner tab="ai.text_to_image" />
-      )}
+      {/* {isBannerActive && userLevel === AI_EVENT_BANNER_TARGET_LEVEL && ( */}
+      <AiEventBanner tab="ai.text_to_image" />
+      {/* )} */}
     </Wrapper>
   );
 };

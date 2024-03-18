@@ -15,14 +15,7 @@ import iconRatioHorizontal_purple from '../../img/text2Img/horizontal_purple.svg
 import iconRatioVertical from '../../img/text2Img/vertical.svg';
 import iconRatioVertical_purple from '../../img/text2Img/vertical_purple.svg';
 import iconCreatingWhite from '../../img/ico_creating_text_white.svg';
-import {
-  alignItemCenter,
-  alignItemStart,
-  flex,
-  flexColumn,
-  grid,
-  justiCenter
-} from '../../style/cssCommon';
+import { alignItemCenter, flex, flexColumn, justiCenter } from '../../style/cssCommon';
 import { RowContainer, SubTitleArea } from '../../views/ImageCreate';
 import SubTitle from '../SubTitle';
 import ShowResultButton from '../buttons/ShowResultButton';
@@ -49,10 +42,8 @@ const MakingInputWrapper = styled.div`
 const GridContainer = styled.div<{
   cssExt?: FlattenSimpleInterpolation;
 }>`
-  ${grid}
-
-  -webkit-grid-columns: repeat(auto-fit,minmax(81px, auto));
-  grid-template-columns: repeat(auto-fit, minmax(81px, auto));
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(81px, 1fr));
 
   width: 100%;
   gap: 16px 8px;
@@ -71,7 +62,7 @@ const SelectOptionArea = styled.div`
 const ContainerItem = styled.div`
   ${flex}
   ${flexColumn}
-  ${alignItemStart}
+  ${alignItemCenter}
 
   gap: 8px;
 `;
