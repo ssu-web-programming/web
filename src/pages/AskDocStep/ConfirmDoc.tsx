@@ -13,7 +13,7 @@ import { Helmet } from 'react-helmet-async';
 
 export const ConfirmDoc = () => {
   const { t } = useTranslation();
-  const { navigate, isLangKo } = useLangParameterNavigate();
+  const { navigate } = useLangParameterNavigate();
   const { isSuccess, isLoading } = usePollingExtractText();
   const { percentage } = usePercentage(isLoading, isSuccess);
 
@@ -23,6 +23,34 @@ export const ConfirmDoc = () => {
     }
   }, [isSuccess, percentage, navigate]);
 
+  const mergeTransComponent = (text: string, opt: { from: string; to: React.ReactElement }) => {
+    const split = text.split(`{{${opt.from}}}`);
+    return (
+      <>
+        {split.map((t, i) =>
+          i < split.length - 1 ? (
+            <>
+              {`${t}`}
+              {opt.to}
+            </>
+          ) : (
+            t
+          )
+        )}
+      </>
+    );
+  };
+
+  const subText = mergeTransComponent(t('AskDocStep.Step2.SubText'), {
+    from: 'drive',
+    to: (
+      <div style={{ display: 'inline-block' }}>
+        <Icon iconSrc={Logo} size="sm" />
+        <b>Polaris Drive</b>
+      </div>
+    )
+  });
+
   return (
     <Wrapper background={false}>
       <Helmet>
@@ -31,22 +59,7 @@ export const ConfirmDoc = () => {
       <GuideMessage>
         <h1>{t('AskDocStep.Step2.MainText')}</h1>
         <SubText>
-          {isLangKo ? (
-            <div className={'ko'}>
-              <Icon iconSrc={Logo} size="sm" />
-              <p>
-                <b> Polaris Drive </b>
-                {t('AskDocStep.Step2.SubText')}
-              </p>
-            </div>
-          ) : (
-            <div className={'en'}>
-              <p>{t('AskDocStep.Step2.SubText1')}</p>
-              <Icon iconSrc={Logo} size="sm" />
-              <b> Polaris Drive. </b>
-              <p>{t('AskDocStep.Step2.SubText2')}</p>
-            </div>
-          )}
+          <div>{subText}</div>
         </SubText>
       </GuideMessage>
       {percentage > 90 && <Loading>{t('AskDocStep.Step2.LoadingText')}</Loading>}
@@ -60,30 +73,14 @@ export const ConfirmDoc = () => {
 export default ConfirmDoc;
 
 const SubText = styled.div`
-  .ko {
-    font-size: 14px;
-    img {
-      float: left;
-    }
-
-    b {
-      padding-left: 4px;
-    }
+  font-size: 14px;
+  img {
+    float: left;
+    margin-top: 2px;
   }
 
-  .en {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 4px;
-    font-size: 14px;
-
-    img {
-      margin-top: 2px;
-    }
-
-    b {
-      color: #6f3ad0;
-    }
+  b {
+    padding-left: 4px;
+    color: #6f3ad0;
   }
 `;

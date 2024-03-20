@@ -10,7 +10,7 @@ import { Helmet } from 'react-helmet-async';
 
 export const StartAnalysisDoc = () => {
   const { t } = useTranslation();
-  const { navigate, isLangKo } = useLangParameterNavigate();
+  const { navigate } = useLangParameterNavigate();
 
   const handleClick = () => {
     navigate('/AskDocStep/ProgressAnalysisDoc');
@@ -32,9 +32,7 @@ export const StartAnalysisDoc = () => {
           {t('AskDocStep.Step3.SubText2')}
           <Highlight>
             <Icon iconSrc={Credit} size="sm" />
-            <strong>
-              {`${t('AskDocStep.Step3.Credit', { credit: 4 })}${isLangKo ? '' : '.'}`}
-            </strong>
+            <strong>{`${t('AskDocStep.Step3.Credit', { credit: 4 })}`}</strong>
           </Highlight>
           {t('AskDocStep.Step3.SubText3')}
         </SubText>

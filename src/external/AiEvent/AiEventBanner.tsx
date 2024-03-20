@@ -1,8 +1,5 @@
 import styled from 'styled-components';
-import banner from '../../img/AiEventBanner/pc_communication_banner.png';
-import banner_eng from '../../img/AiEventBanner/pc_communication_banner_eng.png';
 import banner2 from '../../img/AiEventBanner/banner_ai.png';
-import { LANG_KO_KR, getLangCodeFromParams, getLangCodeFromUA } from '../../locale';
 import { openNewWindow } from '../../util/common';
 import Bridge, { ClientType, getPlatform } from '../../util/bridge';
 import { useEffect } from 'react';
@@ -30,9 +27,6 @@ const BannerWrapper = styled.div`
 export const AI_EVENT_BANNER_TARGET_LEVEL = '1'; // level 1 is free plan user
 
 const AiEventBanner = ({ tab }: { tab: 'ai.write' | 'ai.text_to_image' | 'ai.ask_doc' }) => {
-  // const paramLang = getLangCodeFromParams() || getLangCodeFromUA();
-  // const isLangKo = paramLang?.includes(LANG_KO_KR);
-
   async function getLogger(logger = usePostSplunkLog) {
     try {
       if (!navigator.onLine) {
@@ -78,9 +72,6 @@ const AiEventBanner = ({ tab }: { tab: 'ai.write' | 'ai.text_to_image' | 'ai.ask
     const platform = getPlatform();
 
     const url = 'https://polarisoffice.com/ko/promotion/stamp';
-    // isLangKo
-    //   ? process.env.REACT_APP_AI_EVENT_URL_KO
-    //   : process.env.REACT_APP_AI_EVENT_URL_EN;
 
     switch (platform) {
       case ClientType.android:

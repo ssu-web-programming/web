@@ -3,11 +3,13 @@ import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import ko from './translation.ko.json';
 import en from './translation.en.json';
+import ja from './translation.ja.json';
 
 export const LANG_KO_KR = 'ko';
+export const LANG_JA_JP = 'ja';
 export const LANG_EN_US = 'en';
 
-export const getLangCodeFromParams = () => {
+const getLangCodeFromParams = () => {
   try {
     const params = new URL(window.location.href).searchParams;
     const lang = params.get('lang');
@@ -17,7 +19,7 @@ export const getLangCodeFromParams = () => {
   }
 };
 
-export const getLangCodeFromUA = () => {
+const getLangCodeFromUA = () => {
   try {
     const parse = /Polaris\/\d.?\d \(.*,\s?(.*-.*)\)/g.exec(navigator.userAgent);
     if (!parse) return undefined;
@@ -32,6 +34,8 @@ export const convertLangFromLangCode = (code: string | undefined) => {
     const lower = code?.toLowerCase();
     if (lower?.startsWith('ko')) {
       return LANG_KO_KR;
+    } else if (lower?.startsWith('ja')) {
+      return LANG_JA_JP;
     } else {
       return LANG_EN_US;
     }
@@ -56,6 +60,9 @@ const resources = {
   },
   en: {
     translation: en
+  },
+  ja: {
+    translation: ja
   }
 };
 
