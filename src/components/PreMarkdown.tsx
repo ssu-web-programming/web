@@ -1,11 +1,17 @@
-import remarkGfm from 'remark-gfm';
-import Markdown from 'react-markdown';
 import styled from 'styled-components';
+import { markdownToHtml } from '../util/common';
 
 const Pre = styled.div`
-  overflow-x: auto;
   width: 100%;
   height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  font-weight: normal;
+  font-size: 13px;
+  margin: 0px;
+  padding: 0px;
+
   p {
     margin: 0px;
     padding: 0px;
@@ -16,25 +22,14 @@ const Pre = styled.div`
 const PreMarkdown = ({ text }: { text: string }) => {
   return (
     <Pre
-      style={{
-        whiteSpace: 'pre-wrap',
-        // fontFamily: 'Noto Sans KR',
-        fontWeight: 'normal',
-        fontSize: '13px',
-        margin: '0px',
-        padding: '0px'
-      }}
-      ref={(el) => {
-        if (el) el.scrollTo(0, el.scrollHeight);
-      }}>
-      <Markdown
-        components={{
-          a: 'span'
-        }}
-        remarkPlugins={[remarkGfm]}>
-        {text}
-      </Markdown>
-    </Pre>
+      ref={async (el) => {
+        if (el) {
+          const html = await markdownToHtml(text, 'preview');
+          if (html) {
+            el.innerHTML = html;
+          }
+        }
+      }}></Pre>
   );
 };
 
