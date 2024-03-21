@@ -22,7 +22,7 @@ const BannerWrapper = styled.div`
 
   img {
     display: flex;
-    width: 320px;
+    /* width: 320px; */
     height: 60px;
   }
 `;
