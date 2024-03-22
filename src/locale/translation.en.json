@@ -171,6 +171,7 @@
   "ShowResult": "View Results",
   "Retry": "Retry",
   "MoveToLimitInfo": "https://polarisofficehelp.zendesk.com/hc/en-us/articles/6736284040335-Limitations-on-Polaris-Office-AI",
+  "Unlimited": "Unlimited",
   "AskDoc": {
     "Greeting": "Hello. This is a Polaris Office AI ASK Doc and I provide answers based on the document.",
     "LoadingMsg": {
@@ -193,9 +194,9 @@
     },
     "Summary": "Key Summary",
     "Keyword": "Keyword",
-    "Questions": "Document Recommended Questions"
+    "Questions": "Document Recommended Questions",
+    "AnswerKeyword": "Tell me about {{keyword}}"
   },
-  "Unlimited": "Unlimited",
   "AskDocStep": {
     "Step1": {
       "MainText": "There is an edit history in the document.",
@@ -205,8 +206,7 @@
     },
     "Step2": {
       "MainText": "Reviewing the document.\n Please wait a moment.",
-      "SubText1": "checking the document on",
-      "SubText2": "Please wait a moment.",
+      "SubText": "checking the document on {{drive}}. Please wait a moment.",
       "LoadingText": "Finalizing documentation checks……"
     },
     "Step3": {
@@ -231,6 +231,7 @@
       "UpgradePlan": "Upgrade subscription plan",
       "FailAnalyze": "Document analysis has failed.",
       "AgainAnalyze": "Reanalyzing the document.",
+      "FailedAnalyze": "Document analysis failed. Please try again for a more accurate analysis.",
       "CheckCredit": "Please check the credits.",
       "Close": "Close",
       "DefaultError": "The service could not be provided due to failure of document analysis.<br />We’ll work tirelessly to provide better service.",

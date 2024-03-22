@@ -222,7 +222,8 @@ export default function AppList(props: AppListProps) {
         });
         return (await res.json()).data.appList.map((appInfo: AppInfo) => ({
           ...appInfo,
-          icon: AlliAppIcons.find((icon) => icon.id[lang] === appInfo.id)?.icon
+          icon: AlliAppIcons.find((icon) => icon.id[lang === 'ko' ? 'ko' : 'en'] === appInfo.id)
+            ?.icon
         }));
       } catch (err) {
         throw err;

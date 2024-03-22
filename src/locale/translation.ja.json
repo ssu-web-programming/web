@@ -1,0 +1,252 @@
+{
+  "PageCount": "ページ数",
+  "InsertFail": "ドキュメント内の挿入位置を選択してください！",
+  "Write": "書く",
+  "Chatting": "チャット",
+  "CreateImage": "画像を作成する",
+  "ASKDoc": "ASK Doc",
+  "ShowExam": "例文を表示",
+  "Confirm": "確認",
+  "Result": "結果",
+  "Generate": "生成する",
+  "Regenerate": "再生成",
+  "Back": "戻る",
+  "StopGenerate": "生成を停止",
+  "FormList": {
+    "paragraph": "文章",
+    "list": "目次",
+    "table": "表"
+  },
+  "WriteTab": {
+    "WriteTopic": "トピックを書く",
+    "WriteTextboxPlacehold": "書く内容のトピックを入力してください",
+    "SelectVersion": "バージョンを選択",
+    "SelectForm": "書式を選択",
+    "SelectResultLength": "書かれる文字数を選択してください（スペースを含む）",
+    "Length": {
+      "Short": "短く",
+      "Medium": "普通",
+      "Long": "長く"
+    },
+    "WritingArticle": "記事を書く",
+    "PreviewWriting": "内容のプレビュー",
+    "LoadingMsg": "書いたトピックでポラリスオフィスAIが素晴らしい内容を作成します！",
+    "LengthInfo": "スペースを含む{{length}}文字",
+    "ReEnterTopic": "トピックを再入力",
+    "Recreating": "再作成",
+    "InsertDoc": "ドキュメントに挿入",
+    "MoveToChating": "チャットでさらに作業する",
+    "ToSameTopic": "書いたトピックを再考して書きます！"
+  },
+  "ChatingTab": {
+    "AIGreeting": "こんにちは。簡単で迅速なドキュメント作成をサポートするポラリスオフィスAIチャットです。",
+    "UseMoreAI": "さらに多くのAI機能を使用してみてください。",
+    "UseVariableForm": "さまざまな形式で回答を書いてみてください。",
+    "InputPlaceholder": "何でも質問してください。",
+    "InfoChat": "新しい会話を開始します！どのトピックで会話をしたいですか？",
+    "TipList": {
+      "1ChatingCredit": "1回の会話ごとにクレジットが差し引かれます。",
+      "EnterInfo": "Enterキーで改行してください",
+      "CtrlEnterInfo": "Ctrl+Enterキーで会話することができます。",
+      "CtrlShiftEnterInfo": "Ctrl+Shift+Enterキーで会話することができます。",
+      "DoSepecificQuestion": "具体的な質問でより良い回答を得てください。"
+    },
+    "LoadingMsg": {
+      "Creating": "内容を生成中です...",
+      "ReCreating": "内容を再作成中です...",
+      "ContitnueWriting": "続きを書きます...",
+      "ContitnueWriting_input": "書いた内容を含めて続きを書きます...",
+      "Summary": "内容の要約を開始します...",
+      "Summary_input": "書いた内容を反映して要約を開始します...",
+      "Translate": "内容を{{language}}に翻訳します...",
+      "Translate_input": "書いた内容も追加して{{language}}に翻訳します...",
+      "ChangeStyle": "内容を'{{style}}'スタイルに変更します...",
+      "ChangeStyle_input": "書いた内容を反映して'{{style}}'スタイルに変更します...",
+      "Grammar": "文法/表現の修正を開始します...",
+      "Grammar_input": "書いた内容を反映して文法/表現の修正を開始します..."
+    },
+    "FuncRecBtn": {
+      "resume_writing": "続きを書く",
+      "summary": "要約する",
+      "translate": "翻訳する",
+      "change_text_style": "文体を変更する",
+      "modify_text": "文法/表現を修正する",
+      "start_new_chating": "新しい会話を開始する",
+      "SubFuncRec": {
+        "Korean": "韓国語",
+        "English": "英語",
+        "Chinese": "中国語",
+        "Indonesian": "インドネシア語",
+        "Brazil": "ポルトガル語",
+        "German": "ドイツ語",
+        "French": "フランス語",
+        "Japanese": "日本語",
+        "Spanish": "スペイン語",
+        "BusinessStyle": "ビジネス体",
+        "Friendly": "フレンドリーに",
+        "Simply": "シンプルに",
+        "Poetically": "詩的に"
+      }
+    }
+  },
+  "Txt2ImgTab": {
+    "CreateImage": "画像を作成する",
+    "WritingImageDesc": "画像の説明を書く",
+    "WriteImageDesc": "作成する画像の説明を入力してください。",
+    "ChooseStyle": "スタイルを選択する",
+    "StyleList": {
+      "None": "なし",
+      "Picture": "写真",
+      "ConceptArt": "コンセプトアート",
+      "3D": "3D",
+      "Anime": "アニメ",
+      "Retro": "レトロ",
+      "WaterPainting": "水彩画",
+      "OilPainting": "油絵"
+    },
+    "ChooseRatio": "画像の比率を選択する",
+    "RatioList": {
+      "Squre": "正方形",
+      "Horizontal": "横",
+      "Vertical": "縦"
+    },
+    "LoadingMsg": "ポラリスオフィスAIが作成した内容を画像にしています。しばらくお待ちください。",
+    "PreviewImage": "画像のプレビュー",
+    "ToastMsg": {
+      "StartCreatingImage": "画像を作成しています。",
+      "CompleteCreatingImage": "画像の作成が完了しました。ご希望の操作を実行してください。",
+      "CompleteInsertImage": "画像の挿入が完了しました。",
+      "ForbiddenWord": "画像の説明に不適切な単語が含まれています。",
+      "GPTExceededLimit": "チャットした文字数が制限を超えてエラーが発生しました。もう一度お試しください。"
+    }
+  },
+  "ExampleList": {
+    "Health": "健康的な生活習慣のための効果的な5つの方法",
+    "DeliveryIdea": "デリバリーサービスのマーケティングアイデアをブレインストーミングし、各アイデアの利点を説明してください",
+    "Novel": "雨の海をテーマにした小説のシノプシス",
+    "InterviewTopic": "中古衣料品ショップのCEOインタビューの質問リスト10個",
+    "RecommendGift": "両親の誕生日プレゼントをおすすめしてください",
+    "CreateDoc": "効率的な文書作成の方法",
+    "AITech": "AI技術の進歩に関する調査資料を作成する際、調査する内容をまとめてください。",
+    "Recipe": "美味しいアリオリオパスタのレシピ",
+    "BusinessChart": "新規事業のビジネスプランの目次を作成する",
+    "CreateReport": "会議の結果報告メールの作成方法",
+    "Flight": "飛行機が飛んでいる絵、鉛筆で描かれた、HQ",
+    "Tiger": "都市で日光浴を楽しむトラの写真、コンセプトアート、4k",
+    "Panda": "レオナルド・ダ・ヴィンチが描いたビーチのパンダ",
+    "City": "未来型のサイバーパンク都市の風景、摩天楼、スカイライン、4K",
+    "Puppy": "かわいらしく愛らしい子犬、漫画、ファンタジー、アートステーション",
+    "Space": "銀河、渦巻き、宇宙、星雲、星、煙、虹色、複雑なディテール、ライオンの形、8k",
+    "House": "ハウス、コンセプトアート、マットペインティング、HQ、4k",
+    "NewYear": "川での新年祝賀イベントの様子、花火、ドローンショー、超現実的、8k、高いディテール",
+    "ComicPoster": "漫画のコンセプトのハリーポッターポスター、4K、HQ"
+  },
+  "ToastMsg": {
+    "UsedAllCredit": "お持ちのクレジットをすべて使用しました。",
+    "CheckCreditPolicy": "クレジットポリシーを確認する >",
+    "NoCredit": "クレジットが不足しています。実行するには{{credit}}クレジットが必要です。",
+    "TabLoadedAndWait": "現在{{tab}}タブで内容を生成中です。完了を待つか、生成を停止して再試行してください。",
+    "StartCreating": "内容を生成します。{{deductionCredit}}クレジットが差し引かれました。（残りのクレジット：{{leftCredit}}）",
+    "AboutCredit": "{{deductionCredit}}クレジットが差し引かれました。（残りのクレジット：{{leftCredit}}）",
+    "AIError": "AI結果の生成に失敗しました。もう一度お試しください！",
+    "StopMsg": "作成を中止しました。ご希望の操作を実行してください。",
+    "SuccessMsg": "作成が完了しました。ご希望の操作を実行してください。",
+    "CompleteCopy": "内容のコピーが完了しました。",
+    "CompleteInsert": "内容の挿入が完了しました。",
+    "ErrorMsg": "エラーが発生しました。しばらくしてからもう一度お試しください。（{{code}}：{{msg}}）",
+    "ServiceErrorMsg": "サービスの利用中に問題が発生しました。しばらくしてからもう一度お試しください。",
+    "UnauthorizedMsg": "この機能を使用するにはログインが必要です。現在ログインしているか再度確認してください。",
+    "CopyCompleted": "コピーが完了しました。"
+  },
+  "Offline": {
+    "UnstableConnection": "サービスへの接続が安定していません。",
+    "CheckNetwork": "使用中のネットワークの状態を確認してください。"
+  },
+  "Download": "ダウンロード",
+  "AITools": "AIツール",
+  "AIWrite": "AI作成",
+  "AIMarket": "AIマーケット",
+  "Test": "テスト",
+  "Additional": "追加",
+  "ShowResult": "結果を再表示",
+  "Retry": "再試行",
+  "MoveToLimitInfo": "https://polarisofficehelp.zendesk.com/hc/ko/articles/6736284040335-%ED%8F%B4%EB%9D%BC%EB%A6%AC%EC%8A%A4%EC%98%A4%ED%94%BC%EC%8A%A4-AI-%EC%A0%9C%ED%95%9C%EC%82%AC%ED%95%AD",
+  "Unlimited": "無制限",
+  "AskDoc": {
+    "Greeting": "こんにちは。ドキュメントに基づいて正確な回答を提供するポラリスオフィスAI ASK Docです。",
+    "LoadingMsg": {
+      "Info": "より良い回答のためにドキュメントを分析しています。しばらくお待ちください。最大3分かかる場合があります。",
+      "AskDoc": "コンテンツを生成中です...",
+      "Gpt": "追加情報を生成中です..."
+    },
+    "ReferencedPage": "参照ページ",
+    "GetMoreInformation": "詳細情報を見る",
+    "InitLoadQuestion": "人々が知りたいと思う質問を2つリスト形式で回答なしで教えてください。",
+    "InitLoadInfoMention": "ポラリスオフィスAIがこんな質問を見つけました。",
+    "InitLoadInfoContent": "ポラリスオフィスAIがこんな内容を見つけました。",
+    "DefaultQuestion": "このドキュメントで最も重要な内容は何ですか？",
+    "FailedConvert": "ドキュメントの変換に失敗し、サービスを提供できません。より良いサービスのために努力します。",
+    "FailedAnalyze": "ドキュメントの分析に失敗しました。正確な分析のためにもう一度お試しください。",
+    "RetryAnalyze": "ドキュメントを再分析する",
+    "TipList": {
+      "1ChatingCredit": "1回の会話につき4クレジットが差し引かれます。",
+      "1VoiceCredit": "音声ガイドが追加され、1回の会話につき8クレジットが差し引かれます。"
+    },
+    "Summary": "要約",
+    "Keyword": "キーワード",
+    "Questions": "ドキュメント内のおすすめの質問",
+    "AnswerKeyword": "{{keyword}}について説明してください"
+  },
+  "AskDocStep": {
+    "Step1": {
+      "MainText": "ドキュメントに編集履歴があります。",
+      "SubText": "編集内容を反映するために再分析しますか？",
+      "ButtonTextChecked": "選択したドキュメントを再分析します。",
+      "ButtonTextUnChecked": "既存の分析ドキュメントを使用します。"
+    },
+    "Step2": {
+      "MainText": "ドキュメントを確認しています。\nしばらくお待ちください。",
+      "SubText": "{{drive}}でドキュメントを確認しています。しばらくお待ちください。",
+      "LoadingText": "ドキュメントの確認を終了しています..."
+    },
+    "Step3": {
+      "MainText": "ドキュメントの分析を開始します。",
+      "SubText1": "ドキュメントの分析には",
+      "SubText2": "回の質問に",
+      "SubText3": "が必要であり、一度分析したドキュメントは追加のクレジットなしで使用できます。",
+      "ButtonText": "分析を開始します。",
+      "Credit": "{{credit}} クレジット"
+    },
+    "Step4": {
+      "MainText": "より良い回答のために\nドキュメントを分析しています。",
+      "Noti": "ドキュメントの分析が完了しました。\n{{deductionCredit}} クレジットが差し引かれました。（残りのクレジット：{{leftCredit}}）",
+      "Loading_AnalyzeDoc": "ドキュメントの分析中...",
+      "Loading_Keyword": "ドキュメント内の重要な質問を検索中...",
+      "Loading_Done": "すぐに結果画面に移動します。"
+    },
+    "Modal": {
+      "Over1000": "正確なドキュメントの分析には<span class='important'>1,000文字以上</span>のテキストが必要です。ドキュメントに追加の内容を書いてください。",
+      "Under300": "ドキュメントのページ数が<span class='important'>300ページ</span>を超えているため、ドキュメントの分析はできません。<br />ドキュメントのページ数を減らしてください。",
+      "NeedCredit": "クレジットが不足しています。<br />ASK Docドキュメントの分析には<span class='credit'>最低5クレジット</span>が必要です。",
+      "UpgradePlan": "料金プランのアップグレード",
+      "FailAnalyze": "ドキュメントの分析に失敗しました。",
+      "AgainAnalyze": "ドキュメントを再分析する",
+      "FailedAnalyze": "ドキュメントの分析に失敗しました。<br />正確な分析のためにもう一度お試しください。",
+      "CheckCredit": "クレジットを確認してください。",
+      "Close": "閉じる",
+      "DefaultError": "ドキュメントの分析に失敗し、サービスを提供できません。<br />より良いサービスのために努力します。",
+      "CheckDocument": "ドキュメントを再確認してください。",
+      "SameNameInDrive": "Polaris Drive内に同じ名前のファイルがあります。現在のファイルで上書きしますか？",
+      "CoverThisFile": "現在のファイルで上書き",
+      "Ignore": "無視して進行",
+      "LackUsage": "Polaris Driveの容量が不足しているため、ドキュメントの分析を行うことができません。料金プランをアップグレードしてより多くの容量を利用してみてください。",
+      "UploadFail": "ドキュメントのアップロードに失敗しました。<br />もう一度お試しください。",
+      "TryAgain": "再度試してください",
+      "ServiceNotification": "サービスのお知らせ"
+    }
+  },
+  "EOS": {
+    "ASKDocEOSTitle": "ASK Doc V1サービス終了",
+    "ASKDocEOSDesc": "アプリのアップデート後、新しく改良されたASK Doc V2をお試しください。"
+  }
+}

@@ -194,7 +194,8 @@
     },
     "Summary": "핵심 요약",
     "Keyword": "키워드",
-    "Questions": "문서 내 추천 질문"
+    "Questions": "문서 내 추천 질문",
+    "AnswerKeyword": "{{keyword}}에 대해서 설명해줘"
   },
   "AskDocStep": {
     "Step1": {
@@ -205,7 +206,7 @@
     },
     "Step2": {
       "MainText": "문서를 확인하고 있습니다.\n 잠시만 기다려주세요.",
-      "SubText": "에서 문서를 확인 중입니다. 잠시만 기다려 주세요.",
+      "SubText": "{{drive}} 에서 문서를 확인 중입니다. 잠시만 기다려 주세요.",
       "LoadingText": "문서 확인 마무리 중입니다..."
     },
     "Step3": {

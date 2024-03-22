@@ -100,7 +100,7 @@ export const QuestionList = ({
                       <Keyword
                         key={index}
                         onClick={() => {
-                          onClick('askDoc', `${keyword}에 대해서 설명해줘`);
+                          onClick('askDoc', t(`AskDoc.AnswerKeyword`, { keyword: keyword })!);
                         }}
                         disable={isLoading}>
                         {`#${keyword}`}
