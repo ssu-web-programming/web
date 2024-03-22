@@ -201,12 +201,17 @@ const ImageCreateResult = ({
           curListIndex={curListIndex}
           onPrev={() => {
             if (history.length <= 1) return;
-            if (curListIndex > 0) dispatch(updateT2ICurListId(history[curListIndex - 1].id));
+            if (curListIndex > 0) {
+              dispatch(updateT2ICurListId(history[curListIndex - 1].id));
+              dispatch(updateT2ICurItemIndex(0));
+            }
           }}
           onNext={() => {
             if (history.length <= 1) return;
-            if (curListIndex < history.length - 1)
+            if (curListIndex < history.length - 1) {
               dispatch(updateT2ICurListId(history[curListIndex + 1].id));
+              dispatch(updateT2ICurItemIndex(0));
+            }
           }}
         />
       </ImgListSwitcher>
