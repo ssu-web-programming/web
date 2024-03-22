@@ -66,6 +66,10 @@ html,
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
       }
 
+  pre {
+    white-space: pre-wrap;
+  }
+
   ol, ul{
     ${flex}
     ${flexColumn}

@@ -16,7 +16,7 @@ import CreditButton from '../../components/buttons/CreditButton';
 import Loading from '../../components/Loading';
 import { ALLI_RESPONSE_STREAM_API } from '../../api/constant';
 import { Requestor, requestChatStream, streaming } from '../../api';
-import { calLeftCredit, insertDoc, markdownToHtml } from '../../util/common';
+import { calLeftCredit, insertDoc } from '../../util/common';
 import { useShowCreditToast } from '../../components/hooks/useShowCreditToast';
 import useErrorHandle from '../../components/hooks/useErrorHandle';
 import { activeToast } from '../../store/slices/toastSlice';
@@ -29,6 +29,7 @@ import {
 } from '../../store/slices/alliApps';
 import AlliApps from './AlliApps';
 import ga, { init } from '../../util/gaConnect';
+import PreMarkdown from '../../components/PreMarkdown';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -356,13 +357,9 @@ export default function Alli() {
                 <ResultArea>
                   <Divider sx={{ margin: '32px 0px' }} />
                   <ResultTitle>{t('Result')}</ResultTitle>
-                  <RunResult
-                    ref={async (el) => {
-                      if (el) {
-                        const html = await markdownToHtml(result);
-                        if (html) el.innerHTML = html;
-                      }
-                    }}></RunResult>
+                  <RunResult>
+                    <PreMarkdown text={result} />
+                  </RunResult>
                   <Button
                     disable={streamingStatus !== 'none'}
                     variant="gray"
