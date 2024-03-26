@@ -9,13 +9,11 @@ import { Divider } from '@mui/material';
 import AppIconRefresh from '../../img/alli/alli-icon-refresh.svg';
 
 import Button from '../../components/buttons/Button';
-import Bridge from '../../util/bridge';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { initFlagSelector } from '../../store/slices/initFlagSlice';
 import CreditButton from '../../components/buttons/CreditButton';
 import Loading from '../../components/Loading';
 import { ALLI_RESPONSE_STREAM_API } from '../../api/constant';
-import { Requestor, requestChatStream, streaming } from '../../api';
 import { calLeftCredit, insertDoc } from '../../util/common';
 import { useShowCreditToast } from '../../components/hooks/useShowCreditToast';
 import useErrorHandle from '../../components/hooks/useErrorHandle';
@@ -30,6 +28,7 @@ import {
 import AlliApps from './AlliApps';
 import ga, { init } from '../../util/gaConnect';
 import PreMarkdown from '../../components/PreMarkdown';
+import { apiWrapper, streaming } from '../../api/apiWrapper';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -239,7 +238,7 @@ export default function Alli() {
 
   const [streamingStatus, setStreamingStatus] = useState<StreamingStatus>('none');
 
-  const requestor = useRef<Requestor | null>(null);
+  const requestor = useRef<any>();
 
   const selectApp = (appInfo: AppInfo) => {
     if (appInfo.inputs) {
@@ -281,35 +280,27 @@ export default function Alli() {
     let resultText = '';
     try {
       setStreamingStatus('request');
-      const sessionInfo = await Bridge.checkSession('');
-      try {
-        requestor.current = requestChatStream(sessionInfo, {
-          api: ALLI_RESPONSE_STREAM_API,
-          arg: { inputs, appId, lang }
-        });
+      requestor.current = apiWrapper();
+      const { res } = await requestor.current?.request(ALLI_RESPONSE_STREAM_API, {
+        body: { inputs, appId, lang },
+        method: 'POST'
+      });
 
-        const res = await requestor.current.request();
+      const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
+      showCreditToast(deductionCredit, leftCredit);
 
-        const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
-        showCreditToast(deductionCredit, leftCredit);
-
-        setStreamingStatus('streaming');
-        await streaming(res, (contents) => {
-          setResult((prev) => prev + contents);
-          resultText += contents;
-        });
-      } catch (err) {
-        if (requestor.current?.isAborted() === true) {
-        } else {
-          throw err;
-        }
-      } finally {
-        requestor.current = null;
-        dispatch(setCreateResult({ inputs, output: resultText }));
-      }
+      setStreamingStatus('streaming');
+      await streaming(res, (contents) => {
+        setResult((prev) => prev + contents);
+        resultText += contents;
+      });
     } catch (err) {
-      errorHandle(err);
+      if (requestor.current?.isAborted() === true) {
+      } else {
+        errorHandle(err);
+      }
     } finally {
+      dispatch(setCreateResult({ inputs, output: resultText }));
       setStreamingStatus('none');
       ga.event({ category: 'AI Apps', action: 'App Run', label: appId });
     }

@@ -9,12 +9,11 @@ import InvalidAccess from './pages/InvalidAccess';
 import Offline from './pages/Offline';
 import Spinner from './components/Spinner';
 import Confirm from './components/Confirm';
-import useApiWrapper from './api/useApiWrapper';
-import { BANNER_ACTIVE_API, JSON_CONTENT_TYPE } from './api/constant';
+import { apiWrapper } from './api/apiWrapper';
+import { BANNER_ACTIVE_API } from './api/constant';
 import { setBanner, setUserLevel } from './store/slices/banner';
 import { useInitBridgeListener } from './util/bridge';
 import AskDocHome from './pages/AskDocStep/AskDocHome';
-import VoiceDoc from './pages/VoiceDoc';
 import CheckDocHistory from './pages/AskDocStep/CheckDocHistory';
 import ConfirmDoc from './pages/AskDocStep/ConfirmDoc';
 import ProgressAnalysisDoc from './pages/AskDocStep/ProgressAnalysisDoc';
@@ -26,7 +25,6 @@ import Alli from './pages/Alli/Alli';
 
 function App() {
   const dispatch = useAppDispatch();
-  const apiWrapper = useApiWrapper();
   const initBridgeListener = useInitBridgeListener();
 
   useEffect(() => {
@@ -35,14 +33,10 @@ function App() {
 
   const updateEventBannerStatus = async () => {
     try {
-      const { res, userInfo } = await apiWrapper(BANNER_ACTIVE_API, {
-        headers: {
-          ...JSON_CONTENT_TYPE,
-          'User-Agent': navigator.userAgent
-        },
-        body: JSON.stringify({
+      const { res, userInfo } = await apiWrapper().request(BANNER_ACTIVE_API, {
+        body: {
           type: 'banner'
-        }),
+        },
         method: 'POST'
       });
 
@@ -74,7 +68,6 @@ function App() {
             <Route path="/AskDocStep/StartAnalysisDoc" element={<StartAnalysisDoc />} />
             <Route path="/AskDocStep/Chat" element={<Chat />} />
           </Route>
-          <Route path="/voicedoc" element={<VoiceDoc></VoiceDoc>}></Route>
           <Route path="*" element={<InvalidAccess></InvalidAccess>}></Route>
         </Routes>
         <Offline />

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import useApiWrapper from '../../api/useApiWrapper';
+import { apiWrapper } from '../../api/apiWrapper';
 import { lang } from '../../locale';
 import { Divider } from '@mui/material';
 import { AppInfo } from './Alli';
@@ -207,17 +207,11 @@ interface AppListProps {
 export default function AppList(props: AppListProps) {
   const { onSelect } = props;
 
-  const apiWrapper = useApiWrapper();
-
   const { data } = useSuspenseQuery<AppInfo[]>({
     queryKey: ['AlliApps'],
     queryFn: async () => {
       try {
-        const { res } = await apiWrapper(`/api/v2/alli/apps?lang=${lang}`, {
-          headers: {
-            'content-type': 'application/json',
-            'User-Agent': navigator.userAgent
-          },
+        const { res } = await apiWrapper().request(`/api/v2/alli/apps?lang=${lang}`, {
           method: 'GET'
         });
         return (await res.json()).data.appList.map((appInfo: AppInfo) => ({

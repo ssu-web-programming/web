@@ -1,8 +1,8 @@
 import { Dispatch, MutableRefObject, SetStateAction, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { filesSelector } from '../../store/slices/askDocAnalyzeFiesSlice';
-import { ASKDCO_ASK_QUESTION, JSON_CONTENT_TYPE } from '../../api/constant';
-import useApiWrapper from '../../api/useApiWrapper';
+import { ASKDCO_ASK_QUESTION } from '../../api/constant';
+import { apiWrapper } from '../../api/apiWrapper';
 import useErrorHandle from './useErrorHandle';
 import { setCreating } from '../../store/slices/tabSlice';
 import { appendChat, removeChat, updateChat } from '../../store/slices/askDoc';
@@ -21,7 +21,6 @@ export const useChatAskdoc = () => {
 
   const { files, userId } = useAppSelector(filesSelector);
   const dispatch = useAppDispatch();
-  const apiWrapper = useApiWrapper();
   const errorHandle = useErrorHandle();
   const showCreditToast = useShowCreditToast();
   const { t } = useTranslation();
@@ -80,16 +79,12 @@ export const useChatAskdoc = () => {
     try {
       dispatch(setCreating('ASKDoc'));
 
-      const { res } = await apiWrapper(ASKDCO_ASK_QUESTION, {
-        headers: {
-          ...JSON_CONTENT_TYPE,
-          'User-Agent': navigator.userAgent
-        },
-        body: JSON.stringify({
+      const { res } = await apiWrapper().request(ASKDCO_ASK_QUESTION, {
+        body: {
           fileId: files[0].fileId,
           fileRevision: files[0].fileRevision,
           question: chatText ? chatText : userChatText
-        }),
+        },
         method: 'POST'
       });
 
