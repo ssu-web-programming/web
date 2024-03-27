@@ -20,8 +20,8 @@ import useLangParameterNavigate from '../../components/hooks/useLangParameterNav
 import Icon from '../../components/Icon';
 import icon_ai from '../../img/ico_ai.svg';
 import { useTranslation } from 'react-i18next';
-import { JSON_CONTENT_TYPE, VOICEDOC_MAKE_VOICE } from '../../api/constant';
-import useApiWrapper from '../../api/useApiWrapper';
+import { VOICEDOC_MAKE_VOICE } from '../../api/constant';
+import { apiWrapper } from '../../api/apiWrapper';
 import { Helmet } from 'react-helmet-async';
 import AiEventBanner from '../../external/AiEvent/AiEventBanner';
 
@@ -64,7 +64,6 @@ const InfoArea = styled.div`
 
 const AskDoc = () => {
   const { t } = useTranslation();
-  const apiWrapper = useApiWrapper();
   const submitAskDoc = useChatAskdoc();
   const { isTesla } = useLangParameterNavigate();
   const { fileStatus } = useAppSelector(filesSelector);
@@ -88,15 +87,11 @@ const AskDoc = () => {
 
   const reqVoiceRes = async (text: string) => {
     try {
-      const { res } = await apiWrapper(VOICEDOC_MAKE_VOICE, {
-        headers: {
-          ...JSON_CONTENT_TYPE,
-          'User-Agent': navigator.userAgent
-        },
-        body: JSON.stringify({
+      const { res } = await apiWrapper().request(VOICEDOC_MAKE_VOICE, {
+        body: {
           speaker: 'vara',
           text: text
-        }),
+        },
         method: 'POST'
       });
 

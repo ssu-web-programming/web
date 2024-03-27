@@ -5,8 +5,8 @@ import { ASKDOC_GET_EXTRACT_TEXT_STATUS, ASKDOC_EXTRACT_TEXT } from '../../api/c
 import { setCreating } from '../../store/slices/tabSlice';
 import useErrorHandle from './useErrorHandle';
 import useAskDocErrorHandler from './useAskDocErrorHandler';
-import requestHandler from '../../api/askdocRequestHandler';
 import useAskDocRequestHandler from './useAskDocRequestHandler';
+import { apiWrapper } from '../../api/apiWrapper';
 
 const usePollingExtractText = () => {
   const timerIdRef = useRef<any>(null);
@@ -25,9 +25,12 @@ const usePollingExtractText = () => {
       // Your polling logic here
       try {
         dispatch(setCreating('TextExtract'));
-        const { resultCode, status } = await requestHandler(ASKDOC_GET_EXTRACT_TEXT_STATUS, {
-          taskId: data.data.taskId
+        const { res } = await apiWrapper().request(ASKDOC_GET_EXTRACT_TEXT_STATUS, {
+          body: { taskId: data.data.taskId },
+          method: 'POST'
         });
+
+        const { resultCode, status } = await res.json();
         if (resultCode === 0) {
           if (status === 'completed') {
             dispatch(

@@ -3,8 +3,8 @@ import { filesSelector, setFiles } from '../../store/slices/askDocAnalyzeFiesSli
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import Bridge from '../../util/bridge';
 import { initFlagSelector } from '../../store/slices/initFlagSlice';
-import useApiWrapper from '../../api/useApiWrapper';
-import { ASKDOC_GET_ANALYZE_INFO, JSON_CONTENT_TYPE } from '../../api/constant';
+import { apiWrapper } from '../../api/apiWrapper';
+import { ASKDOC_GET_ANALYZE_INFO } from '../../api/constant';
 import useErrorHandle from './useErrorHandle';
 import { setSummary } from '../../store/slices/askDocSummary';
 import useInterval from './useInterval';
@@ -37,7 +37,6 @@ const useGetAskDocFiles = () => {
   const { isSuccsess, files, userId, isInitialized } = useAppSelector(filesSelector);
   const [loading, setLoading] = useState(true);
   const dispatch = useAppDispatch();
-  const apiWrapper = useApiWrapper();
   const errorHandle = useErrorHandle();
   const [data, setData] = useState<Data | null>(null);
 
@@ -54,14 +53,10 @@ const useGetAskDocFiles = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const { res } = await apiWrapper(ASKDOC_GET_ANALYZE_INFO, {
-          headers: {
-            ...JSON_CONTENT_TYPE,
-            'User-Agent': navigator.userAgent
-          },
-          body: JSON.stringify({
+        const { res } = await apiWrapper().request(ASKDOC_GET_ANALYZE_INFO, {
+          body: {
             fileId: files[0].fileId
-          }),
+          },
           method: 'POST'
         });
 

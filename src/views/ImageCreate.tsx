@@ -12,9 +12,9 @@ import {
   updateT2ICurItemIndex,
   updateT2ICurListId
 } from '../store/slices/txt2imgHistory';
-import { JSON_CONTENT_TYPE, TEXT_TO_IMAGE_API } from '../api/constant';
+import { TEXT_TO_IMAGE_API } from '../api/constant';
 import { activeToast } from '../store/slices/toastSlice';
-import useApiWrapper from '../api/useApiWrapper';
+import { apiWrapper } from '../api/apiWrapper';
 import { useTranslation } from 'react-i18next';
 import { calLeftCredit } from '../util/common';
 import useErrorHandle from '../components/hooks/useErrorHandle';
@@ -58,7 +58,6 @@ export const RowContainer = styled.div<{
 `;
 
 const ImageCreate = ({ contents }: { contents: string }) => {
-  const apiWrapper = useApiWrapper();
   const { creating } = useAppSelector(selectTabSlice);
   const dispatch = useAppDispatch();
   const { currentListId, currentItemIdx, history } = useAppSelector(selectT2IHistory);
@@ -87,12 +86,8 @@ const ImageCreate = ({ contents }: { contents: string }) => {
         };
         if (option.style !== 'none') apiBody['style_preset'] = option.style;
 
-        const { res, logger } = await apiWrapper(TEXT_TO_IMAGE_API, {
-          headers: {
-            ...JSON_CONTENT_TYPE,
-            'User-Agent': navigator.userAgent
-          },
-          body: JSON.stringify(apiBody),
+        const { res, logger } = await apiWrapper().request(TEXT_TO_IMAGE_API, {
+          body: apiBody,
           method: 'POST'
         });
 
@@ -144,7 +139,7 @@ const ImageCreate = ({ contents }: { contents: string }) => {
         dispatch(setCreating('none'));
       }
     },
-    [apiWrapper, dispatch, errorHandle, t]
+    [dispatch, errorHandle, t]
   );
 
   useEffect(() => {

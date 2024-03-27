@@ -8,7 +8,7 @@ import {
 } from '../../api/constant';
 import { setCreating } from '../../store/slices/tabSlice';
 import useErrorHandle from './useErrorHandle';
-import requestHandler from '../../api/askdocRequestHandler';
+import { apiWrapper } from '../../api/apiWrapper';
 
 const useAskDocRequestHandler = (api: string) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -36,7 +36,8 @@ const useAskDocRequestHandler = (api: string) => {
           fileRevision: files[0].fileRevision
         };
         dispatch(setCreating(shareAnswerState));
-        const res = await requestHandler(api, sendData);
+        const { res } = await apiWrapper().request(api, { body: sendData, method: 'POST' });
+        const response = await res.json();
         if (api !== ASKDOC_EXTRACT_TEXT) {
           dispatch(
             setFiles({
@@ -44,17 +45,18 @@ const useAskDocRequestHandler = (api: string) => {
               isLoading: false,
               isSuccsess: true,
               files: [...files],
-              fileStatus: res.status,
+              fileStatus: response.status,
               isInitialized: true
             })
           );
         }
-        if (res.resultCode === 0) {
+        const resData = { ...response, credit: res?.headers?.get('Userinfo-Credit') };
+        if (response.resultCode === 0) {
           setIsSuccess(true);
-          setData({ code: 'success', data: res });
+          setData({ code: 'success', data: resData });
         } else {
           setIsSuccess(false);
-          setData({ code: 'fail', data: res });
+          setData({ code: 'fail', data: resData });
         }
         setIsLoading(false);
       } catch (error: any) {

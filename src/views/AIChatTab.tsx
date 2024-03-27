@@ -36,20 +36,20 @@ import {
   flex,
   flexWrap
 } from '../style/cssCommon';
-import { postSplunkLog, calcToken, getElValue, parseGptVer } from '../api/usePostSplunkLog';
+import { calcToken, getElValue, parseGptVer } from '../api/usePostSplunkLog';
 import { setCreating } from '../store/slices/tabSlice';
 import { calLeftCredit } from '../util/common';
 import { useTranslation } from 'react-i18next';
 import useErrorHandle from '../components/hooks/useErrorHandle';
 import SendCoinButton from '../components/buttons/SendCoinButton';
 import { REC_ID_LIST } from '../components/chat/RecommendBox/FunctionRec';
-import Bridge, { ClientType, getPlatform } from '../util/bridge';
+import { ClientType, getPlatform } from '../util/bridge';
 import Button from '../components/buttons/Button';
 import { VersionListType, versionList } from '../components/chat/RecommendBox/FormRec';
 import DropDownButton from '../components/buttons/DropDownButton';
-import { Requestor, requestChatStream, streaming } from '../api';
 import { useShowCreditToast } from '../components/hooks/useShowCreditToast';
 import { AI_WRITE_RESPONSE_STREAM_API } from '../api/constant';
+import { apiWrapper, streaming } from '../api/apiWrapper';
 
 const TEXT_MAX_HEIGHT = 268;
 
@@ -259,7 +259,7 @@ const AIChatTab = (props: WriteTabProps) => {
   const [isDefaultInput, setIsDefaultInput] = useState<boolean>(false);
 
   const chatEndRef = useRef<HTMLDivElement>(null);
-  const requestor = useRef<Requestor | null>(null);
+  const requestor = useRef<any>();
   const textRef = useRef<HTMLTextAreaElement>(null);
 
   const toggleActiveInput = (isActive: boolean) => {
@@ -389,6 +389,7 @@ const AIChatTab = (props: WriteTabProps) => {
     }
 
     let resultText = '';
+    let splunk = undefined;
     const assistantId = uuidv4();
     const userId = uuidv4();
     let input = chat
@@ -432,79 +433,75 @@ const AIChatTab = (props: WriteTabProps) => {
     );
 
     try {
-      const sessionInfo = await Bridge.checkSession('');
-      try {
-        requestor.current = requestChatStream(sessionInfo, {
-          api: AI_WRITE_RESPONSE_STREAM_API,
-          arg: {
-            engine: gptVer,
-            history: [
-              ...history
-                .filter((history) => history.role !== 'reset')
-                .map((chat) => ({ content: chat.result, role: chat.role })),
-              {
-                content: input,
-                role: 'user',
-                preProcessing: preProc
-              }
-            ]
-          }
-        });
+      requestor.current = apiWrapper();
+      const { res, logger } = await requestor.current?.request(AI_WRITE_RESPONSE_STREAM_API, {
+        body: {
+          engine: gptVer,
+          history: [
+            ...history
+              .filter((history) => history.role !== 'reset')
+              .map((chat) => ({ content: chat.result, role: chat.role })),
+            {
+              content: input,
+              role: 'user',
+              preProcessing: preProc
+            }
+          ]
+        },
+        method: 'POST'
+      });
+      splunk = logger;
 
-        const res = await requestor.current.request();
+      const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
+      showCreditToast(deductionCredit, leftCredit);
 
-        const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
-        showCreditToast(deductionCredit, leftCredit);
+      await streaming(res, (contents) => {
+        dispatch(
+          updateChat({ id: assistantId, role: 'assistant', result: contents, input: input })
+        );
+        resultText += contents;
+      });
 
-        await streaming(res, (contents) => {
-          dispatch(
-            updateChat({ id: assistantId, role: 'assistant', result: contents, input: input })
-          );
-          resultText += contents;
-        });
-
+      setChatInput((prev) => ({ ...prev, input: '' }));
+      dispatch(initRecFunc());
+    } catch (error: any) {
+      if (requestor.current?.isAborted() === true) {
         setChatInput((prev) => ({ ...prev, input: '' }));
         dispatch(initRecFunc());
-      } catch (err) {
-        if (requestor.current?.isAborted() === true) {
-          setChatInput((prev) => ({ ...prev, input: '' }));
-          dispatch(initRecFunc());
-        } else {
-          throw err;
-        }
-      } finally {
-        requestor.current = null;
+      } else {
+        errorHandle(error);
 
-        const el = getElValue(selectedRecFunction?.id);
-        const input_token = calcToken(chatInput);
-        const output_token = calcToken(resultText);
-        const gpt_ver = parseGptVer(gptVer!);
-
-        postSplunkLog(sessionInfo, {
-          dp: 'ai.write',
-          el,
-          input_token,
-          output_token,
-          gpt_ver
-        });
-      }
-    } catch (error: any) {
-      errorHandle(error);
-
-      const assistantResult = chatHistory?.filter((history) => history.id === assistantId)[0]
-        ?.result;
-      if (!assistantResult || assistantResult?.length === 0) {
-        dispatch(removeChat(userId));
-        dispatch(removeChat(assistantId));
-        if (input) {
-          setChatInput((prev) => ({ ...prev, input }));
-          setIsActiveInput(true);
+        const assistantResult = chatHistory?.filter((history) => history.id === assistantId)[0]
+          ?.result;
+        if (!assistantResult || assistantResult?.length === 0) {
+          dispatch(removeChat(userId));
+          dispatch(removeChat(assistantId));
+          if (input) {
+            setChatInput((prev) => ({ ...prev, input }));
+            setIsActiveInput(true);
+          }
         }
       }
     } finally {
       setLoadingId(null);
       dispatch(setCreating('none'));
       setRetryOrigin(null);
+
+      if (splunk) {
+        try {
+          const el = getElValue(selectedRecFunction?.id);
+          const input_token = calcToken(chatInput);
+          const output_token = calcToken(resultText);
+          const gpt_ver = parseGptVer(gptVer!);
+          splunk({
+            dp: 'ai.write',
+            el,
+            input_token,
+            output_token,
+            gpt_ver
+          });
+        } catch (err) {}
+      }
     }
   };
 

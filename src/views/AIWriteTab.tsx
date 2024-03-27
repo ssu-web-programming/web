@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useRef } from 'react';
 import { useDispatch } from 'react-redux';
-import { postSplunkLog, calcToken, parseGptVer } from '../api/usePostSplunkLog';
+import { calcToken, parseGptVer } from '../api/usePostSplunkLog';
 import { activeToast } from '../store/slices/toastSlice';
 import { v4 as uuidv4 } from 'uuid';
 import {
@@ -22,13 +22,11 @@ import useErrorHandle from '../components/hooks/useErrorHandle';
 import AiWriteResult from '../components/aiWrite/AiWriteResult';
 import AIWriteInput from '../components/aiWrite/AIWriteInput';
 import { EngineVersion, WriteOptions } from '../components/chat/RecommendBox/FormRec';
-import AiEventBanner, { AI_EVENT_BANNER_TARGET_LEVEL } from '../external/AiEvent/AiEventBanner';
-import { selectBanner } from '../store/slices/banner';
-import { Requestor, requestChatStream, streaming } from '../api';
+import AiEventBanner from '../external/AiEvent/AiEventBanner';
 import { useShowCreditToast } from '../components/hooks/useShowCreditToast';
-import Bridge from '../util/bridge';
 import { StreamPreprocessing } from '../store/slices/chatHistorySlice';
 import { AI_WRITE_RESPONSE_STREAM_API } from '../api/constant';
+import { apiWrapper, streaming } from '../api/apiWrapper';
 
 const TabWrapper = styled.div`
   ${flex}
@@ -46,19 +44,17 @@ const AIWriteTab = (props: WriteTabProps) => {
   const { options: selectedOptions, setOptions: setSelectedOptions } = props;
   const { t } = useTranslation();
 
+  const requestor = useRef<any>();
   const errorHandle = useErrorHandle();
   const showCreditToast = useShowCreditToast();
 
-  const requestor = useRef<Requestor | null>(null);
-  const endRef = useRef<any>();
-
   const dispatch = useDispatch();
   const { history, currentWriteId } = useAppSelector(selectWriteHistorySlice);
-  const { active: isBannerActive, userLevel } = useAppSelector(selectBanner);
 
   const submitSubject = async (inputParam?: WriteType) => {
     let resultText = '';
     let input = '';
+    let splunk = undefined;
     let version: EngineVersion = 'gpt3.5';
 
     const assistantId = uuidv4();
@@ -92,73 +88,68 @@ const AIWriteTab = (props: WriteTabProps) => {
     dispatch(setCreating('Write'));
 
     try {
-      const sessionInfo = await Bridge.checkSession('');
-      try {
-        requestor.current = requestChatStream(sessionInfo, {
-          api: AI_WRITE_RESPONSE_STREAM_API,
-          arg: {
-            engine: version,
-            history: [
-              {
-                content: input,
-                role: 'user',
-                preProcessing: preProc
-              }
-            ]
-          }
-        });
+      requestor.current = apiWrapper();
+      const { res, logger } = await requestor.current?.request(AI_WRITE_RESPONSE_STREAM_API, {
+        body: {
+          engine: version,
+          history: [
+            {
+              content: input,
+              role: 'user',
+              preProcessing: preProc
+            }
+          ]
+        },
+        method: 'POST'
+      });
+      splunk = logger;
 
-        const res = await requestor.current.request();
+      const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
+      showCreditToast(deductionCredit, leftCredit);
 
-        const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
-        showCreditToast(deductionCredit, leftCredit);
-
-        await streaming(res, (contents) => {
-          dispatch(
-            updateWriteHistory({
-              id: assistantId,
-              result: contents,
-              input: input,
-              preProcessing: preProc!,
-              version
-            })
-          );
-          resultText += contents;
-          endRef?.current?.scrollIntoView({ behavior: 'smooth' });
-        });
-      } catch (err) {
-        if (requestor.current?.isAborted() === true) {
-        } else {
-          throw err;
-        }
-      } finally {
-        requestor.current = null;
-
-        const input_token = calcToken(input);
-        const output_token = calcToken(resultText);
-        const gpt_ver = parseGptVer(version);
-
-        postSplunkLog(sessionInfo, {
-          dp: 'ai.write',
-          el: 'create_text',
-          input_token,
-          output_token,
-          gpt_ver
-        });
-      }
+      await streaming(res, (contents) => {
+        dispatch(
+          updateWriteHistory({
+            id: assistantId,
+            result: contents,
+            input: input,
+            preProcessing: preProc!,
+            version
+          })
+        );
+        resultText += contents;
+      });
     } catch (error: any) {
-      dispatch(resetCurrentWrite());
-      errorHandle(error);
+      if (requestor.current?.isAborted() === true) {
+      } else {
+        dispatch(resetCurrentWrite());
+        errorHandle(error);
 
-      const assistantResult = history?.filter((write) => write.id === assistantId)[0]?.result;
-      if (!assistantResult || assistantResult?.length === 0) {
-        dispatch(removeWriteHistory(assistantId));
-      }
-      if (input) {
-        setSelectedOptions((prev) => ({ ...prev, input: input }));
+        const assistantResult = history?.filter((write) => write.id === assistantId)[0]?.result;
+        if (!assistantResult || assistantResult?.length === 0) {
+          dispatch(removeWriteHistory(assistantId));
+        }
+        if (input) {
+          setSelectedOptions((prev) => ({ ...prev, input: input }));
+        }
       }
     } finally {
       dispatch(setCreating('none'));
+
+      if (splunk) {
+        try {
+          const input_token = calcToken(input);
+          const output_token = calcToken(resultText);
+          const gpt_ver = parseGptVer(version);
+          splunk({
+            dp: 'ai.write',
+            el: 'create_text',
+            input_token,
+            output_token,
+            gpt_ver
+          });
+        } catch (err) {}
+      }
     }
   };
 
@@ -184,9 +175,7 @@ const AIWriteTab = (props: WriteTabProps) => {
           submitSubject={submitSubject}
         />
       )}
-      {/* {isBannerActive && userLevel === AI_EVENT_BANNER_TARGET_LEVEL && ( */}
       <AiEventBanner tab="ai.write" />
-      {/* )} */}
     </TabWrapper>
   );
 };
