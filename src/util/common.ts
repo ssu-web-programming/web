@@ -10,7 +10,7 @@ const htmlBody = `
 table{
   border-collapse: collapse ;
   border-radius: 6px;
-  width: 500px;
+  width: 100%;
 }
 
 th ,
@@ -45,18 +45,13 @@ th
 </body>
 </html>`;
 
-const previewRenderer = new marked.Renderer();
-previewRenderer.link = (href, title, text) => `<a href="javascript:void(0)">${text}</a>`;
+const renderer = new marked.Renderer();
+renderer.link = (href, title, text) => `<a href="javascript:void(0)">${text}</a>`;
 
-const insertRenderer = new marked.Renderer();
-insertRenderer.link = (href, title, text) => `<a href="javascript:void(0)">${text}</a>`;
-insertRenderer.code = (code, language) =>
-  `<div>${code.replaceAll(`\n`, `<br>`).replaceAll(` `, `&nbsp;`)}</div>`;
-
-export const markdownToHtml = async (markdown: string, mode: 'preview' | 'insertDoc') => {
+export const markdownToHtml = async (markdown: string) => {
   try {
     const converted = await marked(markdown, {
-      renderer: mode === 'preview' ? previewRenderer : insertRenderer
+      renderer
     });
     const $ = load(htmlBody);
     const body = $('body');
@@ -69,7 +64,7 @@ export const markdownToHtml = async (markdown: string, mode: 'preview' | 'insert
 
 export const insertDoc = async (markdown: string) => {
   try {
-    const html = await markdownToHtml(markdown, 'insertDoc');
+    const html = await markdownToHtml(markdown);
     await Bridge.callBridgeApi('insertHtml', html);
   } catch (error) {}
 };
@@ -89,7 +84,7 @@ export const openNewWindow = (url: string) => {
 };
 
 export const makeClipboardData = async (markdown: string) => {
-  const html = await markdownToHtml(markdown, 'insertDoc');
+  const html = await markdownToHtml(markdown);
   let text = undefined;
   if (html) {
     text = convert(html);

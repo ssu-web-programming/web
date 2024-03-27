@@ -24,7 +24,7 @@ const PreMarkdown = ({ text }: { text: string }) => {
     <Pre
       ref={async (el) => {
         if (el) {
-          const html = await markdownToHtml(text, 'preview');
+          const html = await markdownToHtml(text);
           if (html) {
             el.innerHTML = html;
           }
