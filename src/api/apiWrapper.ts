@@ -1,4 +1,5 @@
 import { ERR_INVALID_SESSION, ERR_NOT_ONLINE } from '../error/error';
+import { lang } from '../locale';
 import Bridge from '../util/bridge';
 import usePostSplunkLog from './usePostSplunkLog';
 
@@ -34,6 +35,7 @@ export function apiWrapper() {
         headers: {
           'User-Agent': navigator.userAgent,
           'content-type': 'application/json',
+          'X-PO-AI-API-LANGUAGE': lang,
           ...session,
           ...init.headers
         },
