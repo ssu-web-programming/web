@@ -27,6 +27,8 @@ const BannerWrapper = styled.div`
 export const AI_EVENT_BANNER_TARGET_LEVEL = '1'; // level 1 is free plan user
 
 const AiEventBanner = ({ tab }: { tab: 'ai.write' | 'ai.text_to_image' | 'ai.ask_doc' }) => {
+  return null;
+
   async function getLogger(logger = usePostSplunkLog) {
     try {
       if (!navigator.onLine) {
