@@ -110,6 +110,11 @@ html,
     letter-spacing: normal;
     border: none;
   }
+
+  hr {
+    width: inherit;
+    border: revert;
+  }
  
 `;
 
