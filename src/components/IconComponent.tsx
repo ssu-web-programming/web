@@ -12,6 +12,8 @@ const IconSizeStyle = css<{ size: IconSize }>`
 
 const WrappedSvg = styled.div`
   ${IconSizeStyle}
+
+  pointer-events: none;
 `;
 
 const IconComponent = (props: IconComponentProps) => {

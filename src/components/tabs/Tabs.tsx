@@ -49,6 +49,10 @@ const TabItem = styled.div<{ selected: boolean }>`
         color: var(--ai-purple-70);
       }
     `}
+
+  svg {
+    pointer-events: none;
+  }
 `;
 
 interface TabProps {
