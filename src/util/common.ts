@@ -3,6 +3,17 @@ import { marked } from 'marked';
 import { convert } from 'html-to-text';
 import Bridge from './bridge';
 
+const renderer = new marked.Renderer();
+renderer.link = (href, title, text) => {
+  return `<a href="javascript:void(0)">${text}</a>`;
+};
+
+marked.use({
+  renderer: renderer,
+  mangle: false,
+  headerIds: false
+});
+
 const htmlBody = `
 <html>
 <head>
@@ -45,14 +56,9 @@ th
 </body>
 </html>`;
 
-const renderer = new marked.Renderer();
-renderer.link = (href, title, text) => `<a href="javascript:void(0)">${text}</a>`;
-
 export const markdownToHtml = async (markdown: string) => {
   try {
-    const converted = await marked(markdown, {
-      renderer
-    });
+    const converted = await marked(markdown);
     const $ = load(htmlBody);
     const body = $('body');
 

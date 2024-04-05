@@ -7176,10 +7176,10 @@ makeerror@1.0.12:
   dependencies:
     tmpl "1.0.5"
 
-marked@^5.0.1:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/marked/-/marked-5.0.1.tgz#e1f7db63ce290daa5702f8d12f9853eceb7bc6e1"
-  integrity sha512-Nn9peC4lvIZdcfp8Uze6xk4ZYowkcj/K6+e/6rLHadhtjqeip/bYRxMgt3124IGGJ3RPs2uX5YVmAGbUutY18g==
+marked@^5.1.2:
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/marked/-/marked-5.1.2.tgz#62b5ccfc75adf72ca3b64b2879b551d89e77677f"
+  integrity sha512-ahRPGXJpjMjwSOlBoTMZAK7ATXkli5qCPxZ21TG44rx1KEo44bii4ekgTDQPNRQ4Kh7JMb9Ub1PVk1NxRSsorg==
 
 mdn-data@2.0.14:
   version "2.0.14"
