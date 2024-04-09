@@ -9,6 +9,8 @@ const Contents = styled.div`
   ${justiCenter}
   ${alignItemCenter}
   gap: 6px;
+
+  width: 100%;
 `;
 
 type IconPos = 'left' | 'right';
