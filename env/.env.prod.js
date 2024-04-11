@@ -8,6 +8,84 @@ const REACT_APP_GA4_TRACKING_ID = 'G-0C5M4VGQVE';
 const REACT_APP_AI_EVENT_URL_KO = 'https://polarisoffice.com/ko/promotion/firstmonth_202311_app';
 const REACT_APP_AI_EVENT_URL_EN = 'https://polarisoffice.com/en/promotion/firstmonth_202311_app';
 
+const REACT_APP_ALLI_APPS = JSON.stringify({
+  AlliIconCandidate: {
+    ko: 'TExNQXBwOjY1YWE1NGFlOTU1MGU3YmU1ZmY4NTM1ZA==',
+    en: 'TExNQXBwOjY1Y2VmMWIzNDcwOWJhMDY5NzlhMGUyZg==',
+    ja: 'TExNQXBwOjY2MGZjZDE2NTA4YTI3ZTI1Y2UwYTQwMQ=='
+  },
+  AlliIconCopyrighting: {
+    ko: 'TExNQXBwOjY1YWE1NWJlZWZlZGI3ODEyNjI1YWZjMA==',
+    en: 'TExNQXBwOjY1Y2VmNGYzZjlhMmVlMTE4ZDg3OTZmMA==',
+    ja: 'TExNQXBwOjY2MGZjZDE2NTA4YTI3ZTI1Y2UwYTJiNQ=='
+  },
+  AlliIconCrew: {
+    ko: 'TExNQXBwOjY1YWE1NGNjN2M0ZWFhNDJlZmNjMTRlZg==',
+    en: 'TExNQXBwOjY1Y2VmMmM4MTIxMGQ2MzRlODNhMzBjZg==',
+    ja: 'TExNQXBwOjY2MGZjZDE2NTA4YTI3ZTI1Y2UwYTM5ZA=='
+  },
+  AlliIconEvent: {
+    ko: 'TExNQXBwOjY1YWE1NjYzZGY3ZDA0OTlkNGM2N2EzZg==',
+    en: 'TExNQXBwOjY1Y2VmOGIxNDcwOWJhMDY5NzlmNGE3ZA==',
+    ja: 'TExNQXBwOjY2MGZjZDE2NTA4YTI3ZTI1Y2UwYTQzMg=='
+  },
+  AlliIconLaw: {
+    ko: 'TExNQXBwOjY1NjU0MzdmM2YxNGI4ZjE4MjhhNTJmNA==',
+    en: 'TExNQXBwOjY1Y2VlZjA0YWRlYWY3NWMxZmIyYWI2ZQ==',
+    ja: 'TExNQXBwOjY2MGZjZDE1NTA4YTI3ZTI1Y2UwYTE3MA=='
+  },
+  AlliIconManual: {
+    ko: 'TExNQXBwOjY1ODNkN2ZlYmI0NmNkYzM1ZTYwMWQxMg==',
+    en: 'TExNQXBwOjY1Y2VmZDA2ZjlhMmVlMTE4ZDhiMTljMw==',
+    ja: 'TExNQXBwOjY2MGZjZDE2NTA4YTI3ZTI1Y2UwYTJlNg=='
+  },
+  AlliIconNoti: {
+    ko: 'TExNQXBwOjY1YWE1NGMxYWM0ZjdlYTdjMWE0NTUxZA==',
+    en: 'TExNQXBwOjY1Y2VmNTljMDdlZGU1MWM2YmYxNzEyMA==',
+    ja: 'TExNQXBwOjY2MGZjZDE2NTA4YTI3ZTI1Y2UwYTI2ZQ=='
+  },
+  AlliIconPrivacy: {
+    ko: 'TExNQXBwOjY1YWE1NDA1ZWM2N2Q2NGEzOTlmNTJlOA==',
+    en: 'TExNQXBwOjY1Y2VlZmU2ZmI5MDBjZDczYWZlYWIzZQ==',
+    ja: 'TExNQXBwOjY2MGZjZDE1NTA4YTI3ZTI1Y2UwYTE0Mw=='
+  },
+  AlliIconPromotion: {
+    ko: 'TExNQXBwOjY1YWE1NGVhNTE0YzlhNTAzMGZjODg5NA==',
+    en: 'TExNQXBwOjY1Y2VmNzAyZTljYzBlZTJiNTBlMTBkNw==',
+    ja: 'TExNQXBwOjY2MGZjZDE2NTA4YTI3ZTI1Y2UwYTQ1Zg=='
+  },
+  AlliIconPush: {
+    ko: 'TExNQXBwOjY1YWE1NTlhYzM4NTBlZWZkZjM1MmQ0Ng==',
+    en: 'TExNQXBwOjY1Y2VmOTQxZDg2OTk2MThjY2RjYTAzOA==',
+    ja: 'TExNQXBwOjY2MGZjZDE2NTA4YTI3ZTI1Y2UwYTMxZg=='
+  },
+  AlliIconSentence: {
+    ko: 'TExNQXBwOjY1ODNmMmYyZWU1ZGIzMjdhOWU1NjYzYw==',
+    en: 'TExNQXBwOjY1Y2VmMGQ0OWZlNzQ0NjdjZDJjNmU1Mg==',
+    ja: 'TExNQXBwOjY2MGZjZDE1NTA4YTI3ZTI1Y2UwYTFkYw=='
+  },
+  AlliIconTranslator: {
+    ko: 'TExNQXBwOjY1YWE1NTgzZDI5YWRhYWEzOTc5N2IxMg==',
+    en: 'TExNQXBwOjY1Y2VmODUxZDgwZGNhZTMwMDZhYjM3ZA==',
+    ja: 'TExNQXBwOjY2MGZjZDE1NTA4YTI3ZTI1Y2UwYTIxNQ=='
+  },
+  AlliIconWelcome: {
+    ko: 'TExNQXBwOjY1YWE1NThlZDI5YWRhYWEzOTc5ODVjNQ==',
+    en: 'TExNQXBwOjY1Y2VmMzNmZDg2OTk2MThjY2Q5ZmE0NQ==',
+    ja: 'TExNQXBwOjY2MGZjZDE2NTA4YTI3ZTI1Y2UwYTM1ZQ=='
+  },
+  AlliIconEmail: {
+    ko: 'TExNQXBwOjY1YWE1NTc0ZDI3ZDNlMjcwNjI2ZDQ1MQ==',
+    en: 'TExNQXBwOjY1Y2VlZWEzNDEzYTE5ZjcwOTdlMWFiYQ==',
+    ja: 'TExNQXBwOjY2MGZjZDE0NTA4YTI3ZTI1Y2UwOWYxYg=='
+  },
+  AlliIconGoodWord: {
+    ko: 'TExNQXBwOjY1ZTkyODliOWJkMDVkZWQyZTI5MWRmMg==',
+    en: 'TExNQXBwOjY1ZTkyOTllZTk5YzMyNjI4MDljOTY1YQ==',
+    ja: 'TExNQXBwOjY2MGZjZDE1NTA4YTI3ZTI1Y2UwYTFhNQ=='
+  }
+});
+
 module.exports = new Promise((resolve, reject) => {
   resolve({
     REACT_APP_USE_LOGGER_SPLUNK,
@@ -18,7 +96,8 @@ module.exports = new Promise((resolve, reject) => {
     REACT_APP_AI_EVENT_URL_KO,
     REACT_APP_AI_EVENT_URL_EN,
     REACT_APP_GTM_ID,
-    REACT_APP_GA4_TRACKING_ID
+    REACT_APP_GA4_TRACKING_ID,
+    REACT_APP_ALLI_APPS
   });
   // Promise.all([common_promise]).then((resultArr) => {
   //   const common = resultArr[0];
