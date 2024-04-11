@@ -8,6 +8,84 @@ const REACT_APP_AI_EVENT_URL_KO =
 const REACT_APP_AI_EVENT_URL_EN =
   'https://vf-ca-cloud.polarisoffice.com/en/promotion/firstmonth_202311_app';
 
+const REACT_APP_ALLI_APPS = JSON.stringify({
+  AlliIconCandidate: {
+    ko: 'TExNQXBwOjY2MTUwMmRjNzQ5YWM4MzBmNGRmNTBjYQ==',
+    en: 'TExNQXBwOjY2MTUwNDUzNzQ5YWM4MzBmNGRmNTFjNw==',
+    ja: 'TExNQXBwOjY2MGZjZGJmNTA4YTI3ZTI1Y2UwYWI2OQ=='
+  },
+  AlliIconCopyrighting: {
+    ko: 'TExNQXBwOjY2MTUwMmRjNzQ5YWM4MzBmNGRmNGY0NQ==',
+    en: 'TExNQXBwOjY2MTUwNDU0NzQ5YWM4MzBmNGRmNTVjMA==',
+    ja: 'TExNQXBwOjY2MGZjZGJmNTA4YTI3ZTI1Y2UwYWExZA=='
+  },
+  AlliIconCrew: {
+    ko: 'TExNQXBwOjY2MTUwMmRjNzQ5YWM4MzBmNGRmNTA1MQ==',
+    en: 'TExNQXBwOjY2MTUwNDUzNzQ5YWM4MzBmNGRmNTM1Ng==',
+    ja: 'TExNQXBwOjY2MGZjZGJmNTA4YTI3ZTI1Y2UwYWIwNQ=='
+  },
+  AlliIconEvent: {
+    ko: 'TExNQXBwOjY2MTUwMmRkNzQ5YWM4MzBmNGRmNTEwNA==',
+    en: 'TExNQXBwOjY2MTUwNDUzNzQ5YWM4MzBmNGRmNTM4Nw==',
+    ja: 'TExNQXBwOjY2MGZjZGJmNTA4YTI3ZTI1Y2UwYWI5YQ=='
+  },
+  AlliIconLaw: {
+    ko: 'TExNQXBwOjY2MTUwMmRjNzQ5YWM4MzBmNGRmNGRjYQ==',
+    en: 'TExNQXBwOjY2MTUwNDUzNzQ5YWM4MzBmNGRmNTNlZA==',
+    ja: 'TExNQXBwOjY2MGZjZGJlNTA4YTI3ZTI1Y2UwYThkOA=='
+  },
+  AlliIconManual: {
+    ko: 'TExNQXBwOjY2MTUwMmRjNzQ5YWM4MzBmNGRmNGY3Zg==',
+    en: 'TExNQXBwOjY2MTUwNDU0NzQ5YWM4MzBmNGRmNTU3OQ==',
+    ja: 'TExNQXBwOjY2MGZjZGJmNTA4YTI3ZTI1Y2UwYWE0ZQ=='
+  },
+  AlliIconNoti: {
+    ko: 'TExNQXBwOjY2MTUwMmRjNzQ5YWM4MzBmNGRmNGVmNQ==',
+    en: 'TExNQXBwOjY2MTUwNDUzNzQ5YWM4MzBmNGRmNTI0MA==',
+    ja: 'TExNQXBwOjY2MGZjZGJmNTA4YTI3ZTI1Y2UwYTlkNg=='
+  },
+  AlliIconPrivacy: {
+    ko: 'TExNQXBwOjY2MTUwMmRjNzQ5YWM4MzBmNGRmNGQ5NA==',
+    en: 'TExNQXBwOjY2MTUwNDU0NzQ5YWM4MzBmNGRmNTRjNQ==',
+    ja: 'TExNQXBwOjY2MGZjZGJlNTA4YTI3ZTI1Y2UwYThhYg=='
+  },
+  AlliIconPromotion: {
+    ko: 'TExNQXBwOjY2MTUwMmRkNzQ5YWM4MzBmNGRmNTEzYQ==',
+    en: 'TExNQXBwOjY2MTUwNDUzNzQ5YWM4MzBmNGRmNTI2ZA==',
+    ja: 'TExNQXBwOjY2MGZjZGJmNTA4YTI3ZTI1Y2UwYWJjNw=='
+  },
+  AlliIconPush: {
+    ko: 'TExNQXBwOjY2MTUwMmRjNzQ5YWM4MzBmNGRmNGZjMQ==',
+    en: 'TExNQXBwOjY2MTUwNDUzNzQ5YWM4MzBmNGRmNTJkOA==',
+    ja: 'TExNQXBwOjY2MGZjZGJmNTA4YTI3ZTI1Y2UwYWE4Nw=='
+  },
+  AlliIconSentence: {
+    ko: 'TExNQXBwOjY2MTUwMmRjNzQ5YWM4MzBmNGRmNGU1MQ==',
+    en: 'TExNQXBwOjY2MTUwNDU0NzQ5YWM4MzBmNGRmNTQ5Yw==',
+    ja: 'TExNQXBwOjY2MGZjZGJmNTA4YTI3ZTI1Y2UwYTk0NA=='
+  },
+  AlliIconTranslator: {
+    ko: 'TExNQXBwOjY2MTUwMmRjNzQ5YWM4MzBmNGRmNGU5Mw==',
+    en: 'TExNQXBwOjY2MTUwNDU0NzQ5YWM4MzBmNGRmNTUxYg==',
+    ja: 'TExNQXBwOjY2MGZjZGJmNTA4YTI3ZTI1Y2UwYTk3ZA=='
+  },
+  AlliIconWelcome: {
+    ko: 'TExNQXBwOjY2MTUwMmRjNzQ5YWM4MzBmNGRmNTAwOQ==',
+    en: 'TExNQXBwOjY2MTUwNDUzNzQ5YWM4MzBmNGRmNTMxNw==',
+    ja: 'TExNQXBwOjY2MGZjZGJmNTA4YTI3ZTI1Y2UwYWFjNg=='
+  },
+  AlliIconEmail: {
+    ko: 'TExNQXBwOjY2MTUwMmQ5NzQ5YWM4MzBmNGRmNGFiOA==',
+    en: 'TExNQXBwOjY2MTUwNDUzNzQ5YWM4MzBmNGRmNTNjMA==',
+    ja: 'TExNQXBwOjY2MGZjZGJkNTA4YTI3ZTI1Y2UwYTY4Mw=='
+  },
+  AlliIconGoodWord: {
+    ko: 'TExNQXBwOjY2MTUwMmRjNzQ5YWM4MzBmNGRmNGUxMQ==',
+    en: 'TExNQXBwOjY2MTUwNDU0NzQ5YWM4MzBmNGRmNTU0OA==',
+    ja: 'TExNQXBwOjY2MGZjZGJlNTA4YTI3ZTI1Y2UwYTkwZA=='
+  }
+});
+
 module.exports = new Promise((resolve, reject) => {
   resolve({
     REACT_APP_USE_LOGGER_SPLUNK,
@@ -16,16 +94,7 @@ module.exports = new Promise((resolve, reject) => {
     REACT_APP_AI_EVENT_URL_KO,
     REACT_APP_AI_EVENT_URL_EN,
     REACT_APP_GTM_ID,
-    REACT_APP_GA4_TRACKING_ID
+    REACT_APP_GA4_TRACKING_ID,
+    REACT_APP_ALLI_APPS
   });
-  // Promise.all([common_promise]).then((resultArr) => {
-  //   const common = resultArr[0];
-  //   resolve({
-  //     ...common,
-  //     BACK_END_SERVER_URL,
-  //     REACT_APP_USING_COLLABORATION,
-  //     REACT_APP_GA_UA_TRACKING_ID,
-  //     REACT_APP_GTM_ID,
-  //   });
-  // });
 });

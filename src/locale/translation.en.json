@@ -218,7 +218,7 @@
       "Credit": "{{credit}} Credits"
     },
     "Step4": {
-      "MainText": "Analyzing the document\n for a better response.",
+      "MainText": "Analyzing the document for a better response.",
       "Noti": "Document analysis has been completed. \n {{deductionCredit}} credits have been used. (remaining credits: {{leftCredit}})",
       "Loading_AnalyzeDoc": "Document analysis in progress...",
       "Loading_Keyword": "Searching for important questions within the document...",

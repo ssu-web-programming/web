@@ -23,7 +23,8 @@ const Wrapper = styled.div`
 
 const Contents = styled.div`
   width: 196px;
-  text-align: center;
+  display: flex;
+  justify-content: center;
 `;
 
 const Loading = ({ children }: { children?: React.ReactNode }) => {

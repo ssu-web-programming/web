@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { recType, selectRecFuncSlice } from '../../../store/slices/recFuncSlice';
 import { useAppSelector } from '../../../store/store';
 import { RowWrapBox } from './ChatRecommend';
-import { css } from 'styled-components';
+import styled, { css } from 'styled-components';
 import icon_resume from '../../../img/aiChat/ico_ai_resume.svg';
 import icon_spelingcheck from '../../../img/aiChat/ico_ai_spellingcheck.svg';
 import icon_summary from '../../../img/aiChat/ico_ai_summary.svg';
@@ -16,7 +16,6 @@ import icon_style_purple from '../../../img/aiChat/ico_changing_style_purple.svg
 import icon_new_chat from '../../../img/ico_newchat.svg';
 import icon_new_chat_purple from '../../../img/ico_newchat_purple.svg';
 import IconTextButton from '../../buttons/IconTextButton';
-import { alignItemCenter, flex, flexGrow, flexShrink } from '../../../style/cssCommon';
 import { RowBox } from '../../../views/AIChatTab';
 import Button from '../../buttons/Button';
 import icon_prev from '../../../img/ico_arrow_prev.svg';
@@ -33,53 +32,72 @@ export const REC_ID_LIST = {
 };
 
 const recList = [
-  {
-    id: REC_ID_LIST.RESUME_WRITING,
-    icon: icon_resume,
-    selectedIcon: icon_resume_purple,
-    subList: null
-  },
-  {
-    id: REC_ID_LIST.SUMMARY,
-    icon: icon_summary,
-    selectedIcon: icon_summary_purple,
-    subList: null
-  },
-  {
-    id: REC_ID_LIST.TRANSLATE,
-    icon: icon_translation,
-    selectedIcon: icon_translation_purple,
-    subList: [
-      'Korean',
-      'English',
-      'Japanese',
-      'Chinese',
-      'Spanish',
-      'French',
-      'Indonesian',
-      'Brazil',
-      'German'
-    ]
-  },
-  {
-    id: REC_ID_LIST.CHANGE_TEXT_STYLE,
-    icon: icon_style,
-    selectedIcon: icon_style_purple,
-    subList: ['BusinessStyle', 'Friendly', 'Simply', 'Poetically']
-  },
-  {
-    id: REC_ID_LIST.MODIFY_TEXT,
-    icon: icon_spelingcheck,
-    selectedIcon: icon_spelingcheck_purple,
-    subList: null
-  },
-  {
-    id: REC_ID_LIST.START_NEW_CHATING,
-    icon: icon_new_chat,
-    selectedIcon: icon_new_chat_purple,
-    subList: null
-  }
+  [
+    {
+      id: REC_ID_LIST.RESUME_WRITING,
+      icon: icon_resume,
+      selectedIcon: icon_resume_purple,
+      subList: null
+    },
+    {
+      id: REC_ID_LIST.SUMMARY,
+      icon: icon_summary,
+      selectedIcon: icon_summary_purple,
+      subList: null
+    },
+    {
+      id: REC_ID_LIST.TRANSLATE,
+      icon: icon_translation,
+      selectedIcon: icon_translation_purple,
+      subList: [
+        'Korean',
+        'English',
+        'Japanese',
+        'Chinese',
+        'Spanish',
+        'French',
+        'Indonesian',
+        'Brazil',
+        'German'
+      ]
+    }
+  ],
+  [
+    {
+      id: REC_ID_LIST.CHANGE_TEXT_STYLE,
+      icon: icon_style,
+      selectedIcon: icon_style_purple,
+      subList: ['BusinessStyle', 'Friendly', 'Simply', 'Poetically']
+    },
+    {
+      id: REC_ID_LIST.MODIFY_TEXT,
+      icon: icon_spelingcheck,
+      selectedIcon: icon_spelingcheck_purple,
+      subList: null
+    }
+  ],
+  [
+    {
+      id: REC_ID_LIST.START_NEW_CHATING,
+      icon: icon_new_chat,
+      selectedIcon: icon_new_chat_purple,
+      subList: null
+    }
+  ]
 ];
+
+const ButtonGroup = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+`;
+
+const ButtonText = styled.div`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
 
 const FunctionRec = ({
   onClick,
@@ -101,26 +119,30 @@ const FunctionRec = ({
         cssExt={css`
           gap: 8px;
         `}>
-        {recList.map((rec) => (
-          <IconTextButton
-            width="full"
-            key={rec.id}
-            iconSrc={rec.id === selectedRecFunction?.id ? rec.selectedIcon : rec.icon}
-            iconPos="left"
-            selected={rec.id === selectedRecFunction?.id}
-            onClick={() => {
-              onClick(rec);
-            }}
-            cssExt={css`
-              ${flex}
-              ${alignItemCenter}
-              ${rec.id !== REC_ID_LIST.START_NEW_CHATING && flexShrink}
-              ${rec.id !== REC_ID_LIST.START_NEW_CHATING && flexGrow}
-              flex: ${rec.id !== REC_ID_LIST.START_NEW_CHATING ? '30%' : 'none'};
-            `}>
-            {t(`ChatingTab.FuncRecBtn.${rec.id}`)}
-          </IconTextButton>
-        ))}
+        {recList.map((group, index) => {
+          return (
+            <ButtonGroup key={index}>
+              {group.map((rec) => (
+                <div
+                  key={rec.id}
+                  style={{
+                    width: `${100 / group.length}%`,
+                    overflow: 'hidden'
+                  }}>
+                  <IconTextButton
+                    width="full"
+                    key={rec.id}
+                    iconSrc={rec.id === selectedRecFunction?.id ? rec.selectedIcon : rec.icon}
+                    iconPos="left"
+                    selected={rec.id === selectedRecFunction?.id}
+                    onClick={() => onClick(rec)}>
+                    <ButtonText>{t(`ChatingTab.FuncRecBtn.${rec.id}`)}</ButtonText>
+                  </IconTextButton>
+                </div>
+              ))}
+            </ButtonGroup>
+          );
+        })}
       </RowWrapBox>
     );
   else
@@ -135,10 +157,8 @@ const FunctionRec = ({
               width="full"
               key={sub}
               selected={selectedSubRecFunction?.id === sub}
-              onClick={() => {
-                onSubClick(sub);
-              }}>
-              {t(`ChatingTab.FuncRecBtn.SubFuncRec.${sub}`)}
+              onClick={() => onSubClick(sub)}>
+              <ButtonText>{t(`ChatingTab.FuncRecBtn.SubFuncRec.${sub}`)}</ButtonText>
             </Button>
           ))}
         </Grid>

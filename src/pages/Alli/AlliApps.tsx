@@ -88,117 +88,82 @@ type AlliAppIcon = {
   id: {
     ko: string;
     en: string;
+    ja: string;
   };
   icon: string;
 };
 
 const AlliAppIcons: AlliAppIcon[] = [
   {
-    id: {
-      ko: 'TExNQXBwOjY1YWE1NGFlOTU1MGU3YmU1ZmY4NTM1ZA==',
-      en: 'TExNQXBwOjY1Y2VmMWIzNDcwOWJhMDY5NzlhMGUyZg=='
-    },
+    name: 'AlliIconCandidate',
     icon: AlliIconCandidate
   },
   {
-    id: {
-      ko: 'TExNQXBwOjY1YWE1NWJlZWZlZGI3ODEyNjI1YWZjMA==',
-      en: 'TExNQXBwOjY1Y2VmNGYzZjlhMmVlMTE4ZDg3OTZmMA=='
-    },
+    name: 'AlliIconCopyrighting',
     icon: AlliIconCopyrighting
   },
   {
-    id: {
-      ko: 'TExNQXBwOjY1YWE1NGNjN2M0ZWFhNDJlZmNjMTRlZg==',
-      en: 'TExNQXBwOjY1Y2VmMmM4MTIxMGQ2MzRlODNhMzBjZg=='
-    },
+    name: 'AlliIconCrew',
     icon: AlliIconCrew
   },
   {
-    id: {
-      ko: 'TExNQXBwOjY1YWE1NjYzZGY3ZDA0OTlkNGM2N2EzZg==',
-      en: 'TExNQXBwOjY1Y2VmOGIxNDcwOWJhMDY5NzlmNGE3ZA=='
-    },
+    name: 'AlliIconEvent',
     icon: AlliIconEvent
   },
   {
-    id: {
-      ko: 'TExNQXBwOjY1NjU0MzdmM2YxNGI4ZjE4MjhhNTJmNA==',
-      en: 'TExNQXBwOjY1Y2VlZjA0YWRlYWY3NWMxZmIyYWI2ZQ=='
-    },
+    name: 'AlliIconLaw',
     icon: AlliIconLaw
   },
   {
-    id: {
-      ko: 'TExNQXBwOjY1ODNkN2ZlYmI0NmNkYzM1ZTYwMWQxMg==',
-      en: 'TExNQXBwOjY1Y2VmZDA2ZjlhMmVlMTE4ZDhiMTljMw=='
-    },
+    name: 'AlliIconManual',
     icon: AlliIconManual
   },
   {
-    id: {
-      ko: 'TExNQXBwOjY1YWE1NGMxYWM0ZjdlYTdjMWE0NTUxZA==',
-      en: 'TExNQXBwOjY1Y2VmNTljMDdlZGU1MWM2YmYxNzEyMA=='
-    },
+    name: 'AlliIconNoti',
     icon: AlliIconNoti
   },
   {
-    id: {
-      ko: 'TExNQXBwOjY1YWE1NDA1ZWM2N2Q2NGEzOTlmNTJlOA==',
-      en: 'TExNQXBwOjY1Y2VlZmU2ZmI5MDBjZDczYWZlYWIzZQ=='
-    },
+    name: 'AlliIconPrivacy',
     icon: AlliIconPrivacy
   },
   {
-    id: {
-      ko: 'TExNQXBwOjY1YWE1NGVhNTE0YzlhNTAzMGZjODg5NA==',
-      en: 'TExNQXBwOjY1Y2VmNzAyZTljYzBlZTJiNTBlMTBkNw=='
-    },
+    name: 'AlliIconPromotion',
     icon: AlliIconPromotion
   },
   {
-    id: {
-      ko: 'TExNQXBwOjY1YWE1NTlhYzM4NTBlZWZkZjM1MmQ0Ng==',
-      en: 'TExNQXBwOjY1Y2VmOTQxZDg2OTk2MThjY2RjYTAzOA=='
-    },
+    name: 'AlliIconPush',
     icon: AlliIconPush
   },
   {
-    id: {
-      ko: 'TExNQXBwOjY1ODNmMmYyZWU1ZGIzMjdhOWU1NjYzYw==',
-      en: 'TExNQXBwOjY1Y2VmMGQ0OWZlNzQ0NjdjZDJjNmU1Mg=='
-    },
+    name: 'AlliIconSentence',
     icon: AlliIconSentence
   },
   {
-    id: {
-      ko: 'TExNQXBwOjY1YWE1NTgzZDI5YWRhYWEzOTc5N2IxMg==',
-      en: 'TExNQXBwOjY1Y2VmODUxZDgwZGNhZTMwMDZhYjM3ZA=='
-    },
+    name: 'AlliIconTranslator',
     icon: AlliIconTranslator
   },
   {
-    id: {
-      ko: 'TExNQXBwOjY1YWE1NThlZDI5YWRhYWEzOTc5ODVjNQ==',
-      en: 'TExNQXBwOjY1Y2VmMzNmZDg2OTk2MThjY2Q5ZmE0NQ=='
-    },
+    name: 'AlliIconWelcome',
     icon: AlliIconWelcome
   },
   {
-    id: {
-      ko: 'TExNQXBwOjY1YWE1NTc0ZDI3ZDNlMjcwNjI2ZDQ1MQ==',
-      en: 'TExNQXBwOjY1Y2VlZWEzNDEzYTE5ZjcwOTdlMWFiYQ=='
-    },
+    name: 'AlliIconEmail',
     icon: AlliIconEmail
   },
   {
-    id: {
-      ko: 'TExNQXBwOjY1ZTkyODliOWJkMDVkZWQyZTI5MWRmMg==',
-      en: 'TExNQXBwOjY1ZTkyOTllZTk5YzMyNjI4MDljOTY1YQ=='
-    },
+    name: 'AlliIconGoodWord',
     icon: AlliIconGoodWord
   }
-];
+].map((item) => {
+  const AlliAppID = JSON.parse(process.env.REACT_APP_ALLI_APPS ?? '{}');
+  const appId = AlliAppID[item.name];
+  return {
+    ...item,
+    id: {
+      ...appId
+    }
+  };
+});
 
 interface AppListProps {
   onSelect: (app: AppInfo) => void;
@@ -216,8 +181,7 @@ export default function AppList(props: AppListProps) {
         });
         return (await res.json()).data.appList.map((appInfo: AppInfo) => ({
           ...appInfo,
-          icon: AlliAppIcons.find((icon) => icon.id[lang === 'ko' ? 'ko' : 'en'] === appInfo.id)
-            ?.icon
+          icon: AlliAppIcons.find((icon) => icon.id[lang] === appInfo.id)?.icon
         }));
       } catch (err) {
         throw err;
