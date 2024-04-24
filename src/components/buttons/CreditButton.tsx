@@ -7,8 +7,6 @@ import { flex } from '../../style/cssCommon';
 
 const IconWrapper = styled.div`
   ${flex}
-  position: absolute;
-  right: 6px;
   flex: none;
 `;
 
@@ -21,6 +19,7 @@ export default function CreditButton(props: PropsWithChildren<ButtonProps>) {
       cssExt={css`
         ${cssExt}
         position: relative;
+        gap: 8px;
       `}>
       {props.children}
       <IconWrapper>
