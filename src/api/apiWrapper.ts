@@ -2,7 +2,11 @@ import { ERR_INVALID_SESSION, ERR_NOT_ONLINE, INVALID_PROMPT, NoCreditError } fr
 import { lang } from '../locale';
 import Bridge from '../util/bridge';
 import { calLeftCredit } from '../util/common';
-import { AI_WRITE_RESPONSE_STREAM_API, TEXT_TO_IMAGE_API } from './constant';
+import {
+  AI_WRITE_RESPONSE_STREAM_API,
+  ALLI_RESPONSE_STREAM_API,
+  TEXT_TO_IMAGE_API
+} from './constant';
 import usePostSplunkLog from './usePostSplunkLog';
 
 interface ApiInit extends RequestInit {
@@ -45,7 +49,9 @@ export function apiWrapper() {
       });
 
       if (
-        (api === AI_WRITE_RESPONSE_STREAM_API || api === TEXT_TO_IMAGE_API) &&
+        (api === AI_WRITE_RESPONSE_STREAM_API ||
+          api === TEXT_TO_IMAGE_API ||
+          api === ALLI_RESPONSE_STREAM_API) &&
         res.status !== 200
       ) {
         if (res.ok === false && res.status === 429) {
