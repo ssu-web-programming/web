@@ -3,10 +3,10 @@ import { ReactComponent as Icon } from '../../../img/askDoc/ico_credit_64.svg';
 import ErrorModal from './ErrorModal';
 
 type Props = {
-  buttonOnClick: () => void;
+  buttonOnclick: () => void;
 };
 
-const CreditCheckModal = ({ buttonOnClick }: Props) => {
+const CreditCheckModal = ({ buttonOnclick }: Props) => {
   const { t } = useTranslation();
   const text = t('AskDocStep.Modal.NeedCredit');
   return (
@@ -14,7 +14,7 @@ const CreditCheckModal = ({ buttonOnClick }: Props) => {
       title={t('AskDocStep.Modal.CheckCredit')}
       isTwoButton={false}
       buttonName={t('AskDocStep.Modal.Close')}
-      buttonOnClick={buttonOnClick}>
+      buttonOnClick={buttonOnclick}>
       <>
         <p dangerouslySetInnerHTML={{ __html: text }}></p>
         <div className="imgWrapp">

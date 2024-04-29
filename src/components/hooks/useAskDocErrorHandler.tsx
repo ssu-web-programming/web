@@ -1,10 +1,8 @@
 import useModal from './useModal';
-import { openNewWindow } from '../../util/common';
 import Bridge from '../../util/bridge';
-import { useAppDispatch, useAppSelector } from '../../store/store';
-import { filesSelector, setFileStatus, setFiles } from '../../store/slices/askDocAnalyzeFiesSlice';
+import { useAppDispatch } from '../../store/store';
+import { setFiles } from '../../store/slices/askDocAnalyzeFiesSlice';
 import { setCreating } from '../../store/slices/tabSlice';
-import useLangParameterNavigate from './useLangParameterNavigate';
 type Props = {
   code: 'success' | 'fail';
   data: any;
@@ -12,9 +10,7 @@ type Props = {
 
 const useAskDocErrorHandler = () => {
   const { openModal, closeModal } = useModal();
-  const { navigate } = useLangParameterNavigate();
   const dispatch = useAppDispatch();
-  const file = useAppSelector(filesSelector);
 
   const closeEvent = (
     type:
@@ -58,19 +54,6 @@ const useAskDocErrorHandler = () => {
       if (data.data.resultCode === 15303) type = 'overpage';
       switch (type) {
         case 'lackOfCredit':
-          return openModal({
-            type,
-            props: {
-              leftButtonOnClick: () => {
-                openNewWindow('upgradePlan');
-                closeModal(type);
-                navigate('/AskDocStep/StartAnalysisDoc');
-                dispatch(setCreating('none'));
-                dispatch(setFileStatus({ ...file, fileStatus: 'TEXT_DONE' }));
-              },
-              rightButtonOnClick: () => closeEvent(type)
-            }
-          });
         case 'remine':
         case 'default':
         case 'overpage': {

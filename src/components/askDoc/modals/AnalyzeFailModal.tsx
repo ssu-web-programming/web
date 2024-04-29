@@ -3,10 +3,10 @@ import ErrorModal from './ErrorModal';
 import { useTranslation } from 'react-i18next';
 
 type Props = {
-  buttonOnClick: () => void;
+  buttonOnclick: () => void;
 };
 
-const AnalyzeFailModal = ({ buttonOnClick }: Props) => {
+const AnalyzeFailModal = ({ buttonOnclick }: Props) => {
   const { t } = useTranslation();
   const textData = t('AskDocStep.Modal.FailedAnalyze');
   return (
@@ -14,7 +14,7 @@ const AnalyzeFailModal = ({ buttonOnClick }: Props) => {
       title={t('AskDocStep.Modal.FailAnalyze')}
       isTwoButton={false}
       buttonName={t('AskDocStep.Modal.AgainAnalyze')}
-      buttonOnClick={buttonOnClick}>
+      buttonOnClick={buttonOnclick}>
       <>
         <p dangerouslySetInnerHTML={{ __html: textData }}></p>
         <div className="imgWrapp">
