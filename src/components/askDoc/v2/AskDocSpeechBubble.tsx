@@ -189,7 +189,7 @@ const AskDocSpeechBubble = (props: PropsWithChildren<AskDocSpeechBubbleProps>) =
                       variant="purpleGradient"
                       onClick={onMore}
                       disable={loadingId !== null}>
-                      {t('AskDoc.GetMoreInformation')}
+                      <span>{t('AskDoc.GetMoreInformation')}</span>
                     </CreditButton>
                   </Grid>
                 </>
