@@ -18,7 +18,6 @@ import { apiWrapper } from '../api/apiWrapper';
 import { useTranslation } from 'react-i18next';
 import { calLeftCredit } from '../util/common';
 import useErrorHandle from '../components/hooks/useErrorHandle';
-import { INVALID_PROMPT } from '../error/error';
 import { selectTabSlice, setCreating } from '../store/slices/tabSlice';
 import ImageCreateInput, {
   ratioItemList,
@@ -92,12 +91,6 @@ const ImageCreate = ({ contents }: { contents: string }) => {
         });
 
         const body = await res.json();
-
-        if (res.status !== 200) {
-          if (body?.error?.code === 'invalid_prompt') throw new Error(INVALID_PROMPT);
-          else throw res;
-        }
-
         const input_token = calcToken(option.input);
         logger({
           dp: 'ai.text_to_image',
