@@ -28,7 +28,7 @@ const TextToImage = () => {
 
   return (
     <Wrapper>
-      <Header title={t('AITools')} subTitle="Text to Image"></Header>
+      <Header title={t('AITools')} subTitle={t('TextToImage')}></Header>
       <Body>
         <ImageCreate contents={location.state?.body || ''} />
       </Body>

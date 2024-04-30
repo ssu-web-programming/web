@@ -12,6 +12,7 @@
   "Regenerate": "Regenerate",
   "Back": "Back",
   "StopGenerate": "Stop Generating",
+  "TextToImage": "Text to Image",
   "FormList": {
     "paragraph": "Sentence",
     "list": "Table of Contents",

@@ -12,6 +12,7 @@
   "Regenerate": "再生成",
   "Back": "戻る",
   "StopGenerate": "生成を停止",
+  "TextToImage": "テキストを画像に",
   "FormList": {
     "paragraph": "文",
     "list": "目次",
