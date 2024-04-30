@@ -12,6 +12,7 @@
   "Regenerate": "재생성",
   "Back": "뒤로가기",
   "StopGenerate": "생성중지",
+  "TextToImage": "Text to Image",
   "FormList": {
     "paragraph": "문장",
     "list": "목차",
