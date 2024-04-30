@@ -36,6 +36,7 @@ const Contents = styled.div`
 `;
 
 const TextWrapper = styled.div`
+  width: 80%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -77,18 +78,13 @@ export default function Offline() {
             version="1.1"
             xmlns="http://www.w3.org/2000/svg">
             <title>ico/service_error</title>
-            <g
-              id="ico/service_error"
-              stroke="none"
-              stroke-width="1"
-              fill="none"
-              fill-rule="evenodd">
+            <g id="ico/service_error" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
               <rect id="Rectangle" x="0" y="0" width="56" height="56"></rect>
               <g
                 id="Group-2"
                 transform="translate(5.000000, 7.000000)"
                 fill="#E0D1FF"
-                fill-rule="nonzero">
+                fillRule="nonzero">
                 <g id="Group" transform="translate(21.000000, 11.000000)">
                   <polygon id="Line" points="3 0 3 13 0 13 0 0"></polygon>
                   <polygon id="Line-Copy" points="3 16 3 20 0 20 0 16"></polygon>
