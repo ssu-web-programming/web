@@ -10,7 +10,7 @@ const useLangParameterNavigate = () => {
   const isTesla = match ? JSON.parse(match[1]) : false;
 
   const navigate = (path: string) => {
-    return navigator(`${path}${location.search}`);
+    return navigator(`${path}${location.search}`, { replace: true });
   };
 
   return { navigate, isTesla };
