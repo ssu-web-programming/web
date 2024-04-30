@@ -238,7 +238,8 @@ export const useInitBridgeListener = () => {
         }
       }
       navigate(`${path}${location.search}`, {
-        state: { body }
+        state: { body },
+        replace: true
       });
     } else {
       if (window.location.pathname !== path) {
