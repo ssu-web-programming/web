@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { recSubType, recType } from '../../../store/slices/recFuncSlice';
 import { LANG_KO_KR, lang } from '../../../locale';
 
-export type EngineVersion = 'gpt3.5' | 'gpt4' | 'clovax';
+export type EngineVersion = 'gpt3.5' | 'gpt4' | 'gpt4o' | 'clovax';
 
 export interface VersionListType {
   id: string;
@@ -53,16 +53,21 @@ export const formRecList = [
 ];
 
 const versionGpt3: VersionListType = {
-  id: 'GPT 3.5',
+  id: 'GPT-3.5',
   version: 'gpt3.5',
   group: 'gpt'
 };
 const versionGpt4: VersionListType = {
-  id: 'GPT 4.0',
+  id: 'GPT-4',
   version: 'gpt4',
   group: 'gpt'
 };
-const versionClova: VersionListType = {
+export const versionGpt4o: VersionListType = {
+  id: 'GPT-4o',
+  version: 'gpt4o',
+  group: 'gpt'
+};
+export const versionClova: VersionListType = {
   id: 'CLOVA X',
   version: 'clovax',
   group: 'clova'
@@ -70,8 +75,8 @@ const versionClova: VersionListType = {
 
 export const versionList: VersionListType[] =
   lang === LANG_KO_KR
-    ? [versionClova, versionGpt3, versionGpt4]
-    : [versionGpt3, versionGpt4, versionClova];
+    ? [versionClova, versionGpt3, versionGpt4, versionGpt4o]
+    : [versionGpt3, versionGpt4, versionGpt4o, versionClova];
 
 export const DEFAULT_WRITE_OPTION_LENGTH_VALUE: LengthListType = {
   id: 'Short',

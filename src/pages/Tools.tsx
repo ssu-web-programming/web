@@ -14,12 +14,14 @@ import TabPanel from '../components/tabs/TabPanel';
 import {
   DEFAULT_WRITE_OPTION_FORM_VALUE,
   DEFAULT_WRITE_OPTION_LENGTH_VALUE,
-  versionList,
+  versionClova,
+  versionGpt4o,
   WriteOptions
 } from '../components/chat/RecommendBox/FormRec';
 
 import { ReactComponent as IconChat } from '../img/ico_chat.svg';
 import { ReactComponent as IconCreatingText } from '../img/ico_creating_text.svg';
+import { LANG_KO_KR, lang } from '../locale';
 
 const Wrapper = styled.div`
   ${flex}
@@ -55,16 +57,18 @@ const TAB_LIST: TabListProps[] = [
   }
 ];
 
+const initVersion = lang === LANG_KO_KR ? versionClova : versionGpt4o;
+
 const initWriteOptions: WriteOptions = {
   input: '',
-  version: versionList[0],
+  version: initVersion,
   form: DEFAULT_WRITE_OPTION_FORM_VALUE,
   length: DEFAULT_WRITE_OPTION_LENGTH_VALUE
 };
 
 const initChatOptions: ChatOptions = {
   input: '',
-  version: versionList[0]
+  version: initVersion
 };
 
 export default function Tools() {

@@ -258,7 +258,6 @@ const AIChatTab = (props: WriteTabProps) => {
   );
   const [isDefaultInput, setIsDefaultInput] = useState<boolean>(false);
 
-  const chatEndRef = useRef<HTMLDivElement>(null);
   const requestor = useRef<any>();
   const textRef = useRef<HTMLTextAreaElement>(null);
 
@@ -303,10 +302,6 @@ const AIChatTab = (props: WriteTabProps) => {
   }, [defaultInput]);
 
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [chatHistory, isActiveInput, loadingId]);
-
-  useEffect(() => {
     if (defaultInput) setIsDefaultInput(true);
 
     return () => {
@@ -331,7 +326,6 @@ const AIChatTab = (props: WriteTabProps) => {
     if (textRef.current) {
       textRef.current.style.height = 'auto';
       textRef.current.style.height = textRef.current.scrollHeight + 'px';
-      // chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
@@ -527,6 +521,11 @@ const AIChatTab = (props: WriteTabProps) => {
         onClick={(e) => {
           toggleActiveInput(false);
           // dispatch(closeRecFunc());
+        }}
+        ref={(el) => {
+          if (el) {
+            el.scrollTo(0, el.scrollHeight);
+          }
         }}>
         <SpeechBubble
           chat={{
@@ -547,7 +546,6 @@ const AIChatTab = (props: WriteTabProps) => {
             chatInput={chatInput}
           />
         ))}
-        <div ref={chatEndRef}></div>
       </ChatListWrapper>
       {loadingId && (
         <CenterBox>
@@ -633,7 +631,7 @@ const AIChatTab = (props: WriteTabProps) => {
                             setChatInput((prev) => ({ ...prev, version: item }));
                           }}
                           selectedId={version.id}
-                          defaultId={group.list[0].id}
+                          defaultId={'GPT-4o'}
                         />
                       ) : (
                         <Button
