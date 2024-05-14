@@ -142,7 +142,7 @@ const DropDownButton = <T extends { id: string }>(props: DropDownProps<T>) => {
           `}>
           <VersionInner>
             {hasSelectedOption ? selectedId : thumbItemId.length > 0 && thumbItemId}
-            {thumbItemId === 'GPT-4o' && <NewMark></NewMark>}
+            {(thumbItemId === 'GPT-4o' || selectedId === 'GPT-4o') && <NewMark></NewMark>}
           </VersionInner>
           <IconComponent iconComponent={isOpen ? IconArrowDown : IconArrowUp} />
         </Button>
