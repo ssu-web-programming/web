@@ -30,6 +30,19 @@ const InputArea = styled.div`
   width: 100%;
 `;
 
+const VersionInner = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+const NewMark = styled.div`
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  margin: 2px;
+  background-color: #fb4949;
+`;
+
 const TitleInputSet = styled.div`
   ${flex}
   ${flexColumn}
@@ -84,7 +97,7 @@ const AIWriteInput = ({
       </TitleInputSet>
       <TitleInputSet>
         <SubTitle subTitle={t(`WriteTab.SelectVersion`)} />
-        <Grid col={3}>
+        <Grid col={4}>
           {versionList.map((cur) => (
             <Button
               width="full"
@@ -92,7 +105,10 @@ const AIWriteInput = ({
               key={cur.version}
               onClick={() => setSelectedOptions((prev) => ({ ...prev, version: cur }))}
               selected={selectedVersion.version === cur.version}>
-              {cur.id}
+              <VersionInner>
+                {cur.id}
+                {cur.id === 'GPT-4o' && <NewMark></NewMark>}
+              </VersionInner>
             </Button>
           ))}
         </Grid>

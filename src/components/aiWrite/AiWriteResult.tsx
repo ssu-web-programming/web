@@ -139,7 +139,12 @@ const AiWriteResult = ({
           {currentWrite.result.length === 0 && creating !== 'none' && (
             <Loading>{t(`WriteTab.LoadingMsg`)}</Loading>
           )}
-          <ResultWrapper>
+          <ResultWrapper
+            ref={(el) => {
+              if (el) {
+                el.scrollTo(0, el.scrollHeight);
+              }
+            }}>
             <PreMarkdown text={currentWrite.result} />
           </ResultWrapper>
           <ResultInfo>

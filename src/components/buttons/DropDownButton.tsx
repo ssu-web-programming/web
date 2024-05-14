@@ -69,6 +69,19 @@ const FloatingItem = styled.div<{ isSelected: boolean }>`
     `}
 `;
 
+const VersionInner = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+const NewMark = styled.div`
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  margin: 2px 0px 0px 2px;
+  background-color: #fb4949;
+`;
+
 interface DropDownProps<T> extends ButtonProps {
   list: T[];
   onItemClick: (item: T) => void;
@@ -111,7 +124,10 @@ const DropDownButton = <T extends { id: string }>(props: DropDownProps<T>) => {
                   onItemClick(item);
                   setThumbItemId(item.id);
                 }}>
-                {item.id}
+                <VersionInner>
+                  {item.id}
+                  {item.id === 'GPT-4o' && <NewMark></NewMark>}
+                </VersionInner>
               </FloatingItem>
             ))}
           </FloatingListWrapper>
@@ -124,7 +140,10 @@ const DropDownButton = <T extends { id: string }>(props: DropDownProps<T>) => {
           cssExt={css`
             padding: 0px;
           `}>
-          <div>{hasSelectedOption ? selectedId : thumbItemId.length > 0 && thumbItemId}</div>
+          <VersionInner>
+            {hasSelectedOption ? selectedId : thumbItemId.length > 0 && thumbItemId}
+            {thumbItemId === 'GPT-4o' && <NewMark></NewMark>}
+          </VersionInner>
           <IconComponent iconComponent={isOpen ? IconArrowDown : IconArrowUp} />
         </Button>
       </DropDownWrapper>
