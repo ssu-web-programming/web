@@ -631,7 +631,7 @@ const AIChatTab = (props: WriteTabProps) => {
                             setChatInput((prev) => ({ ...prev, version: item }));
                           }}
                           selectedId={version.id}
-                          defaultId={'GPT-4o'}
+                          defaultId={group.list[0].id}
                         />
                       ) : (
                         <Button
