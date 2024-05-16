@@ -332,9 +332,14 @@ const AIChatTab = (props: WriteTabProps) => {
   const validCheckSubmit = () => {
     if (selectedRecFunction?.subList && !selectedSubRecFunction) return false;
 
-    if (chatHistory.length === 0 && chatInput.length === 0) return false;
-    else if (chatInput.length === 0 && !selectedRecFunction) return false;
-    else return true;
+    if (chatInput.length === 0) {
+      if (!selectedRecFunction) return false;
+      if (chatHistory.length === 0) return false;
+
+      const lastChat = chatHistory[chatHistory.length - 1];
+      if (lastChat?.role === 'reset') return false;
+    }
+    return true;
   };
 
   const getPreProcessing = (chat?: Chat) => {
