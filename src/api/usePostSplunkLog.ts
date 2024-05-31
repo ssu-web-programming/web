@@ -191,8 +191,8 @@ export const calcToken = (text: string) => {
 export const parseGptVer = (version: EngineVersion): LLMVersion => {
   try {
     if (version === 'clovax') return 'CLOVA';
-    const gptVer = new RegExp(/gpt([0-9]*[.]?[0-9]+)/g).exec(version);
-    const gpt_ver = gptVer && gptVer[1] ? parseFloat(gptVer[1]) : 0;
+    const gptVer = new RegExp(/gpt([0-9]*[.]?[0-9]+[a-z]?)/g).exec(version);
+    const gpt_ver = gptVer && gptVer[1] ? gptVer[1] : 0;
     return gpt_ver;
   } catch (err) {
     return 'unknown';
