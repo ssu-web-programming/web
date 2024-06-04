@@ -1,7 +1,6 @@
 export const AI_WRITE_RESPONSE_STREAM_API = '/api/v2/nlp/chatStream';
 export const ALLI_RESPONSE_STREAM_API = '/api/v2/alli/run';
 export const TEXT_TO_IMAGE_API = '/api/v2/image/generation';
-export const BANNER_ACTIVE_API = '/api/v2/control/getEnableStatus';
 export const VOICEDOC_MAKE_VOICE = '/api/v2/tts/get-voice';
 
 export const ASKDOC_GET_ANALYZE_INFO = '/api/1/ai/askdoc/getAnalyzeInfo';

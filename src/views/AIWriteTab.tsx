@@ -22,7 +22,6 @@ import useErrorHandle from '../components/hooks/useErrorHandle';
 import AiWriteResult from '../components/aiWrite/AiWriteResult';
 import AIWriteInput from '../components/aiWrite/AIWriteInput';
 import { EngineVersion, WriteOptions } from '../components/chat/RecommendBox/FormRec';
-import AiEventBanner from '../external/AiEvent/AiEventBanner';
 import { useShowCreditToast } from '../components/hooks/useShowCreditToast';
 import { StreamPreprocessing } from '../store/slices/chatHistorySlice';
 import { AI_WRITE_RESPONSE_STREAM_API } from '../api/constant';
@@ -175,7 +174,6 @@ const AIWriteTab = (props: WriteTabProps) => {
           submitSubject={submitSubject}
         />
       )}
-      <AiEventBanner tab="ai.write" />
     </TabWrapper>
   );
 };
