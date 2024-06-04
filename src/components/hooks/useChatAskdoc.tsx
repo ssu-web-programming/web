@@ -10,7 +10,6 @@ import { useTranslation } from 'react-i18next';
 import { activeToast } from '../../store/slices/toastSlice';
 import NoCredit from '../toast/contents/NoCredit';
 import { useShowCreditToast } from './useShowCreditToast';
-import useLangParameterNavigate from './useLangParameterNavigate';
 import { getPlatform } from '../../util/bridge';
 import TagManager from 'react-gtm-module';
 import { useLocation } from 'react-router';
@@ -24,7 +23,6 @@ export const useChatAskdoc = () => {
   const errorHandle = useErrorHandle();
   const showCreditToast = useShowCreditToast();
   const { t } = useTranslation();
-  const { isTesla } = useLangParameterNavigate();
   const location = useLocation();
 
   function createTagManagerArgs(eventValue: string) {
@@ -47,8 +45,7 @@ export const useChatAskdoc = () => {
     UID: string,
     userChatText: string,
     stopRef: MutableRefObject<string[]>,
-    reqVoiceRes: (text: string) => Promise<Response>,
-    playVoiceRes: (res: Blob) => void,
+    playVoice: ((text: string) => void) | null,
     chatText?: string
   ) => {
     dispatch(
@@ -172,7 +169,7 @@ export const useChatAskdoc = () => {
             }
 
             if (!isExistPages) {
-              if (isTesla) {
+              if (playVoice) {
                 answer_tesla += data;
               } else {
                 dispatch(
@@ -236,10 +233,8 @@ export const useChatAskdoc = () => {
         }
 
         // 차량모드는 음성재생으로 인해 스트리밍을 지원하지 않음
-        if (isTesla) {
-          const resAudio = await reqVoiceRes(answer_tesla);
-          const audioBlob = await resAudio.blob();
-          playVoiceRes(audioBlob);
+        if (playVoice) {
+          await playVoice(answer_tesla);
 
           dispatch(
             updateChat({

@@ -5,15 +5,19 @@ const useLangParameterNavigate = () => {
   const navigator = useNavigate();
   const location = useLocation();
 
-  const regex = /(?:\?|&)tesla=([^&]+)/;
-  const match = location.search.match(regex);
-  const isTesla = match ? JSON.parse(match[1]) : false;
+  // const regex = /(?:\?|&)tesla=([^&]+)/;
+  // const match = location.search.match(regex);
+  // const isTesla = match ? JSON.parse(match[1]) : false;
+
+  const params = new URLSearchParams(location.search);
+  const isTesla = params.get('tesla') === 'true';
+  const isObigo = params.get('obigo') === 'true';
 
   const navigate = (path: string) => {
     return navigator(`${path}${location.search}`, { replace: true });
   };
 
-  return { navigate, isTesla };
+  return { navigate, isTesla, isObigo };
 };
 
 export default useLangParameterNavigate;
