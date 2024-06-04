@@ -1,7 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import Tools from './pages/Tools';
 import Toast from './components/toast/Toast';
-import { useAppDispatch } from './store/store';
 import { useEffect } from 'react';
 import TextToImage from './pages/TextToImage';
 import GlobalStyle from './style/globalStyle';
@@ -9,9 +8,6 @@ import InvalidAccess from './pages/InvalidAccess';
 import Offline from './pages/Offline';
 import Spinner from './components/Spinner';
 import Confirm from './components/Confirm';
-import { apiWrapper } from './api/apiWrapper';
-import { BANNER_ACTIVE_API } from './api/constant';
-import { setBanner, setUserLevel } from './store/slices/banner';
 import { useInitBridgeListener } from './util/bridge';
 import AskDocHome from './pages/AskDocStep/AskDocHome';
 import CheckDocHistory from './pages/AskDocStep/CheckDocHistory';
@@ -24,31 +20,10 @@ import AskDocLoading from './pages/AskDocStep/AskDocLoading';
 import Alli from './pages/Alli/Alli';
 
 function App() {
-  const dispatch = useAppDispatch();
   const initBridgeListener = useInitBridgeListener();
 
   useEffect(() => {
     initBridgeListener();
-  }, []);
-
-  const updateEventBannerStatus = async () => {
-    try {
-      const { res, userInfo } = await apiWrapper().request(BANNER_ACTIVE_API, {
-        body: {
-          type: 'banner'
-        },
-        method: 'POST'
-      });
-
-      dispatch(setUserLevel(userInfo.ul));
-
-      const resJson = await res.json();
-      dispatch(setBanner(resJson.data.enable));
-    } catch {}
-  };
-
-  useEffect(() => {
-    updateEventBannerStatus();
   }, []);
 
   return (

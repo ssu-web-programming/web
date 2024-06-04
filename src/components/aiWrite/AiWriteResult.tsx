@@ -27,7 +27,6 @@ import {
 import { insertDoc } from '../../util/common';
 import { activeToast } from '../../store/slices/toastSlice';
 import { selectTabSlice } from '../../store/slices/tabSlice';
-// import { selectBanner } from '../../store/slices/banner';
 import CreditButton from '../buttons/CreditButton';
 import IconTextButton from '../buttons/IconTextButton';
 import Grid from '../layout/Grid';
@@ -122,7 +121,6 @@ const AiWriteResult = ({
   const dispatch = useAppDispatch();
   // const copyClipboard = useCopyClipboard();
   const { creating } = useAppSelector(selectTabSlice);
-  // const { active: bannerActive } = useAppSelector(selectBanner);
   const moveChat = useMoveChatTab();
 
   const currentWrite = history.filter((write) => write.id === currentWriteId)[0];

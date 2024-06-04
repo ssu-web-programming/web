@@ -9,7 +9,6 @@ import txtimgHistory from './slices/txt2imgHistory';
 import network from './slices/network';
 import confirm from './slices/confirm';
 import loadingSpinner from './slices/loadingSpinner';
-import banner from './slices/banner';
 import askDoc from './slices/askDoc';
 import askDocModal from './slices/askDocModalsSlice';
 import askDocAnalyzeFiesSlice from './slices/askDocAnalyzeFiesSlice';
@@ -28,7 +27,6 @@ const store = configureStore({
     network,
     confirm,
     loadingSpinner,
-    banner,
     askDoc,
     askDocModal,
     askDocAnalyzeFiesSlice,
