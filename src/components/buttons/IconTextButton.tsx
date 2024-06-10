@@ -16,24 +16,26 @@ const Contents = styled.div`
 type IconPos = 'left' | 'right';
 
 export interface IconTextButtonProps extends ButtonProps {
-  iconSrc: string;
+  iconSrc?: string;
+  iconComp?: React.ReactNode;
+
   iconPos?: IconPos;
   iconSize?: IconSize | number;
 }
 
 export default function IconTextButton(props: PropsWithChildren<IconTextButtonProps>) {
-  const { children, iconPos, iconSrc, iconSize = 'sm', ...rest } = props;
+  const { children, iconPos, iconSrc, iconSize = 'sm', iconComp, ...rest } = props;
 
   return (
     <Button {...rest}>
       {iconPos === 'right' ? (
         <Contents>
           {children}
-          <Icon size={iconSize} iconSrc={iconSrc}></Icon>
+          <Icon size={iconSize} iconSrc={iconSrc} iconComp={iconComp}></Icon>
         </Contents>
       ) : (
         <Contents>
-          <Icon size={iconSize} iconSrc={iconSrc}></Icon>
+          <Icon size={iconSize} iconSrc={iconSrc} iconComp={iconComp}></Icon>
           {children}
         </Contents>
       )}

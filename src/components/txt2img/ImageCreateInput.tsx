@@ -8,12 +8,9 @@ import iconStyleAni from '../../img/text2Img/ani@2x.png';
 import iconStyleRet from '../../img/text2Img/ret@2x.png';
 import iconStyleWater from '../../img/text2Img/water@2x.png';
 import iconStyleOil from '../../img/text2Img/oil@2x.png';
-import iconRatioSqure from '../../img/text2Img/square.svg';
-import iconRatioSqure_purple from '../../img/text2Img/square_purple.svg';
-import iconRatioHorizontal from '../../img/text2Img/horizontal.svg';
-import iconRatioHorizontal_purple from '../../img/text2Img/horizontal_purple.svg';
-import iconRatioVertical from '../../img/text2Img/vertical.svg';
-import iconRatioVertical_purple from '../../img/text2Img/vertical_purple.svg';
+import { ReactComponent as RatioSqure } from '../../img/text2Img/square.svg';
+import { ReactComponent as RatioHorizontal } from '../../img/text2Img/horizontal.svg';
+import { ReactComponent as RatioVertical } from '../../img/text2Img/vertical.svg';
 import iconCreatingWhite from '../../img/ico_creating_text_white.svg';
 import { alignItemCenter, flex, flexColumn, justiCenter } from '../../style/cssCommon';
 import { RowContainer, SubTitleArea } from '../../views/ImageCreate';
@@ -201,20 +198,17 @@ export const ratioItemList = [
   {
     id: '1024x1024',
     title: 'Squre',
-    imgItem: iconRatioSqure,
-    selectedImgItem: iconRatioSqure_purple
+    imgItem: RatioSqure
   },
   {
     id: '1344x768',
     title: 'Horizontal',
-    imgItem: iconRatioHorizontal,
-    selectedImgItem: iconRatioHorizontal_purple
+    imgItem: RatioHorizontal
   },
   {
     id: '768x1344',
     title: 'Vertical',
-    imgItem: iconRatioVertical,
-    selectedImgItem: iconRatioVertical_purple
+    imgItem: RatioVertical
   }
 ];
 
@@ -233,6 +227,10 @@ const ImageCreateInput = ({
   const { t } = useTranslation();
 
   const { input, style, ratio } = options;
+
+  const getIconColor = (itemId: string, selectedRatio: string) => {
+    return itemId === selectedRatio ? 'var(--ai-purple-50-main)' : 'var(--gray-gray-70)';
+  };
 
   return (
     <MakingInputWrapper>
@@ -309,7 +307,7 @@ const ImageCreateInput = ({
                 width="full"
                 height={50}
                 iconSize="md"
-                iconSrc={item.id === ratio ? item.selectedImgItem : item.imgItem}
+                iconComp={<item.imgItem color={getIconColor(item.id, ratio)} />}
                 onClick={() => setOptions((prev) => ({ ...prev, ratio: item.id }))}
                 selected={item.id === ratio}>
                 {t(`Txt2ImgTab.RatioList.${item.title}`)}
