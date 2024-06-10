@@ -16,7 +16,7 @@ const Contents = styled.div`
 type IconPos = 'left' | 'right';
 
 export interface IconTextButtonProps extends ButtonProps {
-  iconSrc: string;
+  iconSrc: string | React.ReactNode;
   iconPos?: IconPos;
   iconSize?: IconSize | number;
 }
