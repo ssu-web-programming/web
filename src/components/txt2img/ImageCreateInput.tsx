@@ -307,7 +307,7 @@ const ImageCreateInput = ({
                 width="full"
                 height={50}
                 iconSize="md"
-                iconComp={<item.imgItem color={getIconColor(item.id, ratio)} />}
+                iconSrc={<item.imgItem color={getIconColor(item.id, ratio)} />}
                 onClick={() => setOptions((prev) => ({ ...prev, ratio: item.id }))}
                 selected={item.id === ratio}>
                 {t(`Txt2ImgTab.RatioList.${item.title}`)}

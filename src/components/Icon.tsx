@@ -6,11 +6,6 @@ const IconImg = styled.img<{ size: FlattenSimpleInterpolation }>`
   ${(props) => props.size}
 `;
 
-const SvgWrapper = styled.div<{ size: FlattenSimpleInterpolation }>`
-  ${flex}
-  ${(props) => props.size}
-`;
-
 export const SIZES = {
   sm: css`
     width: 16px;
@@ -30,11 +25,10 @@ export type IconSize = 'sm' | 'md' | 'lg';
 
 export interface IconProps {
   size?: IconSize | number;
-  iconSrc?: string;
-  iconComp?: React.ReactNode;
+  iconSrc: string | React.ReactNode;
 }
 
-const Icon = ({ size = 'md', iconSrc, iconComp }: IconProps) => {
+const Icon = ({ size = 'md', iconSrc }: IconProps) => {
   const sizeStyle =
     typeof size === 'string'
       ? SIZES[size]
@@ -43,8 +37,12 @@ const Icon = ({ size = 'md', iconSrc, iconComp }: IconProps) => {
           height: ${size}px;
         `;
 
-  if (iconComp) {
-    return <SvgWrapper size={sizeStyle}>{iconComp}</SvgWrapper>;
+  if (typeof iconSrc !== 'string') {
+    return (
+      <IconImg as="div" size={sizeStyle}>
+        {iconSrc}
+      </IconImg>
+    );
   }
 
   return <IconImg size={sizeStyle} src={iconSrc} alt="icon" />;
