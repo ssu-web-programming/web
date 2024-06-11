@@ -29,6 +29,7 @@ import CreditButton from '../buttons/CreditButton';
 import Icon from '../Icon';
 import Grid from '../layout/Grid';
 import IconBoxTextButton from '../buttons/IconBoxTextButton';
+import { getIconColor } from 'util/getColor';
 
 const MakingInputWrapper = styled.div`
   ${flex}
@@ -227,10 +228,6 @@ const ImageCreateInput = ({
   const { t } = useTranslation();
 
   const { input, style, ratio } = options;
-
-  const getIconColor = (itemId: string, selectedRatio: string) => {
-    return itemId === selectedRatio ? 'var(--ai-purple-50-main)' : 'var(--gray-gray-70)';
-  };
 
   return (
     <MakingInputWrapper>

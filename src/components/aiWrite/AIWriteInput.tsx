@@ -14,6 +14,7 @@ import Icon from '../Icon';
 import Button from '../buttons/Button';
 import IconBoxTextButton from '../buttons/IconBoxTextButton';
 import Grid from '../layout/Grid';
+import { getIconColor } from 'util/getColor';
 
 const WriteInputPage = styled.div`
   ${flex}
@@ -125,7 +126,7 @@ const AIWriteInput = ({
               iconSize="md"
               onClick={() => setSelectedOptions((prev) => ({ ...prev, form: form }))}
               selected={selectedForm ? (selectedForm.id === form.id ? true : false) : false}
-              iconSrc={selectedForm.id === form.id ? form.selectedIcon : form.icon}>
+              iconSrc={<form.icon color={getIconColor(form.id, selectedForm.id)} />}>
               {t(`FormList.${form.id}`)}
             </IconBoxTextButton>
           ))}
