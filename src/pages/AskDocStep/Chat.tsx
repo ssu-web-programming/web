@@ -109,7 +109,7 @@ const AskDoc = () => {
   const submitAskDoc = useChatAskdoc();
   const { isTesla, isObigo } = useLangParameterNavigate();
   const { fileStatus } = useAppSelector(filesSelector);
-  const { questions } = useAppSelector(summarySelector);
+  const { keywords, questions, summary } = useAppSelector(summarySelector);
   const recogVoiceSelector = useAppSelector(recognizedVoiceSelector);
   const [userChatText, setUserChatText] = useState('');
   const [onPlayAudio, setOnPlayAudio] = useState<HTMLAudioElement | null>(null);
@@ -119,6 +119,8 @@ const AskDoc = () => {
   const [activeRetry, setActiveRetry] = useState<boolean>(false);
   const [recognitionMode, setRecognitionMode] = useState<boolean>(false);
   const stopRef = useRef<AskDocChat['id'][]>([]);
+
+  const [obigoGreeting, setObigoGreeting] = useState<boolean>(false);
 
   useEffect(() => {
     if (fileStatus != 'AVAILABLE') return;
@@ -140,8 +142,22 @@ const AskDoc = () => {
     if (isObigo) {
       const greeting = t('AskDoc.Greeting');
       Bridge.callBridgeApi('textToSpeech', greeting);
+      setObigoGreeting(true);
     }
   }, [isObigo]);
+
+  useEffect(() => {
+    if (obigoGreeting && keywords && questions && summary) {
+      const initComplete = t('AskDoc.InitLoadInfoContent');
+      const s = t('AskDoc.Summary');
+      const k = t('AskDoc.Keyword');
+      const q = t('AskDoc.Questions');
+      Bridge.callBridgeApi(
+        'textToSpeech',
+        `${initComplete} ${s} ${summary} ${k} ${keywords.join(',')} ${q} ${questions.join(',')}`
+      );
+    }
+  }, [obigoGreeting, keywords, questions, summary]);
 
   const reqVoiceRes = async (text: string) => {
     try {
