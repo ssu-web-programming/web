@@ -3,24 +3,19 @@ import { recType, selectRecFuncSlice } from '../../../store/slices/recFuncSlice'
 import { useAppSelector } from '../../../store/store';
 import { RowWrapBox } from './ChatRecommend';
 import styled, { css } from 'styled-components';
-import icon_resume from '../../../img/aiChat/ico_ai_resume.svg';
-import icon_spelingcheck from '../../../img/aiChat/ico_ai_spellingcheck.svg';
-import icon_summary from '../../../img/aiChat/ico_ai_summary.svg';
-import icon_translation from '../../../img/aiChat/ico_ai_translation.svg';
-import icon_style from '../../../img/aiChat/ico_changing_style.svg';
-import icon_resume_purple from '../../../img/aiChat/ico_ai_resume_purple.svg';
-import icon_spelingcheck_purple from '../../../img/aiChat/ico_ai_spellingcheck_purple.svg';
-import icon_summary_purple from '../../../img/aiChat/ico_ai_summary_purple.svg';
-import icon_translation_purple from '../../../img/aiChat/ico_ai_translation_purple.svg';
-import icon_style_purple from '../../../img/aiChat/ico_changing_style_purple.svg';
-import icon_new_chat from '../../../img/ico_newchat.svg';
-import icon_new_chat_purple from '../../../img/ico_newchat_purple.svg';
+import { ReactComponent as IconResume } from 'img/aiChat/ico_ai_resume.svg';
+import { ReactComponent as IconSummary } from 'img/aiChat/ico_ai_summary.svg';
+import { ReactComponent as IconTranslation } from 'img/aiChat/ico_ai_translation.svg';
+import { ReactComponent as IconStyle } from 'img/aiChat/ico_changing_style.svg';
+import { ReactComponent as IconSpelingcheck } from 'img/aiChat/ico_ai_spellingcheck.svg';
+import { ReactComponent as IconNewChat } from 'img/ico_newchat.svg';
 import IconTextButton from '../../buttons/IconTextButton';
 import { RowBox } from '../../../views/AIChatTab';
 import Button from '../../buttons/Button';
 import icon_prev from '../../../img/ico_arrow_prev.svg';
 import Icon from '../../Icon';
 import Grid from '../../layout/Grid';
+import { getIconColor } from 'util/getColor';
 
 export const REC_ID_LIST = {
   RESUME_WRITING: 'resume_writing',
@@ -35,20 +30,17 @@ const recList = [
   [
     {
       id: REC_ID_LIST.RESUME_WRITING,
-      icon: icon_resume,
-      selectedIcon: icon_resume_purple,
+      icon: IconResume,
       subList: null
     },
     {
       id: REC_ID_LIST.SUMMARY,
-      icon: icon_summary,
-      selectedIcon: icon_summary_purple,
+      icon: IconSummary,
       subList: null
     },
     {
       id: REC_ID_LIST.TRANSLATE,
-      icon: icon_translation,
-      selectedIcon: icon_translation_purple,
+      icon: IconTranslation,
       subList: [
         'Korean',
         'English',
@@ -65,22 +57,19 @@ const recList = [
   [
     {
       id: REC_ID_LIST.CHANGE_TEXT_STYLE,
-      icon: icon_style,
-      selectedIcon: icon_style_purple,
+      icon: IconStyle,
       subList: ['BusinessStyle', 'Friendly', 'Simply', 'Poetically']
     },
     {
       id: REC_ID_LIST.MODIFY_TEXT,
-      icon: icon_spelingcheck,
-      selectedIcon: icon_spelingcheck_purple,
+      icon: IconSpelingcheck,
       subList: null
     }
   ],
   [
     {
       id: REC_ID_LIST.START_NEW_CHATING,
-      icon: icon_new_chat,
-      selectedIcon: icon_new_chat_purple,
+      icon: IconNewChat,
       subList: null
     }
   ]
@@ -132,7 +121,7 @@ const FunctionRec = ({
                   <IconTextButton
                     width="full"
                     key={rec.id}
-                    iconSrc={rec.id === selectedRecFunction?.id ? rec.selectedIcon : rec.icon}
+                    iconSrc={<rec.icon color={getIconColor(rec.id, selectedRecFunction?.id!)} />}
                     iconPos="left"
                     selected={rec.id === selectedRecFunction?.id}
                     onClick={() => onClick(rec)}>
