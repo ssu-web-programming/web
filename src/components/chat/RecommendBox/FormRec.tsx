@@ -6,6 +6,7 @@ import { ReactComponent as IconList } from 'img/aiChat/ico_table_of_contents.svg
 import { useTranslation } from 'react-i18next';
 import { recSubType, recType } from '../../../store/slices/recFuncSlice';
 import { LANG_KO_KR, lang } from '../../../locale';
+import { getIconColor } from 'util/getColor';
 
 export type EngineVersion = 'gpt3.5' | 'gpt4' | 'gpt4o' | 'clovax';
 
@@ -101,8 +102,7 @@ const FormRec = ({
           width="full"
           height={48}
           iconSize="md"
-          // iconSrc={rec.id === selectedRecFunction?.id ? rec.selectedIcon : rec.icon}
-          iconSrc={<rec.icon />}
+          iconSrc={<rec.icon color={getIconColor(rec.id, selectedRecFunction?.id!)} />}
           selected={selectedRecFunction ? selectedRecFunction.id === rec.id : false}
           onClick={() => onClick({ id: rec.id })}>
           {t(`FormList.${rec.id}`)}
