@@ -11,6 +11,7 @@ import { isHigherVersion, makeClipboardData } from './common';
 import { AskDocStatus, setSrouceId, setStatus } from '../store/slices/askDoc';
 import { setFiles } from '../store/slices/askDocAnalyzeFiesSlice';
 import { initComplete } from '../store/slices/initFlagSlice';
+import { setRecognizedVoice } from '../store/slices/recognizedVoice';
 
 const UA_PREFIX: string = `__polaris_office_ai_`;
 
@@ -303,6 +304,10 @@ export const useInitBridgeListener = () => {
             );
             break;
           }
+          case 'recognizeVoiceData': {
+            dispatch(setRecognizedVoice({ recognizedVoice: body }));
+            break;
+          }
           default: {
             break;
           }
@@ -374,7 +379,9 @@ type ApiType =
   | 'movePage'
   | 'reInitAskDoc'
   | 'shareAnswerState'
-  | 'analyzeFiles';
+  | 'analyzeFiles'
+  | 'setVoiceRecognizeMode'
+  | 'textToSpeech';
 
 const Bridge = {
   checkSession: (api: string) => {
