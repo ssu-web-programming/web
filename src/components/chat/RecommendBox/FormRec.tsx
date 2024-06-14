@@ -18,7 +18,7 @@ export interface VersionListType {
 
 interface FormListType {
   id: string;
-  icon: string | React.FC<React.SVGProps<SVGSVGElement>>;
+  icon: React.FC<React.SVGProps<SVGSVGElement>>;
 }
 
 interface LengthListType {
