@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { apiWrapper } from '../../api/apiWrapper';
 import { lang } from '../../locale';
 import { Divider } from '@mui/material';
-import { AppInfo } from './Alli';
+import { AppInfo, isSlideNoteApp } from './Alli';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 import AlliIconCandidate from '../../img/alli/appIcon/alli-icon-candidate.svg';
@@ -20,6 +20,8 @@ import AlliIconTranslator from '../../img/alli/appIcon/alli-icon-translator.svg'
 import AlliIconWelcome from '../../img/alli/appIcon/alli-icon-welcome.svg';
 import AlliIconEmail from '../../img/alli/appIcon/alli-icon-email.svg';
 import AlliIconGoodWord from '../../img/alli/appIcon/alli-icon-good-word.svg';
+import AlliIconSlideNote from '../../img/alli/appIcon/alli-icon-slide-note.svg';
+import Bridge from '../../util/bridge';
 
 const Wrapper = styled.ul`
   width: 100%;
@@ -153,6 +155,10 @@ const AlliAppIcons: AlliAppIcon[] = [
   {
     name: 'AlliIconGoodWord',
     icon: AlliIconGoodWord
+  },
+  {
+    name: 'AlliIconSlideNote',
+    icon: AlliIconSlideNote
   }
 ].map((item) => {
   const AlliAppID = JSON.parse(process.env.REACT_APP_ALLI_APPS ?? '{}');
@@ -179,10 +185,20 @@ export default function AppList(props: AppListProps) {
         const { res } = await apiWrapper().request(`/api/v2/alli/apps?lang=${lang}`, {
           method: 'GET'
         });
-        return (await res.json()).data.appList.map((appInfo: AppInfo) => ({
+        const list = (await res.json()).data.appList.map((appInfo: AppInfo) => ({
           ...appInfo,
           icon: AlliAppIcons.find((icon) => icon.id[lang] === appInfo.id)?.icon
         }));
+
+        const docType = await Bridge.callSyncBridgeApi('getDocType');
+
+        // move slide note app to the top
+        return docType.includes('ppt')
+          ? [
+              ...list.filter((item: any) => isSlideNoteApp(item.id)),
+              ...list.filter((item: any) => !isSlideNoteApp(item.id))
+            ]
+          : [...list.filter((item: any) => !isSlideNoteApp(item.id))];
       } catch (err) {
         throw err;
       }

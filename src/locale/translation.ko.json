@@ -7,6 +7,7 @@
   "ASKDoc": "ASK Doc",
   "ShowExam": "예시문구 보기",
   "Confirm": "확인",
+  "Cancel": "취소",
   "Result": "결과",
   "Generate": "생성하기",
   "Regenerate": "재생성",
@@ -245,6 +246,14 @@
       "TryAgain": "다시 시도하기",
       "ServiceNotification": "서비스 알림"
     }
+  },
+  "Alli": {
+    "ReCheck": "다시 한 번 확인해주세요!",
+    "AlreadyExistNote": "해당 페이지에 기존에 작성한 슬라이드 노트가 있습니다. 슬라이드 노트 생성하기는 크레딧이 소모됩니다.",
+    "RefPage": "{{page}} 페이지 참고중",
+    "insertNote": "{{page}} 페이지 슬라이드 노트에 삽입하기",
+    "getCurrentSlideNote": "현재 슬라이드 내용 가져오기",
+    "AlreadyExistSlideContents": "슬라이드 내용을 새로 가져오면 기존에 편집한 내용은 사라집니다. 계속 진행할까요?"
   },
   "EOS": {
     "ASKDocEOSTitle": "ASK Doc V1 서비스 종료",

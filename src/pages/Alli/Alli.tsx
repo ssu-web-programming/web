@@ -1,12 +1,13 @@
 import styled, { css } from 'styled-components';
 import Header from '../../components/layout/Header';
 import { useTranslation } from 'react-i18next';
-import { Suspense, useEffect, useRef, useState } from 'react';
+import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import uiBuild from './builder';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Divider } from '@mui/material';
 
 import AppIconRefresh from '../../img/alli/alli-icon-refresh.svg';
+import { ReactComponent as IconDocument } from '../../img/askDoc/ico_document_64.svg';
 
 import Button from '../../components/buttons/Button';
 import { useAppDispatch, useAppSelector } from '../../store/store';
@@ -29,6 +30,9 @@ import AlliApps from './AlliApps';
 import ga, { init } from '../../util/gaConnect';
 import PreMarkdown from '../../components/PreMarkdown';
 import { apiWrapper, streaming } from '../../api/apiWrapper';
+import Bridge from '../../util/bridge';
+import { useConfirm } from '../../components/Confirm';
+import { setCreating } from '../../store/slices/tabSlice';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -166,6 +170,23 @@ const Buttons = styled.div`
   gap: 10px;
 `;
 
+const ConfirmContents = styled.div`
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  text-align: left;
+`;
+
+const ConfirmTitle = styled.div`
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 27px;
+  text-align: left;
+  color: #000000;
+
+  margin-bottom: 8px;
+`;
+
 export interface ResponseAppInputOption {
   name: string;
   value: string;
@@ -175,6 +196,7 @@ export interface ResponseAppInputInfo {
   name: string;
   inputType: string;
   value: string;
+  placeholder?: string;
   options: ResponseAppInputOption[];
 }
 
@@ -229,12 +251,15 @@ export default function Alli() {
 
   const errorHandle = useErrorHandle();
   const showCreditToast = useShowCreditToast();
+  const confirm = useConfirm();
 
   const { isInit } = useAppSelector(initFlagSelector);
   const { selectedApp, createResult } = useAppSelector(selectAlliApps);
 
   const [inputs, setInputs] = useState<any>(createResult.inputs);
   const [result, setResult] = useState<string>(createResult.output);
+  const [refSlideNum, setRefSlideNum] = useState<number>(createResult.refSlideNum);
+  const [insertSlideNum, setInsertSlideNum] = useState<number>(createResult.insertSlideNum);
 
   const [streamingStatus, setStreamingStatus] = useState<StreamingStatus>('none');
 
@@ -248,6 +273,8 @@ export default function Alli() {
           [cur.value]:
             cur.value === 'language'
               ? cur.options.find((opt) => opt.value.toLowerCase().startsWith(lang))?.value
+              : isSlideNoteApp(appInfo.id)
+              ? cur.options[0]?.value
               : undefined
         };
       }, {});
@@ -260,6 +287,8 @@ export default function Alli() {
   const refresh = (appInfo?: AppInfo) => {
     dispatch(resetCreateResult());
     setInputs({});
+    setRefSlideNum(0);
+    setInsertSlideNum(0);
     setResult('');
     if (appInfo) {
       selectApp(appInfo);
@@ -279,6 +308,7 @@ export default function Alli() {
   const requestAlliRun = async (appId: string, inputs: any) => {
     let resultText = '';
     try {
+      dispatch(setCreating('AI Apps'));
       setStreamingStatus('request');
       requestor.current = apiWrapper();
       const { res } = await requestor.current?.request(ALLI_RESPONSE_STREAM_API, {
@@ -300,7 +330,10 @@ export default function Alli() {
         errorHandle(err);
       }
     } finally {
-      dispatch(setCreateResult({ inputs, output: resultText }));
+      dispatch(setCreating('none'));
+      dispatch(
+        setCreateResult({ inputs, output: resultText, refSlideNum, insertSlideNum: refSlideNum })
+      );
       setStreamingStatus('none');
       ga.event({ category: 'AI Apps', action: 'App Run', label: appId });
     }
@@ -314,7 +347,97 @@ export default function Alli() {
   const hasEmpty = (inputs: any) =>
     Object.values(inputs).some((val) => val === undefined || val === '');
 
-  const inputComponents = selectedApp ? uiBuild(selectedApp.inputs, setInputs, inputs) : undefined;
+  const parseShape = useCallback((contents: any) => {
+    const getShapeText = (shape: any) => Object.values(shape.text).join('\n');
+    const texts = contents.map((c: any) => {
+      try {
+        if (c.type === 'shape') {
+          return getShapeText(c.shape);
+        } else if (c.type === 'group') {
+          return parseShape(c.shapes).join('\n');
+        } else if (c.type === 'table') {
+          return c.table.cells.map((c: any) => getShapeText(c)).join('\n');
+        } else {
+          console.log('unknown type', c.type);
+          return '';
+        }
+      } catch (err) {
+        return '';
+      }
+    });
+    return texts;
+  }, []);
+
+  const onClickGetSlideContents = useCallback(
+    async (prop: ResponseAppInputInfo) => {
+      if (inputs[prop.value]) {
+        const ret = await confirm({
+          msg: (
+            <>
+              <ConfirmContents>
+                <ConfirmTitle>{t('Alli.ReCheck')}</ConfirmTitle>
+                {t('Alli.AlreadyExistSlideContents')}
+              </ConfirmContents>
+              <div style={{ marginTop: '24px' }}>
+                <IconDocument></IconDocument>
+              </div>
+            </>
+          ),
+          onOk: { text: t('Confirm'), callback: () => {} },
+          onCancel: { text: t('Cancel'), callback: () => {} }
+        });
+        if (!ret) return;
+      }
+
+      try {
+        const response = await Bridge.callSyncBridgeApi('getSlideContents');
+        const { contents, slide_number, note } = JSON.parse(response); // slide contents type is string
+
+        if (note) {
+          dispatch(
+            activeToast({
+              type: 'error',
+              msg: t('Alli.AlreadyExistNote')
+            })
+          );
+        }
+        const texts = parseShape(contents);
+        setInputs((prev: any) => ({ ...prev, [prop.value]: texts.join('\n') }));
+        setResult('');
+        setRefSlideNum(slide_number);
+      } catch (err) {}
+    },
+    [inputs, confirm, dispatch, parseShape, t]
+  );
+
+  const inputComponents = selectedApp
+    ? uiBuild(
+        {
+          appId: selectedApp.id,
+          props: selectedApp.inputs,
+          GetSlideContentsButton: (
+            <Button
+              variant="white"
+              width={'full'}
+              height={40}
+              cssExt={css`
+                margin-top: 8px;
+              `}
+              selected={true}
+              onClick={() =>
+                onClickGetSlideContents(
+                  selectedApp.inputs.find((input) => input.inputType === 'paragraph')!
+                )
+              }>
+              {t('Alli.getCurrentSlideNote')}
+            </Button>
+          ),
+          slideNum: refSlideNum > 0 ? `${t('Alli.RefPage', { page: refSlideNum })}` : undefined
+        },
+        setInputs,
+        inputs
+      )
+    : undefined;
 
   useEffect(() => {
     init();
@@ -366,11 +489,22 @@ export default function Alli() {
                       text-align: center;
                       color: #6f3ad0;
                     `}
-                    onClick={() => {
-                      insertDoc(result);
-                      dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.CompleteInsert`) }));
+                    onClick={async () => {
+                      if (isSlideNoteApp(selectedApp.id)) {
+                        const ret = await Bridge.callSyncBridgeApi(
+                          'insertNote',
+                          JSON.stringify({ slide_number: insertSlideNum, note: result })
+                        );
+                        const { success, message } = ret;
+                        dispatch(activeToast({ type: success ? 'info' : 'error', msg: message }));
+                      } else {
+                        insertDoc(result);
+                        dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.CompleteInsert`) }));
+                      }
                     }}>
-                    {t('WriteTab.InsertDoc')}
+                    {isSlideNoteApp(selectedApp.id)
+                      ? `${t('Alli.insertNote', { page: insertSlideNum })}`
+                      : t('WriteTab.InsertDoc')}
                   </Button>
                 </ResultArea>
               )}
@@ -400,12 +534,17 @@ export default function Alli() {
                     {streamingStatus !== 'none' ? t('StopGenerate') : t('Back')}
                   </Button>
                   <CreditButton
-                    disable={streamingStatus !== 'none' || hasEmpty(inputs)}
+                    disable={
+                      streamingStatus !== 'none' ||
+                      hasEmpty(inputs) ||
+                      (isSlideNoteApp(selectedApp.id) && refSlideNum === 0)
+                    }
                     variant="purpleGradient"
                     width={'full'}
                     height={40}
                     onClick={() => {
                       if (result) setResult('');
+                      if (isSlideNoteApp(selectedApp.id)) setInsertSlideNum(refSlideNum);
                       requestAlliRun(selectedApp.id, inputs);
                     }}>
                     {result ? t('Regenerate') : t('Generate')}
@@ -424,3 +563,8 @@ export default function Alli() {
     </ThemeProvider>
   );
 }
+
+export const isSlideNoteApp = (appId: string) => {
+  const AlliAppID = JSON.parse(process.env.REACT_APP_ALLI_APPS ?? '{}');
+  return Object.values(AlliAppID['AlliIconSlideNote']).includes(appId);
+};

@@ -1,25 +1,27 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 
-interface confirmType {
+export interface ConfirmType {
   msg: string | React.ReactNode | null;
-  btnFunc?: () => void;
+  onOk: { text: string; callback: () => void };
+  onCancel: { text: string; callback: () => void };
 }
 
 const confirmSlice = createSlice({
   name: 'confirm',
-  initialState: { msg: '', btnFunc: undefined } as confirmType,
+  initialState: { msg: '', onOk: {}, onCancel: {} } as ConfirmType,
   reducers: {
     initConfirm: (state) => {
       state.msg = null;
-      state.btnFunc = undefined;
+      state.onOk = {
+        text: '',
+        callback: () => false
+      };
+      state.onCancel = { text: '', callback: () => false };
     },
-    activeConfirm: (
-      state,
-      action: PayloadAction<{ msg: string | React.ReactNode; btnFunc?: () => void }>
-    ) => {
-      state.msg = action.payload.msg;
-      state.btnFunc = action.payload.btnFunc;
+    activeConfirm: (state, action: PayloadAction<ConfirmType>) => {
+      state = action.payload;
+      return state;
     }
   }
 });

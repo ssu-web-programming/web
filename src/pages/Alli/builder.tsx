@@ -1,6 +1,7 @@
 import { MenuItem, Select, TextField } from '@mui/material';
 import styled from 'styled-components';
-import { ResponseAppInputInfo, ResponseAppInputOption } from './Alli';
+import { ResponseAppInputInfo, isSlideNoteApp } from './Alli';
+import React from 'react';
 
 const Fieldset = styled.fieldset`
   border: none;
@@ -20,6 +21,7 @@ interface BuilderProps {
   inputs: any;
   setInputs: (val: string) => void;
   info: ResponseAppInputInfo;
+  compProps?: any;
 }
 
 type ComponentType = 'text' | 'paragraph' | 'single';
@@ -42,9 +44,11 @@ const template: Template[] = [
   },
   {
     inputType: 'paragraph',
-    component: ({ inputs, setInputs, info }) => (
+    component: ({ inputs, setInputs, info, compProps }) => (
       <TextField
+        {...compProps}
         multiline
+        placeholder={info.placeholder}
         rows={8}
         fullWidth
         value={inputs[info.value] || ''}
@@ -65,29 +69,61 @@ const template: Template[] = [
   }
 ];
 
-const wrapper = (legend: string, component: React.ReactNode) => (
+const wrapper = (legend: string, component: React.ReactNode, slideNum?: string) => (
   <Fieldset key={legend}>
-    <Legend>{legend}</Legend>
+    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+      <Legend>{legend}</Legend>
+      {slideNum && (
+        <div
+          style={{
+            fontSize: '13px',
+            fontWeight: 500,
+            lineHeight: '18.82px',
+            textAlign: 'left',
+            color: '#6F3AD0'
+          }}>
+          {slideNum}
+        </div>
+      )}
+    </div>
     {component}
   </Fieldset>
 );
 
 export default function build(
-  props: ResponseAppInputInfo[],
+  {
+    appId,
+    props,
+    GetSlideContentsButton,
+    slideNum
+  }: {
+    appId: string;
+    props: ResponseAppInputInfo[];
+    GetSlideContentsButton: React.ReactNode;
+    slideNum?: string;
+  },
   setInputs: React.Dispatch<React.SetStateAction<any>>,
   inputs: any
 ): React.ReactNode {
   const result = props.map((prop) => {
     const found = template.find((t) => t.inputType === prop.inputType);
     return found ? (
-      wrapper(
-        prop.name,
-        found.component({
-          inputs,
-          setInputs: (val) => setInputs((prev: any) => ({ ...prev, [prop.value]: val })),
-          info: prop
-        })
-      )
+      <>
+        {wrapper(
+          prop.name,
+          found.component({
+            inputs,
+            setInputs: (val) => setInputs((prev: any) => ({ ...prev, [prop.value]: val })),
+            info: prop,
+            compProps:
+              prop.inputType === 'paragraph' && isSlideNoteApp(appId) && !slideNum
+                ? { disabled: true }
+                : undefined
+          }),
+          prop.inputType === 'paragraph' && isSlideNoteApp(appId) ? slideNum : undefined
+        )}
+        {prop.inputType === 'paragraph' && isSlideNoteApp(appId) && GetSlideContentsButton}
+      </>
     ) : (
       <></>
     );

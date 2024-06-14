@@ -1,143 +1,89 @@
 import styled from 'styled-components';
 import Blanket from './Blanket';
 import { useAppDispatch, useAppSelector } from '../store/store';
-import { initConfirm, selectConfirm } from '../store/slices/confirm';
-import {
-  alignItemCenter,
-  flex,
-  flexColumn,
-  flexGrow,
-  flexShrink,
-  justiCenter,
-  purpleBtnCss
-} from '../style/cssCommon';
-import error_icon from '../img/service_error.png';
-import close_icon from '../img/ico_ai_close.svg';
-import { useTranslation } from 'react-i18next';
+import { activeConfirm, ConfirmType, initConfirm, selectConfirm } from '../store/slices/confirm';
+import Button from './buttons/Button';
 
 const ConfirmBox = styled.div`
-  ${flex}
-  ${flexColumn}
-  ${alignItemCenter}
-  ${justiCenter}
-  ${flexGrow}
-  ${flexShrink}
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
   background-color: #fff;
-  width: 90%;
-  height: 200px;
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2);
-  border-radius: 4px;
-  border: solid 1px var(--gray-gray-50);
-  background-color: #fff;
-`;
-
-const CloseBtn = styled.div`
-  ${flex}
-  ${justiCenter}
-  ${alignItemCenter}
-  align-self: flex-end;
-
-  position: absolute;
-  top: 0px;
-  right: 0px;
-
-  img {
-    width: 32px;
-    height: 32px;
-  }
-
-  &:hover {
-    cursor: pointer;
-  }
-`;
-
-const MsgArea = styled.div`
-  ${flex}
-  ${flexColumn}
-  ${flexGrow}
-  ${justiCenter}
-  ${alignItemCenter}
-  
-  font-size: 13px;
-  color: var(--gray-gray-80-02);
-  margin: 18px 0px 24px 0px;
-
-  height: fit-content;
+  width: 320px;
+  box-shadow: 0px 8px 16px 0px #0000001a;
+  border-radius: 10px;
+  padding: 24px;
+  background-color: #ffffff;
 `;
 
 const ContentArea = styled.div`
-  ${flex}
-  ${flexColumn}
-  ${justiCenter}
-  ${alignItemCenter}
-`;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
 
-const ErrorIcon = styled.img`
-  width: 38.6px;
-  height: 36px;
-`;
+  margin-bottom: 24px;
 
-const RetryBtn = styled.button`
-  ${purpleBtnCss}
-  padding: 0px;
-
-  height: 28px;
-  border-radius: 4px;
-
-  ${flex}
-  ${alignItemCenter}
-  ${justiCenter}
-  ${flexGrow}
-  ${flexShrink}
-  margin: 0px 16px 0px 16px;
-
-  &:hover {
-    cursor: pointer;
+  & .important {
+    color: red;
+    font-weight: 700;
   }
 `;
 
 const Confirm = () => {
-  const dispatch = useAppDispatch();
-  const { t } = useTranslation();
-  const { msg, btnFunc } = useAppSelector(selectConfirm);
+  const { msg, onOk, onCancel } = useAppSelector(selectConfirm);
 
-  const close = () => {
-    dispatch(initConfirm());
-  };
+  if (!msg) return null;
 
   return (
     <>
-      {msg && (
-        <>
-          <Blanket />
-          <ConfirmBox>
-            <CloseBtn onClick={close}>
-              <img src={close_icon} alt="confirm close button" />
-            </CloseBtn>
-            <ContentArea>
-              <ErrorIcon src={error_icon} />
-              <MsgArea className="msgarea">{msg}</MsgArea>
-            </ContentArea>
-            {btnFunc && (
-              <div style={{ width: '100%', display: 'flex' }}>
-                <RetryBtn
-                  onClick={() => {
-                    btnFunc();
-                  }}>
-                  {t(`Retry`)}
-                </RetryBtn>
-              </div>
-            )}
-          </ConfirmBox>
-        </>
-      )}
+      <Blanket />
+      <ConfirmBox>
+        <ContentArea>{msg}</ContentArea>
+        <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <Button variant="purpleGradient" width={'full'} height={40} onClick={onOk.callback}>
+            {onOk.text}
+          </Button>
+          <Button variant="gray" width={'full'} height={40} onClick={onCancel?.callback}>
+            {onCancel.text}
+          </Button>
+        </div>
+      </ConfirmBox>
     </>
   );
 };
 
 export default Confirm;
+
+export function useConfirm() {
+  const dispatch = useAppDispatch();
+  return function ({ msg, onOk, onCancel }: ConfirmType) {
+    return new Promise((resolve) => {
+      dispatch(
+        activeConfirm({
+          msg,
+          onOk: {
+            text: onOk.text,
+            callback: () => {
+              dispatch(initConfirm());
+              resolve(true);
+            }
+          },
+          onCancel: {
+            text: onCancel.text,
+            callback: () => {
+              dispatch(initConfirm());
+              resolve(false);
+            }
+          }
+        })
+      );
+    });
+  };
+}

@@ -11,7 +11,8 @@ type CREATING_TYPE =
   | 'TextExtract'
   | 'CreateVectorData'
   | 'PreAsk'
-  | 'MakeSummary';
+  | 'MakeSummary'
+  | 'AI Apps';
 export type AI_WRITE_TAB_TYPE = 'write' | 'chat';
 
 interface TabType {

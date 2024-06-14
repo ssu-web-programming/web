@@ -83,6 +83,11 @@ const REACT_APP_ALLI_APPS = JSON.stringify({
     ko: 'TExNQXBwOjY2MTUwMmRjNzQ5YWM4MzBmNGRmNGUxMQ==',
     en: 'TExNQXBwOjY2MTUwNDU0NzQ5YWM4MzBmNGRmNTU0OA==',
     ja: 'TExNQXBwOjY2MGZjZGJlNTA4YTI3ZTI1Y2UwYTkwZA=='
+  },
+  AlliIconSlideNote: {
+    ko: 'TExNQXBwOjY2MDNhNjI0MmFmZTAxMGNmYzYzYmRkOA==',
+    en: 'TExNQXBwOjY2NjdlODdkYjVmNjhkYmI5YTMyMzc5NA==',
+    ja: 'TExNQXBwOjY2NjdlYTg3YmMzYWZjNzgzNmZmMjI4Nw=='
   }
 });
 
