@@ -16,6 +16,7 @@ import initFlagSlice from './slices/initFlagSlice';
 import askDocSummary from './slices/askDocSummary';
 import alliApps from './slices/alliApps';
 import recognizedVoice from './slices/recognizedVoice';
+import appState from './slices/appState';
 
 const store = configureStore({
   reducer: {
@@ -34,7 +35,8 @@ const store = configureStore({
     askDocSummary,
     initFlagSlice,
     alliApps,
-    recognizedVoice
+    recognizedVoice,
+    appState
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }).concat(shareAnswerState),

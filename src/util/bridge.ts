@@ -444,29 +444,28 @@ const Bridge = {
       arg && typeof arg !== 'string' && typeof arg !== 'number' ? await fileToString(arg) : arg;
     callApi(api, apiArg);
   },
-  callSyncBridgeApi: (api: ApiType, arg?: string | number) => {
-    return new Promise<any>((resolve, reject) => {
-      const callback = async (msg: CallbackMessage, id: BridgeItemID) => {
-        try {
-          resolve(msg.body);
-        } catch (err) {
-          reject(err);
-        } finally {
-          delete BridgeList[id];
+  callSyncBridgeApiWithCallback: (param: {
+    api: ApiType;
+    arg?: string | number;
+    callback: (res: any) => void;
+  }) => {
+    try {
+      const { api, arg, callback } = param;
+      const item = {
+        id: api,
+        callback: (msg: CallbackMessage, id: BridgeItemID) => {
+          try {
+            callback(msg.body);
+          } catch (err) {
+          } finally {
+            delete BridgeList[id];
+          }
         }
       };
-      try {
-        const item = {
-          id: api,
-          callback
-        };
-        BridgeList[item.id] = item;
+      BridgeList[item.id] = item;
 
-        callApi(api, arg);
-      } catch (err) {
-        reject({ success: false, err });
-      }
-    });
+      callApi(api, arg);
+    } catch (err) {}
   }
 };
 

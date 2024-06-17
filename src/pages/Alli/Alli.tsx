@@ -390,21 +390,27 @@ export default function Alli() {
       }
 
       try {
-        const response = await Bridge.callSyncBridgeApi('getSlideContents');
-        const { contents, slide_number, note } = JSON.parse(response); // slide contents type is string
+        Bridge.callSyncBridgeApiWithCallback({
+          api: 'getSlideContents',
+          callback: (response) => {
+            try {
+              const { contents, slide_number, note } = JSON.parse(response); // slide contents type is string
 
-        if (note) {
-          dispatch(
-            activeToast({
-              type: 'error',
-              msg: t('Alli.AlreadyExistNote')
-            })
-          );
-        }
-        const texts = parseShape(contents);
-        setInputs((prev: any) => ({ ...prev, [prop.value]: texts.join('\n') }));
-        setResult('');
-        setRefSlideNum(slide_number);
+              if (note) {
+                dispatch(
+                  activeToast({
+                    type: 'error',
+                    msg: t('Alli.AlreadyExistNote')
+                  })
+                );
+              }
+              const texts = parseShape(contents);
+              setInputs((prev: any) => ({ ...prev, [prop.value]: texts.join('\n') }));
+              setResult('');
+              setRefSlideNum(slide_number);
+            } catch (err) {}
+          }
+        });
       } catch (err) {}
     },
     [inputs, confirm, dispatch, parseShape, t]
@@ -491,12 +497,18 @@ export default function Alli() {
                     `}
                     onClick={async () => {
                       if (isSlideNoteApp(selectedApp.id)) {
-                        const ret = await Bridge.callSyncBridgeApi(
-                          'insertNote',
-                          JSON.stringify({ slide_number: insertSlideNum, note: result })
-                        );
-                        const { success, message } = ret;
-                        dispatch(activeToast({ type: success ? 'info' : 'error', msg: message }));
+                        Bridge.callSyncBridgeApiWithCallback({
+                          api: 'insertNote',
+                          arg: JSON.stringify({ slide_number: insertSlideNum, note: result }),
+                          callback: (ret) => {
+                            try {
+                              const { success, message } = ret;
+                              dispatch(
+                                activeToast({ type: success ? 'info' : 'error', msg: message })
+                              );
+                            } catch (err) {}
+                          }
+                        });
                       } else {
                         insertDoc(result);
                         dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.CompleteInsert`) }));
