@@ -7,6 +7,7 @@
   "ASKDoc": "ASK Doc",
   "ShowExam": "例文",
   "Confirm": "確認",
+  "Cancel": "キャンセル",
   "Result": "結果",
   "Generate": "生成",
   "Regenerate": "再生成",
@@ -245,6 +246,14 @@
       "TryAgain": "再試行",
       "ServiceNotification": "サービスのお知らせ"
     }
+  },
+  "Alli": {
+    "ReCheck": "再度ご確認ください!",
+    "AlreadyExistNote": "このページには、前回生成されたスライドノートがあります. スライドノートの作成はクレジットを消費する.",
+    "RefPage": "参考 {{page}} ページ",
+    "insertNote": "{{page}}ページにスライドノートを挿入する",
+    "getCurrentSlideNote": "現在のスライドの内容を取得する",
+    "AlreadyExistSlideContents": "スライドの内容をインポートすると、以前の編集が失われます. 続行する?"
   },
   "EOS": {
     "ASKDocEOSTitle": "ASK Doc V1のサービスが終了しました",

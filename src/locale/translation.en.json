@@ -7,6 +7,7 @@
   "ASKDoc": "ASK Doc",
   "ShowExam": "example sentences",
   "Confirm": "Confirm",
+  "Cancel": "Cancel",
   "Result": "Result",
   "Generate": "Generate",
   "Regenerate": "Regenerate",
@@ -245,6 +246,14 @@
       "TryAgain": "Try again",
       "ServiceNotification": "Service Notification"
     }
+  },
+  "Alli": {
+    "ReCheck": "Please check again!",
+    "AlreadyExistNote": "There are already existing slide notes on this page. Generating slide note consumes the credits.",
+    "RefPage": "Ref {{page}} Page",
+    "insertNote": "Insert the slide note in {{page}} page",
+    "getCurrentSlideNote": "Get the current slide contents",
+    "AlreadyExistSlideContents": "Previous edits are lost when the slide content is imported. Continue to proceed?"
   },
   "EOS": {
     "ASKDocEOSTitle": "ASK Doc V1 Service Ended",

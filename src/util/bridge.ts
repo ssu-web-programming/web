@@ -381,7 +381,10 @@ type ApiType =
   | 'shareAnswerState'
   | 'analyzeFiles'
   | 'setVoiceRecognizeMode'
-  | 'textToSpeech';
+  | 'textToSpeech'
+  | 'getDocType'
+  | 'getSlideContents'
+  | 'insertNote';
 
 const Bridge = {
   checkSession: (api: string) => {
@@ -440,6 +443,30 @@ const Bridge = {
     const apiArg =
       arg && typeof arg !== 'string' && typeof arg !== 'number' ? await fileToString(arg) : arg;
     callApi(api, apiArg);
+  },
+  callSyncBridgeApi: (api: ApiType, arg?: string | number) => {
+    return new Promise<any>((resolve, reject) => {
+      const callback = async (msg: CallbackMessage, id: BridgeItemID) => {
+        try {
+          resolve(msg.body);
+        } catch (err) {
+          reject(err);
+        } finally {
+          delete BridgeList[id];
+        }
+      };
+      try {
+        const item = {
+          id: api,
+          callback
+        };
+        BridgeList[item.id] = item;
+
+        callApi(api, arg);
+      } catch (err) {
+        reject({ success: false, err });
+      }
+    });
   }
 };
 

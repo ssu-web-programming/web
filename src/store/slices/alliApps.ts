@@ -5,6 +5,8 @@ import { AppInfo } from '../../pages/Alli/Alli';
 interface AlliCreateResult {
   inputs: any;
   output: string;
+  refSlideNum: number;
+  insertSlideNum: number;
 }
 
 interface AlliAppsState {
@@ -16,7 +18,9 @@ const initialState: AlliAppsState = {
   selectedApp: null,
   createResult: {
     inputs: {},
-    output: ''
+    output: '',
+    refSlideNum: 0,
+    insertSlideNum: 0
   }
 };
 
