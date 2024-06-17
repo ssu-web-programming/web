@@ -6,6 +6,7 @@ import React from 'react';
 const Fieldset = styled.fieldset`
   border: none;
   margin: 0px;
+  min-width: auto;
   padding: 0px;
   & + & {
     margin-top: 16px;
