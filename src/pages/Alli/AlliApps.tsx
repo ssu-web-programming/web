@@ -22,6 +22,8 @@ import AlliIconEmail from '../../img/alli/appIcon/alli-icon-email.svg';
 import AlliIconGoodWord from '../../img/alli/appIcon/alli-icon-good-word.svg';
 import AlliIconSlideNote from '../../img/alli/appIcon/alli-icon-slide-note.svg';
 import Bridge from '../../util/bridge';
+import { useAppDispatch, useAppSelector } from '../../store/store';
+import { appStateSelector, setDocType } from '../../store/slices/appState';
 
 const Wrapper = styled.ul`
   width: 100%;
@@ -178,6 +180,9 @@ interface AppListProps {
 export default function AppList(props: AppListProps) {
   const { onSelect } = props;
 
+  const dispatch = useAppDispatch();
+  const { docType } = useAppSelector(appStateSelector);
+
   const { data } = useSuspenseQuery<AppInfo[]>({
     queryKey: ['AlliApps'],
     queryFn: async () => {
@@ -190,15 +195,15 @@ export default function AppList(props: AppListProps) {
           icon: AlliAppIcons.find((icon) => icon.id[lang] === appInfo.id)?.icon
         }));
 
-        const docType = await Bridge.callSyncBridgeApi('getDocType');
-
-        // move slide note app to the top
-        return docType.includes('ppt')
-          ? [
-              ...list.filter((item: any) => isSlideNoteApp(item.id)),
-              ...list.filter((item: any) => !isSlideNoteApp(item.id))
-            ]
-          : [...list.filter((item: any) => !isSlideNoteApp(item.id))];
+        Bridge.callSyncBridgeApiWithCallback({
+          api: 'getDocType',
+          callback: (docType) => {
+            try {
+              dispatch(setDocType(docType));
+            } catch (err) {}
+          }
+        });
+        return list;
       } catch (err) {
         throw err;
       }
@@ -206,9 +211,17 @@ export default function AppList(props: AppListProps) {
     staleTime: Infinity
   });
 
+  // move slide note app to the top
+  const appList = docType.includes('ppt')
+    ? [
+        ...data.filter((item: any) => isSlideNoteApp(item.id)),
+        ...data.filter((item: any) => !isSlideNoteApp(item.id))
+      ]
+    : [...data.filter((item: any) => !isSlideNoteApp(item.id))];
+
   return (
     <Wrapper>
-      {data.map((item, index) => (
+      {appList.map((item, index) => (
         <AppItemWrapper key={item.name}>
           {index !== 0 && <Divider />}
           <AppItem onClick={() => onSelect(item)}>
