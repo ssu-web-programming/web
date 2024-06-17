@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { useEffect, useRef, useState } from 'react';
 import { useAppSelector } from '../../store/store';
 import { v4 as uuidv4 } from 'uuid';
-import { ChatList } from '../../components/askDoc/v2/ChatList';
+import { ChatList } from '../../components/askDoc/ChatList';
 import { ChatBottom } from '../../components/askDoc/ChatBottom';
 
 import {
