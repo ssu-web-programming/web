@@ -13,7 +13,7 @@ import {
 } from '../style/cssCommon';
 import { useTranslation } from 'react-i18next';
 import Header from '../components/layout/Header';
-import AskDocSpeechBubble from '../components/askDoc/v1/AskDocSpeechBubble';
+import AskDocSpeechBubble from '../components/askDoc/AskDocSpeechBubble';
 import Button from '../components/buttons/Button';
 import ico_askdoc_64 from '../img/askDoc/ico_askdoc_64.svg';
 
