@@ -12,6 +12,7 @@ import { AskDocStatus, setSrouceId, setStatus } from '../store/slices/askDoc';
 import { setFiles } from '../store/slices/askDocAnalyzeFiesSlice';
 import { initComplete } from '../store/slices/initFlagSlice';
 import { setRecognizedVoice } from '../store/slices/recognizedVoice';
+import { initConfirm } from '../store/slices/confirm';
 
 const UA_PREFIX: string = `__polaris_office_ai_`;
 
@@ -242,6 +243,7 @@ export const useInitBridgeListener = () => {
         state: { body },
         replace: true
       });
+      thunkAPI.dispatch(initConfirm());
     } else {
       if (window.location.pathname !== path) {
         thunkAPI.dispatch(
