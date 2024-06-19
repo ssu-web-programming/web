@@ -266,20 +266,6 @@ export default function Alli() {
   const requestor = useRef<any>();
 
   const selectApp = (appInfo: AppInfo) => {
-    if (appInfo.inputs) {
-      const initVal = appInfo.inputs.reduce((acc, cur) => {
-        return {
-          ...acc,
-          [cur.value]:
-            cur.value === 'language'
-              ? cur.options.find((opt) => opt.value.toLowerCase().startsWith(lang))?.value
-              : isSlideNoteApp(appInfo.id)
-              ? cur.options[0]?.value
-              : undefined
-        };
-      }, {});
-      setInputs(initVal);
-    }
     dispatch(setSelectedApp(appInfo));
     ga.event({ category: 'AI Apps', action: 'App Select', label: appInfo.id });
   };
@@ -449,6 +435,23 @@ export default function Alli() {
     init();
     ga.event({ category: 'AI Apps', action: 'App List' });
   }, []);
+
+  useEffect(() => {
+    if (selectedApp?.inputs && createResult.output === '') {
+      const initVal = selectedApp.inputs.reduce((acc, cur) => {
+        return {
+          ...acc,
+          [cur.value]:
+            cur.value === 'language'
+              ? cur.options.find((opt) => opt.value.toLowerCase().startsWith(lang))?.value
+              : isSlideNoteApp(selectedApp.id)
+              ? cur.options[0]?.value
+              : undefined
+        };
+      }, {});
+      setInputs(initVal);
+    }
+  }, [selectedApp, createResult.output]);
 
   return (
     <ThemeProvider theme={theme}>
