@@ -2,6 +2,16 @@ import { MenuItem, Select, TextField } from '@mui/material';
 import styled from 'styled-components';
 import { ResponseAppInputInfo, isSlideNoteApp } from './Alli';
 import React from 'react';
+import TextLength from 'components/TextLength';
+
+const TEXT_MAX_LENGTH = 50;
+const PARAGRAPH_MAX_LENGTH = 2000;
+
+const TextFieldWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+`;
 
 const Fieldset = styled.fieldset`
   border: none;
@@ -35,25 +45,33 @@ const template: Template[] = [
   {
     inputType: 'text',
     component: ({ inputs, setInputs, info }) => (
-      <TextField
-        size="small"
-        fullWidth
-        value={inputs[info.value] || ''}
-        onChange={(e) => setInputs(e.target.value)}
-      />
+      <TextFieldWrapper>
+        <TextField
+          size="small"
+          fullWidth
+          value={inputs[info.value] || ''}
+          onChange={(e) => setInputs(e.target.value?.slice(0, TEXT_MAX_LENGTH))}
+        />
+        <TextLength length={inputs[info.value]?.length || 0} max={TEXT_MAX_LENGTH}></TextLength>
+      </TextFieldWrapper>
     )
   },
   {
     inputType: 'paragraph',
     component: ({ inputs, setInputs, info, compProps }) => (
-      <TextField
-        {...compProps}
-        multiline
-        placeholder={info.placeholder}
-        rows={8}
-        fullWidth
-        value={inputs[info.value] || ''}
-        onChange={(e) => setInputs(e.target.value)}></TextField>
+      <TextFieldWrapper>
+        <TextField
+          {...compProps}
+          multiline
+          placeholder={info.placeholder}
+          rows={8}
+          fullWidth
+          value={inputs[info.value] || ''}
+          onChange={(e) => setInputs(e.target.value?.slice(0, PARAGRAPH_MAX_LENGTH))}></TextField>
+        <TextLength
+          length={inputs[info.value]?.length || 0}
+          max={PARAGRAPH_MAX_LENGTH}></TextLength>
+      </TextFieldWrapper>
     )
   },
   {

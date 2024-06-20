@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 import SubTitle from './SubTitle';
 import TextArea from './TextArea';
-import { LengthWrapper } from '../views/AIChatTab';
 import ChangeExampleButton from './buttons/ChangeExampleButton';
 import { useState } from 'react';
 import { alignItemCenter, flex, flexColumn, justiSpaceBetween } from '../style/cssCommon';
 import { useTranslation } from 'react-i18next';
+import TextLength from './TextLength';
 
 const InputArea = styled.div<{ activeBorder: boolean }>`
   ${flex}
@@ -82,9 +82,7 @@ const ExTextbox = ({
           }}
         />
         <TopBorer>
-          <LengthWrapper isError={value.length >= maxTextLen}>
-            {value.length}/{maxTextLen}
-          </LengthWrapper>
+          <TextLength length={value.length} max={maxTextLen}></TextLength>
           <ChangeExampleButton disable={value.length > 0} onClick={refreshExampleText} />
         </TopBorer>
       </InputArea>

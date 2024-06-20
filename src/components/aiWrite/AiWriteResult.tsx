@@ -8,7 +8,7 @@ import {
   flexShrink,
   justiSpaceBetween
 } from '../../style/cssCommon';
-import { BoldLengthWrapper, ColumDivider, RowBox } from '../../views/AIChatTab';
+import { ColumDivider, RowBox } from '../../views/AIChatTab';
 import SubTitle from '../SubTitle';
 import Loading from '../Loading';
 import PreMarkdown from '../PreMarkdown';
@@ -34,6 +34,7 @@ import React from 'react';
 import { useMoveChatTab } from '../hooks/useMovePage';
 import ArrowSwitcher from '../ArrowSwitcher';
 import ClovaXLinkText from '../ClovaXLinkText';
+import { BoldTextLength } from 'components/TextLength';
 
 // clipboard
 // import { useCopyClipboard } from '../../util/bridge';
@@ -131,7 +132,11 @@ const AiWriteResult = ({
       <ResWrapper>
         <RowBox>
           <SubTitle subTitle={t(`WriteTab.PreviewWriting`)} />
-          {creating === 'none' && <ReturnButton onClick={() => dispatch(resetCurrentWrite())} />}
+          {creating === 'none' && (
+            <ReturnButton onClick={() => dispatch(resetCurrentWrite())}>
+              {t(`WriteTab.ReEnterTopic`)}
+            </ReturnButton>
+          )}
         </RowBox>
         <ResultBox>
           {currentWrite.result.length === 0 && creating !== 'none' && (
@@ -159,11 +164,11 @@ const AiWriteResult = ({
                 height: 35px;
                 padding: 8px 12px;
               `}>
-              <BoldLengthWrapper>
+              <BoldTextLength>
                 {currentWrite.result.length > 0 && (
                   <>{t(`WriteTab.LengthInfo`, { length: currentWrite?.result.length })}</>
                 )}
-              </BoldLengthWrapper>
+              </BoldTextLength>
 
               {creating === 'none' && currentIndex !== null && (
                 <RightBox>
