@@ -50,6 +50,7 @@ import DropDownButton from '../components/buttons/DropDownButton';
 import { useShowCreditToast } from '../components/hooks/useShowCreditToast';
 import { AI_WRITE_RESPONSE_STREAM_API } from '../api/constant';
 import { apiWrapper, streaming } from '../api/apiWrapper';
+import TextLength from 'components/TextLength';
 
 const TEXT_MAX_HEIGHT = 268;
 
@@ -113,32 +114,12 @@ export const RowBox = styled.div<{ cssExt?: FlattenSimpleInterpolation }>`
   ${({ cssExt }) => cssExt && cssExt}
 `;
 
-export const LengthWrapper = styled.div<{ isError?: boolean; cssExt?: FlattenSimpleInterpolation }>`
-  ${flex}
-  ${alignItemCenter}
-
-  font-size: 12px;
-  color: var(--gray-gray-70);
-
-  ${({ isError }) =>
-    isError !== undefined &&
-    css`
-      color: ${isError ? 'var(--sale)' : 'var(--gray-gray-70)'};
-    `}
-
-  ${({ cssExt }) => cssExt && cssExt}
-`;
-
 export const VersionWrapper = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   gap: 8px;
-`;
-
-export const BoldLengthWrapper = styled(LengthWrapper)`
-  font-weight: 500;
 `;
 
 const Info = styled.div`
@@ -620,9 +601,7 @@ const AIChatTab = (props: WriteTabProps) => {
           {!loadingId && isActiveInput && (
             <InputBottomArea>
               <div style={{ display: 'flex', flexDirection: 'row', gap: '12px' }}>
-                <LengthWrapper isError={chatInput.length >= INPUT_MAX_LENGTH}>
-                  {chatInput.length}/{INPUT_MAX_LENGTH}
-                </LengthWrapper>
+                <TextLength length={chatInput.length} max={INPUT_MAX_LENGTH}></TextLength>
                 <VersionWrapper>
                   <>
                     {groupVersionList.map((group) => {

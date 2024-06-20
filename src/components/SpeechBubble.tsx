@@ -1,5 +1,5 @@
 import styled, { FlattenSimpleInterpolation, css } from 'styled-components';
-import { BoldLengthWrapper, ColumDivider, RowBox } from '../views/AIChatTab';
+import { ColumDivider, RowBox } from '../views/AIChatTab';
 import Icon from './Icon';
 import icon_ai from '../img/ico_ai.svg';
 import icon_ai_loading from '../img/loading_dot_2x.webp';
@@ -21,6 +21,7 @@ import { formRecList } from './chat/RecommendBox/FormRec';
 import { REC_ID_LIST } from './chat/RecommendBox/FunctionRec';
 import { selectRecFuncSlice } from '../store/slices/recFuncSlice';
 import ClovaXLinkText from './ClovaXLinkText';
+import { BoldTextLength } from './TextLength';
 
 // clipboard
 // import { useCopyClipboard } from '../util/bridge';
@@ -209,9 +210,9 @@ const SpeechBubble = (props: PropsWithChildren<SpeechBubbleProps>) => {
                   gap: 8px;
                 `}>
                 <RowBox>
-                  <BoldLengthWrapper>
+                  <BoldTextLength>
                     {t(`WriteTab.LengthInfo`, { length: text.length })}
-                  </BoldLengthWrapper>
+                  </BoldTextLength>
                   {/* {chat.id !== loadingId && (
                     <IconButton
                       iconSize="sm"
