@@ -147,17 +147,12 @@ const AskDoc = () => {
   }, [isObigo]);
 
   useEffect(() => {
-    if (obigoGreeting && keywords && questions && summary) {
+    if (obigoGreeting && summary) {
       const initComplete = t('AskDoc.InitLoadInfoContent');
       const s = t('AskDoc.Summary');
-      const k = t('AskDoc.Keyword');
-      const q = t('AskDoc.Questions');
-      Bridge.callBridgeApi(
-        'textToSpeech',
-        `${initComplete} ${s} ${summary} ${k} ${keywords.join(',')} ${q} ${questions.join(',')}`
-      );
+      Bridge.callBridgeApi('textToSpeech', `${initComplete} ${s} ${summary}`);
     }
-  }, [obigoGreeting, keywords, questions, summary]);
+  }, [obigoGreeting, summary]);
 
   const reqVoiceRes = async (text: string) => {
     try {
@@ -259,7 +254,7 @@ const AskDoc = () => {
             onPlayAudio={onPlayAudio}
             setOnPlayAudio={setOnPlayAudio}
           />
-          {!isTesla && !isObigo && (
+          {!isTesla && (
             <ChatBottom
               loadingId={loadingId}
               isActiveInput={isActiveInput}
