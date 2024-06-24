@@ -32,12 +32,13 @@ import ArrowSwitcher from '../ArrowSwitcher';
 
 import { ReactComponent as IconArrowUp } from '../../img/ico_arrow_up_small.svg';
 import { ReactComponent as IconArrowDown } from '../../img/ico_arrow_down_small.svg';
+import { versionItemList } from './ImageCreateInput';
 
 const ImagePreview = styled.div`
   width: 100%;
   aspect-ratio: 1 / 1;
   max-height: 348px;
-  margin-top: 16px;
+  margin: 16px 0 12px;
 `;
 
 const InputDescKor = styled.p`
@@ -224,7 +225,7 @@ const ImageCreateResult = ({
             alt=""></img>
         )}
       </ImagePreview>
-      <ImageList>
+      {/* <ImageList>
         <ArrowSwitcher
           size="sm"
           type="imgList"
@@ -254,7 +255,7 @@ const ImageCreateResult = ({
               alt=""></img>
           ))}
         </ArrowSwitcher>
-      </ImageList>
+      </ImageList> */}
       <RowContainer>
         <Grid col={2}>
           <CreditButton
@@ -265,7 +266,8 @@ const ImageCreateResult = ({
               createAiImage({
                 input: curHistory.input,
                 style: curHistory.style,
-                ratio: curHistory.ratio
+                ratio: curHistory.ratio,
+                type: curHistory.type
               })
             }>
             {t(`WriteTab.Recreating`)}
@@ -295,7 +297,7 @@ const ImageCreateResult = ({
         </Grid>
         <Button
           width={'full'}
-          height={28}
+          height={40}
           variant={'purpleGradient'}
           onClick={async () => {
             try {
@@ -323,7 +325,7 @@ const ImageCreateResult = ({
       <LicenseMark>
         <LinkText url={t(`MoveToLimitInfo`)}>
           <div style={{ color: '#8769ba', fontSize: '11px' }}>
-            Powered By <b>Stable Diffusion</b>
+            Powered By <b>{versionItemList.find((item) => item.id === curHistory.type)?.title}</b>
           </div>
         </LinkText>
       </LicenseMark>

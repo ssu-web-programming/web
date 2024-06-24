@@ -6,10 +6,16 @@ interface AiImageResponse {
   data: string;
 }
 
+export enum VersionType {
+  sd3 = 'sd3',
+  dalle3 = 'dalle3'
+}
+
 export interface T2IOptionType {
   input: string;
   style: string;
   ratio: string;
+  type: VersionType;
 }
 
 export interface T2IType extends T2IOptionType {

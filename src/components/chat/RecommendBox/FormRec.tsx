@@ -8,12 +8,12 @@ import { recSubType, recType } from '../../../store/slices/recFuncSlice';
 import { LANG_KO_KR, lang } from '../../../locale';
 import { getIconColor } from 'util/getColor';
 
-export type EngineVersion = 'gpt3.5' | 'gpt4' | 'gpt4o' | 'clovax';
+export type EngineVersion = 'gpt3.5' | 'gpt4' | 'gpt4o' | 'clovax' | 'claude';
 
 export interface VersionListType {
   id: string;
   version: EngineVersion;
-  group: 'gpt' | 'clova' | null;
+  group: 'all' | null;
 }
 
 interface FormListType {
@@ -50,28 +50,36 @@ export const formRecList = [
 const versionGpt3: VersionListType = {
   id: 'GPT-3.5',
   version: 'gpt3.5',
-  group: 'gpt'
+  group: 'all'
 };
 const versionGpt4: VersionListType = {
   id: 'GPT-4',
   version: 'gpt4',
-  group: 'gpt'
+  group: 'all'
 };
 export const versionGpt4o: VersionListType = {
   id: 'GPT-4o',
   version: 'gpt4o',
-  group: 'gpt'
+  group: 'all'
 };
 export const versionClova: VersionListType = {
   id: 'CLOVA X',
   version: 'clovax',
-  group: 'clova'
+  group: 'all'
+};
+export const versionClaude: VersionListType = {
+  id: 'Claude 3.5 Sonnet',
+  version: 'claude',
+  group: 'all'
 };
 
-export const versionList: VersionListType[] =
-  lang === LANG_KO_KR
-    ? [versionClova, versionGpt3, versionGpt4, versionGpt4o]
-    : [versionGpt3, versionGpt4, versionGpt4o, versionClova];
+export const versionList: VersionListType[] = [
+  versionClova,
+  versionClaude,
+  versionGpt3,
+  versionGpt4,
+  versionGpt4o
+];
 
 export const DEFAULT_WRITE_OPTION_LENGTH_VALUE: LengthListType = {
   id: 'Short',

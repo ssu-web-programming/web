@@ -22,6 +22,7 @@ import { REC_ID_LIST } from './chat/RecommendBox/FunctionRec';
 import { selectRecFuncSlice } from '../store/slices/recFuncSlice';
 import ClovaXLinkText from './ClovaXLinkText';
 import { BoldTextLength } from './TextLength';
+import ClaudeLinkText from 'components/ClaudeLinkText';
 
 // clipboard
 // import { useCopyClipboard } from '../util/bridge';
@@ -256,7 +257,13 @@ const SpeechBubble = (props: PropsWithChildren<SpeechBubbleProps>) => {
 
       {chat.role === 'assistant' && !loadingMsg && (
         <LisenceRight>
-          {chat.version === 'clovax' ? <ClovaXLinkText /> : <OpenAILinkText />}
+          {chat.version === 'clovax' ? (
+            <ClovaXLinkText />
+          ) : chat.version === 'claude' ? (
+            <ClaudeLinkText />
+          ) : (
+            <OpenAILinkText />
+          )}
         </LisenceRight>
       )}
     </Wrapper>

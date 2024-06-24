@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { flex, flexColumn } from '../../style/cssCommon';
 import { RowBox, exampleList } from '../../views/AIChatTab';
 import { useTranslation } from 'react-i18next';
@@ -31,12 +31,12 @@ const InputArea = styled.div`
   width: 100%;
 `;
 
-const VersionInner = styled.div`
+export const VersionInner = styled.div`
   display: flex;
   flex-direction: row;
 `;
 
-const NewMark = styled.div`
+export const NewMark = styled.div`
   width: 6px;
   height: 6px;
   border-radius: 50%;
@@ -98,8 +98,23 @@ const AIWriteInput = ({
       </TitleInputSet>
       <TitleInputSet>
         <SubTitle subTitle={t(`WriteTab.SelectVersion`)} />
-        <Grid col={4}>
-          {versionList.map((cur) => (
+        <Grid col={2}>
+          {versionList.slice(0, 2).map((cur) => (
+            <Button
+              width="full"
+              variant="gray"
+              key={cur.version}
+              onClick={() => setSelectedOptions((prev) => ({ ...prev, version: cur }))}
+              selected={selectedVersion.version === cur.version}>
+              <VersionInner>
+                {cur.id}
+                {cur.id === 'Claude 3.5 Sonnet' && <NewMark></NewMark>}
+              </VersionInner>
+            </Button>
+          ))}
+        </Grid>
+        <Grid col={3}>
+          {versionList.slice(2, 5).map((cur) => (
             <Button
               width="full"
               variant="gray"
@@ -150,18 +165,20 @@ const AIWriteInput = ({
         </Grid>
       </TitleInputSet>
 
-      <div style={{ paddingTop: '4px' }}>
-        <CreditButton
-          width="full"
-          disable={input.length === 0}
-          variant="purpleGradient"
-          onClick={() => submitSubject()}>
-          <div style={{ display: 'flex', gap: '5px' }}>
-            <Icon size="sm" iconSrc={icon_write}></Icon>
-            {t(`WriteTab.WritingArticle`)}
-          </div>
-        </CreditButton>
-      </div>
+      <CreditButton
+        width="full"
+        disable={input.length === 0}
+        variant="purpleGradient"
+        cssExt={css`
+          padding-top: 4px;
+          height: 40px;
+        `}
+        onClick={() => submitSubject()}>
+        <div style={{ display: 'flex', gap: '5px' }}>
+          <Icon size="sm" iconSrc={icon_write}></Icon>
+          {t(`WriteTab.WritingArticle`)}
+        </div>
+      </CreditButton>
     </WriteInputPage>
   );
 };

@@ -95,6 +95,7 @@
     "CreateImage": "画像を作成",
     "WritingImageDesc": "画像の説明を作成",
     "WriteImageDesc": "作成する画像の説明を入力してください。",
+    "SelectType": "モデルを選択",
     "ChooseStyle": "スタイルを選択",
     "StyleList": {
       "None": "なし",
