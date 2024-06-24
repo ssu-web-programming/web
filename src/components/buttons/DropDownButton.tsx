@@ -1,5 +1,5 @@
-import { ReactComponent as IconArrowDown } from '../../img/ico_arrow_down_small_comp.svg';
-import { ReactComponent as IconArrowUp } from '../../img/ico_arrow_up_small_comp.svg';
+import { ReactComponent as IconArrowDown } from '../../img/ico_arrow_down_small.svg';
+import { ReactComponent as IconArrowUp } from '../../img/ico_arrow_up_small.svg';
 import { useMemo, useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import {
@@ -8,7 +8,8 @@ import {
   flexColumn,
   flexGrow,
   flexShrink,
-  justiCenter
+  justiCenter,
+  justiStart
 } from '../../style/cssCommon';
 import Button, { ButtonProps } from './Button';
 import IconComponent from '../IconComponent';
@@ -38,21 +39,23 @@ const FloatingListWrapper = styled.div`
   font-size: 12px;
   position: absolute;
   top: 0px;
+  left: 0;
   transform: translate(0%, -100%);
 
   border-radius: 4px;
   border: solid 1px #6f3ad0;
   background-color: white;
-  width: 100%;
+  width: 140px;
 `;
 
 const FloatingItem = styled.div<{ isSelected: boolean }>`
   ${flex}
-  ${justiCenter}
+  ${justiStart}
   ${alignItemCenter}
 
   width: 100%;
   height: 24px;
+  padding: 3px 10px;
   border-radius: 4px;
 
   &:hover {
@@ -103,6 +106,8 @@ const DropDownButton = <T extends { id: string }>(props: DropDownProps<T>) => {
     setThumbItemId(defaultId);
   }, [defaultId]);
 
+  console.log(list);
+
   return (
     <>
       <DropDownWrapper
@@ -126,7 +131,7 @@ const DropDownButton = <T extends { id: string }>(props: DropDownProps<T>) => {
                 }}>
                 <VersionInner>
                   {item.id}
-                  {item.id === 'GPT-4o' && <NewMark></NewMark>}
+                  {item.id === 'Claude 3.5 Sonnet' && <NewMark></NewMark>}
                 </VersionInner>
               </FloatingItem>
             ))}
@@ -136,13 +141,15 @@ const DropDownButton = <T extends { id: string }>(props: DropDownProps<T>) => {
         <Button
           {...rest}
           width={width}
-          variant={hasSelectedOption ? 'purple' : 'gray'}
+          variant={'gray'}
           cssExt={css`
-            padding: 0px;
+            padding: 0 8px;
           `}>
           <VersionInner>
             {hasSelectedOption ? selectedId : thumbItemId.length > 0 && thumbItemId}
-            {(thumbItemId === 'GPT-4o' || selectedId === 'GPT-4o') && <NewMark></NewMark>}
+            {(thumbItemId === 'Claude 3.5 Sonnet' || selectedId === 'Claude 3.5 Sonnet') && (
+              <NewMark></NewMark>
+            )}
           </VersionInner>
           <IconComponent iconComponent={isOpen ? IconArrowDown : IconArrowUp} />
         </Button>

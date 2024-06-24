@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import {
   T2IOptionType,
+  VersionType,
   addT2I,
   selectT2IHistory,
   updateT2ICurItemIndex,
@@ -21,7 +22,8 @@ import useErrorHandle from '../components/hooks/useErrorHandle';
 import { selectTabSlice, setCreating } from '../store/slices/tabSlice';
 import ImageCreateInput, {
   ratioItemList,
-  styleItemList
+  styleItemList,
+  versionItemList
 } from '../components/txt2img/ImageCreateInput';
 import ImageCreateResult from '../components/txt2img/ImageCreateResult';
 
@@ -67,7 +69,8 @@ const ImageCreate = ({ contents }: { contents: string }) => {
   const [selectedOptions, setSelectedOptions] = useState<T2IOptionType>({
     input: contents,
     style: styleItemList[0].id,
-    ratio: ratioItemList[0].id
+    ratio: ratioItemList[0].id,
+    type: versionItemList[0].id
   });
 
   const createAiImage = useCallback(
@@ -78,12 +81,16 @@ const ImageCreate = ({ contents }: { contents: string }) => {
         const apiBody: {
           prompt: string;
           imgSize: string;
-          style_preset?: string;
+          stylePreset?: string;
+          type: VersionType;
         } = {
           prompt: option.input,
-          imgSize: option.ratio
+          imgSize: option.ratio,
+          type: option.type
         };
-        if (option.style !== 'none') apiBody['style_preset'] = option.style;
+        if (option.style !== 'none') apiBody['stylePreset'] = option.style;
+
+        console.log('option', option);
 
         const { res, logger } = await apiWrapper().request(TEXT_TO_IMAGE_API, {
           body: apiBody,
@@ -91,6 +98,7 @@ const ImageCreate = ({ contents }: { contents: string }) => {
         });
 
         const body = await res.json();
+
         const input_token = calcToken(option.input);
         logger({
           dp: 'ai.text_to_image',
@@ -118,7 +126,8 @@ const ImageCreate = ({ contents }: { contents: string }) => {
               input: option.input,
               style: option.style,
               ratio: option.ratio,
-              translatedPrompts: translatedPrompts
+              translatedPrompts: translatedPrompts,
+              type: option.type
             })
           );
           dispatch(updateT2ICurListId(assistantId));
@@ -140,7 +149,8 @@ const ImageCreate = ({ contents }: { contents: string }) => {
       setSelectedOptions({
         input: contents,
         style: styleItemList[0].id,
-        ratio: ratioItemList[0].id
+        ratio: ratioItemList[0].id,
+        type: versionItemList[0].id
       });
     }
   }, [contents]);

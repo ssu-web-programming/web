@@ -31,12 +31,12 @@ const InputArea = styled.div`
   width: 100%;
 `;
 
-const VersionInner = styled.div`
+export const VersionInner = styled.div`
   display: flex;
   flex-direction: row;
 `;
 
-const NewMark = styled.div`
+export const NewMark = styled.div`
   width: 6px;
   height: 6px;
   border-radius: 50%;
@@ -48,6 +48,14 @@ const TitleInputSet = styled.div`
   ${flex}
   ${flexColumn}
   gap: 8px;
+`;
+
+const StyledCreditButton = styled.div`
+  padding-top: 4px;
+
+  button {
+    height: 40px;
+  }
 `;
 
 const subjectMaxLength = 1000;
@@ -98,8 +106,23 @@ const AIWriteInput = ({
       </TitleInputSet>
       <TitleInputSet>
         <SubTitle subTitle={t(`WriteTab.SelectVersion`)} />
-        <Grid col={4}>
-          {versionList.map((cur) => (
+        <Grid col={2}>
+          {versionList.slice(0, 2).map((cur) => (
+            <Button
+              width="full"
+              variant="gray"
+              key={cur.version}
+              onClick={() => setSelectedOptions((prev) => ({ ...prev, version: cur }))}
+              selected={selectedVersion.version === cur.version}>
+              <VersionInner>
+                {cur.id}
+                {cur.id === 'Claude 3.5 Sonnet' && <NewMark></NewMark>}
+              </VersionInner>
+            </Button>
+          ))}
+        </Grid>
+        <Grid col={3}>
+          {versionList.slice(2, 5).map((cur) => (
             <Button
               width="full"
               variant="gray"
@@ -150,7 +173,7 @@ const AIWriteInput = ({
         </Grid>
       </TitleInputSet>
 
-      <div style={{ paddingTop: '4px' }}>
+      <StyledCreditButton>
         <CreditButton
           width="full"
           disable={input.length === 0}
@@ -161,7 +184,7 @@ const AIWriteInput = ({
             {t(`WriteTab.WritingArticle`)}
           </div>
         </CreditButton>
-      </div>
+      </StyledCreditButton>
     </WriteInputPage>
   );
 };

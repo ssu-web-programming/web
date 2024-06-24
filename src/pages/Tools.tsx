@@ -16,7 +16,8 @@ import {
   DEFAULT_WRITE_OPTION_LENGTH_VALUE,
   versionClova,
   versionGpt4o,
-  WriteOptions
+  WriteOptions,
+  versionClaude
 } from '../components/chat/RecommendBox/FormRec';
 
 import { ReactComponent as IconChat } from '../img/ico_chat.svg';
