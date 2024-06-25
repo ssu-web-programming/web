@@ -243,18 +243,6 @@ export default function Alli() {
   const requestor = useRef<any>();
 
   const selectApp = (appInfo: AppInfo) => {
-    if (appInfo.inputs) {
-      const initVal = appInfo.inputs.reduce((acc, cur) => {
-        return {
-          ...acc,
-          [cur.value]:
-            cur.value === 'language'
-              ? cur.options.find((opt) => opt.value.toLowerCase().startsWith(lang))?.value
-              : cur.options[0]?.value
-        };
-      }, {});
-      setInputs(initVal);
-    }
     dispatch(setSelectedApp(appInfo));
     ga.event({ category: 'AI Apps', action: 'App Select', label: appInfo.id });
   };
