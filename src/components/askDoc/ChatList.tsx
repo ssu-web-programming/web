@@ -1,21 +1,20 @@
 import AskDocSpeechBubble from './AskDocSpeechBubble';
 import { QuestionList } from './QuestionList';
 import styled from 'styled-components';
-import { flex, flexColumn, flexGrow, justiCenter } from '../../../style/cssCommon';
-import { useAppSelector } from '../../../store/store';
-import { AskDocChat, selectAskDoc } from '../../../store/slices/askDoc';
-import StopButton from '../../buttons/StopButton';
-import { setCreating } from '../../../store/slices/tabSlice';
-import { activeToast } from '../../../store/slices/toastSlice';
-import { Dispatch, MutableRefObject, useRef, SetStateAction, useState, useEffect } from 'react';
+import { flex, flexColumn, flexGrow, justiCenter } from '../../style/cssCommon';
+import { useAppSelector } from '../../store/store';
+import { AskDocChat, selectAskDoc } from '../../store/slices/askDoc';
+import StopButton from '../buttons/StopButton';
+import { setCreating } from '../../store/slices/tabSlice';
+import { activeToast } from '../../store/slices/toastSlice';
+import { Dispatch, MutableRefObject, SetStateAction, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAppDispatch } from '../../../store/store';
-import Button from '../../buttons/Button';
-import Bridge from '../../../util/bridge';
-import Icon from '../../Icon';
-import icon_retry from '../../../img/ico_reanalyze.svg';
-import useDownScroll from '../../hooks/useDownScroll';
-import useLangParameterNavigate from '../../hooks/useLangParameterNavigate';
+import { useAppDispatch } from '../../store/store';
+import Button from '../buttons/Button';
+import Bridge from '../../util/bridge';
+import Icon from '../Icon';
+import icon_retry from '../../img/ico_reanalyze.svg';
+import useLangParameterNavigate from '../hooks/useLangParameterNavigate';
 
 const ChatListWrapper = styled.div<{ isLoading: boolean }>`
   ${flex}
@@ -43,7 +42,6 @@ export const ChatList = ({
   loadingId,
   setLoadingId,
   isActiveRetry,
-  isIncludeSummary,
   setIsActiveInput,
   handleClickQuestion,
   stopRef,
@@ -53,7 +51,6 @@ export const ChatList = ({
   loadingId: string | null;
   setLoadingId: Dispatch<SetStateAction<string | null>>;
   isActiveRetry: boolean;
-  isIncludeSummary: boolean;
   setIsActiveInput: Dispatch<SetStateAction<boolean>>;
   handleClickQuestion: (api: 'gpt' | 'askDoc', chatText?: string) => {};
   stopRef: MutableRefObject<string[]>;
@@ -63,16 +60,10 @@ export const ChatList = ({
   const { t } = useTranslation();
   const { isTesla } = useLangParameterNavigate();
   const dispatch = useAppDispatch();
-  const downScroll = useDownScroll();
-  const chatEndRef = useRef<HTMLDivElement>(null);
 
   const { askDocHistory: chatHistory, sourceId, status } = useAppSelector(selectAskDoc);
 
   const [cancleList, setCancleList] = useState<AskDocChat['id'][]>([]);
-
-  useEffect(() => {
-    downScroll(chatEndRef);
-  }, [chatHistory, loadingId]);
 
   const onStop = () => {
     if (stopRef.current && loadingId) {
@@ -98,6 +89,11 @@ export const ChatList = ({
         isLoading={!!loadingId}
         onClick={() => {
           setIsActiveInput(false);
+        }}
+        ref={(el) => {
+          if (el) {
+            el.scrollTo(0, el.scrollHeight);
+          }
         }}>
         <AskDocSpeechBubble
           loadingId={loadingId}
@@ -139,7 +135,6 @@ export const ChatList = ({
                 handleClickQuestion('gpt', chat.input);
               }}></AskDocSpeechBubble>
           ))}
-        <div ref={chatEndRef}></div>
       </ChatListWrapper>
       {loadingId && loadingId !== 'init' && (
         <CenterBox>

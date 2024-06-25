@@ -3,7 +3,7 @@ import { RootState } from '../store';
 
 export interface recSubType {
   id: string;
-  icon?: string;
+  icon?: React.FC<React.SVGProps<SVGSVGElement>>;
 }
 
 export interface recType extends recSubType {

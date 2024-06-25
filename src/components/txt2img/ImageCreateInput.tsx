@@ -1,6 +1,5 @@
 import styled, { FlattenSimpleInterpolation, css } from 'styled-components';
-import iconStyleNone from '../../img/text2Img/non_select.svg';
-import iconStyleNonePurple from '../../img/text2Img/non_select_purple.svg';
+import { ReactComponent as IconStyleNone } from 'img/text2Img/non_select.svg';
 import iconStylePhoto from '../../img/text2Img/photo@2x.png';
 import iconStyleConcept from '../../img/text2Img/concept@2x.png';
 import iconStyle3d from '../../img/text2Img/3d@2x.png';
@@ -29,6 +28,7 @@ import CreditButton from '../buttons/CreditButton';
 import Icon from '../Icon';
 import Grid from '../layout/Grid';
 import IconBoxTextButton from '../buttons/IconBoxTextButton';
+import { getIconColor } from 'util/getColor';
 
 const MakingInputWrapper = styled.div`
   ${flex}
@@ -147,50 +147,42 @@ export const styleItemList = [
   {
     id: 'none',
     title: 'None',
-    imgItem: iconStyleNone,
-    selectedImgItem: iconStyleNonePurple
+    imgItem: IconStyleNone
   },
   {
     id: 'photographic',
     title: 'Picture',
-    imgItem: iconStylePhoto,
-    selectedImgItem: iconStylePhoto
+    imgItem: iconStylePhoto
   },
   {
     id: 'fantasy-art',
     title: 'ConceptArt',
-    imgItem: iconStyleConcept,
-    selectedImgItem: iconStyleConcept
+    imgItem: iconStyleConcept
   },
   {
     id: '3d-model',
     title: '3D',
-    imgItem: iconStyle3d,
-    selectedImgItem: iconStyle3d
+    imgItem: iconStyle3d
   },
   {
     id: 'anime',
     title: 'Anime',
-    imgItem: iconStyleAni,
-    selectedImgItem: iconStyleAni
+    imgItem: iconStyleAni
   },
   {
     id: 'x-po-retro',
     title: 'Retro',
-    imgItem: iconStyleRet,
-    selectedImgItem: iconStyleRet
+    imgItem: iconStyleRet
   },
   {
     id: 'x-po-watercolor-painting',
     title: 'WaterPainting',
-    imgItem: iconStyleWater,
-    selectedImgItem: iconStyleWater
+    imgItem: iconStyleWater
   },
   {
     id: 'x-po-oil-painting',
     title: 'OilPainting',
-    imgItem: iconStyleOil,
-    selectedImgItem: iconStyleOil
+    imgItem: iconStyleOil
   }
 ];
 
@@ -227,10 +219,6 @@ const ImageCreateInput = ({
   const { t } = useTranslation();
 
   const { input, style, ratio } = options;
-
-  const getIconColor = (itemId: string, selectedRatio: string) => {
-    return itemId === selectedRatio ? 'var(--ai-purple-50-main)' : 'var(--gray-gray-70)';
-  };
 
   return (
     <MakingInputWrapper>
@@ -278,13 +266,23 @@ const ImageCreateInput = ({
                     height: 80px;
                   `}
                   isSelected={item.id === style}>
-                  <img
-                    style={{
-                      width: item.id === 'none' ? '24px' : '100%',
-                      height: item.id === 'none' ? '24px' : '100%'
-                    }}
-                    src={item.id === style ? item.selectedImgItem : item.imgItem}
-                    alt=""></img>
+                  {item.id === 'none' ? (
+                    <item.imgItem
+                      color={getIconColor(item.id, style, {
+                        selected: 'var(--ai-purple-50-main)',
+                        default: '#979797'
+                      })}
+                    />
+                  ) : (
+                    <img
+                      style={{
+                        width: '100%',
+                        height: '100%'
+                      }}
+                      src={item.imgItem as string}
+                      alt={item.title}
+                    />
+                  )}
                 </ItemIconBox>
                 <ItemTitle isSelected={item.id === style}>
                   {t(`Txt2ImgTab.StyleList.${item.title}`)}

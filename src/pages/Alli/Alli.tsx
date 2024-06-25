@@ -6,7 +6,6 @@ import uiBuild from './builder';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Divider } from '@mui/material';
 
-import AppIconRefresh from '../../img/alli/alli-icon-refresh.svg';
 import { ReactComponent as IconDocument } from '../../img/askDoc/ico_document_64.svg';
 
 import Button from '../../components/buttons/Button';
@@ -33,6 +32,7 @@ import { apiWrapper, streaming } from '../../api/apiWrapper';
 import Bridge from '../../util/bridge';
 import { useConfirm } from '../../components/Confirm';
 import { setCreating } from '../../store/slices/tabSlice';
+import ReturnButton from 'components/buttons/ReturnButton';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -42,16 +42,24 @@ const Wrapper = styled.div`
   flex-direction: column;
 `;
 
+const BackButtonArea = styled.div`
+  display: flex;
+  height: 40px;
+  flex-direction: row;
+  padding: 0px 24px;
+  align-items: center;
+  border-bottom: 1px solid #e0e0e0;
+`;
+
 const Body = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
   padding: 5px 16px;
 
-  gap: 10px;
   overflow-y: auto;
 
-  padding: 40px 0px;
+  padding: 0px 0px 20px 0px;
   position: relative;
 `;
 
@@ -62,7 +70,7 @@ const AppContents = styled.div`
   flex-direction: column;
   flex: 1;
 
-  padding: 0px 24px;
+  padding: 20px 24px 0px 24px;
 
   overflow-y: auto;
 `;
@@ -132,42 +140,11 @@ const PoweredBy = styled.div`
 const Footer = styled.div`
   width: 100%;
   display: flex;
-  flex-direction: column;
-  gap: 32px;
-  margin-top: auto;
-`;
-
-const RefreshArea = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-`;
-
-const RefreshButton = styled.div<{ disabled: boolean }>`
-  width: 40px;
-  height: 40px;
-  background: linear-gradient(180deg, #a86cea 0%, #6f3ad0 100%);
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  &:hover {
-    cursor: pointer;
-  }
-
-  ${({ disabled }) =>
-    disabled &&
-    css`
-      opacity: 0.3;
-      pointer-events: none;
-    `}
-`;
-
-const Buttons = styled.div`
-  display: flex;
   flex-direction: row;
   gap: 10px;
+  padding: 10px 24px 0px 24px;
+  margin-top: auto;
+  border-top: 1px solid #e0e0e0;
 `;
 
 const ConfirmContents = styled.div`
@@ -266,6 +243,18 @@ export default function Alli() {
   const requestor = useRef<any>();
 
   const selectApp = (appInfo: AppInfo) => {
+    if (appInfo.inputs) {
+      const initVal = appInfo.inputs.reduce((acc, cur) => {
+        return {
+          ...acc,
+          [cur.value]:
+            cur.value === 'language'
+              ? cur.options.find((opt) => opt.value.toLowerCase().startsWith(lang))?.value
+              : cur.options[0]?.value
+        };
+      }, {});
+      setInputs(initVal);
+    }
     dispatch(setSelectedApp(appInfo));
     ga.event({ category: 'AI Apps', action: 'App Select', label: appInfo.id });
   };
@@ -457,6 +446,9 @@ export default function Alli() {
     <ThemeProvider theme={theme}>
       <Wrapper>
         <Header title={t('AITools')} subTitle={'AI Apps'}></Header>
+        <BackButtonArea>
+          {selectedApp && <ReturnButton onClick={goBack}>{t('Alli.ReturnAppList')}</ReturnButton>}
+        </BackButtonArea>
         <Body>
           {!selectedApp ? (
             isInit ? (
@@ -467,106 +459,95 @@ export default function Alli() {
               <Loading></Loading>
             )
           ) : (
-            <AppContents
-              ref={(el) => {
-                if (el && streamingStatus === 'streaming') {
-                  el.scrollTo(0, el.scrollHeight);
-                }
-              }}>
-              <AppName>{selectedApp.name}</AppName>
-              <AppDesc>{selectedApp.description}</AppDesc>
-              {inputComponents && inputComponents}
-              {result && (
-                <ResultArea>
-                  <Divider sx={{ margin: '32px 0px' }} />
-                  <ResultTitle>{t('Result')}</ResultTitle>
-                  <RunResult>
-                    <PreMarkdown text={result} />
-                  </RunResult>
-                  <Button
-                    disable={streamingStatus !== 'none'}
-                    variant="gray"
-                    width={'full'}
-                    height={40}
-                    cssExt={css`
-                      background-color: #ede5fe;
-                      border: solid 1px #9d75ec;
-                      font-size: 13px;
-                      font-weight: 700;
-                      line-height: 20px;
-                      letter-spacing: 0px;
-                      text-align: center;
-                      color: #6f3ad0;
-                    `}
-                    onClick={async () => {
-                      if (isSlideNoteApp(selectedApp.id)) {
-                        Bridge.callSyncBridgeApiWithCallback({
-                          api: 'insertNote',
-                          arg: JSON.stringify({ slide_number: insertSlideNum, note: result }),
-                          callback: (ret) => {
-                            try {
-                              const { success, message } = ret;
-                              dispatch(
-                                activeToast({ type: success ? 'info' : 'error', msg: message })
-                              );
-                            } catch (err) {}
-                          }
-                        });
-                      } else {
-                        insertDoc(result);
-                        dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.CompleteInsert`) }));
-                      }
-                    }}>
-                    {isSlideNoteApp(selectedApp.id)
-                      ? `${t('Alli.insertNote', { page: insertSlideNum })}`
-                      : t('WriteTab.InsertDoc')}
-                  </Button>
-                </ResultArea>
-              )}
-              <PoweredBy>Powered By Alli</PoweredBy>
+            <>
+              <AppContents
+                ref={(el) => {
+                  if (el && streamingStatus === 'streaming') {
+                    el.scrollTo(0, el.scrollHeight);
+                  }
+                }}>
+                <AppName>{selectedApp.name}</AppName>
+                <AppDesc>{selectedApp.description}</AppDesc>
+                {inputComponents && inputComponents}
+                {result && (
+                  <ResultArea>
+                    <Divider sx={{ margin: '32px 0px' }} />
+                    <ResultTitle>{t('Result')}</ResultTitle>
+                    <RunResult>
+                      <PreMarkdown text={result} />
+                    </RunResult>
+                    <Button
+                      disable={streamingStatus !== 'none'}
+                      variant="gray"
+                      width={'full'}
+                      height={40}
+                      cssExt={css`
+                        background-color: #ede5fe;
+                        border: solid 1px #9d75ec;
+                        font-size: 13px;
+                        font-weight: 700;
+                        line-height: 20px;
+                        letter-spacing: 0px;
+                        text-align: center;
+                        color: #6f3ad0;
+                      `}
+                      onClick={async () => {
+                        if (isSlideNoteApp(selectedApp.id)) {
+                          Bridge.callSyncBridgeApiWithCallback({
+                            api: 'insertNote',
+                            arg: JSON.stringify({ slide_number: insertSlideNum, note: result }),
+                            callback: (ret) => {
+                              try {
+                                const { success, message } = ret;
+                                dispatch(
+                                  activeToast({ type: success ? 'info' : 'error', msg: message })
+                                );
+                              } catch (err) {}
+                            }
+                          });
+                        } else {
+                          insertDoc(result);
+                          dispatch(
+                            activeToast({ type: 'info', msg: t(`ToastMsg.CompleteInsert`) })
+                          );
+                        }
+                      }}>
+                      {isSlideNoteApp(selectedApp.id)
+                        ? `${t('Alli.insertNote', { page: insertSlideNum })}`
+                        : t('WriteTab.InsertDoc')}
+                    </Button>
+                  </ResultArea>
+                )}
+                <PoweredBy>Powered By Alli</PoweredBy>
+              </AppContents>
               <Footer>
-                <RefreshArea>
-                  <RefreshButton
-                    disabled={streamingStatus !== 'none'}
-                    onClick={() => {
-                      refresh(selectedApp);
-                    }}>
-                    <img src={AppIconRefresh} width={15} height={15} alt="refresh"></img>
-                  </RefreshButton>
-                </RefreshArea>
-                <Buttons>
-                  <Button
-                    variant="gray"
-                    width={'full'}
-                    height={40}
-                    onClick={() => {
-                      if (streamingStatus !== 'none') {
-                        onClickStop();
-                      } else {
-                        goBack();
-                      }
-                    }}>
-                    {streamingStatus !== 'none' ? t('StopGenerate') : t('Back')}
+                <Button
+                  variant="gray"
+                  width={'full'}
+                  height={40}
+                  disable={streamingStatus !== 'none'}
+                  onClick={() => refresh(selectedApp)}>
+                  {t('Alli.RemoveAll')}
+                </Button>
+                {streamingStatus !== 'none' ? (
+                  <Button variant="gray" width={'full'} height={40} onClick={onClickStop}>
+                    {t('StopGenerate')}
                   </Button>
+                ) : (
                   <CreditButton
-                    disable={
-                      streamingStatus !== 'none' ||
-                      hasEmpty(inputs) ||
-                      (isSlideNoteApp(selectedApp.id) && refSlideNum === 0)
-                    }
                     variant="purpleGradient"
                     width={'full'}
                     height={40}
+                    disable={streamingStatus !== 'none' || hasEmpty(inputs)}
                     onClick={() => {
                       if (result) setResult('');
-                      if (isSlideNoteApp(selectedApp.id)) setInsertSlideNum(refSlideNum);
                       requestAlliRun(selectedApp.id, inputs);
                     }}>
                     {result ? t('Regenerate') : t('Generate')}
                   </CreditButton>
-                </Buttons>
+                )}
               </Footer>
-            </AppContents>
+            </>
           )}
           {streamingStatus === 'request' && (
             <MakingOverlap>

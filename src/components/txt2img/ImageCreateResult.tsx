@@ -163,8 +163,9 @@ const ImageCreateResult = ({
           onClick={() => {
             dispatch(updateT2ICurListId(null));
             dispatch(updateT2ICurItemIndex(null));
-          }}
-        />
+          }}>
+          {t(`WriteTab.ReEnterTopic`)}
+        </ReturnButton>
       </SubTitleArea>
       <InputDescBox>
         <InputDesc>
