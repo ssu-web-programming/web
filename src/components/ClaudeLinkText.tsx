@@ -1,11 +1,10 @@
 import LinkText from './LinkText';
 import icon_claude from '../img/logo_anthropic.svg';
 import styled from 'styled-components';
-import { flex } from '../style/cssCommon';
 import { useTranslation } from 'react-i18next';
 
 const Wrapper = styled.div`
-  ${flex}
+  display: flex;
 
   font-family: Pretendard;
   font-size: 11px;

@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { flex, flexColumn } from '../../style/cssCommon';
 import { RowBox, exampleList } from '../../views/AIChatTab';
 import { useTranslation } from 'react-i18next';
@@ -48,14 +48,6 @@ const TitleInputSet = styled.div`
   ${flex}
   ${flexColumn}
   gap: 8px;
-`;
-
-const StyledCreditButton = styled.div`
-  padding-top: 4px;
-
-  button {
-    height: 40px;
-  }
 `;
 
 const subjectMaxLength = 1000;
@@ -173,18 +165,20 @@ const AIWriteInput = ({
         </Grid>
       </TitleInputSet>
 
-      <StyledCreditButton>
-        <CreditButton
-          width="full"
-          disable={input.length === 0}
-          variant="purpleGradient"
-          onClick={() => submitSubject()}>
-          <div style={{ display: 'flex', gap: '5px' }}>
-            <Icon size="sm" iconSrc={icon_write}></Icon>
-            {t(`WriteTab.WritingArticle`)}
-          </div>
-        </CreditButton>
-      </StyledCreditButton>
+      <CreditButton
+        width="full"
+        disable={input.length === 0}
+        variant="purpleGradient"
+        cssExt={css`
+          padding-top: 4px;
+          height: 40px;
+        `}
+        onClick={() => submitSubject()}>
+        <div style={{ display: 'flex', gap: '5px' }}>
+          <Icon size="sm" iconSrc={icon_write}></Icon>
+          {t(`WriteTab.WritingArticle`)}
+        </div>
+      </CreditButton>
     </WriteInputPage>
   );
 };

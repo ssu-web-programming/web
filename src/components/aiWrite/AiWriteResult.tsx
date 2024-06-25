@@ -34,6 +34,7 @@ import React from 'react';
 import { useMoveChatTab } from '../hooks/useMovePage';
 import ArrowSwitcher from '../ArrowSwitcher';
 import ClovaXLinkText from '../ClovaXLinkText';
+import ClaudeLinkText from '../ClaudeLinkText';
 import { BoldTextLength } from 'components/TextLength';
 
 // clipboard
@@ -224,7 +225,13 @@ const AiWriteResult = ({
             </IconTextButton>
           </div>
           <RightBox>
-            {currentWrite.version === 'clovax' ? <ClovaXLinkText /> : <OpenAILinkText />}
+            {currentWrite.version === 'clovax' ? (
+              <ClovaXLinkText />
+            ) : currentWrite.version === 'claude' ? (
+              <ClaudeLinkText />
+            ) : (
+              <OpenAILinkText />
+            )}
           </RightBox>
         </ButtonBox>
       </ResWrapper>

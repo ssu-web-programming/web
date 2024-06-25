@@ -106,8 +106,6 @@ const DropDownButton = <T extends { id: string }>(props: DropDownProps<T>) => {
     setThumbItemId(defaultId);
   }, [defaultId]);
 
-  console.log(list);
-
   return (
     <>
       <DropDownWrapper
