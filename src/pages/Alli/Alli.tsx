@@ -425,6 +425,23 @@ export default function Alli() {
     ga.event({ category: 'AI Apps', action: 'App List' });
   }, []);
 
+  useEffect(() => {
+    if (selectedApp?.inputs && createResult.output === '') {
+      const initVal = selectedApp.inputs.reduce((acc, cur) => {
+        return {
+          ...acc,
+          [cur.value]:
+            cur.value === 'language'
+              ? cur.options.find((opt) => opt.value.toLowerCase().startsWith(lang))?.value
+              : isSlideNoteApp(selectedApp.id)
+              ? cur.options[0]?.value
+              : undefined
+        };
+      }, {});
+      setInputs(initVal);
+    }
+  }, [selectedApp, createResult.output]);
+
   return (
     <ThemeProvider theme={theme}>
       <Wrapper>
