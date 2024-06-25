@@ -20,7 +20,8 @@ import {
   T2IOptionType,
   T2IType,
   updateT2ICurItemIndex,
-  updateT2ICurListId
+  updateT2ICurListId,
+  VersionType
 } from '../../store/slices/txt2imgHistory';
 import ExTextbox from '../ExTextbox';
 import { useTranslation } from 'react-i18next';
@@ -29,6 +30,8 @@ import Icon from '../Icon';
 import Grid from '../layout/Grid';
 import IconBoxTextButton from '../buttons/IconBoxTextButton';
 import { getIconColor } from 'util/getColor';
+import Button from '../buttons/Button';
+import { VersionInner, NewMark } from 'components/aiWrite/AIWriteInput';
 
 const MakingInputWrapper = styled.div`
   ${flex}
@@ -131,6 +134,12 @@ const ItemIconBox = styled.div<{
   ${({ cssExt }) => cssExt && cssExt}
 `;
 
+const StyledCreditButton = styled.div`
+  button {
+    height: 40px;
+  }
+`;
+
 const exampleList = [
   'Flight',
   'Tiger',
@@ -193,14 +202,25 @@ export const ratioItemList = [
     imgItem: RatioSqure
   },
   {
-    id: '1344x768',
+    id: '1792x1024',
     title: 'Horizontal',
     imgItem: RatioHorizontal
   },
   {
-    id: '768x1344',
+    id: '1024x1792',
     title: 'Vertical',
     imgItem: RatioVertical
+  }
+];
+
+export const versionItemList = [
+  {
+    id: VersionType.dalle3,
+    title: 'DALL-E-3'
+  },
+  {
+    id: VersionType.sd3,
+    title: 'Stable Diffusion 3'
   }
 ];
 
@@ -218,7 +238,7 @@ const ImageCreateInput = ({
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
 
-  const { input, style, ratio } = options;
+  const { input, style, ratio, type } = options;
 
   return (
     <MakingInputWrapper>
@@ -245,6 +265,31 @@ const ImageCreateInput = ({
             setOptions((prev) => ({ ...prev, input: val }));
           }}
         />
+      </SelectOptionArea>
+      <SelectOptionArea>
+        <SubTitleArea>
+          <SubTitle subTitle={t('Txt2ImgTab.SelectType')} />
+        </SubTitleArea>
+        <RowContainer>
+          <Grid col={2}>
+            {versionItemList.map((item) => (
+              <Button
+                key={item.id}
+                width="full"
+                variant="gray"
+                cssExt={css`
+                  padding: 4px 14px;
+                `}
+                onClick={() => setOptions((prev) => ({ ...prev, type: item.id }))}
+                selected={item.id === options.type}>
+                <VersionInner>
+                  {item.title}
+                  {item.id === 'dalle3' && <NewMark />}
+                </VersionInner>
+              </Button>
+            ))}
+          </Grid>
+        </RowContainer>
       </SelectOptionArea>
       <SelectOptionArea>
         <SubTitleArea>
@@ -314,16 +359,20 @@ const ImageCreateInput = ({
           </Grid>
         </RowContainer>
       </SelectOptionArea>
-      <CreditButton
-        width="full"
-        variant="purpleGradient"
-        onClick={() => createAiImage(options)}
-        disable={input.length === 0}>
-        <div style={{ display: 'flex', gap: '5px' }}>
-          <Icon size="sm" iconSrc={iconCreatingWhite}></Icon>
-          {t(`Txt2ImgTab.CreateImage`)}
-        </div>
-      </CreditButton>
+      <StyledCreditButton>
+        <CreditButton
+          width="full"
+          variant="purpleGradient"
+          onClick={() => {
+            createAiImage(options);
+          }}
+          disable={input.length === 0}>
+          <div style={{ display: 'flex', gap: '5px' }}>
+            <Icon size="sm" iconSrc={iconCreatingWhite}></Icon>
+            {t(`Txt2ImgTab.CreateImage`)}
+          </div>
+        </CreditButton>
+      </StyledCreditButton>
     </MakingInputWrapper>
   );
 };

@@ -95,6 +95,7 @@
     "CreateImage": "Create image",
     "WritingImageDesc": "Write image description",
     "WriteImageDesc": "Enter a description of image to create.",
+    "SelectType": "Select model",
     "ChooseStyle": "Select style",
     "StyleList": {
       "None": "None",

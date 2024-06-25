@@ -231,6 +231,7 @@ const AIChatTab = (props: WriteTabProps) => {
     options: { input: chatInput, version },
     setOptions: setChatInput
   } = props;
+
   const [isActiveInput, setIsActiveInput] = useState<boolean>(false);
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const [retryOrigin, setRetryOrigin] = useState<string | null>(null);
@@ -603,34 +604,19 @@ const AIChatTab = (props: WriteTabProps) => {
               <div style={{ display: 'flex', flexDirection: 'row', gap: '12px' }}>
                 <TextLength length={chatInput.length} max={INPUT_MAX_LENGTH}></TextLength>
                 <VersionWrapper>
-                  <>
-                    {groupVersionList.map((group) => {
-                      return group.list.length > 1 ? (
-                        <DropDownButton<VersionListType>
-                          width={77}
-                          height="full"
-                          key={group.group}
-                          list={group.list}
-                          onItemClick={(item: VersionListType) => {
-                            setChatInput((prev) => ({ ...prev, version: item }));
-                          }}
-                          selectedId={version.id}
-                          defaultId={group.list[0].id}
-                        />
-                      ) : (
-                        <Button
-                          key={group.list[0].id}
-                          width="fit"
-                          height={24}
-                          variant={group.list[0].version === version.version ? 'purple' : 'gray'} // no comment
-                          onClick={() =>
-                            setChatInput((prev) => ({ ...prev, version: group.list[0] }))
-                          }>
-                          {group.list[0].id}
-                        </Button>
-                      );
-                    })}
-                  </>
+                  {groupVersionList.map((group) => (
+                    <DropDownButton<VersionListType>
+                      width={'fit'}
+                      height="full"
+                      key={group.group}
+                      list={group.list}
+                      onItemClick={(item: VersionListType) => {
+                        setChatInput((prev) => ({ ...prev, version: item }));
+                      }}
+                      selectedId={version.id}
+                      defaultId={group.list[0].id}
+                    />
+                  ))}
                 </VersionWrapper>
               </div>
               <ChangeExampleButton disable={chatInput.length > 0} onClick={refreshExampleText} />
