@@ -18,6 +18,7 @@ import AskDoc from './pages/AskDoc';
 import Chat from './pages/AskDocStep/Chat';
 import AskDocLoading from './pages/AskDocStep/AskDocLoading';
 import Alli from './pages/Alli/Alli';
+import Nova from 'pages/Nova/Nova';
 
 function App() {
   const initBridgeListener = useInitBridgeListener();
@@ -35,6 +36,7 @@ function App() {
           <Route path="/txt2img" element={<TextToImage></TextToImage>}></Route>
           <Route path="/askdoc" element={<AskDoc />} />
           <Route path="/alli" element={<Alli />} />
+          <Route path="/nova" element={<Nova />} />
           <Route path="/AskDocStep" element={<AskDocHome />}>
             <Route index element={<AskDocLoading />} />
             <Route path="/AskDocStep/CheckDocHistory" element={<CheckDocHistory />} />
