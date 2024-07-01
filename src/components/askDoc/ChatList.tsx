@@ -73,7 +73,7 @@ export const ChatList = ({
       setIsActiveInput(true);
       setLoadingId(null);
 
-      dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.StopMsg`) }));
+      dispatch(activeToast({ type: 'success', msg: t(`ToastMsg.StopMsg`) }));
     }
 
     if (isTesla && onPlayAudio) {

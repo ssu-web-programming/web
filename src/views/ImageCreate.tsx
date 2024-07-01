@@ -106,7 +106,7 @@ const ImageCreate = ({ contents }: { contents: string }) => {
         const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
         dispatch(
           activeToast({
-            type: 'info',
+            type: 'success',
             msg: ` ${t(`Txt2ImgTab.ToastMsg.StartCreatingImage`)} 
              ${t(`ToastMsg.AboutCredit`, {
                deductionCredit: deductionCredit,
