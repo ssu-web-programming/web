@@ -69,6 +69,7 @@ export default function InputBar() {
     // TODO : check file extension
     setLocalFiles(Array.from(files));
   };
+
   return (
     <InputBarBase>
       {localFiles.length > 0 && (

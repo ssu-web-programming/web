@@ -105,6 +105,9 @@ const Tooltip = (props: TooltipProps) => {
 
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
   }, []);
 
   const toggleTooltip = () => {
