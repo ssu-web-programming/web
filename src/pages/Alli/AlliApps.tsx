@@ -188,6 +188,9 @@ export default function AppList(props: AppListProps) {
     queryFn: async () => {
       try {
         const { res } = await apiWrapper().request(`/api/v2/alli/apps?lang=${lang}`, {
+          headers: {
+            'Content-Type': 'application/json'
+          },
           method: 'GET'
         });
         const list = (await res.json()).data.appList.map((appInfo: AppInfo) => ({

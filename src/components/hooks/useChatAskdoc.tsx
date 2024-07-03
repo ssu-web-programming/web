@@ -77,11 +77,14 @@ export const useChatAskdoc = () => {
       dispatch(setCreating('ASKDoc'));
 
       const { res } = await apiWrapper().request(ASKDCO_ASK_QUESTION, {
-        body: {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
           fileId: files[0].fileId,
           fileRevision: files[0].fileRevision,
           question: chatText ? chatText : userChatText
-        },
+        }),
         method: 'POST'
       });
 

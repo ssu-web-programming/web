@@ -54,6 +54,7 @@ html,
     --gray-gray-80-02: #454c53;
     --gray-gray-70: #72787f;
     --gray-gray-60-03: #9ea4aa;
+    --gray-gray-10: #f7f8f9;
     --gray-gray-50: #b3b8bd;
     --gray-gray-20: #f2f4f6;
     --gray-gray-30: #E8EBED;

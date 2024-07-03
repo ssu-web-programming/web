@@ -416,7 +416,10 @@ const AIChatTab = (props: WriteTabProps) => {
     try {
       requestor.current = apiWrapper();
       const { res, logger } = await requestor.current?.request(AI_WRITE_RESPONSE_STREAM_API, {
-        body: {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
           engine: gptVer,
           history: [
             ...history
@@ -428,7 +431,7 @@ const AIChatTab = (props: WriteTabProps) => {
               preProcessing: preProc
             }
           ]
-        },
+        }),
         method: 'POST'
       });
       splunk = logger;

@@ -54,9 +54,12 @@ const useGetAskDocFiles = () => {
     const getData = async () => {
       try {
         const { res } = await apiWrapper().request(ASKDOC_GET_ANALYZE_INFO, {
-          body: {
-            fileId: files[0].fileId
+          headers: {
+            'Content-Type': 'application/json'
           },
+          body: JSON.stringify({
+            fileId: files[0].fileId
+          }),
           method: 'POST'
         });
 

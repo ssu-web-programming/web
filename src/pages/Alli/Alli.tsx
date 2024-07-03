@@ -275,7 +275,10 @@ export default function Alli() {
       setStreamingStatus('request');
       requestor.current = apiWrapper();
       const { res } = await requestor.current?.request(ALLI_RESPONSE_STREAM_API, {
-        body: { inputs, appId, lang },
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ inputs, appId, lang }),
         method: 'POST'
       });
 
