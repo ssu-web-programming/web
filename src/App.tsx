@@ -8,7 +8,6 @@ import InvalidAccess from './pages/InvalidAccess';
 import Offline from './pages/Offline';
 import Spinner from './components/Spinner';
 import Confirm from './components/Confirm';
-import Popup from 'components/Popup';
 import { useInitBridgeListener } from './util/bridge';
 import AskDocHome from './pages/AskDocStep/AskDocHome';
 import CheckDocHistory from './pages/AskDocStep/CheckDocHistory';
@@ -52,7 +51,6 @@ function App() {
         <Toast />
         <Spinner />
         <Confirm />
-        <Popup />
       </>
     </>
   );
