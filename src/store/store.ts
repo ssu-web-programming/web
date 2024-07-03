@@ -13,6 +13,7 @@ import askDoc from './slices/askDoc';
 import askDocModal from './slices/askDocModalsSlice';
 import askDocAnalyzeFiesSlice from './slices/askDocAnalyzeFiesSlice';
 import initFlagSlice from './slices/initFlagSlice';
+import popupSlice from './slices/popupSlice';
 import askDocSummary from './slices/askDocSummary';
 import alliApps from './slices/alliApps';
 import recognizedVoice from './slices/recognizedVoice';
@@ -36,7 +37,8 @@ const store = configureStore({
     initFlagSlice,
     alliApps,
     recognizedVoice,
-    appState
+    appState,
+    popupSlice
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }).concat(shareAnswerState),
