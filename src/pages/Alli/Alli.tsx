@@ -347,7 +347,8 @@ export default function Alli() {
             </>
           ),
           onOk: { text: t('Confirm'), callback: () => {} },
-          onCancel: { text: t('Cancel'), callback: () => {} }
+          onCancel: { text: t('Cancel'), callback: () => {} },
+          direction: 'column'
         });
         if (!ret) return;
       }
