@@ -47,6 +47,12 @@ th
   background: #f5f1fd;
   padding: 10px 10px;
 }
+
+img
+{
+  width: 100%;
+  height: auto;
+}
 </style>
 </head>
 <body>

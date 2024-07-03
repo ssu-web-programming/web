@@ -10,3 +10,5 @@ export const ASKDOC_CREATE_VECTOR_DATA = '/api/1/ai/askdoc/createVectorData';
 export const ASKDOC_MAKE_SUMMARY = '/api/1/ai/askdoc/makeSummary';
 export const ASKDOC_ALL_COMPLETE_ANALYZING = '/api/1/ai/askdoc/preAsk';
 export const ASKDCO_ASK_QUESTION = '/api/1/ai/askdoc/ask';
+
+export const NOVA_CHAT_API = '/api/v2/assistants/chatFunc';

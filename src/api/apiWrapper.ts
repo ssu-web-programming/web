@@ -40,12 +40,10 @@ export function apiWrapper() {
         signal: abortController.signal,
         headers: {
           'User-Agent': navigator.userAgent,
-          'content-type': 'application/json',
           'X-PO-AI-API-LANGUAGE': lang,
           ...session,
           ...init.headers
-        },
-        body: JSON.stringify(init.body)
+        }
       });
 
       if (

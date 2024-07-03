@@ -89,7 +89,10 @@ const AIWriteTab = (props: WriteTabProps) => {
     try {
       requestor.current = apiWrapper();
       const { res, logger } = await requestor.current?.request(AI_WRITE_RESPONSE_STREAM_API, {
-        body: {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
           engine: version,
           history: [
             {
@@ -98,7 +101,7 @@ const AIWriteTab = (props: WriteTabProps) => {
               preProcessing: preProc
             }
           ]
-        },
+        }),
         method: 'POST'
       });
       splunk = logger;

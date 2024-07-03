@@ -91,7 +91,10 @@ const ImageCreate = ({ contents }: { contents: string }) => {
         if (option.style !== 'none') apiBody['stylePreset'] = option.style;
 
         const { res, logger } = await apiWrapper().request(TEXT_TO_IMAGE_API, {
-          body: apiBody,
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(apiBody),
           method: 'POST'
         });
 

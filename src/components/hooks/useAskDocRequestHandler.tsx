@@ -36,7 +36,13 @@ const useAskDocRequestHandler = (api: string) => {
           fileRevision: files[0].fileRevision
         };
         dispatch(setCreating(shareAnswerState));
-        const { res } = await apiWrapper().request(api, { body: sendData, method: 'POST' });
+        const { res } = await apiWrapper().request(api, {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(sendData),
+          method: 'POST'
+        });
         const response = await res.json();
         if (api !== ASKDOC_EXTRACT_TEXT) {
           dispatch(

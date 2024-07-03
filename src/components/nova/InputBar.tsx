@@ -60,7 +60,16 @@ const InputText = styled.input`
   text-align: left;
 `;
 
-export default function InputBar() {
+export interface InputBarSubmitParam {
+  input: string;
+  files?: File[];
+}
+
+interface InputBarProps {
+  onSubmit: (param: InputBarSubmitParam) => void;
+}
+
+export default function InputBar(props: InputBarProps) {
   const [localFiles, setLocalFiles] = useState<File[]>([]);
 
   const [text, setText] = useState<string>('');
@@ -121,7 +130,7 @@ export default function InputBar() {
           type="text"
           value={text}
           onChange={(e) => setText(e.currentTarget.value)}></InputText>
-        <button onClick={() => setText('')}>go</button>
+        <button onClick={() => props.onSubmit({ input: text, files: localFiles })}>go</button>
       </InputArea>
     </InputBarBase>
   );
