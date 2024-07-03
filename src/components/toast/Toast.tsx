@@ -3,12 +3,12 @@ import styled, { FlattenSimpleInterpolation, css, keyframes } from 'styled-compo
 import { initToast, selectToast } from '../../store/slices/toastSlice';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import Icon from '../Icon';
-import icon_warnning from '../../img/ico_toast_warning.svg';
-import icon_pass from '../../img/ico_toast_completion.svg';
-import { alignItemStart, flex, flexGrow, flexShrink } from '../../style/cssCommon';
-import IconButton from '../buttons/IconButton';
-
-import { ReactComponent as IconClose } from '../../img/ico_ai_close.svg';
+import IconButton from 'components/buttons/IconButton';
+import icon_info from 'img/ico_toast_new_info.svg';
+import icon_success from 'img/ico_toast_new_success.svg';
+import icon_error from 'img/ico_toast_new_error.svg';
+import { ReactComponent as IconClose } from 'img/ico_ai_close_black.svg';
+import { alignItemStart, flex, flexGrow, flexShrink } from 'style/cssCommon';
 
 const Fade = keyframes`
   0% {
@@ -33,11 +33,12 @@ const ToastMsgWrapper = styled.div<{ variant: FlattenSimpleInterpolation }>`
   transform: translate(-50%, -50%);
 
   word-wrap: break-word;
-  width: 360px;
+  width: 313px;
   max-width: 80%;
   height: fit-content;
   border-radius: 10px;
-  padding: 4px;
+  padding: 10px 14px;
+  box-sizing: border-box;
   animation: ${Fade} ${TIME}ms;
   font-size: 13px;
   font-weight: 500;
@@ -48,39 +49,37 @@ const ToastMsgWrapper = styled.div<{ variant: FlattenSimpleInterpolation }>`
   z-index: 50;
 `;
 
-const IconWrapper = styled.div`
-  padding: 8px;
-`;
-
 const ToastText = styled.div`
   flex: 1;
-  height: fit-content;
-  padding: 6px 0px;
+  padding: 0 10px;
+  line-height: 21px;
+  font-size: 14px;
 `;
 
-const CloseWrapper = styled.div<{ type: ToastType }>`
-  ${(props) =>
-    props.type === 'error'
-      ? css`
-          color: #fb4949;
-        `
-      : css`
-          color: #449916;
-        `}
-`;
+export type ToastType = 'none' | 'info' | 'success' | 'error';
 
-export type ToastType = 'none' | 'info' | 'error';
+const toastSrc = {
+  info: icon_info,
+  success: icon_success,
+  error: icon_error
+};
+
 const VARIANTS = {
   none: css``,
   info: css`
-    border: solid 1px #85ca5f;
+    border: solid 1px var(--primary-po-blue-40);
+    background-color: #e8f2fe;
+    color: var(--primary-po-blue-60);
+  `,
+  success: css`
+    border: solid 1px var(--primary-po-green-40);
     background-color: #edf7e8;
-    color: var(--primary-po-green-60);
+    color: var(--primary-po-green-50);
   `,
   error: css`
-    border: solid 1px #fa8c8c;
+    border: solid 1px var(--primary-po-red-40);
     background-color: #feeeee;
-    color: var(--sale);
+    color: var(--primary-po-red-50);
   `
 };
 
@@ -114,13 +113,9 @@ export default function Toast() {
 
   return (
     <ToastMsgWrapper variant={variant}>
-      <IconWrapper>
-        <Icon size="sm" iconSrc={toast.type === 'error' ? icon_warnning : icon_pass} />
-      </IconWrapper>
+      <Icon size={21} iconSrc={toastSrc[toast.type]} />
       <ToastText>{toast.msg}</ToastText>
-      <CloseWrapper type={toast.type}>
-        <IconButton iconSize="lg" iconComponent={IconClose} onClick={closeToast} />
-      </CloseWrapper>
+      <IconButton iconSize="sm" iconComponent={IconClose} onClick={closeToast} />
     </ToastMsgWrapper>
   );
 }

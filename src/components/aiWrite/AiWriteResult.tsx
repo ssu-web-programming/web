@@ -210,7 +210,7 @@ const AiWriteResult = ({
               borderType="gray"
               onClick={() => {
                 insertDoc(currentWrite.result);
-                dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.CompleteInsert`) }));
+                dispatch(activeToast({ type: 'success', msg: t(`ToastMsg.CompleteInsert`) }));
               }}>
               {t(`WriteTab.InsertDoc`)}
             </Button>
