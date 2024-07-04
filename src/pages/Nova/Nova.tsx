@@ -11,7 +11,6 @@ import {
 } from 'store/slices/novaHistorySlice';
 import { apiWrapper, streaming } from 'api/apiWrapper';
 import { v4 } from 'uuid';
-import PreMarkdown from 'components/PreMarkdown';
 import Tooltip, { TooltipOption } from 'components/Tooltip';
 import { useConfirm } from 'components/Confirm';
 import { NOVA_CHAT_API } from 'api/constant';
@@ -24,6 +23,8 @@ import ico_nova from 'img/ico_nova.svg';
 import ico_credit_info from 'img/ico_credit_info.svg';
 import ico_credit from 'img/ico_credit.svg';
 import { ReactComponent as IconMessagePlus } from 'img/ico_message_plus.svg';
+import ChatList from 'components/nova/ChatList';
+import { useCallback } from 'react';
 
 const Container = styled.div`
   width: 100%;
@@ -67,33 +68,6 @@ const Entry = styled(Container)`
   overflow-y: auto;
 `;
 
-const ChatList = styled(Container)`
-  flex-direction: column;
-  padding: 24px 16px;
-
-  background-color: var(--gray-gray-10);
-  overflow-y: auto;
-`;
-
-const ChatItem = styled.div`
-  width: 100%;
-  height: fit-content;
-  display: flex;
-  flex-direction: column;
-
-  & > div {
-    display: flex;
-    flex-direction: row;
-    gap: 8px;
-    justify-content: flex-start;
-    align-items: flex-start;
-  }
-
-  & + & {
-    margin-top: 30px;
-  }
-`;
-
 const TitleWrapper = styled.div`
   gap: 4px;
 
@@ -112,64 +86,65 @@ export default function Nova() {
   const novaHistory = useAppSelector(novaHistorySelector);
   const confirm = useConfirm();
 
-  const onSubmit = async (submitParam: InputBarSubmitParam) => {
-    const id = v4();
-    let result = '';
-    try {
-      const lastChat = novaHistory[novaHistory.length - 1];
-      const { vsId = '', threadId = '' } = lastChat || {};
-      const { input, files = [] } = submitParam;
-      const formData = new FormData();
-      for (const file of files) {
-        formData.append('uploadFiles', file);
-      }
+  const onSubmit = useCallback(
+    async (submitParam: InputBarSubmitParam) => {
+      const id = v4();
+      let result = '';
+      try {
+        const lastChat = novaHistory[novaHistory.length - 1];
+        const { vsId = '', threadId = '' } = lastChat || {};
+        const { input, files = [], fileType: type } = submitParam;
+        const formData = new FormData();
+        for (const file of files) {
+          formData.append('uploadFiles', file);
+        }
 
-      const type = ''; // TODO : check
-      const role = 'user';
+        const role = 'user';
+        formData.append('content', input);
+        formData.append('role', role);
+        formData.append('type', type);
+        formData.append('vsId', vsId);
+        formData.append('threadId', threadId);
 
-      formData.append('content', input);
-      formData.append('role', role);
-      formData.append('type', type);
-      formData.append('vsId', vsId);
-      formData.append('threadId', threadId);
+        dispatch(pushChat({ id, input, type, role, vsId, threadId, output: '' }));
 
-      dispatch(pushChat({ id, input, type, role, vsId, threadId, output: '' }));
+        const { res } = await apiWrapper().request(NOVA_CHAT_API, {
+          headers: {},
+          body: formData,
+          method: 'POST'
+        });
 
-      const { res } = await apiWrapper().request(NOVA_CHAT_API, {
-        headers: {},
-        body: formData,
-        method: 'POST'
-      });
+        const resVsId = res.headers.get('X-PO-AI-ASSISTANT-API-VSID') || '';
+        const resThreadId = res.headers.get('X-PO-AI-ASSISTANT-API-TID') || '';
 
-      const resVsId = res.headers.get('vsId') || '';
-      const resThreadId = res.headers.get('threadId') || '';
-
-      await streaming(res, (contents) => {
-        dispatch(
-          appendChatOutput({
-            id,
-            output: contents,
-            vsId: resVsId,
-            threadId: resThreadId
-          })
-        );
-        result += contents;
-      });
-      dispatch(updateChatStatus({ id, status: 'done' }));
-    } catch (err) {
-      console.log(err);
-    } finally {
-      const html = await markdownToHtml(result);
-      if (html) {
-        const $ = load(html);
-        const $image = $('img');
-        if ($image.length > 0) {
-          const image = $image[0] as cheerio.TagElement;
-          dispatch(addChatOutputRes({ id, res: image.attribs.src }));
+        await streaming(res, (contents) => {
+          dispatch(
+            appendChatOutput({
+              id,
+              output: contents,
+              vsId: resVsId,
+              threadId: resThreadId
+            })
+          );
+          result += contents;
+        });
+        dispatch(updateChatStatus({ id, status: 'done' }));
+      } catch (err) {
+        console.log(err);
+      } finally {
+        const html = await markdownToHtml(result);
+        if (html) {
+          const $ = load(html);
+          const $image = $('img');
+          if ($image.length > 0) {
+            const image = $image[0] as cheerio.TagElement;
+            dispatch(addChatOutputRes({ id, res: image.attribs.src }));
+          }
         }
       }
-    }
-  };
+    },
+    [novaHistory, dispatch]
+  );
 
   const newChat = async () => {
     const ret = await confirm({
@@ -232,32 +207,7 @@ export default function Nova() {
             <div>제공한 답이 정확하지 않을 수 있으니 정보의 사실 여부를 확인해 주세요.</div>
           </Entry>
         ) : (
-          <ChatList
-            ref={(el) => {
-              if (el) el.scrollTo(0, el.scrollHeight);
-            }}>
-            {novaHistory.map((item) => (
-              <ChatItem key={item.id}>
-                <div>
-                  <div>User</div>
-                  {item.input}
-                </div>
-                <div>
-                  <div>AI</div>
-                  {item.status === 'request' ? (
-                    <div>Loading...</div>
-                  ) : (
-                    <PreMarkdown text={item.output}></PreMarkdown>
-                  )}
-                </div>
-                {item.res && (
-                  <div>
-                    <button>down</button>
-                  </div>
-                )}
-              </ChatItem>
-            ))}
-          </ChatList>
+          <ChatList></ChatList>
         )}
       </Body>
       <InputBar onSubmit={onSubmit}></InputBar>
