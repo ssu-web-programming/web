@@ -76,6 +76,8 @@ const OptionItemWrapper = styled.li<{ type: TooltipType }>`
   display: flex;
   align-items: center;
   font-size: 14px;
+
+  color: var(--gray-gray-90-01);
 `;
 
 const Divider = styled.div`
