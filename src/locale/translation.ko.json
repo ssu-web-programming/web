@@ -261,5 +261,12 @@
   "EOS": {
     "ASKDocEOSTitle": "ASK Doc V1 서비스 종료",
     "ASKDocEOSDesc": "앱 업데이트 후 새롭게 개선된 ASK Doc V2를 만나보세요."
+  },
+  "Nova": {
+    "NewChat": {
+      "Title": "새로운 대화",
+      "Desc": "'새로 대화하기' 선택 시, 지금까지의 대화 내용은 삭제됩니다.",
+      "Ok": "새로 대화하기"
+    }
   }
 }
