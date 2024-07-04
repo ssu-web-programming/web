@@ -171,17 +171,21 @@ export default function Nova() {
     }
   };
 
-  const newChat = () => {
-    confirm({
+  const newChat = async () => {
+    const ret = await confirm({
       title: '새로운 대화',
       msg: "'새로 대화하기' 선택 시, 지금까지의 대화 내용은 삭제됩니다.",
       onCancel: { text: '취소', callback: () => {} },
       onOk: {
         text: '새로 대화하기',
-        callback: () => dispatch(initNovaHistory())
+        callback: () => {}
       },
       direction: 'row'
     });
+
+    if (!!ret) {
+      dispatch(initNovaHistory());
+    }
   };
 
   const TOOLTIP_CREDIT_INFO_OPTIONS: TooltipOption[] = [
