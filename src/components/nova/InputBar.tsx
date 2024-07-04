@@ -63,6 +63,7 @@ const InputText = styled.input`
 export interface InputBarSubmitParam {
   input: string;
   files?: File[];
+  fileType: '' | 'image' | 'document';
 }
 
 interface InputBarProps {
@@ -87,18 +88,6 @@ export default function InputBar(props: InputBarProps) {
             <FileItem>
               {file.name}
               <button
-                onClick={() => {
-                  const downloadUrl = window.URL.createObjectURL(file);
-                  const anchorElement = document.createElement('a');
-                  document.body.appendChild(anchorElement);
-                  anchorElement.download = file.name;
-                  anchorElement.href = downloadUrl;
-                  anchorElement.click();
-                  document.body.removeChild(anchorElement);
-                }}>
-                down
-              </button>
-              <button
                 onClick={() => setLocalFiles(localFiles.filter((prev) => prev !== file))}
                 style={{ border: 'solid 1px red' }}>
                 del
@@ -120,7 +109,7 @@ export default function InputBar(props: InputBarProps) {
         <IconButtonWrapper>
           <FileButton
             target={'nova-image'}
-            accept=".jpg, .png, .webp, .gif"
+            accept=".jpg, .png, .gif"
             handleOnChange={loadlocalFile}
             multiple>
             <ImageIcon></ImageIcon>
@@ -130,7 +119,21 @@ export default function InputBar(props: InputBarProps) {
           type="text"
           value={text}
           onChange={(e) => setText(e.currentTarget.value)}></InputText>
-        <button onClick={() => props.onSubmit({ input: text, files: localFiles })}>go</button>
+        <button
+          onClick={() => {
+            // TODO : refactor
+            const fileType =
+              localFiles.length < 1
+                ? ''
+                : localFiles[0].type.split('/')[0].includes('image')
+                ? 'image'
+                : 'document';
+            props.onSubmit({ input: text, files: localFiles, fileType });
+            setText('');
+            setLocalFiles([]);
+          }}>
+          go
+        </button>
       </InputArea>
     </InputBarBase>
   );
