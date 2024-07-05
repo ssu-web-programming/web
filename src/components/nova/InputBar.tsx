@@ -1,15 +1,22 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import FileButton from 'components/FileButton';
 import { ReactComponent as FileIcon } from '../../img/file.svg';
 import { ReactComponent as ImageIcon } from '../../img/landscape.svg';
 import { useState } from 'react';
 
-const InputBarBase = styled.div`
+const InputBarBase = styled.div<{ disabled: boolean }>`
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  ${({ disabled }) =>
+    disabled &&
+    css`
+      pointer-events: none;
+      opacity: 0.5;
+    `}
 `;
 
 const FileListViewer = styled.div`
@@ -67,10 +74,12 @@ export interface InputBarSubmitParam {
 }
 
 interface InputBarProps {
+  disabled?: boolean;
   onSubmit: (param: InputBarSubmitParam) => void;
 }
 
 export default function InputBar(props: InputBarProps) {
+  const { disabled = false } = props;
   const [localFiles, setLocalFiles] = useState<File[]>([]);
 
   const [text, setText] = useState<string>('');
@@ -81,11 +90,11 @@ export default function InputBar(props: InputBarProps) {
   };
 
   return (
-    <InputBarBase>
+    <InputBarBase disabled={disabled}>
       {localFiles.length > 0 && (
         <FileListViewer>
           {localFiles.map((file) => (
-            <FileItem>
+            <FileItem key={file.name}>
               {file.name}
               <button
                 onClick={() => setLocalFiles(localFiles.filter((prev) => prev !== file))}
