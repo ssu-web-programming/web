@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import InputBar, { InputBarSubmitParam } from 'components/nova/InputBar';
 import styled, { css } from 'styled-components';
 import { useAppDispatch, useAppSelector } from 'store/store';
@@ -27,6 +27,7 @@ import { ReactComponent as IconMessagePlus } from 'img/ico_message_plus.svg';
 import ChatList from 'components/nova/ChatList';
 import ico_magnifying_glass from 'img/ico_magnifying_glass.svg';
 import { useTranslation } from 'react-i18next';
+import { activeToast } from 'store/slices/toastSlice';
 
 const flexCenter = css`
   display: flex;
@@ -64,6 +65,8 @@ const Body = styled.div`
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+
+  position: relative;
 `;
 
 const TitleWrapper = styled.div`
@@ -128,6 +131,13 @@ const GuideExample = styled.div`
   font-size: 14px;
 `;
 
+const StopButton = styled.button`
+  position: absolute;
+  left: 50%;
+  bottom: 24px;
+  transform: translate(-50%);
+`;
+
 type CreditInfoType = {
   [key: string]: string;
 };
@@ -144,12 +154,14 @@ export default function Nova() {
   const confirm = useConfirm();
   const { t } = useTranslation();
 
+  const requestor = useRef<ReturnType<typeof apiWrapper>>();
+
+  const lastChat = novaHistory[novaHistory.length - 1];
   const onSubmit = useCallback(
     async (submitParam: InputBarSubmitParam) => {
       const id = v4();
       let result = '';
       try {
-        const lastChat = novaHistory[novaHistory.length - 1];
         const { vsId = '', threadId = '' } = lastChat || {};
         const { input, files = [], fileType: type } = submitParam;
         const formData = new FormData();
@@ -166,7 +178,8 @@ export default function Nova() {
 
         dispatch(pushChat({ id, input, type, role, vsId, threadId, output: '' }));
 
-        const { res } = await apiWrapper().request(NOVA_CHAT_API, {
+        requestor.current = apiWrapper();
+        const { res } = await requestor.current.request(NOVA_CHAT_API, {
           headers: {},
           body: formData,
           method: 'POST'
@@ -188,7 +201,11 @@ export default function Nova() {
         });
         dispatch(updateChatStatus({ id, status: 'done' }));
       } catch (err) {
-        console.log(err);
+        if (requestor.current?.isAborted() === true) {
+          dispatch(updateChatStatus({ id, status: 'cancel' }));
+        } else {
+          // TODO : error handling
+        }
       } finally {
         const html = await markdownToHtml(result);
         if (html) {
@@ -201,7 +218,7 @@ export default function Nova() {
         }
       }
     },
-    [novaHistory, dispatch]
+    [lastChat, dispatch]
   );
 
   const newChat = async () => {
@@ -232,6 +249,11 @@ export default function Nova() {
     name: nameMap[key] || 'Unknown',
     icon: { src: ico_credit, txt: value }
   }));
+
+  const onStop = () => {
+    requestor.current?.abort();
+    dispatch(activeToast({ type: 'success', msg: t(`ToastMsg.StopMsg`) }));
+  };
 
   return (
     <Wrapper>
@@ -265,10 +287,17 @@ export default function Nova() {
             <Nova.SearchGuide />
           </GuideWrapper>
         ) : (
-          <ChatList></ChatList>
+          <>
+            <ChatList></ChatList>
+            {(lastChat?.status === 'request' || lastChat?.status === 'stream') && (
+              <StopButton onClick={onStop}>stop</StopButton>
+            )}
+          </>
         )}
       </Body>
-      <InputBar onSubmit={onSubmit}></InputBar>
+      <InputBar
+        disabled={lastChat?.status === 'request' || lastChat?.status === 'stream'}
+        onSubmit={onSubmit}></InputBar>
     </Wrapper>
   );
 }

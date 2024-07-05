@@ -53,14 +53,23 @@ export default function ChatList() {
             {item.status === 'request' ? (
               <div>Loading...</div>
             ) : (
-              <PreMarkdown text={item.output}></PreMarkdown>
+              <div>
+                <PreMarkdown text={item.output}></PreMarkdown>
+                {item.status === 'done' && (
+                  <>
+                    <button>다시생성</button>
+                    <button>복사</button>
+                    <button>문서로 만들기</button>
+                  </>
+                )}
+                {item.status === 'cancel' && (
+                  <>
+                    <button>다시생성</button>
+                  </>
+                )}
+              </div>
             )}
           </div>
-          {item.res && (
-            <div>
-              <button>down</button>
-            </div>
-          )}
         </ChatItem>
       ))}
     </Wrapper>
