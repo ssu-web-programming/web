@@ -263,10 +263,23 @@
     "ASKDocEOSDesc": "앱 업데이트 후 새롭게 개선된 ASK Doc V2를 만나보세요."
   },
   "Nova": {
+    "CreditInfo": {
+      "Title": "크레딧 안내",
+      "Chat": "채팅",
+      "DocQuery": "문서 질의",
+      "ImgQuery": "이미지 질의",
+      "ImgGen": "문서 생성"
+    },
     "NewChat": {
       "Title": "새로운 대화",
       "Desc": "'새로 대화하기' 선택 시, 지금까지의 대화 내용은 삭제됩니다.",
       "Ok": "새로 대화하기"
+    },
+    "SearchGuide": {
+      "Title": "똑똑한 AI에게  무엇이든 물어보세요.",
+      "SubTitle": "문서를 첨부하면 채팅으로 주요 내용을 빠르게 파악할 수 있어요",
+      "Example1": "희망찬 내용의 노래 가사 만들어줘",
+      "Example2": "해당 문서에서 회의에 참여한 인원은 누구야?"
     }
   }
 }

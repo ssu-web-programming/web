@@ -1,5 +1,6 @@
-import styled from 'styled-components';
+import { useCallback, useState } from 'react';
 import InputBar, { InputBarSubmitParam } from 'components/nova/InputBar';
+import styled, { css } from 'styled-components';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import {
   pushChat,
@@ -24,7 +25,13 @@ import ico_credit_info from 'img/ico_credit_info.svg';
 import ico_credit from 'img/ico_credit.svg';
 import { ReactComponent as IconMessagePlus } from 'img/ico_message_plus.svg';
 import ChatList from 'components/nova/ChatList';
-import { useCallback } from 'react';
+import ico_magnifying_glass from 'img/ico_magnifying_glass.svg';
+import { useTranslation } from 'react-i18next';
+
+const flexCenter = css`
+  display: flex;
+  align-items: center;
+`;
 
 const Container = styled.div`
   width: 100%;
@@ -46,8 +53,7 @@ const Header = styled.div`
   color: var(--ai-purple-50-main);
 
   > div {
-    display: flex;
-    align-items: center;
+    ${flexCenter}
     flex-direction: row;
   }
 `;
@@ -57,14 +63,6 @@ const Body = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
-`;
-
-const Entry = styled(Container)`
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: center;
-  background-color: #f4f6f8;
   overflow-y: auto;
 `;
 
@@ -81,10 +79,70 @@ const ButtonWrapper = styled.div`
   gap: 8px;
 `;
 
+const GuideWrapper = styled(Container)`
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 16px;
+  background-color: #f4f6f8;
+  overflow-y: auto;
+`;
+
+const GuideTitle = styled.div`
+  div.title {
+    ${flexCenter}
+    justify-content: center;
+    margin-bottom: 8px;
+
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 27px;
+    color: var(--ai-purple-50-main);
+  }
+
+  p.subTitle {
+    font-size: 14px;
+    line-height: 21px;
+    letter-spacing: -0.02em;
+    color: var(--gray-gray-80-02);
+    text-align: center;
+  }
+`;
+const Guidebody = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  margin-bottom: 24px;
+`;
+
+const GuideExample = styled.div`
+  ${flexCenter}
+  justify-content: flex-start;
+  gap: 8px;
+  padding: 12px;
+  margin: 0 16px;
+  border: 1px solid var(--gray-gray-40);
+  border-radius: 8px;
+  background: #fff;
+  font-size: 14px;
+`;
+
+type CreditInfoType = {
+  [key: string]: string;
+};
+
 export default function Nova() {
+  const [credit, setCredit] = useState<CreditInfoType>({
+    chat: '5',
+    doc: '10',
+    img: '10',
+    imgGen: '10'
+  });
   const dispatch = useAppDispatch();
   const novaHistory = useAppSelector(novaHistorySelector);
   const confirm = useConfirm();
+  const { t } = useTranslation();
 
   const onSubmit = useCallback(
     async (submitParam: InputBarSubmitParam) => {
@@ -163,12 +221,17 @@ export default function Nova() {
     }
   };
 
-  const TOOLTIP_CREDIT_INFO_OPTIONS: TooltipOption[] = [
-    { name: '채팅', icon: { src: ico_credit, txt: '5' } },
-    { name: '문서 질의', icon: { src: ico_credit, txt: '10' } },
-    { name: '이미지 질의', icon: { src: ico_credit, txt: '10' } },
-    { name: '이미지 생성', icon: { src: ico_credit, txt: '10' } }
-  ];
+  const nameMap: { [key: string]: string } = {
+    chat: t(`Nova.CreditInfo.Chat`),
+    doc: t(`Nova.CreditInfo.DocQuery`),
+    img: t(`Nova.CreditInfo.ImgQuery`),
+    imgGen: t(`Nova.CreditInfo.ImgGen`)
+  };
+
+  const TOOLTIP_CREDIT_OPTIONS: TooltipOption[] = Object.entries(credit).map(([key, value]) => ({
+    name: nameMap[key] || 'Unknown',
+    icon: { src: ico_credit, txt: value }
+  }));
 
   return (
     <Wrapper>
@@ -188,24 +251,19 @@ export default function Nova() {
             />
           )}
           <Tooltip
-            title="크레딧 안내"
+            title={t(`Nova.CreditInfo.Title`) as string}
             placement="bottom-end"
             type="normal"
-            options={TOOLTIP_CREDIT_INFO_OPTIONS}>
+            options={TOOLTIP_CREDIT_OPTIONS}>
             <Icon iconSrc={ico_credit_info} size={32} />
           </Tooltip>
         </ButtonWrapper>
       </Header>
       <Body>
         {novaHistory.length < 1 ? (
-          <Entry>
-            <div>똑똑한 AI에게 무엇이든 물어보세요.</div>
-            <div>문서를 첨부하면 채팅으로 주요 내용을 빠르게 파악할 수 있어요</div>
-            <button>24.03.04에 작성한 회의록 찾아줘</button>
-            <button>기획자 면접 예상질문 뽑아줘</button>
-            <button>이미지 배경제거 하는 법 알려줘</button>
-            <div>제공한 답이 정확하지 않을 수 있으니 정보의 사실 여부를 확인해 주세요.</div>
-          </Entry>
+          <GuideWrapper>
+            <Nova.SearchGuide />
+          </GuideWrapper>
         ) : (
           <ChatList></ChatList>
         )}
@@ -214,3 +272,41 @@ export default function Nova() {
     </Wrapper>
   );
 }
+
+const SearchGuide = () => {
+  const { t } = useTranslation();
+
+  const PROMPT_EXAMPLE = [
+    {
+      src: ico_magnifying_glass,
+      txt: t(`Nova.SearchGuide.Example1`)
+    },
+    {
+      src: ico_magnifying_glass,
+      txt: t(`Nova.SearchGuide.Example2`)
+    }
+  ];
+
+  return (
+    <>
+      <GuideTitle>
+        <div className="title">
+          <Icon iconSrc={ico_ai} size="lg" />
+          <p>{t(`Nova.SearchGuide.Title`)}</p>
+        </div>
+        <p className="subTitle">{t(`Nova.SearchGuide.SubTitle`)}</p>
+      </GuideTitle>
+
+      <Guidebody>
+        {PROMPT_EXAMPLE.map((item) => (
+          <GuideExample key={item.txt}>
+            <Icon iconSrc={item.src} size="md" />
+            <span>{item.txt}</span>
+          </GuideExample>
+        ))}
+      </Guidebody>
+    </>
+  );
+};
+
+Nova.SearchGuide = SearchGuide;
