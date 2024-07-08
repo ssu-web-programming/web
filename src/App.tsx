@@ -25,6 +25,7 @@ function App() {
 
   useEffect(() => {
     initBridgeListener();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -36,7 +37,7 @@ function App() {
           <Route path="/txt2img" element={<TextToImage></TextToImage>}></Route>
           <Route path="/askdoc" element={<AskDoc />} />
           <Route path="/alli" element={<Alli />} />
-          <Route path="/nova" element={<Nova />} />
+          <Route path="/NOVA" element={<Nova />} />
           <Route path="/AskDocStep" element={<AskDocHome />}>
             <Route index element={<AskDocLoading />} />
             <Route path="/AskDocStep/CheckDocHistory" element={<CheckDocHistory />} />
