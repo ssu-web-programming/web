@@ -76,13 +76,14 @@ export interface InputBarSubmitParam {
 interface InputBarProps {
   disabled?: boolean;
   onSubmit: (param: InputBarSubmitParam) => void;
+  contents?: string;
 }
 
 export default function InputBar(props: InputBarProps) {
-  const { disabled = false } = props;
+  const { disabled = false, contents = '' } = props;
   const [localFiles, setLocalFiles] = useState<File[]>([]);
 
-  const [text, setText] = useState<string>('');
+  const [text, setText] = useState<string>(contents);
 
   const loadlocalFile = (files: FileList) => {
     // TODO : check file extension

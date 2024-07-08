@@ -28,6 +28,8 @@ import ChatList from 'components/nova/ChatList';
 import ico_magnifying_glass from 'img/ico_magnifying_glass.svg';
 import { useTranslation } from 'react-i18next';
 import { activeToast } from 'store/slices/toastSlice';
+import { selectTabSlice, setCreating } from 'store/slices/tabSlice';
+import { useLocation } from 'react-router-dom';
 
 const flexCenter = css`
   display: flex;
@@ -143,6 +145,7 @@ type CreditInfoType = {
 };
 
 export default function Nova() {
+  const location = useLocation();
   const [credit, setCredit] = useState<CreditInfoType>({
     chat: '5',
     doc: '10',
@@ -151,17 +154,19 @@ export default function Nova() {
   });
   const dispatch = useAppDispatch();
   const novaHistory = useAppSelector(novaHistorySelector);
+  const { creating } = useAppSelector(selectTabSlice);
   const confirm = useConfirm();
   const { t } = useTranslation();
 
   const requestor = useRef<ReturnType<typeof apiWrapper>>();
 
-  const lastChat = novaHistory[novaHistory.length - 1];
   const onSubmit = useCallback(
     async (submitParam: InputBarSubmitParam) => {
       const id = v4();
       let result = '';
       try {
+        dispatch(setCreating('NOVA'));
+        const lastChat = novaHistory[novaHistory.length - 1];
         const { vsId = '', threadId = '' } = lastChat || {};
         const { input, files = [], fileType: type } = submitParam;
         const formData = new FormData();
@@ -207,6 +212,7 @@ export default function Nova() {
           // TODO : error handling
         }
       } finally {
+        dispatch(setCreating('none'));
         const html = await markdownToHtml(result);
         if (html) {
           const $ = load(html);
@@ -218,7 +224,7 @@ export default function Nova() {
         }
       }
     },
-    [lastChat, dispatch]
+    [novaHistory, dispatch]
   );
 
   const newChat = async () => {
@@ -289,15 +295,14 @@ export default function Nova() {
         ) : (
           <>
             <ChatList></ChatList>
-            {(lastChat?.status === 'request' || lastChat?.status === 'stream') && (
-              <StopButton onClick={onStop}>stop</StopButton>
-            )}
+            {creating !== 'none' && <StopButton onClick={onStop}>stop</StopButton>}
           </>
         )}
       </Body>
       <InputBar
-        disabled={lastChat?.status === 'request' || lastChat?.status === 'stream'}
-        onSubmit={onSubmit}></InputBar>
+        disabled={creating !== 'none'}
+        onSubmit={onSubmit}
+        contents={location.state?.body}></InputBar>
     </Wrapper>
   );
 }

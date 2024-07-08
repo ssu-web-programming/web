@@ -12,7 +12,8 @@ type CREATING_TYPE =
   | 'CreateVectorData'
   | 'PreAsk'
   | 'MakeSummary'
-  | 'AI Apps';
+  | 'AI Apps'
+  | 'NOVA';
 export type AI_WRITE_TAB_TYPE = 'write' | 'chat';
 
 interface TabType {

@@ -183,7 +183,7 @@ interface ReceiveMessage {
   body: string;
 }
 
-type PanelOpenCmd = 'openAiTools' | 'openTextToImg' | 'openAskDoc' | 'openAlli';
+type PanelOpenCmd = 'openAiTools' | 'openTextToImg' | 'openAskDoc' | 'openAlli' | 'openNOVA';
 
 export const useInitBridgeListener = () => {
   const dispatch = useAppDispatch();
@@ -212,6 +212,8 @@ export const useInitBridgeListener = () => {
         return '/askdoc';
       case 'openAlli':
         return '/alli';
+      case 'openNOVA':
+        return '/NOVA';
     }
   }, []);
 
@@ -264,7 +266,8 @@ export const useInitBridgeListener = () => {
           case 'openAiTools':
           case 'openTextToImg':
           case 'openAskDoc':
-          case 'openAlli': {
+          case 'openAlli':
+          case 'openNOVA': {
             dispatch(changePanel({ cmd, body }));
             break;
           }
