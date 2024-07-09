@@ -168,7 +168,7 @@ export default function Nova() {
         dispatch(setCreating('NOVA'));
         const lastChat = novaHistory[novaHistory.length - 1];
         const { vsId = '', threadId = '' } = lastChat || {};
-        const { input, files = [], fileType: type } = submitParam;
+        const { input, files = [], type } = submitParam;
         const formData = new FormData();
         for (const file of files) {
           formData.append('uploadFiles', file);
@@ -294,7 +294,7 @@ export default function Nova() {
           </GuideWrapper>
         ) : (
           <>
-            <ChatList></ChatList>
+            <ChatList novaHistory={novaHistory} onSubmit={onSubmit}></ChatList>
             {creating !== 'none' && <StopButton onClick={onStop}>stop</StopButton>}
           </>
         )}
