@@ -1,7 +1,7 @@
 import PreMarkdown from 'components/PreMarkdown';
-import { novaHistorySelector } from 'store/slices/novaHistorySlice';
-import { useAppSelector } from 'store/store';
+import { NovaChatType } from 'store/slices/novaHistorySlice';
 import styled from 'styled-components';
+import { InputBarSubmitParam } from './InputBar';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -34,8 +34,13 @@ const ChatItem = styled.div`
   }
 `;
 
-export default function ChatList() {
-  const novaHistory = useAppSelector(novaHistorySelector);
+interface ChatListProps {
+  novaHistory: NovaChatType[];
+  onSubmit: (submitParam: InputBarSubmitParam) => void;
+}
+
+export default function ChatList(props: ChatListProps) {
+  const { novaHistory, onSubmit } = props;
 
   return (
     <Wrapper
@@ -57,7 +62,9 @@ export default function ChatList() {
                 <PreMarkdown text={item.output}></PreMarkdown>
                 {item.status === 'done' && (
                   <>
-                    <button>다시생성</button>
+                    <button onClick={() => onSubmit({ input: item.input, type: '' })}>
+                      다시생성
+                    </button>
                     <button>복사</button>
                     <button>문서로 만들기</button>
                   </>

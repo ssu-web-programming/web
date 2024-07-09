@@ -3,6 +3,7 @@ import FileButton from 'components/FileButton';
 import { ReactComponent as FileIcon } from '../../img/file.svg';
 import { ReactComponent as ImageIcon } from '../../img/landscape.svg';
 import { useState } from 'react';
+import { NovaChatType } from 'store/slices/novaHistorySlice';
 
 const InputBarBase = styled.div<{ disabled: boolean }>`
   width: 100%;
@@ -67,10 +68,8 @@ const InputText = styled.input`
   text-align: left;
 `;
 
-export interface InputBarSubmitParam {
-  input: string;
+export interface InputBarSubmitParam extends Pick<NovaChatType, 'input' | 'type'> {
   files?: File[];
-  fileType: '' | 'image' | 'document';
 }
 
 interface InputBarProps {
@@ -132,13 +131,13 @@ export default function InputBar(props: InputBarProps) {
         <button
           onClick={() => {
             // TODO : refactor
-            const fileType =
+            const type =
               localFiles.length < 1
                 ? ''
                 : localFiles[0].type.split('/')[0].includes('image')
                 ? 'image'
                 : 'document';
-            props.onSubmit({ input: text, files: localFiles, fileType });
+            props.onSubmit({ input: text, files: localFiles, type });
             setText('');
             setLocalFiles([]);
           }}>

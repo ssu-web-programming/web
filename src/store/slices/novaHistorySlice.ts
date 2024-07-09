@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 
-type NovaChatType = {
+export type NovaChatType = {
   id: string;
   input: string;
   output: string;
 
   role: string;
-  type: string;
+  type: '' | 'image' | 'document';
   vsId?: string;
   threadId?: string;
 
