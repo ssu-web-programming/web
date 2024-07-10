@@ -258,7 +258,7 @@ export default function Nova() {
 
   const onStop = () => {
     requestor.current?.abort();
-    dispatch(activeToast({ type: 'success', msg: t(`ToastMsg.StopMsg`) }));
+    dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.StopMsg`) }));
   };
 
   return (

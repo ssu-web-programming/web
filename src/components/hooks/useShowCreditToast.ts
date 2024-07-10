@@ -10,7 +10,7 @@ export const useShowCreditToast = () => {
     const leftCredit = left === '-1' ? t('Unlimited') : left;
     dispatch(
       activeToast({
-        type: 'success',
+        type: 'info',
         msg: t(`ToastMsg.StartCreating`, { deductionCredit: consumed, leftCredit })
       })
     );

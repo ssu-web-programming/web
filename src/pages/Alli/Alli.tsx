@@ -307,7 +307,7 @@ export default function Alli() {
 
   const onClickStop = () => {
     requestor.current?.abort();
-    dispatch(activeToast({ type: 'success', msg: t(`ToastMsg.StopMsg`) }));
+    dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.StopMsg`) }));
   };
 
   const hasEmpty = (inputs: any) =>
@@ -492,7 +492,7 @@ export default function Alli() {
                               try {
                                 const { success, message } = ret;
                                 dispatch(
-                                  activeToast({ type: success ? 'success' : 'error', msg: message })
+                                  activeToast({ type: success ? 'info' : 'error', msg: message })
                                 );
                               } catch (err) {}
                             }
@@ -500,7 +500,7 @@ export default function Alli() {
                         } else {
                           insertDoc(result);
                           dispatch(
-                            activeToast({ type: 'success', msg: t(`ToastMsg.CompleteInsert`) })
+                            activeToast({ type: 'info', msg: t(`ToastMsg.CompleteInsert`) })
                           );
                         }
                       }}>

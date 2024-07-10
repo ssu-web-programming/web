@@ -157,7 +157,7 @@ const AIWriteTab = (props: WriteTabProps) => {
 
   const onClickStop = () => {
     requestor.current?.abort();
-    dispatch(activeToast({ type: 'success', msg: t(`ToastMsg.StopMsg`) }));
+    dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.StopMsg`) }));
   };
 
   return (

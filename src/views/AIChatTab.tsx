@@ -1,4 +1,4 @@
-import styled, { FlattenSimpleInterpolation, css } from 'styled-components';
+import styled, { FlattenSimpleInterpolation } from 'styled-components';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import SpeechBubble from '../components/SpeechBubble';
 import TextArea from '../components/TextArea';
@@ -44,7 +44,6 @@ import useErrorHandle from '../components/hooks/useErrorHandle';
 import SendCoinButton from '../components/buttons/SendCoinButton';
 import { REC_ID_LIST } from '../components/chat/RecommendBox/FunctionRec';
 import { ClientType, getPlatform } from '../util/bridge';
-import Button from '../components/buttons/Button';
 import { VersionListType, versionList } from '../components/chat/RecommendBox/FormRec';
 import DropDownButton from '../components/buttons/DropDownButton';
 import { useShowCreditToast } from '../components/hooks/useShowCreditToast';
@@ -338,7 +337,7 @@ const AIChatTab = (props: WriteTabProps) => {
 
   const onStop = () => {
     requestor.current?.abort();
-    dispatch(activeToast({ type: 'success', msg: t(`ToastMsg.StopMsg`) }));
+    dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.StopMsg`) }));
   };
 
   const submitChat = async (chat?: Chat) => {
