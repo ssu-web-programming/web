@@ -229,11 +229,11 @@ export default function Nova() {
 
   const newChat = async () => {
     const ret = await confirm({
-      title: '새로운 대화',
-      msg: "'새로 대화하기' 선택 시, 지금까지의 대화 내용은 삭제됩니다.",
-      onCancel: { text: '취소', callback: () => {} },
+      title: t(`Nova.NewChat.Title`)!,
+      msg: t(`Nova.NewChat.Msg`),
+      onCancel: { text: t(`Cancel`)!, callback: () => {} },
       onOk: {
-        text: '새로 대화하기',
+        text: t(`Nova.NewChat.Ok`),
         callback: () => {}
       },
       direction: 'row'

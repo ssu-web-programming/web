@@ -18,6 +18,7 @@ import Tooltip from 'components/Tooltip';
 import ico_cloud from 'img/ico_cloud.svg';
 import ico_local from 'img/ico_local.svg';
 import { NovaChatType } from 'store/slices/novaHistorySlice';
+import { useTranslation } from 'react-i18next';
 
 export const flexCenter = css`
   display: flex;
@@ -171,6 +172,8 @@ export default function InputBar(props: InputBarProps) {
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const inputFileRef = useRef<HTMLInputElement | null>(null);
 
+  const { t } = useTranslation();
+
   const loadlocalFile = (files: FileList) => {
     // TODO : check file extension
     setLocalFiles(Array.from(files));
@@ -203,7 +206,7 @@ export default function InputBar(props: InputBarProps) {
       <InputTxtWrapper value={text}>
         <div>
           <TextArea
-            placeholder="NOVA에게 무엇이든 물어보기"
+            placeholder={t(`Nova.ActionWindow.Placeholder`)!}
             value={text}
             onChange={handleChange}
             rows={1}
@@ -304,15 +307,16 @@ const FileList = (props: FileListProps) => {
 const FileUploader = forwardRef<HTMLInputElement, FileUploaderProps>(
   (props: FileUploaderProps, ref) => {
     const { onLoadFile, isAgreed, setIsAgreed } = props;
+    const { t } = useTranslation();
 
     const TOOLTIP_UPLOAD_OPTION = [
       {
-        name: '폴라리스 드라이브',
+        name: t(`Nova.UploadTooltip.PolarisDrive`),
         icon: { src: ico_cloud },
         onClick: () => alert('폴라리스 드라이브')
       },
       {
-        name: '현재 장치',
+        name: t(`Nova.UploadTooltip.Local`),
         icon: { src: ico_local },
         onClick: () => (ref as React.MutableRefObject<HTMLInputElement>)?.current?.click()
       }

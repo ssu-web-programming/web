@@ -1,6 +1,7 @@
 import { forwardRef } from 'react';
 import styled from 'styled-components';
 import { useConfirm } from './Confirm';
+import { useTranslation } from 'react-i18next';
 
 const FileButtonBase = styled.button`
   width: fit-content;
@@ -21,6 +22,7 @@ interface FileButtonProps extends React.ComponentPropsWithoutRef<'input'> {
 }
 
 const FileButton = forwardRef<HTMLInputElement, FileButtonProps>((props, ref) => {
+  const { t } = useTranslation();
   const { target, children, accept, handleOnChange, isAgreed, handleOnClick, ...otherProps } =
     props;
 
@@ -31,11 +33,11 @@ const FileButton = forwardRef<HTMLInputElement, FileButtonProps>((props, ref) =>
     if (isAgreed === true) return;
 
     const isConfirmed = await confirm({
-      title: '개인정보 수집 및 이용동의 (필수)',
-      msg: 'AI NOVA 서비스를 제공하기 위해 다음과 같이 개인정보 추가 동의가 필요합니다.',
-      onCancel: { text: '동의 안 함', callback: () => {} },
+      title: t(`Nova.ConfirmAgreement.Title`)!,
+      msg: t(`Nova.ConfirmAgreement.Msg`),
+      onCancel: { text: t(`Nova.ConfirmAgreement.Cancel`), callback: () => {} },
       onOk: {
-        text: '동의',
+        text: t(`Nova.ConfirmAgreement.Ok`),
         callback: () => {}
       },
       direction: 'row'
