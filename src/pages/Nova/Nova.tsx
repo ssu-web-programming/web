@@ -21,8 +21,8 @@ import Icon from 'components/Icon';
 import IconButton from 'components/buttons/IconButton';
 import ico_ai from 'img/ico_ai.svg';
 import ico_nova from 'img/ico_nova.svg';
-import ico_credit_info from 'img/ico_credit_info.svg';
-import ico_credit from 'img/ico_credit.svg';
+import ico_credit_info from 'img/ico_credit_line.svg';
+import ico_credit from 'img/ico_credit_gray.svg';
 import { ReactComponent as IconMessagePlus } from 'img/ico_message_plus.svg';
 import ChatList from 'components/nova/ChatList';
 import ico_magnifying_glass from 'img/ico_magnifying_glass.svg';
@@ -147,7 +147,7 @@ type CreditInfoType = {
 export default function Nova() {
   const location = useLocation();
   const [credit, setCredit] = useState<CreditInfoType>({
-    chat: '5',
+    chat: '3',
     doc: '10',
     img: '10',
     imgGen: '10'

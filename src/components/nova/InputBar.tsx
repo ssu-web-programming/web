@@ -1,16 +1,36 @@
+import { useState, useEffect, useRef, forwardRef } from 'react';
 import styled, { css } from 'styled-components';
 import FileButton from 'components/FileButton';
+import IconButton from 'components/buttons/IconButton';
+import Icon from 'components/Icon';
 import { ReactComponent as FileIcon } from '../../img/file.svg';
 import { ReactComponent as ImageIcon } from '../../img/landscape.svg';
-import { useState } from 'react';
+import { ReactComponent as SendActiveIcon } from 'img/ico_send_active.svg';
+import { ReactComponent as SendDisabledIcon } from 'img/ico_send_disabled.svg';
+import { ReactComponent as DeleteIcon } from 'img/ico_delete.svg';
+import ico_docs_hwp from 'img/ico_docs_hwp.svg';
+import ico_docs_docx from 'img/ico_docs_docx.svg';
+import ico_docs_xlsx from 'img/ico_docs_xlsx.svg';
+import ico_docs_pptx from 'img/ico_docs_pptx.svg';
+import ico_docs_odt from 'img/ico_docs_odt.svg';
+import ico_docs_img from 'img/ico_image.svg';
+import Tooltip from 'components/Tooltip';
+import ico_cloud from 'img/ico_cloud.svg';
+import ico_local from 'img/ico_local.svg';
 import { NovaChatType } from 'store/slices/novaHistorySlice';
 
-const InputBarBase = styled.div<{ disabled: boolean }>`
-  width: 100%;
+export const flexCenter = css`
   display: flex;
+  align-items: center;
+`;
+
+const InputBarBase = styled.div<{ disabled: boolean }>`
+  position: relative;
+  width: 100%;
+  ${flexCenter}
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  border-top: 2px solid var(--ai-purple-50-main);
 
   ${({ disabled }) =>
     disabled &&
@@ -22,50 +42,103 @@ const InputBarBase = styled.div<{ disabled: boolean }>`
 
 const FileListViewer = styled.div`
   width: 100%;
+  padding: 8px 16px 0px 16px;
   display: flex;
-  flex-direction: row;
-  overflow-x: auto;
+  gap: 8px;
+  overflow-x: scroll;
+  white-space: nowrap;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
 `;
 
 const FileItem = styled.div`
   width: fit-content;
-  height: 37px;
-  display: flex;
-  flex-direction: row;
-  border: solid 1px gray;
-  padding: 5px;
-`;
-
-const InputArea = styled.div`
-  width: 100%;
-  height: 54px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
+  height: 40px;
+  ${flexCenter}
   gap: 8px;
-  padding: 8px 16px;
-`;
-
-const IconButtonWrapper = styled.div`
-  width: 32px;
-  height: 38px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const InputText = styled.input`
-  width: 100%;
-  height: 38px;
-  border: solid 1px gray;
-  padding: 7px 12px;
-  border: 1px solid #e8ebed;
+  padding: 8px;
+  border: 1px solid var(--gray-gray-40);
   border-radius: 8px;
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 24px;
+  background: var(--gray-gray-20);
+
+  font-size: 14px;
+  line-height: 21px;
   text-align: left;
+`;
+
+const InputBtnWrapper = styled.div`
+  width: 100%;
+  height: 46px;
+  padding: 0 16px;
+  ${flexCenter}
+  justify-content: space-between;
+  gap: 8px;
+`;
+
+const UploadBtn = styled.div`
+  display: flex;
+  justify-content: space-between;
+  gap: 11px;
+
+  > button {
+    width: 32px;
+    height: 38px;
+    ${flexCenter}
+    justify-content: center;
+  }
+`;
+
+const IconBtnWrapper = styled.div`
+  width: 36px;
+  height: 36px;
+`;
+
+const InputTxtWrapper = styled.div<{ value: string }>`
+  width: 100%;
+  min-height: 40px;
+  height: auto;
+  padding: 8px 16px 4px;
+  box-sizing: border-box;
+
+  > div {
+    background: ${({ value }) =>
+      !!value ? 'linear-gradient(180deg, #6f3ad0 0%, #a86cea 100%)' : 'var(--gray-gray-40)'};
+
+    z-index: 1;
+    padding: 1px;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+`;
+
+const TextArea = styled.textarea<{ value: string }>`
+  display: flex;
+  width: 100%;
+  max-height: ${({ value }) => (value ? '60px' : '40px')};
+  padding: 10px 16px;
+  box-sizing: border-box;
+  background: white;
+  outline: none;
+  font-size: 14px;
+  line-height: 20px;
+  word-break: break-all;
+  resize: none;
+  z-index: 2;
+  border-radius: 3px;
+
+  scrollbar-width: thin;
+  scrollbar-color: #c9cdd2 transparent;
+
+  // &::-webkit-scrollbar-button {
+  //   display: none;
+  // }
+
+  &::placeholder {
+    color: ${({ value }) => (!!value ? 'transparent' : '#aaa')};
+  }
 `;
 
 export interface InputBarSubmitParam extends Pick<NovaChatType, 'input' | 'type'> {
@@ -78,72 +151,221 @@ interface InputBarProps {
   contents?: string;
 }
 
+type FileListProps = {
+  files: File[];
+  onRemoveFile: (file: File) => void;
+};
+
+type FileUploaderProps = {
+  onLoadFile: (files: FileList) => void;
+  isAgreed: boolean;
+  setIsAgreed: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
 export default function InputBar(props: InputBarProps) {
   const { disabled = false, contents = '' } = props;
   const [localFiles, setLocalFiles] = useState<File[]>([]);
 
   const [text, setText] = useState<string>(contents);
+  const [isAgreed, setIsAgreed] = useState(false);
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  const inputFileRef = useRef<HTMLInputElement | null>(null);
 
   const loadlocalFile = (files: FileList) => {
     // TODO : check file extension
     setLocalFiles(Array.from(files));
   };
 
+  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const inputText = event.target.value;
+    if (inputText.length <= 1000) {
+      setText(inputText);
+    }
+  };
+
+  const handleRemoveFile = (file: File) => {
+    setLocalFiles(localFiles.filter((prev) => prev !== file));
+  };
+
+  // auto resize textArea
+  useEffect(() => {
+    if (textAreaRef.current) {
+      textAreaRef.current.style.height = '40px';
+      textAreaRef.current.style.height = `${Math.min(textAreaRef.current.scrollHeight, 60)}px`;
+    }
+  }, [text]);
+
   return (
     <InputBarBase disabled={disabled}>
       {localFiles.length > 0 && (
-        <FileListViewer>
-          {localFiles.map((file) => (
-            <FileItem key={file.name}>
-              {file.name}
-              <button
-                onClick={() => setLocalFiles(localFiles.filter((prev) => prev !== file))}
-                style={{ border: 'solid 1px red' }}>
-                del
-              </button>
-            </FileItem>
-          ))}
-        </FileListViewer>
+        <InputBar.FileList files={localFiles} onRemoveFile={handleRemoveFile} />
       )}
-      <InputArea>
-        <IconButtonWrapper>
-          <FileButton
-            target={'nova-file'}
-            accept=".docx, .doc, .pptx, .ppt, .xlsx, .xls, .hwp, .pdf"
-            handleOnChange={loadlocalFile}
-            multiple>
-            <FileIcon></FileIcon>
-          </FileButton>
-        </IconButtonWrapper>
-        <IconButtonWrapper>
-          <FileButton
-            target={'nova-image'}
-            accept=".jpg, .png, .gif"
-            handleOnChange={loadlocalFile}
-            multiple>
-            <ImageIcon></ImageIcon>
-          </FileButton>
-        </IconButtonWrapper>
-        <InputText
-          type="text"
-          value={text}
-          onChange={(e) => setText(e.currentTarget.value)}></InputText>
-        <button
-          onClick={() => {
-            // TODO : refactor
-            const type =
-              localFiles.length < 1
-                ? ''
-                : localFiles[0].type.split('/')[0].includes('image')
-                ? 'image'
-                : 'document';
-            props.onSubmit({ input: text, files: localFiles, type });
-            setText('');
-            setLocalFiles([]);
-          }}>
-          go
-        </button>
-      </InputArea>
+      <InputTxtWrapper value={text}>
+        <div>
+          <TextArea
+            placeholder="NOVA에게 무엇이든 물어보기"
+            value={text}
+            onChange={handleChange}
+            rows={1}
+            maxLength={1000}
+            ref={textAreaRef}
+          />
+        </div>
+      </InputTxtWrapper>
+      <InputBtnWrapper>
+        <InputBar.FileUploader
+          onLoadFile={loadlocalFile}
+          isAgreed={isAgreed}
+          setIsAgreed={setIsAgreed}
+          ref={inputFileRef}
+        />
+
+        <IconBtnWrapper>
+          <IconButton
+            disable={text.length < 1}
+            onClick={() => {
+              // TODO : refactor
+              const fileType =
+                localFiles.length < 1
+                  ? ''
+                  : localFiles[0].type.split('/')[0].includes('image')
+                  ? 'image'
+                  : 'document';
+              props.onSubmit({ input: text, files: localFiles, type: fileType });
+              setText('');
+              setLocalFiles([]);
+            }}
+            iconSize="lg"
+            iconComponent={text.length < 1 ? SendDisabledIcon : SendActiveIcon}
+          />
+        </IconBtnWrapper>
+      </InputBtnWrapper>
     </InputBarBase>
   );
 }
+
+const FileList = (props: FileListProps) => {
+  const { files, onRemoveFile } = props;
+
+  const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.currentTarget.scrollLeft += e.deltaY;
+  };
+
+  const getFileIcon = (file: File) => {
+    const fileExt = file.name.split('.').pop()?.toLowerCase();
+
+    if (!fileExt) return null;
+
+    if (['docx', 'doc'].includes(fileExt)) {
+      return ico_docs_docx;
+    } else if (['xlsx', 'xls'].includes(fileExt)) {
+      return ico_docs_xlsx;
+    } else if (['pptx', 'ppt'].includes(fileExt)) {
+      return ico_docs_pptx;
+    } else if (['jpg', 'jpeg', 'png', 'gif'].includes(fileExt)) {
+      return ico_docs_img;
+    } else if (fileExt === 'odt') {
+      return ico_docs_odt;
+    } else {
+      return ico_docs_hwp;
+    }
+  };
+
+  const getFileName = (file: File) => {
+    const fileName = file.name;
+    if (fileName.length > 20) {
+      const fileExt = fileName.split('.').pop() || '';
+      const fileNameWithoutExt = fileName.slice(0, 20 - fileExt.length - 1);
+      return `${fileNameWithoutExt}…${fileExt}`;
+    }
+    return fileName;
+  };
+
+  return (
+    <FileListViewer onWheel={handleWheel}>
+      {files.map((file: File) => (
+        <FileItem key={file.name}>
+          <Icon size={28} iconSrc={getFileIcon(file)} />
+          <span>{getFileName(file)}</span>
+          <IconButton
+            iconSize="md"
+            width={21}
+            height={21}
+            iconComponent={DeleteIcon}
+            onClick={() => onRemoveFile(file)}
+          />
+        </FileItem>
+      ))}
+    </FileListViewer>
+  );
+};
+
+const FileUploader = forwardRef<HTMLInputElement, FileUploaderProps>(
+  (props: FileUploaderProps, ref) => {
+    const { onLoadFile, isAgreed, setIsAgreed } = props;
+
+    const TOOLTIP_UPLOAD_OPTION = [
+      {
+        name: '폴라리스 드라이브',
+        icon: { src: ico_cloud },
+        onClick: () => alert('폴라리스 드라이브')
+      },
+      {
+        name: '현재 장치',
+        icon: { src: ico_local },
+        onClick: () => (ref as React.MutableRefObject<HTMLInputElement>)?.current?.click()
+      }
+    ];
+
+    const handleOnClick = () => {
+      if (!isAgreed) {
+        setIsAgreed(() => true);
+      } else {
+        (ref as React.MutableRefObject<HTMLInputElement>)?.current?.click();
+      }
+    };
+
+    const UPLOAD_BTN_LIST = [
+      {
+        target: 'nova-file',
+        accept: '.docx, .doc, .pptx, .ppt, .xlsx, .xls, .hwp, .pdf',
+        children: <FileIcon />
+      },
+      {
+        target: 'nova-image',
+        accept: '.jpg, .png, .gif',
+        children: <ImageIcon />
+      }
+    ];
+
+    return (
+      <UploadBtn>
+        {UPLOAD_BTN_LIST.map((btn) => (
+          <Tooltip
+            key={btn.target}
+            placement="top-start"
+            type="selectable"
+            options={TOOLTIP_UPLOAD_OPTION}
+            distance={10}
+            condition={isAgreed}
+            initPos>
+            <FileButton
+              target={btn.target}
+              accept={btn.accept}
+              handleOnChange={onLoadFile}
+              multiple
+              isAgreed={isAgreed}
+              handleOnClick={handleOnClick}
+              ref={ref}>
+              {btn.children}
+            </FileButton>
+          </Tooltip>
+        ))}
+      </UploadBtn>
+    );
+  }
+);
+
+InputBar.FileList = FileList;
+InputBar.FileUploader = FileUploader;

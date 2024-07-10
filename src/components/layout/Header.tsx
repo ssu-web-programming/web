@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import Icon from '../Icon';
-import icon_ai from '../../img/ico_ai.svg';
+import icon_ai_tools from 'img/ico_ai_tools.svg';
 import { flex, alignItemCenter, justiSpaceBetween } from '../../style/cssCommon';
 import Bridge from '../../util/bridge';
 import IconButton from '../buttons/IconButton';
@@ -64,7 +64,7 @@ export default function Header(props: HeaderProps) {
   return (
     <Contents>
       <TitleWrapper>
-        <Icon iconSrc={icon_ai} size="lg" />
+        <Icon iconSrc={icon_ai_tools} size="lg" />
         <Title>{title}</Title>
         {subTitle && (
           <>
