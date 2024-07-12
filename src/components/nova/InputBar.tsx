@@ -13,7 +13,8 @@ import ico_docs_docx from 'img/ico_docs_docx.svg';
 import ico_docs_xlsx from 'img/ico_docs_xlsx.svg';
 import ico_docs_pptx from 'img/ico_docs_pptx.svg';
 import ico_docs_odt from 'img/ico_docs_odt.svg';
-import ico_docs_img from 'img/ico_image.svg';
+import ico_docs_img from 'img/landscape.svg';
+
 import Tooltip from 'components/Tooltip';
 import ico_cloud from 'img/ico_cloud.svg';
 import ico_local from 'img/ico_local.svg';
@@ -97,7 +98,7 @@ const IconBtnWrapper = styled.div`
   height: 36px;
 `;
 
-const InputTxtWrapper = styled.div<{ value: string }>`
+const InputTxtWrapper = styled.div<{ hasValue: boolean }>`
   width: 100%;
   min-height: 40px;
   height: auto;
@@ -105,8 +106,8 @@ const InputTxtWrapper = styled.div<{ value: string }>`
   box-sizing: border-box;
 
   > div {
-    background: ${({ value }) =>
-      !!value ? 'linear-gradient(180deg, #6f3ad0 0%, #a86cea 100%)' : 'var(--gray-gray-40)'};
+    background: ${({ hasValue }) =>
+      hasValue ? 'linear-gradient(180deg, #6f3ad0 0%, #a86cea 100%)' : 'var(--gray-gray-40)'};
 
     z-index: 1;
     padding: 1px;
@@ -118,17 +119,21 @@ const InputTxtWrapper = styled.div<{ value: string }>`
 const TextArea = styled.textarea<{ value: string }>`
   display: flex;
   width: 100%;
-  max-height: ${({ value }) => (value ? '60px' : '40px')};
-  padding: 10px 16px;
+  height: 40px;
+  max-height: 60px;
+  padding: 0px;
   box-sizing: border-box;
   background: white;
   outline: none;
+  border-radius: 3px;
+  border: 10px solid white;
+  border-right: 6px solid white;
+  border-left: 16px solid white;
+  resize: none;
+  word-break: break-all;
   font-size: 14px;
   line-height: 20px;
-  word-break: break-all;
-  resize: none;
   z-index: 2;
-  border-radius: 3px;
 
   scrollbar-width: thin;
   scrollbar-color: #c9cdd2 transparent;
@@ -190,12 +195,16 @@ export default function InputBar(props: InputBarProps) {
     setLocalFiles(localFiles.filter((prev) => prev !== file));
   };
 
-  // auto resize textArea
-  useEffect(() => {
-    if (textAreaRef.current) {
-      textAreaRef.current.style.height = '40px';
-      textAreaRef.current.style.height = `${Math.min(textAreaRef.current.scrollHeight, 60)}px`;
+  const adjustTextareaHeight = () => {
+    const textarea = textAreaRef.current;
+    if (textarea) {
+      textarea.style.height = '1px';
+      textarea.style.height = `${textarea.scrollHeight > 20 ? 60 : 40}px`;
     }
+  };
+
+  useEffect(() => {
+    adjustTextareaHeight();
   }, [text]);
 
   return (
@@ -203,13 +212,12 @@ export default function InputBar(props: InputBarProps) {
       {localFiles.length > 0 && (
         <InputBar.FileList files={localFiles} onRemoveFile={handleRemoveFile} />
       )}
-      <InputTxtWrapper value={text}>
+      <InputTxtWrapper hasValue={!!text}>
         <div>
           <TextArea
             placeholder={t(`Nova.ActionWindow.Placeholder`)!}
             value={text}
             onChange={handleChange}
-            rows={1}
             maxLength={1000}
             ref={textAreaRef}
           />
@@ -251,7 +259,6 @@ const FileList = (props: FileListProps) => {
   const { files, onRemoveFile } = props;
 
   const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
-    e.preventDefault();
     e.currentTarget.scrollLeft += e.deltaY;
   };
 
@@ -291,13 +298,7 @@ const FileList = (props: FileListProps) => {
         <FileItem key={file.name}>
           <Icon size={28} iconSrc={getFileIcon(file)} />
           <span>{getFileName(file)}</span>
-          <IconButton
-            iconSize="md"
-            width={21}
-            height={21}
-            iconComponent={DeleteIcon}
-            onClick={() => onRemoveFile(file)}
-          />
+          <IconButton iconSize="lg" iconComponent={DeleteIcon} onClick={() => onRemoveFile(file)} />
         </FileItem>
       ))}
     </FileListViewer>
