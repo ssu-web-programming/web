@@ -11,7 +11,7 @@ import { ReactComponent as IconDocument } from '../../img/askDoc/ico_document_64
 import Button from '../../components/buttons/Button';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { initFlagSelector } from '../../store/slices/initFlagSlice';
-import CreditButton from '../../components/buttons/CreditButton';
+import IconTextButton from 'components/buttons/IconTextButton';
 import Loading from '../../components/Loading';
 import { ALLI_RESPONSE_STREAM_API } from '../../api/constant';
 import { calLeftCredit, insertDoc } from '../../util/common';
@@ -33,6 +33,7 @@ import Bridge from '../../util/bridge';
 import { useConfirm } from '../../components/Confirm';
 import { setCreating } from '../../store/slices/tabSlice';
 import ReturnButton from 'components/buttons/ReturnButton';
+import ico_credit_purple from 'img/ico_credit_purple.svg';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -526,7 +527,7 @@ export default function Alli() {
                     {t('StopGenerate')}
                   </Button>
                 ) : (
-                  <CreditButton
+                  <IconTextButton
                     variant="purpleGradient"
                     width={'full'}
                     height={40}
@@ -534,9 +535,10 @@ export default function Alli() {
                     onClick={() => {
                       if (result) setResult('');
                       requestAlliRun(selectedApp.id, inputs);
-                    }}>
+                    }}
+                    iconSrc={ico_credit_purple}>
                     {result ? t('Regenerate') : t('Generate')}
-                  </CreditButton>
+                  </IconTextButton>
                 )}
               </Footer>
             </>

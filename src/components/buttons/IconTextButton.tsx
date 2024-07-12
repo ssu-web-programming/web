@@ -11,9 +11,11 @@ const Contents = styled.div`
   gap: 6px;
 
   width: 100%;
+  position: relative;
+  line-height: 20px;
 `;
 
-type IconPos = 'left' | 'right';
+type IconPos = 'left' | 'right' | 'end';
 
 export interface IconTextButtonProps extends ButtonProps {
   iconSrc: string | React.ReactNode;
@@ -22,21 +24,36 @@ export interface IconTextButtonProps extends ButtonProps {
 }
 
 export default function IconTextButton(props: PropsWithChildren<IconTextButtonProps>) {
-  const { children, iconPos, iconSrc, iconSize = 'sm', ...rest } = props;
+  const { children, iconPos = 'right', iconSrc, iconSize = 'sm', ...rest } = props;
 
   return (
     <Button {...rest}>
-      {iconPos === 'right' ? (
-        <Contents>
-          {children}
-          <Icon size={iconSize} iconSrc={iconSrc}></Icon>
-        </Contents>
-      ) : (
-        <Contents>
-          <Icon size={iconSize} iconSrc={iconSrc}></Icon>
-          {children}
-        </Contents>
-      )}
+      <Contents>
+        {iconPos === 'left' && (
+          <>
+            <Icon size={iconSize} iconSrc={iconSrc} />
+            {children}
+          </>
+        )}
+        {iconPos === 'right' && (
+          <>
+            {children}
+            <Icon size={iconSize} iconSrc={iconSrc} />
+          </>
+        )}
+        {iconPos === 'end' && (
+          <>
+            {children}
+            <div
+              style={{
+                position: 'absolute',
+                right: '11px'
+              }}>
+              <Icon size={iconSize} iconSrc={iconSrc} />
+            </div>
+          </>
+        )}
+      </Contents>
     </Button>
   );
 }
