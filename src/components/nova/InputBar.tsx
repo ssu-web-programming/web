@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, forwardRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import FileButton from 'components/FileButton';
 import IconButton from 'components/buttons/IconButton';
@@ -175,7 +175,6 @@ export default function InputBar(props: InputBarProps) {
   const [text, setText] = useState<string>(contents);
   const [isAgreed, setIsAgreed] = useState(false);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
-  const inputFileRef = useRef<HTMLInputElement | null>(null);
 
   const { t } = useTranslation();
 
@@ -228,7 +227,6 @@ export default function InputBar(props: InputBarProps) {
           onLoadFile={loadlocalFile}
           isAgreed={isAgreed}
           setIsAgreed={setIsAgreed}
-          ref={inputFileRef}
         />
 
         <IconBtnWrapper>
@@ -305,72 +303,80 @@ const FileList = (props: FileListProps) => {
   );
 };
 
-const FileUploader = forwardRef<HTMLInputElement, FileUploaderProps>(
-  (props: FileUploaderProps, ref) => {
-    const { onLoadFile, isAgreed, setIsAgreed } = props;
-    const { t } = useTranslation();
+const FileUploader = (props: FileUploaderProps) => {
+  const { onLoadFile, isAgreed, setIsAgreed } = props;
+  const { t } = useTranslation();
+  const inputDocsFileRef = useRef<HTMLInputElement | null>(null);
+  const inputImgFileRef = useRef<HTMLInputElement | null>(null);
 
-    const TOOLTIP_UPLOAD_OPTION = [
-      {
-        name: t(`Nova.UploadTooltip.PolarisDrive`),
-        icon: { src: ico_cloud },
-        onClick: () => alert('폴라리스 드라이브')
-      },
-      {
-        name: t(`Nova.UploadTooltip.Local`),
-        icon: { src: ico_local },
-        onClick: () => (ref as React.MutableRefObject<HTMLInputElement>)?.current?.click()
-      }
-    ];
+  const getCurrentFileInput = (target: string) => {
+    if (target === 'nova-file') {
+      return inputDocsFileRef;
+    } else if (target === 'nova-image') {
+      return inputImgFileRef;
+    }
+  };
 
-    const handleOnClick = () => {
-      if (!isAgreed) {
-        setIsAgreed(() => true);
-      } else {
-        (ref as React.MutableRefObject<HTMLInputElement>)?.current?.click();
-      }
-    };
+  const TOOLTIP_UPLOAD_OPTION = (target: string) => [
+    {
+      name: t(`Nova.UploadTooltip.PolarisDrive`),
+      icon: { src: ico_cloud },
+      onClick: () => alert('폴라리스 드라이브')
+    },
+    {
+      name: t(`Nova.UploadTooltip.Local`),
+      icon: { src: ico_local },
+      onClick: () => getCurrentFileInput(target)?.current?.click()
+    }
+  ];
 
-    const UPLOAD_BTN_LIST = [
-      {
-        target: 'nova-file',
-        accept: '.docx, .doc, .pptx, .ppt, .xlsx, .xls, .hwp, .pdf',
-        children: <FileIcon />
-      },
-      {
-        target: 'nova-image',
-        accept: '.jpg, .png, .gif',
-        children: <ImageIcon />
-      }
-    ];
+  const handleOnClick = () => {
+    if (!isAgreed) {
+      setIsAgreed(() => true);
+    }
+  };
 
-    return (
-      <UploadBtn>
-        {UPLOAD_BTN_LIST.map((btn) => (
-          <Tooltip
-            key={btn.target}
-            placement="top-start"
-            type="selectable"
-            options={TOOLTIP_UPLOAD_OPTION}
-            distance={10}
-            condition={isAgreed}
-            initPos>
-            <FileButton
-              target={btn.target}
-              accept={btn.accept}
-              handleOnChange={onLoadFile}
-              multiple
-              isAgreed={isAgreed}
-              handleOnClick={handleOnClick}
-              ref={ref}>
-              {btn.children}
-            </FileButton>
-          </Tooltip>
-        ))}
-      </UploadBtn>
-    );
-  }
-);
+  const UPLOAD_BTN_LIST = [
+    {
+      target: 'nova-file',
+      accept: '.docx, .doc, .pptx, .ppt, .xlsx, .xls, .hwp, .pdf',
+      children: <FileIcon />,
+      ref: inputDocsFileRef
+    },
+    {
+      target: 'nova-image',
+      accept: '.jpg, .png, .gif',
+      children: <ImageIcon />,
+      ref: inputImgFileRef
+    }
+  ];
+
+  return (
+    <UploadBtn>
+      {UPLOAD_BTN_LIST.map((btn) => (
+        <Tooltip
+          key={btn.target}
+          placement="top-start"
+          type="selectable"
+          options={TOOLTIP_UPLOAD_OPTION(btn.target)}
+          distance={10}
+          condition={isAgreed}
+          initPos>
+          <FileButton
+            target={btn.target}
+            accept={btn.accept}
+            handleOnChange={onLoadFile}
+            multiple
+            isAgreed={isAgreed}
+            handleOnClick={handleOnClick}
+            ref={btn.ref}>
+            {btn.children}
+          </FileButton>
+        </Tooltip>
+      ))}
+    </UploadBtn>
+  );
+};
 
 InputBar.FileList = FileList;
 InputBar.FileUploader = FileUploader;

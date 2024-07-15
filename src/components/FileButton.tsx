@@ -29,7 +29,7 @@ const FileButton = forwardRef<HTMLInputElement, FileButtonProps>((props, ref) =>
   const inputId = `__upload-local-file-${target}`;
   const confirm = useConfirm();
 
-  const handleClick = async () => {
+  const handleAgreement = async () => {
     if (isAgreed === true) return;
 
     const isConfirmed = await confirm({
@@ -49,7 +49,7 @@ const FileButton = forwardRef<HTMLInputElement, FileButtonProps>((props, ref) =>
   };
 
   return (
-    <FileButtonBase onClick={handleClick}>
+    <FileButtonBase onClick={handleAgreement}>
       <Label>{children}</Label>
       <input
         ref={ref}
