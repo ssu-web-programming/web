@@ -32,7 +32,7 @@ const PreAsk = ({ onNext }: Props) => {
       dispatch(setCreating('PreAsk'));
       dispatch(
         activeToast({
-          type: 'success',
+          type: 'info',
           msg: t(`AskDocStep.Step4.Noti`, {
             deductionCredit: 5,
             leftCredit: data.data.credit === '-1' ? t('Unlimited') : data.data.credit

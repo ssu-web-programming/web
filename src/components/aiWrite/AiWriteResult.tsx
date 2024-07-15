@@ -27,7 +27,6 @@ import {
 import { insertDoc } from '../../util/common';
 import { activeToast } from '../../store/slices/toastSlice';
 import { selectTabSlice } from '../../store/slices/tabSlice';
-import CreditButton from '../buttons/CreditButton';
 import IconTextButton from '../buttons/IconTextButton';
 import Grid from '../layout/Grid';
 import React from 'react';
@@ -36,6 +35,7 @@ import ArrowSwitcher from '../ArrowSwitcher';
 import ClovaXLinkText from '../ClovaXLinkText';
 import ClaudeLinkText from '../ClaudeLinkText';
 import { BoldTextLength } from 'components/TextLength';
+import icon_credit_purple from '../../img/ico_credit_purple.svg';
 
 // clipboard
 // import { useCopyClipboard } from '../../util/bridge';
@@ -199,18 +199,19 @@ const AiWriteResult = ({
         </ResultBox>
         <ButtonBox creating={creating !== 'none'}>
           <Grid col={2}>
-            <CreditButton
+            <IconTextButton
               width="full"
               borderType="gray"
+              iconSrc={icon_credit_purple}
               onClick={() => submitSubject(currentWrite)}>
               {t(`WriteTab.Recreating`)}
-            </CreditButton>
+            </IconTextButton>
             <Button
               width="full"
               borderType="gray"
               onClick={() => {
                 insertDoc(currentWrite.result);
-                dispatch(activeToast({ type: 'success', msg: t(`ToastMsg.CompleteInsert`) }));
+                dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.CompleteInsert`) }));
               }}>
               {t(`WriteTab.InsertDoc`)}
             </Button>

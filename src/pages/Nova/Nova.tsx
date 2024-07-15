@@ -21,8 +21,8 @@ import Icon from 'components/Icon';
 import IconButton from 'components/buttons/IconButton';
 import ico_ai from 'img/ico_ai.svg';
 import ico_nova from 'img/ico_nova.svg';
-import ico_credit_info from 'img/ico_credit_info.svg';
-import ico_credit from 'img/ico_credit.svg';
+import ico_credit_info from 'img/ico_credit_line.svg';
+import ico_credit from 'img/ico_credit_gray.svg';
 import { ReactComponent as IconMessagePlus } from 'img/ico_message_plus.svg';
 import ChatList from 'components/nova/ChatList';
 import ico_magnifying_glass from 'img/ico_magnifying_glass.svg';
@@ -147,7 +147,7 @@ type CreditInfoType = {
 export default function Nova() {
   const location = useLocation();
   const [credit, setCredit] = useState<CreditInfoType>({
-    chat: '5',
+    chat: '3',
     doc: '10',
     img: '10',
     imgGen: '10'
@@ -229,11 +229,11 @@ export default function Nova() {
 
   const newChat = async () => {
     const ret = await confirm({
-      title: '새로운 대화',
-      msg: "'새로 대화하기' 선택 시, 지금까지의 대화 내용은 삭제됩니다.",
-      onCancel: { text: '취소', callback: () => {} },
+      title: t(`Nova.NewChat.Title`)!,
+      msg: t(`Nova.NewChat.Msg`),
+      onCancel: { text: t(`Cancel`)!, callback: () => {} },
       onOk: {
-        text: '새로 대화하기',
+        text: t(`Nova.NewChat.Ok`),
         callback: () => {}
       },
       direction: 'row'
@@ -258,7 +258,7 @@ export default function Nova() {
 
   const onStop = () => {
     requestor.current?.abort();
-    dispatch(activeToast({ type: 'success', msg: t(`ToastMsg.StopMsg`) }));
+    dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.StopMsg`) }));
   };
 
   return (

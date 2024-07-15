@@ -11,7 +11,7 @@ import { ReactComponent as IconDocument } from '../../img/askDoc/ico_document_64
 import Button from '../../components/buttons/Button';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { initFlagSelector } from '../../store/slices/initFlagSlice';
-import CreditButton from '../../components/buttons/CreditButton';
+import IconTextButton from 'components/buttons/IconTextButton';
 import Loading from '../../components/Loading';
 import { ALLI_RESPONSE_STREAM_API } from '../../api/constant';
 import { calLeftCredit, insertDoc } from '../../util/common';
@@ -33,6 +33,7 @@ import Bridge from '../../util/bridge';
 import { useConfirm } from '../../components/Confirm';
 import { setCreating } from '../../store/slices/tabSlice';
 import ReturnButton from 'components/buttons/ReturnButton';
+import ico_credit_purple from 'img/ico_credit_purple.svg';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -307,7 +308,7 @@ export default function Alli() {
 
   const onClickStop = () => {
     requestor.current?.abort();
-    dispatch(activeToast({ type: 'success', msg: t(`ToastMsg.StopMsg`) }));
+    dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.StopMsg`) }));
   };
 
   const hasEmpty = (inputs: any) =>
@@ -492,7 +493,7 @@ export default function Alli() {
                               try {
                                 const { success, message } = ret;
                                 dispatch(
-                                  activeToast({ type: success ? 'success' : 'error', msg: message })
+                                  activeToast({ type: success ? 'info' : 'error', msg: message })
                                 );
                               } catch (err) {}
                             }
@@ -500,7 +501,7 @@ export default function Alli() {
                         } else {
                           insertDoc(result);
                           dispatch(
-                            activeToast({ type: 'success', msg: t(`ToastMsg.CompleteInsert`) })
+                            activeToast({ type: 'info', msg: t(`ToastMsg.CompleteInsert`) })
                           );
                         }
                       }}>
@@ -526,7 +527,7 @@ export default function Alli() {
                     {t('StopGenerate')}
                   </Button>
                 ) : (
-                  <CreditButton
+                  <IconTextButton
                     variant="purpleGradient"
                     width={'full'}
                     height={40}
@@ -534,9 +535,10 @@ export default function Alli() {
                     onClick={() => {
                       if (result) setResult('');
                       requestAlliRun(selectedApp.id, inputs);
-                    }}>
+                    }}
+                    iconSrc={ico_credit_purple}>
                     {result ? t('Regenerate') : t('Generate')}
-                  </CreditButton>
+                  </IconTextButton>
                 )}
               </Footer>
             </>

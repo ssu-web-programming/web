@@ -10,6 +10,7 @@ export type TooltipOption = {
     src: string;
     txt?: string;
   };
+  onClick?: () => void;
 };
 
 type TooltipProps = {
@@ -17,8 +18,10 @@ type TooltipProps = {
   options: TooltipOption[];
   placement: TooltipPlacement;
   type?: TooltipType;
-  onSelect?: (option: string) => void;
   children: React.ReactNode;
+  distance?: number; // distance between tooltip and children
+  initPos?: boolean; // if true, tooltip will be positioned as initial
+  condition?: boolean; // if false, tooltip will not be opened
 };
 
 const STYLE_BY_TYPE = {
@@ -33,20 +36,29 @@ const STYLE_BY_TYPE = {
   `
 };
 
-const TooltipContainer = styled.div`
-  position: relative;
-  display: inline-block;
+const TooltipContainer = styled.div<{ initPos: boolean }>`
+  position: ${({ initPos }) => (initPos ? 'initial' : 'relative')};
+  display: flex;
+  align-items: center;
 `;
 
 const TootipButton = styled.div`
   cursor: pointer;
+  background-color: transparent;
 `;
 
-const TooltipContent = styled.div<{ isOpen: boolean; placement: string; type: TooltipType }>`
+const TooltipContent = styled.div<{
+  isOpen: boolean;
+  placement: string;
+  type: TooltipType;
+  distance: number;
+}>`
   display: ${({ isOpen }) => (isOpen ? 'block' : 'none')};
   position: absolute;
-  top: ${({ placement }) => (placement.startsWith('top') ? 'auto' : 'calc(100% + 4px)')};
-  bottom: ${({ placement }) => (placement.startsWith('top') ? 'calc(100% + 4px)' : 'auto')};
+  top: ${({ placement, distance }) =>
+    placement.startsWith('top') ? 'auto' : `calc(100% + ${distance}px)`};
+  bottom: ${({ placement, distance }) =>
+    placement.startsWith('top') ? `calc(100% + ${distance}px)` : 'auto'};
   left: ${({ placement }) => (placement.endsWith('start') ? '0' : 'auto')};
   right: ${({ placement }) => (placement.endsWith('end') ? '0' : 'auto')};
   min-width: 165px;
@@ -56,6 +68,7 @@ const TooltipContent = styled.div<{ isOpen: boolean; placement: string; type: To
   background-color: white;
   box-shadow: 0px 6px 12px 0px #383f4733;
   z-index: 10;
+  margin-left: ${({ distance }) => distance}px;
 `;
 
 const OptionList = styled.ul`
@@ -92,12 +105,22 @@ const Divider = styled.div`
 const ChipWrapper = styled.div`
   display: flex;
   margin-right: 4px;
+  align-items: center;
 `;
 
 const Tooltip = (props: TooltipProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const tooltipRef = useRef<HTMLDivElement>(null);
-  const { options, onSelect, placement, children, title, type = 'normal' } = props;
+  const {
+    options,
+    placement,
+    children,
+    title,
+    type = 'normal',
+    distance = 4,
+    condition,
+    initPos = false
+  } = props;
 
   const handleClickOutside = (event: MouseEvent) => {
     if (tooltipRef.current && !tooltipRef.current.contains(event.target as Node)) {
@@ -113,31 +136,34 @@ const Tooltip = (props: TooltipProps) => {
   }, []);
 
   const toggleTooltip = () => {
+    if (condition === false) return;
     setIsOpen(!isOpen);
   };
 
-  const handleOptionSelect = (option: string) => {
+  const handleOptionSelect = (option: TooltipOption) => {
     if (type === 'selectable') {
-      onSelect && onSelect(option);
+      option?.onClick && option.onClick();
     }
+
     setIsOpen(false);
   };
 
   return (
-    <TooltipContainer ref={tooltipRef}>
+    <TooltipContainer ref={tooltipRef} initPos={initPos}>
       <TootipButton onClick={toggleTooltip}>{children}</TootipButton>
-      <TooltipContent isOpen={isOpen} placement={placement} type={type}>
+      <TooltipContent isOpen={isOpen} placement={placement} type={type} distance={distance}>
         {title && (
           <>
             <Title>{title}</Title>
             <Divider />
           </>
         )}
+
         <OptionList>
           {options.map((option, idx) => (
             <Tooltip.OptionItem
               key={`${option.name}-${idx}`}
-              onSelect={() => handleOptionSelect(option.name)}
+              onSelect={() => handleOptionSelect(option)}
               option={option}
               type={type}
             />
@@ -148,14 +174,12 @@ const Tooltip = (props: TooltipProps) => {
   );
 };
 
-const OptionItem = (
-  props: Pick<TooltipProps, 'onSelect'> & { option: TooltipOption; type: TooltipType }
-) => {
+const OptionItem = (props: { option: TooltipOption; type: TooltipType; onSelect?: () => void }) => {
   const { option, type, onSelect } = props;
 
   const handleOnClick = () => {
     if (type === 'selectable' && onSelect) {
-      onSelect(option.name);
+      onSelect();
     }
   };
 
@@ -186,7 +210,7 @@ const Chip = (props: { option: TooltipOption }) => {
   return (
     <ChipWrapper>
       {icon?.txt && <span style={{ marginRight: '4px' }}>{icon.txt}</span>}
-      <Icon iconSrc={icon?.src} size={21} />
+      <Icon iconSrc={icon?.src} size={16} />
     </ChipWrapper>
   );
 };

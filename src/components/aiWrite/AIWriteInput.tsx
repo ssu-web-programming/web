@@ -9,12 +9,13 @@ import { WriteType, setCurrentWrite } from '../../store/slices/writeHistorySlice
 import ExTextbox from '../ExTextbox';
 import { WriteOptions, formRecList, lengthList, versionList } from '../chat/RecommendBox/FormRec';
 import icon_write from '../../img/ico_creating_text_white.svg';
-import CreditButton from '../buttons/CreditButton';
 import Icon from '../Icon';
 import Button from '../buttons/Button';
 import IconBoxTextButton from '../buttons/IconBoxTextButton';
 import Grid from '../layout/Grid';
 import { getIconColor } from 'util/getColor';
+import IconTextButton from 'components/buttons/IconTextButton';
+import icon_credit_outline from '../../img/ico_credit_outline.svg';
 
 const WriteInputPage = styled.div`
   ${flex}
@@ -164,8 +165,7 @@ const AIWriteInput = ({
           ))}
         </Grid>
       </TitleInputSet>
-
-      <CreditButton
+      <IconTextButton
         width="full"
         disable={input.length === 0}
         variant="purpleGradient"
@@ -173,12 +173,15 @@ const AIWriteInput = ({
           padding-top: 4px;
           height: 40px;
         `}
-        onClick={() => submitSubject()}>
-        <div style={{ display: 'flex', gap: '5px' }}>
+        onClick={() => submitSubject()}
+        iconSrc={icon_credit_outline}
+        iconPos="end"
+        iconSize={18}>
+        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
           <Icon size="sm" iconSrc={icon_write}></Icon>
           {t(`WriteTab.WritingArticle`)}
         </div>
-      </CreditButton>
+      </IconTextButton>
     </WriteInputPage>
   );
 };

@@ -1,4 +1,7 @@
+import { forwardRef } from 'react';
 import styled from 'styled-components';
+import { useConfirm } from './Confirm';
+import { useTranslation } from 'react-i18next';
 
 const FileButtonBase = styled.button`
   width: fit-content;
@@ -14,15 +17,42 @@ const Label = styled.label`
 interface FileButtonProps extends React.ComponentPropsWithoutRef<'input'> {
   target: string;
   handleOnChange?: (files: FileList) => void;
+  isAgreed?: boolean;
+  handleOnClick: () => void;
 }
 
-function FileButton(props: React.PropsWithChildren<FileButtonProps>) {
-  const { target, children, accept, handleOnChange, ...otherProps } = props;
+const FileButton = forwardRef<HTMLInputElement, FileButtonProps>((props, ref) => {
+  const { t } = useTranslation();
+  const { target, children, accept, handleOnChange, isAgreed, handleOnClick, ...otherProps } =
+    props;
+
   const inputId = `__upload-local-file-${target}`;
+  const confirm = useConfirm();
+
+  const handleAgreement = async () => {
+    if (isAgreed === true) return;
+
+    const isConfirmed = await confirm({
+      title: t(`Nova.ConfirmAgreement.Title`)!,
+      msg: t(`Nova.ConfirmAgreement.Msg`),
+      onCancel: { text: t(`Nova.ConfirmAgreement.Cancel`), callback: () => {} },
+      onOk: {
+        text: t(`Nova.ConfirmAgreement.Ok`),
+        callback: () => {}
+      },
+      direction: 'row'
+    });
+
+    if (!!isConfirmed) {
+      handleOnClick();
+    }
+  };
+
   return (
-    <FileButtonBase>
-      <Label htmlFor={inputId}>{children}</Label>
+    <FileButtonBase onClick={handleAgreement}>
+      <Label>{children}</Label>
       <input
+        ref={ref}
         id={inputId}
         type="file"
         hidden
@@ -35,6 +65,6 @@ function FileButton(props: React.PropsWithChildren<FileButtonProps>) {
       />
     </FileButtonBase>
   );
-}
+});
 
 export default FileButton;

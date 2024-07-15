@@ -483,6 +483,6 @@ export function useCopyClipboard() {
   return async (markdown: string) => {
     const clipboardData = await makeClipboardData(markdown);
     await Bridge.callBridgeApi('copyClipboard', JSON.stringify(clipboardData));
-    dispatch(activeToast({ type: 'success', msg: t(`ToastMsg.CopyCompleted`) }));
+    dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.CopyCompleted`) }));
   };
 }

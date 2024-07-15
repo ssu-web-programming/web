@@ -23,7 +23,7 @@ import {
 import Button from '../buttons/Button';
 import { activeToast } from '../../store/slices/toastSlice';
 import LinkText from '../LinkText';
-import CreditButton from '../buttons/CreditButton';
+import IconTextButton from 'components/buttons/IconTextButton';
 import Grid from '../layout/Grid';
 import Bridge from '../../util/bridge';
 import { useMemo, useState } from 'react';
@@ -33,6 +33,7 @@ import ArrowSwitcher from '../ArrowSwitcher';
 import { ReactComponent as IconArrowUp } from '../../img/ico_arrow_up_small.svg';
 import { ReactComponent as IconArrowDown } from '../../img/ico_arrow_down_small.svg';
 import { versionItemList } from './ImageCreateInput';
+import icon_credit_purple from '../../img/ico_credit_purple.svg';
 
 const ImagePreview = styled.div`
   width: 100%;
@@ -258,7 +259,7 @@ const ImageCreateResult = ({
       </ImageList> */}
       <RowContainer>
         <Grid col={2}>
-          <CreditButton
+          <IconTextButton
             width="full"
             borderType="gray"
             height={32}
@@ -269,9 +270,12 @@ const ImageCreateResult = ({
                 ratio: curHistory.ratio,
                 type: curHistory.type
               })
-            }>
+            }
+            iconSrc={icon_credit_purple}
+            iconPos="end">
             {t(`WriteTab.Recreating`)}
-          </CreditButton>
+          </IconTextButton>
+
           <Button
             width="full"
             borderType="gray"
@@ -313,7 +317,7 @@ const ImageCreateResult = ({
               Bridge.callBridgeApi('insertImage', blob);
 
               dispatch(
-                activeToast({ type: 'success', msg: t(`Txt2ImgTab.ToastMsg.CompleteInsertImage`) })
+                activeToast({ type: 'info', msg: t(`Txt2ImgTab.ToastMsg.CompleteInsertImage`) })
               );
             } catch (err) {
               // TODO : error handle
