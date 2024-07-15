@@ -8,6 +8,10 @@ renderer.link = (href, title, text) => {
   return `<a href="javascript:void(0)">${text}</a>`;
 };
 
+renderer.image = (href, title, text) => 
+  `<img src=${href} alt=${text} style="width: 100%; height: auto">`;
+
+
 marked.use({
   renderer: renderer,
   mangle: false,
@@ -48,11 +52,6 @@ th
   padding: 10px 10px;
 }
 
-img
-{
-  width: 100%;
-  height: auto;
-}
 </style>
 </head>
 <body>
