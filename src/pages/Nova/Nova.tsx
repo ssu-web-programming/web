@@ -195,6 +195,7 @@ export default function Nova() {
 
         const resVsId = res.headers.get('X-PO-AI-NOVA-API-VSID') || '';
         const resThreadId = res.headers.get('X-PO-AI-NOVA-API-TID') || '';
+        const askType = res.headers.get('X-PO-AI-NOVA-API-ASK-TYPE') || '';
 
         await streaming(res, (contents) => {
           dispatch(
@@ -202,7 +203,8 @@ export default function Nova() {
               id,
               output: contents,
               vsId: resVsId,
-              threadId: resThreadId
+              threadId: resThreadId,
+              askType: askType as NovaChatType['askType']
             })
           );
           result += contents;

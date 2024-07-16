@@ -10,6 +10,7 @@ export type NovaChatType = {
   type: '' | 'image' | 'document';
   vsId?: string;
   threadId?: string;
+  askType: '' | 'document' | 'image';
 
   res?: string;
 
@@ -21,12 +22,12 @@ const novaHistorySlice = createSlice({
   initialState: [] as NovaChatType[],
   reducers: {
     initNovaHistory: () => [],
-    pushChat: (state, action: PayloadAction<Omit<NovaChatType, 'status'>>) => {
-      state.push({ ...action.payload, status: 'request' });
+    pushChat: (state, action: PayloadAction<Omit<NovaChatType, 'status' | 'askType'>>) => {
+      state.push({ ...action.payload, status: 'request', askType: '' });
     },
     appendChatOutput: (
       state,
-      action: PayloadAction<Pick<NovaChatType, 'id' | 'output' | 'vsId' | 'threadId'>>
+      action: PayloadAction<Pick<NovaChatType, 'id' | 'output' | 'vsId' | 'threadId' | 'askType'>>
     ) => {
       return state.map((chat) =>
         chat.id === action.payload.id
