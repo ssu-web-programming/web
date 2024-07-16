@@ -288,11 +288,30 @@
       "PolarisDrive": "폴라리스 드라이브",
       "Local": "현재 장치"
     },
-    "ConfirmAgreement": {
+    "ConfirmPersonalInfo": {
       "Title": "개인정보 수집 및 이용동의 (필수)",
       "Msg": "AI NOVA 서비스를 제공하기 위해 다음과 같이 개인정보 추가 동의가 필요합니다.",
       "Ok": "동의",
       "Cancel": "동의 안 함"
+    },
+    "ConfirmAccess": {
+      "Msg": "'폴라리스 오피스'에서 기기의 사진, 미디어, 파일에 엑세스 하도록 허용하시겠습니까?",
+      "Ok": "허용",
+      "Cancel": "거부"
+    },
+    "Chat": {
+      "Recreating": "다시 생성",
+      "Copy": "복사",
+      "InsertDoc": {
+        "Title": "문서에 삽입",
+        "Fail": {
+          "Title": "문서 삽입 실패",
+          "Msg": {
+            "Home": "문서에 삽입하려면 먼저 문서를 열고 편집 모드를 실행해 주세요",
+            "Viewer": "문서에 삽입하려면 편집 모드를 실행해 주세요"
+          }
+        }
+      }
     }
   }
 }
