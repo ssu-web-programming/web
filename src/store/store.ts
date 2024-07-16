@@ -18,6 +18,7 @@ import alliApps from './slices/alliApps';
 import recognizedVoice from './slices/recognizedVoice';
 import appState from './slices/appState';
 import novaHistory from './slices/novaHistorySlice';
+import userInfo from './slices/userInfo';
 
 const store = configureStore({
   reducer: {
@@ -38,7 +39,8 @@ const store = configureStore({
     alliApps,
     recognizedVoice,
     appState,
-    novaHistory
+    novaHistory,
+    userInfo
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }).concat(shareAnswerState),
