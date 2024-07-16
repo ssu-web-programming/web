@@ -27,10 +27,12 @@ import ico_credit from 'img/ico_credit_gray.svg';
 import { ReactComponent as IconMessagePlus } from 'img/ico_message_plus.svg';
 import ChatList from 'components/nova/ChatList';
 import ico_magnifying_glass from 'img/ico_magnifying_glass.svg';
+import stop_circle from 'img/stop_circle.svg';
 import { useTranslation } from 'react-i18next';
 import { activeToast } from 'store/slices/toastSlice';
 import { selectTabSlice, setCreating } from 'store/slices/tabSlice';
 import { useLocation } from 'react-router-dom';
+import IconTextButton from 'components/buttons/IconTextButton';
 
 const flexCenter = css`
   display: flex;
@@ -134,7 +136,7 @@ const GuideExample = styled.div`
   font-size: 14px;
 `;
 
-const StopButton = styled.button`
+const StopButton = styled.div`
   position: absolute;
   left: 50%;
   bottom: 24px;
@@ -380,7 +382,24 @@ export default function Nova() {
               onCopy={onCopy}
               handleInsertDocs={handleInsertDocs}
               onSave={onSave}></ChatList>
-            {creating !== 'none' && <StopButton onClick={onStop}>stop</StopButton>}
+            {creating !== 'none' && (
+              <StopButton onClick={onStop}>
+                <IconTextButton
+                  iconPos="left"
+                  iconSrc={stop_circle}
+                  iconSize={21}
+                  width={78}
+                  height={36}
+                  cssExt={css`
+                    border-radius: 999px;
+                    box-shadow: 0px 2px 8px 0px #0000001a;
+                    font-weight: 500;
+                    font-size: 14px;
+                  `}>
+                  STOP
+                </IconTextButton>
+              </StopButton>
+            )}
           </>
         )}
       </Body>
