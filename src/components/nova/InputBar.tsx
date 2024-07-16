@@ -182,8 +182,11 @@ export default function InputBar(props: InputBarProps) {
   const setIsAgreed = async (agree: boolean) => {
     try {
       const { res } = await apiWrapper().request(NOVA_SET_USER_INFO_AGREEMENT, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
         method: 'POST',
-        body: { agree: true }
+        body: JSON.stringify({ agree: true })
       });
       const { success } = await res.json();
       if (success) dispatch(setNovaAgreement(agree));
