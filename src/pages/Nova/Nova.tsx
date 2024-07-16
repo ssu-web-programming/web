@@ -193,8 +193,8 @@ export default function Nova() {
           method: 'POST'
         });
 
-        const resVsId = res.headers.get('X-PO-AI-ASSISTANT-API-VSID') || '';
-        const resThreadId = res.headers.get('X-PO-AI-ASSISTANT-API-TID') || '';
+        const resVsId = res.headers.get('X-PO-AI-NOVA-API-VSID') || '';
+        const resThreadId = res.headers.get('X-PO-AI-NOVA-API-TID') || '';
 
         await streaming(res, (contents) => {
           dispatch(
