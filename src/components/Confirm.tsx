@@ -19,6 +19,7 @@ const ConfirmBox = styled.div`
   box-shadow: 0px 8px 16px 0px #0000001a;
   background-color: #fff;
   border-radius: 10px;
+  z-index: 100;
 `;
 
 const Header = styled.div`
@@ -49,10 +50,15 @@ const Footer = styled.div<{ direction?: 'column' | 'row' }>`
   display: flex;
   flex-direction: ${(props) => props.direction};
   gap: 8px;
+
+  button {
+    font-size: 16px;
+    font-weight: 500;
+  }
 `;
 
 const Confirm = () => {
-  const { title, msg, onOk, onCancel, direction } = useAppSelector(selectConfirm);
+  const { title, msg, onOk, onCancel, direction = 'row' } = useAppSelector(selectConfirm);
 
   // 필요시 사용
   // const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -81,6 +87,8 @@ const Confirm = () => {
             onClick={onOk.callback}
             cssExt={css`
               order: ${direction === 'row' ? 2 : undefined};
+              min-width: 195px;
+              width: 295px;
             `}>
             {onOk.text}
           </Button>
@@ -92,6 +100,7 @@ const Confirm = () => {
               onClick={onCancel.callback}
               cssExt={css`
                 order: ${direction === 'row' ? 1 : undefined};
+                min-width: 92px;
               `}>
               {onCancel.text}
             </Button>
@@ -106,7 +115,14 @@ export default Confirm;
 
 export function useConfirm() {
   const dispatch = useAppDispatch();
-  return function ({ title, msg, onOk, onCancel, direction }: ConfirmType) {
+
+  return function ({
+    title,
+    msg,
+    onOk,
+    onCancel,
+    direction = 'row'
+  }: ConfirmType): Promise<boolean> {
     return new Promise((resolve) => {
       const handleOk = () => {
         onOk.callback();

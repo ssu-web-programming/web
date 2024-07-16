@@ -1,12 +1,22 @@
-import PreMarkdown from 'components/PreMarkdown';
+import styled, { css } from 'styled-components';
+import { useTranslation } from 'react-i18next';
 import { NovaChatType } from 'store/slices/novaHistorySlice';
-import styled from 'styled-components';
+import IconTextButton from 'components/buttons/IconTextButton';
+import PreMarkdown from 'components/PreMarkdown';
+import Icon from 'components/Icon';
+import Overlay from 'components/Overlay';
+import { ReactComponent as CreditColorIcon } from 'img/ico_credit_color.svg';
+import { ReactComponent as CopyChatIcon } from 'img/ico_copy_chat.svg';
+import { ReactComponent as InsertDocsIcon } from 'img/ico_insert_docs.svg';
+import ico_user from 'img/ico_user.svg';
+import ico_ai from 'img/ico_ai.svg';
 import { InputBarSubmitParam } from './InputBar';
 
 const Wrapper = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
+  gap: 12px;
 
   flex-direction: column;
   padding: 24px 16px;
@@ -20,27 +30,92 @@ const ChatItem = styled.div`
   height: fit-content;
   display: flex;
   flex-direction: column;
+  gap: 12px;
+`;
 
-  > div {
-    display: flex;
-    flex-direction: row;
-    gap: 8px;
-    justify-content: flex-start;
-    align-items: flex-start;
-  }
+const Chat = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
 
-  & + & {
-    margin-top: 8px;
+  p {
+    font-size: 16px;
   }
+`;
+
+const Question = styled(Chat)`
+  align-items: center;
+
+  p {
+    font-weight: 500;
+    line-height: 25.6px;
+  }
+`;
+
+const Answer = styled(Chat)`
+  align-items: flex-start;
+
+  p {
+    font-weight: 400;
+    line-height: 24px;
+  }
+`;
+
+const ChatButtonWrapper = styled.div`
+  width: 100%;
+  height: 34px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+
+  button > div {
+    gap: 4px;
+  }
+`;
+
+const ButtonText = styled.div`
+  font-size: 14px;
+  line-height: 14px;
+  font-weight: 500;
 `;
 
 interface ChatListProps {
   novaHistory: NovaChatType[];
   onSubmit: (submitParam: InputBarSubmitParam) => void;
+  onCopy: (text: string) => void;
+  handleInsertDocs: (history: NovaChatType) => void;
+  onSave: () => void;
 }
 
+type ChatButtonType = {
+  text: string;
+  iconSrc: React.ReactNode;
+  clickHandler: (arg: NovaChatType | any) => void;
+};
+
 export default function ChatList(props: ChatListProps) {
-  const { novaHistory, onSubmit } = props;
+  const { novaHistory, onSubmit, onCopy, handleInsertDocs, onSave } = props;
+  const { t } = useTranslation();
+
+  const CHAT_BUTTON_LIST: ChatButtonType[] = [
+    {
+      iconSrc: <CreditColorIcon />,
+      text: t(`Nova.Chat.Recreating`),
+      clickHandler: (history: NovaChatType) => onSubmit({ input: history.input, type: '' })
+    },
+    {
+      iconSrc: <CopyChatIcon />,
+      text: t(`Nova.Chat.Copy`),
+      clickHandler: (history: NovaChatType) => onCopy(history.output)
+    },
+    {
+      iconSrc: <InsertDocsIcon />,
+      text: t(`Nova.Chat.InsertDoc.Title`),
+      clickHandler: (history: NovaChatType) => handleInsertDocs(history)
+    }
+  ];
 
   return (
     <Wrapper
@@ -49,34 +124,42 @@ export default function ChatList(props: ChatListProps) {
       }}>
       {novaHistory.map((item) => (
         <ChatItem key={item.id}>
-          <div>
-            <div>User</div>
-            {item.input}
-          </div>
-          <div>
-            <div>AI</div>
+          <Question>
+            <Icon size={32} iconSrc={ico_user}></Icon>
+            <p>{item.input}</p>
+          </Question>
+          <Answer>
+            <Icon size={32} iconSrc={ico_ai}></Icon>
             {item.status === 'request' ? (
-              <div>Loading...</div>
+              <p>Loading...</p>
             ) : (
               <div>
-                <PreMarkdown text={item.output}></PreMarkdown>
+                <PreMarkdown text={item.output}>
+                  <Overlay onSave={onSave} />
+                </PreMarkdown>
                 {item.status === 'done' && (
-                  <>
-                    <button onClick={() => onSubmit({ input: item.input, type: '' })}>
-                      다시생성
-                    </button>
-                    <button>복사</button>
-                    <button>문서로 만들기</button>
-                  </>
+                  <ChatButtonWrapper>
+                    {CHAT_BUTTON_LIST.map((btn) => (
+                      <IconTextButton
+                        key={btn.text}
+                        width={'fit'}
+                        iconSize={24}
+                        iconSrc={btn.iconSrc}
+                        iconPos="left"
+                        onClick={() => btn.clickHandler(item)}
+                        cssExt={css`
+                          background: transparent;
+                          padding: 0;
+                        `}>
+                        <ButtonText>{btn.text}</ButtonText>
+                      </IconTextButton>
+                    ))}
+                  </ChatButtonWrapper>
                 )}
-                {item.status === 'cancel' && (
-                  <>
-                    <button>다시생성</button>
-                  </>
-                )}
+                {item.status === 'cancel' && <button>다시생성</button>}
               </div>
             )}
-          </div>
+          </Answer>
         </ChatItem>
       ))}
     </Wrapper>

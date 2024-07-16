@@ -6,7 +6,7 @@ export interface ConfirmType {
   msg: string | React.ReactNode | null;
   onCancel?: { text: string; callback: () => void };
   onOk: { text: string; callback: () => void };
-  direction: 'row' | 'column';
+  direction?: 'row' | 'column';
 }
 
 const initialState: ConfirmType = {

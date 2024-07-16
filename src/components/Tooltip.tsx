@@ -66,7 +66,8 @@ const TooltipContent = styled.div<{
   border: 1px solid var(--gray-gray-40);
   border-radius: 8px;
   background-color: white;
-  box-shadow: 0px 6px 12px 0px #383f4733;
+  box-shadow: 0px 2px 8px 0px #0000001a;
+
   z-index: 10;
   margin-left: ${({ distance }) => distance}px;
 `;

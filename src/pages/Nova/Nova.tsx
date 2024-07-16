@@ -8,7 +8,8 @@ import {
   novaHistorySelector,
   appendChatOutput,
   addChatOutputRes,
-  updateChatStatus
+  updateChatStatus,
+  NovaChatType
 } from 'store/slices/novaHistorySlice';
 import { apiWrapper, streaming } from 'api/apiWrapper';
 import { v4 } from 'uuid';
@@ -261,6 +262,85 @@ export default function Nova() {
     dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.StopMsg`) }));
   };
 
+  const onCopy = (output: string) => {
+    navigator.clipboard.writeText(output).then(
+      () => {
+        dispatch(activeToast({ type: 'info', msg: '복사 완료' }));
+      },
+      () => {
+        dispatch(activeToast({ type: 'error', msg: '복사 실패' }));
+      }
+    );
+  };
+
+  // 임시 - 문서 삽입 분기처리
+  const handleInsertDocs = (history: NovaChatType) => {
+    type StatusType = 'home' | 'edit' | 'viewer'; // 임시 - home: 홈, edit: 편집모드, viewer: 뷰어모드
+    const status = 'edit' as StatusType;
+
+    const insertToEditMode = async (output = '') => {
+      alert(`${status} : 문서에 삽입`);
+    };
+
+    switch (status) {
+      case 'home':
+        confirm({
+          title: t(`Nova.Chat.InsertDoc.Fail.Title`)!,
+          msg: t(`Nova.Chat.InsertDoc.Fail.Msg.Home`)!,
+          onOk: {
+            text: t(`Confirm`),
+            callback: () => {}
+          }
+        });
+        break;
+      case 'viewer':
+        confirm({
+          title: t(`Nova.Chat.InsertDoc.Fail.Title`)!,
+          msg: t(`Nova.Chat.InsertDoc.Fail.Msg.Viewer`)!,
+          onOk: {
+            text: t(`Confirm`),
+            callback: () => {}
+          }
+        });
+        break;
+      case 'edit':
+        insertToEditMode(history.output);
+        break;
+    }
+  };
+
+  const confirmPermission = async () => {
+    const ret = await confirm({
+      msg: t(`Nova.ConfirmAccess.Msg`),
+      onCancel: { text: t(`Nova.ConfirmAccess.Cancel`), callback: () => {} },
+      onOk: {
+        text: t(`Nova.ConfirmAccess.Ok`),
+        callback: () => {}
+      },
+      direction: 'row'
+    });
+
+    if (ret) {
+      alert('접근 권한 허용함');
+    }
+  };
+
+  const onSave = () => {
+    const hasPermission = true; // 임시
+
+    if (!!hasPermission) {
+      const saveSuccess = true; // 저장 성공 여부에 따라 변경
+
+      if (saveSuccess) {
+        dispatch(activeToast({ type: 'info', msg: '저장 완료' }));
+      } else {
+        dispatch(activeToast({ type: 'error', msg: '저장 실패' }));
+      }
+    } else {
+      confirmPermission();
+    }
+  };
+
   return (
     <Wrapper>
       <Header>
@@ -294,7 +374,12 @@ export default function Nova() {
           </GuideWrapper>
         ) : (
           <>
-            <ChatList novaHistory={novaHistory} onSubmit={onSubmit}></ChatList>
+            <ChatList
+              novaHistory={novaHistory}
+              onSubmit={onSubmit}
+              onCopy={onCopy}
+              handleInsertDocs={handleInsertDocs}
+              onSave={onSave}></ChatList>
             {creating !== 'none' && <StopButton onClick={onStop}>stop</StopButton>}
           </>
         )}

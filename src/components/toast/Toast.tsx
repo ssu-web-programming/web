@@ -44,7 +44,7 @@ const ToastMsgWrapper = styled.div<{ variant: FlattenSimpleInterpolation }>`
 
   ${(props) => props.variant}
 
-  z-index: 50;
+  z-index: 200;
 `;
 
 const IconWrapper = styled.div`

@@ -9,6 +9,7 @@ const BlanketBG = styled.div`
   left: 0;
   opacity: 0.2;
   background-color: #000;
+  z-index: 100;
 `;
 
 const Blanket = (
