@@ -11,6 +11,8 @@ import { ReactComponent as InsertDocsIcon } from 'img/ico_insert_docs.svg';
 import ico_user from 'img/ico_user.svg';
 import ico_ai from 'img/ico_ai.svg';
 import { InputBarSubmitParam } from './InputBar';
+import { useAppSelector } from 'store/store';
+import { selectTabSlice } from 'store/slices/tabSlice';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -90,6 +92,7 @@ interface ChatListProps {
 }
 
 type ChatButtonType = {
+  status: NovaChatType['status'][];
   text: string;
   iconSrc: React.ReactNode;
   clickHandler: (arg: NovaChatType | any) => void;
@@ -98,19 +101,23 @@ type ChatButtonType = {
 export default function ChatList(props: ChatListProps) {
   const { novaHistory, onSubmit, onCopy, handleInsertDocs, onSave } = props;
   const { t } = useTranslation();
+  const { creating } = useAppSelector(selectTabSlice);
 
   const CHAT_BUTTON_LIST: ChatButtonType[] = [
     {
+      status: ['done', 'cancel'],
       iconSrc: <CreditColorIcon />,
       text: t(`Nova.Chat.Recreating`),
       clickHandler: (history: NovaChatType) => onSubmit({ input: history.input, type: '' })
     },
     {
+      status: ['done'],
       iconSrc: <CopyChatIcon />,
       text: t(`Nova.Chat.Copy`),
       clickHandler: (history: NovaChatType) => onCopy(history.output)
     },
     {
+      status: ['done'],
       iconSrc: <InsertDocsIcon />,
       text: t(`Nova.Chat.InsertDoc.Title`),
       clickHandler: (history: NovaChatType) => handleInsertDocs(history)
@@ -137,26 +144,24 @@ export default function ChatList(props: ChatListProps) {
                 <PreMarkdown text={item.output}>
                   <Overlay onSave={onSave} />
                 </PreMarkdown>
-                {item.status === 'done' && (
-                  <ChatButtonWrapper>
-                    {CHAT_BUTTON_LIST.map((btn) => (
-                      <IconTextButton
-                        key={btn.text}
-                        width={'fit'}
-                        iconSize={24}
-                        iconSrc={btn.iconSrc}
-                        iconPos="left"
-                        onClick={() => btn.clickHandler(item)}
-                        cssExt={css`
-                          background: transparent;
-                          padding: 0;
-                        `}>
-                        <ButtonText>{btn.text}</ButtonText>
-                      </IconTextButton>
-                    ))}
-                  </ChatButtonWrapper>
-                )}
-                {item.status === 'cancel' && <button>다시생성</button>}
+                <ChatButtonWrapper>
+                  {CHAT_BUTTON_LIST.filter((btn) => btn.status.includes(item.status)).map((btn) => (
+                    <IconTextButton
+                      disable={creating !== 'none'}
+                      key={btn.text}
+                      width={'fit'}
+                      iconSize={24}
+                      iconSrc={btn.iconSrc}
+                      iconPos="left"
+                      onClick={() => btn.clickHandler(item)}
+                      cssExt={css`
+                        background: transparent;
+                        padding: 0;
+                      `}>
+                      <ButtonText>{btn.text}</ButtonText>
+                    </IconTextButton>
+                  ))}
+                </ChatButtonWrapper>
               </div>
             )}
           </Answer>
