@@ -20,6 +20,10 @@ import ico_cloud from 'img/ico_cloud.svg';
 import ico_local from 'img/ico_local.svg';
 import { NovaChatType } from 'store/slices/novaHistorySlice';
 import { useTranslation } from 'react-i18next';
+import { useAppDispatch, useAppSelector } from 'store/store';
+import { setNovaAgreement, userInfoSelector } from 'store/slices/userInfo';
+import { apiWrapper } from 'api/apiWrapper';
+import { NOVA_SET_USER_INFO_AGREEMENT } from 'api/constant';
 
 export const flexCenter = css`
   display: flex;
@@ -165,15 +169,26 @@ type FileListProps = {
 type FileUploaderProps = {
   onLoadFile: (files: FileList) => void;
   isAgreed: boolean;
-  setIsAgreed: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsAgreed: (agree: boolean) => void;
 };
 
 export default function InputBar(props: InputBarProps) {
+  const dispatch = useAppDispatch();
   const { disabled = false, contents = '' } = props;
   const [localFiles, setLocalFiles] = useState<File[]>([]);
 
   const [text, setText] = useState<string>(contents);
-  const [isAgreed, setIsAgreed] = useState(false);
+  const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
+  const setIsAgreed = async (agree: boolean) => {
+    try {
+      const { res } = await apiWrapper().request(NOVA_SET_USER_INFO_AGREEMENT, {
+        method: 'POST',
+        body: { agree: true }
+      });
+      const { success } = await res.json();
+      if (success) dispatch(setNovaAgreement(agree));
+    } catch (err) {}
+  };
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   const { t } = useTranslation();
@@ -332,7 +347,7 @@ const FileUploader = (props: FileUploaderProps) => {
 
   const handleOnClick = () => {
     if (!isAgreed) {
-      setIsAgreed(() => true);
+      setIsAgreed(true);
     }
   };
 
