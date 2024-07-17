@@ -1,0 +1,37 @@
+import { apiWrapper } from 'api/apiWrapper';
+import { AI_CREDIT_INFO, NOVA_GET_USER_INFO_AGREEMENT } from 'api/constant';
+import { useCallback } from 'react';
+import { setCreditInfo } from 'store/slices/creditInfo';
+import { setNovaAgreement } from 'store/slices/userInfo';
+import { useAppDispatch } from 'store/store';
+
+export default function useInitApp() {
+  const dispatch = useAppDispatch();
+
+  const initUserInfo = useCallback(async () => {
+    try {
+      const { res } = await apiWrapper().request(NOVA_GET_USER_INFO_AGREEMENT, { method: 'POST' });
+      const {
+        success,
+        data: { agreement }
+      } = await res.json();
+      if (success) dispatch(setNovaAgreement(agreement));
+    } catch (err) {}
+  }, [dispatch]);
+
+  const initCreditInfo = useCallback(async () => {
+    try {
+      const { res } = await apiWrapper().request(AI_CREDIT_INFO, { method: 'POST' });
+      const {
+        success,
+        data: { creditInfos }
+      } = await res.json();
+      if (success) dispatch(setCreditInfo(creditInfos));
+    } catch (err) {}
+  }, [dispatch]);
+
+  return () => {
+    initUserInfo();
+    initCreditInfo();
+  };
+}

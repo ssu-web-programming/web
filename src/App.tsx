@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import Tools from './pages/Tools';
 import Toast from './components/toast/Toast';
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
 import TextToImage from './pages/TextToImage';
 import GlobalStyle from './style/globalStyle';
 import InvalidAccess from './pages/InvalidAccess';
@@ -19,34 +19,17 @@ import Chat from './pages/AskDocStep/Chat';
 import AskDocLoading from './pages/AskDocStep/AskDocLoading';
 import Alli from './pages/Alli/Alli';
 import Nova from 'pages/Nova/Nova';
-import { apiWrapper } from 'api/apiWrapper';
-import { NOVA_GET_USER_INFO_AGREEMENT } from 'api/constant';
-import { useAppDispatch } from 'store/store';
-import { setNovaAgreement } from 'store/slices/userInfo';
+import useInitApp from 'components/hooks/useInitApp';
 
 function App() {
-  const dispatch = useAppDispatch();
   const initBridgeListener = useInitBridgeListener();
+  const initApp = useInitApp();
 
   useEffect(() => {
     initBridgeListener();
+    initApp(); // initBridgeListener 다음에 호출되어야 함
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const initUserInfo = useCallback(async () => {
-    try {
-      const { res } = await apiWrapper().request(NOVA_GET_USER_INFO_AGREEMENT, { method: 'POST' });
-      const {
-        success,
-        data: { agreement }
-      } = await res.json();
-      if (success) dispatch(setNovaAgreement(agreement));
-    } catch (err) {}
-  }, [dispatch]);
-
-  useEffect(() => {
-    initUserInfo();
-  }, [initUserInfo]);
 
   return (
     <>
