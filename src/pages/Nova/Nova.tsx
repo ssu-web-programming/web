@@ -15,7 +15,7 @@ import { apiWrapper, streaming } from 'api/apiWrapper';
 import { v4 } from 'uuid';
 import Tooltip, { TooltipOption } from 'components/Tooltip';
 import { useConfirm } from 'components/Confirm';
-import { NOVA_CHAT_API } from 'api/constant';
+import { NOVA_CHAT_API, NOVA_DELETE_CONVERSATION } from 'api/constant';
 import { markdownToHtml } from 'util/common';
 import Bridge from 'util/bridge';
 import { load } from 'cheerio';
@@ -246,7 +246,19 @@ export default function Nova() {
     });
 
     if (!!ret) {
-      dispatch(initNovaHistory());
+      try {
+        const lastChat = novaHistory[novaHistory.length - 1];
+        apiWrapper().request(NOVA_DELETE_CONVERSATION, {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          method: 'POST',
+          body: JSON.stringify({ threadId: lastChat.threadId })
+        });
+        dispatch(initNovaHistory());
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
 

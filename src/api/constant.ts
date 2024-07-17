@@ -12,6 +12,7 @@ export const ASKDOC_ALL_COMPLETE_ANALYZING = '/api/1/ai/askdoc/preAsk';
 export const ASKDCO_ASK_QUESTION = '/api/1/ai/askdoc/ask';
 
 export const NOVA_CHAT_API = '/api/v2/nova-apis/chatFunc';
+export const NOVA_DELETE_CONVERSATION = '/api/v2/nova-apis/delete-conversation';
 export const NOVA_GET_USER_INFO_AGREEMENT = '/api/v2/nova-apis/get-agreement';
 export const NOVA_SET_USER_INFO_AGREEMENT = '/api/v2/nova-apis/set-agreement';
 
