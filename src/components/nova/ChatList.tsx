@@ -88,7 +88,7 @@ interface ChatListProps {
   onSubmit: (submitParam: InputBarSubmitParam) => void;
   onCopy: (text: string) => void;
   handleInsertDocs: (history: NovaChatType) => void;
-  onSave: () => void;
+  onSave: (history: NovaChatType) => void;
 }
 
 type ChatButtonType = {
@@ -142,7 +142,7 @@ export default function ChatList(props: ChatListProps) {
             ) : (
               <div>
                 <PreMarkdown text={item.output}>
-                  <Overlay onSave={onSave} />
+                  <Overlay onSave={() => onSave(item)} />
                 </PreMarkdown>
                 <ChatButtonWrapper>
                   {CHAT_BUTTON_LIST.filter((btn) => btn.status.includes(item.status)).map((btn) => (
