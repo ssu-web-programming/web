@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { markdownToHtml } from '../util/common';
+import { markdownToHtml } from 'util/common';
 
 const Pre = styled.div`
   width: 100%;
@@ -14,15 +14,13 @@ const Pre = styled.div`
   margin: 0px;
   padding: 0px;
 
-  p {
-    margin: 0px;
-    padding: 0px;
-    word-break: break-all;
-  }
+  margin: 0px;
+  padding: 0px;
+  word-break: break-all;
 
   img {
-    width: 160px;
-    height: 160px;
+    width: 160px !important;
+    height: 160px !important;
     border-radius: 4px;
     border: 1px solid #c9cdd2;
     display: block;
@@ -37,20 +35,26 @@ const PreMarkdown = ({ text, children }: { text: string; children?: React.ReactN
     setImage(null);
   };
 
+  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    const target = event.target as HTMLImageElement;
+
+    if (target.tagName === 'IMG') {
+      setImage(target.src);
+    }
+  };
+
   return (
     <>
       <Pre
         ref={async (el) => {
           if (el) {
             const html = await markdownToHtml(text);
-            if (html) {
+            if (html && !image) {
               el.innerHTML = html;
-              el.querySelectorAll('img').forEach((img) =>
-                img.addEventListener('click', () => setImage(img.src))
-              );
             }
           }
-        }}></Pre>
+        }}
+        onClick={handleClick}></Pre>
 
       {/* overlay */}
       {image && children && React.cloneElement(children as React.ReactElement, { image, onClose })}
