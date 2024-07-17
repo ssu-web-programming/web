@@ -17,6 +17,7 @@ import Tooltip, { TooltipOption } from 'components/Tooltip';
 import { useConfirm } from 'components/Confirm';
 import { NOVA_CHAT_API } from 'api/constant';
 import { markdownToHtml } from 'util/common';
+import Bridge from 'util/bridge';
 import { load } from 'cheerio';
 import Icon from 'components/Icon';
 import IconButton from 'components/buttons/IconButton';
@@ -329,15 +330,27 @@ export default function Nova() {
     }
   };
 
-  const onSave = () => {
+  const downloadImage = async (imageURL: string): Promise<void> => {
+    try {
+      const response = await fetch(imageURL);
+      const blob: Blob = await response.blob();
+      Bridge.callBridgeApi('downloadImage', blob);
+    } catch (error) {
+      console.error('Fetch failed:', error);
+    }
+  };
+
+  const onSave = async (currentChat?: NovaChatType) => {
     const hasPermission = true; // 임시
+    const imageURL = currentChat?.res!;
 
     if (!!hasPermission) {
-      const saveSuccess = true; // 저장 성공 여부에 따라 변경
-
-      if (saveSuccess) {
-        dispatch(activeToast({ type: 'info', msg: '저장 완료' }));
-      } else {
+      try {
+        if (imageURL) {
+          await downloadImage(imageURL);
+          dispatch(activeToast({ type: 'info', msg: '저장 완료' }));
+        }
+      } catch {
         dispatch(activeToast({ type: 'error', msg: '저장 실패' }));
       }
     } else {
@@ -383,7 +396,8 @@ export default function Nova() {
               onSubmit={onSubmit}
               onCopy={onCopy}
               handleInsertDocs={handleInsertDocs}
-              onSave={onSave}></ChatList>
+              onSave={onSave}
+            />
             {creating !== 'none' && (
               <StopButton onClick={onStop}>
                 <IconTextButton
