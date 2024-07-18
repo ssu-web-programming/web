@@ -61,7 +61,7 @@ const TooltipContent = styled.div<{
     placement.startsWith('top') ? `calc(100% + ${distance}px)` : 'auto'};
   left: ${({ placement }) => (placement.endsWith('start') ? '0' : 'auto')};
   right: ${({ placement }) => (placement.endsWith('end') ? '0' : 'auto')};
-  min-width: 165px;
+  width: max-content;
   padding: ${({ type }) => (type === 'selectable' ? '0 16px' : '12px 16px')};
   border: 1px solid var(--gray-gray-40);
   border-radius: 8px;
@@ -105,7 +105,7 @@ const Divider = styled.div`
 
 const ChipWrapper = styled.div`
   display: flex;
-  margin-right: 4px;
+  margin: 0 4px 0 20px;
   align-items: center;
 `;
 
