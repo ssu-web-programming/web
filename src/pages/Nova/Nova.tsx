@@ -15,7 +15,7 @@ import { apiWrapper, streaming } from 'api/apiWrapper';
 import { v4 } from 'uuid';
 import Tooltip, { TooltipOption } from 'components/Tooltip';
 import { useConfirm } from 'components/Confirm';
-import { NOVA_CHAT_API, NOVA_DELETE_CONVERSATION } from 'api/constant';
+import { NOVA_CHAT_API, NOVA_DELETE_CONVERSATION, PO_DRIVE_UPLOAD } from 'api/constant';
 import { insertDoc, markdownToHtml } from 'util/common';
 import Bridge from 'util/bridge';
 import { load } from 'cheerio';
@@ -177,6 +177,37 @@ export default function Nova() {
 
   const requestor = useRef<ReturnType<typeof apiWrapper>>();
 
+  const reqUploadFiles = async (files: File[]) => {
+    // TODO : promise all
+    const ret = [];
+    for (const file of files) {
+      const formData = new FormData();
+      formData.append('uploadFile', file);
+      const { res } = await apiWrapper().request(PO_DRIVE_UPLOAD, {
+        body: formData,
+        method: 'POST'
+      });
+      const json = await res.json();
+      ret.push({ ...json, file });
+    }
+    return ret;
+    // const promises = files.map(
+    //   (file) =>
+    //     new Promise<{ file: File; success: boolean; data: { fileId: string } }>(async (resolve) => {
+    //       const formData = new FormData();
+    //       formData.append('uploadFile', file);
+    //       const { res } = await apiWrapper().request(PO_DRIVE_UPLOAD, {
+    //         body: formData,
+    //         method: 'POST'
+    //       });
+    //       const json = await res.json();
+    //       resolve({ ...json, file });
+    //     })
+    // );
+    // const res = await Promise.all(promises);
+    // return res;
+  };
+
   const onSubmit = useCallback(
     async (submitParam: InputBarSubmitParam) => {
       const id = v4();
@@ -186,10 +217,17 @@ export default function Nova() {
         const lastChat = novaHistory[novaHistory.length - 1];
         const { vsId = '', threadId = '' } = lastChat || {};
         const { input, files = [], type } = submitParam;
+
+        const resUpload = await reqUploadFiles(files);
         const formData = new FormData();
-        for (const file of files) {
-          formData.append('uploadFiles', file);
-        }
+        resUpload
+          .filter((res) => res.success)
+          .forEach((res) => {
+            if (res.success) {
+              formData.append('uploadFiles', res.file);
+              formData.append('fileIds[]', res.data.fileId);
+            }
+          });
 
         const role = 'user';
         formData.append('content', input);
@@ -202,7 +240,6 @@ export default function Nova() {
 
         requestor.current = apiWrapper();
         const { res } = await requestor.current.request(NOVA_CHAT_API, {
-          headers: {},
           body: formData,
           method: 'POST'
         });
