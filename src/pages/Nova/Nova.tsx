@@ -16,7 +16,7 @@ import { v4 } from 'uuid';
 import Tooltip, { TooltipOption } from 'components/Tooltip';
 import { useConfirm } from 'components/Confirm';
 import { NOVA_CHAT_API, NOVA_DELETE_CONVERSATION } from 'api/constant';
-import { markdownToHtml } from 'util/common';
+import { insertDoc, markdownToHtml } from 'util/common';
 import Bridge from 'util/bridge';
 import { load } from 'cheerio';
 import Icon from 'components/Icon';
@@ -291,40 +291,52 @@ export default function Nova() {
     );
   };
 
-  // 임시 - 문서 삽입 분기처리
   const handleInsertDocs = (history: NovaChatType) => {
-    type StatusType = 'home' | 'edit' | 'viewer'; // 임시 - home: 홈, edit: 편집모드, viewer: 뷰어모드
-    const status = 'edit' as StatusType;
-
-    const insertToEditMode = async (output = '') => {
-      alert(`${status} : 문서에 삽입`);
-    };
-
-    switch (status) {
-      case 'home':
-        confirm({
-          title: t(`Nova.Chat.InsertDoc.Fail.Title`)!,
-          msg: t(`Nova.Chat.InsertDoc.Fail.Msg.Home`)!,
-          onOk: {
-            text: t(`Confirm`),
-            callback: () => {}
-          }
-        });
-        break;
-      case 'viewer':
-        confirm({
-          title: t(`Nova.Chat.InsertDoc.Fail.Title`)!,
-          msg: t(`Nova.Chat.InsertDoc.Fail.Msg.Viewer`)!,
-          onOk: {
-            text: t(`Confirm`),
-            callback: () => {}
-          }
-        });
-        break;
-      case 'edit':
-        insertToEditMode(history.output);
-        break;
-    }
+    type StatusType = 'home' | 'doc_edit_mode' | 'doc_view_mode';
+    Bridge.callSyncBridgeApiWithCallback({
+      api: 'getClientStatus',
+      callback: async (status: StatusType) => {
+        switch (status) {
+          case 'home':
+            confirm({
+              title: t(`Nova.Chat.InsertDoc.Fail.Title`)!,
+              msg: t(`Nova.Chat.InsertDoc.Fail.Msg.Home`)!,
+              onOk: {
+                text: t(`Confirm`),
+                callback: () => {}
+              }
+            });
+            break;
+          case 'doc_view_mode':
+            confirm({
+              title: t(`Nova.Chat.InsertDoc.Fail.Title`)!,
+              msg: t(`Nova.Chat.InsertDoc.Fail.Msg.Viewer`)!,
+              onOk: {
+                text: t(`Confirm`),
+                callback: () => {}
+              }
+            });
+            break;
+          case 'doc_edit_mode':
+            switch (history.askType) {
+              case 'image': {
+                try {
+                  const res = await fetch(history.res!);
+                  const blob = await res.blob();
+                  Bridge.callBridgeApi('insertImage', blob);
+                } catch (err) {}
+                break;
+              }
+              case 'document':
+              default: {
+                insertDoc(history.output);
+                break;
+              }
+            }
+            break;
+        }
+      }
+    });
   };
 
   const confirmPermission = async () => {

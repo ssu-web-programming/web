@@ -389,7 +389,8 @@ type ApiType =
   | 'textToSpeech'
   | 'getDocType'
   | 'getSlideContents'
-  | 'insertNote';
+  | 'insertNote'
+  | 'getClientStatus';
 
 const Bridge = {
   checkSession: (api: string) => {
