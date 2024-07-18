@@ -17,3 +17,5 @@ export const NOVA_GET_USER_INFO_AGREEMENT = '/api/v2/nova-apis/get-agreement';
 export const NOVA_SET_USER_INFO_AGREEMENT = '/api/v2/nova-apis/set-agreement';
 
 export const AI_CREDIT_INFO = '/api/v2/nova-apis/credit-info';
+export const PO_DRIVE_LIST = '/api/v2/nova-apis/podrive/list';
+export const PO_DRIVE_UPLOAD = '/api/v2/nova-apis/podrive/upload';
