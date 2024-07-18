@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useRef } from 'react';
 import InputBar, { InputBarSubmitParam } from 'components/nova/InputBar';
 import styled, { css } from 'styled-components';
 import { useAppDispatch, useAppSelector } from 'store/store';
@@ -27,13 +27,15 @@ import ico_credit_info from 'img/ico_credit_line.svg';
 import ico_credit from 'img/ico_credit_gray.svg';
 import { ReactComponent as IconMessagePlus } from 'img/ico_message_plus.svg';
 import ChatList from 'components/nova/ChatList';
-import ico_magnifying_glass from 'img/ico_magnifying_glass.svg';
+import ico_image from 'img/ico_image.svg';
+import ico_documents from 'img/ico_documents.svg';
 import stop_circle from 'img/stop_circle.svg';
 import { useTranslation } from 'react-i18next';
 import { activeToast } from 'store/slices/toastSlice';
 import { selectTabSlice, setCreating } from 'store/slices/tabSlice';
 import { useLocation } from 'react-router-dom';
 import IconTextButton from 'components/buttons/IconTextButton';
+import { creditInfoSelector } from 'store/slices/creditInfo';
 
 const flexCenter = css`
   display: flex;
@@ -144,23 +146,34 @@ const StopButton = styled.div`
   transform: translate(-50%);
 `;
 
-type CreditInfoType = {
-  [key: string]: string;
-};
-
 export default function Nova() {
   const location = useLocation();
-  const [credit, setCredit] = useState<CreditInfoType>({
-    chat: '3',
-    doc: '10',
-    img: '10',
-    imgGen: '10'
-  });
   const dispatch = useAppDispatch();
   const novaHistory = useAppSelector(novaHistorySelector);
   const { creating } = useAppSelector(selectTabSlice);
-  const confirm = useConfirm();
+  const creditInfo = useAppSelector(creditInfoSelector);
   const { t } = useTranslation();
+
+  const CREDIT_NAME_MAP: { [key: string]: string } = {
+    NOVA_CHAT_GPT4O: t(`Nova.CreditInfo.Chat`),
+    NOVA_ASK_DOC_GPT4O: t(`Nova.CreditInfo.DocImgQuery`),
+    NOVA_IMG_GPT4O: t(`Nova.CreditInfo.ImgGen`)
+  };
+
+  const FilteredcreditInfo = creditInfo.filter((item) =>
+    CREDIT_NAME_MAP.hasOwnProperty(item.serviceType)
+  );
+
+  const TOOLTIP_CREDIT_OPTIONS: TooltipOption[] = FilteredcreditInfo.map((item) => {
+    const { serviceType, deductCredit } = item;
+
+    return {
+      name: CREDIT_NAME_MAP[serviceType] || 'Unknown',
+      icon: { src: ico_credit, txt: String(deductCredit) }
+    };
+  });
+
+  const confirm = useConfirm();
 
   const requestor = useRef<ReturnType<typeof apiWrapper>>();
 
@@ -249,18 +262,6 @@ export default function Nova() {
       dispatch(initNovaHistory());
     }
   };
-
-  const nameMap: { [key: string]: string } = {
-    chat: t(`Nova.CreditInfo.Chat`),
-    doc: t(`Nova.CreditInfo.DocQuery`),
-    img: t(`Nova.CreditInfo.ImgQuery`),
-    imgGen: t(`Nova.CreditInfo.ImgGen`)
-  };
-
-  const TOOLTIP_CREDIT_OPTIONS: TooltipOption[] = Object.entries(credit).map(([key, value]) => ({
-    name: nameMap[key] || 'Unknown',
-    icon: { src: ico_credit, txt: value }
-  }));
 
   const onStop = () => {
     requestor.current?.abort();
@@ -432,11 +433,11 @@ const SearchGuide = () => {
 
   const PROMPT_EXAMPLE = [
     {
-      src: ico_magnifying_glass,
+      src: ico_image,
       txt: t(`Nova.SearchGuide.Example1`)
     },
     {
-      src: ico_magnifying_glass,
+      src: ico_documents,
       txt: t(`Nova.SearchGuide.Example2`)
     }
   ];
