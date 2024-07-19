@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import InputBar, { InputBarSubmitParam } from 'components/nova/InputBar';
 import styled, { css } from 'styled-components';
 import { useAppDispatch, useAppSelector } from 'store/store';
@@ -26,6 +26,8 @@ import ico_nova from 'img/ico_nova.svg';
 import ico_credit_info from 'img/ico_credit_line.svg';
 import ico_credit from 'img/ico_credit_gray.svg';
 import { ReactComponent as IconMessagePlus } from 'img/ico_message_plus.svg';
+import { ReactComponent as AgentFraphic } from 'img/agent_graphic.svg';
+import { ReactComponent as IconArrowLeft } from 'img/ico_arrow_left.svg';
 import ChatList from 'components/nova/ChatList';
 import ico_image from 'img/ico_image.svg';
 import ico_documents from 'img/ico_documents.svg';
@@ -196,6 +198,9 @@ export const SUPPORT_IMAGE_TYPE = [
   }
 ];
 
+interface FileUpladState extends Pick<NovaChatType, 'type'> {
+  state: 'ready' | 'upload' | 'wait' | 'delay';
+}
 export default function Nova() {
   const location = useLocation();
   const dispatch = useAppDispatch();
@@ -204,6 +209,11 @@ export default function Nova() {
   const creditInfo = useAppSelector(creditInfoSelector);
   const { t } = useTranslation();
   const confirm = useConfirm();
+
+  const [fileUploadState, setFileUploadState] = useState<FileUpladState>({
+    type: '',
+    state: 'ready'
+  });
 
   const CREDIT_NAME_MAP: { [key: string]: string } = {
     NOVA_CHAT_GPT4O: t(`Nova.CreditInfo.Chat`),
@@ -261,6 +271,7 @@ export default function Nova() {
         const { vsId = '', threadId = '' } = lastChat || {};
         const { input, files = [], type } = submitParam;
 
+        if (type === 'image' || type === 'document') setFileUploadState({ type, state: 'upload' });
         const resUpload = await reqUploadFiles(files);
         const formData = new FormData();
         resUpload
@@ -282,6 +293,8 @@ export default function Nova() {
         dispatch(pushChat({ id, input, type, role, vsId, threadId, output: '' }));
 
         requestor.current = apiWrapper();
+        if (type === 'image' || type === 'document')
+          setFileUploadState((prev) => ({ ...prev, state: 'wait' }));
         const { res } = await requestor.current.request(NOVA_CHAT_API, {
           body: formData,
           method: 'POST'
@@ -291,6 +304,7 @@ export default function Nova() {
         const resThreadId = res.headers.get('X-PO-AI-NOVA-API-TID') || '';
         const askType = res.headers.get('X-PO-AI-NOVA-API-ASK-TYPE') || '';
 
+        setFileUploadState({ type: '', state: 'ready' });
         await streaming(res, (contents) => {
           dispatch(
             appendChatOutput({
@@ -312,6 +326,7 @@ export default function Nova() {
         }
       } finally {
         dispatch(setCreating('none'));
+        setFileUploadState({ type: '', state: 'ready' });
         const html = await markdownToHtml(result);
         if (html) {
           const $ = load(html);
@@ -528,6 +543,7 @@ export default function Nova() {
         disabled={creating !== 'none'}
         onSubmit={onSubmit}
         contents={location.state?.body}></InputBar>
+      {<FileUploading {...fileUploadState}></FileUploading>}
     </Wrapper>
   );
 }
@@ -568,7 +584,66 @@ const SearchGuide = () => {
   );
 };
 
+const FileUploadWrapper = styled(Wrapper)`
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-color: white;
+
+  .header {
+    height: 56px;
+    display: flex;
+    flex-direction: row;
+    padding: 12px 16px;
+    align-items: center;
+    border-bottom: 4px solid #6f3ad0;
+  }
+
+  > div {
+    padding: 40px 24px;
+
+    .title {
+      font-weight: 700;
+      font-size: 24px;
+      line-height: 36px;
+    }
+
+    .desc {
+      margin-top: 16px;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 24px;
+    }
+  }
+  .agentImage {
+    display: flex;
+    justify-content: center;
+  }
+`;
+
+const FileUploading = (props: FileUpladState) => {
+  const { type, state } = props;
+  const { t } = useTranslation();
+  if (state === 'ready') return null;
+
+  return (
+    <FileUploadWrapper>
+      <div className="header">
+        <IconButton iconComponent={IconArrowLeft} width={32} height={32}></IconButton>
+      </div>
+      <div>
+        <div className="title">{t(`Nova.UploadState.Uploading`, { type: t(type) })}</div>
+        <div className="desc">{t(`Nova.UploadState.${state}`)}</div>
+      </div>
+      <div className="agentImage">
+        <AgentFraphic></AgentFraphic>
+      </div>
+    </FileUploadWrapper>
+  );
+};
+
 Nova.SearchGuide = SearchGuide;
+Nova.FileUploading = FileUploading;
 
 export const filterCreditInfo = (
   creditInfo: InitialState[],
