@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 
-type InitialState = {
+export type InitialState = {
   serviceType: string;
   status: string;
   deductCredit: number;

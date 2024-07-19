@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { AppDispatch, RootState, useAppDispatch } from '../store/store';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useMoveChatTab } from '../components/hooks/useMovePage';
+// import { useMoveChatTab } from '../components/hooks/useMovePage';
 import { updateT2ICurItemIndex, updateT2ICurListId } from '../store/slices/txt2imgHistory';
 import { activeToast } from '../store/slices/toastSlice';
 import gI18n, { convertLangFromLangCode } from '../locale';
@@ -13,6 +13,7 @@ import { setFiles } from '../store/slices/askDocAnalyzeFiesSlice';
 import { initComplete } from '../store/slices/initFlagSlice';
 import { setRecognizedVoice } from '../store/slices/recognizedVoice';
 import { initConfirm } from '../store/slices/confirm';
+import { resetCurrentWrite } from 'store/slices/writeHistorySlice';
 
 const UA_PREFIX: string = `__polaris_office_ai_`;
 
@@ -191,7 +192,7 @@ export const useInitBridgeListener = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const movePage = useMoveChatTab();
+  // const movePage = useMoveChatTab();
   const getPath = useCallback((cmd: PanelOpenCmd) => {
     switch (cmd) {
       case 'openAiTools':
@@ -233,7 +234,8 @@ export const useInitBridgeListener = () => {
     if (creating === 'none') {
       if (cmd === `openAiTools`) {
         if (body && body !== '') {
-          movePage(body);
+          // movePage(body);
+          thunkAPI.dispatch(resetCurrentWrite());
         }
       } else if (cmd === `openTextToImg`) {
         if (body && body !== '') {

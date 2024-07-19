@@ -266,7 +266,7 @@
     "CreditInfo": {
       "Title": "크레딧 안내",
       "Chat": "채팅",
-      "DocImgQuery": "문서 이미지 조회",
+      "DocImgQuery": "문서/이미지 질의",
       "ImgGen": "이미지 생성"
     },
     "NewChat": {

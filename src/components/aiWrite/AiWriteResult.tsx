@@ -216,15 +216,6 @@ const AiWriteResult = ({
               {t(`WriteTab.InsertDoc`)}
             </Button>
           </Grid>
-          <div>
-            <IconTextButton
-              width="full"
-              variant="purpleGradient"
-              iconSrc={icon_chat_white}
-              onClick={() => moveChat(currentWrite.result)}>
-              {t(`WriteTab.MoveToChating`)}
-            </IconTextButton>
-          </div>
           <RightBox>
             {currentWrite.version === 'clovax' ? (
               <ClovaXLinkText />

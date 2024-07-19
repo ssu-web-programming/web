@@ -21,26 +21,27 @@ const OverlayWrapper = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
+  // padding: 0 calc((100vw - 327px) / 2);
   padding: 0 24px;
   background: #fff linear-gradient(0deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3));
 
   display: flex;
   justify-content: center;
-  align-items: flex-end;
+  align-items: center;
   z-index: 10;
 `;
 
 const ImageModal = styled.div`
   position: relative;
-  max-width: 100%;
-  max-height: 80%;
+  width: 100%
+  height: auto;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0px 4px 12px 0px #00000026;
+  box-shadow: 0px 4px 12px 0px #00000026; 
 
   > img {
     width: 100%;
-    height: auto;
+    height: 100%;
     display: block;
   }
 
@@ -71,10 +72,12 @@ const Overlay: React.FC<OverlayProps> = ({ image, onClose, onSave }) => {
         cssExt={css`
           color: #fff;
           padding: 0;
+          transform: translateX(50%);
         `}
         iconComponent={closeIcon}
         onClick={onClose}
       />
+
       <ImageModal>
         <img src={image} alt="Modal" />
         <IconTextButton iconSize={24} iconSrc={ico_download} iconPos="left" onClick={onSave}>
