@@ -21,7 +21,6 @@ const OverlayWrapper = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  // padding: 0 calc((100vw - 327px) / 2);
   padding: 0 24px;
   background: #fff linear-gradient(0deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3));
 
@@ -72,7 +71,9 @@ const Overlay: React.FC<OverlayProps> = ({ image, onClose, onSave }) => {
         cssExt={css`
           color: #fff;
           padding: 0;
-          transform: translateX(50%);
+          width: 100%;
+          display: flex;
+          justify-content: flex-end;
         `}
         iconComponent={closeIcon}
         onClick={onClose}
