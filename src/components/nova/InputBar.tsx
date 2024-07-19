@@ -24,6 +24,7 @@ import { useAppDispatch, useAppSelector } from 'store/store';
 import { setNovaAgreement, userInfoSelector } from 'store/slices/userInfo';
 import { apiWrapper } from 'api/apiWrapper';
 import { NOVA_SET_USER_INFO_AGREEMENT } from 'api/constant';
+import { SUPPORT_DOCUMENT_TYPE, SUPPORT_IMAGE_TYPE } from 'pages/Nova/Nova';
 
 export const flexCenter = css`
   display: flex;
@@ -167,7 +168,7 @@ type FileListProps = {
 };
 
 type FileUploaderProps = {
-  onLoadFile: (files: FileList) => void;
+  onLoadFile: (files: File[]) => void;
   isAgreed: boolean;
   setIsAgreed: (agree: boolean) => void;
 };
@@ -196,10 +197,7 @@ export default function InputBar(props: InputBarProps) {
 
   const { t } = useTranslation();
 
-  const loadlocalFile = (files: FileList) => {
-    // TODO : check file extension
-    setLocalFiles(Array.from(files));
-  };
+  const loadlocalFile = (files: File[]) => setLocalFiles(files);
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const inputText = event.target.value;
@@ -251,7 +249,6 @@ export default function InputBar(props: InputBarProps) {
           <IconButton
             disable={text.length < 1}
             onClick={() => {
-              // TODO : refactor
               const fileType =
                 localFiles.length < 1
                   ? ''
@@ -357,13 +354,13 @@ const FileUploader = (props: FileUploaderProps) => {
   const UPLOAD_BTN_LIST = [
     {
       target: 'nova-file',
-      accept: '.docx, .doc, .pptx, .ppt, .xlsx, .xls, .hwp, .pdf',
+      accept: SUPPORT_DOCUMENT_TYPE,
       children: <FileIcon />,
       ref: inputDocsFileRef
     },
     {
       target: 'nova-image',
-      accept: '.jpg, .png, .gif',
+      accept: SUPPORT_IMAGE_TYPE,
       children: <ImageIcon />,
       ref: inputImgFileRef
     }
@@ -382,7 +379,7 @@ const FileUploader = (props: FileUploaderProps) => {
           initPos>
           <FileButton
             target={btn.target}
-            accept={btn.accept}
+            accept={btn.accept.map((acc) => acc.mimeType).join(',')}
             handleOnChange={onLoadFile}
             multiple
             isAgreed={isAgreed}

@@ -146,6 +146,56 @@ const StopButton = styled.div`
   transform: translate(-50%);
 `;
 
+export const SUPPORT_DOCUMENT_TYPE = [
+  {
+    mimeType: 'application/msword',
+    extensions: '.doc'
+  },
+  {
+    mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    extensions: '.docx'
+  },
+  {
+    mimeType: 'application/vnd.ms-powerpoint',
+    extensions: '.ppt'
+  },
+  {
+    mimeType: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+    extensions: '.pptx'
+  },
+  {
+    mimeType: 'application/vnd.ms-excel',
+    extensions: '.xls'
+  },
+  {
+    mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    extensions: '.xlsx'
+  },
+  {
+    mimeType: 'application/vnd.hancom.hwp',
+    extensions: '.hwp'
+  },
+  {
+    mimeType: 'application/pdf',
+    extensions: '.pdf'
+  }
+];
+
+export const SUPPORT_IMAGE_TYPE = [
+  {
+    mimeType: 'image/jpeg',
+    extensions: '.jpg'
+  },
+  {
+    mimeType: 'image/png',
+    extensions: '.png'
+  },
+  {
+    mimeType: 'image/gif',
+    extensions: '.gif'
+  }
+];
+
 export default function Nova() {
   const location = useLocation();
   const dispatch = useAppDispatch();
