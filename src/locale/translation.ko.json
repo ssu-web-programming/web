@@ -14,6 +14,8 @@
   "Back": "뒤로가기",
   "StopGenerate": "생성중지",
   "TextToImage": "Text to Image",
+  "image": "이미지",
+  "document": "문서",
   "FormList": {
     "paragraph": "문장",
     "list": "목차",
@@ -286,6 +288,12 @@
     "UploadTooltip": {
       "PolarisDrive": "폴라리스 드라이브",
       "Local": "현재 장치"
+    },
+    "UploadState": {
+      "Uploading": "{{type}}를 업로드 중이에요.",
+      "upload": "답변을 제공하기 위해, 폴라리스 오피스 드라이브에 파일을 저장하고 있어요",
+      "wait": "답변을 준비하고 있어요. 잠시만 기다려주세요!",
+      "delay": "거의 다 완성되었어요. 조금만 더 기다려주세요!"
     },
     "ConfirmPersonalInfo": {
       "Title": "개인정보 수집 및 이용동의 (필수)",
