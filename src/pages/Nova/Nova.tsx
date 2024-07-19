@@ -310,15 +310,32 @@ export default function Nova() {
     dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.StopMsg`) }));
   };
 
-  const onCopy = (output: string) => {
-    navigator.clipboard.writeText(output).then(
-      () => {
-        dispatch(activeToast({ type: 'info', msg: '복사 완료' }));
-      },
-      () => {
-        dispatch(activeToast({ type: 'error', msg: '복사 실패' }));
+  const onCopy = async (output: string) => {
+    try {
+      const imgReg = /!\[.*\]\((.*)\)/;
+      const imgURL = output.match(imgReg)?.[1];
+
+      if (imgURL) {
+        const data = await fetch(String(imgURL));
+        const bolb = await data.blob();
+
+        await navigator.clipboard.write([
+          new ClipboardItem({
+            'image/png': bolb
+          })
+        ]);
+      } else {
+        const html = await markdownToHtml(output);
+        const blob = new Blob([html!], { type: 'text/html' });
+        const data = [new ClipboardItem({ ['text/html']: blob })];
+
+        await navigator.clipboard.write(data);
       }
-    );
+
+      dispatch(activeToast({ type: 'info', msg: '복사 완료' }));
+    } catch {
+      dispatch(activeToast({ type: 'error', msg: '복사 실패' }));
+    }
   };
 
   const handleInsertDocs = (history: NovaChatType) => {
