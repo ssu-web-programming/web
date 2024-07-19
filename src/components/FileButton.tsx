@@ -16,7 +16,7 @@ const Label = styled.label`
 
 interface FileButtonProps extends React.ComponentPropsWithoutRef<'input'> {
   target: string;
-  handleOnChange?: (files: FileList) => void;
+  handleOnChange?: (files: File[]) => void;
   isAgreed?: boolean;
   handleOnClick: () => void;
 }
@@ -58,7 +58,11 @@ const FileButton = forwardRef<HTMLInputElement, FileButtonProps>((props, ref) =>
         hidden
         accept={accept}
         onChange={(e) => {
-          if (e.currentTarget.files) handleOnChange?.(e.currentTarget.files);
+          if (e.currentTarget.files) {
+            const files = Array.from(e.currentTarget.files);
+            const valid = files.filter((file) => accept?.includes(file.type));
+            handleOnChange?.(valid);
+          }
           e.currentTarget.value = '';
         }}
         {...otherProps}
