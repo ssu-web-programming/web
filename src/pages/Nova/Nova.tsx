@@ -13,7 +13,7 @@ import {
 } from 'store/slices/novaHistorySlice';
 import { apiWrapper, streaming } from 'api/apiWrapper';
 import { v4 } from 'uuid';
-import Tooltip, { TooltipOption } from 'components/Tooltip';
+import Tooltip from 'components/Tooltip';
 import { useConfirm } from 'components/Confirm';
 import { NOVA_CHAT_API, NOVA_DELETE_CONVERSATION } from 'api/constant';
 import { insertDoc, markdownToHtml } from 'util/common';
@@ -35,7 +35,7 @@ import { activeToast } from 'store/slices/toastSlice';
 import { selectTabSlice, setCreating } from 'store/slices/tabSlice';
 import { useLocation } from 'react-router-dom';
 import IconTextButton from 'components/buttons/IconTextButton';
-import { creditInfoSelector } from 'store/slices/creditInfo';
+import { creditInfoSelector, InitialState } from 'store/slices/creditInfo';
 
 const flexCenter = css`
   display: flex;
@@ -153,6 +153,7 @@ export default function Nova() {
   const { creating } = useAppSelector(selectTabSlice);
   const creditInfo = useAppSelector(creditInfoSelector);
   const { t } = useTranslation();
+  const confirm = useConfirm();
 
   const CREDIT_NAME_MAP: { [key: string]: string } = {
     NOVA_CHAT_GPT4O: t(`Nova.CreditInfo.Chat`),
@@ -160,20 +161,12 @@ export default function Nova() {
     NOVA_IMG_GPT4O: t(`Nova.CreditInfo.ImgGen`)
   };
 
-  const FilteredcreditInfo = creditInfo.filter((item) =>
-    CREDIT_NAME_MAP.hasOwnProperty(item.serviceType)
-  );
+  const credit = filterCreditInfo(creditInfo, CREDIT_NAME_MAP);
 
-  const TOOLTIP_CREDIT_OPTIONS: TooltipOption[] = FilteredcreditInfo.map((item) => {
-    const { serviceType, deductCredit } = item;
-
-    return {
-      name: CREDIT_NAME_MAP[serviceType] || 'Unknown',
-      icon: { src: ico_credit, txt: String(deductCredit) }
-    };
-  });
-
-  const confirm = useConfirm();
+  const TOOLTIP_CREDIT_OPTIONS = credit.map((item) => ({
+    name: CREDIT_NAME_MAP[item.serviceType] || 'Unknown',
+    icon: { src: ico_credit, txt: String(item.deductCredit) }
+  }));
 
   const requestor = useRef<ReturnType<typeof apiWrapper>>();
 
@@ -489,3 +482,10 @@ const SearchGuide = () => {
 };
 
 Nova.SearchGuide = SearchGuide;
+
+export const filterCreditInfo = (
+  creditInfo: InitialState[],
+  nameMap: { [key: string]: string }
+) => {
+  return creditInfo.filter((item) => nameMap[item.serviceType]);
+};

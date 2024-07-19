@@ -129,7 +129,7 @@ const DropDownButton = <T extends { id: string }>(props: DropDownProps<T>) => {
                 }}>
                 <VersionInner>
                   {item.id}
-                  {['Claude 3.5 Sonnet', 'GPT-4o'].includes(item.id) && <NewMark />}
+                  {['Claude 3.5 Sonnet', 'GPT 4o'].includes(item.id) && <NewMark />}
                 </VersionInner>
               </FloatingItem>
             ))}
@@ -145,8 +145,8 @@ const DropDownButton = <T extends { id: string }>(props: DropDownProps<T>) => {
           `}>
           <VersionInner>
             {hasSelectedOption ? selectedId : thumbItemId.length > 0 && thumbItemId}
-            {['Claude 3.5 Sonnet', 'GPT-4o'].includes(thumbItemId) ||
-            ['Claude 3.5 Sonnet', 'GPT-4o'].includes(selectedId) ? (
+            {['Claude 3.5 Sonnet', 'GPT 4o'].includes(thumbItemId) ||
+            ['Claude 3.5 Sonnet', 'GPT 4o'].includes(selectedId) ? (
               <NewMark />
             ) : null}
           </VersionInner>
