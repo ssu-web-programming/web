@@ -11,11 +11,11 @@ export const ASKDOC_MAKE_SUMMARY = '/api/1/ai/askdoc/makeSummary';
 export const ASKDOC_ALL_COMPLETE_ANALYZING = '/api/1/ai/askdoc/preAsk';
 export const ASKDCO_ASK_QUESTION = '/api/1/ai/askdoc/ask';
 
-export const NOVA_CHAT_API = '/api/v2/nova-apis/chatFunc';
-export const NOVA_DELETE_CONVERSATION = '/api/v2/nova-apis/delete-conversation';
-export const NOVA_GET_USER_INFO_AGREEMENT = '/api/v2/nova-apis/get-agreement';
-export const NOVA_SET_USER_INFO_AGREEMENT = '/api/v2/nova-apis/set-agreement';
+export const NOVA_CHAT_API = '/api/v2/nova/chatFunc';
+export const NOVA_DELETE_CONVERSATION = '/api/v2/nova/delete-conversation';
+export const NOVA_GET_USER_INFO_AGREEMENT = '/api/v2/nova/get-agreement';
+export const NOVA_SET_USER_INFO_AGREEMENT = '/api/v2/nova/set-agreement';
 
-export const AI_CREDIT_INFO = '/api/v2/nova-apis/credit-info';
-export const PO_DRIVE_LIST = '/api/v2/nova-apis/podrive/list';
-export const PO_DRIVE_UPLOAD = '/api/v2/nova-apis/podrive/upload';
+export const AI_CREDIT_INFO = '/api/v2/nova/credit-info';
+export const PO_DRIVE_LIST = '/api/v2/nova/podrive/list';
+export const PO_DRIVE_UPLOAD = '/api/v2/nova/podrive/upload';
