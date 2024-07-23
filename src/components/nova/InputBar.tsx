@@ -214,8 +214,12 @@ export default function InputBar(props: InputBarProps) {
     }
   };
 
-  const handleRemoveFile = (file: FileListItemInfo) => {
+  const handleRemoveLocalFile = (file: FileListItemInfo) => {
     setLocalFiles(localFiles.filter((prev) => prev !== file));
+  };
+
+  const handleRemoveDriveFile = (file: FileListItemInfo) => {
+    setDriveFiles(driveFiles.filter((prev) => prev !== file));
   };
 
   const adjustTextareaHeight = () => {
@@ -233,10 +237,10 @@ export default function InputBar(props: InputBarProps) {
   return (
     <InputBarBase disabled={disabled}>
       {localFiles.length > 0 && (
-        <InputBar.FileList files={localFiles} onRemoveFile={handleRemoveFile} />
+        <InputBar.FileList files={localFiles} onRemoveFile={handleRemoveLocalFile} />
       )}
       {driveFiles.length > 0 && (
-        <InputBar.FileList files={driveFiles} onRemoveFile={handleRemoveFile} />
+        <InputBar.FileList files={driveFiles} onRemoveFile={handleRemoveDriveFile} />
       )}
       <InputTxtWrapper hasValue={!!text}>
         <div>
@@ -370,10 +374,7 @@ const FileUploader = (props: FileUploaderProps) => {
                 }}>
                 {t('Nova.PoDrive.Desc')}
               </div>
-              <PoDrive
-                onChange={(file: DriveFileInfo) =>
-                  setDriveFiles((prev) => [...prev, file])
-                }></PoDrive>
+              <PoDrive onChange={(files: DriveFileInfo[]) => setDriveFiles(files)}></PoDrive>
             </>
           ),
           onOk: { text: t('Confirm'), callback: () => {} },
