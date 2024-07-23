@@ -27,6 +27,7 @@ import { NOVA_SET_USER_INFO_AGREEMENT } from 'api/constant';
 import { SUPPORT_DOCUMENT_TYPE, SUPPORT_IMAGE_TYPE } from 'pages/Nova/Nova';
 import { useConfirm } from 'components/Confirm';
 import PoDrive, { DriveFileInfo } from 'components/PoDrive';
+import useUserInfoUtils from 'components/hooks/useUserInfoUtils';
 
 export const flexCenter = css`
   display: flex;
@@ -174,14 +175,15 @@ type FileListProps = {
 };
 
 type FileUploaderProps = {
-  onLoadFile: (files: File[]) => void;
+  loadlocalFile: (files: File[]) => void;
   isAgreed: boolean;
   setIsAgreed: (agree: boolean) => void;
-  setDriveFiles: Dispatch<SetStateAction<DriveFileInfo[]>>;
+  onLoadDriveFile: (files: DriveFileInfo[]) => void;
 };
 
 export default function InputBar(props: InputBarProps) {
   const dispatch = useAppDispatch();
+  const { getUploadFileLimit } = useUserInfoUtils();
   const { disabled = false, contents = '' } = props;
   const [localFiles, setLocalFiles] = useState<File[]>([]);
   const [driveFiles, setDriveFiles] = useState<DriveFileInfo[]>([]);
@@ -205,7 +207,14 @@ export default function InputBar(props: InputBarProps) {
 
   const { t } = useTranslation();
 
-  const loadlocalFile = (files: File[]) => setLocalFiles(files);
+  const loadlocalFile = (files: File[]) => {
+    const limit = getUploadFileLimit();
+    // TODO : alert
+    setLocalFiles(files.splice(0, limit));
+  };
+  const loadDriveFile = (files: DriveFileInfo[]) => {
+    setDriveFiles(files);
+  };
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const inputText = event.target.value;
@@ -255,10 +264,10 @@ export default function InputBar(props: InputBarProps) {
       </InputTxtWrapper>
       <InputBtnWrapper>
         <InputBar.FileUploader
-          onLoadFile={loadlocalFile}
+          loadlocalFile={loadlocalFile}
           isAgreed={isAgreed}
           setIsAgreed={setIsAgreed}
-          setDriveFiles={setDriveFiles}
+          onLoadDriveFile={loadDriveFile}
         />
 
         <IconBtnWrapper>
@@ -341,7 +350,7 @@ const FileList = (props: FileListProps) => {
 };
 
 const FileUploader = (props: FileUploaderProps) => {
-  const { onLoadFile, isAgreed, setIsAgreed, setDriveFiles } = props;
+  const { loadlocalFile, isAgreed, setIsAgreed, onLoadDriveFile } = props;
   const { t } = useTranslation();
   const confirm = useConfirm();
   const inputDocsFileRef = useRef<HTMLInputElement | null>(null);
@@ -374,14 +383,14 @@ const FileUploader = (props: FileUploaderProps) => {
                 }}>
                 {t('Nova.PoDrive.Desc')}
               </div>
-              <PoDrive onChange={(files: DriveFileInfo[]) => setDriveFiles(files)}></PoDrive>
+              <PoDrive onChange={(files: DriveFileInfo[]) => onLoadDriveFile(files)}></PoDrive>
             </>
           ),
           onOk: { text: t('Confirm'), callback: () => {} },
           onCancel: { text: t('Cancel'), callback: () => {} }
         });
         if (!ret) {
-          setDriveFiles([]);
+          onLoadDriveFile([]);
         }
       }
     },
@@ -427,7 +436,7 @@ const FileUploader = (props: FileUploaderProps) => {
           <FileButton
             target={btn.target}
             accept={btn.accept.map((acc) => acc.mimeType).join(',')}
-            handleOnChange={onLoadFile}
+            handleOnChange={loadlocalFile}
             multiple
             isAgreed={isAgreed}
             handleOnClick={handleOnClick}

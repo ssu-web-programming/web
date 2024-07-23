@@ -2,6 +2,7 @@ import { forwardRef } from 'react';
 import styled from 'styled-components';
 import { useConfirm } from './Confirm';
 import { useTranslation } from 'react-i18next';
+import { SUPPORT_IMAGE_TYPE } from 'pages/Nova/Nova';
 
 const FileButtonBase = styled.button`
   width: fit-content;
@@ -57,11 +58,25 @@ const FileButton = forwardRef<HTMLInputElement, FileButtonProps>((props, ref) =>
         type="file"
         hidden
         accept={accept}
-        onChange={(e) => {
+        onChange={async (e) => {
           if (e.currentTarget.files) {
             const files = Array.from(e.currentTarget.files);
-            const valid = files.filter((file) => accept?.includes(file.type));
-            handleOnChange?.(valid);
+            const invalid = files.filter((file) => !accept?.includes(file.type));
+            const support = accept?.includes(SUPPORT_IMAGE_TYPE[0].mimeType)
+              ? 'jpg, png, gif'
+              : 'doc, pptx, pdf, hwp, xlsx';
+            if (invalid.length > 0) {
+              confirm({
+                title: '',
+                msg: t('Nova.Alert.UnsupportFile', { support }),
+                onOk: {
+                  text: t(`Confirm`),
+                  callback: () => {}
+                }
+              });
+              return;
+            }
+            handleOnChange?.(files);
           }
           e.currentTarget.value = '';
         }}
