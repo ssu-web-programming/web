@@ -320,6 +320,9 @@
         }
       }
     },
+    "Alert": {
+      "UnsupportFile": "지원되지 않는 파일입니다. {{support}} 파일만 업로드해 주세요"
+    },
     "PoDrive": {
       "Desc": "500MB 이하의 파일 N개까지 선택할 수 있어요."
     }
