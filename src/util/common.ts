@@ -8,9 +8,8 @@ renderer.link = (href, title, text) => {
   return `<a href="javascript:void(0)">${text}</a>`;
 };
 
-renderer.image = (href, title, text) => 
+renderer.image = (href, title, text) =>
   `<img src=${href} alt=${text} style="width: 100%; height: auto">`;
-
 
 marked.use({
   renderer: renderer,
@@ -143,4 +142,8 @@ export const isHigherVersion = (targetVersion: string, currentVersion: string | 
   if (targetMajor === currentMajor && targetMinor === currentMinor && targetPatch === currentPatch)
     return true;
   return false;
+};
+
+export const getFileExtension = (filename: string) => {
+  return `.${filename.split('.').pop()}`;
 };
