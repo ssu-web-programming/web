@@ -139,6 +139,12 @@ const callApi = (api: ApiType, arg?: string | number) => {
             }
             break;
           }
+          case 'getClientStatus': {
+            if (window.webkit.messageHandlers.getClientStatus) {
+              window.webkit.messageHandlers.getClientStatus.postMessage(arg);
+            }
+            break;
+          }
         }
         break;
       }
