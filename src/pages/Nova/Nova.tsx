@@ -15,7 +15,12 @@ import { apiWrapper, streaming } from 'api/apiWrapper';
 import { v4 } from 'uuid';
 import Tooltip from 'components/Tooltip';
 import { useConfirm } from 'components/Confirm';
-import { NOVA_CHAT_API, NOVA_DELETE_CONVERSATION, PO_DRIVE_UPLOAD } from 'api/constant';
+import {
+  NOVA_CHAT_API,
+  NOVA_DELETE_CONVERSATION,
+  PO_DRIVE_DOWNLOAD,
+  PO_DRIVE_UPLOAD
+} from 'api/constant';
 import { insertDoc, markdownToHtml } from 'util/common';
 import Bridge from 'util/bridge';
 import { load } from 'cheerio';
@@ -38,6 +43,7 @@ import { selectTabSlice, setCreating } from 'store/slices/tabSlice';
 import { useLocation } from 'react-router-dom';
 import IconTextButton from 'components/buttons/IconTextButton';
 import { creditInfoSelector, InitialState } from 'store/slices/creditInfo';
+import { DriveFileInfo } from 'components/PoDrive';
 
 const flexCenter = css`
   display: flex;
@@ -198,6 +204,8 @@ export const SUPPORT_IMAGE_TYPE = [
   }
 ];
 
+export const SUPPORT_FILE_TYPE = [...SUPPORT_DOCUMENT_TYPE, ...SUPPORT_IMAGE_TYPE];
+
 interface FileUpladState extends Pick<NovaChatType, 'type'> {
   state: 'ready' | 'upload' | 'wait' | 'delay';
 }
@@ -261,6 +269,31 @@ export default function Nova() {
     // return res;
   };
 
+  const reqDownloadFiles = async (files: DriveFileInfo[]) => {
+    const ret = [];
+    try {
+      for (const file of files) {
+        const { res } = await apiWrapper().request(PO_DRIVE_DOWNLOAD, {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ fileId: file.fileId }),
+          method: 'POST'
+        });
+        const blob = await res.blob();
+        ret.push({
+          success: true,
+          file: new File([blob], file.name, { type: file.type }),
+          data: { fileId: file.fileId }
+        });
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      return ret;
+    }
+  };
+
   const onSubmit = useCallback(
     async (submitParam: InputBarSubmitParam) => {
       const id = v4();
@@ -271,17 +304,32 @@ export default function Nova() {
         const { vsId = '', threadId = '' } = lastChat || {};
         const { input, files = [], type } = submitParam;
 
-        if (type === 'image' || type === 'document') setFileUploadState({ type, state: 'upload' });
-        const resUpload = await reqUploadFiles(files);
         const formData = new FormData();
-        resUpload
-          .filter((res) => res.success)
-          .forEach((res) => {
-            if (res.success) {
-              formData.append('uploadFiles', res.file);
-              formData.append('fileIds[]', res.data.fileId);
-            }
-          });
+        if (files[0]) {
+          if (type === 'image' || type === 'document')
+            setFileUploadState({ type, state: 'upload' });
+          if (files[0] instanceof File) {
+            const resUpload = await reqUploadFiles(files as File[]);
+            resUpload
+              .filter((res) => res.success)
+              .forEach((res) => {
+                if (res.success) {
+                  formData.append('uploadFiles', res.file);
+                  formData.append('fileIds[]', res.data.fileId);
+                }
+              });
+          } else if ('fileId' in files[0]) {
+            const resDownload = await reqDownloadFiles(files as DriveFileInfo[]);
+            resDownload
+              .filter((res) => res.success)
+              .forEach((res) => {
+                if (res.success) {
+                  formData.append('uploadFiles', res.file);
+                  formData.append('fileIds[]', res.data.fileId);
+                }
+              });
+          }
+        }
 
         const role = 'user';
         formData.append('content', input);

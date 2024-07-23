@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, Dispatch, SetStateAction } from 'react';
 import styled, { css } from 'styled-components';
 import FileButton from 'components/FileButton';
 import IconButton from 'components/buttons/IconButton';
@@ -25,6 +25,8 @@ import { setNovaAgreement, userInfoSelector } from 'store/slices/userInfo';
 import { apiWrapper } from 'api/apiWrapper';
 import { NOVA_SET_USER_INFO_AGREEMENT } from 'api/constant';
 import { SUPPORT_DOCUMENT_TYPE, SUPPORT_IMAGE_TYPE } from 'pages/Nova/Nova';
+import { useConfirm } from 'components/Confirm';
+import PoDrive, { DriveFileInfo } from 'components/PoDrive';
 
 export const flexCenter = css`
   display: flex;
@@ -153,7 +155,7 @@ const TextArea = styled.textarea<{ value: string }>`
 `;
 
 export interface InputBarSubmitParam extends Pick<NovaChatType, 'input' | 'type'> {
-  files?: File[];
+  files?: File[] | DriveFileInfo[];
 }
 
 interface InputBarProps {
@@ -162,21 +164,27 @@ interface InputBarProps {
   contents?: string;
 }
 
+interface FileListItemInfo {
+  name: string;
+}
+
 type FileListProps = {
-  files: File[];
-  onRemoveFile: (file: File) => void;
+  files: FileListItemInfo[];
+  onRemoveFile: (file: FileListItemInfo) => void;
 };
 
 type FileUploaderProps = {
   onLoadFile: (files: File[]) => void;
   isAgreed: boolean;
   setIsAgreed: (agree: boolean) => void;
+  setDriveFiles: Dispatch<SetStateAction<DriveFileInfo[]>>;
 };
 
 export default function InputBar(props: InputBarProps) {
   const dispatch = useAppDispatch();
   const { disabled = false, contents = '' } = props;
   const [localFiles, setLocalFiles] = useState<File[]>([]);
+  const [driveFiles, setDriveFiles] = useState<DriveFileInfo[]>([]);
 
   const [text, setText] = useState<string>(contents);
   const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
@@ -206,7 +214,7 @@ export default function InputBar(props: InputBarProps) {
     }
   };
 
-  const handleRemoveFile = (file: File) => {
+  const handleRemoveFile = (file: FileListItemInfo) => {
     setLocalFiles(localFiles.filter((prev) => prev !== file));
   };
 
@@ -227,6 +235,9 @@ export default function InputBar(props: InputBarProps) {
       {localFiles.length > 0 && (
         <InputBar.FileList files={localFiles} onRemoveFile={handleRemoveFile} />
       )}
+      {driveFiles.length > 0 && (
+        <InputBar.FileList files={driveFiles} onRemoveFile={handleRemoveFile} />
+      )}
       <InputTxtWrapper hasValue={!!text}>
         <div>
           <TextArea
@@ -243,21 +254,28 @@ export default function InputBar(props: InputBarProps) {
           onLoadFile={loadlocalFile}
           isAgreed={isAgreed}
           setIsAgreed={setIsAgreed}
+          setDriveFiles={setDriveFiles}
         />
 
         <IconBtnWrapper>
           <IconButton
             disable={text.length < 1}
             onClick={() => {
+              const targetFiles = localFiles.length > 0 ? localFiles : driveFiles;
               const fileType =
-                localFiles.length < 1
+                targetFiles.length < 1
                   ? ''
-                  : localFiles[0].type.split('/')[0].includes('image')
+                  : targetFiles[0].type.split('/')[0].includes('image')
                   ? 'image'
                   : 'document';
-              props.onSubmit({ input: text, files: localFiles, type: fileType });
+              props.onSubmit({
+                input: text,
+                files: localFiles.length > 0 ? localFiles : driveFiles.length > 0 ? driveFiles : [],
+                type: fileType
+              });
               setText('');
               setLocalFiles([]);
+              setDriveFiles([]);
             }}
             iconSize="lg"
             iconComponent={text.length < 1 ? SendDisabledIcon : SendActiveIcon}
@@ -275,7 +293,7 @@ const FileList = (props: FileListProps) => {
     e.currentTarget.scrollLeft += e.deltaY;
   };
 
-  const getFileIcon = (file: File) => {
+  const getFileIcon = (file: FileListItemInfo) => {
     const fileExt = file.name.split('.').pop()?.toLowerCase();
 
     if (!fileExt) return null;
@@ -295,7 +313,7 @@ const FileList = (props: FileListProps) => {
     }
   };
 
-  const getFileName = (file: File) => {
+  const getFileName = (file: FileListItemInfo) => {
     const fileName = file.name;
     if (fileName.length > 20) {
       const fileExt = fileName.split('.').pop() || '';
@@ -307,7 +325,7 @@ const FileList = (props: FileListProps) => {
 
   return (
     <FileListViewer onWheel={handleWheel}>
-      {files.map((file: File) => (
+      {files.map((file: FileListItemInfo) => (
         <FileItem key={file.name}>
           <Icon size={28} iconSrc={getFileIcon(file)} />
           <span>{getFileName(file)}</span>
@@ -319,8 +337,9 @@ const FileList = (props: FileListProps) => {
 };
 
 const FileUploader = (props: FileUploaderProps) => {
-  const { onLoadFile, isAgreed, setIsAgreed } = props;
+  const { onLoadFile, isAgreed, setIsAgreed, setDriveFiles } = props;
   const { t } = useTranslation();
+  const confirm = useConfirm();
   const inputDocsFileRef = useRef<HTMLInputElement | null>(null);
   const inputImgFileRef = useRef<HTMLInputElement | null>(null);
 
@@ -336,7 +355,34 @@ const FileUploader = (props: FileUploaderProps) => {
     {
       name: t(`Nova.UploadTooltip.PolarisDrive`),
       icon: { src: ico_cloud },
-      onClick: () => alert('폴라리스 드라이브')
+      onClick: async () => {
+        const ret = await confirm({
+          title: t('Nova.UploadTooltip.PolarisDrive')!,
+          msg: (
+            <>
+              <div
+                style={{
+                  fontWeight: 400,
+                  fontSize: '16px',
+                  lineHeight: '24px',
+                  marginBottom: '24px',
+                  marginTop: '-8px'
+                }}>
+                {t('Nova.PoDrive.Desc')}
+              </div>
+              <PoDrive
+                onChange={(file: DriveFileInfo) =>
+                  setDriveFiles((prev) => [...prev, file])
+                }></PoDrive>
+            </>
+          ),
+          onOk: { text: t('Confirm'), callback: () => {} },
+          onCancel: { text: t('Cancel'), callback: () => {} }
+        });
+        if (!ret) {
+          setDriveFiles([]);
+        }
+      }
     },
     {
       name: t(`Nova.UploadTooltip.Local`),

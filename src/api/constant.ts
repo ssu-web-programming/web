@@ -19,3 +19,4 @@ export const NOVA_SET_USER_INFO_AGREEMENT = '/api/v2/nova/set-agreement';
 export const AI_CREDIT_INFO = '/api/v2/nova/credit-info';
 export const PO_DRIVE_LIST = '/api/v2/nova/podrive/list';
 export const PO_DRIVE_UPLOAD = '/api/v2/nova/podrive/upload';
+export const PO_DRIVE_DOWNLOAD = '/api/v2/nova/podrive/download';
