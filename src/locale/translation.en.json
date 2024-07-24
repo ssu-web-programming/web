@@ -158,8 +158,7 @@
     "CompleteInsert": "Insert completed.",
     "ErrorMsg": "An error has occurred. Please try again later. ({{code}} : {{msg}})",
     "ServiceErrorMsg": "Experiencing issues with the service. Please try again later.",
-    "UnauthorizedMsg": "You need to be logged in to use this feature. Please check your login status again.",
-    "CopyCompleted": "Copy Completed."
+    "UnauthorizedMsg": "You need to be logged in to use this feature. Please check your login status again."
   },
   "Offline": {
     "UnstableConnection": "Service connectivity issues!",

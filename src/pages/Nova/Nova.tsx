@@ -443,9 +443,9 @@ export default function Nova() {
         await navigator.clipboard.write(data);
       }
 
-      dispatch(activeToast({ type: 'info', msg: '복사 완료' }));
+      dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.CopyCompleted`) }));
     } catch {
-      dispatch(activeToast({ type: 'error', msg: '복사 실패' }));
+      dispatch(activeToast({ type: 'error', msg: t(`ToastMsg.CopyFailed`) }));
     }
   };
 
@@ -482,12 +482,14 @@ export default function Nova() {
                   const res = await fetch(history.res!);
                   const blob = await res.blob();
                   Bridge.callBridgeApi('insertImage', blob);
+                  dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.CompleteInsert`) }));
                 } catch (err) {}
                 break;
               }
               case 'document':
               default: {
                 insertDoc(history.output);
+                dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.CompleteInsert`) }));
                 break;
               }
             }
@@ -495,22 +497,6 @@ export default function Nova() {
         }
       }
     });
-  };
-
-  const confirmPermission = async () => {
-    const ret = await confirm({
-      msg: t(`Nova.ConfirmAccess.Msg`),
-      onCancel: { text: t(`Nova.ConfirmAccess.Cancel`), callback: () => {} },
-      onOk: {
-        text: t(`Nova.ConfirmAccess.Ok`),
-        callback: () => {}
-      },
-      direction: 'row'
-    });
-
-    if (ret) {
-      alert('접근 권한 허용함');
-    }
   };
 
   const downloadImage = async (imageURL: string): Promise<void> => {
@@ -524,20 +510,14 @@ export default function Nova() {
   };
 
   const onSave = async (currentChat?: NovaChatType) => {
-    const hasPermission = true; // 임시
     const imageURL = currentChat?.res!;
-
-    if (!!hasPermission) {
-      try {
-        if (imageURL) {
-          await downloadImage(imageURL);
-          dispatch(activeToast({ type: 'info', msg: '저장 완료' }));
-        }
-      } catch {
-        dispatch(activeToast({ type: 'error', msg: '저장 실패' }));
+    try {
+      if (imageURL) {
+        await downloadImage(imageURL);
+        dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.CopyCompleted`) }));
       }
-    } else {
-      confirmPermission();
+    } catch {
+      dispatch(activeToast({ type: 'error', msg: t(`ToastMsg.SaveFailed`) }));
     }
   };
 
@@ -694,7 +674,7 @@ const FileUploading = (props: FileUpladState) => {
   return (
     <FileUploadWrapper>
       <div className="header">
-        <IconButton iconComponent={IconArrowLeft} width={32} height={32}></IconButton>
+        {/* <IconButton iconComponent={IconArrowLeft} width={32} height={32}></IconButton> */}
       </div>
       <div>
         <div className="title">{t(`Nova.UploadState.Uploading`, { type: t(type) })}</div>
