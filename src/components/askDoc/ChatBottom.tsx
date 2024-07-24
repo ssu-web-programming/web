@@ -1,6 +1,6 @@
 import TextArea from '../TextArea';
 import { INPUT_MAX_LENGTH } from '../../store/slices/askDoc';
-import SendCoinButton from '../buttons/SendCoinButton';
+import { ReactComponent as SendActiveIcon } from 'img/ico_send_active.svg';
 import styled, { css, FlattenSimpleInterpolation } from 'styled-components';
 import { Tip } from '../../components/askDoc/Tip';
 import {
@@ -13,11 +13,12 @@ import {
   justiSpaceBetween
 } from '../../style/cssCommon';
 import { useTranslation } from 'react-i18next';
-import { Dispatch, RefObject, SetStateAction, useEffect, useMemo, useRef } from 'react';
+import { Dispatch, SetStateAction, useEffect, useMemo, useRef } from 'react';
 import { RowWrapBox } from '../chat/RecommendBox/ChatRecommend';
 import useResizeHeight from '../hooks/useResizeHeight';
 import useLangParameterNavigate from '../hooks/useLangParameterNavigate';
 import AudioInit from '../../audio/init.mpga';
+import IconButton from 'components/buttons/IconButton';
 
 const TEXT_MAX_HEIGHT = 268;
 
@@ -165,8 +166,11 @@ export const ChatBottom = ({
             }}
           />
           {!loadingId && isActiveInput && (
-            <SendCoinButton
-              disabled={!validCheckSubmit()}
+            <IconButton
+              disable={!validCheckSubmit()}
+              cssExt={css`
+                margin-left: 8px;
+              `}
               onClick={() => {
                 if (validCheckSubmit()) {
                   setIsActiveInput(false);
@@ -174,6 +178,8 @@ export const ChatBottom = ({
                   onSubmitAskdocChat('askDoc');
                 }
               }}
+              iconSize="lg"
+              iconComponent={SendActiveIcon}
             />
           )}
         </TextBox>

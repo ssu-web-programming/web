@@ -9,7 +9,7 @@ import {
 } from '../../style/cssCommon';
 import Button from '../buttons/Button';
 import Icon from '../Icon';
-import icon_credit from '../../img/ico_credit.svg';
+import icon_credit from '../../img/ico_credit_purple.svg';
 import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '../../store/store';
 import { summarySelector } from '../../store/slices/askDocSummary';
