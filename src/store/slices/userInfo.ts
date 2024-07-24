@@ -15,7 +15,7 @@ const initialState: InitialState = {
   userInfo: {
     us: '',
     uid: '',
-    ul: ''
+    ul: '' // 8: smart, 9: pro, 4: bussiness, 12: ai basic, 13: ai plus
   }
 };
 

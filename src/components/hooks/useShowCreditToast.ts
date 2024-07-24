@@ -6,12 +6,15 @@ export const useShowCreditToast = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
-  return function (consumed: string, left: string) {
+  return function (consumed: string, left: string, type = 'common') {
     const leftCredit = left === '-1' ? t('Unlimited') : left;
     dispatch(
       activeToast({
         type: 'info',
-        msg: t(`ToastMsg.StartCreating`, { deductionCredit: consumed, leftCredit })
+        msg: t(type === 'common' ? `ToastMsg.StartCreating` : `Nova.Toast.ConsumeCredit`, {
+          deductionCredit: consumed,
+          leftCredit
+        })
       })
     );
   };

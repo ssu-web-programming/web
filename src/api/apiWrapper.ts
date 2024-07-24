@@ -1,10 +1,17 @@
-import { ERR_INVALID_SESSION, ERR_NOT_ONLINE, INVALID_PROMPT, NoCreditError } from '../error/error';
+import {
+  ERR_INVALID_SESSION,
+  ERR_NOT_ONLINE,
+  INVALID_PROMPT,
+  NoCreditError,
+  NovaNoCreditError
+} from '../error/error';
 import { lang } from '../locale';
 import Bridge from '../util/bridge';
 import { calLeftCredit } from '../util/common';
 import {
   AI_WRITE_RESPONSE_STREAM_API,
   ALLI_RESPONSE_STREAM_API,
+  NOVA_CHAT_API,
   TEXT_TO_IMAGE_API
 } from './constant';
 import usePostSplunkLog from './usePostSplunkLog';
@@ -53,14 +60,22 @@ export function apiWrapper() {
         res.status !== 200
       ) {
         if (res.ok === false && res.status === 429) {
-          const { leftCredit: current, deductionCredit: necessary } = calLeftCredit(res.headers);
-          throw new NoCreditError({ current, necessary });
+          const { leftCredit, deductionCredit } = calLeftCredit(res.headers);
+          throw new NoCreditError({
+            current: parseInt(leftCredit),
+            necessary: parseInt(deductionCredit)
+          });
         }
 
         const body = await res.json();
         if (body?.error?.code === 'invalid_prompt') throw new Error(INVALID_PROMPT);
 
         throw res;
+      } else if (api === NOVA_CHAT_API) {
+        if (res.ok === false && res.status === 429) {
+          const { leftCredit: current, deductionCredit: necessary } = calLeftCredit(res.headers);
+          throw new NovaNoCreditError({ current, necessary });
+        }
       }
 
       return {
