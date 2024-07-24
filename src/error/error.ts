@@ -15,3 +15,11 @@ export class NoCreditError extends Error {
     this.credit = credit;
   }
 }
+
+export class NovaNoCreditError extends Error {
+  credit: CreditStatus;
+  constructor(credit: CreditStatus) {
+    super(NOT_ENOUGH_CREDIT);
+    this.credit = credit;
+  }
+}

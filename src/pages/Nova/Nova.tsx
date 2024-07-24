@@ -9,7 +9,8 @@ import {
   appendChatOutput,
   addChatOutputRes,
   updateChatStatus,
-  NovaChatType
+  NovaChatType,
+  removeLastChat
 } from 'store/slices/novaHistorySlice';
 import { apiWrapper, streaming } from 'api/apiWrapper';
 import { v4 } from 'uuid';
@@ -21,7 +22,7 @@ import {
   PO_DRIVE_DOWNLOAD,
   PO_DRIVE_UPLOAD
 } from 'api/constant';
-import { insertDoc, markdownToHtml } from 'util/common';
+import { calLeftCredit, insertDoc, markdownToHtml } from 'util/common';
 import Bridge from 'util/bridge';
 import { load } from 'cheerio';
 import Icon from 'components/Icon';
@@ -44,6 +45,8 @@ import { useLocation } from 'react-router-dom';
 // import IconTextButton from 'components/buttons/IconTextButton';
 import { creditInfoSelector, InitialState } from 'store/slices/creditInfo';
 import { DriveFileInfo } from 'components/PoDrive';
+import { useShowCreditToast } from 'components/hooks/useShowCreditToast';
+import useErrorHandle from 'components/hooks/useErrorHandle';
 
 const flexCenter = css`
   display: flex;
@@ -217,6 +220,8 @@ export default function Nova() {
   const creditInfo = useAppSelector(creditInfoSelector);
   const { t } = useTranslation();
   const confirm = useConfirm();
+  const showCreditToast = useShowCreditToast();
+  const errorHandle = useErrorHandle();
 
   const [fileUploadState, setFileUploadState] = useState<FileUpladState>({
     type: '',
@@ -352,6 +357,9 @@ export default function Nova() {
         const resThreadId = res.headers.get('X-PO-AI-NOVA-API-TID') || '';
         const askType = res.headers.get('X-PO-AI-NOVA-API-ASK-TYPE') || '';
 
+        const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
+        showCreditToast(deductionCredit, leftCredit, 'nova');
+
         setFileUploadState({ type: '', state: 'ready' });
         await streaming(res, (contents) => {
           dispatch(
@@ -370,7 +378,8 @@ export default function Nova() {
         if (requestor.current?.isAborted() === true) {
           dispatch(updateChatStatus({ id, status: 'cancel' }));
         } else {
-          // TODO : error handling
+          dispatch(removeLastChat());
+          errorHandle(err);
         }
       } finally {
         dispatch(setCreating('none'));
