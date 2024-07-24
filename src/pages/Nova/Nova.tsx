@@ -36,12 +36,12 @@ import { ReactComponent as IconArrowLeft } from 'img/ico_arrow_left.svg';
 import ChatList from 'components/nova/ChatList';
 import ico_image from 'img/ico_image.svg';
 import ico_documents from 'img/ico_documents.svg';
-import stop_circle from 'img/stop_circle.svg';
+// import stop_circle from 'img/stop_circle.svg';
 import { useTranslation } from 'react-i18next';
 import { activeToast } from 'store/slices/toastSlice';
 import { selectTabSlice, setCreating } from 'store/slices/tabSlice';
 import { useLocation } from 'react-router-dom';
-import IconTextButton from 'components/buttons/IconTextButton';
+// import IconTextButton from 'components/buttons/IconTextButton';
 import { creditInfoSelector, InitialState } from 'store/slices/creditInfo';
 import { DriveFileInfo } from 'components/PoDrive';
 
@@ -147,12 +147,12 @@ const GuideExample = styled.div`
   font-size: 14px;
 `;
 
-const StopButton = styled.div`
-  position: absolute;
-  left: 50%;
-  bottom: 24px;
-  transform: translate(-50%);
-`;
+// const StopButton = styled.div`
+//   position: absolute;
+//   left: 50%;
+//   bottom: 24px;
+//   transform: translate(-50%);
+// `;
 
 export const SUPPORT_DOCUMENT_TYPE = [
   {
@@ -180,7 +180,7 @@ export const SUPPORT_DOCUMENT_TYPE = [
     extensions: '.xlsx'
   },
   {
-    mimeType: 'application/vnd.hancom.hwp',
+    mimeType: 'application/x-hwp',
     extensions: '.hwp'
   },
   {
@@ -418,10 +418,10 @@ export default function Nova() {
     }
   };
 
-  const onStop = () => {
-    requestor.current?.abort();
-    dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.StopMsg`) }));
-  };
+  // const onStop = () => {
+  //   requestor.current?.abort();
+  //   dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.StopMsg`) }));
+  // };
 
   const onCopy = async (output: string) => {
     try {
@@ -583,7 +583,7 @@ export default function Nova() {
               handleInsertDocs={handleInsertDocs}
               onSave={onSave}
             />
-            {creating !== 'none' && (
+            {/* {creating !== 'none' && (
               <StopButton onClick={onStop}>
                 <IconTextButton
                   iconPos="left"
@@ -600,7 +600,7 @@ export default function Nova() {
                   STOP
                 </IconTextButton>
               </StopButton>
-            )}
+            )} */}
           </>
         )}
       </Body>
