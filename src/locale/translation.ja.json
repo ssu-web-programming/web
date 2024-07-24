@@ -158,8 +158,7 @@
     "CompleteInsert": "挿入が完了しました。",
     "ErrorMsg": "エラーが発生しました。 もう一度やり直してください。 ({{code}}： {{msg}})",
     "ServiceErrorMsg": "サービスに問題が発生しています。 もう一度やり直してください。",
-    "UnauthorizedMsg": "この機能を使用するにはログインする必要があります。 ログイン状況をもう一度ご確認ください。",
-    "CopyCompleted": "コピーが完了しました。"
+    "UnauthorizedMsg": "この機能を使用するにはログインする必要があります。 ログイン状況をもう一度ご確認ください。"
   },
   "Offline": {
     "UnstableConnection": "サービス接続に問題が発生しました。",
