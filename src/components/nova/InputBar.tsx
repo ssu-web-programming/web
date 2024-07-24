@@ -34,6 +34,7 @@ import { SUPPORT_DOCUMENT_TYPE, SUPPORT_IMAGE_TYPE } from 'pages/Nova/Nova';
 import { useConfirm } from 'components/Confirm';
 import PoDrive, { DriveFileInfo } from 'components/PoDrive';
 import useUserInfoUtils from 'components/hooks/useUserInfoUtils';
+import { useChatNova } from 'components/hooks/useChatNova';
 
 export const flexCenter = css`
   display: flex;
@@ -166,6 +167,7 @@ export interface InputBarSubmitParam extends Pick<NovaChatType, 'input' | 'type'
 }
 
 interface InputBarProps {
+  novaHistory: NovaChatType[];
   disabled?: boolean;
   onSubmit: (param: InputBarSubmitParam) => void;
   contents?: string;
@@ -182,10 +184,14 @@ type FileUploaderProps = {
   onLoadDriveFile: (files: DriveFileInfo[]) => void;
 };
 
+const MAX_FILE_UPLOAD_SIZE_MB = 500;
+
 export default function InputBar(props: InputBarProps) {
   const dispatch = useAppDispatch();
+  const confirm = useConfirm();
+  const chatNova = useChatNova();
   const { getUploadFileLimit } = useUserInfoUtils();
-  const { disabled = false, contents = '' } = props;
+  const { novaHistory, disabled = false, contents = '' } = props;
   const [localFiles, setLocalFiles] = useState<File[]>([]);
   const [driveFiles, setDriveFiles] = useState<DriveFileInfo[]>([]);
 
@@ -208,10 +214,34 @@ export default function InputBar(props: InputBarProps) {
 
   const { t } = useTranslation();
 
-  const loadlocalFile = (files: File[]) => {
-    const limit = getUploadFileLimit();
-    // TODO : alert
-    setLocalFiles(files.splice(0, limit));
+  const loadlocalFile = async (files: File[]) => {
+    const oversize = files.filter((file) => file.size >= MAX_FILE_UPLOAD_SIZE_MB * 1024 * 1024);
+    if (oversize.length > 0) {
+      confirm({
+        title: '',
+        msg: t('Nova.Alert.OverFileUploadSize', { max: MAX_FILE_UPLOAD_SIZE_MB })!,
+        onOk: { text: t('Confirm'), callback: () => {} }
+      });
+      return;
+    }
+
+    const uploadLimit = getUploadFileLimit();
+    const uploadCnt = novaHistory.reduce((acc, cur) => {
+      const len = cur.files?.length;
+      if (!!len) return acc + len;
+      else return acc;
+    }, 0);
+    if (uploadCnt >= uploadLimit) {
+      await confirm({
+        title: '',
+        msg: t('Nova.Alert.OverMaxFileUploadCnt', { max: uploadLimit })!,
+        onOk: { text: t('Nova.NewChat.StartNewChat'), callback: chatNova.newCHat },
+        onCancel: { text: t('Cancel'), callback: () => {} }
+      });
+
+      return;
+    }
+    setLocalFiles(files);
   };
   const loadDriveFile = (files: DriveFileInfo[]) => {
     setDriveFiles(files);
