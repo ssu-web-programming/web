@@ -184,7 +184,7 @@ type FileUploaderProps = {
   onLoadDriveFile: (files: DriveFileInfo[]) => void;
 };
 
-const MAX_FILE_UPLOAD_SIZE_MB = 500;
+export const MAX_FILE_UPLOAD_SIZE_MB = 20;
 
 export default function InputBar(props: InputBarProps) {
   const dispatch = useAppDispatch();
@@ -362,6 +362,7 @@ const FileUploader = (props: FileUploaderProps) => {
   const { loadlocalFile, isAgreed, setIsAgreed, onLoadDriveFile } = props;
   const { t } = useTranslation();
   const confirm = useConfirm();
+  const { getUploadFileLimit } = useUserInfoUtils();
   const inputDocsFileRef = useRef<HTMLInputElement | null>(null);
   const inputImgFileRef = useRef<HTMLInputElement | null>(null);
 
@@ -378,6 +379,7 @@ const FileUploader = (props: FileUploaderProps) => {
       name: t(`Nova.UploadTooltip.PolarisDrive`),
       icon: { src: ico_cloud },
       onClick: async () => {
+        const uploadLimit = getUploadFileLimit();
         const ret = await confirm({
           title: t('Nova.UploadTooltip.PolarisDrive')!,
           msg: (
@@ -390,7 +392,7 @@ const FileUploader = (props: FileUploaderProps) => {
                   marginBottom: '24px',
                   marginTop: '-8px'
                 }}>
-                {t('Nova.PoDrive.Desc')}
+                {t('Nova.PoDrive.Desc', { size: MAX_FILE_UPLOAD_SIZE_MB, count: uploadLimit })}
               </div>
               <PoDrive onChange={(files: DriveFileInfo[]) => onLoadDriveFile(files)}></PoDrive>
             </>
