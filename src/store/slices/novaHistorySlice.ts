@@ -15,6 +15,10 @@ export type NovaChatType = {
   res?: string;
 
   status: 'none' | 'request' | 'stream' | 'done' | 'cancel';
+  files?: {
+    name: string;
+    type: string;
+  }[];
 };
 
 const novaHistorySlice = createSlice({

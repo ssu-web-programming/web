@@ -304,6 +304,11 @@ export default function Nova() {
         const { vsId = '', threadId = '' } = lastChat || {};
         const { input, files = [], type } = submitParam;
 
+        const fileInfo = files.map((file) => {
+          const type = file.type.split('/')[1];
+          return { name: file.name, type };
+        });
+
         const formData = new FormData();
         if (files[0]) {
           if (type === 'image' || type === 'document')
@@ -338,7 +343,7 @@ export default function Nova() {
         formData.append('vsId', vsId);
         formData.append('threadId', threadId);
 
-        dispatch(pushChat({ id, input, type, role, vsId, threadId, output: '' }));
+        dispatch(pushChat({ id, input, type, role, vsId, threadId, output: '', files: fileInfo }));
 
         requestor.current = apiWrapper();
         if (type === 'image' || type === 'document')
