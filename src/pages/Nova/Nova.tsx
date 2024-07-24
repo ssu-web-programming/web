@@ -4,7 +4,6 @@ import styled, { css } from 'styled-components';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import {
   pushChat,
-  initNovaHistory,
   novaHistorySelector,
   appendChatOutput,
   addChatOutputRes,
@@ -16,12 +15,7 @@ import { apiWrapper, streaming } from 'api/apiWrapper';
 import { v4 } from 'uuid';
 import Tooltip from 'components/Tooltip';
 import { useConfirm } from 'components/Confirm';
-import {
-  NOVA_CHAT_API,
-  NOVA_DELETE_CONVERSATION,
-  PO_DRIVE_DOWNLOAD,
-  PO_DRIVE_UPLOAD
-} from 'api/constant';
+import { NOVA_CHAT_API, PO_DRIVE_DOWNLOAD, PO_DRIVE_UPLOAD } from 'api/constant';
 import { calLeftCredit, insertDoc, markdownToHtml } from 'util/common';
 import Bridge from 'util/bridge';
 import { load } from 'cheerio';
@@ -47,6 +41,7 @@ import { creditInfoSelector, InitialState } from 'store/slices/creditInfo';
 import { DriveFileInfo } from 'components/PoDrive';
 import { useShowCreditToast } from 'components/hooks/useShowCreditToast';
 import useErrorHandle from 'components/hooks/useErrorHandle';
+import { useChatNova } from 'components/hooks/useChatNova';
 
 const flexCenter = css`
   display: flex;
@@ -222,6 +217,7 @@ export default function Nova() {
   const confirm = useConfirm();
   const showCreditToast = useShowCreditToast();
   const errorHandle = useErrorHandle();
+  const chatNova = useChatNova();
 
   const [fileUploadState, setFileUploadState] = useState<FileUpladState>({
     type: '',
@@ -400,7 +396,7 @@ export default function Nova() {
         }
       }
     },
-    [novaHistory, dispatch]
+    [novaHistory, dispatch, errorHandle, showCreditToast]
   );
 
   const newChat = async () => {
@@ -416,19 +412,7 @@ export default function Nova() {
     });
 
     if (!!ret) {
-      try {
-        const lastChat = novaHistory[novaHistory.length - 1];
-        apiWrapper().request(NOVA_DELETE_CONVERSATION, {
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          method: 'POST',
-          body: JSON.stringify({ threadId: lastChat.threadId })
-        });
-        dispatch(initNovaHistory());
-      } catch (err) {
-        console.log(err);
-      }
+      chatNova.newCHat();
     }
   };
 
@@ -619,6 +603,7 @@ export default function Nova() {
         )}
       </Body>
       <InputBar
+        novaHistory={novaHistory}
         disabled={creating !== 'none'}
         onSubmit={onSubmit}
         contents={location.state?.body}></InputBar>
@@ -688,6 +673,7 @@ const FileUploadWrapper = styled(Wrapper)`
     }
 
     .desc {
+      height: 48px;
       margin-top: 16px;
       font-weight: 400;
       font-size: 16px;
