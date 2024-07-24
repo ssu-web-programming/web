@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, Dispatch, SetStateAction } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import FileButton from 'components/FileButton';
 import IconButton from 'components/buttons/IconButton';
@@ -64,7 +64,7 @@ const FileListViewer = styled.div`
   }
 `;
 
-const FileItem = styled.div`
+export const FileItem = styled.div`
   width: fit-content;
   height: 40px;
   ${flexCenter}
@@ -169,11 +169,6 @@ interface FileListItemInfo {
   name: string;
 }
 
-type FileListProps = {
-  files: FileListItemInfo[];
-  onRemoveFile: (file: FileListItemInfo) => void;
-};
-
 type FileUploaderProps = {
   loadlocalFile: (files: File[]) => void;
   isAgreed: boolean;
@@ -231,6 +226,10 @@ export default function InputBar(props: InputBarProps) {
     setDriveFiles(driveFiles.filter((prev) => prev !== file));
   };
 
+  const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+    e.currentTarget.scrollLeft += e.deltaY;
+  };
+
   const adjustTextareaHeight = () => {
     const textarea = textAreaRef.current;
     if (textarea) {
@@ -246,10 +245,34 @@ export default function InputBar(props: InputBarProps) {
   return (
     <InputBarBase disabled={disabled}>
       {localFiles.length > 0 && (
-        <InputBar.FileList files={localFiles} onRemoveFile={handleRemoveLocalFile} />
+        <FileListViewer onWheel={handleWheel}>
+          {localFiles.map((file: FileListItemInfo) => (
+            <FileItem key={file.name}>
+              <Icon size={28} iconSrc={getFileIcon(file.name)} />
+              <span>{getFileName(file.name)}</span>
+              <IconButton
+                iconSize="lg"
+                iconComponent={DeleteIcon}
+                onClick={() => handleRemoveLocalFile(file)}
+              />
+            </FileItem>
+          ))}
+        </FileListViewer>
       )}
       {driveFiles.length > 0 && (
-        <InputBar.FileList files={driveFiles} onRemoveFile={handleRemoveDriveFile} />
+        <FileListViewer onWheel={handleWheel}>
+          {driveFiles.map((file: FileListItemInfo) => (
+            <FileItem key={file.name}>
+              <Icon size={28} iconSrc={getFileIcon(file.name)} />
+              <span>{getFileName(file.name)}</span>
+              <IconButton
+                iconSize="lg"
+                iconComponent={DeleteIcon}
+                onClick={() => handleRemoveDriveFile(file)}
+              />
+            </FileItem>
+          ))}
+        </FileListViewer>
       )}
       <InputTxtWrapper hasValue={!!text}>
         <div>
@@ -298,56 +321,6 @@ export default function InputBar(props: InputBarProps) {
     </InputBarBase>
   );
 }
-
-const FileList = (props: FileListProps) => {
-  const { files, onRemoveFile } = props;
-
-  const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
-    e.currentTarget.scrollLeft += e.deltaY;
-  };
-
-  const getFileIcon = (file: FileListItemInfo) => {
-    const fileExt = file.name.split('.').pop()?.toLowerCase();
-
-    if (!fileExt) return null;
-
-    if (['docx', 'doc'].includes(fileExt)) {
-      return ico_docs_docx;
-    } else if (['xlsx', 'xls'].includes(fileExt)) {
-      return ico_docs_xlsx;
-    } else if (['pptx', 'ppt'].includes(fileExt)) {
-      return ico_docs_pptx;
-    } else if (['jpg', 'jpeg', 'png', 'gif'].includes(fileExt)) {
-      return ico_docs_img;
-    } else if (fileExt === 'odt') {
-      return ico_docs_odt;
-    } else {
-      return ico_docs_hwp;
-    }
-  };
-
-  const getFileName = (file: FileListItemInfo) => {
-    const fileName = file.name;
-    if (fileName.length > 20) {
-      const fileExt = fileName.split('.').pop() || '';
-      const fileNameWithoutExt = fileName.slice(0, 20 - fileExt.length - 1);
-      return `${fileNameWithoutExt}…${fileExt}`;
-    }
-    return fileName;
-  };
-
-  return (
-    <FileListViewer onWheel={handleWheel}>
-      {files.map((file: FileListItemInfo) => (
-        <FileItem key={file.name}>
-          <Icon size={28} iconSrc={getFileIcon(file)} />
-          <span>{getFileName(file)}</span>
-          <IconButton iconSize="lg" iconComponent={DeleteIcon} onClick={() => onRemoveFile(file)} />
-        </FileItem>
-      ))}
-    </FileListViewer>
-  );
-};
 
 const FileUploader = (props: FileUploaderProps) => {
   const { loadlocalFile, isAgreed, setIsAgreed, onLoadDriveFile } = props;
@@ -451,3 +424,33 @@ const FileUploader = (props: FileUploaderProps) => {
 
 InputBar.FileList = FileList;
 InputBar.FileUploader = FileUploader;
+
+export const getFileIcon = (name: string) => {
+  const fileExt = name.includes('.') ? name.split('.').pop() : name;
+
+  if (!fileExt) return null;
+
+  if (['docx', 'doc'].includes(fileExt)) {
+    return ico_docs_docx;
+  } else if (['xlsx', 'xls'].includes(fileExt)) {
+    return ico_docs_xlsx;
+  } else if (['pptx', 'ppt'].includes(fileExt)) {
+    return ico_docs_pptx;
+  } else if (['jpg', 'jpeg', 'png', 'gif'].includes(fileExt)) {
+    return ico_docs_img;
+  } else if (fileExt === 'odt') {
+    return ico_docs_odt;
+  } else {
+    return ico_docs_hwp;
+  }
+};
+
+export const getFileName = (name: string) => {
+  const fileName = name;
+  if (fileName.length > 20) {
+    const fileExt = fileName.split('.').pop() || '';
+    const fileNameWithoutExt = fileName.slice(0, 20 - fileExt.length - 1);
+    return `${fileNameWithoutExt}…${fileExt}`;
+  }
+  return fileName;
+};

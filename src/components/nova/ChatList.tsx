@@ -10,9 +10,10 @@ import { ReactComponent as CopyChatIcon } from 'img/ico_copy_chat.svg';
 import { ReactComponent as InsertDocsIcon } from 'img/ico_insert_docs.svg';
 import ico_user from 'img/ico_user.svg';
 import ico_ai from 'img/ico_ai.svg';
-import { InputBarSubmitParam } from './InputBar';
+import { FileItem, InputBarSubmitParam, getFileIcon, getFileName } from './InputBar';
 import { useAppSelector } from 'store/store';
 import { selectTabSlice } from 'store/slices/tabSlice';
+import Loading from 'img/agent_loading.gif';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -46,12 +47,19 @@ const Chat = styled.div`
 `;
 
 const Question = styled(Chat)`
-  align-items: center;
+  align-items: flex-start;
 
   p {
     font-weight: 500;
     line-height: 25.6px;
   }
+`;
+
+const QuestionContents = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 `;
 
 const Answer = styled(Chat)`
@@ -133,12 +141,20 @@ export default function ChatList(props: ChatListProps) {
         <ChatItem key={item.id}>
           <Question>
             <Icon size={32} iconSrc={ico_user}></Icon>
-            <p>{item.input}</p>
+            <QuestionContents>
+              <p>{item.input}</p>
+              {item.files?.map((file) => (
+                <FileItem key={file.name} style={{ width: '100%' }}>
+                  <Icon size={28} iconSrc={getFileIcon(file.type)}></Icon>
+                  <span>{getFileName(file.name)}</span>
+                </FileItem>
+              ))}
+            </QuestionContents>
           </Question>
           <Answer>
             <Icon size={32} iconSrc={ico_ai}></Icon>
             {item.status === 'request' ? (
-              <p>Loading...</p>
+              <img src={Loading} alt="loading" />
             ) : (
               <div>
                 <PreMarkdown text={item.output}>
