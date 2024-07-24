@@ -8,13 +8,19 @@ import { ReactComponent as ImageIcon } from '../../img/landscape.svg';
 import { ReactComponent as SendActiveIcon } from 'img/ico_send_active.svg';
 import { ReactComponent as SendDisabledIcon } from 'img/ico_send_disabled.svg';
 import { ReactComponent as DeleteIcon } from 'img/ico_delete.svg';
-import ico_docs_hwp from 'img/ico_docs_hwp.svg';
-import ico_docs_docx from 'img/ico_docs_docx.svg';
-import ico_docs_xlsx from 'img/ico_docs_xlsx.svg';
-import ico_docs_pptx from 'img/ico_docs_pptx.svg';
-import ico_docs_odt from 'img/ico_docs_odt.svg';
-import ico_docs_img from 'img/landscape.svg';
-
+import ico_file_doc from 'img/ico_file_doc.svg';
+import ico_file_hwp from 'img/ico_file_hwp.svg';
+import ico_file_odt from 'img/ico_file_odt.svg';
+import ico_file_xls from 'img/ico_file_xls.svg';
+import ico_file_csv from 'img/ico_file_csv.svg';
+import ico_file_ppt from 'img/ico_file_ppt.svg';
+import ico_file_pps from 'img/ico_file_pps.svg';
+import ico_file_pdf from 'img/ico_file_pdf.svg';
+import ico_file_txt from 'img/ico_file_txt.svg';
+import ico_file_img from 'img/ico_file_img.svg';
+import ico_file_word from 'img/ico_file_word.svg';
+import ico_file_slide from 'img/ico_file_slide.svg';
+import ico_file_sheet from 'img/ico_file_sheet.svg';
 import Tooltip from 'components/Tooltip';
 import ico_cloud from 'img/ico_cloud.svg';
 import ico_local from 'img/ico_local.svg';
@@ -422,7 +428,6 @@ const FileUploader = (props: FileUploaderProps) => {
   );
 };
 
-InputBar.FileList = FileList;
 InputBar.FileUploader = FileUploader;
 
 export const getFileIcon = (name: string) => {
@@ -430,19 +435,31 @@ export const getFileIcon = (name: string) => {
 
   if (!fileExt) return null;
 
-  if (['docx', 'doc'].includes(fileExt)) {
-    return ico_docs_docx;
-  } else if (['xlsx', 'xls'].includes(fileExt)) {
-    return ico_docs_xlsx;
-  } else if (['pptx', 'ppt'].includes(fileExt)) {
-    return ico_docs_pptx;
-  } else if (['jpg', 'jpeg', 'png', 'gif'].includes(fileExt)) {
-    return ico_docs_img;
-  } else if (fileExt === 'odt') {
-    return ico_docs_odt;
-  } else {
-    return ico_docs_hwp;
-  }
+  const fileIconMap: { [key: string]: string } = {
+    doc: ico_file_doc,
+    docx: ico_file_doc,
+    hwp: ico_file_hwp,
+    hwpx: ico_file_hwp,
+    odt: ico_file_odt,
+    xlsx: ico_file_xls,
+    xls: ico_file_xls,
+    csv: ico_file_csv,
+    ppt: ico_file_ppt,
+    pptx: ico_file_ppt,
+    pps: ico_file_pps,
+    ppsx: ico_file_pps,
+    pdf: ico_file_pdf,
+    txt: ico_file_txt,
+    jpg: ico_file_img,
+    jpeg: ico_file_img,
+    png: ico_file_img,
+    gif: ico_file_img,
+    word: ico_file_word,
+    slide: ico_file_slide,
+    sheet: ico_file_sheet
+  };
+
+  return fileIconMap[fileExt] || null;
 };
 
 export const getFileName = (name: string) => {
