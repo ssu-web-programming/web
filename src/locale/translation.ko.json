@@ -339,7 +339,7 @@
       "OverMaxFileUploadCnt": "하나의 대화에서는 {{max}}개의 파일만 첨부해 질문할 수 있어요. 새 대화를 실행해 질문을 이어가 보세요!"
     },
     "PoDrive": {
-      "Desc": "500MB 이하의 파일 N개까지 선택할 수 있어요."
+      "Desc": "{{size}}MB 이하의 파일 {{count}}개까지 선택할 수 있어요."
     },
     "Toast": {
       "ConsumeCredit": "{{deductionCredit}}크레딧이 사용되었어요. 남은 크레딧: {{leftCredit}}"

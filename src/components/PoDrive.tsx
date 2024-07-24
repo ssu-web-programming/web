@@ -11,6 +11,7 @@ import { ReactComponent as IconImage } from 'img/landscape.svg';
 import { ReactComponent as IconCloud } from 'img/cloud.svg';
 import { ReactComponent as IconRight } from 'img/angle_right.svg';
 import CheckBox from './CheckBox';
+import { MAX_FILE_UPLOAD_SIZE_MB } from './nova/InputBar';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -137,6 +138,7 @@ export default function PoDrive(props: PoDriveProps) {
       } = await res.json();
       if (!success) throw new Error('failed to get file list');
       return list
+        .filter((item: DriveFileInfo) => item.size <= MAX_FILE_UPLOAD_SIZE_MB * 1024 * 1024)
         .sort((l: DriveFileInfo, r: DriveFileInfo) =>
           l.fileType < r.fileType ? -1 : l.fileType > r.fileType ? 1 : 0
         )
@@ -182,6 +184,7 @@ export default function PoDrive(props: PoDriveProps) {
 
   useEffect(() => {
     initFileList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

@@ -41,12 +41,13 @@ const useErrorHandle = () => {
         })
       );
     } else if (error instanceof NovaNoCreditError) {
-      const { current, necessary } = error.credit;
+      const { current } = error.credit;
       const platform = getPlatform();
 
       switch (ul) {
         case '12':
-        case '13': {
+        case '13':
+        case '4': {
           switch (platform) {
             case ClientType.ios:
             case ClientType.mac: {

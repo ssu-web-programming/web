@@ -56,26 +56,26 @@ export function apiWrapper() {
       if (
         (api === AI_WRITE_RESPONSE_STREAM_API ||
           api === TEXT_TO_IMAGE_API ||
-          api === ALLI_RESPONSE_STREAM_API) &&
+          api === ALLI_RESPONSE_STREAM_API ||
+          api === NOVA_CHAT_API) &&
         res.status !== 200
       ) {
         if (res.ok === false && res.status === 429) {
           const { leftCredit, deductionCredit } = calLeftCredit(res.headers);
-          throw new NoCreditError({
-            current: parseInt(leftCredit),
-            necessary: parseInt(deductionCredit)
-          });
+          const current = parseInt(leftCredit);
+          const necessary = parseInt(deductionCredit);
+          throw api === NOVA_CHAT_API
+            ? new NovaNoCreditError({ current, necessary })
+            : new NoCreditError({
+                current,
+                necessary
+              });
         }
 
         const body = await res.json();
         if (body?.error?.code === 'invalid_prompt') throw new Error(INVALID_PROMPT);
 
         throw res;
-      } else if (api === NOVA_CHAT_API) {
-        if (res.ok === false && res.status === 429) {
-          const { leftCredit: current, deductionCredit: necessary } = calLeftCredit(res.headers);
-          throw new NovaNoCreditError({ current, necessary });
-        }
       }
 
       return {
