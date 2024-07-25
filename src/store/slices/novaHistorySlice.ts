@@ -17,7 +17,6 @@ export type NovaChatType = {
   status: 'none' | 'request' | 'stream' | 'done' | 'cancel';
   files?: {
     name: string;
-    type: string;
   }[];
 };
 

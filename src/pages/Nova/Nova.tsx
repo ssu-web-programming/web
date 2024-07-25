@@ -331,8 +331,7 @@ export default function Nova() {
         const { input, files = [], type } = submitParam;
 
         const fileInfo = files.map((file) => {
-          const type = file.type.split('/')[1];
-          return { name: file.name, type };
+          return { name: file.name };
         });
 
         const formData = new FormData();

@@ -160,7 +160,7 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
               <p>{item.input}</p>
               {item.files?.map((file) => (
                 <FileItem key={file.name} style={{ width: '100%' }}>
-                  <Icon size={28} iconSrc={getFileIcon(file.type)}></Icon>
+                  <Icon size={28} iconSrc={getFileIcon(file.name)}></Icon>
                   <span>{getFileName(file.name)}</span>
                 </FileItem>
               ))}
