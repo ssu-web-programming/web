@@ -92,12 +92,17 @@ const FileItem = styled.div`
   }
 
   .info {
+    width: 100%;
+    overflow: hidden;
     .name {
       font-weight: 400;
       font-size: 16px;
       line-height: 16px;
 
       margin-bottom: 4px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
     }
 
     .createdAt {
@@ -126,6 +131,7 @@ export interface DriveFileInfo {
 }
 
 interface PoDriveProps {
+  max: number;
   onChange: (files: DriveFileInfo[]) => void;
   target: string;
 }
@@ -246,11 +252,13 @@ export default function PoDrive(props: PoDriveProps) {
                   setNavi((prev) => [...prev, item]);
                 } else if (item.fileType === 'FILE') {
                   if (selected.includes(item)) {
-                    setSelected((prev) => prev.filter((prevItem) => prevItem !== item));
-                    props.onChange(selected.filter((prevItem) => prevItem !== item));
+                    const sel = selected.filter((prevItem) => prevItem !== item);
+                    setSelected(sel);
+                    props.onChange(sel);
                   } else {
-                    setSelected((prev) => [...prev, item]);
-                    props.onChange([...selected, item]);
+                    const sel = [...selected, item].slice(props.max * -1);
+                    setSelected(sel);
+                    props.onChange(sel);
                   }
                 }
               }}>

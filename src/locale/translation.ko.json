@@ -340,7 +340,8 @@
         "ios": "AI 크레딧을 추가로 구매하고, 스마트한 NOVA와 함께 작업 효율을 높여 보세요!"
       },
       "OverFileUploadSize": "파일의 크기가 너무 큽니다. {{max}}MB 이하의 파일만 선택해 주세요.",
-      "OverMaxFileUploadCnt": "하나의 대화에서는 {{max}}개의 파일만 첨부해 질문할 수 있어요. 새 대화를 실행해 질문을 이어가 보세요!"
+      "OverMaxFileUploadCnt": "하나의 대화에서는 {{max}}개의 파일만 첨부해 질문할 수 있어요. 새 대화를 실행해 질문을 이어가 보세요!",
+      "OverMaxFileUploadCntOnce": "{{max}}개의 파일만 첨부해 질문할 수 있어요. 파일을 다시 선택해 주세요."
     },
     "PoDrive": {
       "Desc": "{{size}}MB 이하의 파일 {{count}}개까지 선택할 수 있어요."
