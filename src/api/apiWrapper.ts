@@ -99,7 +99,11 @@ export function apiWrapper() {
   };
 }
 
-export const streaming = async (res: Response, output: (contents: string) => void) => {
+export const streaming = async (
+  res: Response,
+  output: (contents: string) => void,
+  parser = (data: string) => data
+) => {
   const reader = res.body?.getReader();
   const enc = new TextDecoder('utf-8');
 
@@ -110,6 +114,7 @@ export const streaming = async (res: Response, output: (contents: string) => voi
     }
 
     const decodeStr = enc.decode(value);
-    output(decodeStr);
+    const parsed = parser(decodeStr);
+    output(parsed);
   }
 };
