@@ -1,8 +1,10 @@
+import { novaHistorySelector } from 'store/slices/novaHistorySlice';
 import { userInfoSelector } from 'store/slices/userInfo';
 import { useAppSelector } from 'store/store';
 
 export default function useUserInfoUtils() {
   const { userInfo } = useAppSelector(userInfoSelector);
+  const novaHistory = useAppSelector(novaHistorySelector);
 
   const getUploadFileLimit = () => {
     switch (userInfo.ul) {
@@ -18,5 +20,15 @@ export default function useUserInfoUtils() {
     }
   };
 
-  return { getUploadFileLimit };
+  const getDriveSelectFileCount = () => {
+    const uploadLimit = getUploadFileLimit();
+    const uploadCnt = novaHistory.reduce((acc, cur) => {
+      const len = cur.files?.length;
+      if (!!len) return acc + len;
+      else return acc;
+    }, 0);
+    return uploadLimit - uploadCnt;
+  };
+
+  return { getUploadFileLimit, getDriveSelectFileCount };
 }
