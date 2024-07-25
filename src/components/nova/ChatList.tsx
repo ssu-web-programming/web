@@ -1,3 +1,4 @@
+import { useEffect, forwardRef, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { NovaChatType } from 'store/slices/novaHistorySlice';
@@ -97,6 +98,7 @@ interface ChatListProps {
   onCopy: (text: string) => void;
   handleInsertDocs: (history: NovaChatType) => void;
   onSave: (history: NovaChatType) => void;
+  scrollHandler: (e: React.UIEvent<HTMLDivElement>) => void;
 }
 
 type ChatButtonType = {
@@ -106,10 +108,11 @@ type ChatButtonType = {
   clickHandler: (arg: NovaChatType | any) => void;
 };
 
-export default function ChatList(props: ChatListProps) {
-  const { novaHistory, onSubmit, onCopy, handleInsertDocs, onSave } = props;
+const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
+  const { novaHistory, onSubmit, onCopy, handleInsertDocs, onSave, scrollHandler } = props;
   const { t } = useTranslation();
   const { creating } = useAppSelector(selectTabSlice);
+  const scrollRef = useRef<HTMLDivElement | null>(null);
 
   const CHAT_BUTTON_LIST: ChatButtonType[] = [
     {
@@ -132,11 +135,23 @@ export default function ChatList(props: ChatListProps) {
     }
   ];
 
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTo(0, scrollRef.current.scrollHeight);
+    }
+  }, [novaHistory]);
+
   return (
     <Wrapper
-      ref={(el) => {
-        if (el) el.scrollTo(0, el.scrollHeight);
-      }}>
+      ref={(node) => {
+        scrollRef.current = node;
+        if (typeof ref === 'function') {
+          ref(node);
+        } else if (ref) {
+          (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
+        }
+      }}
+      onScroll={(ref) => scrollHandler(ref)}>
       {novaHistory.map((item) => (
         <ChatItem key={item.id}>
           <Question>
@@ -185,4 +200,6 @@ export default function ChatList(props: ChatListProps) {
       ))}
     </Wrapper>
   );
-}
+});
+
+export default ChatList;
