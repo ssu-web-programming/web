@@ -422,7 +422,11 @@ export default function Nova() {
                     }
                     case 'annotations': {
                       const ref = JSON.parse(json.data);
-                      return `\n\n${t('Nova.Chat.ReferFile', { file: ref.join(', ') })}`;
+                      return `\n\n${t('Nova.Chat.ReferFile', {
+                        file: ref
+                          .map((r: string) => (r.length > 20 ? `${r.slice(0, 20)}...` : r))
+                          .join(', ')
+                      })}`;
                     }
                     default:
                       return '';
