@@ -315,6 +315,7 @@
     "Chat": {
       "Recreating": "다시 생성",
       "Copy": "복사",
+      "ReferFile": "'{{file}}' 파일을 참고했어요.",
       "InsertDoc": {
         "Title": "문서에 삽입",
         "Fail": {

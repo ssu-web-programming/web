@@ -16,7 +16,7 @@ import { v4 } from 'uuid';
 import Tooltip from 'components/Tooltip';
 import { useConfirm } from 'components/Confirm';
 import { NOVA_CHAT_API, PO_DRIVE_DOWNLOAD, PO_DRIVE_UPLOAD } from 'api/constant';
-import { calLeftCredit, insertDoc, markdownToHtml } from 'util/common';
+import { insertDoc, markdownToHtml } from 'util/common';
 import Bridge from 'util/bridge';
 import { load } from 'cheerio';
 import Icon from 'components/Icon';
@@ -27,7 +27,6 @@ import ico_credit_info from 'img/ico_credit_line.svg';
 import ico_credit from 'img/ico_credit_gray.svg';
 import { ReactComponent as IconMessagePlus } from 'img/ico_message_plus.svg';
 import { ReactComponent as AgentFraphic } from 'img/agent_graphic.svg';
-import { ReactComponent as IconArrowLeft } from 'img/ico_arrow_left.svg';
 import ChatList from 'components/nova/ChatList';
 import ico_image from 'img/ico_image.svg';
 import ico_documents from 'img/ico_documents.svg';
@@ -358,22 +357,53 @@ export default function Nova() {
         const resThreadId = res.headers.get('X-PO-AI-NOVA-API-TID') || '';
         const askType = res.headers.get('X-PO-AI-NOVA-API-ASK-TYPE') || '';
 
-        const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
-        showCreditToast(deductionCredit, leftCredit, 'nova');
-
         setFileUploadState({ type: '', state: 'ready' });
-        await streaming(res, (contents) => {
-          dispatch(
-            appendChatOutput({
-              id,
-              output: contents,
-              vsId: resVsId,
-              threadId: resThreadId,
-              askType: askType as NovaChatType['askType']
-            })
-          );
-          result += contents;
-        });
+        await streaming(
+          res,
+          (contents) => {
+            dispatch(
+              appendChatOutput({
+                id,
+                output: contents,
+                vsId: resVsId,
+                threadId: resThreadId,
+                askType: askType as NovaChatType['askType']
+              })
+            );
+            result += contents;
+          },
+          (obj: string) => {
+            return obj
+              .toString()
+              .split('\n\n')
+              .map((element: string) => {
+                const data = element.replace('data:', '');
+                try {
+                  if (!data) throw new Error();
+                  const json = JSON.parse(data);
+                  switch (json.event_type) {
+                    case 'text': {
+                      return json.data;
+                    }
+                    case 'credit': {
+                      const { deductCredit, remainCredit } = json.data;
+                      showCreditToast(deductCredit, remainCredit, 'nova');
+                      return '';
+                    }
+                    case 'annotations': {
+                      const ref = JSON.parse(json.data);
+                      return `\n\n${t('Nova.Chat.ReferFile', { file: ref.join(', ') })}`;
+                    }
+                    default:
+                      return '';
+                  }
+                } catch (error) {
+                  return '';
+                }
+              })
+              .join('');
+          }
+        );
         dispatch(updateChatStatus({ id, status: 'done' }));
       } catch (err) {
         if (requestor.current?.isAborted() === true) {
@@ -396,7 +426,7 @@ export default function Nova() {
         }
       }
     },
-    [novaHistory, dispatch, errorHandle, showCreditToast]
+    [novaHistory, dispatch, errorHandle, showCreditToast, t]
   );
 
   const newChat = async () => {
