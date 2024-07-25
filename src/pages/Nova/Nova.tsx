@@ -27,6 +27,7 @@ import ico_credit_info from 'img/ico_credit_line.svg';
 import ico_credit from 'img/ico_credit_gray.svg';
 import { ReactComponent as IconMessagePlus } from 'img/ico_message_plus.svg';
 import { ReactComponent as AgentFraphic } from 'img/agent_graphic.svg';
+import { ReactComponent as IconArrowLeft } from 'img/ico_arrow_left.svg';
 import ChatList from 'components/nova/ChatList';
 import ico_image from 'img/ico_image.svg';
 import ico_documents from 'img/ico_documents.svg';
@@ -151,6 +152,29 @@ const GuideExample = styled.div`
 //   transform: translate(-50%);
 // `;
 
+const ScrollDownButton = styled.div`
+  width: 48px;
+  height: 48px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  bottom: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  box-shadow: 0px 2px 8px 0px #0000001a;
+
+  button {
+    transform: rotate(-90deg);
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+  }
+`;
+
 export const SUPPORT_DOCUMENT_TYPE = [
   {
     mimeType: 'application/msword',
@@ -217,6 +241,8 @@ export default function Nova() {
   const showCreditToast = useShowCreditToast();
   const errorHandle = useErrorHandle();
   const chatNova = useChatNova();
+  const [showScrollDownBtn, setShowScrollDownBtn] = useState(false);
+  const chatListRef = useRef<HTMLDivElement>(null);
 
   const [fileUploadState, setFileUploadState] = useState<FileUpladState>({
     type: '',
@@ -305,8 +331,7 @@ export default function Nova() {
         const { input, files = [], type } = submitParam;
 
         const fileInfo = files.map((file) => {
-          const type = file.type.split('/')[1];
-          return { name: file.name, type };
+          return { name: file.name };
         });
 
         const formData = new FormData();
@@ -551,6 +576,20 @@ export default function Nova() {
     }
   };
 
+  const handleOnScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const el = e.currentTarget;
+    const scrollPosition = el.scrollTop;
+    const totalScrollHeight = el.scrollHeight;
+    const visibleHeight = el.clientHeight;
+    const scrollPercentage = (scrollPosition / (totalScrollHeight - visibleHeight)) * 100;
+
+    if (scrollPercentage <= 30) {
+      setShowScrollDownBtn(true);
+    } else if (scrollPercentage > 30) {
+      setShowScrollDownBtn(false);
+    }
+  };
+
   return (
     <Wrapper>
       <Header>
@@ -590,6 +629,8 @@ export default function Nova() {
               onCopy={onCopy}
               handleInsertDocs={handleInsertDocs}
               onSave={onSave}
+              scrollHandler={handleOnScroll}
+              ref={chatListRef}
             />
             {/* {creating !== 'none' && (
               <StopButton onClick={onStop}>
@@ -609,6 +650,21 @@ export default function Nova() {
                 </IconTextButton>
               </StopButton>
             )} */}
+
+            {creating === 'none' && showScrollDownBtn && (
+              <ScrollDownButton>
+                <IconButton
+                  iconComponent={IconArrowLeft}
+                  iconSize="md"
+                  onClick={() => {
+                    chatListRef.current?.scrollTo({
+                      top: chatListRef.current?.scrollHeight,
+                      behavior: 'smooth'
+                    });
+                  }}
+                />
+              </ScrollDownButton>
+            )}
           </>
         )}
       </Body>
