@@ -1,8 +1,8 @@
 import { apiWrapper } from 'api/apiWrapper';
 import { PO_DRIVE_LIST } from 'api/constant';
-import { SUPPORT_FILE_TYPE, SUPPORT_IMAGE_TYPE } from 'pages/Nova/Nova';
+import { SUPPORT_DOCUMENT_TYPE, SUPPORT_IMAGE_TYPE } from 'pages/Nova/Nova';
 import { useCallback, useEffect, useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { getFileExtension } from 'util/common';
 
 import { ReactComponent as IconFolder } from 'img/folder.svg';
@@ -12,8 +12,9 @@ import { ReactComponent as IconCloud } from 'img/cloud.svg';
 import { ReactComponent as IconRight } from 'img/angle_right.svg';
 import CheckBox from './CheckBox';
 import { MAX_FILE_UPLOAD_SIZE_MB } from './nova/InputBar';
+import { CustomScrollbar } from 'style/cssCommon';
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ disabled: boolean }>`
   width: 100%;
   height: 270px;
   background-color: white;
@@ -23,6 +24,13 @@ const Wrapper = styled.div`
 
   border: 1px solid #c9cdd2;
   border-radius: 8px;
+
+  ${({ disabled }) =>
+    disabled &&
+    css`
+      pointer-events: none;
+      opacity: 0.5;
+    `}
 `;
 
 const Navi = styled.div`
@@ -57,6 +65,8 @@ const FileList = styled.div`
   overflow-y: auto;
 
   padding: 0px 24px;
+
+  ${CustomScrollbar}
 `;
 
 const FileItem = styled.div`
@@ -117,14 +127,27 @@ export interface DriveFileInfo {
 
 interface PoDriveProps {
   onChange: (files: DriveFileInfo[]) => void;
+  target: string;
 }
 
 export default function PoDrive(props: PoDriveProps) {
+  const [state, setState] = useState<'none' | 'request'>('request');
   const [selected, setSelected] = useState<DriveFileInfo[]>([]);
   const [filelist, setFilelist] = useState<DriveFileInfo[]>([]);
-  const [navi, setNavi] = useState<DriveFileInfo[]>([]);
+  const [navi, setNavi] = useState<DriveFileInfo[]>([
+    {
+      fileId: '',
+      fileName: 'drive',
+      fileType: 'DIR',
+      lastModified: 0,
+      size: 0,
+      name: '',
+      type: ''
+    }
+  ]);
   const getFileList = async (fileId?: DriveFileInfo['fileId']) => {
     try {
+      setState('request');
       const { res } = await apiWrapper().request(PO_DRIVE_LIST, {
         headers: {
           'Content-Type': 'application/json'
@@ -143,9 +166,10 @@ export default function PoDrive(props: PoDriveProps) {
           l.fileType < r.fileType ? -1 : l.fileType > r.fileType ? 1 : 0
         )
         .map((item: DriveFileInfo) => {
-          const type = SUPPORT_FILE_TYPE.find(
-            (type) => type.extensions === getFileExtension(item.fileName)
-          )?.mimeType;
+          const ext = getFileExtension(item.fileName);
+          const supports =
+            props.target === 'nova-image' ? SUPPORT_IMAGE_TYPE : SUPPORT_DOCUMENT_TYPE;
+          const type = supports.find((type) => type.extensions === ext)?.mimeType;
 
           return {
             ...item,
@@ -157,6 +181,8 @@ export default function PoDrive(props: PoDriveProps) {
     } catch (err) {
       console.log(err);
       return []; // TODO : error handling
+    } finally {
+      setState('none');
     }
   };
 
@@ -172,7 +198,6 @@ export default function PoDrive(props: PoDriveProps) {
   }, []);
 
   const moveFolder = async (fileId: DriveFileInfo['fileId']) => {
-    setFilelist([]);
     const list = await getFileList(fileId);
     setFilelist(list);
   };
@@ -188,7 +213,7 @@ export default function PoDrive(props: PoDriveProps) {
   }, []);
 
   return (
-    <Wrapper>
+    <Wrapper disabled={state === 'request'}>
       <Navi>
         <IconFolder></IconFolder>
         {navi.map((item, index) => {

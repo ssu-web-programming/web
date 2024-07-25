@@ -394,7 +394,9 @@ const FileUploader = (props: FileUploaderProps) => {
                 }}>
                 {t('Nova.PoDrive.Desc', { size: MAX_FILE_UPLOAD_SIZE_MB, count: uploadLimit })}
               </div>
-              <PoDrive onChange={(files: DriveFileInfo[]) => onLoadDriveFile(files)}></PoDrive>
+              <PoDrive
+                onChange={(files: DriveFileInfo[]) => onLoadDriveFile(files)}
+                target={target}></PoDrive>
             </>
           ),
           onOk: { text: t('Confirm'), callback: () => {} },
