@@ -48,7 +48,7 @@ function getAgentVersion(userAgent: string) {
 export const getPlatform = () => getAgentPlatform(navigator.userAgent);
 export const getVersion = () => getAgentVersion(navigator.userAgent);
 
-async function fileToString(file: Blob) {
+export async function fileToString(file: Blob) {
   return new Promise<string>((resolve, reject) => {
     try {
       let reader = new FileReader();
@@ -489,8 +489,8 @@ export function useCopyClipboard() {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
 
-  return async (markdown: string) => {
-    const clipboardData = await makeClipboardData(markdown);
+  return async (target: string | Blob) => {
+    const clipboardData = await makeClipboardData(target);
     await Bridge.callBridgeApi('copyClipboard', JSON.stringify(clipboardData));
     dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.CopyCompleted`) }));
   };
