@@ -619,7 +619,7 @@ export default function Nova() {
     try {
       if (imageURL) {
         await downloadImage(imageURL);
-        dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.CopyCompleted`) }));
+        dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.SaveCompleted`) }));
       }
     } catch {
       dispatch(activeToast({ type: 'error', msg: t(`ToastMsg.SaveFailed`) }));
