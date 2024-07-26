@@ -265,39 +265,40 @@
     "CreditInfo": {
       "Title": "Creditガイド",
       "Chat": "チャット",
-      "DocImgQuery": "",
+      "DocImgQuery": "ドキュメント/画像クエリ",
       "ImgGen": "画像生成"
     },
     "SearchGuide": {
       "Title": "スマートAIに何でも質問してください。",
       "SubTitle": "ドキュメントを添付し、チャットで主な内容を素早く把握してください。",
-      "Example1": "",
-      "Example2": ""
+      "Example1": "ロマンチックな夕焼けを描いて。",
+      "Example2": "この文書の会議には誰が出席しましたか?"
     },
     "ActionWindow": {
-      "Placeholder": ""
+      "Placeholder": "NOVAに何でも聞いてください。"
     },
     "UploadTooltip": {
       "PolarisDrive": "Polaris Drive",
       "Local": "現在のデバイス"
     },
     "UploadState": {
-      "Uploading": "",
-      "upload": "回答を提供するために、ファイルをPolaris Office Driveに保存しています。",
+      "Uploading": "{{type}}をアップロード中です。",
+      "upload_image": "回答を提供するために、ファイルをPolaris Officeドライブに保存しています。",
+      "upload_document": "回答を提供するために、ファイルをPolaris Officeドライブに保存しています。",
       "wait": "回答を準備中です。少々お待ちください。",
       "delay": "もうすぐ終わります。もう少しお待ちください！"
     },
     "Chat": {
       "Recreating": "再生成",
       "Copy": "コピー",
-      "ReferFile": "",
+      "ReferFile": "'{{file}}' ファイルを参考にしました。",
       "InsertDoc": {
         "Title": "文書に挿入",
         "Fail": {
           "Title": "ドキュメントの挿入に失敗しました。",
           "Msg": {
-            "Home": "",
-            "Viewer": ""
+            "Home": "ドキュメントに挿入するには、まずドキュメントを開いて編集モードにしてください。",
+            "Viewer": "ドキュメントに挿入するには、編集モードにしてください。"
           }
         }
       }
@@ -305,39 +306,48 @@
     "Alert": {
       "UnsupportFile": "このファイルはサポートされていません。{{support}}ファイルのみをアップロードしてください。",
       "NoCredit": {
-        "Title": "",
+        "Title": "クレジットがすべて使い切られました :(",
         "UpgradeLevel": "プランに加入してスマートNOVAで仕事の効率を上げましょう！",
-        "ios": "",
-        "android": ""
+        "ios": "Polaris OfficeのウェブサイトでAIクレジットを追加購入して、作業効率を高めましょう！",
+        "android": "AIクレジットを追加購入して、スマートなNOVAと一緒に作業効率を高めましょう！"
       },
       "NotEnoughCredit": {
-        "Title": "",
-        "ios": ""
+        "Title": "クレジットが不足しています :(",
+        "ios": "AIクレジットを追加購入して、スマートなNOVAと一緒に作業効率を高めましょう！"
       },
       "OverFileUploadSize": "ファイルサイズが大きすぎます。{{max}}MB未満のファイルのみを選択してください。",
       "ReQuestion": "残念ながら、回答が遅れているようです。申し訳ありませんが、もう一度質問していただけますか？",
       "LackOfStorage": "Polaris Driveに十分なストレージ容量がありません。ファイルをアップロードするのに十分なストレージ容量があることを確認してください。",
       "LowResolution": "画像の解像度が低いため、分析が困難です。より高解像度の画像をアップロードしてください。",
       "DamagedFile": "ファイルが破損しているためアップロードできません。ファイルをもう一度確認してください。",
-      "FailedToInsertIntoDoc": "ドキュメントへの挿入に失敗しました。もう一度やり直してください。"
+      "FailedToInsertIntoDoc": "ドキュメントへの挿入に失敗しました。もう一度やり直してください。",
+      "Checking": {
+        "Title": "機能点検中",
+        "Msg": "機能を点検中です。しばらくしてから再試行してください。"
+      },
+      "Error": "エラーが発生しました。しばらくしてからもう一度お試しください。"
     },
     "Confirm": {
       "NewChat": {
-        "StartNewChat": "",
+        "StartNewChat": "新しい会話を始める",
         "Title": "新しい会話を始めませんか?",
         "Msg": "「新しい会話」を選択すると、これまでの会話の内容は削除されます。",
         "Ok": "新しい会話を始める"
       },
       "PersonalInfo": {
-        "Title": "個人情報を第三者に提供することに同意する（必須）",
-        "Msg": "",
+        "Title": "個人情報の収集および利用同意（必須）",
+        "Msg1": "AI NOVAサービスを提供するために、以下の個人情報の収集および利用に関する同意が必要です。",
+        "Msg2": "1. 収集する個人情報の項目および利用目的\n- ユーザーが入力したテキスト、生成された結果データ：対話型AIサービスの提供、サービス機能の改善、新機能の開発、パーソナライズされた情報の提供\n- アップロードされたファイル：対話型AIサービスの提供\n2. 保有および利用期間\n- ユーザーが入力したテキストおよび生成された結果データの場合、{{chatRetention}}\n- アップロードされたファイルの場合、{{fileRetention}}",
+        "Msg3": "この個人情報の収集および利用に同意しない権利があり、同意を拒否した場合、サービスを利用することはできません。",
         "Ok": "同意する",
-        "Cancel": "同意しない"
+        "Cancel": "同意しない",
+        "ChatRetention": "収集後3年間",
+        "FileRetention": "会話の有効期限が切れてから最大1日"
       },
       "Access": {
-        "Msg": "",
-        "Ok": "",
-        "Cancel": ""
+        "Msg": "'Polaris Office'にデバイスの写真、メディア、ファイルへのアクセスを許可しますか？",
+        "Ok": "許可する",
+        "Cancel": "拒否する"
       },
       "GoToDocSearch": {
         "Msg": "「ドキュメント検索」に進むと、NOVAとの会話は終了します。移動してもよろしいですか?",
@@ -348,7 +358,7 @@
         "Ok": "移動"
       },
       "OverMaxFileUploadCnt": "1回の会話で最大{{max}}個のファイルを添付できます。質問を続けるには、新しい会話を開始してください。",
-      "OverMaxFileUploadCntOnce": ""
+      "OverMaxFileUploadCntOnce": "{{max}}個のファイルのみ添付して質問できます。ファイルを再選択してください。"
     },
     "PoDrive": {
       "Desc": "{{size}}MB未満のファイルを最大{{count}}個選択できます。"

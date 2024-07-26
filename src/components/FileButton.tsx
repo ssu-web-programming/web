@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useConfirm } from './Confirm';
 import { useTranslation } from 'react-i18next';
 import { SUPPORT_IMAGE_TYPE } from 'pages/Nova/Nova';
+import { CustomScrollbar } from 'style/cssCommon';
 
 const FileButtonBase = styled.button`
   width: fit-content;
@@ -13,6 +14,15 @@ const FileButtonBase = styled.button`
 const Label = styled.label`
   display: block;
   cursor: pointer;
+`;
+
+const PersonalInfoContents = styled.div`
+  max-height: 372px;
+  overflow-y: auto;
+  ${CustomScrollbar}
+  text-align: left;
+  font-size: 15px;
+  letter-spacing: -0.3px;
 `;
 
 interface FileButtonProps extends React.ComponentPropsWithoutRef<'input'> {
@@ -31,8 +41,8 @@ const FileButton = forwardRef<HTMLInputElement, FileButtonProps>((props, ref) =>
   const confirm = useConfirm();
 
   const Msg = () => {
-    const chatRetention = '수집 후 3년';
-    const fileRetention = '대화 만료 후 최대 1일';
+    const chatRetention = t('Nova.Confirm.PersonalInfo.ChatRetention');
+    const fileRetention = t('Nova.Confirm.PersonalInfo.FileRetention');
 
     const msg1 = t('Nova.Confirm.PersonalInfo.Msg1');
     const msg2 = t('Nova.Confirm.PersonalInfo.Msg2', {
@@ -42,6 +52,7 @@ const FileButton = forwardRef<HTMLInputElement, FileButtonProps>((props, ref) =>
     const msg3 = t('Nova.Confirm.PersonalInfo.Msg3');
     const msg = `${msg1}\n\n${msg2}\n\n${msg3}`;
     const splitMsg = msg.split('\n');
+    console.log(splitMsg);
 
     const boldText = (line: string) => {
       const mappings = [
@@ -52,30 +63,31 @@ const FileButton = forwardRef<HTMLInputElement, FileButtonProps>((props, ref) =>
       for (const { key, highlight } of mappings) {
         if (line.includes(key)) {
           const [before, after] = line.split(key);
+
           return (
-            <p>
+            <div>
               {before}
               {highlight}
               {after}
-            </p>
+            </div>
           );
         }
       }
 
       return (
-        <p>
+        <div>
           {line}
           <br />
-        </p>
+        </div>
       );
     };
 
     return (
-      <div>
+      <PersonalInfoContents>
         {splitMsg.map((line, idx) => (
-          <p key={idx}>{boldText(line)}</p>
+          <div key={idx}>{boldText(line)}</div>
         ))}
-      </div>
+      </PersonalInfoContents>
     );
   };
 
