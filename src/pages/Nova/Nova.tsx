@@ -480,11 +480,11 @@ export default function Nova() {
 
   const newChat = async () => {
     const ret = await confirm({
-      title: t(`Nova.NewChat.Title`)!,
-      msg: t(`Nova.NewChat.Msg`),
+      title: t(`Nova.Confirm.NewChat.Title`)!,
+      msg: t(`Nova.Confirm.NewChat.Msg`),
       onCancel: { text: t(`Cancel`)!, callback: () => {} },
       onOk: {
-        text: t(`Nova.NewChat.Ok`),
+        text: t(`Nova.Confirm.NewChat.Ok`),
         callback: () => {}
       },
       direction: 'row'
