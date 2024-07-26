@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useConfirm } from './Confirm';
 import { useTranslation } from 'react-i18next';
 import { SUPPORT_IMAGE_TYPE } from 'pages/Nova/Nova';
+import { CustomScrollbar } from 'style/cssCommon';
 
 const FileButtonBase = styled.button`
   width: fit-content;
@@ -13,6 +14,12 @@ const FileButtonBase = styled.button`
 const Label = styled.label`
   display: block;
   cursor: pointer;
+`;
+
+const PersonalInfoContents = styled.div`
+  max-height: 360px;
+  overflow-y: scroll;
+  ${CustomScrollbar}
 `;
 
 interface FileButtonProps extends React.ComponentPropsWithoutRef<'input'> {
@@ -31,8 +38,8 @@ const FileButton = forwardRef<HTMLInputElement, FileButtonProps>((props, ref) =>
   const confirm = useConfirm();
 
   const Msg = () => {
-    const chatRetention = '수집 후 3년';
-    const fileRetention = '대화 만료 후 최대 1일';
+    const chatRetention = t('Nova.Confirm.PersonalInfo.ChatRetention');
+    const fileRetention = t('Nova.Confirm.PersonalInfo.FileRetention');
 
     const msg1 = t('Nova.Confirm.PersonalInfo.Msg1');
     const msg2 = t('Nova.Confirm.PersonalInfo.Msg2', {
@@ -71,11 +78,11 @@ const FileButton = forwardRef<HTMLInputElement, FileButtonProps>((props, ref) =>
     };
 
     return (
-      <div>
+      <PersonalInfoContents>
         {splitMsg.map((line, idx) => (
           <p key={idx}>{boldText(line)}</p>
         ))}
-      </div>
+      </PersonalInfoContents>
     );
   };
 

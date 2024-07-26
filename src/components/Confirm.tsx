@@ -90,8 +90,8 @@ const Confirm = () => {
             onClick={onOk.callback}
             cssExt={css`
               order: ${direction === 'row' ? 2 : undefined};
-              min-width: 195px;
-              width: 295px;
+              min-width: 92px;
+              width: 100%;
             `}>
             {onOk.text}
           </Button>
@@ -104,6 +104,7 @@ const Confirm = () => {
               cssExt={css`
                 order: ${direction === 'row' ? 1 : undefined};
                 min-width: 92px;
+                width: 100%;
               `}>
               {onCancel.text}
             </Button>
