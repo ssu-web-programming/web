@@ -233,6 +233,7 @@ export const SUPPORT_FILE_TYPE = [...SUPPORT_DOCUMENT_TYPE, ...SUPPORT_IMAGE_TYP
 
 interface FileUpladState extends Pick<NovaChatType, 'type'> {
   state: 'ready' | 'upload' | 'wait' | 'delay';
+  progress: number;
 }
 export default function Nova() {
   const location = useLocation();
@@ -251,7 +252,8 @@ export default function Nova() {
 
   const [fileUploadState, setFileUploadState] = useState<FileUpladState>({
     type: '',
-    state: 'ready'
+    state: 'ready',
+    progress: 0
   });
 
   const CREDIT_NAME_MAP: { [key: string]: string } = {
@@ -275,7 +277,8 @@ export default function Nova() {
     for (const file of files) {
       const formData = new FormData();
       formData.append('uploadFile', file);
-      const { res } = await apiWrapper().request(PO_DRIVE_UPLOAD, {
+      requestor.current = apiWrapper();
+      const { res } = await requestor.current.request(PO_DRIVE_UPLOAD, {
         body: formData,
         method: 'POST'
       });
@@ -302,27 +305,23 @@ export default function Nova() {
 
   const reqDownloadFiles = async (files: DriveFileInfo[]) => {
     const ret = [];
-    try {
-      for (const file of files) {
-        const { res } = await apiWrapper().request(PO_DRIVE_DOWNLOAD, {
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ fileId: file.fileId }),
-          method: 'POST'
-        });
-        const blob = await res.blob();
-        ret.push({
-          success: true,
-          file: new File([blob], file.name, { type: file.type }),
-          data: { fileId: file.fileId }
-        });
-      }
-    } catch (err) {
-      console.log(err);
-    } finally {
-      return ret;
+    for (const file of files) {
+      requestor.current = apiWrapper();
+      const { res } = await requestor.current.request(PO_DRIVE_DOWNLOAD, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ fileId: file.fileId }),
+        method: 'POST'
+      });
+      const blob = await res.blob();
+      ret.push({
+        success: true,
+        file: new File([blob], file.name, { type: file.type }),
+        data: { fileId: file.fileId }
+      });
     }
+    return ret;
   };
 
   const onSubmit = useCallback(
@@ -342,7 +341,7 @@ export default function Nova() {
         const formData = new FormData();
         if (files[0]) {
           if (type === 'image' || type === 'document')
-            setFileUploadState({ type, state: 'upload' });
+            setFileUploadState({ type, state: 'upload', progress: 20 });
           if (files[0] instanceof File) {
             const resUpload = await reqUploadFiles(files as File[]);
             resUpload
@@ -376,18 +375,34 @@ export default function Nova() {
         dispatch(pushChat({ id, input, type, role, vsId, threadId, output: '', files: fileInfo }));
 
         requestor.current = apiWrapper();
-        if (type === 'image' || type === 'document')
-          setFileUploadState((prev) => ({ ...prev, state: 'wait' }));
+        let timer = null;
+        if (type === 'image' || type === 'document') {
+          setFileUploadState((prev) => ({ ...prev, state: 'wait', progress: 40 }));
+          const progressing = () =>
+            setTimeout(() => {
+              setFileUploadState((prev) => {
+                if (prev.progress < 90) {
+                  timer = progressing();
+                  return { ...prev, progress: prev.progress + 10 };
+                } else {
+                  return { ...prev, state: 'delay', progress: 90 };
+                }
+              });
+            }, 3000);
+          timer = progressing();
+        }
         const { res } = await requestor.current.request(NOVA_CHAT_API, {
           body: formData,
           method: 'POST'
         });
 
+        if (timer) clearTimeout(timer);
+
         const resVsId = res.headers.get('X-PO-AI-NOVA-API-VSID') || '';
         const resThreadId = res.headers.get('X-PO-AI-NOVA-API-TID') || '';
         const askType = res.headers.get('X-PO-AI-NOVA-API-ASK-TYPE') || '';
 
-        setFileUploadState({ type: '', state: 'ready' });
+        setFileUploadState({ type: '', state: 'ready', progress: 0 });
         await streaming(
           res,
           (contents) => {
@@ -448,7 +463,7 @@ export default function Nova() {
         }
       } finally {
         dispatch(setCreating('none'));
-        setFileUploadState({ type: '', state: 'ready' });
+        setFileUploadState({ type: '', state: 'ready', progress: 0 });
         const html = await markdownToHtml(result);
         if (html) {
           const $ = load(html);
@@ -674,7 +689,13 @@ export default function Nova() {
         disabled={creating !== 'none'}
         onSubmit={onSubmit}
         contents={location.state?.body}></InputBar>
-      {<FileUploading {...fileUploadState}></FileUploading>}
+      {
+        <FileUploading
+          {...fileUploadState}
+          onClickBack={() => {
+            requestor.current?.abort();
+          }}></FileUploading>
+      }
     </Wrapper>
   );
 }
@@ -727,10 +748,9 @@ const FileUploadWrapper = styled(Wrapper)`
     flex-direction: row;
     padding: 12px 16px;
     align-items: center;
-    border-bottom: 4px solid #6f3ad0;
   }
 
-  > div {
+  .contents {
     padding: 40px 24px;
 
     .title {
@@ -753,17 +773,36 @@ const FileUploadWrapper = styled(Wrapper)`
   }
 `;
 
-const FileUploading = (props: FileUpladState) => {
-  const { type, state } = props;
+const ProgressBar = styled.div<{ progress: number }>`
+  width: ${({ progress }) => progress}%;
+  height: 4px;
+  padding: 0px;
+  background-color: #6f3ad0;
+`;
+
+interface FileUploadingProps extends FileUpladState {
+  onClickBack: () => void;
+  progress: number;
+}
+
+const FileUploading = (props: FileUploadingProps) => {
+  const { type, state, progress, onClickBack } = props;
   const { t } = useTranslation();
   if (state === 'ready') return null;
 
   return (
     <FileUploadWrapper>
       <div className="header">
-        {/* <IconButton iconComponent={IconArrowLeft} width={32} height={32}></IconButton> */}
+        {state === 'upload' && (
+          <IconButton
+            iconComponent={IconArrowLeft}
+            width={32}
+            height={32}
+            onClick={onClickBack}></IconButton>
+        )}
       </div>
-      <div>
+      <ProgressBar progress={progress}></ProgressBar>
+      <div className="contents">
         <div className="title">{t(`Nova.UploadState.Uploading`, { type: t(type) })}</div>
         <div className="desc">{t(`Nova.UploadState.${state}`)}</div>
       </div>
