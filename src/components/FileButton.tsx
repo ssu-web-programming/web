@@ -52,7 +52,6 @@ const FileButton = forwardRef<HTMLInputElement, FileButtonProps>((props, ref) =>
     const msg3 = t('Nova.Confirm.PersonalInfo.Msg3');
     const msg = `${msg1}\n\n${msg2}\n\n${msg3}`;
     const splitMsg = msg.split('\n');
-    console.log(splitMsg);
 
     const boldText = (line: string) => {
       const mappings = [
