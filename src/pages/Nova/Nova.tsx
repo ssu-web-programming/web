@@ -804,7 +804,11 @@ const FileUploading = (props: FileUploadingProps) => {
       <ProgressBar progress={progress}></ProgressBar>
       <div className="contents">
         <div className="title">{t(`Nova.UploadState.Uploading`, { type: t(type) })}</div>
-        <div className="desc">{t(`Nova.UploadState.${state}`)}</div>
+        <div className="desc">
+          {state === 'upload'
+            ? t(`Nova.UploadState.${state}_${type}`)
+            : t(`Nova.UploadState.${state}`)}
+        </div>
       </div>
       <div className="agentImage">
         <AgentFraphic></AgentFraphic>
