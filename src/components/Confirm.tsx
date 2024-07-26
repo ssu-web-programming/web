@@ -43,6 +43,8 @@ const ContentArea = styled.div`
     color: red;
     font-weight: 700;
   }
+
+  color: var(--gray-gray-80-02);
 `;
 
 const Footer = styled.div<{ direction?: 'column' | 'row' }>`

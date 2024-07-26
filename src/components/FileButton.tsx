@@ -30,12 +30,61 @@ const FileButton = forwardRef<HTMLInputElement, FileButtonProps>((props, ref) =>
   const inputId = `__upload-local-file-${target}`;
   const confirm = useConfirm();
 
+  const Msg = () => {
+    const chatRetention = '수집 후 3년';
+    const fileRetention = '대화 만료 후 최대 1일';
+
+    const msg1 = t('Nova.Confirm.PersonalInfo.Msg1');
+    const msg2 = t('Nova.Confirm.PersonalInfo.Msg2', {
+      chatRetention,
+      fileRetention
+    });
+    const msg3 = t('Nova.Confirm.PersonalInfo.Msg3');
+    const msg = `${msg1}\n\n${msg2}\n\n${msg3}`;
+    const splitMsg = msg.split('\n');
+
+    const boldText = (line: string) => {
+      const mappings = [
+        { key: chatRetention, highlight: <strong>{chatRetention}</strong> },
+        { key: fileRetention, highlight: <strong>{fileRetention}</strong> }
+      ];
+
+      for (const { key, highlight } of mappings) {
+        if (line.includes(key)) {
+          const [before, after] = line.split(key);
+          return (
+            <p>
+              {before}
+              {highlight}
+              {after}
+            </p>
+          );
+        }
+      }
+
+      return (
+        <p>
+          {line}
+          <br />
+        </p>
+      );
+    };
+
+    return (
+      <div>
+        {splitMsg.map((line, idx) => (
+          <p key={idx}>{boldText(line)}</p>
+        ))}
+      </div>
+    );
+  };
+
   const handleAgreement = async () => {
     if (isAgreed === true) return;
 
     const isConfirmed = await confirm({
       title: t(`Nova.Confirm.PersonalInfo.Title`)!,
-      msg: t(`Nova.Confirm.PersonalInfo.Msg`),
+      msg: <Msg />,
       onCancel: { text: t(`Nova.Confirm.PersonalInfo.Cancel`), callback: () => {} },
       onOk: {
         text: t(`Nova.Confirm.PersonalInfo.Ok`),
