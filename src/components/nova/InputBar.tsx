@@ -215,6 +215,7 @@ export default function InputBar(props: InputBarProps) {
   const { t } = useTranslation();
 
   const loadlocalFile = async (files: File[]) => {
+    setDriveFiles([]);
     const oversize = files.filter((file) => file.size >= MAX_FILE_UPLOAD_SIZE_MB * 1024 * 1024);
     if (oversize.length > 0) {
       confirm({
@@ -238,12 +239,21 @@ export default function InputBar(props: InputBarProps) {
         onOk: { text: t('Nova.Confirm.NewChat.StartNewChat'), callback: chatNova.newCHat },
         onCancel: { text: t('Cancel'), callback: () => {} }
       });
+      return;
+    }
 
+    if (files.length > uploadLimit) {
+      await confirm({
+        title: '',
+        msg: t('Nova.Alert.OverMaxFileUploadCntOnce', { max: uploadLimit - uploadCnt })!,
+        onOk: { text: t('Confirm'), callback: () => {} }
+      });
       return;
     }
     setLocalFiles(files);
   };
   const loadDriveFile = (files: DriveFileInfo[]) => {
+    setLocalFiles([]);
     setDriveFiles(files);
   };
 
@@ -362,7 +372,8 @@ const FileUploader = (props: FileUploaderProps) => {
   const { loadlocalFile, isAgreed, setIsAgreed, onLoadDriveFile } = props;
   const { t } = useTranslation();
   const confirm = useConfirm();
-  const { getUploadFileLimit } = useUserInfoUtils();
+  const chatNova = useChatNova();
+  const { getUploadFileLimit, getDriveSelectFileCount } = useUserInfoUtils();
   const inputDocsFileRef = useRef<HTMLInputElement | null>(null);
   const inputImgFileRef = useRef<HTMLInputElement | null>(null);
 
@@ -379,7 +390,16 @@ const FileUploader = (props: FileUploaderProps) => {
       name: t(`Nova.UploadTooltip.PolarisDrive`),
       icon: { src: ico_cloud },
       onClick: async () => {
-        const uploadLimit = getUploadFileLimit();
+        const uploadLimit = getDriveSelectFileCount();
+        if (uploadLimit === 0) {
+          await confirm({
+            title: '',
+            msg: t('Nova.Alert.OverMaxFileUploadCnt', { max: getUploadFileLimit() })!,
+            onOk: { text: t('Nova.NewChat.StartNewChat'), callback: chatNova.newCHat },
+            onCancel: { text: t('Cancel'), callback: () => {} }
+          });
+          return;
+        }
         const ret = await confirm({
           title: t('Nova.UploadTooltip.PolarisDrive')!,
           msg: (
@@ -395,6 +415,7 @@ const FileUploader = (props: FileUploaderProps) => {
                 {t('Nova.PoDrive.Desc', { size: MAX_FILE_UPLOAD_SIZE_MB, count: uploadLimit })}
               </div>
               <PoDrive
+                max={uploadLimit}
                 onChange={(files: DriveFileInfo[]) => onLoadDriveFile(files)}
                 target={target}></PoDrive>
             </>

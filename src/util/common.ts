@@ -1,7 +1,7 @@
 import { load } from 'cheerio';
 import { marked } from 'marked';
 import { convert } from 'html-to-text';
-import Bridge from './bridge';
+import Bridge, { fileToString } from './bridge';
 
 const renderer = new marked.Renderer();
 renderer.link = (href, title, text) => {
@@ -93,16 +93,23 @@ export const openNewWindow = (url: string) => {
   Bridge.callBridgeApi('openWindow', url);
 };
 
-export const makeClipboardData = async (markdown: string) => {
-  const html = await markdownToHtml(markdown);
+export const makeClipboardData = async (target: string | Blob) => {
   let text = undefined;
-  if (html) {
-    text = convert(html);
+  let html = undefined;
+  let image = undefined;
+  if (typeof target !== 'string') {
+    image = await fileToString(target);
+  } else {
+    html = await markdownToHtml(target);
+    if (html) {
+      text = convert(html);
+    }
   }
 
   return {
     text,
-    html
+    html,
+    image
   };
 };
 

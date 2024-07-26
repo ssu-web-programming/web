@@ -17,7 +17,7 @@ import Tooltip from 'components/Tooltip';
 import { useConfirm } from 'components/Confirm';
 import { NOVA_CHAT_API, PO_DRIVE_DOWNLOAD, PO_DRIVE_UPLOAD } from 'api/constant';
 import { insertDoc, markdownToHtml } from 'util/common';
-import Bridge from 'util/bridge';
+import Bridge, { useCopyClipboard } from 'util/bridge';
 import { load } from 'cheerio';
 import Icon from 'components/Icon';
 import IconButton from 'components/buttons/IconButton';
@@ -205,6 +205,10 @@ export const SUPPORT_DOCUMENT_TYPE = [
     extensions: '.hwp'
   },
   {
+    mimeType: 'application/vnd.hancom.hwp',
+    extensions: '.hwp'
+  },
+  {
     mimeType: 'application/pdf',
     extensions: '.pdf'
   }
@@ -241,6 +245,7 @@ export default function Nova() {
   const showCreditToast = useShowCreditToast();
   const errorHandle = useErrorHandle();
   const chatNova = useChatNova();
+  const copyClipboard = useCopyClipboard();
   const [showScrollDownBtn, setShowScrollDownBtn] = useState(false);
   const chatListRef = useRef<HTMLDivElement>(null);
 
@@ -417,7 +422,11 @@ export default function Nova() {
                     }
                     case 'annotations': {
                       const ref = JSON.parse(json.data);
-                      return `\n\n${t('Nova.Chat.ReferFile', { file: ref.join(', ') })}`;
+                      return `\n\n${t('Nova.Chat.ReferFile', {
+                        file: ref
+                          .map((r: string) => (r.length > 20 ? `${r.slice(0, 20)}...` : r))
+                          .join(', ')
+                      })}`;
                     }
                     default:
                       return '';
@@ -481,22 +490,14 @@ export default function Nova() {
       const imgReg = /!\[.*\]\((.*)\)/;
       const imgURL = output.match(imgReg)?.[1];
 
+      let target = undefined;
       if (imgURL) {
         const data = await fetch(String(imgURL));
-        const bolb = await data.blob();
-
-        await navigator.clipboard.write([
-          new ClipboardItem({
-            'image/png': bolb
-          })
-        ]);
+        target = await data.blob();
       } else {
-        const html = await markdownToHtml(output);
-        const blob = new Blob([html!], { type: 'text/html' });
-        const data = [new ClipboardItem({ ['text/html']: blob })];
-
-        await navigator.clipboard.write(data);
+        target = output;
       }
+      copyClipboard(target);
 
       dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.CopyCompleted`) }));
     } catch {
