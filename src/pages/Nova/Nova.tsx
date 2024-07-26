@@ -9,7 +9,7 @@ import {
   addChatOutputRes,
   updateChatStatus,
   NovaChatType,
-  removeLastChat
+  removeChat
 } from 'store/slices/novaHistorySlice';
 import { apiWrapper, streaming } from 'api/apiWrapper';
 import { v4 } from 'uuid';
@@ -42,6 +42,7 @@ import { DriveFileInfo } from 'components/PoDrive';
 import { useShowCreditToast } from 'components/hooks/useShowCreditToast';
 import useErrorHandle from 'components/hooks/useErrorHandle';
 import { useChatNova } from 'components/hooks/useChatNova';
+import { ExceedPoDriveLimitError } from 'error/error';
 
 const flexCenter = css`
   display: flex;
@@ -457,8 +458,17 @@ export default function Nova() {
       } catch (err) {
         if (requestor.current?.isAborted() === true) {
           dispatch(updateChatStatus({ id, status: 'cancel' }));
+        } else if (err instanceof ExceedPoDriveLimitError) {
+          await confirm({
+            title: '',
+            msg: t(`Nova.Alert.LackOfStorage`),
+            onOk: {
+              text: t('Confirm'),
+              callback: () => {}
+            }
+          });
         } else {
-          dispatch(removeLastChat());
+          dispatch(removeChat(id));
           errorHandle(err);
         }
       } finally {
