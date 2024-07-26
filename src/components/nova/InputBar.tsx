@@ -234,8 +234,8 @@ export default function InputBar(props: InputBarProps) {
     if (uploadCnt >= uploadLimit) {
       await confirm({
         title: '',
-        msg: t('Nova.Alert.OverMaxFileUploadCnt', { max: uploadLimit })!,
-        onOk: { text: t('Nova.NewChat.StartNewChat'), callback: chatNova.newCHat },
+        msg: t('Nova.Confirm.OverMaxFileUploadCnt', { max: uploadLimit })!,
+        onOk: { text: t('Nova.Confirm.NewChat.StartNewChat'), callback: chatNova.newCHat },
         onCancel: { text: t('Cancel'), callback: () => {} }
       });
 
