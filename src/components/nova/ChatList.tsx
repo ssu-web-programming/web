@@ -99,6 +99,7 @@ interface ChatListProps {
   handleInsertDocs: (history: NovaChatType) => void;
   onSave: (history: NovaChatType) => void;
   scrollHandler: (e: React.UIEvent<HTMLDivElement>) => void;
+  expiredNOVA: boolean;
 }
 
 type ChatButtonType = {
@@ -109,7 +110,8 @@ type ChatButtonType = {
 };
 
 const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
-  const { novaHistory, onSubmit, onCopy, handleInsertDocs, onSave, scrollHandler } = props;
+  const { novaHistory, onSubmit, onCopy, handleInsertDocs, onSave, scrollHandler, expiredNOVA } =
+    props;
   const { t } = useTranslation();
   const { creating } = useAppSelector(selectTabSlice);
   const scrollRef = useRef<HTMLDivElement | null>(null);
@@ -178,7 +180,7 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                 <ChatButtonWrapper>
                   {CHAT_BUTTON_LIST.filter((btn) => btn.status.includes(item.status)).map((btn) => (
                     <IconTextButton
-                      disable={creating !== 'none'}
+                      disable={creating !== 'none' || expiredNOVA === true}
                       key={btn.text}
                       width={'fit'}
                       iconSize={24}

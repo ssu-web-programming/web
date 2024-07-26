@@ -13,6 +13,7 @@ export type NovaChatType = {
   askType: '' | 'document' | 'image';
 
   res?: string;
+  expiredTime?: number;
 
   status: 'none' | 'request' | 'stream' | 'done' | 'cancel';
   files?: {
@@ -30,7 +31,9 @@ const novaHistorySlice = createSlice({
     },
     appendChatOutput: (
       state,
-      action: PayloadAction<Pick<NovaChatType, 'id' | 'output' | 'vsId' | 'threadId' | 'askType'>>
+      action: PayloadAction<
+        Pick<NovaChatType, 'id' | 'output' | 'vsId' | 'threadId' | 'askType' | 'expiredTime'>
+      >
     ) => {
       return state.map((chat) =>
         chat.id === action.payload.id

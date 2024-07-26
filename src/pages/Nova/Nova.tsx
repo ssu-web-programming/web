@@ -231,7 +231,7 @@ export const SUPPORT_IMAGE_TYPE = [
 ];
 
 export const SUPPORT_FILE_TYPE = [...SUPPORT_DOCUMENT_TYPE, ...SUPPORT_IMAGE_TYPE];
-
+export const NOVA_EXPIRED_TIME = 1800000;
 interface FileUpladState extends Pick<NovaChatType, 'type'> {
   state: 'ready' | 'upload' | 'wait' | 'delay';
   progress: number;
@@ -250,6 +250,7 @@ export default function Nova() {
   const copyClipboard = useCopyClipboard();
   const [showScrollDownBtn, setShowScrollDownBtn] = useState(false);
   const chatListRef = useRef<HTMLDivElement>(null);
+  const [expiredNOVA, setExpiredNOVA] = useState<boolean>(false);
 
   const [fileUploadState, setFileUploadState] = useState<FileUpladState>({
     type: '',
@@ -269,6 +270,8 @@ export default function Nova() {
     name: CREDIT_NAME_MAP[item.serviceType] || 'Unknown',
     icon: { src: ico_credit, txt: String(item.deductCredit) }
   }));
+
+  const expireTimer = useRef<NodeJS.Timeout | null>(null);
 
   const requestor = useRef<ReturnType<typeof apiWrapper>>();
 
@@ -402,6 +405,12 @@ export default function Nova() {
         const resVsId = res.headers.get('X-PO-AI-NOVA-API-VSID') || '';
         const resThreadId = res.headers.get('X-PO-AI-NOVA-API-TID') || '';
         const askType = res.headers.get('X-PO-AI-NOVA-API-ASK-TYPE') || '';
+        const expiredTime = res.headers.get('X-PO-AI-NOVA-API-EXPIRED-TIME') || '';
+
+        if (expireTimer.current) clearTimeout(expireTimer.current);
+        expireTimer.current = setTimeout(() => {
+          setExpiredNOVA(true);
+        }, NOVA_EXPIRED_TIME);
 
         setFileUploadState({ type: '', state: 'ready', progress: 0 });
         await streaming(
@@ -413,7 +422,8 @@ export default function Nova() {
                 output: contents,
                 vsId: resVsId,
                 threadId: resThreadId,
-                askType: askType as NovaChatType['askType']
+                askType: askType as NovaChatType['askType'],
+                expiredTime: parseInt(expiredTime)
               })
             );
             result += contents;
@@ -433,7 +443,7 @@ export default function Nova() {
                     }
                     case 'credit': {
                       const { deductCredit, remainCredit } = json.data;
-                      showCreditToast(deductCredit, remainCredit, 'nova');
+                      showCreditToast(`${deductCredit}`, `${remainCredit}`, 'nova');
                       return '';
                     }
                     case 'annotations': {
@@ -485,8 +495,22 @@ export default function Nova() {
         }
       }
     },
-    [novaHistory, dispatch, errorHandle, showCreditToast, t]
+    [novaHistory, dispatch, errorHandle, showCreditToast, t, confirm]
   );
+
+  if (expiredNOVA) {
+    confirm({
+      title: '',
+      msg: t('Nova.Alert.ExpiredNOVA'),
+      onOk: {
+        text: t(`Confirm`),
+        callback: () => {
+          setExpiredNOVA(false);
+          chatNova.newCHat();
+        }
+      }
+    });
+  }
 
   const newChat = async () => {
     const ret = await confirm({
@@ -650,6 +674,7 @@ export default function Nova() {
         ) : (
           <>
             <ChatList
+              expiredNOVA={expiredNOVA}
               novaHistory={novaHistory}
               onSubmit={onSubmit}
               onCopy={onCopy}
@@ -696,7 +721,7 @@ export default function Nova() {
       </Body>
       <InputBar
         novaHistory={novaHistory}
-        disabled={creating !== 'none'}
+        disabled={creating !== 'none' || expiredNOVA === true}
         onSubmit={onSubmit}
         contents={location.state?.body}></InputBar>
       {
