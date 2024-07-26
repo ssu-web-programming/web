@@ -63,8 +63,8 @@ const novaHistorySlice = createSlice({
           : chat
       );
     },
-    removeLastChat: (state) => {
-      return state.slice(0, state.length - 1);
+    removeChat: (state, action: PayloadAction<NovaChatType['id']>) => {
+      return state.filter((chat) => chat.id !== action.payload);
     }
   }
 });
@@ -75,7 +75,7 @@ export const {
   appendChatOutput,
   addChatOutputRes,
   updateChatStatus,
-  removeLastChat
+  removeChat
 } = novaHistorySlice.actions;
 export const novaHistorySelector = (state: RootState) => state.novaHistory;
 export default novaHistorySlice.reducer;

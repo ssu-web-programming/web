@@ -1,6 +1,7 @@
 import {
   ERR_INVALID_SESSION,
   ERR_NOT_ONLINE,
+  ExceedPoDriveLimitError,
   INVALID_PROMPT,
   NoCreditError,
   NovaNoCreditError
@@ -12,6 +13,7 @@ import {
   AI_WRITE_RESPONSE_STREAM_API,
   ALLI_RESPONSE_STREAM_API,
   NOVA_CHAT_API,
+  PO_DRIVE_UPLOAD,
   TEXT_TO_IMAGE_API
 } from './constant';
 import usePostSplunkLog from './usePostSplunkLog';
@@ -75,6 +77,12 @@ export function apiWrapper() {
         const body = await res.json();
         if (body?.error?.code === 'invalid_prompt') throw new Error(INVALID_PROMPT);
 
+        throw res;
+      }
+
+      if (api === PO_DRIVE_UPLOAD && res.status === 400) {
+        const body = await res.json();
+        if (body?.error?.code === '100') throw new ExceedPoDriveLimitError();
         throw res;
       }
 
