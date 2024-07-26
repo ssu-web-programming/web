@@ -17,9 +17,12 @@ const Label = styled.label`
 `;
 
 const PersonalInfoContents = styled.div`
-  max-height: 360px;
-  overflow-y: scroll;
+  max-height: 372px;
+  overflow-y: auto;
   ${CustomScrollbar}
+  text-align: left;
+  font-size: 15px;
+  letter-spacing: -0.3px;
 `;
 
 interface FileButtonProps extends React.ComponentPropsWithoutRef<'input'> {
@@ -49,6 +52,7 @@ const FileButton = forwardRef<HTMLInputElement, FileButtonProps>((props, ref) =>
     const msg3 = t('Nova.Confirm.PersonalInfo.Msg3');
     const msg = `${msg1}\n\n${msg2}\n\n${msg3}`;
     const splitMsg = msg.split('\n');
+    console.log(splitMsg);
 
     const boldText = (line: string) => {
       const mappings = [
@@ -59,28 +63,29 @@ const FileButton = forwardRef<HTMLInputElement, FileButtonProps>((props, ref) =>
       for (const { key, highlight } of mappings) {
         if (line.includes(key)) {
           const [before, after] = line.split(key);
+
           return (
-            <p>
+            <div>
               {before}
               {highlight}
               {after}
-            </p>
+            </div>
           );
         }
       }
 
       return (
-        <p>
+        <div>
           {line}
           <br />
-        </p>
+        </div>
       );
     };
 
     return (
       <PersonalInfoContents>
         {splitMsg.map((line, idx) => (
-          <p key={idx}>{boldText(line)}</p>
+          <div key={idx}>{boldText(line)}</div>
         ))}
       </PersonalInfoContents>
     );
