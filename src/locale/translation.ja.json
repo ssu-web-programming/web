@@ -347,10 +347,8 @@
         "Msg": "その他のAI機能を使用するとNOVAとの会話は終了します。移動してもよろしいですか?",
         "Ok": "移動"
       },
-      "OverMaxFileUploadCnt": {
-        "Msg": "1回の会話で最大{{max}}個のファイルを添付できます。質問を続けるには、新しい会話を開始してください。",
-        "Ok": ""
-      }
+      "OverMaxFileUploadCnt": "1回の会話で最大{{max}}個のファイルを添付できます。質問を続けるには、新しい会話を開始してください。",
+      "OverMaxFileUploadCntOnce": ""
     },
     "PoDrive": {
       "Desc": "{{size}}MB未満のファイルを最大{{count}}個選択できます。"

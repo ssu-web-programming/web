@@ -245,7 +245,7 @@ export default function InputBar(props: InputBarProps) {
     if (files.length > uploadLimit) {
       await confirm({
         title: '',
-        msg: t('Nova.Alert.OverMaxFileUploadCntOnce', { max: uploadLimit - uploadCnt })!,
+        msg: t('Nova.Confirm.OverMaxFileUploadCntOnce', { max: uploadLimit - uploadCnt })!,
         onOk: { text: t('Confirm'), callback: () => {} }
       });
       return;
@@ -394,8 +394,8 @@ const FileUploader = (props: FileUploaderProps) => {
         if (uploadLimit === 0) {
           await confirm({
             title: '',
-            msg: t('Nova.Alert.OverMaxFileUploadCnt', { max: getUploadFileLimit() })!,
-            onOk: { text: t('Nova.NewChat.StartNewChat'), callback: chatNova.newCHat },
+            msg: t('Nova.Confirm.OverMaxFileUploadCnt', { max: getUploadFileLimit() })!,
+            onOk: { text: t('Nova.Confirm.NewChat.StartNewChat'), callback: chatNova.newCHat },
             onCancel: { text: t('Cancel'), callback: () => {} }
           });
           return;

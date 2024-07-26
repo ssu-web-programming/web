@@ -347,10 +347,8 @@
         "Msg": "If you use other AI features, the conversation with NOVA will end. Do you still want to move?",
         "Ok": "Move"
       },
-      "OverMaxFileUploadCnt": {
-        "Msg": "You can attach up to {{max}} files in one conversation. Start a new conversation to continue asking questions!",
-        "Ok": ""
-      }
+      "OverMaxFileUploadCnt": "You can attach up to {{max}} files in one conversation. Start a new conversation to continue asking questions!",
+      "OverMaxFileUploadCntOnce": ""
     },
     "PoDrive": {
       "Desc": "You can select up to {{count}} files under {{size}}MB."
