@@ -288,6 +288,24 @@ export default function InputBar(props: InputBarProps) {
     adjustTextareaHeight();
   }, [text]);
 
+  const handleOnClick = () => {
+    const targetFiles = localFiles.length > 0 ? localFiles : driveFiles;
+    const fileType =
+      targetFiles.length < 1
+        ? ''
+        : targetFiles[0].type.split('/')[0].includes('image')
+        ? 'image'
+        : 'document';
+    props.onSubmit({
+      input: text,
+      files: localFiles.length > 0 ? localFiles : driveFiles.length > 0 ? driveFiles : [],
+      type: fileType
+    });
+    setText('');
+    setLocalFiles([]);
+    setDriveFiles([]);
+  };
+
   return (
     <InputBarBase disabled={disabled}>
       {localFiles.length > 0 && (
@@ -328,6 +346,15 @@ export default function InputBar(props: InputBarProps) {
             onChange={handleChange}
             maxLength={1000}
             ref={textAreaRef}
+            onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+              if (e.key === 'Enter' && e.ctrlKey) {
+                if (text.length > 0) {
+                  handleOnClick();
+                } else {
+                  e.preventDefault();
+                }
+              }
+            }}
           />
         </div>
       </InputTxtWrapper>
@@ -342,23 +369,7 @@ export default function InputBar(props: InputBarProps) {
         <IconBtnWrapper>
           <IconButton
             disable={text.length < 1}
-            onClick={() => {
-              const targetFiles = localFiles.length > 0 ? localFiles : driveFiles;
-              const fileType =
-                targetFiles.length < 1
-                  ? ''
-                  : targetFiles[0].type.split('/')[0].includes('image')
-                  ? 'image'
-                  : 'document';
-              props.onSubmit({
-                input: text,
-                files: localFiles.length > 0 ? localFiles : driveFiles.length > 0 ? driveFiles : [],
-                type: fileType
-              });
-              setText('');
-              setLocalFiles([]);
-              setDriveFiles([]);
-            }}
+            onClick={handleOnClick}
             iconSize="lg"
             iconComponent={text.length < 1 ? SendDisabledIcon : SendActiveIcon}
           />
