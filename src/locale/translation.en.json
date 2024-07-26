@@ -158,7 +158,9 @@
     "CompleteInsert": "Insert completed.",
     "ErrorMsg": "An error has occurred. Please try again later. ({{code}} : {{msg}})",
     "ServiceErrorMsg": "Experiencing issues with the service. Please try again later.",
-    "UnauthorizedMsg": "You need to be logged in to use this feature. Please check your login status again."
+    "UnauthorizedMsg": "You need to be logged in to use this feature. Please check your login status again.",
+    "SaveCompleted": "Saved",
+    "SaveFailed": "Failed to save"
   },
   "Offline": {
     "UnstableConnection": "Service connectivity issues!",
@@ -258,5 +260,104 @@
   "EOS": {
     "ASKDocEOSTitle": "ASK Doc V1 Service Ended",
     "ASKDocEOSDesc": "Meet the newly improved ASK Doc V2 after updating the app."
+  },
+  "Nova": {
+    "CreditInfo": {
+      "Title": "Credit Guide",
+      "Chat": "Chat",
+      "DocImgQuery": "",
+      "ImgGen": "Generate Image"
+    },
+    "SearchGuide": {
+      "Title": "Ask the smart AI anything.",
+      "SubTitle": "Attach a document and quickly grasp the main contents through chat.",
+      "Example1": "",
+      "Example2": ""
+    },
+    "ActionWindow": {
+      "Placeholder": ""
+    },
+    "UploadTooltip": {
+      "PolarisDrive": "Polaris Drive",
+      "Local": "Current device"
+    },
+    "UploadState": {
+      "Uploading": "",
+      "upload": "To provide an answer, I am storing the file on Polaris Office Drive.",
+      "wait": "I'm preparing an answer. Please wait for a moment! ",
+      "delay": "It's almost finished. Please wait a little longer!"
+    },
+    "Chat": {
+      "Recreating": "Regenerate",
+      "Copy": "Copy",
+      "ReferFile": "",
+      "InsertDoc": {
+        "Title": "Insert into document",
+        "Fail": {
+          "Title": "Document insertion failed. ",
+          "Msg": {
+            "Home": "",
+            "Viewer": ""
+          }
+        }
+      }
+    },
+    "Alert": {
+      "UnsupportFile": "This file is not supported. Please upload only {{support}} files.",
+      "NoCredit": {
+        "Title": "",
+        "UpgradeLevel": "Subscribe to a plan and increase your work efficiency with smart NOVA!",
+        "ios": "",
+        "android": ""
+      },
+      "NotEnoughCredit": {
+        "Title": "",
+        "ios": ""
+      },
+      "OverFileUploadSize": "The file size is too large. Please select only files under {{max}}MB.",
+      "ReQuestion": "Oh no! The answer is delayed. Sorry, but could you ask the question again?",
+      "LackOfStorage": "There is not enough storage space on the Polaris Drive. Please make sure you have enough storage space to upload files!",
+      "LowResolution": "The image's resolution is low, making analysis difficult. Please upload a higher resolution image.",
+      "DamagedFile": "The file is damaged and cannot be uploaded. Please check the file again.",
+      "FailedToInsertIntoDoc": "Failed to insert into document. Please try again"
+    },
+    "Confirm": {
+      "NewChat": {
+        "StartNewChat": "",
+        "Title": "Would you like to start a new conversation?",
+        "Msg": "When you select 'New Conversation', the contents of the conversation so far will be deleted. ",
+        "Ok": "Start a new conversation"
+      },
+      "PersonalInfo": {
+        "Title": "Consent to provide personal information to third parties (required)",
+        "Msg": "",
+        "Ok": "Agree",
+        "Cancel": "I do not agree"
+      },
+      "Access": {
+        "Msg": "",
+        "Ok": "",
+        "Cancel": ""
+      },
+      "GoToDocSearch": {
+        "Msg": "When you go to 'Document Search', your conversation with NOVA will end. Do you still want to move? ",
+        "Ok": "Search documents"
+      },
+      "GoToOtherAiFeatures": {
+        "Msg": "If you use other AI features, the conversation with NOVA will end. Do you still want to move?",
+        "Ok": "Move"
+      },
+      "OverMaxFileUploadCnt": {
+        "Msg": "You can attach up to {{max}} files in one conversation. Start a new conversation to continue asking questions!",
+        "Ok": ""
+      }
+    },
+    "PoDrive": {
+      "Desc": "You can select up to {{count}} files under {{size}}MB."
+    },
+    "Toast": {
+      "ConsumeCredit": "{{deductionCredit}} credits were used. Remaining Credits: {{leftCredit}}",
+      "SelectDoc": "Select the document you want to analyze."
+    }
   }
 }

@@ -34,11 +34,11 @@ const FileButton = forwardRef<HTMLInputElement, FileButtonProps>((props, ref) =>
     if (isAgreed === true) return;
 
     const isConfirmed = await confirm({
-      title: t(`Nova.ConfirmPersonalInfo.Title`)!,
-      msg: t(`Nova.ConfirmPersonalInfo.Msg`),
-      onCancel: { text: t(`Nova.ConfirmPersonalInfo.Cancel`), callback: () => {} },
+      title: t(`Nova.Confirm.PersonalInfo.Title`)!,
+      msg: t(`Nova.Confirm.PersonalInfo.Msg`),
+      onCancel: { text: t(`Nova.Confirm.PersonalInfo.Cancel`), callback: () => {} },
       onOk: {
-        text: t(`Nova.ConfirmPersonalInfo.Ok`),
+        text: t(`Nova.Confirm.PersonalInfo.Ok`),
         callback: () => {}
       },
       direction: 'row'

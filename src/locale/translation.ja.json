@@ -158,7 +158,9 @@
     "CompleteInsert": "挿入が完了しました。",
     "ErrorMsg": "エラーが発生しました。 もう一度やり直してください。 ({{code}}： {{msg}})",
     "ServiceErrorMsg": "サービスに問題が発生しています。 もう一度やり直してください。",
-    "UnauthorizedMsg": "この機能を使用するにはログインする必要があります。 ログイン状況をもう一度ご確認ください。"
+    "UnauthorizedMsg": "この機能を使用するにはログインする必要があります。 ログイン状況をもう一度ご確認ください。",
+    "SaveCompleted": "保存",
+    "SaveFailed": "保存に失敗しました"
   },
   "Offline": {
     "UnstableConnection": "サービス接続に問題が発生しました。",
@@ -258,5 +260,104 @@
   "EOS": {
     "ASKDocEOSTitle": "ASK Doc V1のサービスが終了しました",
     "ASKDocEOSDesc": "アプリをアップデートして、新しく改善されたASK Doc V2をご体験ください。"
+  },
+  "Nova": {
+    "CreditInfo": {
+      "Title": "Creditガイド",
+      "Chat": "チャット",
+      "DocImgQuery": "",
+      "ImgGen": "画像生成"
+    },
+    "SearchGuide": {
+      "Title": "スマートAIに何でも質問してください。",
+      "SubTitle": "ドキュメントを添付し、チャットで主な内容を素早く把握してください。",
+      "Example1": "",
+      "Example2": ""
+    },
+    "ActionWindow": {
+      "Placeholder": ""
+    },
+    "UploadTooltip": {
+      "PolarisDrive": "Polaris Drive",
+      "Local": "現在のデバイス"
+    },
+    "UploadState": {
+      "Uploading": "",
+      "upload": "回答を提供するために、ファイルをPolaris Office Driveに保存しています。",
+      "wait": "回答を準備中です。少々お待ちください。",
+      "delay": "もうすぐ終わります。もう少しお待ちください！"
+    },
+    "Chat": {
+      "Recreating": "再生成",
+      "Copy": "コピー",
+      "ReferFile": "",
+      "InsertDoc": {
+        "Title": "文書に挿入",
+        "Fail": {
+          "Title": "ドキュメントの挿入に失敗しました。",
+          "Msg": {
+            "Home": "",
+            "Viewer": ""
+          }
+        }
+      }
+    },
+    "Alert": {
+      "UnsupportFile": "このファイルはサポートされていません。{{support}}ファイルのみをアップロードしてください。",
+      "NoCredit": {
+        "Title": "",
+        "UpgradeLevel": "プランに加入してスマートNOVAで仕事の効率を上げましょう！",
+        "ios": "",
+        "android": ""
+      },
+      "NotEnoughCredit": {
+        "Title": "",
+        "ios": ""
+      },
+      "OverFileUploadSize": "ファイルサイズが大きすぎます。{{max}}MB未満のファイルのみを選択してください。",
+      "ReQuestion": "残念ながら、回答が遅れているようです。申し訳ありませんが、もう一度質問していただけますか？",
+      "LackOfStorage": "Polaris Driveに十分なストレージ容量がありません。ファイルをアップロードするのに十分なストレージ容量があることを確認してください。",
+      "LowResolution": "画像の解像度が低いため、分析が困難です。より高解像度の画像をアップロードしてください。",
+      "DamagedFile": "ファイルが破損しているためアップロードできません。ファイルをもう一度確認してください。",
+      "FailedToInsertIntoDoc": "ドキュメントへの挿入に失敗しました。もう一度やり直してください。"
+    },
+    "Confirm": {
+      "NewChat": {
+        "StartNewChat": "",
+        "Title": "新しい会話を始めませんか?",
+        "Msg": "「新しい会話」を選択すると、これまでの会話の内容は削除されます。",
+        "Ok": "新しい会話を始める"
+      },
+      "PersonalInfo": {
+        "Title": "個人情報を第三者に提供することに同意する（必須）",
+        "Msg": "",
+        "Ok": "同意する",
+        "Cancel": "同意しない"
+      },
+      "Access": {
+        "Msg": "",
+        "Ok": "",
+        "Cancel": ""
+      },
+      "GoToDocSearch": {
+        "Msg": "「ドキュメント検索」に進むと、NOVAとの会話は終了します。移動してもよろしいですか?",
+        "Ok": "ドキュメントの検索"
+      },
+      "GoToOtherAiFeatures": {
+        "Msg": "その他のAI機能を使用するとNOVAとの会話は終了します。移動してもよろしいですか?",
+        "Ok": "移動"
+      },
+      "OverMaxFileUploadCnt": {
+        "Msg": "1回の会話で最大{{max}}個のファイルを添付できます。質問を続けるには、新しい会話を開始してください。",
+        "Ok": ""
+      }
+    },
+    "PoDrive": {
+      "Desc": "{{size}}MB未満のファイルを最大{{count}}個選択できます。"
+    },
+    "Toast": {
+      "ConsumeCredit": "{{deductionCredit}} creditが使用されました。残りのcredit:{{leftCredit}}",
+      "SelectDoc": "分析するドキュメントを選択してください。"
+    }
   }
 }
