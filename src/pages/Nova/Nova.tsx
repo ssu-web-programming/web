@@ -275,7 +275,8 @@ export default function Nova() {
     for (const file of files) {
       const formData = new FormData();
       formData.append('uploadFile', file);
-      const { res } = await apiWrapper().request(PO_DRIVE_UPLOAD, {
+      requestor.current = apiWrapper();
+      const { res } = await requestor.current.request(PO_DRIVE_UPLOAD, {
         body: formData,
         method: 'POST'
       });
@@ -302,27 +303,23 @@ export default function Nova() {
 
   const reqDownloadFiles = async (files: DriveFileInfo[]) => {
     const ret = [];
-    try {
-      for (const file of files) {
-        const { res } = await apiWrapper().request(PO_DRIVE_DOWNLOAD, {
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ fileId: file.fileId }),
-          method: 'POST'
-        });
-        const blob = await res.blob();
-        ret.push({
-          success: true,
-          file: new File([blob], file.name, { type: file.type }),
-          data: { fileId: file.fileId }
-        });
-      }
-    } catch (err) {
-      console.log(err);
-    } finally {
-      return ret;
+    for (const file of files) {
+      requestor.current = apiWrapper();
+      const { res } = await requestor.current.request(PO_DRIVE_DOWNLOAD, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ fileId: file.fileId }),
+        method: 'POST'
+      });
+      const blob = await res.blob();
+      ret.push({
+        success: true,
+        file: new File([blob], file.name, { type: file.type }),
+        data: { fileId: file.fileId }
+      });
     }
+    return ret;
   };
 
   const onSubmit = useCallback(
@@ -674,7 +671,13 @@ export default function Nova() {
         disabled={creating !== 'none'}
         onSubmit={onSubmit}
         contents={location.state?.body}></InputBar>
-      {<FileUploading {...fileUploadState}></FileUploading>}
+      {
+        <FileUploading
+          {...fileUploadState}
+          onClickBack={() => {
+            requestor.current?.abort();
+          }}></FileUploading>
+      }
     </Wrapper>
   );
 }
@@ -753,15 +756,25 @@ const FileUploadWrapper = styled(Wrapper)`
   }
 `;
 
-const FileUploading = (props: FileUpladState) => {
-  const { type, state } = props;
+interface FileUploadingProps extends FileUpladState {
+  onClickBack: () => void;
+}
+
+const FileUploading = (props: FileUploadingProps) => {
+  const { type, state, onClickBack } = props;
   const { t } = useTranslation();
   if (state === 'ready') return null;
 
   return (
     <FileUploadWrapper>
       <div className="header">
-        {/* <IconButton iconComponent={IconArrowLeft} width={32} height={32}></IconButton> */}
+        {state === 'upload' && (
+          <IconButton
+            iconComponent={IconArrowLeft}
+            width={32}
+            height={32}
+            onClick={onClickBack}></IconButton>
+        )}
       </div>
       <div>
         <div className="title">{t(`Nova.UploadState.Uploading`, { type: t(type) })}</div>
