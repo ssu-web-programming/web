@@ -1,6 +1,7 @@
 import { apiWrapper } from 'api/apiWrapper';
 import { NOVA_DELETE_CONVERSATION } from 'api/constant';
 import { initNovaHistory, novaHistorySelector } from 'store/slices/novaHistorySlice';
+import { setCreating } from 'store/slices/tabSlice';
 import { useAppDispatch, useAppSelector } from 'store/store';
 
 export const useChatNova = () => {
@@ -17,6 +18,7 @@ export const useChatNova = () => {
         body: JSON.stringify({ threadId: lastChat.threadId })
       });
       dispatch(initNovaHistory());
+      dispatch(setCreating('none'));
     } catch (err) {
       console.log(err);
     }

@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import InputBar, { InputBarSubmitParam } from 'components/nova/InputBar';
 import styled, { css } from 'styled-components';
 import { useAppDispatch, useAppSelector } from 'store/store';
@@ -342,6 +342,8 @@ export default function Nova() {
           return { name: file.name };
         });
 
+        if (expireTimer.current) clearTimeout(expireTimer.current);
+
         const formData = new FormData();
         if (files[0]) {
           if (type === 'image' || type === 'document')
@@ -407,11 +409,6 @@ export default function Nova() {
         const askType = res.headers.get('X-PO-AI-NOVA-API-ASK-TYPE') || '';
         const expiredTime = res.headers.get('X-PO-AI-NOVA-API-EXPIRED-TIME') || '';
 
-        if (expireTimer.current) clearTimeout(expireTimer.current);
-        expireTimer.current = setTimeout(() => {
-          setExpiredNOVA(true);
-        }, NOVA_EXPIRED_TIME);
-
         setFileUploadState({ type: '', state: 'ready', progress: 0 });
         await streaming(
           res,
@@ -432,6 +429,7 @@ export default function Nova() {
             return obj
               .toString()
               .split('\n\n')
+              .filter((element: string) => element !== '')
               .map((element: string) => {
                 const data = element.replace('data:', '');
                 try {
@@ -484,6 +482,11 @@ export default function Nova() {
       } finally {
         dispatch(setCreating('none'));
         setFileUploadState({ type: '', state: 'ready', progress: 0 });
+
+        expireTimer.current = setTimeout(() => {
+          setExpiredNOVA(true);
+        }, NOVA_EXPIRED_TIME);
+
         const html = await markdownToHtml(result);
         if (html) {
           const $ = load(html);
@@ -498,19 +501,21 @@ export default function Nova() {
     [novaHistory, dispatch, errorHandle, showCreditToast, t, confirm]
   );
 
-  if (expiredNOVA) {
-    confirm({
-      title: '',
-      msg: t('Nova.Alert.ExpiredNOVA'),
-      onOk: {
-        text: t(`Confirm`),
-        callback: () => {
-          setExpiredNOVA(false);
-          chatNova.newCHat();
+  useEffect(() => {
+    if (expiredNOVA) {
+      confirm({
+        title: '',
+        msg: t('Nova.Alert.ExpiredNOVA'),
+        onOk: {
+          text: t(`Confirm`),
+          callback: () => {
+            setExpiredNOVA(false);
+            chatNova.newCHat();
+          }
         }
-      }
-    });
-  }
+      });
+    }
+  }, [expiredNOVA, t, confirm, chatNova]);
 
   const newChat = async () => {
     const ret = await confirm({
@@ -721,7 +726,8 @@ export default function Nova() {
       </Body>
       <InputBar
         novaHistory={novaHistory}
-        disabled={creating !== 'none' || expiredNOVA === true}
+        disabled={creating !== 'none'}
+        expiredNOVA={expiredNOVA}
         onSubmit={onSubmit}
         contents={location.state?.body}></InputBar>
       {

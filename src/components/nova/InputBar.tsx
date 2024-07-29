@@ -169,7 +169,8 @@ export interface InputBarSubmitParam extends Pick<NovaChatType, 'input' | 'type'
 interface InputBarProps {
   novaHistory: NovaChatType[];
   disabled?: boolean;
-  onSubmit: (param: InputBarSubmitParam) => void;
+  expiredNOVA?: boolean;
+  onSubmit: (param: InputBarSubmitParam) => Promise<void>;
   contents?: string;
 }
 
@@ -191,7 +192,7 @@ export default function InputBar(props: InputBarProps) {
   const confirm = useConfirm();
   const chatNova = useChatNova();
   const { getUploadFileLimit } = useUserInfoUtils();
-  const { novaHistory, disabled = false, contents = '' } = props;
+  const { novaHistory, disabled = false, contents = '', expiredNOVA = false } = props;
   const [localFiles, setLocalFiles] = useState<File[]>([]);
   const [driveFiles, setDriveFiles] = useState<DriveFileInfo[]>([]);
 
@@ -287,7 +288,19 @@ export default function InputBar(props: InputBarProps) {
     adjustTextareaHeight();
   }, [text]);
 
-  const handleOnClick = () => {
+  useEffect(() => {
+    if (expiredNOVA) {
+      setLocalFiles([]);
+      setDriveFiles([]);
+      (document.activeElement as HTMLElement)?.blur();
+    }
+  }, [expiredNOVA]);
+
+  const handleOnClick = async () => {
+    (document.activeElement as HTMLElement)?.blur();
+    setText('');
+    setLocalFiles([]);
+    setDriveFiles([]);
     const targetFiles = localFiles.length > 0 ? localFiles : driveFiles;
     const fileType =
       targetFiles.length < 1
@@ -295,18 +308,16 @@ export default function InputBar(props: InputBarProps) {
         : targetFiles[0].type.split('/')[0].includes('image')
         ? 'image'
         : 'document';
-    props.onSubmit({
+    await props.onSubmit({
       input: text,
       files: localFiles.length > 0 ? localFiles : driveFiles.length > 0 ? driveFiles : [],
       type: fileType
     });
-    setText('');
-    setLocalFiles([]);
-    setDriveFiles([]);
+    textAreaRef.current?.focus();
   };
 
   return (
-    <InputBarBase disabled={disabled}>
+    <InputBarBase disabled={disabled || expiredNOVA}>
       {localFiles.length > 0 && (
         <FileListViewer onWheel={handleWheel}>
           {localFiles.map((file: FileListItemInfo) => (
