@@ -77,9 +77,8 @@ export const FileItem = styled.div`
   ${flexCenter}
   gap: 8px;
   padding: 8px;
-  border: 1px solid var(--gray-gray-40);
   border-radius: 8px;
-  background: var(--gray-gray-20);
+  background: var(--gray-gray-10);
 
   font-size: 14px;
   line-height: 21px;

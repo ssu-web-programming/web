@@ -813,17 +813,18 @@ const FileUploadWrapper = styled(Wrapper)`
     padding: 40px 24px;
 
     .title {
-      font-weight: 700;
-      font-size: 24px;
-      line-height: 36px;
-    }
-
-    .desc {
-      height: 48px;
-      margin-top: 16px;
+      height: 24px;
       font-weight: 400;
       font-size: 16px;
       line-height: 24px;
+    }
+
+    .desc {
+      height: 108px;
+      margin-top: 12px;
+      font-weight: 700;
+      font-size: 24px;
+      line-height: 36px;
     }
   }
   .agentImage {
