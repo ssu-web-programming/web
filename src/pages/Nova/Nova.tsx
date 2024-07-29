@@ -251,6 +251,7 @@ export default function Nova() {
   const [showScrollDownBtn, setShowScrollDownBtn] = useState(false);
   const chatListRef = useRef<HTMLDivElement>(null);
   const [expiredNOVA, setExpiredNOVA] = useState<boolean>(false);
+  const [inputContents, setInputContents] = useState<{ input: string }>({ input: '' });
 
   const [fileUploadState, setFileUploadState] = useState<FileUpladState>({
     type: '',
@@ -663,6 +664,11 @@ export default function Nova() {
     }
   };
 
+  const contentsBody = location.state?.body || inputContents.input;
+  if (location.state?.body) {
+    location.state.body = '';
+  }
+
   return (
     <Wrapper>
       <Header>
@@ -692,7 +698,7 @@ export default function Nova() {
       <Body>
         {novaHistory.length < 1 ? (
           <GuideWrapper>
-            <Nova.SearchGuide />
+            <Nova.SearchGuide setContents={setInputContents} />
           </GuideWrapper>
         ) : (
           <>
@@ -747,7 +753,7 @@ export default function Nova() {
         disabled={creating !== 'none'}
         expiredNOVA={expiredNOVA}
         onSubmit={onSubmit}
-        contents={location.state?.body}></InputBar>
+        contents={{ input: contentsBody }}></InputBar>
       {
         <FileUploading
           {...fileUploadState}
@@ -759,7 +765,11 @@ export default function Nova() {
   );
 }
 
-const SearchGuide = () => {
+interface SearchGuideProps {
+  setContents: React.Dispatch<React.SetStateAction<{ input: string }>>;
+}
+
+const SearchGuide = (props: SearchGuideProps) => {
   const { t } = useTranslation();
 
   const PROMPT_EXAMPLE = [
@@ -785,7 +795,7 @@ const SearchGuide = () => {
 
       <Guidebody>
         {PROMPT_EXAMPLE.map((item) => (
-          <GuideExample key={item.txt}>
+          <GuideExample key={item.txt} onClick={() => props.setContents({ input: item.txt })}>
             <Icon iconSrc={item.src} size="md" />
             <span>{item.txt}</span>
           </GuideExample>

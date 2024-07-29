@@ -170,7 +170,9 @@ interface InputBarProps {
   disabled?: boolean;
   expiredNOVA?: boolean;
   onSubmit: (param: InputBarSubmitParam) => Promise<void>;
-  contents?: string;
+  contents?: {
+    input: string;
+  };
 }
 
 interface FileListItemInfo {
@@ -191,11 +193,12 @@ export default function InputBar(props: InputBarProps) {
   const confirm = useConfirm();
   const chatNova = useChatNova();
   const { getUploadFileLimit } = useUserInfoUtils();
-  const { novaHistory, disabled = false, contents = '', expiredNOVA = false } = props;
+  const { novaHistory, disabled = false, expiredNOVA = false } = props;
+  const inputContents = props.contents;
   const [localFiles, setLocalFiles] = useState<File[]>([]);
   const [driveFiles, setDriveFiles] = useState<DriveFileInfo[]>([]);
 
-  const [text, setText] = useState<string>(contents);
+  const [text, setText] = useState<string>(inputContents?.input || '');
   const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
   const setIsAgreed = async (agree: boolean) => {
     try {
@@ -286,6 +289,10 @@ export default function InputBar(props: InputBarProps) {
   useEffect(() => {
     adjustTextareaHeight();
   }, [text]);
+
+  useEffect(() => {
+    if (inputContents?.input) setText(inputContents.input);
+  }, [inputContents]);
 
   useEffect(() => {
     if (expiredNOVA) {
