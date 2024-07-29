@@ -2,6 +2,7 @@ import { encode } from 'gpt-tokenizer';
 import { REC_ID_LIST } from '../components/chat/RecommendBox/FunctionRec';
 import { EngineVersion } from '../components/chat/RecommendBox/FormRec';
 import { CheckSessionResponse } from '../util/bridge';
+import { VersionType } from 'store/slices/txt2imgHistory';
 
 export type LLMVersion = string | number;
 interface SplunkLogDataType {
@@ -36,6 +37,7 @@ interface SplunkLogDataType {
     output_token?: number;
     env?: string;
     gpt_ver?: LLMVersion;
+    file_type?: string;
   };
 }
 
@@ -61,6 +63,8 @@ export interface SplunkData {
   gpt_ver?: LLMVersion;
 
   dt?: string;
+
+  file_type?: string;
 }
 
 export const DEFAULT_LOG_DATA: SplunkLogDataType = {
@@ -91,7 +95,8 @@ export const DEFAULT_LOG_DATA: SplunkLogDataType = {
   cobj: {
     input_token: undefined,
     output_token: undefined,
-    gpt_ver: undefined
+    gpt_ver: undefined,
+    file_type: undefined
   }
 };
 
@@ -118,6 +123,7 @@ const usePostSplunkLog = (sessionInfo: SessionInfo) => {
     logData.cobj.input_token = data.input_token;
     logData.cobj.output_token = data.output_token;
     logData.cobj.gpt_ver = data.gpt_ver;
+    logData.cobj.file_type = data.file_type;
 
     if (isVfMode) logData.cobj.env = 'vf';
 
@@ -188,9 +194,12 @@ export const calcToken = (text: string) => {
   }
 };
 
-export const parseGptVer = (version: EngineVersion): LLMVersion => {
+export const parseGptVer = (version: EngineVersion | VersionType): LLMVersion => {
   try {
     if (version === 'clovax') return 'CLOVA';
+    else if (version === 'claude') return 'claude3';
+    else if (version === 'sd3') return 'Stable_Diffusion';
+    else if (version === 'dalle3') return 'Dalle-3';
     const gptVer = new RegExp(/gpt([0-9]*[.]?[0-9]+[a-z]?)/g).exec(version);
     const gpt_ver = gptVer && gptVer[1] ? gptVer[1] : 0;
     return gpt_ver;

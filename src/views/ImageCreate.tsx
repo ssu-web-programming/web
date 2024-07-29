@@ -1,6 +1,6 @@
 import { useCallback, useState, useEffect } from 'react';
 import styled, { FlattenSimpleInterpolation } from 'styled-components';
-import { calcToken } from '../api/usePostSplunkLog';
+import { calcToken, parseGptVer } from '../api/usePostSplunkLog';
 import { flexColumn, justiSpaceBetween, flexWrap, alignItemCenter, flex } from '../style/cssCommon';
 import Loading from '../components/Loading';
 import { v4 as uuidv4 } from 'uuid';
@@ -103,7 +103,8 @@ const ImageCreate = ({ contents }: { contents: string }) => {
         const input_token = calcToken(option.input);
         logger({
           dp: 'ai.text_to_image',
-          input_token
+          input_token,
+          gpt_ver: parseGptVer(apiBody.type)
         });
 
         const { deductionCredit, leftCredit } = calLeftCredit(res.headers);

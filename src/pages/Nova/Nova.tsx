@@ -332,11 +332,12 @@ export default function Nova() {
     async (submitParam: InputBarSubmitParam) => {
       const id = v4();
       let result = '';
+      const lastChat = novaHistory[novaHistory.length - 1];
+      const { vsId = '', threadId = '' } = lastChat || {};
+      const { input, files = [], type } = submitParam;
+      let splunk = null;
       try {
         dispatch(setCreating('NOVA'));
-        const lastChat = novaHistory[novaHistory.length - 1];
-        const { vsId = '', threadId = '' } = lastChat || {};
-        const { input, files = [], type } = submitParam;
 
         const fileInfo = files.map((file) => {
           return { name: file.name };
@@ -397,10 +398,11 @@ export default function Nova() {
             }, 3000);
           timer = progressing();
         }
-        const { res } = await requestor.current.request(NOVA_CHAT_API, {
+        const { res, logger } = await requestor.current.request(NOVA_CHAT_API, {
           body: formData,
           method: 'POST'
         });
+        splunk = logger;
 
         if (timer) clearTimeout(timer);
 
@@ -482,6 +484,22 @@ export default function Nova() {
       } finally {
         dispatch(setCreating('none'));
         setFileUploadState({ type: '', state: 'ready', progress: 0 });
+
+        try {
+          if (splunk) {
+            splunk({
+              dp: 'ai.nova',
+              el: vsId || type !== '' ? 'nova_document_or_image' : 'nova_chating'
+            });
+            if (type) {
+              splunk({
+                dp: 'ai.nova',
+                el: 'upload_file',
+                file_type: type
+              });
+            }
+          }
+        } catch (err) {}
 
         expireTimer.current = setTimeout(() => {
           setExpiredNOVA(true);
