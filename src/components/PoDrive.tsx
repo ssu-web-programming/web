@@ -122,6 +122,7 @@ const FileItem = styled.div`
 export interface DriveFileInfo {
   fileId: string;
   fileName: string;
+  fileRevision: number;
   fileType: 'DIR' | 'FILE';
   lastModified: number; //??
   size: number;
@@ -144,6 +145,7 @@ export default function PoDrive(props: PoDriveProps) {
     {
       fileId: '',
       fileName: 'drive',
+      fileRevision: 0,
       fileType: 'DIR',
       lastModified: 0,
       size: 0,

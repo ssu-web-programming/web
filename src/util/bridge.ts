@@ -145,6 +145,12 @@ const callApi = (api: ApiType, arg?: string | number) => {
             }
             break;
           }
+          case 'openPoDriveFile': {
+            if (window.webkit.messageHandlers.openPoDriveFile) {
+              window.webkit.messageHandlers.openPoDriveFile.postMessage(arg);
+            }
+            break;
+          }
         }
         break;
       }
@@ -398,7 +404,8 @@ type ApiType =
   | 'getDocType'
   | 'getSlideContents'
   | 'insertNote'
-  | 'getClientStatus';
+  | 'getClientStatus'
+  | 'openPoDriveFile';
 
 const Bridge = {
   checkSession: (api: string) => {

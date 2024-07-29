@@ -1,6 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 
+export interface NovaFileInfo {
+  name: string;
+  fileId: string;
+  file: File;
+  fileRevision: number;
+}
+
 export type NovaChatType = {
   id: string;
   input: string;
@@ -16,9 +23,7 @@ export type NovaChatType = {
   expiredTime?: number;
 
   status: 'none' | 'request' | 'stream' | 'done' | 'cancel';
-  files?: {
-    name: string;
-  }[];
+  files?: NovaFileInfo[];
 };
 
 const novaHistorySlice = createSlice({
