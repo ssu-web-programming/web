@@ -342,6 +342,7 @@ export default function Nova() {
       const { vsId = '', threadId = '' } = lastChat || {};
       const { input, files = [], type } = submitParam;
       let splunk = null;
+      let timer = null;
       try {
         dispatch(setCreating('NOVA'));
 
@@ -397,7 +398,6 @@ export default function Nova() {
         dispatch(pushChat({ id, input, type, role, vsId, threadId, output: '', files: fileInfo }));
 
         requestor.current = apiWrapper();
-        let timer = null;
         if (type === 'image' || type === 'document') {
           setFileUploadState((prev) => ({ ...prev, state: 'wait', progress: 40 }));
           const progressing = () =>
@@ -481,6 +481,7 @@ export default function Nova() {
         );
         dispatch(updateChatStatus({ id, status: 'done' }));
       } catch (err) {
+        if (timer) clearTimeout(timer);
         if (requestor.current?.isAborted() === true) {
           dispatch(updateChatStatus({ id, status: 'cancel' }));
         } else if (err instanceof ExceedPoDriveLimitError) {
