@@ -3,12 +3,11 @@ import styled, { FlattenSimpleInterpolation, css, keyframes } from 'styled-compo
 import { initToast, selectToast } from '../../store/slices/toastSlice';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import Icon from '../Icon';
-import icon_warnning from '../../img/ico_toast_warning.svg';
-import icon_pass from '../../img/ico_toast_completion.svg';
-import { alignItemStart, flex, flexGrow, flexShrink } from '../../style/cssCommon';
 import IconButton from '../buttons/IconButton';
-
-import { ReactComponent as IconClose } from '../../img/ico_ai_close.svg';
+import icon_warnning from 'img/ico_toast_warning.svg';
+import icon_pass from 'img/ico_toast_completion.svg';
+import { ReactComponent as IconClose } from 'img/ico_ai_close.svg';
+import { alignItemStart, flex, flexGrow, flexShrink } from '../../style/cssCommon';
 
 const Fade = keyframes`
   0% {
@@ -45,7 +44,7 @@ const ToastMsgWrapper = styled.div<{ variant: FlattenSimpleInterpolation }>`
 
   ${(props) => props.variant}
 
-  z-index: 50;
+  z-index: 200;
 `;
 
 const IconWrapper = styled.div`

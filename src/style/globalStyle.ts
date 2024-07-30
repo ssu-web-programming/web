@@ -54,11 +54,25 @@ html,
     --gray-gray-80-02: #454c53;
     --gray-gray-70: #72787f;
     --gray-gray-60-03: #9ea4aa;
+    --gray-gray-10: #f7f8f9;
     --gray-gray-50: #b3b8bd;
     --gray-gray-20: #f2f4f6;
+    --gray-gray-30: #E8EBED;
+    --gray-gray-40: #C9CDD2;
 
     --sale: #fb4949;
+
+    --primary-po-red-40: #FA8C8C;
+    --primary-po-red-50: #F95C5C;
+    --primary-po-red-60: #D34E4E;
+    
+    --primary-po-green-40: #85CA5F;
+    --primary-po-green-50: #51B41B;
     --primary-po-green-60: #449916;
+    
+    --primary-po-blue-40: #60A5FA;
+    --primary-po-blue-50: #1D7FF9;
+    --primary-po-blue-60: #186CD3;
   }
 
   textarea, button, pre{
@@ -86,10 +100,6 @@ html,
     }
   }
 
-  li{
-    margin-block-end: 8px;
-  }
-      
   p{
     /* css reset */
     margin: 0;

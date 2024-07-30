@@ -159,7 +159,8 @@
     "ErrorMsg": "An error has occurred. Please try again later. ({{code}} : {{msg}})",
     "ServiceErrorMsg": "Experiencing issues with the service. Please try again later.",
     "UnauthorizedMsg": "You need to be logged in to use this feature. Please check your login status again.",
-    "CopyCompleted": "Copy Completed."
+    "SaveCompleted": "Saved",
+    "SaveFailed": "Failed to save"
   },
   "Offline": {
     "UnstableConnection": "Service connectivity issues!",
@@ -259,5 +260,113 @@
   "EOS": {
     "ASKDocEOSTitle": "ASK Doc V1 Service Ended",
     "ASKDocEOSDesc": "Meet the newly improved ASK Doc V2 after updating the app."
+  },
+  "Nova": {
+    "CreditInfo": {
+      "Title": "Credit Guide",
+      "Chat": "Chat",
+      "DocImgQuery": "Document/Image query",
+      "ImgGen": "Generate Image"
+    },
+    "SearchGuide": {
+      "Title": "Ask the smart AI anything.",
+      "SubTitle": "Attach a document and quickly grasp the main contents through chat.",
+      "Example1": "Draw a romantic sunset scene.",
+      "Example2": "Who attended the meeting in this document?"
+    },
+    "ActionWindow": {
+      "Placeholder": "NOVA, ask anything"
+    },
+    "UploadTooltip": {
+      "PolarisDrive": "Polaris Drive",
+      "Local": "Current device"
+    },
+    "UploadState": {
+      "Uploading": "Uploading {{type}}.",
+      "upload_image": "To provide an answer, we are saving the file to Polaris Office Drive.",
+      "upload_document": "To provide an answer, we are saving the file to Polaris Office Drive.",
+      "wait": "I'm preparing an answer. Please wait for a moment! ",
+      "delay": "It's almost finished. Please wait a little longer!"
+    },
+    "Chat": {
+      "Recreating": "Regenerate",
+      "Copy": "Copy",
+      "ReferFile": "Referenced the '{{file}}' file.",
+      "InsertDoc": {
+        "Title": "Insert into document",
+        "Fail": {
+          "Title": "Document Insertion Guide",
+          "Msg": {
+            "Home": "To insert into the document, please open the document and enter edit mode first. Don't worry, your response won't disappear!",
+            "Viewer": "To insert into the document, please enter edit mode. Don't worry, your response won't disappear!"
+          }
+        }
+      }
+    },
+    "Alert": {
+      "UnsupportFile": "This file is not supported. Please upload only {{support}} files.",
+      "NoCredit": {
+        "Title": "All credits have been used :(",
+        "UpgradeLevel": "Subscribe to a plan and increase your work efficiency with smart NOVA!",
+        "ios": "Purchase additional AI credits on the Polaris Office website and enhance your productivity!",
+        "android": "Purchase additional AI credits and enhance your productivity with the smart NOVA!"
+      },
+      "NotEnoughCredit": {
+        "Title": "Credits are insufficient :(",
+        "ios": "AIクレジットを追加購入して、スマートなNOVAと一緒に作業効率を高めましょう！"
+      },
+      "OverFileUploadSize": "The file size is too large. Please select only files under {{max}}MB.",
+      "ReQuestion": "Oh no! The answer is delayed. Sorry, but could you ask the question again?",
+      "LackOfStorage": "There is not enough storage space on the Polaris Drive. Please make sure you have enough storage space to upload files!",
+      "LowResolution": "The image's resolution is low, making analysis difficult. Please upload a higher resolution image.",
+      "DamagedFile": "The file is damaged and cannot be uploaded. Please check the file again.",
+      "FailedToInsertIntoDoc": "Failed to insert into document. Please try again",
+      "Checking": {
+        "Title": "Function under maintenance",
+        "Msg": "The function is under maintenance. Please try again later."
+      },
+      "Error": "An error has occurred. Please try again later.",
+      "ExpiredNOVA": "The conversation with NOVA has expired. Starting a new conversation."
+    },
+    "Confirm": {
+      "NewChat": {
+        "StartNewChat": "Start a new conversation",
+        "Title": "Would you like to start a new conversation?",
+        "Msg": "When you select 'New Conversation', the contents of the conversation so far will be deleted. ",
+        "Ok": "Start a new conversation"
+      },
+      "PersonalInfo": {
+        "Title": "Consent to Collection and Use of Personal Information (Required)",
+        "Msg1": "To provide the AI NOVA service, we need your consent for the collection and use of personal information as follows.",
+        "Msg2": "1. Collected Personal Information Items and Purposes of Use\n- User input text, generated result data: To provide conversational AI services, improve service functionality, develop new features, and provide personalized information.\n- Uploaded files: To provide conversational AI services.\n2. Retention and Usage Period\n- For user input text and generated result data: {{chatRetention}}\n- For uploaded files: {{fileRetention}}",
+        "Msg3": "You have the right to refuse consent to the collection and use of personal information. However, if you refuse consent, you will not be able to use the service.",
+        "Ok": "Agree",
+        "Cancel": "I do not agree",
+        "ChatRetention": "3 years from the date of collection.",
+        "FileRetention": "Up to 1 day after the conversation expires."
+      },
+      "Access": {
+        "Msg": "Would you like to allow Polaris Office to access photos, media, and files on your device?",
+        "Ok": "Allow",
+        "Cancel": "Deny"
+      },
+      "GoToDocSearch": {
+        "Msg": "When you go to 'Document Search', your conversation with NOVA will end. Do you still want to move? ",
+        "Ok": "Search documents"
+      },
+      "GoToOtherAiFeatures": {
+        "Msg": "If you use other AI features, the conversation with NOVA will end. Do you still want to move?",
+        "Ok": "Move"
+      },
+      "OverMaxFileUploadCnt": "You can attach up to {{max}} files in one conversation. Start a new conversation to continue asking questions!",
+      "OverMaxFileUploadCntOnce": "You can attach up to {{max}} files only. Please reselect the files."
+    },
+    "PoDrive": {
+      "Desc": "You can select up to {{count}} files under {{size}}MB."
+    },
+    "Toast": {
+      "ConsumeCredit": "{{deductionCredit}} credits were used. Remaining Credits: {{leftCredit}}",
+      "SelectDoc": "Select the document you want to analyze."
+    }
   }
 }

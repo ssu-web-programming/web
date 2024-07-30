@@ -18,12 +18,17 @@ import AskDoc from './pages/AskDoc';
 import Chat from './pages/AskDocStep/Chat';
 import AskDocLoading from './pages/AskDocStep/AskDocLoading';
 import Alli from './pages/Alli/Alli';
+import Nova from 'pages/Nova/Nova';
+import useInitApp from 'components/hooks/useInitApp';
 
 function App() {
   const initBridgeListener = useInitBridgeListener();
+  const initApp = useInitApp();
 
   useEffect(() => {
     initBridgeListener();
+    initApp(); // initBridgeListener 다음에 호출되어야 함
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -35,6 +40,7 @@ function App() {
           <Route path="/txt2img" element={<TextToImage></TextToImage>}></Route>
           <Route path="/askdoc" element={<AskDoc />} />
           <Route path="/alli" element={<Alli />} />
+          <Route path="/NOVA" element={<Nova />} />
           <Route path="/AskDocStep" element={<AskDocHome />}>
             <Route index element={<AskDocLoading />} />
             <Route path="/AskDocStep/CheckDocHistory" element={<CheckDocHistory />} />

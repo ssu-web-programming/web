@@ -25,13 +25,14 @@ import {
 } from '../../store/slices/txt2imgHistory';
 import ExTextbox from '../ExTextbox';
 import { useTranslation } from 'react-i18next';
-import CreditButton from '../buttons/CreditButton';
 import Icon from '../Icon';
 import Grid from '../layout/Grid';
 import IconBoxTextButton from '../buttons/IconBoxTextButton';
 import { getIconColor } from 'util/getColor';
 import Button from '../buttons/Button';
 import { VersionInner, NewMark } from 'components/aiWrite/AIWriteInput';
+import IconTextButton from 'components/buttons/IconTextButton';
+import icon_credit_outline from 'img/ico_credit_outline.svg';
 
 const MakingInputWrapper = styled.div`
   ${flex}
@@ -360,18 +361,20 @@ const ImageCreateInput = ({
         </RowContainer>
       </SelectOptionArea>
       <StyledCreditButton>
-        <CreditButton
+        <IconTextButton
           width="full"
           variant="purpleGradient"
           onClick={() => {
             createAiImage(options);
           }}
-          disable={input.length === 0}>
+          disable={input.length === 0}
+          iconSrc={icon_credit_outline}
+          iconPos="end">
           <div style={{ display: 'flex', gap: '5px' }}>
             <Icon size="sm" iconSrc={iconCreatingWhite}></Icon>
             {t(`Txt2ImgTab.CreateImage`)}
           </div>
-        </CreditButton>
+        </IconTextButton>
       </StyledCreditButton>
     </MakingInputWrapper>
   );

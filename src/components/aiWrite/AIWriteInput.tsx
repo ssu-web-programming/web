@@ -4,17 +4,21 @@ import { RowBox, exampleList } from '../../views/AIChatTab';
 import { useTranslation } from 'react-i18next';
 import SubTitle from '../SubTitle';
 import ShowResultButton from '../buttons/ShowResultButton';
-import { useAppDispatch } from '../../store/store';
+import { useAppDispatch, useAppSelector } from '../../store/store';
 import { WriteType, setCurrentWrite } from '../../store/slices/writeHistorySlice';
 import ExTextbox from '../ExTextbox';
 import { WriteOptions, formRecList, lengthList, versionList } from '../chat/RecommendBox/FormRec';
 import icon_write from '../../img/ico_creating_text_white.svg';
-import CreditButton from '../buttons/CreditButton';
 import Icon from '../Icon';
 import Button from '../buttons/Button';
 import IconBoxTextButton from '../buttons/IconBoxTextButton';
 import Grid from '../layout/Grid';
 import { getIconColor } from 'util/getColor';
+import IconTextButton, { Chip } from 'components/buttons/IconTextButton';
+import icon_credit_outline from '../../img/ico_credit_outline.svg';
+import icon_credit_gray from 'img/ico_credit_gray.svg';
+import { creditInfoSelector } from 'store/slices/creditInfo';
+import { filterCreditInfo } from 'pages/Nova/Nova';
 
 const WriteInputPage = styled.div`
   ${flex}
@@ -71,6 +75,20 @@ const AIWriteInput = ({
     form: selectedForm,
     length: selectedLength
   } = selectedOptions;
+  const creditInfo = useAppSelector(creditInfoSelector);
+
+  const CREDIT_NAME_MAP: { [key: string]: string } = {
+    WRITE_GPT4O: 'GPT 4o',
+    WRITE_GPT4: 'GPT 4',
+    GPT3: 'GPT 3.5',
+    WRITE_CLOVA: 'CLOVA X',
+    WRITE_CLADE3: 'Claude 3.5 Sonnet'
+  };
+
+  const credit = filterCreditInfo(creditInfo, CREDIT_NAME_MAP).reduce((acc, cur) => {
+    acc[CREDIT_NAME_MAP[cur.serviceType]] = cur;
+    return acc;
+  }, {} as { [key: string]: any });
 
   return (
     <WriteInputPage>
@@ -98,34 +116,60 @@ const AIWriteInput = ({
       </TitleInputSet>
       <TitleInputSet>
         <SubTitle subTitle={t(`WriteTab.SelectVersion`)} />
-        <Grid col={2}>
-          {versionList.slice(0, 2).map((cur) => (
-            <Button
+        <Grid col={3}>
+          {versionList.slice(0, 3).map((cur) => (
+            <IconTextButton
               width="full"
               variant="gray"
               key={cur.version}
+              cssExt={css`
+                padding: 4px 12px;
+                > div {
+                  justify-content: space-between;
+                }
+              `}
               onClick={() => setSelectedOptions((prev) => ({ ...prev, version: cur }))}
-              selected={selectedVersion.version === cur.version}>
+              selected={selectedVersion.version === cur.version}
+              iconSrc={
+                <Chip iconSrc={icon_credit_gray}>
+                  <span>{credit[cur.id]?.deductCredit}</span>
+                </Chip>
+              }
+              iconPos="end">
+              <VersionInner>
+                {cur.id}
+                {cur.id === 'GPT 4o' && <NewMark></NewMark>}
+              </VersionInner>
+            </IconTextButton>
+          ))}
+        </Grid>
+        <Grid col={3}>
+          {versionList.slice(3, 5).map((cur) => (
+            <IconTextButton
+              width="full"
+              variant="gray"
+              key={cur.version}
+              cssExt={css`
+                padding: 4px 12px;
+                grid-column: ${cur.id === 'Claude 3.5 Sonnet' ? '2 / 4' : '1 / 2'};
+
+                > div {
+                  justify-content: space-between;
+                }
+              `}
+              onClick={() => setSelectedOptions((prev) => ({ ...prev, version: cur }))}
+              selected={selectedVersion.version === cur.version}
+              iconSrc={
+                <Chip iconSrc={icon_credit_gray}>
+                  <span>{credit[cur.id]?.deductCredit}</span>
+                </Chip>
+              }
+              iconPos="end">
               <VersionInner>
                 {cur.id}
                 {cur.id === 'Claude 3.5 Sonnet' && <NewMark></NewMark>}
               </VersionInner>
-            </Button>
-          ))}
-        </Grid>
-        <Grid col={3}>
-          {versionList.slice(2, 5).map((cur) => (
-            <Button
-              width="full"
-              variant="gray"
-              key={cur.version}
-              onClick={() => setSelectedOptions((prev) => ({ ...prev, version: cur }))}
-              selected={selectedVersion.version === cur.version}>
-              <VersionInner>
-                {cur.id}
-                {cur.id === 'GPT-4o' && <NewMark></NewMark>}
-              </VersionInner>
-            </Button>
+            </IconTextButton>
           ))}
         </Grid>
       </TitleInputSet>
@@ -165,7 +209,7 @@ const AIWriteInput = ({
         </Grid>
       </TitleInputSet>
 
-      <CreditButton
+      <IconTextButton
         width="full"
         disable={input.length === 0}
         variant="purpleGradient"
@@ -173,12 +217,15 @@ const AIWriteInput = ({
           padding-top: 4px;
           height: 40px;
         `}
-        onClick={() => submitSubject()}>
-        <div style={{ display: 'flex', gap: '5px' }}>
+        onClick={() => submitSubject()}
+        iconSrc={icon_credit_outline}
+        iconPos="end"
+        iconSize={18}>
+        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
           <Icon size="sm" iconSrc={icon_write}></Icon>
           {t(`WriteTab.WritingArticle`)}
         </div>
-      </CreditButton>
+      </IconTextButton>
     </WriteInputPage>
   );
 };

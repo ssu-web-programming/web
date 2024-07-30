@@ -7,10 +7,11 @@ import { flexColumn, flex, justiSpaceBetween, alignItemCenter } from '../../styl
 import { PropsWithChildren, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import Grid from '../layout/Grid';
-import CreditButton from '../buttons/CreditButton';
 import { AskDocChat } from '../../store/slices/askDoc';
 import Button from '../buttons/Button';
 import Bridge from '../../util/bridge';
+import IconTextButton from 'components/buttons/IconTextButton';
+import icon_credit_purple from '../../img/ico_credit_purple.svg';
 
 const Wrapper = styled.div<{ isUser: boolean }>`
   ${flex}
@@ -184,13 +185,14 @@ const AskDocSpeechBubble = (props: PropsWithChildren<AskDocSpeechBubbleProps>) =
                     </div>
                   )}
                   <Grid col={1}>
-                    <CreditButton
+                    <IconTextButton
                       width="full"
                       variant="purpleGradient"
                       onClick={onMore}
-                      disable={loadingId !== null}>
+                      disable={loadingId !== null}
+                      iconSrc={icon_credit_purple}>
                       <span>{t('AskDoc.GetMoreInformation')}</span>
-                    </CreditButton>
+                    </IconTextButton>
                   </Grid>
                 </>
               )}

@@ -157,10 +157,13 @@ const AskDoc = () => {
   const reqVoiceRes = async (text: string) => {
     try {
       const { res } = await apiWrapper().request(VOICEDOC_MAKE_VOICE, {
-        body: {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
           speaker: 'vara',
           text: text
-        },
+        }),
         method: 'POST'
       });
 

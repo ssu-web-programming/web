@@ -26,7 +26,10 @@ const usePollingExtractText = () => {
       try {
         dispatch(setCreating('TextExtract'));
         const { res } = await apiWrapper().request(ASKDOC_GET_EXTRACT_TEXT_STATUS, {
-          body: { taskId: data.data.taskId },
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ taskId: data.data.taskId }),
           method: 'POST'
         });
 

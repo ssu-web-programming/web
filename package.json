@@ -49,7 +49,8 @@
     "build:staging": "env-cmd -f ./env/.env.staging.js react-scripts build",
     "build:prod": "env-cmd -f ./env/.env.prod.js react-scripts build",
     "dev": "yarn build && nodemon --watch ./build/**/*.js --exec \"ts-node\" server/server.ts",
-    "build:all": "node -r esm ./scripts/buildByEnv.js aws_s3"
+    "build:all": "node -r esm ./scripts/buildByEnv.js aws_s3",
+    "check:i18n": "node ./scripts/extractKeys.js"
   },
   "eslintConfig": {
     "extends": [

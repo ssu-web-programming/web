@@ -13,6 +13,24 @@ export const userSelectCss = css`
   user-select: none;
 `;
 
+export const CustomScrollbar = css`
+  scrollbar-color: #c9cdd2 #ffffff;
+  scrollbar-width: thin;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+    background: #ffffff;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: #c9cdd2;
+  }
+  &::-webkit-scrollbar-track {
+    border-radius: 4px;
+    background: #ffffff;
+  }
+`;
+
 export const purpleBtnCss = css`
   background-image: linear-gradient(to left, #a86cea, var(--ai-purple-50-main));
   color: #fff;

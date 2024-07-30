@@ -48,17 +48,17 @@ export const formRecList = [
 ];
 
 const versionGpt3: VersionListType = {
-  id: 'GPT-3.5',
+  id: 'GPT 3.5',
   version: 'gpt3.5',
   group: 'all'
 };
 const versionGpt4: VersionListType = {
-  id: 'GPT-4',
+  id: 'GPT 4',
   version: 'gpt4',
   group: 'all'
 };
 export const versionGpt4o: VersionListType = {
-  id: 'GPT-4o',
+  id: 'GPT 4o',
   version: 'gpt4o',
   group: 'all'
 };
@@ -74,11 +74,11 @@ export const versionClaude: VersionListType = {
 };
 
 export const versionList: VersionListType[] = [
-  versionClova,
-  versionClaude,
-  versionGpt3,
+  versionGpt4o,
   versionGpt4,
-  versionGpt4o
+  versionGpt3,
+  versionClova,
+  versionClaude
 ];
 
 export const DEFAULT_WRITE_OPTION_LENGTH_VALUE: LengthListType = {

@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { AppDispatch, RootState, useAppDispatch } from '../store/store';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useMoveChatTab } from '../components/hooks/useMovePage';
+// import { useMoveChatTab } from '../components/hooks/useMovePage';
 import { updateT2ICurItemIndex, updateT2ICurListId } from '../store/slices/txt2imgHistory';
 import { activeToast } from '../store/slices/toastSlice';
 import gI18n, { convertLangFromLangCode } from '../locale';
@@ -13,6 +13,7 @@ import { setFiles } from '../store/slices/askDocAnalyzeFiesSlice';
 import { initComplete } from '../store/slices/initFlagSlice';
 import { setRecognizedVoice } from '../store/slices/recognizedVoice';
 import { initConfirm } from '../store/slices/confirm';
+import { resetCurrentWrite } from 'store/slices/writeHistorySlice';
 
 const UA_PREFIX: string = `__polaris_office_ai_`;
 
@@ -47,7 +48,7 @@ function getAgentVersion(userAgent: string) {
 export const getPlatform = () => getAgentPlatform(navigator.userAgent);
 export const getVersion = () => getAgentVersion(navigator.userAgent);
 
-async function fileToString(file: Blob) {
+export async function fileToString(file: Blob) {
   return new Promise<string>((resolve, reject) => {
     try {
       let reader = new FileReader();
@@ -138,6 +139,18 @@ const callApi = (api: ApiType, arg?: string | number) => {
             }
             break;
           }
+          case 'getClientStatus': {
+            if (window.webkit.messageHandlers.getClientStatus) {
+              window.webkit.messageHandlers.getClientStatus.postMessage(arg);
+            }
+            break;
+          }
+          case 'openPoDriveFile': {
+            if (window.webkit.messageHandlers.openPoDriveFile) {
+              window.webkit.messageHandlers.openPoDriveFile.postMessage(arg);
+            }
+            break;
+          }
         }
         break;
       }
@@ -183,7 +196,7 @@ interface ReceiveMessage {
   body: string;
 }
 
-type PanelOpenCmd = 'openAiTools' | 'openTextToImg' | 'openAskDoc' | 'openAlli';
+type PanelOpenCmd = 'openAiTools' | 'openTextToImg' | 'openAskDoc' | 'openAlli' | 'openNOVA';
 
 export const useInitBridgeListener = () => {
   const dispatch = useAppDispatch();
@@ -191,7 +204,7 @@ export const useInitBridgeListener = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const movePage = useMoveChatTab();
+  // const movePage = useMoveChatTab();
   const getPath = useCallback((cmd: PanelOpenCmd) => {
     switch (cmd) {
       case 'openAiTools':
@@ -212,6 +225,8 @@ export const useInitBridgeListener = () => {
         return '/askdoc';
       case 'openAlli':
         return '/alli';
+      case 'openNOVA':
+        return '/NOVA';
     }
   }, []);
 
@@ -231,7 +246,8 @@ export const useInitBridgeListener = () => {
     if (creating === 'none') {
       if (cmd === `openAiTools`) {
         if (body && body !== '') {
-          movePage(body);
+          // movePage(body);
+          thunkAPI.dispatch(resetCurrentWrite());
         }
       } else if (cmd === `openTextToImg`) {
         if (body && body !== '') {
@@ -264,7 +280,8 @@ export const useInitBridgeListener = () => {
           case 'openAiTools':
           case 'openTextToImg':
           case 'openAskDoc':
-          case 'openAlli': {
+          case 'openAlli':
+          case 'openNOVA': {
             dispatch(changePanel({ cmd, body }));
             break;
           }
@@ -386,7 +403,9 @@ type ApiType =
   | 'textToSpeech'
   | 'getDocType'
   | 'getSlideContents'
-  | 'insertNote';
+  | 'insertNote'
+  | 'getClientStatus'
+  | 'openPoDriveFile';
 
 const Bridge = {
   checkSession: (api: string) => {
@@ -477,8 +496,8 @@ export function useCopyClipboard() {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
 
-  return async (markdown: string) => {
-    const clipboardData = await makeClipboardData(markdown);
+  return async (target: string | Blob) => {
+    const clipboardData = await makeClipboardData(target);
     await Bridge.callBridgeApi('copyClipboard', JSON.stringify(clipboardData));
     dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.CopyCompleted`) }));
   };

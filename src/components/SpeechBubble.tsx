@@ -23,6 +23,8 @@ import { selectRecFuncSlice } from '../store/slices/recFuncSlice';
 import ClovaXLinkText from './ClovaXLinkText';
 import { BoldTextLength } from './TextLength';
 import ClaudeLinkText from 'components/ClaudeLinkText';
+import IconTextButton from './buttons/IconTextButton';
+import icon_credit_purple from 'img/ico_credit_purple.svg';
 
 // clipboard
 // import { useCopyClipboard } from '../util/bridge';
@@ -226,16 +228,18 @@ const SpeechBubble = (props: PropsWithChildren<SpeechBubbleProps>) => {
                 {chat.id !== loadingId && (
                   <Grid col={retryOrigin !== chat.id ? 2 : 1}>
                     {retryOrigin !== chat.id && (
-                      <CreditButton
+                      <IconTextButton
                         width="full"
                         borderType="gray"
                         onClick={() => {
                           submitChat(chat);
                           setRetryOrigin(chat.id);
                         }}
-                        disable={creating === 'Chatting'}>
+                        disable={creating === 'Chatting'}
+                        iconSrc={icon_credit_purple}
+                        iconSize={16}>
                         {t(`WriteTab.Recreating`)}
-                      </CreditButton>
+                      </IconTextButton>
                     )}
                     <Button
                       width="full"

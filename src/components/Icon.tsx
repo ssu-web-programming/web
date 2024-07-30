@@ -26,9 +26,10 @@ export type IconSize = 'sm' | 'md' | 'lg';
 export interface IconProps {
   size?: IconSize | number;
   iconSrc: string | React.ReactNode;
+  [key: string]: any;
 }
 
-const Icon = ({ size = 'md', iconSrc }: IconProps) => {
+const Icon = ({ size = 'md', iconSrc, ...rest }: IconProps) => {
   const sizeStyle =
     typeof size === 'string'
       ? SIZES[size]
@@ -45,7 +46,7 @@ const Icon = ({ size = 'md', iconSrc }: IconProps) => {
     );
   }
 
-  return <IconImg size={sizeStyle} src={iconSrc} alt="icon" />;
+  return <IconImg size={sizeStyle} src={iconSrc} alt="icon" {...rest} />;
 };
 
 export default Icon;

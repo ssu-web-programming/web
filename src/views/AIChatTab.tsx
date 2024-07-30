@@ -41,16 +41,17 @@ import { setCreating } from '../store/slices/tabSlice';
 import { calLeftCredit } from '../util/common';
 import { useTranslation } from 'react-i18next';
 import useErrorHandle from '../components/hooks/useErrorHandle';
-import SendCoinButton from '../components/buttons/SendCoinButton';
 import { REC_ID_LIST } from '../components/chat/RecommendBox/FunctionRec';
 import { ClientType, getPlatform } from '../util/bridge';
-import Button from '../components/buttons/Button';
 import { VersionListType, versionList } from '../components/chat/RecommendBox/FormRec';
 import DropDownButton from '../components/buttons/DropDownButton';
 import { useShowCreditToast } from '../components/hooks/useShowCreditToast';
 import { AI_WRITE_RESPONSE_STREAM_API } from '../api/constant';
 import { apiWrapper, streaming } from '../api/apiWrapper';
 import TextLength from 'components/TextLength';
+import { ReactComponent as SendActiveIcon } from 'img/ico_send_active.svg';
+import { ReactComponent as SendDisabledIcon } from 'img/ico_send_disabled.svg';
+import IconButton from 'components/buttons/IconButton';
 
 const TEXT_MAX_HEIGHT = 268;
 
@@ -416,7 +417,10 @@ const AIChatTab = (props: WriteTabProps) => {
     try {
       requestor.current = apiWrapper();
       const { res, logger } = await requestor.current?.request(AI_WRITE_RESPONSE_STREAM_API, {
-        body: {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
           engine: gptVer,
           history: [
             ...history
@@ -428,7 +432,7 @@ const AIChatTab = (props: WriteTabProps) => {
               preProcessing: preProc
             }
           ]
-        },
+        }),
         method: 'POST'
       });
       splunk = logger;
@@ -588,14 +592,19 @@ const AIChatTab = (props: WriteTabProps) => {
               }}
             />
             {!loadingId && isActiveInput && (
-              <SendCoinButton
-                disabled={!validCheckSubmit()}
+              <IconButton
+                disable={!validCheckSubmit()}
                 onClick={() => {
                   if (validCheckSubmit()) {
                     setIsActiveInput(false);
                     submitChat();
                   }
                 }}
+                iconSize="lg"
+                cssExt={css`
+                  align-self: flex-end;
+                `}
+                iconComponent={props.options.input.length < 1 ? SendDisabledIcon : SendActiveIcon}
               />
             )}
           </TextBox>

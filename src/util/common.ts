@@ -1,12 +1,15 @@
 import { load } from 'cheerio';
 import { marked } from 'marked';
 import { convert } from 'html-to-text';
-import Bridge from './bridge';
+import Bridge, { fileToString } from './bridge';
 
 const renderer = new marked.Renderer();
 renderer.link = (href, title, text) => {
   return `<a href="javascript:void(0)">${text}</a>`;
 };
+
+renderer.image = (href, title, text) =>
+  `<img src=${href} alt=${text} style="width: 100%; height: auto">`;
 
 marked.use({
   renderer: renderer,
@@ -47,6 +50,7 @@ th
   background: #f5f1fd;
   padding: 10px 10px;
 }
+
 </style>
 </head>
 <body>
@@ -89,16 +93,23 @@ export const openNewWindow = (url: string) => {
   Bridge.callBridgeApi('openWindow', url);
 };
 
-export const makeClipboardData = async (markdown: string) => {
-  const html = await markdownToHtml(markdown);
+export const makeClipboardData = async (target: string | Blob) => {
   let text = undefined;
-  if (html) {
-    text = convert(html);
+  let html = undefined;
+  let image = undefined;
+  if (typeof target !== 'string') {
+    image = await fileToString(target);
+  } else {
+    html = await markdownToHtml(target);
+    if (html) {
+      text = convert(html);
+    }
   }
 
   return {
     text,
-    html
+    html,
+    image
   };
 };
 
@@ -138,4 +149,8 @@ export const isHigherVersion = (targetVersion: string, currentVersion: string | 
   if (targetMajor === currentMajor && targetMinor === currentMinor && targetPatch === currentPatch)
     return true;
   return false;
+};
+
+export const getFileExtension = (filename: string) => {
+  return `.${filename.split('.').pop()}`;
 };

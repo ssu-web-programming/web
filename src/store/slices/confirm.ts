@@ -2,23 +2,26 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 
 export interface ConfirmType {
+  title?: string;
   msg: string | React.ReactNode | null;
+  onCancel?: { text: string; callback: () => void };
   onOk: { text: string; callback: () => void };
-  onCancel: { text: string; callback: () => void };
+  direction?: 'row' | 'column';
 }
+
+const initialState: ConfirmType = {
+  title: '',
+  msg: null,
+  onCancel: { text: '', callback: () => {} },
+  onOk: { text: '', callback: () => {} },
+  direction: 'column'
+};
 
 const confirmSlice = createSlice({
   name: 'confirm',
-  initialState: { msg: '', onOk: {}, onCancel: {} } as ConfirmType,
+  initialState: initialState,
   reducers: {
-    initConfirm: (state) => {
-      state.msg = null;
-      state.onOk = {
-        text: '',
-        callback: () => false
-      };
-      state.onCancel = { text: '', callback: () => false };
-    },
+    initConfirm: () => initialState,
     activeConfirm: (state, action: PayloadAction<ConfirmType>) => {
       state = action.payload;
       return state;

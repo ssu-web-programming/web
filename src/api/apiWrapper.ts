@@ -1,10 +1,19 @@
-import { ERR_INVALID_SESSION, ERR_NOT_ONLINE, INVALID_PROMPT, NoCreditError } from '../error/error';
+import {
+  ERR_INVALID_SESSION,
+  ERR_NOT_ONLINE,
+  ExceedPoDriveLimitError,
+  INVALID_PROMPT,
+  NoCreditError,
+  NovaNoCreditError
+} from '../error/error';
 import { lang } from '../locale';
 import Bridge from '../util/bridge';
 import { calLeftCredit } from '../util/common';
 import {
   AI_WRITE_RESPONSE_STREAM_API,
   ALLI_RESPONSE_STREAM_API,
+  NOVA_CHAT_API,
+  PO_DRIVE_UPLOAD,
   TEXT_TO_IMAGE_API
 } from './constant';
 import usePostSplunkLog from './usePostSplunkLog';
@@ -40,28 +49,40 @@ export function apiWrapper() {
         signal: abortController.signal,
         headers: {
           'User-Agent': navigator.userAgent,
-          'content-type': 'application/json',
           'X-PO-AI-API-LANGUAGE': lang,
           ...session,
           ...init.headers
-        },
-        body: JSON.stringify(init.body)
+        }
       });
 
       if (
         (api === AI_WRITE_RESPONSE_STREAM_API ||
           api === TEXT_TO_IMAGE_API ||
-          api === ALLI_RESPONSE_STREAM_API) &&
+          api === ALLI_RESPONSE_STREAM_API ||
+          api === NOVA_CHAT_API) &&
         res.status !== 200
       ) {
         if (res.ok === false && res.status === 429) {
-          const { leftCredit: current, deductionCredit: necessary } = calLeftCredit(res.headers);
-          throw new NoCreditError({ current, necessary });
+          const { leftCredit, deductionCredit } = calLeftCredit(res.headers);
+          const current = parseInt(leftCredit);
+          const necessary = parseInt(deductionCredit);
+          throw api === NOVA_CHAT_API
+            ? new NovaNoCreditError({ current, necessary })
+            : new NoCreditError({
+                current,
+                necessary
+              });
         }
 
         const body = await res.json();
         if (body?.error?.code === 'invalid_prompt') throw new Error(INVALID_PROMPT);
 
+        throw res;
+      }
+
+      if (api === PO_DRIVE_UPLOAD && res.status === 400) {
+        const body = await res.json();
+        if (body?.error?.code === '100') throw new ExceedPoDriveLimitError();
         throw res;
       }
 
@@ -86,7 +107,11 @@ export function apiWrapper() {
   };
 }
 
-export const streaming = async (res: Response, output: (contents: string) => void) => {
+export const streaming = async (
+  res: Response,
+  output: (contents: string) => void,
+  parser = (data: string) => data
+) => {
   const reader = res.body?.getReader();
   const enc = new TextDecoder('utf-8');
 
@@ -97,6 +122,7 @@ export const streaming = async (res: Response, output: (contents: string) => voi
     }
 
     const decodeStr = enc.decode(value);
-    output(decodeStr);
+    const parsed = parser(decodeStr);
+    output(parsed);
   }
 };
