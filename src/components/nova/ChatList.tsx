@@ -1,7 +1,7 @@
 import { useEffect, forwardRef, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import { useTranslation } from 'react-i18next';
-import { NovaChatType } from 'store/slices/novaHistorySlice';
+import { NovaChatType, NovaFileInfo } from 'store/slices/novaHistorySlice';
 import IconTextButton from 'components/buttons/IconTextButton';
 import PreMarkdown from 'components/PreMarkdown';
 import Icon from 'components/Icon';
@@ -11,10 +11,13 @@ import { ReactComponent as CopyChatIcon } from 'img/ico_copy_chat.svg';
 import { ReactComponent as InsertDocsIcon } from 'img/ico_insert_docs.svg';
 import ico_user from 'img/ico_user.svg';
 import ico_ai from 'img/ico_ai.svg';
-import { FileItem, InputBarSubmitParam, getFileIcon, getFileName } from './InputBar';
+import { InputBarSubmitParam, flexCenter, getFileIcon, getFileName } from './InputBar';
 import { useAppSelector } from 'store/store';
 import { selectTabSlice } from 'store/slices/tabSlice';
 import Loading from 'img/agent_loading.gif';
+import Bridge from 'util/bridge';
+import { ClientStatusType } from 'pages/Nova/Nova';
+import { useConfirm } from 'components/Confirm';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -86,6 +89,21 @@ const ChatButtonWrapper = styled.div`
   }
 `;
 
+const FileItem = styled.div`
+  width: fit-content;
+  height: 40px;
+  ${flexCenter}
+  gap: 8px;
+  padding: 8px;
+  border: 1px solid var(--gray-gray-40);
+  border-radius: 8px;
+  background: var(--gray-gray-20);
+
+  font-size: 14px;
+  line-height: 21px;
+  text-align: left;
+`;
+
 const ButtonText = styled.div`
   font-size: 14px;
   line-height: 14px;
@@ -100,6 +118,7 @@ interface ChatListProps {
   onSave: (history: NovaChatType) => void;
   scrollHandler: (e: React.UIEvent<HTMLDivElement>) => void;
   expiredNOVA: boolean;
+  setImagePreview: React.Dispatch<React.SetStateAction<NovaFileInfo | null>>;
 }
 
 type ChatButtonType = {
@@ -113,6 +132,7 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
   const { novaHistory, onSubmit, onCopy, handleInsertDocs, onSave, scrollHandler, expiredNOVA } =
     props;
   const { t } = useTranslation();
+  const confirm = useConfirm();
   const { creating } = useAppSelector(selectTabSlice);
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
@@ -161,7 +181,42 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
             <QuestionContents>
               <p>{item.input}</p>
               {item.files?.map((file) => (
-                <FileItem key={file.name} style={{ width: '100%' }}>
+                <FileItem
+                  key={file.name}
+                  style={{ width: '100%' }}
+                  onClick={async () => {
+                    if (item.type === 'document') {
+                      Bridge.callSyncBridgeApiWithCallback({
+                        api: 'getClientStatus',
+                        callback: async (status: ClientStatusType) => {
+                          switch (status) {
+                            case 'home':
+                              Bridge.callBridgeApi(
+                                'openPoDriveFile',
+                                JSON.stringify({
+                                  fileId: file.fileId,
+                                  fileRevision: file.fileRevision
+                                })
+                              );
+                              break;
+                            default: {
+                              confirm({
+                                title: 'error',
+                                msg: 'only home state',
+                                onOk: {
+                                  text: 'ok',
+                                  callback: () => {}
+                                }
+                              });
+                              break;
+                            }
+                          }
+                        }
+                      });
+                    } else if (item.type === 'image') {
+                      props.setImagePreview(file);
+                    }
+                  }}>
                   <Icon size={28} iconSrc={getFileIcon(file.name)}></Icon>
                   <span>{getFileName(file.name)}</span>
                 </FileItem>

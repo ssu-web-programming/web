@@ -9,7 +9,8 @@ import {
   addChatOutputRes,
   updateChatStatus,
   NovaChatType,
-  removeChat
+  removeChat,
+  NovaFileInfo
 } from 'store/slices/novaHistorySlice';
 import { apiWrapper, streaming } from 'api/apiWrapper';
 import { v4 } from 'uuid';
@@ -43,6 +44,7 @@ import { useShowCreditToast } from 'components/hooks/useShowCreditToast';
 import useErrorHandle from 'components/hooks/useErrorHandle';
 import { useChatNova } from 'components/hooks/useChatNova';
 import { ExceedPoDriveLimitError } from 'error/error';
+import { ReactComponent as closeIcon } from 'img/ico_ai_close.svg';
 
 const flexCenter = css`
   display: flex;
@@ -230,6 +232,8 @@ export const SUPPORT_IMAGE_TYPE = [
   }
 ];
 
+export type ClientStatusType = 'home' | 'doc_edit_mode' | 'doc_view_mode';
+
 export const SUPPORT_FILE_TYPE = [...SUPPORT_DOCUMENT_TYPE, ...SUPPORT_IMAGE_TYPE];
 export const NOVA_EXPIRED_TIME = 1800000;
 interface FileUpladState extends Pick<NovaChatType, 'type'> {
@@ -252,6 +256,7 @@ export default function Nova() {
   const chatListRef = useRef<HTMLDivElement>(null);
   const [expiredNOVA, setExpiredNOVA] = useState<boolean>(false);
   const [inputContents, setInputContents] = useState<{ input: string }>({ input: '' });
+  const [imagePreview, setImagePreview] = useState<NovaFileInfo | null>(null);
 
   const [fileUploadState, setFileUploadState] = useState<FileUpladState>({
     type: '',
@@ -323,7 +328,7 @@ export default function Nova() {
       ret.push({
         success: true,
         file: new File([blob], file.name, { type: file.type }),
-        data: { fileId: file.fileId }
+        data: { fileId: file.fileId, fileRevision: file.fileRevision }
       });
     }
     return ret;
@@ -340,10 +345,7 @@ export default function Nova() {
       try {
         dispatch(setCreating('NOVA'));
 
-        const fileInfo = files.map((file) => {
-          return { name: file.name };
-        });
-
+        const fileInfo: NovaChatType['files'] = [];
         if (expireTimer.current) clearTimeout(expireTimer.current);
 
         const formData = new FormData();
@@ -358,6 +360,12 @@ export default function Nova() {
                 if (res.success) {
                   formData.append('uploadFiles', res.file);
                   formData.append('fileIds[]', res.data.fileId);
+                  fileInfo.push({
+                    name: res.file.name,
+                    fileId: res.data.fileId,
+                    file: res.file,
+                    fileRevision: res.data.fileRevision
+                  });
                 }
               });
           } else if ('fileId' in files[0]) {
@@ -368,6 +376,12 @@ export default function Nova() {
                 if (res.success) {
                   formData.append('uploadFiles', res.file);
                   formData.append('fileIds[]', res.data.fileId);
+                  fileInfo.push({
+                    name: res.file.name,
+                    fileId: res.data.fileId,
+                    file: res.file,
+                    fileRevision: res.data.fileRevision
+                  });
                 }
               });
           }
@@ -579,10 +593,9 @@ export default function Nova() {
   };
 
   const handleInsertDocs = (history: NovaChatType) => {
-    type StatusType = 'home' | 'doc_edit_mode' | 'doc_view_mode';
     Bridge.callSyncBridgeApiWithCallback({
       api: 'getClientStatus',
-      callback: async (status: StatusType) => {
+      callback: async (status: ClientStatusType) => {
         switch (status) {
           case 'home':
             confirm({
@@ -710,6 +723,7 @@ export default function Nova() {
               handleInsertDocs={handleInsertDocs}
               onSave={onSave}
               scrollHandler={handleOnScroll}
+              setImagePreview={setImagePreview}
               ref={chatListRef}
             />
             {/* {creating !== 'none' && (
@@ -761,6 +775,9 @@ export default function Nova() {
             requestor.current?.abort();
           }}></FileUploading>
       }
+      {imagePreview && (
+        <ImagePreview {...imagePreview} onClose={() => setImagePreview(null)}></ImagePreview>
+      )}
     </Wrapper>
   );
 }
@@ -884,6 +901,55 @@ const FileUploading = (props: FileUploadingProps) => {
         <AgentFraphic></AgentFraphic>
       </div>
     </FileUploadWrapper>
+  );
+};
+
+const ImagePreviewWrapper = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 10px;
+
+  .btns {
+    width: 100%;
+  }
+
+  img {
+    background-color: white;
+    width: 100%;
+  }
+`;
+
+interface ImagePreviewProps extends NovaFileInfo {
+  onClose: () => void;
+}
+
+const ImagePreview = (props: ImagePreviewProps) => {
+  return (
+    <ImagePreviewWrapper>
+      <div className="btns">
+        <IconButton
+          iconSize="lg"
+          cssExt={css`
+            color: #fff;
+            padding: 0;
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+          `}
+          iconComponent={closeIcon}
+          onClick={() => props.onClose()}
+        />
+      </div>
+      <img src={URL.createObjectURL(props.file)} alt="preview" />
+    </ImagePreviewWrapper>
   );
 };
 

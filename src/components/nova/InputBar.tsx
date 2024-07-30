@@ -71,7 +71,7 @@ const FileListViewer = styled.div`
   }
 `;
 
-export const FileItem = styled.div`
+const FileItem = styled.div`
   width: fit-content;
   height: 40px;
   ${flexCenter}
