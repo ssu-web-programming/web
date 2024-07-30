@@ -101,7 +101,7 @@ const useErrorHandle = () => {
             msg: t(`Nova.Alert.NoCredit.UpgradeLevel`),
             onOk: {
               text: t('Subscribe'),
-              callback: () => openNewWindow(`credit`)
+              callback: () => openNewWindow(`upgradePlan`)
             },
             onCancel: {
               text: t('Cancel'),
