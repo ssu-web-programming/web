@@ -377,7 +377,8 @@
     },
     "Toast": {
       "ConsumeCredit": "{{deductionCredit}}크레딧이 사용되었어요. 남은 크레딧: {{leftCredit}}",
-      "SelectDoc": "분석하고 싶은 문서를 선택해 보세요."
+      "SelectDoc": "분석하고 싶은 문서를 선택해 보세요.",
+      "SelectImg": "분석하고 싶은 이미지를 선택해 보세요."
     }
   }
 }
