@@ -372,6 +372,7 @@
     },
     "PoDrive": {
       "Desc": "{{size}}MB 이하의 파일 {{count}}개까지 선택할 수 있어요.",
+      "DescImg": "{{size}}MB 이하의 jpg, jpeg, png, gif 파일 {{count}}개를 선택할 수 있어요.",
       "NoFile": "첨부 가능한 {{type}}가 없습니다."
     },
     "Toast": {
