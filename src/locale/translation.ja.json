@@ -363,7 +363,8 @@
       "OverMaxFileUploadCntOnce": "{{max}}個のファイルのみ添付して質問できます。ファイルを再選択してください。"
     },
     "PoDrive": {
-      "Desc": "{{size}}MB未満のファイルを最大{{count}}個選択できます。"
+      "Desc": "{{size}}MB未満のファイルを最大{{count}}個選択できます。",
+      "DescImg": "{{size}} MB未満のjpg、jpeg、png、webp、gifファイルを最大{{count}}個選択できます。"
     },
     "Toast": {
       "ConsumeCredit": "{{deductionCredit}} creditが使用されました。残りのcredit:{{leftCredit}}",

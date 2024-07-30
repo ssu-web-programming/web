@@ -442,7 +442,10 @@ const FileUploader = (props: FileUploaderProps) => {
                   marginBottom: '24px',
                   marginTop: '-8px'
                 }}>
-                {t('Nova.PoDrive.Desc', { size: MAX_FILE_UPLOAD_SIZE_MB, count: uploadLimit })}
+                {t(target === 'nova-file' ? 'Nova.PoDrive.Desc' : 'Nova.PoDrive.DescImg', {
+                  size: MAX_FILE_UPLOAD_SIZE_MB,
+                  count: uploadLimit
+                })}
               </div>
               <PoDrive
                 max={uploadLimit}

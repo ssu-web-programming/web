@@ -363,7 +363,8 @@
       "OverMaxFileUploadCntOnce": "You can attach up to {{max}} files only. Please reselect the files."
     },
     "PoDrive": {
-      "Desc": "You can select up to {{count}} files under {{size}}MB."
+      "Desc": "You can select up to {{count}} files under {{size}}MB.",
+      "DescImg": "You can select up to {{count}} jpg, jpeg, png, and gif files under {{size}} MB."
     },
     "Toast": {
       "ConsumeCredit": "{{deductionCredit}} credits were used. Remaining Credits: {{leftCredit}}",
