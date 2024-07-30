@@ -1,4 +1,3 @@
-import React from 'react';
 import { apiWrapper } from 'api/apiWrapper';
 import { PO_DRIVE_LIST } from 'api/constant';
 import { SUPPORT_DOCUMENT_TYPE, SUPPORT_IMAGE_TYPE } from 'pages/Nova/Nova';
@@ -39,7 +38,6 @@ const Wrapper = styled.div`
 const Navi = styled.div`
   width: 100%;
   height: 56px;
-
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -55,6 +53,13 @@ const Navi = styled.div`
   svg {
     width: 16px;
     height: 16px;
+  }
+
+  .currentDir {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    cursor: pointer;
   }
 `;
 
@@ -258,26 +263,36 @@ export default function PoDrive(props: PoDriveProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const onBack = () => {
+    const index = navi.length - 1;
+    if (index === 0) return;
+    setNavi((prev) => prev.slice(0, index));
+    moveFolder(navi[index - 1].fileId);
+  };
+
   return (
     <Wrapper>
       <Navi>
+        {navi.length > 1 && (
+          <IconRight
+            style={{ width: '12px', height: '24px', transform: 'rotate(180deg)' }}
+            onClick={onBack}
+          />
+        )}
         <Icon size={24} iconSrc={getDirIcon(navi[navi.length - 1])} />
-        {navi.map((item, index) => {
-          return (
-            <React.Fragment key={item.fileId}>
-              <div
-                onClick={() => {
-                  const index = navi.findIndex((nav) => nav.fileId === item.fileId);
-                  setNavi((prev) => prev.slice(0, index + 1));
-                  moveFolder(item.fileId);
-                }}
-                style={{ cursor: 'pointer' }}>
-                {item.fileName}
-              </div>
-              {index !== navi.length - 1 && <IconRight style={{ width: '12px', height: '24px' }} />}
-            </React.Fragment>
-          );
-        })}
+        <div className="currentDir">
+          <div
+            onClick={async () => {
+              if (navi.length > 1) {
+                const index = navi.findIndex((nav) => nav.fileId === navi[navi.length - 1].fileId);
+                setNavi((prev) => prev.slice(0, index));
+                moveFolder(navi[index - 1].fileId);
+              }
+            }}
+            className="currentDir">
+            {navi[navi.length - 1].fileName}
+          </div>
+        </div>
       </Navi>
       <FileList>
         {state === 'none' &&
