@@ -364,11 +364,13 @@
     },
     "PoDrive": {
       "Desc": "You can select up to {{count}} files under {{size}}MB.",
-      "DescImg": "You can select up to {{count}} jpg, jpeg, png, and gif files under {{size}} MB."
+      "DescImg": "You can select up to {{count}} jpg, jpeg, png, and gif files under {{size}} MB.",
+      "NoFile": "There are no attachable {{type}}."
     },
     "Toast": {
       "ConsumeCredit": "{{deductionCredit}} credits were used. Remaining Credits: {{leftCredit}}",
-      "SelectDoc": "Select the document you want to analyze."
+      "SelectDoc": "Select the document you want to analyze.",
+      "SelectImg": "Please select an image to analyze."
     }
   }
 }

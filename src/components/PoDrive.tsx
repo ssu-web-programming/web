@@ -249,7 +249,12 @@ export default function PoDrive(props: PoDriveProps) {
 
   useEffect(() => {
     initFileList();
-    dispatch(activeToast({ type: 'info', msg: t('Nova.Toast.SelectDoc') }));
+    dispatch(
+      activeToast({
+        type: 'info',
+        msg: t(props.target === 'nova-file' ? 'Nova.Toast.SelectDoc' : 'Nova.Toast.SelectImg')
+      })
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
