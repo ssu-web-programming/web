@@ -548,7 +548,7 @@ export const getFileIcon = (name: string) => {
     sheet: ico_file_sheet
   };
 
-  return fileIconMap[fileExt] || null;
+  return fileIconMap[fileExt.toLowerCase()] || null;
 };
 
 export const getFileName = (name: string) => {
