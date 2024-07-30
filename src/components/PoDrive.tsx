@@ -198,7 +198,7 @@ export default function PoDrive(props: PoDriveProps) {
           l.fileType < r.fileType ? -1 : l.fileType > r.fileType ? 1 : 0
         )
         .map((item: DriveFileInfo) => {
-          const ext = getFileExtension(item.fileName);
+          const ext = getFileExtension(item.fileName).toLowerCase();
           const supports =
             props.target === 'nova-image' ? SUPPORT_IMAGE_TYPE : SUPPORT_DOCUMENT_TYPE;
           const type = supports.find((type) => type.extensions === ext)?.mimeType;
