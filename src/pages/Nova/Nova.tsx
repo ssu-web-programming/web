@@ -791,12 +791,16 @@ const SearchGuide = (props: SearchGuideProps) => {
 
   const PROMPT_EXAMPLE = [
     {
-      src: ico_image,
+      src: ico_documents,
       txt: t(`Nova.SearchGuide.Example1`)
     },
     {
-      src: ico_documents,
+      src: ico_image,
       txt: t(`Nova.SearchGuide.Example2`)
+    },
+    {
+      src: ico_documents,
+      txt: t(`Nova.SearchGuide.Example3`)
     }
   ];
 
