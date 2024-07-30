@@ -31,7 +31,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
 
-  outline: 1px solid #c9cdd2;
+  border: 1px solid #c9cdd2;
   border-radius: 8px;
   overflow: hidden;
 `;

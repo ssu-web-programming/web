@@ -1,18 +1,21 @@
+import { useRef, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import Blanket from './Blanket';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import { activeConfirm, ConfirmType, initConfirm, selectConfirm } from '../store/slices/confirm';
 import Button from './buttons/Button';
+import { CustomScrollbar } from 'style/cssCommon';
 
 const ConfirmBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
   min-width: 328px;
   max-width: 343px;
   padding: 24px;
@@ -20,6 +23,8 @@ const ConfirmBox = styled.div`
   background-color: #fff;
   border-radius: 10px;
   z-index: 100;
+  max-height: 100vh;
+  height: fit-content;
 `;
 
 const Header = styled.div`
@@ -39,6 +44,11 @@ const ContentArea = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+
+  height: fit-content;
+  overflow-y: auto;
+  ${CustomScrollbar}
+
   & .important {
     color: red;
     font-weight: 700;
@@ -62,6 +72,21 @@ const Footer = styled.div<{ direction?: 'column' | 'row' }>`
 
 const Confirm = () => {
   const { title, msg, onOk, onCancel, direction = 'row' } = useAppSelector(selectConfirm);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const footerRef = useRef<HTMLDivElement>(null);
+  const contentsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (headerRef.current && footerRef.current) {
+      const headerHeight = headerRef.current.clientHeight;
+      const footerHeight = footerRef.current.clientHeight;
+      const contents = contentsRef.current;
+
+      if (contents) {
+        contents.style.height = `calc(100vh - ${headerHeight + footerHeight}px)`;
+      }
+    }
+  }, [headerRef, footerRef]);
 
   // 필요시 사용
   // const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -78,11 +103,11 @@ const Confirm = () => {
     <>
       <Blanket />
       <ConfirmBox>
-        <Header>
+        <Header ref={headerRef}>
           <Title>{title}</Title>
         </Header>
-        <ContentArea>{msg}</ContentArea>
-        <Footer direction={direction}>
+        <ContentArea ref={contentsRef}>{msg}</ContentArea>
+        <Footer direction={direction} ref={footerRef}>
           <Button
             variant="purple"
             width={'full'}

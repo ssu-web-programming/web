@@ -439,8 +439,7 @@ const FileUploader = (props: FileUploaderProps) => {
                   fontWeight: 400,
                   fontSize: '16px',
                   lineHeight: '24px',
-                  marginBottom: '24px',
-                  marginTop: '-8px'
+                  marginBottom: '24px'
                 }}>
                 {t(target === 'nova-file' ? 'Nova.PoDrive.Desc' : 'Nova.PoDrive.DescImg', {
                   size: MAX_FILE_UPLOAD_SIZE_MB,
