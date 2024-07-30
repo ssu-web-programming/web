@@ -9,6 +9,7 @@ const FileButtonBase = styled.button`
   width: fit-content;
   height: fit-content;
   background-color: transparent;
+  padding: 0;
 `;
 
 const Label = styled.label`

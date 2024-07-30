@@ -189,7 +189,7 @@ const OptionItem = (props: { option: TooltipOption; type: TooltipType; onSelect?
       <>
         <OptionItemWrapper type={type} onClick={handleOnClick}>
           <div style={{ marginRight: '6px' }}>
-            <Icon iconSrc={option.icon?.src} size={18} />
+            <Icon iconSrc={option.icon?.src} size={24} />
           </div>
           <span>{option.name}</span>
         </OptionItemWrapper>
