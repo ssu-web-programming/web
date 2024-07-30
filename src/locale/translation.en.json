@@ -271,8 +271,9 @@
     "SearchGuide": {
       "Title": "Ask the smart AI anything.",
       "SubTitle": "Attach a document and quickly grasp the main contents through chat.",
-      "Example1": "Draw a romantic sunset scene.",
-      "Example2": "Who attended the meeting in this document?"
+      "Example1": "Draft a personal statement for application approval.",
+      "Example2": "Create an AI-themed image.",
+      "Example3": "Growth prospects of the 2024 EV market."
     },
     "ActionWindow": {
       "Placeholder": "NOVA, ask anything"
