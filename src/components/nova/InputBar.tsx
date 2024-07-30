@@ -5,6 +5,8 @@ import IconButton from 'components/buttons/IconButton';
 import Icon from 'components/Icon';
 import { ReactComponent as FileIcon } from '../../img/file.svg';
 import { ReactComponent as ImageIcon } from '../../img/landscape.svg';
+import { ReactComponent as DocsPlusIcon } from '../../img/ico_upload_docs_plus.svg';
+import { ReactComponent as ImagePlusIcon } from '../../img/ico_upload_img_plus.svg';
 import { ReactComponent as SendActiveIcon } from 'img/ico_send_active.svg';
 import { ReactComponent as SendDisabledIcon } from 'img/ico_send_disabled.svg';
 import { ReactComponent as DeleteIcon } from 'img/ico_delete.svg';
@@ -22,8 +24,9 @@ import ico_file_word from 'img/ico_file_word.svg';
 import ico_file_slide from 'img/ico_file_slide.svg';
 import ico_file_sheet from 'img/ico_file_sheet.svg';
 import Tooltip from 'components/Tooltip';
-import ico_cloud from 'img/ico_cloud.svg';
-import ico_local from 'img/ico_local.svg';
+import ico_logo_po from 'img/ico_logo_po.svg';
+import ico_mobile from 'img/ico_mobile.svg';
+
 import { NovaChatType } from 'store/slices/novaHistorySlice';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from 'store/store';
@@ -97,7 +100,7 @@ const InputBtnWrapper = styled.div`
 const UploadBtn = styled.div`
   display: flex;
   justify-content: space-between;
-  gap: 11px;
+  gap: 8px;
 
   > button {
     width: 32px;
@@ -415,7 +418,7 @@ const FileUploader = (props: FileUploaderProps) => {
   const TOOLTIP_UPLOAD_OPTION = (target: string) => [
     {
       name: t(`Nova.UploadTooltip.PolarisDrive`),
-      icon: { src: ico_cloud },
+      icon: { src: ico_logo_po },
       onClick: async () => {
         const uploadLimit = getDriveSelectFileCount();
         if (uploadLimit === 0) {
@@ -444,7 +447,8 @@ const FileUploader = (props: FileUploaderProps) => {
               <PoDrive
                 max={uploadLimit}
                 onChange={(files: DriveFileInfo[]) => onLoadDriveFile(files)}
-                target={target}></PoDrive>
+                target={target}
+              />
             </>
           ),
           onOk: { text: t('Confirm'), callback: () => {} },
@@ -457,7 +461,7 @@ const FileUploader = (props: FileUploaderProps) => {
     },
     {
       name: t(`Nova.UploadTooltip.Local`),
-      icon: { src: ico_local },
+      icon: { src: ico_mobile },
       onClick: () => getCurrentFileInput(target)?.current?.click()
     }
   ];
@@ -472,13 +476,13 @@ const FileUploader = (props: FileUploaderProps) => {
     {
       target: 'nova-file',
       accept: SUPPORT_DOCUMENT_TYPE,
-      children: <FileIcon />,
+      children: <DocsPlusIcon />,
       ref: inputDocsFileRef
     },
     {
       target: 'nova-image',
       accept: SUPPORT_IMAGE_TYPE,
-      children: <ImageIcon />,
+      children: <ImagePlusIcon />,
       ref: inputImgFileRef
     }
   ];
