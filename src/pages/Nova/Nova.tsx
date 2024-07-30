@@ -27,7 +27,9 @@ import ico_nova from 'img/ico_nova.svg';
 import ico_credit_info from 'img/ico_credit_line.svg';
 import ico_credit from 'img/ico_credit_gray.svg';
 import { ReactComponent as IconMessagePlus } from 'img/ico_message_plus.svg';
-import { ReactComponent as AgentFraphic } from 'img/agent_graphic.svg';
+import { ReactComponent as AgentFraphicKo } from 'img/agent_graphic_ko.svg';
+import { ReactComponent as AgentFraphicEn } from 'img/agent_graphic_en.svg';
+import { ReactComponent as AgentFraphicJa } from 'img/agent_graphic_ja.svg';
 import { ReactComponent as IconArrowLeft } from 'img/ico_arrow_left.svg';
 import ChatList from 'components/nova/ChatList';
 import ico_image from 'img/ico_image.svg';
@@ -45,6 +47,7 @@ import useErrorHandle from 'components/hooks/useErrorHandle';
 import { useChatNova } from 'components/hooks/useChatNova';
 import { ExceedPoDriveLimitError } from 'error/error';
 import { ReactComponent as closeIcon } from 'img/ico_ai_close.svg';
+import { lang } from 'locale';
 
 const flexCenter = css`
   display: flex;
@@ -881,6 +884,9 @@ const FileUploading = (props: FileUploadingProps) => {
   const { type, state, progress, onClickBack } = props;
   const { t } = useTranslation();
   if (state === 'ready') return null;
+
+  const AgentFraphic =
+    lang === 'ko' ? AgentFraphicKo : lang === 'ja' ? AgentFraphicJa : AgentFraphicEn;
 
   return (
     <FileUploadWrapper>
