@@ -288,7 +288,7 @@
     "UploadState": {
       "Uploading": "{{type}}をアップロード中です。",
       "upload_image": "回答を提供するために、ファイルをPolaris Officeドライブに保存しています。",
-      "upload_document": "回答を提供するために、ファイルをPolaris Officeドライブに保存しています。",
+      "upload_document": "回答を提供するために、ファイルをPolaris Officeドライブで処理しています。",
       "wait": "回答を準備中です。少々お待ちください。",
       "delay": "もうすぐ終わります。もう少しお待ちください！"
     },
