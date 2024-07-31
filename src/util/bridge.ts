@@ -493,12 +493,8 @@ const Bridge = {
 export default Bridge;
 
 export function useCopyClipboard() {
-  const dispatch = useAppDispatch();
-  const { t } = useTranslation();
-
   return async (target: string | Blob) => {
     const clipboardData = await makeClipboardData(target);
     await Bridge.callBridgeApi('copyClipboard', JSON.stringify(clipboardData));
-    dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.CopyCompleted`) }));
   };
 }
