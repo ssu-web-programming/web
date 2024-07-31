@@ -4,6 +4,7 @@ import IconTextButton from 'components/buttons/IconTextButton';
 import IconButton from 'components/buttons/IconButton';
 import { ReactComponent as closeIcon } from 'img/ico_ai_close.svg';
 import ico_download from 'img/ico_download.svg';
+import { useTranslation } from 'react-i18next';
 
 type OverlayProps = {
   image?: string;
@@ -64,6 +65,7 @@ const ImageModal = styled.div`
 `;
 
 const Overlay: React.FC<OverlayProps> = ({ image, onClose, onSave }) => {
+  const { t } = useTranslation();
   return (
     <OverlayWrapper>
       <IconButton
@@ -82,7 +84,7 @@ const Overlay: React.FC<OverlayProps> = ({ image, onClose, onSave }) => {
       <ImageModal>
         <img src={image} alt="Modal" />
         <IconTextButton iconSize={24} iconSrc={ico_download} iconPos="left" onClick={onSave}>
-          <span>저장</span>
+          <span>{t('Save')}</span>
         </IconTextButton>
       </ImageModal>
     </OverlayWrapper>
