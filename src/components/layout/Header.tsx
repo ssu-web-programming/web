@@ -65,7 +65,7 @@ export default function Header(props: HeaderProps) {
   const { title, subTitle, children } = props;
   const location = useLocation();
 
-  if (location.pathname === '/nova') {
+  if (location.pathname.toLowerCase() === '/nova') {
     return <Contents style={{ height: '56px', padding: '0px 16px' }}>{children}</Contents>;
   }
 
