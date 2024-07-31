@@ -275,7 +275,7 @@ export default function PoDrive(props: PoDriveProps) {
       <Navi>
         {navi.length > 1 && (
           <IconRight
-            style={{ width: '12px', height: '24px', transform: 'rotate(180deg)' }}
+            style={{ width: '12px', minWidth: '12px', height: '24px', transform: 'rotate(180deg)' }}
             onClick={onBack}
           />
         )}
