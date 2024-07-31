@@ -288,7 +288,7 @@
     "UploadState": {
       "Uploading": "Uploading {{type}}.",
       "upload_image": "To provide an answer, we are saving the file to Polaris Office Drive.",
-      "upload_document": "To provide an answer, we are saving the file to Polaris Office Drive.",
+      "upload_document": "To provide an answer, we are processing the file on Polaris Office Drive.",
       "wait": "I'm preparing an answer. Please wait for a moment! ",
       "delay": "It's almost finished. Please wait a little longer!"
     },
