@@ -105,7 +105,6 @@ const FileItem = styled.div`
     .name {
       font-weight: 400;
       font-size: 16px;
-      line-height: 16px;
       letter-spacing: -0.02em;
 
       margin-bottom: 4px;
@@ -117,9 +116,7 @@ const FileItem = styled.div`
     .createdAt {
       font-weight: 400;
       font-size: 12px;
-      line-height: 12px;
-
-      color: #9ea4aa;
+      color: var(--gray-gray-60-03);
 
       svg {
         margin-left: 8px;
