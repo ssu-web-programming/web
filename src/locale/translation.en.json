@@ -159,6 +159,8 @@
     "ErrorMsg": "An error has occurred. Please try again later. ({{code}} : {{msg}})",
     "ServiceErrorMsg": "Experiencing issues with the service. Please try again later.",
     "UnauthorizedMsg": "You need to be logged in to use this feature. Please check your login status again.",
+    "CopyCompleted": "Copy completed.",
+    "CopyFailed": "Copy failed.",
     "SaveCompleted": "Saved",
     "SaveFailed": "Failed to save"
   },

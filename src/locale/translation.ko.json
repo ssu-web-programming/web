@@ -163,8 +163,8 @@
     "ErrorMsg": "오류가 발생했습니다. 잠시 후 다시 시도해 주세요. ({{code}} : {{msg}})",
     "ServiceErrorMsg": "서비스 이용 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.",
     "UnauthorizedMsg": "이 기능을 사용하려면 로그인이 필요합니다. 현재 로그인되어 있는지 다시 한 번 확인해주세요.",
-    "CopyCompleted": "복사 완료",
-    "CopyFailed": "복사 실패",
+    "CopyCompleted": "복사가 완료되었어요.",
+    "CopyFailed": "복사가 실패되었어요.",
     "SaveCompleted": "저장 완료",
     "SaveFailed": "저장 실패"
   },
