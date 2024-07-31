@@ -52,6 +52,7 @@ import { DriveFileInfo } from 'components/PoDrive';
 import { useShowCreditToast } from 'components/hooks/useShowCreditToast';
 import useErrorHandle from 'components/hooks/useErrorHandle';
 import { useChatNova } from 'components/hooks/useChatNova';
+import Header from 'components/layout/Header';
 import { ExceedPoDriveLimitError } from 'error/error';
 import { ReactComponent as closeIcon } from 'img/ico_ai_close.svg';
 import { lang } from 'locale';
@@ -72,18 +73,9 @@ const Wrapper = styled(Container)`
   justify-content: flex-start;
 `;
 
-const Header = styled.div`
+const NovaHeader = styled(Header)`
   width: 100%;
-  height: 56px;
-  display: flex;
-  justify-content: space-between;
-  padding: 0px 16px;
   color: var(--ai-purple-50-main);
-
-  > div {
-    ${flexCenter}
-    flex-direction: row;
-  }
 `;
 
 const Body = styled.div`
@@ -103,10 +95,16 @@ const TitleWrapper = styled.div`
     width: 55px;
     height: 16px;
   }
+
+  ${flexCenter}
+  flex-direction: row;
 `;
 
 const ButtonWrapper = styled.div`
   gap: 8px;
+
+  ${flexCenter}
+  flex-direction: row;
 `;
 
 const GuideWrapper = styled(Container)`
@@ -793,7 +791,7 @@ export default function Nova() {
 
   return (
     <Wrapper>
-      <Header>
+      <NovaHeader title="" subTitle="">
         <TitleWrapper>
           <Icon iconSrc={ico_ai} size="lg" />
           <Icon iconSrc={ico_nova} size="lg" className="nova" />
@@ -816,7 +814,7 @@ export default function Nova() {
             <Icon iconSrc={ico_credit_info} size={32} />
           </Tooltip>
         </ButtonWrapper>
-      </Header>
+      </NovaHeader>
       <Body>
         {novaHistory.length < 1 ? (
           <GuideWrapper>
