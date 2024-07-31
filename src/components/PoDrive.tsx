@@ -59,7 +59,6 @@ const Navi = styled.div`
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-    cursor: pointer;
   }
 `;
 
@@ -272,23 +271,21 @@ export default function PoDrive(props: PoDriveProps) {
       <Navi>
         {navi.length > 1 && (
           <IconRight
-            style={{ width: '12px', minWidth: '12px', height: '24px', transform: 'rotate(180deg)' }}
+            style={{
+              width: '12px',
+              minWidth: '12px',
+              height: '24px',
+              transform: 'rotate(180deg)',
+              cursor: 'pointer'
+            }}
             onClick={onBack}
           />
         )}
         <Icon size={24} iconSrc={getDirIcon(navi[navi.length - 1])} />
         <div className="currentDir">
-          <div
-            onClick={async () => {
-              if (navi.length > 1) {
-                const index = navi.findIndex((nav) => nav.fileId === navi[navi.length - 1].fileId);
-                setNavi((prev) => prev.slice(0, index));
-                moveFolder(navi[index - 1].fileId);
-              }
-            }}
-            className="currentDir">
-            {navi[navi.length - 1].fileName}
-          </div>
+          {navi[navi.length - 1].fileName === 'drive'
+            ? t('Nova.UploadTooltip.PolarisDrive')
+            : navi[navi.length - 1].fileName}
         </div>
       </Navi>
       <FileList>
