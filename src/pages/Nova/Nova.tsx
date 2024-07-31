@@ -268,7 +268,7 @@ export default function Nova() {
   const [showScrollDownBtn, setShowScrollDownBtn] = useState(false);
   const chatListRef = useRef<HTMLDivElement>(null);
   const [expiredNOVA, setExpiredNOVA] = useState<boolean>(false);
-  const [inputContents, setInputContents] = useState<{ input: string }>({ input: '' });
+  const [inputContents, setInputContents] = useState<string>('');
   const [imagePreview, setImagePreview] = useState<NovaFileInfo | null>(null);
 
   const [fileUploadState, setFileUploadState] = useState<FileUpladState>({
@@ -657,6 +657,12 @@ export default function Nova() {
     }
   }, [expiredNOVA, t, confirm, chatNova]);
 
+  useEffect(() => {
+    if (location.state?.body) {
+      setInputContents(location.state.body);
+    }
+  }, [location.state?.body]);
+
   const newChat = async () => {
     const ret = await confirm({
       title: t(`Nova.Confirm.NewChat.Title`)!,
@@ -784,11 +790,6 @@ export default function Nova() {
     }
   };
 
-  const contentsBody = location.state?.body || inputContents.input;
-  if (location.state?.body) {
-    location.state.body = '';
-  }
-
   return (
     <Wrapper>
       <NovaHeader title="" subTitle="">
@@ -818,7 +819,7 @@ export default function Nova() {
       <Body>
         {novaHistory.length < 1 ? (
           <GuideWrapper>
-            <Nova.SearchGuide setContents={setInputContents} />
+            <Nova.SearchGuide setInputContents={setInputContents} />
           </GuideWrapper>
         ) : (
           <>
@@ -874,7 +875,8 @@ export default function Nova() {
         disabled={creating !== 'none'}
         expiredNOVA={expiredNOVA}
         onSubmit={onSubmit}
-        contents={{ input: contentsBody }}></InputBar>
+        contents={inputContents}
+        setContents={setInputContents}></InputBar>
       {
         <FileUploading
           {...fileUploadState}
@@ -890,7 +892,7 @@ export default function Nova() {
 }
 
 interface SearchGuideProps {
-  setContents: React.Dispatch<React.SetStateAction<{ input: string }>>;
+  setInputContents: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const SearchGuide = (props: SearchGuideProps) => {
@@ -923,7 +925,7 @@ const SearchGuide = (props: SearchGuideProps) => {
 
       <Guidebody>
         {PROMPT_EXAMPLE.map((item) => (
-          <GuideExample key={item.txt} onClick={() => props.setContents({ input: item.txt })}>
+          <GuideExample key={item.txt} onClick={() => props.setInputContents(item.txt)}>
             <Icon iconSrc={item.src} size="md" />
             <span>{item.txt}</span>
           </GuideExample>
