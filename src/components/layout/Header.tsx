@@ -4,6 +4,7 @@ import icon_ai_tools from 'img/ico_ai_tools.svg';
 import { flex, alignItemCenter, justiSpaceBetween } from '../../style/cssCommon';
 import Bridge from '../../util/bridge';
 import IconButton from '../buttons/IconButton';
+import { useLocation } from 'react-router';
 
 import { ReactComponent as IconClose } from '../../img/ico_ai_close.svg';
 
@@ -57,10 +58,17 @@ const CloseButtonWrap = styled.div`
 interface HeaderProps {
   title: string;
   subTitle: string;
+  children?: React.ReactNode;
 }
 
 export default function Header(props: HeaderProps) {
-  const { title, subTitle } = props;
+  const { title, subTitle, children } = props;
+  const location = useLocation();
+
+  if (location.pathname === '/nova') {
+    return <Contents style={{ height: '56px', padding: '0px 16px' }}>{children}</Contents>;
+  }
+
   return (
     <Contents>
       <TitleWrapper>
