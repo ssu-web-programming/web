@@ -3,8 +3,6 @@ import styled, { css } from 'styled-components';
 import FileButton from 'components/FileButton';
 import IconButton from 'components/buttons/IconButton';
 import Icon from 'components/Icon';
-import { ReactComponent as FileIcon } from '../../img/file.svg';
-import { ReactComponent as ImageIcon } from '../../img/landscape.svg';
 import { ReactComponent as DocsPlusIcon } from '../../img/ico_upload_docs_plus.svg';
 import { ReactComponent as ImagePlusIcon } from '../../img/ico_upload_img_plus.svg';
 import { ReactComponent as SendActiveIcon } from 'img/ico_send_active.svg';
