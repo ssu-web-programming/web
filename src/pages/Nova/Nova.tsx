@@ -16,8 +16,15 @@ import { apiWrapper, streaming } from 'api/apiWrapper';
 import { v4 } from 'uuid';
 import Tooltip from 'components/Tooltip';
 import { useConfirm } from 'components/Confirm';
-import { NOVA_CHAT_API, PO_DRIVE_DOWNLOAD, PO_DRIVE_UPLOAD } from 'api/constant';
-import { insertDoc, markdownToHtml } from 'util/common';
+import {
+  NOVA_CHAT_API,
+  PO_DRIVE_CONVERT,
+  PO_DRIVE_CONVERT_DOWNLOAD,
+  PO_DRIVE_CONVERT_STATUS,
+  PO_DRIVE_DOWNLOAD,
+  PO_DRIVE_UPLOAD
+} from 'api/constant';
+import { getFileExtension, getFileName, insertDoc, markdownToHtml } from 'util/common';
 import Bridge, { useCopyClipboard } from 'util/bridge';
 import { load } from 'cheerio';
 import Icon from 'components/Icon';
@@ -27,7 +34,9 @@ import ico_nova from 'img/ico_nova.svg';
 import ico_credit_info from 'img/ico_credit_line.svg';
 import ico_credit from 'img/ico_credit_gray.svg';
 import { ReactComponent as IconMessagePlus } from 'img/ico_message_plus.svg';
-import { ReactComponent as AgentFraphic } from 'img/agent_graphic.svg';
+import { ReactComponent as AgentFraphicKo } from 'img/agent_graphic_ko.svg';
+import { ReactComponent as AgentFraphicEn } from 'img/agent_graphic_en.svg';
+import { ReactComponent as AgentFraphicJa } from 'img/agent_graphic_ja.svg';
 import { ReactComponent as IconArrowLeft } from 'img/ico_arrow_left.svg';
 import ChatList from 'components/nova/ChatList';
 import ico_image from 'img/ico_image.svg';
@@ -43,8 +52,10 @@ import { DriveFileInfo } from 'components/PoDrive';
 import { useShowCreditToast } from 'components/hooks/useShowCreditToast';
 import useErrorHandle from 'components/hooks/useErrorHandle';
 import { useChatNova } from 'components/hooks/useChatNova';
+import Header from 'components/layout/Header';
 import { ExceedPoDriveLimitError } from 'error/error';
 import { ReactComponent as closeIcon } from 'img/ico_ai_close.svg';
+import { lang } from 'locale';
 
 const flexCenter = css`
   display: flex;
@@ -62,18 +73,9 @@ const Wrapper = styled(Container)`
   justify-content: flex-start;
 `;
 
-const Header = styled.div`
+const NovaHeader = styled(Header)`
   width: 100%;
-  height: 56px;
-  display: flex;
-  justify-content: space-between;
-  padding: 0px 16px;
   color: var(--ai-purple-50-main);
-
-  > div {
-    ${flexCenter}
-    flex-direction: row;
-  }
 `;
 
 const Body = styled.div`
@@ -93,10 +95,16 @@ const TitleWrapper = styled.div`
     width: 55px;
     height: 16px;
   }
+
+  ${flexCenter}
+  flex-direction: row;
 `;
 
 const ButtonWrapper = styled.div`
   gap: 8px;
+
+  ${flexCenter}
+  flex-direction: row;
 `;
 
 const GuideWrapper = styled(Container)`
@@ -240,6 +248,11 @@ interface FileUpladState extends Pick<NovaChatType, 'type'> {
   state: 'ready' | 'upload' | 'wait' | 'delay';
   progress: number;
 }
+
+interface PollingType extends NovaFileInfo {
+  taskId: string;
+}
+
 export default function Nova() {
   const location = useLocation();
   const dispatch = useAppDispatch();
@@ -255,7 +268,7 @@ export default function Nova() {
   const [showScrollDownBtn, setShowScrollDownBtn] = useState(false);
   const chatListRef = useRef<HTMLDivElement>(null);
   const [expiredNOVA, setExpiredNOVA] = useState<boolean>(false);
-  const [inputContents, setInputContents] = useState<{ input: string }>({ input: '' });
+  const [inputContents, setInputContents] = useState<string>('');
   const [imagePreview, setImagePreview] = useState<NovaFileInfo | null>(null);
 
   const [fileUploadState, setFileUploadState] = useState<FileUpladState>({
@@ -280,6 +293,95 @@ export default function Nova() {
   const expireTimer = useRef<NodeJS.Timeout | null>(null);
 
   const requestor = useRef<ReturnType<typeof apiWrapper>>();
+
+  const getConvertStatus = async (fileInfo: { taskId: string }) => {
+    const { res } = await apiWrapper().request(PO_DRIVE_CONVERT_STATUS, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        taskId: fileInfo.taskId
+      }),
+      method: 'POST'
+    });
+    const json = await res.json();
+    const {
+      success,
+      data: { status }
+    } = json;
+
+    if (!success) throw new Error('Convert Error');
+    return status;
+  };
+
+  const refPolling = useRef<any>(null); // TODO :type
+  const downloadConvertFile = async (fileInfo: PollingType) => {
+    const pollingConvertStatus = () =>
+      new Promise((resolve) => {
+        refPolling.current = {
+          [`${fileInfo.fileId}`]: setInterval(async () => {
+            const status = await getConvertStatus(fileInfo);
+            if (status === 'completed') {
+              clearInterval(refPolling.current[fileInfo.fileId]);
+              resolve(true);
+            }
+          }, 1000)
+        };
+      });
+    await pollingConvertStatus();
+
+    const { res } = await apiWrapper().request(PO_DRIVE_CONVERT_DOWNLOAD, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        fileId: fileInfo.fileId,
+        fileRevision: fileInfo.fileRevision
+      }),
+      method: 'POST'
+    });
+    const blob = await res.blob();
+    return new File([blob], `${getFileName(fileInfo.name)}.pdf`, { type: 'application/pdf' });
+  };
+
+  const reqConvertFile = async (fileInfo: NovaFileInfo) => {
+    const { res } = await apiWrapper().request(PO_DRIVE_CONVERT, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        ...fileInfo
+      }),
+      method: 'POST'
+    });
+
+    const json = await res.json();
+    const {
+      success,
+      data: { taskId }
+    } = json;
+
+    if (!success) throw new Error('Convert Error');
+    const converted = await downloadConvertFile({ ...fileInfo, taskId });
+    return converted;
+  };
+
+  const convertFiles = async (files: NovaFileInfo[]) => {
+    const promises = files.map(async (file) => {
+      const ext = getFileExtension(file.name);
+      if (ext === '.hwp' || ext === '.xls' || ext === '.xlsx') {
+        const converted = await reqConvertFile(file);
+        return {
+          ...file,
+          file: converted
+        };
+      } else {
+        return file;
+      }
+    });
+    const results = await Promise.all(promises);
+    return results;
+  };
 
   const reqUploadFiles = async (files: File[]) => {
     // TODO : promise all
@@ -342,6 +444,7 @@ export default function Nova() {
       const { vsId = '', threadId = '' } = lastChat || {};
       const { input, files = [], type } = submitParam;
       let splunk = null;
+      let timer = null;
       try {
         dispatch(setCreating('NOVA'));
 
@@ -352,14 +455,13 @@ export default function Nova() {
         if (files[0]) {
           if (type === 'image' || type === 'document')
             setFileUploadState({ type, state: 'upload', progress: 20 });
+
           if (files[0] instanceof File) {
             const resUpload = await reqUploadFiles(files as File[]);
             resUpload
               .filter((res) => res.success)
               .forEach((res) => {
                 if (res.success) {
-                  formData.append('uploadFiles', res.file);
-                  formData.append('fileIds[]', res.data.fileId);
                   fileInfo.push({
                     name: res.file.name,
                     fileId: res.data.fileId,
@@ -374,8 +476,6 @@ export default function Nova() {
               .filter((res) => res.success)
               .forEach((res) => {
                 if (res.success) {
-                  formData.append('uploadFiles', res.file);
-                  formData.append('fileIds[]', res.data.fileId);
                   fileInfo.push({
                     name: res.file.name,
                     fileId: res.data.fileId,
@@ -385,6 +485,13 @@ export default function Nova() {
                 }
               });
           }
+
+          const convertedFileInfo = await convertFiles(fileInfo);
+
+          convertedFileInfo.forEach((info) => {
+            formData.append('uploadFiles', info.file);
+            formData.append('fileIds[]', info.fileId);
+          });
         }
 
         const role = 'user';
@@ -397,7 +504,6 @@ export default function Nova() {
         dispatch(pushChat({ id, input, type, role, vsId, threadId, output: '', files: fileInfo }));
 
         requestor.current = apiWrapper();
-        let timer = null;
         if (type === 'image' || type === 'document') {
           setFileUploadState((prev) => ({ ...prev, state: 'wait', progress: 40 }));
           const progressing = () =>
@@ -481,6 +587,7 @@ export default function Nova() {
         );
         dispatch(updateChatStatus({ id, status: 'done' }));
       } catch (err) {
+        if (timer) clearTimeout(timer);
         if (requestor.current?.isAborted() === true) {
           dispatch(updateChatStatus({ id, status: 'cancel' }));
         } else if (err instanceof ExceedPoDriveLimitError) {
@@ -549,6 +656,12 @@ export default function Nova() {
       });
     }
   }, [expiredNOVA, t, confirm, chatNova]);
+
+  useEffect(() => {
+    if (location.state?.body) {
+      setInputContents(location.state.body);
+    }
+  }, [location.state?.body]);
 
   const newChat = async () => {
     const ret = await confirm({
@@ -677,14 +790,9 @@ export default function Nova() {
     }
   };
 
-  const contentsBody = location.state?.body || inputContents.input;
-  if (location.state?.body) {
-    location.state.body = '';
-  }
-
   return (
     <Wrapper>
-      <Header>
+      <NovaHeader title="" subTitle="">
         <TitleWrapper>
           <Icon iconSrc={ico_ai} size="lg" />
           <Icon iconSrc={ico_nova} size="lg" className="nova" />
@@ -707,11 +815,11 @@ export default function Nova() {
             <Icon iconSrc={ico_credit_info} size={32} />
           </Tooltip>
         </ButtonWrapper>
-      </Header>
+      </NovaHeader>
       <Body>
         {novaHistory.length < 1 ? (
           <GuideWrapper>
-            <Nova.SearchGuide setContents={setInputContents} />
+            <Nova.SearchGuide setInputContents={setInputContents} />
           </GuideWrapper>
         ) : (
           <>
@@ -767,7 +875,8 @@ export default function Nova() {
         disabled={creating !== 'none'}
         expiredNOVA={expiredNOVA}
         onSubmit={onSubmit}
-        contents={{ input: contentsBody }}></InputBar>
+        contents={inputContents}
+        setContents={setInputContents}></InputBar>
       {
         <FileUploading
           {...fileUploadState}
@@ -783,7 +892,7 @@ export default function Nova() {
 }
 
 interface SearchGuideProps {
-  setContents: React.Dispatch<React.SetStateAction<{ input: string }>>;
+  setInputContents: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const SearchGuide = (props: SearchGuideProps) => {
@@ -816,7 +925,7 @@ const SearchGuide = (props: SearchGuideProps) => {
 
       <Guidebody>
         {PROMPT_EXAMPLE.map((item) => (
-          <GuideExample key={item.txt} onClick={() => props.setContents({ input: item.txt })}>
+          <GuideExample key={item.txt} onClick={() => props.setInputContents(item.txt)}>
             <Icon iconSrc={item.src} size="md" />
             <span>{item.txt}</span>
           </GuideExample>
@@ -880,6 +989,9 @@ const FileUploading = (props: FileUploadingProps) => {
   const { type, state, progress, onClickBack } = props;
   const { t } = useTranslation();
   if (state === 'ready') return null;
+
+  const AgentFraphic =
+    lang === 'ko' ? AgentFraphicKo : lang === 'ja' ? AgentFraphicJa : AgentFraphicEn;
 
   return (
     <FileUploadWrapper>

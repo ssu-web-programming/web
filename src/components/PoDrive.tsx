@@ -1,4 +1,3 @@
-import React from 'react';
 import { apiWrapper } from 'api/apiWrapper';
 import { PO_DRIVE_LIST } from 'api/constant';
 import { SUPPORT_DOCUMENT_TYPE, SUPPORT_IMAGE_TYPE } from 'pages/Nova/Nova';
@@ -31,7 +30,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
 
-  outline: 1px solid #c9cdd2;
+  border: 1px solid #c9cdd2;
   border-radius: 8px;
   overflow: hidden;
 `;
@@ -39,7 +38,6 @@ const Wrapper = styled.div`
 const Navi = styled.div`
   width: 100%;
   height: 56px;
-
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -55,6 +53,12 @@ const Navi = styled.div`
   svg {
     width: 16px;
     height: 16px;
+  }
+
+  .currentDir {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
 `;
 
@@ -100,7 +104,6 @@ const FileItem = styled.div`
     .name {
       font-weight: 400;
       font-size: 16px;
-      line-height: 16px;
       letter-spacing: -0.02em;
 
       margin-bottom: 4px;
@@ -112,9 +115,7 @@ const FileItem = styled.div`
     .createdAt {
       font-weight: 400;
       font-size: 12px;
-      line-height: 12px;
-
-      color: #9ea4aa;
+      color: var(--gray-gray-60-03);
 
       svg {
         margin-left: 8px;
@@ -198,7 +199,7 @@ export default function PoDrive(props: PoDriveProps) {
           l.fileType < r.fileType ? -1 : l.fileType > r.fileType ? 1 : 0
         )
         .map((item: DriveFileInfo) => {
-          const ext = getFileExtension(item.fileName);
+          const ext = getFileExtension(item.fileName).toLowerCase();
           const supports =
             props.target === 'nova-image' ? SUPPORT_IMAGE_TYPE : SUPPORT_DOCUMENT_TYPE;
           const type = supports.find((type) => type.extensions === ext)?.mimeType;
@@ -249,30 +250,43 @@ export default function PoDrive(props: PoDriveProps) {
 
   useEffect(() => {
     initFileList();
-    dispatch(activeToast({ type: 'info', msg: t('Nova.Toast.SelectDoc') }));
+    dispatch(
+      activeToast({
+        type: 'info',
+        msg: t(props.target === 'nova-file' ? 'Nova.Toast.SelectDoc' : 'Nova.Toast.SelectImg')
+      })
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const onBack = () => {
+    const index = navi.length - 1;
+    if (index === 0) return;
+    setNavi((prev) => prev.slice(0, index));
+    moveFolder(navi[index - 1].fileId);
+  };
 
   return (
     <Wrapper>
       <Navi>
+        {navi.length > 1 && (
+          <IconRight
+            style={{
+              width: '12px',
+              minWidth: '12px',
+              height: '24px',
+              transform: 'rotate(180deg)',
+              cursor: 'pointer'
+            }}
+            onClick={onBack}
+          />
+        )}
         <Icon size={24} iconSrc={getDirIcon(navi[navi.length - 1])} />
-        {navi.map((item, index) => {
-          return (
-            <React.Fragment key={item.fileId}>
-              <div
-                onClick={() => {
-                  const index = navi.findIndex((nav) => nav.fileId === item.fileId);
-                  setNavi((prev) => prev.slice(0, index + 1));
-                  moveFolder(item.fileId);
-                }}
-                style={{ cursor: 'pointer' }}>
-                {item.fileName}
-              </div>
-              {index !== navi.length - 1 && <IconRight style={{ width: '12px', height: '24px' }} />}
-            </React.Fragment>
-          );
-        })}
+        <div className="currentDir">
+          {navi[navi.length - 1].fileName === 'drive'
+            ? t('Nova.UploadTooltip.PolarisDrive')
+            : navi[navi.length - 1].fileName}
+        </div>
       </Navi>
       <FileList>
         {state === 'none' &&

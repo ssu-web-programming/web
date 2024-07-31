@@ -3,8 +3,6 @@ import styled, { css } from 'styled-components';
 import FileButton from 'components/FileButton';
 import IconButton from 'components/buttons/IconButton';
 import Icon from 'components/Icon';
-import { ReactComponent as FileIcon } from '../../img/file.svg';
-import { ReactComponent as ImageIcon } from '../../img/landscape.svg';
 import { ReactComponent as DocsPlusIcon } from '../../img/ico_upload_docs_plus.svg';
 import { ReactComponent as ImagePlusIcon } from '../../img/ico_upload_img_plus.svg';
 import { ReactComponent as SendActiveIcon } from 'img/ico_send_active.svg';
@@ -173,9 +171,8 @@ interface InputBarProps {
   disabled?: boolean;
   expiredNOVA?: boolean;
   onSubmit: (param: InputBarSubmitParam) => Promise<void>;
-  contents?: {
-    input: string;
-  };
+  contents?: string;
+  setContents: React.Dispatch<React.SetStateAction<string>>;
 }
 
 interface FileListItemInfo {
@@ -196,12 +193,10 @@ export default function InputBar(props: InputBarProps) {
   const confirm = useConfirm();
   const chatNova = useChatNova();
   const { getUploadFileLimit } = useUserInfoUtils();
-  const { novaHistory, disabled = false, expiredNOVA = false } = props;
-  const inputContents = props.contents;
+  const { novaHistory, disabled = false, expiredNOVA = false, contents = '', setContents } = props;
   const [localFiles, setLocalFiles] = useState<File[]>([]);
   const [driveFiles, setDriveFiles] = useState<DriveFileInfo[]>([]);
 
-  const [text, setText] = useState<string>(inputContents?.input || '');
   const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
   const setIsAgreed = async (agree: boolean) => {
     try {
@@ -265,7 +260,7 @@ export default function InputBar(props: InputBarProps) {
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const inputText = event.target.value;
     if (inputText.length <= 1000) {
-      setText(inputText);
+      setContents(inputText);
     }
   };
 
@@ -291,11 +286,7 @@ export default function InputBar(props: InputBarProps) {
 
   useEffect(() => {
     adjustTextareaHeight();
-  }, [text]);
-
-  useEffect(() => {
-    if (inputContents?.input) setText(inputContents.input);
-  }, [inputContents]);
+  }, [contents]);
 
   useEffect(() => {
     if (expiredNOVA) {
@@ -307,7 +298,7 @@ export default function InputBar(props: InputBarProps) {
 
   const handleOnClick = async () => {
     (document.activeElement as HTMLElement)?.blur();
-    setText('');
+    setContents('');
     setLocalFiles([]);
     setDriveFiles([]);
     const targetFiles = localFiles.length > 0 ? localFiles : driveFiles;
@@ -318,7 +309,7 @@ export default function InputBar(props: InputBarProps) {
         ? 'image'
         : 'document';
     await props.onSubmit({
-      input: text,
+      input: contents,
       files: localFiles.length > 0 ? localFiles : driveFiles.length > 0 ? driveFiles : [],
       type: fileType
     });
@@ -357,17 +348,17 @@ export default function InputBar(props: InputBarProps) {
           ))}
         </FileListViewer>
       )}
-      <InputTxtWrapper hasValue={!!text}>
+      <InputTxtWrapper hasValue={!!contents}>
         <div>
           <TextArea
             placeholder={t(`Nova.ActionWindow.Placeholder`)!}
-            value={text}
+            value={contents}
             onChange={handleChange}
             maxLength={1000}
             ref={textAreaRef}
             onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
               if (e.key === 'Enter' && e.ctrlKey) {
-                if (text.length > 0) {
+                if (contents.length > 0) {
                   handleOnClick();
                 } else {
                   e.preventDefault();
@@ -387,10 +378,10 @@ export default function InputBar(props: InputBarProps) {
 
         <IconBtnWrapper>
           <IconButton
-            disable={text.length < 1}
+            disable={contents.length < 1}
             onClick={handleOnClick}
             iconSize="lg"
-            iconComponent={text.length < 1 ? SendDisabledIcon : SendActiveIcon}
+            iconComponent={contents.length < 1 ? SendDisabledIcon : SendActiveIcon}
           />
         </IconBtnWrapper>
       </InputBtnWrapper>
@@ -439,10 +430,12 @@ const FileUploader = (props: FileUploaderProps) => {
                   fontWeight: 400,
                   fontSize: '16px',
                   lineHeight: '24px',
-                  marginBottom: '24px',
-                  marginTop: '-8px'
+                  marginBottom: '24px'
                 }}>
-                {t('Nova.PoDrive.Desc', { size: MAX_FILE_UPLOAD_SIZE_MB, count: uploadLimit })}
+                {t(target === 'nova-file' ? 'Nova.PoDrive.Desc' : 'Nova.PoDrive.DescImg', {
+                  size: MAX_FILE_UPLOAD_SIZE_MB,
+                  count: uploadLimit
+                })}
               </div>
               <PoDrive
                 max={uploadLimit}
@@ -545,7 +538,7 @@ export const getFileIcon = (name: string) => {
     sheet: ico_file_sheet
   };
 
-  return fileIconMap[fileExt] || null;
+  return fileIconMap[fileExt.toLowerCase()] || null;
 };
 
 export const getFileName = (name: string) => {

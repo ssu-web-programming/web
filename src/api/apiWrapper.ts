@@ -63,15 +63,21 @@ export function apiWrapper() {
         res.status !== 200
       ) {
         if (res.ok === false && res.status === 429) {
+          if (api === NOVA_CHAT_API) {
+            const body = await res.json();
+            throw new NovaNoCreditError({
+              current: body?.error?.code === 'no_credit' ? 0 : 1,
+              necessary: 0
+            });
+          }
           const { leftCredit, deductionCredit } = calLeftCredit(res.headers);
           const current = parseInt(leftCredit);
           const necessary = parseInt(deductionCredit);
-          throw api === NOVA_CHAT_API
-            ? new NovaNoCreditError({ current, necessary })
-            : new NoCreditError({
-                current,
-                necessary
-              });
+
+          throw new NoCreditError({
+            current,
+            necessary
+          });
         }
 
         const body = await res.json();

@@ -8,12 +8,15 @@
   "ShowExam": "例文",
   "Confirm": "確認",
   "Cancel": "キャンセル",
+  "Save": "保存",
   "Result": "結果",
   "Generate": "生成",
   "Regenerate": "再生成",
   "Back": "戻る",
   "StopGenerate": "生成を停止",
   "TextToImage": "テキストを画像に",
+  "image": "画像",
+  "document": "ドキュメント",
   "FormList": {
     "paragraph": "文",
     "list": "目次",
@@ -159,6 +162,8 @@
     "ErrorMsg": "エラーが発生しました。 もう一度やり直してください。 ({{code}}： {{msg}})",
     "ServiceErrorMsg": "サービスに問題が発生しています。 もう一度やり直してください。",
     "UnauthorizedMsg": "この機能を使用するにはログインする必要があります。 ログイン状況をもう一度ご確認ください。",
+    "CopyCompleted": "コピーが完了しました。",
+    "CopyFailed": "コピーに失敗しました。",
     "SaveCompleted": "保存",
     "SaveFailed": "保存に失敗しました"
   },
@@ -285,7 +290,7 @@
     "UploadState": {
       "Uploading": "{{type}}をアップロード中です。",
       "upload_image": "回答を提供するために、ファイルをPolaris Officeドライブに保存しています。",
-      "upload_document": "回答を提供するために、ファイルをPolaris Officeドライブに保存しています。",
+      "upload_document": "回答を提供するために、ファイルをPolaris Officeドライブで処理しています。",
       "wait": "回答を準備中です。少々お待ちください。",
       "delay": "もうすぐ終わります。もう少しお待ちください！"
     },
@@ -363,11 +368,14 @@
       "OverMaxFileUploadCntOnce": "{{max}}個のファイルのみ添付して質問できます。ファイルを再選択してください。"
     },
     "PoDrive": {
-      "Desc": "{{size}}MB未満のファイルを最大{{count}}個選択できます。"
+      "Desc": "{{size}}MB未満のファイルを最大{{count}}個選択できます。",
+      "DescImg": "{{size}} MB未満のjpg、jpeg、png、webp、gifファイルを最大{{count}}個選択できます。",
+      "NoFile": "添付可能な{{type}}がありません。"
     },
     "Toast": {
       "ConsumeCredit": "{{deductionCredit}} creditが使用されました。残りのcredit:{{leftCredit}}",
-      "SelectDoc": "分析するドキュメントを選択してください。"
+      "SelectDoc": "分析するドキュメントを選択してください。",
+      "SelectImg": "分析したい画像を選んでください。"
     }
   }
 }

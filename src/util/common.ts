@@ -154,3 +154,7 @@ export const isHigherVersion = (targetVersion: string, currentVersion: string | 
 export const getFileExtension = (filename: string) => {
   return `.${filename.split('.').pop()}`;
 };
+
+export const getFileName = (filename: string) => {
+  return filename.split('.').shift();
+};
