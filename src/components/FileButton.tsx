@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { useConfirm } from './Confirm';
 import { useTranslation } from 'react-i18next';
 import { SUPPORT_IMAGE_TYPE } from 'pages/Nova/Nova';
-import { CustomScrollbar } from 'style/cssCommon';
 
 const FileButtonBase = styled.button`
   width: fit-content;
@@ -18,9 +17,6 @@ const Label = styled.label`
 `;
 
 const PersonalInfoContents = styled.div`
-  max-height: 372px;
-  overflow-y: auto;
-  ${CustomScrollbar}
   text-align: left;
   font-size: 15px;
   letter-spacing: -0.3px;
