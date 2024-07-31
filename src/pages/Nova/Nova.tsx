@@ -314,19 +314,17 @@ export default function Nova() {
     return status;
   };
 
-  const refPolling = useRef<any>(null); // TODO :type
   const downloadConvertFile = async (fileInfo: PollingType) => {
     const pollingConvertStatus = () =>
       new Promise((resolve) => {
-        refPolling.current = {
-          [`${fileInfo.fileId}`]: setInterval(async () => {
-            const status = await getConvertStatus(fileInfo);
-            if (status === 'completed') {
-              clearInterval(refPolling.current[fileInfo.fileId]);
-              resolve(true);
-            }
-          }, 1000)
-        };
+        setTimeout(async () => {
+          const status = await getConvertStatus(fileInfo);
+          if (status === 'completed') {
+            resolve(status);
+          } else {
+            pollingConvertStatus();
+          }
+        }, 100);
       });
     await pollingConvertStatus();
 
