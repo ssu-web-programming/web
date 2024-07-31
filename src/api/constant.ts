@@ -20,3 +20,6 @@ export const AI_CREDIT_INFO = '/api/v2/nova/credit-info';
 export const PO_DRIVE_LIST = '/api/v2/nova/podrive/list';
 export const PO_DRIVE_UPLOAD = '/api/v2/nova/podrive/upload';
 export const PO_DRIVE_DOWNLOAD = '/api/v2/nova/podrive/download';
+export const PO_DRIVE_CONVERT = '/api/v2/nova/podrive/convert';
+export const PO_DRIVE_CONVERT_STATUS = '/api/v2/nova/podrive/convert/status';
+export const PO_DRIVE_CONVERT_DOWNLOAD = '/api/v2/nova/podrive/convert/download';

@@ -16,8 +16,15 @@ import { apiWrapper, streaming } from 'api/apiWrapper';
 import { v4 } from 'uuid';
 import Tooltip from 'components/Tooltip';
 import { useConfirm } from 'components/Confirm';
-import { NOVA_CHAT_API, PO_DRIVE_DOWNLOAD, PO_DRIVE_UPLOAD } from 'api/constant';
-import { insertDoc, markdownToHtml } from 'util/common';
+import {
+  NOVA_CHAT_API,
+  PO_DRIVE_CONVERT,
+  PO_DRIVE_CONVERT_DOWNLOAD,
+  PO_DRIVE_CONVERT_STATUS,
+  PO_DRIVE_DOWNLOAD,
+  PO_DRIVE_UPLOAD
+} from 'api/constant';
+import { getFileExtension, getFileName, insertDoc, markdownToHtml } from 'util/common';
 import Bridge, { useCopyClipboard } from 'util/bridge';
 import { load } from 'cheerio';
 import Icon from 'components/Icon';
@@ -243,6 +250,11 @@ interface FileUpladState extends Pick<NovaChatType, 'type'> {
   state: 'ready' | 'upload' | 'wait' | 'delay';
   progress: number;
 }
+
+interface PollingType extends NovaFileInfo {
+  taskId: string;
+}
+
 export default function Nova() {
   const location = useLocation();
   const dispatch = useAppDispatch();
@@ -283,6 +295,95 @@ export default function Nova() {
   const expireTimer = useRef<NodeJS.Timeout | null>(null);
 
   const requestor = useRef<ReturnType<typeof apiWrapper>>();
+
+  const getConvertStatus = async (fileInfo: { taskId: string }) => {
+    const { res } = await apiWrapper().request(PO_DRIVE_CONVERT_STATUS, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        taskId: fileInfo.taskId
+      }),
+      method: 'POST'
+    });
+    const json = await res.json();
+    const {
+      success,
+      data: { status }
+    } = json;
+
+    if (!success) throw new Error('Convert Error');
+    return status;
+  };
+
+  const refPolling = useRef<any>(null); // TODO :type
+  const downloadConvertFile = async (fileInfo: PollingType) => {
+    const pollingConvertStatus = () =>
+      new Promise((resolve) => {
+        refPolling.current = {
+          [`${fileInfo.fileId}`]: setInterval(async () => {
+            const status = await getConvertStatus(fileInfo);
+            if (status === 'completed') {
+              clearInterval(refPolling.current[fileInfo.fileId]);
+              resolve(true);
+            }
+          }, 1000)
+        };
+      });
+    await pollingConvertStatus();
+
+    const { res } = await apiWrapper().request(PO_DRIVE_CONVERT_DOWNLOAD, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        fileId: fileInfo.fileId,
+        fileRevision: fileInfo.fileRevision
+      }),
+      method: 'POST'
+    });
+    const blob = await res.blob();
+    return new File([blob], `${getFileName(fileInfo.name)}.pdf`, { type: 'application/pdf' });
+  };
+
+  const reqConvertFile = async (fileInfo: NovaFileInfo) => {
+    const { res } = await apiWrapper().request(PO_DRIVE_CONVERT, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        ...fileInfo
+      }),
+      method: 'POST'
+    });
+
+    const json = await res.json();
+    const {
+      success,
+      data: { taskId }
+    } = json;
+
+    if (!success) throw new Error('Convert Error');
+    const converted = await downloadConvertFile({ ...fileInfo, taskId });
+    return converted;
+  };
+
+  const convertFiles = async (files: NovaFileInfo[]) => {
+    const promises = files.map(async (file) => {
+      const ext = getFileExtension(file.name);
+      if (ext === '.hwp' || ext === '.xls' || ext === '.xlsx') {
+        const converted = await reqConvertFile(file);
+        return {
+          ...file,
+          file: converted
+        };
+      } else {
+        return file;
+      }
+    });
+    const results = await Promise.all(promises);
+    return results;
+  };
 
   const reqUploadFiles = async (files: File[]) => {
     // TODO : promise all
@@ -356,14 +457,13 @@ export default function Nova() {
         if (files[0]) {
           if (type === 'image' || type === 'document')
             setFileUploadState({ type, state: 'upload', progress: 20 });
+
           if (files[0] instanceof File) {
             const resUpload = await reqUploadFiles(files as File[]);
             resUpload
               .filter((res) => res.success)
               .forEach((res) => {
                 if (res.success) {
-                  formData.append('uploadFiles', res.file);
-                  formData.append('fileIds[]', res.data.fileId);
                   fileInfo.push({
                     name: res.file.name,
                     fileId: res.data.fileId,
@@ -378,8 +478,6 @@ export default function Nova() {
               .filter((res) => res.success)
               .forEach((res) => {
                 if (res.success) {
-                  formData.append('uploadFiles', res.file);
-                  formData.append('fileIds[]', res.data.fileId);
                   fileInfo.push({
                     name: res.file.name,
                     fileId: res.data.fileId,
@@ -389,6 +487,13 @@ export default function Nova() {
                 }
               });
           }
+
+          const convertedFileInfo = await convertFiles(fileInfo);
+
+          convertedFileInfo.forEach((info) => {
+            formData.append('uploadFiles', info.file);
+            formData.append('fileIds[]', info.fileId);
+          });
         }
 
         const role = 'user';
