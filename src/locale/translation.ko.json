@@ -289,7 +289,8 @@
     },
     "UploadTooltip": {
       "PolarisDrive": "폴라리스 드라이브",
-      "Local": "현재 장치"
+      "Local": "현재 장치",
+      "Camera": "사진 촬영"
     },
     "UploadState": {
       "Uploading": "{{type}} 업로드 중",

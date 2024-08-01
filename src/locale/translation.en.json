@@ -285,7 +285,8 @@
     },
     "UploadTooltip": {
       "PolarisDrive": "Polaris Drive",
-      "Local": "Current device"
+      "Local": "Current device",
+      "Camera": "Camera"
     },
     "UploadState": {
       "Uploading": "Uploading {{type}}.",

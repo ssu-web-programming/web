@@ -285,7 +285,8 @@
     },
     "UploadTooltip": {
       "PolarisDrive": "Polaris Drive",
-      "Local": "現在のデバイス"
+      "Local": "現在のデバイス",
+      "Camera": "写真撮影"
     },
     "UploadState": {
       "Uploading": "{{type}}をアップロード中です。",
