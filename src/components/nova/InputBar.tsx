@@ -461,7 +461,8 @@ const FileUploader = (props: FileUploaderProps) => {
         onClick: () => {
           const element = getCurrentFileInput(target)?.current;
           if (element) {
-            element.accept = SUPPORT_IMAGE_TYPE.map((type) => type.mimeType).join(',');
+            const targetType = target === 'nova-image' ? SUPPORT_IMAGE_TYPE : SUPPORT_DOCUMENT_TYPE;
+            element.accept = targetType.map((type) => type.mimeType).join(',');
             element.click();
           }
         }
