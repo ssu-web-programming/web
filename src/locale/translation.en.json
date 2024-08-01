@@ -17,6 +17,8 @@
   "TextToImage": "Text to Image",
   "image": "image",
   "document": "document",
+  "Purchase": "Purchase",
+  "Subscribe": "Subscribe",
   "FormList": {
     "paragraph": "Sentence",
     "list": "Table of Contents",
@@ -260,7 +262,9 @@
     "RefPage": "Ref {{page}} Page",
     "insertNote": "Insert the slide note in {{page}} page",
     "getCurrentSlideNote": "Get the current slide contents",
-    "AlreadyExistSlideContents": "Previous edits are lost when the slide content is imported. Continue to proceed?"
+    "AlreadyExistSlideContents": "Previous edits are lost when the slide content is imported. Continue to proceed?",
+    "ReturnAppList": "Back to the app list",
+    "RemoveAll": "Clear All"
   },
   "EOS": {
     "ASKDocEOSTitle": "ASK Doc V1 Service Ended",
