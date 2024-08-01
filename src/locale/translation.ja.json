@@ -17,6 +17,8 @@
   "TextToImage": "テキストを画像に",
   "image": "画像",
   "document": "ドキュメント",
+  "Purchase": "購入する",
+  "Subscribe": "購読する",
   "FormList": {
     "paragraph": "文",
     "list": "目次",
@@ -260,7 +262,9 @@
     "RefPage": "参考 {{page}} ページ",
     "insertNote": "{{page}}ページにスライドノートを挿入する",
     "getCurrentSlideNote": "現在のスライドの内容を取得する",
-    "AlreadyExistSlideContents": "スライドの内容をインポートすると、以前の編集が失われます. 続行する?"
+    "AlreadyExistSlideContents": "スライドの内容をインポートすると、以前の編集が失われます. 続行する?",
+    "ReturnAppList": "アプリ一覧に戻る",
+    "RemoveAll": "すべてクリア"
   },
   "EOS": {
     "ASKDocEOSTitle": "ASK Doc V1のサービスが終了しました",
@@ -285,7 +289,8 @@
     },
     "UploadTooltip": {
       "PolarisDrive": "Polaris Drive",
-      "Local": "現在のデバイス"
+      "Local": "現在のデバイス",
+      "Camera": "写真撮影"
     },
     "UploadState": {
       "Uploading": "{{type}}をアップロード中です。",

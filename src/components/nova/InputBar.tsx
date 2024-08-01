@@ -24,6 +24,7 @@ import ico_file_sheet from 'img/ico_file_sheet.svg';
 import Tooltip from 'components/Tooltip';
 import ico_logo_po from 'img/ico_logo_po.svg';
 import ico_mobile from 'img/ico_mobile.svg';
+import ico_camera from 'img/ico_camera.svg';
 
 import { NovaChatType } from 'store/slices/novaHistorySlice';
 import { useTranslation } from 'react-i18next';
@@ -36,6 +37,7 @@ import { useConfirm } from 'components/Confirm';
 import PoDrive, { DriveFileInfo } from 'components/PoDrive';
 import useUserInfoUtils from 'components/hooks/useUserInfoUtils';
 import { useChatNova } from 'components/hooks/useChatNova';
+import { ClientType, getPlatform } from 'util/bridge';
 
 export const flexCenter = css`
   display: flex;
@@ -406,58 +408,81 @@ const FileUploader = (props: FileUploaderProps) => {
     }
   };
 
-  const TOOLTIP_UPLOAD_OPTION = (target: string) => [
-    {
-      name: t(`Nova.UploadTooltip.PolarisDrive`),
-      icon: { src: ico_logo_po },
-      onClick: async () => {
-        const uploadLimit = getDriveSelectFileCount();
-        if (uploadLimit === 0) {
-          await confirm({
-            title: '',
-            msg: t('Nova.Confirm.OverMaxFileUploadCnt', { max: getUploadFileLimit() })!,
-            onOk: { text: t('Nova.Confirm.NewChat.StartNewChat'), callback: chatNova.newCHat },
+  const TOOLTIP_UPLOAD_OPTION = (target: string) => {
+    const options = [
+      {
+        name: t(`Nova.UploadTooltip.PolarisDrive`),
+        icon: { src: ico_logo_po },
+        onClick: async () => {
+          const uploadLimit = getDriveSelectFileCount();
+          if (uploadLimit === 0) {
+            await confirm({
+              title: '',
+              msg: t('Nova.Confirm.OverMaxFileUploadCnt', { max: getUploadFileLimit() })!,
+              onOk: { text: t('Nova.Confirm.NewChat.StartNewChat'), callback: chatNova.newCHat },
+              onCancel: { text: t('Cancel'), callback: () => {} }
+            });
+            return;
+          }
+          const ret = await confirm({
+            title: t('Nova.UploadTooltip.PolarisDrive')!,
+            msg: (
+              <>
+                <div
+                  style={{
+                    fontWeight: 400,
+                    fontSize: '16px',
+                    lineHeight: '24px',
+                    marginBottom: '24px'
+                  }}>
+                  {t(target === 'nova-file' ? 'Nova.PoDrive.Desc' : 'Nova.PoDrive.DescImg', {
+                    size: MAX_FILE_UPLOAD_SIZE_MB,
+                    count: uploadLimit
+                  })}
+                </div>
+                <PoDrive
+                  max={uploadLimit}
+                  onChange={(files: DriveFileInfo[]) => onLoadDriveFile(files)}
+                  target={target}
+                />
+              </>
+            ),
+            onOk: { text: t('Confirm'), callback: () => {} },
             onCancel: { text: t('Cancel'), callback: () => {} }
           });
-          return;
+          if (!ret) {
+            onLoadDriveFile([]);
+          }
         }
-        const ret = await confirm({
-          title: t('Nova.UploadTooltip.PolarisDrive')!,
-          msg: (
-            <>
-              <div
-                style={{
-                  fontWeight: 400,
-                  fontSize: '16px',
-                  lineHeight: '24px',
-                  marginBottom: '24px'
-                }}>
-                {t(target === 'nova-file' ? 'Nova.PoDrive.Desc' : 'Nova.PoDrive.DescImg', {
-                  size: MAX_FILE_UPLOAD_SIZE_MB,
-                  count: uploadLimit
-                })}
-              </div>
-              <PoDrive
-                max={uploadLimit}
-                onChange={(files: DriveFileInfo[]) => onLoadDriveFile(files)}
-                target={target}
-              />
-            </>
-          ),
-          onOk: { text: t('Confirm'), callback: () => {} },
-          onCancel: { text: t('Cancel'), callback: () => {} }
-        });
-        if (!ret) {
-          onLoadDriveFile([]);
+      },
+      {
+        name: t(`Nova.UploadTooltip.Local`),
+        icon: { src: ico_mobile },
+        onClick: () => {
+          const element = getCurrentFileInput(target)?.current;
+          if (element) {
+            element.accept = SUPPORT_IMAGE_TYPE.map((type) => type.mimeType).join(',');
+            element.click();
+          }
+        }
+      },
+      {
+        name: t(`Nova.UploadTooltip.Camera`),
+        icon: { src: ico_camera },
+        onClick: () => {
+          const element = getCurrentFileInput(target)?.current;
+          if (element) {
+            element.accept = 'camera';
+            element.click();
+          }
         }
       }
-    },
-    {
-      name: t(`Nova.UploadTooltip.Local`),
-      icon: { src: ico_mobile },
-      onClick: () => getCurrentFileInput(target)?.current?.click()
-    }
-  ];
+    ];
+
+    return target === 'nova-image' && getPlatform() === ClientType.android
+      ? options
+      : options.slice(0, 2);
+  };
 
   const handleOnClick = () => {
     if (!isAgreed) {
