@@ -952,6 +952,10 @@ const FileUploadWrapper = styled(Wrapper)`
     flex-direction: row;
     padding: 12px 16px;
     align-items: center;
+
+    .empty {
+      height: inherit;
+    }
   }
 
   .contents {
@@ -1001,15 +1005,19 @@ const FileUploading = (props: FileUploadingProps) => {
   return (
     <FileUploadWrapper>
       <div className="header">
-        {state === 'upload' && (
+        {state === 'upload' ? (
           <IconButton
             iconComponent={IconArrowLeft}
             width={32}
             height={32}
             onClick={onClickBack}></IconButton>
+        ) : (
+          <div className="empty"></div>
         )}
       </div>
-      <ProgressBar progress={progress}></ProgressBar>
+      <div>
+        <ProgressBar progress={progress}></ProgressBar>
+      </div>
       <div className="contents">
         <div className="title">{t(`Nova.UploadState.Uploading`, { type: t(type) })}</div>
         <div className="desc">
