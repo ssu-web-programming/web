@@ -295,7 +295,8 @@ export default function Nova() {
   const requestor = useRef<ReturnType<typeof apiWrapper>>();
 
   const getConvertStatus = async (fileInfo: { taskId: string }) => {
-    const { res } = await apiWrapper().request(PO_DRIVE_CONVERT_STATUS, {
+    requestor.current = apiWrapper();
+    const { res } = await requestor.current.request(PO_DRIVE_CONVERT_STATUS, {
       headers: {
         'Content-Type': 'application/json'
       },
@@ -315,20 +316,25 @@ export default function Nova() {
   };
 
   const downloadConvertFile = async (fileInfo: PollingType) => {
-    const pollingConvertStatus = (mainResolve?: any) =>
-      new Promise((resolve) => {
+    const pollingConvertStatus = (mainResolve?: any, mainReject?: any) =>
+      new Promise((resolve, reject) => {
         setTimeout(async () => {
-          const status = await getConvertStatus(fileInfo);
-          if (status === 'completed') {
-            mainResolve ? mainResolve(true) : resolve(true);
-          } else {
-            pollingConvertStatus(resolve);
+          try {
+            const status = await getConvertStatus(fileInfo);
+            if (status === 'completed') {
+              mainResolve ? mainResolve(true) : resolve(true);
+            } else {
+              pollingConvertStatus(resolve, reject);
+            }
+          } catch (err) {
+            mainReject ? mainReject(err) : reject(err);
           }
         }, 100);
       });
     await pollingConvertStatus();
 
-    const { res } = await apiWrapper().request(PO_DRIVE_CONVERT_DOWNLOAD, {
+    requestor.current = apiWrapper();
+    const { res } = await requestor.current.request(PO_DRIVE_CONVERT_DOWNLOAD, {
       headers: {
         'Content-Type': 'application/json'
       },
@@ -343,7 +349,8 @@ export default function Nova() {
   };
 
   const reqConvertFile = async (fileInfo: NovaFileInfo) => {
-    const { res } = await apiWrapper().request(PO_DRIVE_CONVERT, {
+    requestor.current = apiWrapper();
+    const { res } = await requestor.current.request(PO_DRIVE_CONVERT, {
       headers: {
         'Content-Type': 'application/json'
       },
