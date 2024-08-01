@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 
 type InitialState = {
-  novaAgreement: boolean;
+  novaAgreement: boolean | undefined;
   userInfo: {
     us: string;
     uid: string;
@@ -11,7 +11,7 @@ type InitialState = {
 };
 
 const initialState: InitialState = {
-  novaAgreement: false,
+  novaAgreement: undefined,
   userInfo: {
     us: '',
     uid: '',
