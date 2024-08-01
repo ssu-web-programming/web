@@ -88,7 +88,7 @@ const FileButton = forwardRef<HTMLInputElement, FileButtonProps>((props, ref) =>
   };
 
   const handleAgreement = async () => {
-    if (isAgreed === true) return;
+    if (isAgreed === true || isAgreed === undefined) return;
 
     const isConfirmed = await confirm({
       title: t(`Nova.Confirm.PersonalInfo.Title`)!,
@@ -101,7 +101,7 @@ const FileButton = forwardRef<HTMLInputElement, FileButtonProps>((props, ref) =>
       direction: 'row'
     });
 
-    if (!!isConfirmed) {
+    if (isConfirmed) {
       handleOnClick();
     }
   };

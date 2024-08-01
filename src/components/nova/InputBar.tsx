@@ -183,7 +183,7 @@ interface FileListItemInfo {
 
 type FileUploaderProps = {
   loadlocalFile: (files: File[]) => void;
-  isAgreed: boolean;
+  isAgreed: boolean | undefined;
   setIsAgreed: (agree: boolean) => void;
   onLoadDriveFile: (files: DriveFileInfo[]) => void;
 };
@@ -514,7 +514,7 @@ const FileUploader = (props: FileUploaderProps) => {
           type="selectable"
           options={TOOLTIP_UPLOAD_OPTION(btn.target)}
           distance={10}
-          condition={isAgreed}
+          condition={!!isAgreed}
           initPos>
           <FileButton
             target={btn.target}
