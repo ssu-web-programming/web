@@ -201,10 +201,10 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                               break;
                             default: {
                               confirm({
-                                title: 'error',
-                                msg: 'only home state',
+                                title: '',
+                                msg: t('Nova.Chat.FailOpenDoc'),
                                 onOk: {
-                                  text: 'ok',
+                                  text: t('Confirm'),
                                   callback: () => {}
                                 }
                               });

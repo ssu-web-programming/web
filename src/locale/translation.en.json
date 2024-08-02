@@ -312,7 +312,8 @@
             "Viewer": "To insert into the document, please enter edit mode. Don't worry, your response won't disappear!"
           }
         }
-      }
+      },
+      "FailOpenDoc": "A document is currently open! Please close the document first, then select the desired document."
     },
     "Alert": {
       "UnsupportFile": "This file is not supported. Please upload only {{support}} files.",
