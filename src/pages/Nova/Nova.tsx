@@ -120,6 +120,7 @@ const GuideWrapper = styled(Container)`
 `;
 
 const GuideTitle = styled.div`
+  padding: 0 17px;
   div.title {
     ${flexCenter}
     justify-content: center;
