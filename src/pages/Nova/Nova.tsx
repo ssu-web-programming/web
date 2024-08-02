@@ -59,6 +59,7 @@ import Header from 'components/layout/Header';
 import { ExceedPoDriveLimitError } from 'error/error';
 import { ReactComponent as closeIcon } from 'img/ico_ai_close.svg';
 import { lang } from 'locale';
+import useLangParameterNavigate from 'components/hooks/useLangParameterNavigate';
 
 const flexCenter = css`
   display: flex;
@@ -820,15 +821,17 @@ export default function Nova() {
             options={TOOLTIP_CREDIT_OPTIONS}>
             <Icon iconSrc={ico_credit_info} size={32} />
           </Tooltip>
-          {getPlatform() === ClientType.unknown && <ScreenChangeButton></ScreenChangeButton>}
           {getPlatform() !== ClientType.android && getPlatform() !== ClientType.ios && (
-            <IconButton
-              iconComponent={IconClose}
-              onClick={() => Bridge.callBridgeApi('closePanel')}
-              iconSize="lg"
-              width={32}
-              height={32}
-            />
+            <>
+              <ScreenChangeButton></ScreenChangeButton>
+              <IconButton
+                iconComponent={IconClose}
+                onClick={() => Bridge.callBridgeApi('closePanel')}
+                iconSize="lg"
+                width={32}
+                height={32}
+              />
+            </>
           )}
         </ButtonWrapper>
       </NovaHeader>
@@ -909,6 +912,9 @@ export default function Nova() {
 
 const ScreenChangeButton = () => {
   const [status, setStatus] = useState('min');
+  const { from } = useLangParameterNavigate();
+
+  if (from !== 'home') return null;
 
   return (
     <IconButton
