@@ -25,7 +25,7 @@ import {
   PO_DRIVE_UPLOAD
 } from 'api/constant';
 import { getFileExtension, getFileName, insertDoc, markdownToHtml } from 'util/common';
-import Bridge, { useCopyClipboard } from 'util/bridge';
+import Bridge, { ClientType, getPlatform, useCopyClipboard } from 'util/bridge';
 import { load } from 'cheerio';
 import Icon from 'components/Icon';
 import IconButton from 'components/buttons/IconButton';
@@ -38,6 +38,9 @@ import { ReactComponent as AgentFraphicKo } from 'img/agent_graphic_ko.svg';
 import { ReactComponent as AgentFraphicEn } from 'img/agent_graphic_en.svg';
 import { ReactComponent as AgentFraphicJa } from 'img/agent_graphic_ja.svg';
 import { ReactComponent as IconArrowLeft } from 'img/ico_arrow_left.svg';
+import { ReactComponent as IconMax } from 'img/ico_nova_max.svg';
+import { ReactComponent as IconMin } from 'img/ico_nova_min.svg';
+import { ReactComponent as IconClose } from 'img/ico_nova_close.svg';
 import ChatList from 'components/nova/ChatList';
 import ico_image from 'img/ico_image.svg';
 import ico_documents from 'img/ico_documents.svg';
@@ -819,6 +822,16 @@ export default function Nova() {
             options={TOOLTIP_CREDIT_OPTIONS}>
             <Icon iconSrc={ico_credit_info} size={32} />
           </Tooltip>
+          {getPlatform() === ClientType.unknown && <ScreenChangeButton></ScreenChangeButton>}
+          {getPlatform() !== ClientType.android && getPlatform() !== ClientType.ios && (
+            <IconButton
+              iconComponent={IconClose}
+              onClick={() => Bridge.callBridgeApi('closePanel')}
+              iconSize="lg"
+              width={32}
+              height={32}
+            />
+          )}
         </ButtonWrapper>
       </NovaHeader>
       <Body>
@@ -895,6 +908,23 @@ export default function Nova() {
     </Wrapper>
   );
 }
+
+const ScreenChangeButton = () => {
+  const [status, setStatus] = useState('min');
+
+  return (
+    <IconButton
+      iconComponent={status === 'min' ? IconMax : IconMin}
+      onClick={() => {
+        Bridge.callBridgeApi('changeScreenSize', status === 'min' ? 'max' : 'min');
+        setStatus(status === 'min' ? 'max' : 'min');
+      }}
+      iconSize="lg"
+      width={32}
+      height={32}
+    />
+  );
+};
 
 interface SearchGuideProps {
   setInputContents: React.Dispatch<React.SetStateAction<string>>;
