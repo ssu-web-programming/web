@@ -200,10 +200,10 @@ export const SUPPORT_DOCUMENT_TYPE = [
     mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     extensions: '.docx'
   },
-  {
-    mimeType: 'application/vnd.ms-powerpoint',
-    extensions: '.ppt'
-  },
+  // {
+  //   mimeType: 'application/vnd.ms-powerpoint',
+  //   extensions: '.ppt'
+  // },
   {
     mimeType: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
     extensions: '.pptx'
