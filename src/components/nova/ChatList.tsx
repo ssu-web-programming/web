@@ -108,6 +108,7 @@ const ButtonText = styled.div`
   font-size: 14px;
   line-height: 14px;
   font-weight: 500;
+  text-align: left;
 `;
 
 interface ChatListProps {
