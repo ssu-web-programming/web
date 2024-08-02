@@ -376,7 +376,7 @@ export default function Nova() {
 
   const convertFiles = async (files: NovaFileInfo[]) => {
     const promises = files.map(async (file) => {
-      const ext = getFileExtension(file.name);
+      const ext = getFileExtension(file.file.name);
       if (ext === '.hwp' || ext === '.xls' || ext === '.xlsx') {
         const converted = await reqConvertFile(file);
         return {
@@ -464,35 +464,32 @@ export default function Nova() {
           if (type === 'image' || type === 'document')
             setFileUploadState({ type, state: 'upload', progress: 20 });
 
+          let targetFiles = [];
           if (files[0] instanceof File) {
-            const resUpload = await reqUploadFiles(files as File[]);
-            resUpload
-              .filter((res) => res.success)
-              .forEach((res) => {
-                if (res.success) {
-                  fileInfo.push({
-                    name: res.file.name,
-                    fileId: res.data.fileId,
-                    file: res.file,
-                    fileRevision: res.data.fileRevision
-                  });
-                }
-              });
+            targetFiles = await reqUploadFiles(files as File[]);
           } else if ('fileId' in files[0]) {
-            const resDownload = await reqDownloadFiles(files as DriveFileInfo[]);
-            resDownload
-              .filter((res) => res.success)
-              .forEach((res) => {
-                if (res.success) {
-                  fileInfo.push({
-                    name: res.file.name,
-                    fileId: res.data.fileId,
-                    file: res.file,
-                    fileRevision: res.data.fileRevision
-                  });
-                }
-              });
+            targetFiles = await reqDownloadFiles(files as DriveFileInfo[]);
           }
+          targetFiles
+            .filter((target) => target.success)
+            .forEach((target) => {
+              if (target.success) {
+                fileInfo.push({
+                  name: target.file.name,
+                  fileId: target.data.fileId,
+                  file: new File(
+                    [target.file],
+                    `${getFileName(target.file.name)}${getFileExtension(
+                      target.file.name
+                    ).toLowerCase()}`,
+                    {
+                      type: target.file.type
+                    }
+                  ),
+                  fileRevision: target.data.fileRevision
+                });
+              }
+            });
 
           const convertedFileInfo = await convertFiles(fileInfo);
 
