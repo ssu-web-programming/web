@@ -1,5 +1,6 @@
 import { useLocation } from 'react-router-dom';
 import {
+  DocConvertingError,
   ERR_INVALID_SESSION,
   ERR_NOT_ONLINE,
   GPT_EXCEEDED_LIMIT,
@@ -110,6 +111,15 @@ const useErrorHandle = () => {
           });
         }
       }
+    } else if (error instanceof DocConvertingError) {
+      confirm({
+        title: '',
+        msg: t('Nova.Alert.FailedConvertDoc'),
+        onOk: {
+          text: t('Confirm'),
+          callback: () => {}
+        }
+      });
     } else {
       let msg: string | React.ReactNode = '';
       switch (error.message) {

@@ -56,7 +56,7 @@ import { useShowCreditToast } from 'components/hooks/useShowCreditToast';
 import useErrorHandle from 'components/hooks/useErrorHandle';
 import { useChatNova } from 'components/hooks/useChatNova';
 import Header from 'components/layout/Header';
-import { ExceedPoDriveLimitError } from 'error/error';
+import { DocConvertingError, ExceedPoDriveLimitError } from 'error/error';
 import { ReactComponent as closeIcon } from 'img/ico_ai_close.svg';
 import { lang } from 'locale';
 import useLangParameterNavigate from 'components/hooks/useLangParameterNavigate';
@@ -300,24 +300,28 @@ export default function Nova() {
   const requestor = useRef<ReturnType<typeof apiWrapper>>();
 
   const getConvertStatus = async (fileInfo: { taskId: string }) => {
-    requestor.current = apiWrapper();
-    const { res } = await requestor.current.request(PO_DRIVE_CONVERT_STATUS, {
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        taskId: fileInfo.taskId
-      }),
-      method: 'POST'
-    });
-    const json = await res.json();
-    const {
-      success,
-      data: { status }
-    } = json;
+    try {
+      requestor.current = apiWrapper();
+      const { res } = await requestor.current.request(PO_DRIVE_CONVERT_STATUS, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          taskId: fileInfo.taskId
+        }),
+        method: 'POST'
+      });
+      const json = await res.json();
+      const {
+        success,
+        data: { status }
+      } = json;
 
-    if (!success) throw new Error('Convert Error');
-    return status;
+      if (!success) throw new DocConvertingError();
+      return status;
+    } catch (err) {
+      throw new DocConvertingError();
+    }
   };
 
   const downloadConvertFile = async (fileInfo: PollingType) => {

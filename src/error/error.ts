@@ -3,6 +3,7 @@ export const ERR_INVALID_SESSION = 'ERR_INVALID_SESSION';
 export const INVALID_PROMPT = 'INVALID_PROMPT';
 export const GPT_EXCEEDED_LIMIT = 'GPT_EXCEEDED_LIMIT';
 export const EXCEED_PO_DRIVE_LIMIT = 'EXCEED_PO_DRIVE_LIMIT';
+export const ERR_DOC_CONVERT = 'ERR_DOC_CONVERT';
 const NOT_ENOUGH_CREDIT = 'NOT_ENOUGH_CREDIT';
 
 interface CreditStatus {
@@ -28,5 +29,11 @@ export class NovaNoCreditError extends Error {
 export class ExceedPoDriveLimitError extends Error {
   constructor() {
     super(EXCEED_PO_DRIVE_LIMIT);
+  }
+}
+
+export class DocConvertingError extends Error {
+  constructor() {
+    super(ERR_DOC_CONVERT);
   }
 }
