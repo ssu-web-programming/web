@@ -406,7 +406,8 @@ type ApiType =
   | 'getSlideContents'
   | 'insertNote'
   | 'getClientStatus'
-  | 'openPoDriveFile';
+  | 'openPoDriveFile'
+  | 'changeScreenSize';
 
 const Bridge = {
   checkSession: (api: string) => {
