@@ -236,6 +236,10 @@ export const SUPPORT_IMAGE_TYPE = [
     extensions: '.jpg'
   },
   {
+    mimeType: 'image/jpeg',
+    extensions: '.jpeg'
+  },
+  {
     mimeType: 'image/png',
     extensions: '.png'
   },
