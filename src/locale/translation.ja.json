@@ -7,6 +7,7 @@
   "ASKDoc": "ASK Doc",
   "ShowExam": "例文",
   "Confirm": "確認",
+  "OK": "確認",
   "Cancel": "キャンセル",
   "Save": "保存",
   "Result": "結果",
@@ -268,7 +269,9 @@
   },
   "EOS": {
     "ASKDocEOSTitle": "ASK Doc V1のサービスが終了しました",
-    "ASKDocEOSDesc": "アプリをアップデートして、新しく改善されたASK Doc V2をご体験ください。"
+    "ASKDocEOSDesc": "アプリをアップデートして、新しく改善されたASK Doc V2をご体験ください。",
+    "AIChatTab": "AI Writeチャット機能は、より高度なAIエージェントにアップグレードされる予定です。そのため、チャット機能は終了いたします。ご理解のほど、よろしくお願いいたします。ありがとうございます。",
+    "AIChatTabEosDate": "チャットサービス終了日：2024年8月22日"
   },
   "Nova": {
     "CreditInfo": {

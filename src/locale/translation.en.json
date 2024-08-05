@@ -7,6 +7,7 @@
   "ASKDoc": "ASK Doc",
   "ShowExam": "example sentences",
   "Confirm": "Confirm",
+  "OK": "OK",
   "Cancel": "Cancel",
   "Save": "Save",
   "Result": "Result",
@@ -268,7 +269,9 @@
   },
   "EOS": {
     "ASKDocEOSTitle": "ASK Doc V1 Service Ended",
-    "ASKDocEOSDesc": "Meet the newly improved ASK Doc V2 after updating the app."
+    "ASKDocEOSDesc": "Meet the newly improved ASK Doc V2 after updating the app.",
+    "AIChatTab": "The AI Write chat feature will be upgraded to a more advanced AI agent. As a result, the chat function will be discontinued. We appreciate your understanding. Thank you.",
+    "AIChatTabEosDate": "Chat service end date: August 22, 2024"
   },
   "Nova": {
     "CreditInfo": {
