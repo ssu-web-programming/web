@@ -57,7 +57,7 @@ import useErrorHandle from 'components/hooks/useErrorHandle';
 import { useChatNova } from 'components/hooks/useChatNova';
 import Header from 'components/layout/Header';
 import { DocConvertingError, ExceedPoDriveLimitError } from 'error/error';
-import { ReactComponent as closeIcon } from 'img/ico_ai_close.svg';
+import { ReactComponent as xMarkIcon } from 'img/ico_xmark.svg';
 import { lang } from 'locale';
 import useLangParameterNavigate from 'components/hooks/useLangParameterNavigate';
 
@@ -1085,16 +1085,22 @@ const ImagePreviewWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.5);
+  background: #fff linear-gradient(0deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3));
   padding: 10px;
 
   .btns {
-    width: 100%;
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    z-index: 1;
   }
 
   img {
     background-color: white;
-    width: 100%;
+    position: fixed;
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
   }
 `;
 
@@ -1115,7 +1121,7 @@ const ImagePreview = (props: ImagePreviewProps) => {
             display: flex;
             justify-content: flex-end;
           `}
-          iconComponent={closeIcon}
+          iconComponent={xMarkIcon}
           onClick={() => props.onClose()}
         />
       </div>
