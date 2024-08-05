@@ -574,9 +574,8 @@ export const getFileIcon = (name: string) => {
 export const getFileName = (name: string) => {
   const fileName = name;
   if (fileName.length > 20) {
-    const fileExt = fileName.split('.').pop() || '';
-    const fileNameWithoutExt = fileName.slice(0, 20 - fileExt.length - 1);
-    return `${fileNameWithoutExt}…${fileExt}`;
+    const fileNameWithoutExt = fileName.slice(0, 20);
+    return `${fileNameWithoutExt}...`;
   }
   return fileName;
 };
