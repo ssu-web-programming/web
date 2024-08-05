@@ -2,12 +2,7 @@ import { useEffect, useState } from 'react';
 import AIChatTab, { ChatOptions } from '../views/AIChatTab';
 import AIWriteTab from '../views/AIWriteTab';
 import { useTranslation } from 'react-i18next';
-import {
-  AI_WRITE_TAB_TYPE,
-  selectTab,
-  selectTabSlice,
-  setshowChatEOS
-} from '../store/slices/tabSlice';
+import { AI_WRITE_TAB_TYPE, selectTab, selectTabSlice } from '../store/slices/tabSlice';
 import styled from 'styled-components';
 import { flex, flexColumn } from '../style/cssCommon';
 import Header from '../components/layout/Header';
@@ -29,7 +24,6 @@ import { ReactComponent as IconChat } from '../img/ico_chat.svg';
 import { ReactComponent as IconCreatingText } from '../img/ico_creating_text.svg';
 import { LANG_KO_KR, lang } from '../locale';
 import { useLocation } from 'react-router-dom';
-import { useConfirm } from 'components/Confirm';
 
 const Wrapper = styled.div`
   ${flex}
@@ -82,8 +76,7 @@ const initChatOptions: ChatOptions = {
 export default function Tools() {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const confirm = useConfirm();
-  const { creating, selectedTabId, showChatEOS } = useAppSelector(selectTabSlice);
+  const { creating, selectedTabId } = useAppSelector(selectTabSlice);
   const currentTab = TAB_LIST.find((tab) => tab.id === selectedTabId);
   const location = useLocation();
 
@@ -108,25 +101,6 @@ export default function Tools() {
       );
     }
   };
-
-  useEffect(() => {
-    if (showChatEOS === false) {
-      confirm({
-        title: '',
-        msg: (
-          <div>
-            <p style={{ marginBottom: '20px' }}>{t('EOS.AIChatTab')}</p>
-            <p>{t('EOS.AIChatTabEosDate')}</p>
-          </div>
-        ),
-        onOk: {
-          text: t('OK'),
-          callback: () => {}
-        }
-      });
-      dispatch(setshowChatEOS());
-    }
-  }, [showChatEOS, confirm]);
 
   return (
     <Wrapper>
