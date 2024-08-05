@@ -137,6 +137,7 @@ const NoFile = styled.div`
     color: var(--gray-gray-60-03);
     font-size: 14px;
     line-height: 21px;
+    text-align: center;
   }
 `;
 

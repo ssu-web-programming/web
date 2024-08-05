@@ -30,7 +30,6 @@ import { load } from 'cheerio';
 import Icon from 'components/Icon';
 import IconButton from 'components/buttons/IconButton';
 import ico_ai from 'img/ico_ai.svg';
-import ico_nova from 'img/ico_nova.svg';
 import ico_credit_info from 'img/ico_credit_line.svg';
 import ico_credit from 'img/ico_credit_gray.svg';
 import { ReactComponent as IconMessagePlus } from 'img/ico_message_plus.svg';
@@ -41,6 +40,7 @@ import { ReactComponent as IconArrowLeft } from 'img/ico_arrow_left.svg';
 import { ReactComponent as IconMax } from 'img/ico_nova_max.svg';
 import { ReactComponent as IconMin } from 'img/ico_nova_min.svg';
 import { ReactComponent as IconClose } from 'img/ico_nova_close.svg';
+import { ReactComponent as IconLogoNova } from 'img/ico_logo_nova.svg';
 import ChatList from 'components/nova/ChatList';
 import ico_image from 'img/ico_image.svg';
 import ico_documents from 'img/ico_documents.svg';
@@ -159,6 +159,7 @@ const GuideExample = styled.div`
   border-radius: 8px;
   background: #fff;
   font-size: 14px;
+  color: var(--gray-gray-80-02);
 `;
 
 // const StopButton = styled.div`
@@ -809,8 +810,7 @@ export default function Nova() {
     <Wrapper>
       <NovaHeader title="" subTitle="">
         <TitleWrapper>
-          <Icon iconSrc={ico_ai} size="lg" />
-          <Icon iconSrc={ico_nova} size="lg" className="nova" />
+          <IconLogoNova width={107} height={32} />
         </TitleWrapper>
         <ButtonWrapper>
           {novaHistory.length > 0 && (

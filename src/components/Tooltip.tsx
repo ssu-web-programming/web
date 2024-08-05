@@ -31,7 +31,8 @@ const STYLE_BY_TYPE = {
     justify-content: flex-start;
   `,
   normal: css`
-    padding: 6px 0 6px;
+    padding-top: 6px;
+    line-height: 24px;
     justify-content: space-between;
   `
 };
