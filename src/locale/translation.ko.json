@@ -7,6 +7,7 @@
   "ASKDoc": "ASK Doc",
   "ShowExam": "예시문구 보기",
   "Confirm": "확인",
+  "OK": "확인",
   "Cancel": "취소",
   "Save": "저장",
   "Result": "결과",
@@ -268,7 +269,9 @@
   },
   "EOS": {
     "ASKDocEOSTitle": "ASK Doc V1 서비스 종료",
-    "ASKDocEOSDesc": "앱 업데이트 후 새롭게 개선된 ASK Doc V2를 만나보세요."
+    "ASKDocEOSDesc": "앱 업데이트 후 새롭게 개선된 ASK Doc V2를 만나보세요.",
+    "AIChatTab": "AI Write 채팅 기능이 더욱 향상된 AI 에이전트로 업데이트 될 예정입니다. 이에 따라, 채팅 기능은 종료될 예정이니 양해 부탁드립니다. 감사합니다.",
+    "AIChatTabEosDate": "채팅 서비스 종료일 : 2024년 8월 22일"
   },
   "Nova": {
     "CreditInfo": {
