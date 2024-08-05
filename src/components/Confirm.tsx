@@ -36,6 +36,8 @@ const Title = styled.h2`
   margin: 0;
   font-size: 20px;
   line-height: 30px;
+  pading-bottom: 12px;
+  box-sizing: border-box;
 `;
 
 const ContentArea = styled.div`
@@ -103,9 +105,11 @@ const Confirm = () => {
     <>
       <Blanket />
       <ConfirmBox>
-        <Header ref={headerRef}>
-          <Title>{title}</Title>
-        </Header>
+        {title && (
+          <Header ref={headerRef}>
+            <Title>{title}</Title>
+          </Header>
+        )}
         <ContentArea ref={contentsRef}>{msg}</ContentArea>
         <Footer direction={direction} ref={footerRef}>
           <Button
@@ -117,6 +121,8 @@ const Confirm = () => {
               order: ${direction === 'row' ? 2 : undefined};
               min-width: 92px;
               width: 100%;
+              border-radius: 8px;
+              line-height: 19px;
             `}>
             {onOk.text}
           </Button>
@@ -130,6 +136,8 @@ const Confirm = () => {
                 order: ${direction === 'row' ? 1 : undefined};
                 min-width: 92px;
                 width: 100%;
+                border-radius: 8px;
+                line-height: 19px;
               `}>
               {onCancel.text}
             </Button>

@@ -384,6 +384,10 @@ export default function InputBar(props: InputBarProps) {
             onClick={handleOnClick}
             iconSize="lg"
             iconComponent={contents.length < 1 ? SendDisabledIcon : SendActiveIcon}
+            cssExt={css`
+              opacity: 1;
+              padding: 0;
+            `}
           />
         </IconBtnWrapper>
       </InputBtnWrapper>

@@ -64,6 +64,7 @@ const QuestionContents = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
+  padding-top: 3px;
 `;
 
 const Answer = styled(Chat)`
@@ -227,9 +228,9 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
           <Answer>
             <Icon size={32} iconSrc={ico_ai}></Icon>
             {item.status === 'request' ? (
-              <img src={Loading} alt="loading" />
+              <img src={Loading} alt="loading" style={{ paddingTop: '4px' }} />
             ) : (
-              <div>
+              <div style={{ paddingTop: '3px' }}>
                 <PreMarkdown text={item.output}>
                   <Overlay onSave={() => onSave(item)} />
                 </PreMarkdown>
