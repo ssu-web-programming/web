@@ -37,7 +37,8 @@ import {
   MAX_FILE_UPLOAD_SIZE_MB,
   MIN_FILE_UPLOAD_SIZE_KB,
   SUPPORT_DOCUMENT_TYPE,
-  SUPPORT_IMAGE_TYPE
+  SUPPORT_IMAGE_TYPE,
+  SupportFileType
 } from 'pages/Nova/Nova';
 import { useConfirm } from 'components/Confirm';
 import PoDrive, { DriveFileInfo } from 'components/PoDrive';
@@ -474,7 +475,7 @@ const FileUploader = (props: FileUploaderProps) => {
           const element = getCurrentFileInput(target)?.current;
           if (element) {
             const targetType = target === 'nova-image' ? SUPPORT_IMAGE_TYPE : SUPPORT_DOCUMENT_TYPE;
-            element.accept = targetType.map((type) => type.mimeType).join(',');
+            element.accept = getAccpet(targetType);
             element.click();
           }
         }
@@ -531,7 +532,7 @@ const FileUploader = (props: FileUploaderProps) => {
           initPos>
           <FileButton
             target={btn.target}
-            accept={btn.accept.map((acc) => acc.mimeType).join(',')}
+            accept={getAccpet(btn.accept)}
             handleOnChange={loadlocalFile}
             multiple
             isAgreed={isAgreed}
@@ -577,4 +578,13 @@ export const getFileIcon = (name: string) => {
   };
 
   return fileIconMap[fileExt.toLowerCase()] || null;
+};
+
+const getAccpet = (infos: SupportFileType[]) => {
+  const platform = getPlatform();
+  if (platform === ClientType.unknown) {
+    return infos.map((type) => type.extensions).join(',');
+  } else {
+    return infos.map((type) => type.mimeType).join(',');
+  }
 };

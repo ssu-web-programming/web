@@ -194,7 +194,12 @@ const ScrollDownButton = styled.div`
   }
 `;
 
-export const SUPPORT_DOCUMENT_TYPE = [
+export type SupportFileType = {
+  mimeType: string;
+  extensions: string;
+};
+
+export const SUPPORT_DOCUMENT_TYPE: SupportFileType[] = [
   {
     mimeType: 'application/msword',
     extensions: '.doc'
@@ -233,7 +238,7 @@ export const SUPPORT_DOCUMENT_TYPE = [
   }
 ];
 
-export const SUPPORT_IMAGE_TYPE = [
+export const SUPPORT_IMAGE_TYPE: SupportFileType[] = [
   {
     mimeType: 'image/jpeg',
     extensions: '.jpg'
