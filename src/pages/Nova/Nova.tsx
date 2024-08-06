@@ -22,6 +22,7 @@ import {
   PO_DRIVE_CONVERT_DOWNLOAD,
   PO_DRIVE_CONVERT_STATUS,
   PO_DRIVE_DOWNLOAD,
+  PO_DRIVE_DOC_OPEN_STATUS,
   PO_DRIVE_UPLOAD
 } from 'api/constant';
 import { getFileExtension, getFileName, insertDoc, markdownToHtml } from 'util/common';
@@ -56,7 +57,7 @@ import { useShowCreditToast } from 'components/hooks/useShowCreditToast';
 import useErrorHandle from 'components/hooks/useErrorHandle';
 import { useChatNova } from 'components/hooks/useChatNova';
 import Header from 'components/layout/Header';
-import { DocConvertingError, ExceedPoDriveLimitError } from 'error/error';
+import { DocConvertingError, DocUnopenableError, ExceedPoDriveLimitError } from 'error/error';
 import { ReactComponent as xMarkIcon } from 'img/ico_xmark.svg';
 import { lang } from 'locale';
 import useLangParameterNavigate from 'components/hooks/useLangParameterNavigate';
@@ -385,6 +386,33 @@ export default function Nova() {
     return converted;
   };
 
+  const checkDocStatus = async (files: NovaFileInfo[]) => {
+    const promises = files.map(async (file) => {
+      try {
+        requestor.current = apiWrapper();
+        const { res } = await requestor.current.request(PO_DRIVE_DOC_OPEN_STATUS, {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ fileId: file.fileId, fileRevision: file.fileRevision }),
+          method: 'POST'
+        });
+        const json = await res.json();
+        const {
+          success,
+          data: { status }
+        } = json;
+
+        if (!success) throw new Error('Invalid File');
+        return { ...file, valid: status };
+      } catch (err) {
+        throw err;
+      }
+    });
+    const results = await Promise.all(promises);
+    return results;
+  };
+
   const convertFiles = async (files: NovaFileInfo[]) => {
     const promises = files.map(async (file) => {
       const ext = getFileExtension(file.file.name);
@@ -502,6 +530,13 @@ export default function Nova() {
               }
             });
 
+          const getDocStatus = await checkDocStatus(fileInfo);
+          const invalid = getDocStatus.filter((doc) => doc.valid !== 'NORMAL');
+          if (invalid.length > 0) {
+            throw new DocUnopenableError(
+              invalid.map((inval) => ({ filename: inval.name, type: inval.valid }))
+            );
+          }
           const convertedFileInfo = await convertFiles(fileInfo);
 
           convertedFileInfo.forEach((info) => {

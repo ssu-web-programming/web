@@ -158,3 +158,12 @@ export const getFileExtension = (filename: string) => {
 export const getFileName = (filename: string) => {
   return filename.split('.').shift();
 };
+
+export const sliceFileName = (name: string, index = 20) => {
+  const fileName = name;
+  if (fileName.length > index) {
+    const fileNameWithoutExt = fileName.slice(0, index);
+    return `${fileNameWithoutExt}...`;
+  }
+  return fileName;
+};

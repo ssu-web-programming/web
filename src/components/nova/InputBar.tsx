@@ -38,6 +38,7 @@ import PoDrive, { DriveFileInfo } from 'components/PoDrive';
 import useUserInfoUtils from 'components/hooks/useUserInfoUtils';
 import { useChatNova } from 'components/hooks/useChatNova';
 import { ClientType, getPlatform } from 'util/bridge';
+import { sliceFileName } from 'util/common';
 
 export const flexCenter = css`
   display: flex;
@@ -325,7 +326,7 @@ export default function InputBar(props: InputBarProps) {
           {localFiles.map((file: FileListItemInfo) => (
             <FileItem key={file.name}>
               <Icon size={28} iconSrc={getFileIcon(file.name)} />
-              <span>{getFileName(file.name)}</span>
+              <span>{sliceFileName(file.name)}</span>
               <IconButton
                 iconSize="lg"
                 iconComponent={DeleteIcon}
@@ -340,7 +341,7 @@ export default function InputBar(props: InputBarProps) {
           {driveFiles.map((file: FileListItemInfo) => (
             <FileItem key={file.name}>
               <Icon size={28} iconSrc={getFileIcon(file.name)} />
-              <span>{getFileName(file.name)}</span>
+              <span>{sliceFileName(file.name)}</span>
               <IconButton
                 iconSize="lg"
                 iconComponent={DeleteIcon}
@@ -569,13 +570,4 @@ export const getFileIcon = (name: string) => {
   };
 
   return fileIconMap[fileExt.toLowerCase()] || null;
-};
-
-export const getFileName = (name: string) => {
-  const fileName = name;
-  if (fileName.length > 20) {
-    const fileNameWithoutExt = fileName.slice(0, 20);
-    return `${fileNameWithoutExt}...`;
-  }
-  return fileName;
 };

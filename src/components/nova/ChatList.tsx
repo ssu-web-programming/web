@@ -11,13 +11,14 @@ import { ReactComponent as CopyChatIcon } from 'img/ico_copy_chat.svg';
 import { ReactComponent as InsertDocsIcon } from 'img/ico_insert_docs.svg';
 import ico_user from 'img/ico_user.svg';
 import ico_ai from 'img/ico_ai.svg';
-import { InputBarSubmitParam, flexCenter, getFileIcon, getFileName } from './InputBar';
+import { InputBarSubmitParam, flexCenter, getFileIcon } from './InputBar';
 import { useAppSelector } from 'store/store';
 import { selectTabSlice } from 'store/slices/tabSlice';
 import Loading from 'img/agent_loading.gif';
 import Bridge from 'util/bridge';
 import { ClientStatusType } from 'pages/Nova/Nova';
 import { useConfirm } from 'components/Confirm';
+import { sliceFileName } from 'util/common';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -220,7 +221,7 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                     }
                   }}>
                   <Icon size={28} iconSrc={getFileIcon(file.name)}></Icon>
-                  <span>{getFileName(file.name)}</span>
+                  <span>{sliceFileName(file.name)}</span>
                 </FileItem>
               ))}
             </QuestionContents>

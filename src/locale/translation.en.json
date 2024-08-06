@@ -342,7 +342,10 @@
       },
       "Error": "An error has occurred. Please try again later.",
       "ExpiredNOVA": "The conversation with NOVA has expired. Starting a new conversation.",
-      "FailedConvertDoc": "The selected document is encrypted and cannot be attached. Please decrypt it and try again."
+      "FailedConvertDoc": "The selected document is encrypted and cannot be attached. Please decrypt it and try again.",
+      "UnopenableDocError": "Encrypted or corrupted documents cannot be queried. Please check the document again.",
+      "Unopenable": "Document to verify",
+      "Password": "Encrypted document"
     },
     "Confirm": {
       "NewChat": {

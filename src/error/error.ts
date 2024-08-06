@@ -4,6 +4,7 @@ export const INVALID_PROMPT = 'INVALID_PROMPT';
 export const GPT_EXCEEDED_LIMIT = 'GPT_EXCEEDED_LIMIT';
 export const EXCEED_PO_DRIVE_LIMIT = 'EXCEED_PO_DRIVE_LIMIT';
 export const ERR_DOC_CONVERT = 'ERR_DOC_CONVERT';
+export const ERR_DOC_UNOPENABLE = 'ERR_DOC_UNOPENABLE';
 const NOT_ENOUGH_CREDIT = 'NOT_ENOUGH_CREDIT';
 
 interface CreditStatus {
@@ -35,5 +36,17 @@ export class ExceedPoDriveLimitError extends Error {
 export class DocConvertingError extends Error {
   constructor() {
     super(ERR_DOC_CONVERT);
+  }
+}
+
+type UnopeanbleType = {
+  type: 'PASSWORD' | 'UNOPENABLE_DOCUMENT';
+  filename: string;
+};
+export class DocUnopenableError extends Error {
+  errorInfos: UnopeanbleType[];
+  constructor(errorInfos: UnopeanbleType[]) {
+    super(ERR_DOC_UNOPENABLE);
+    this.errorInfos = errorInfos;
   }
 }
