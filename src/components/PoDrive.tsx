@@ -1,6 +1,6 @@
 import { apiWrapper } from 'api/apiWrapper';
 import { PO_DRIVE_LIST } from 'api/constant';
-import { SUPPORT_DOCUMENT_TYPE, SUPPORT_IMAGE_TYPE } from 'pages/Nova/Nova';
+import { isValidFileSize, SUPPORT_DOCUMENT_TYPE, SUPPORT_IMAGE_TYPE } from 'pages/Nova/Nova';
 import { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { getFileExtension } from 'util/common';
@@ -13,7 +13,6 @@ import { ReactComponent as IconUploadDocs } from 'img/ico_upload_docs.svg';
 import { ReactComponent as IconUploadImg } from 'img/ico_upload_img.svg';
 import CheckBox from './CheckBox';
 import Icon from './Icon';
-import { MAX_FILE_UPLOAD_SIZE_MB } from './nova/InputBar';
 import { CustomScrollbar } from 'style/cssCommon';
 import { getFileIcon } from './nova/InputBar';
 import { useAppDispatch } from 'store/store';
@@ -195,7 +194,7 @@ export default function PoDrive(props: PoDriveProps) {
       } = await res.json();
       if (!success) throw new Error('failed to get file list');
       return list
-        .filter((item: DriveFileInfo) => item.size <= MAX_FILE_UPLOAD_SIZE_MB * 1024 * 1024)
+        .filter((item: DriveFileInfo) => isValidFileSize(item.size) || item.fileType === 'DIR')
         .sort((l: DriveFileInfo, r: DriveFileInfo) =>
           l.fileType < r.fileType ? -1 : l.fileType > r.fileType ? 1 : 0
         )

@@ -330,7 +330,7 @@
         "Title": "Credits are insufficient :(",
         "ios": "Purchase additional AI credits and enhance your productivity with the smart NOVA!"
       },
-      "OverFileUploadSize": "The file size is too large. Please select only files under {{max}}MB.",
+      "OverFileUploadSize": "You can only select documents between {{min}}KB and {{max}}MB. Please try again.",
       "ReQuestion": "Oh no! The answer is delayed. Sorry, but could you ask the question again?",
       "LackOfStorage": "There is not enough storage space on the Polaris Drive. Please make sure you have enough storage space to upload files!",
       "LowResolution": "The image's resolution is low, making analysis difficult. Please upload a higher resolution image.",
@@ -342,7 +342,10 @@
       },
       "Error": "An error has occurred. Please try again later.",
       "ExpiredNOVA": "The conversation with NOVA has expired. Starting a new conversation.",
-      "FailedConvertDoc": "The selected document is encrypted and cannot be attached. Please decrypt it and try again."
+      "FailedConvertDoc": "The selected document is encrypted and cannot be attached. Please decrypt it and try again.",
+      "UnopenableDocError": "Encrypted or corrupted documents cannot be queried. Please check the document again.",
+      "Unopenable": "Document to verify",
+      "Password": "Encrypted document"
     },
     "Confirm": {
       "NewChat": {
