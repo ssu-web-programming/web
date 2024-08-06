@@ -15,6 +15,7 @@ export const NOVA_CHAT_API = '/api/v2/nova/chatFunc';
 export const NOVA_DELETE_CONVERSATION = '/api/v2/nova/delete-conversation';
 export const NOVA_GET_USER_INFO_AGREEMENT = '/api/v2/nova/get-agreement';
 export const NOVA_SET_USER_INFO_AGREEMENT = '/api/v2/nova/set-agreement';
+export const NOVA_GET_EXPIRED_TIME = '/api/v2/nova/expired-time';
 
 export const AI_CREDIT_INFO = '/api/v2/nova/credit-info';
 export const PO_DRIVE_LIST = '/api/v2/nova/podrive/list';
