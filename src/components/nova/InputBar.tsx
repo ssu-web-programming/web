@@ -32,7 +32,13 @@ import { useAppDispatch, useAppSelector } from 'store/store';
 import { setNovaAgreement, userInfoSelector } from 'store/slices/userInfo';
 import { apiWrapper } from 'api/apiWrapper';
 import { NOVA_SET_USER_INFO_AGREEMENT } from 'api/constant';
-import { SUPPORT_DOCUMENT_TYPE, SUPPORT_IMAGE_TYPE } from 'pages/Nova/Nova';
+import {
+  isValidFileSize,
+  MAX_FILE_UPLOAD_SIZE_MB,
+  MIN_FILE_UPLOAD_SIZE_KB,
+  SUPPORT_DOCUMENT_TYPE,
+  SUPPORT_IMAGE_TYPE
+} from 'pages/Nova/Nova';
 import { useConfirm } from 'components/Confirm';
 import PoDrive, { DriveFileInfo } from 'components/PoDrive';
 import useUserInfoUtils from 'components/hooks/useUserInfoUtils';
@@ -189,8 +195,6 @@ type FileUploaderProps = {
   onLoadDriveFile: (files: DriveFileInfo[]) => void;
 };
 
-export const MAX_FILE_UPLOAD_SIZE_MB = 20;
-
 export default function InputBar(props: InputBarProps) {
   const dispatch = useAppDispatch();
   const confirm = useConfirm();
@@ -219,11 +223,14 @@ export default function InputBar(props: InputBarProps) {
 
   const loadlocalFile = async (files: File[]) => {
     setDriveFiles([]);
-    const oversize = files.filter((file) => file.size >= MAX_FILE_UPLOAD_SIZE_MB * 1024 * 1024);
-    if (oversize.length > 0) {
+    const invalidSize = files.filter((file) => !isValidFileSize(file.size));
+    if (invalidSize.length > 0) {
       confirm({
         title: '',
-        msg: t('Nova.Alert.OverFileUploadSize', { max: MAX_FILE_UPLOAD_SIZE_MB })!,
+        msg: t('Nova.Alert.OverFileUploadSize', {
+          max: MAX_FILE_UPLOAD_SIZE_MB,
+          min: MIN_FILE_UPLOAD_SIZE_KB
+        })!,
         onOk: { text: t('Confirm'), callback: () => {} }
       });
       return;

@@ -1174,3 +1174,9 @@ export const filterCreditInfo = (
 ) => {
   return creditInfo.filter((item) => nameMap[item.serviceType]);
 };
+
+export const MAX_FILE_UPLOAD_SIZE_MB = 20;
+export const MIN_FILE_UPLOAD_SIZE_KB = 1;
+export const isValidFileSize = (size: number) => {
+  return size < MAX_FILE_UPLOAD_SIZE_MB * 1024 * 1024 && size > MIN_FILE_UPLOAD_SIZE_KB * 1024;
+};
