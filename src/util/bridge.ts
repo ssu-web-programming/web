@@ -407,7 +407,8 @@ type ApiType =
   | 'insertNote'
   | 'getClientStatus'
   | 'openPoDriveFile'
-  | 'changeScreenSize';
+  | 'changeScreenSize'
+  | 'pchome_mydoc';
 
 const Bridge = {
   checkSession: (api: string) => {
