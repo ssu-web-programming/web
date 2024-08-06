@@ -200,7 +200,8 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                                   JSON.stringify({
                                     fileInfo: {
                                       fileId: file.fileId,
-                                      fileRevision: file.fileRevision
+                                      fileRevision: file.fileRevision,
+                                      fileName: file.name
                                     }
                                   })
                                 );
