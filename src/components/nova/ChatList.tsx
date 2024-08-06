@@ -15,7 +15,7 @@ import { InputBarSubmitParam, flexCenter, getFileIcon } from './InputBar';
 import { useAppSelector } from 'store/store';
 import { selectTabSlice } from 'store/slices/tabSlice';
 import Loading from 'img/agent_loading.gif';
-import Bridge from 'util/bridge';
+import Bridge, { ClientType, getPlatform } from 'util/bridge';
 import { ClientStatusType } from 'pages/Nova/Nova';
 import { useConfirm } from 'components/Confirm';
 import { sliceFileName } from 'util/common';
@@ -194,13 +194,25 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                         callback: async (status: ClientStatusType) => {
                           switch (status) {
                             case 'home':
-                              Bridge.callBridgeApi(
-                                'openPoDriveFile',
-                                JSON.stringify({
-                                  fileId: file.fileId,
-                                  fileRevision: file.fileRevision
-                                })
-                              );
+                              if (getPlatform() === ClientType.windows) {
+                                Bridge.callBridgeApi(
+                                  'pchome_mydoc',
+                                  JSON.stringify({
+                                    fileInfo: {
+                                      fileId: file.fileId,
+                                      fileRevision: file.fileRevision
+                                    }
+                                  })
+                                );
+                              } else {
+                                Bridge.callBridgeApi(
+                                  'openPoDriveFile',
+                                  JSON.stringify({
+                                    fileId: file.fileId,
+                                    fileRevision: file.fileRevision
+                                  })
+                                );
+                              }
                               break;
                             default: {
                               confirm({
