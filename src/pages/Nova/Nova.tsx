@@ -61,6 +61,7 @@ import { DocConvertingError, DocUnopenableError, ExceedPoDriveLimitError } from 
 import { ReactComponent as xMarkIcon } from 'img/ico_xmark.svg';
 import { lang } from 'locale';
 import useLangParameterNavigate from 'components/hooks/useLangParameterNavigate';
+import { appStateSelector } from 'store/slices/appState';
 
 const flexCenter = css`
   display: flex;
@@ -253,8 +254,6 @@ export const SUPPORT_IMAGE_TYPE = [
 
 export type ClientStatusType = 'home' | 'doc_edit_mode' | 'doc_view_mode';
 
-export const SUPPORT_FILE_TYPE = [...SUPPORT_DOCUMENT_TYPE, ...SUPPORT_IMAGE_TYPE];
-export const NOVA_EXPIRED_TIME = 1800000;
 interface FileUpladState extends Pick<NovaChatType, 'type'> {
   state: 'ready' | 'upload' | 'wait' | 'delay';
   progress: number;
@@ -270,6 +269,7 @@ export default function Nova() {
   const novaHistory = useAppSelector(novaHistorySelector);
   const { creating } = useAppSelector(selectTabSlice);
   const creditInfo = useAppSelector(creditInfoSelector);
+  const { novaExpireTime } = useAppSelector(appStateSelector);
   const { t } = useTranslation();
   const confirm = useConfirm();
   const showCreditToast = useShowCreditToast();
@@ -676,7 +676,7 @@ export default function Nova() {
 
         expireTimer.current = setTimeout(() => {
           setExpiredNOVA(true);
-        }, NOVA_EXPIRED_TIME);
+        }, novaExpireTime);
 
         const html = await markdownToHtml(result);
         if (html) {
