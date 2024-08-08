@@ -189,53 +189,67 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                   style={{ width: '100%' }}
                   onClick={async () => {
                     if (item.type === 'document') {
-                      Bridge.callSyncBridgeApiWithCallback({
-                        api: 'getClientStatus',
-                        callback: async (status: ClientStatusType) => {
-                          switch (status) {
-                            case 'home':
-                              if (getPlatform() === ClientType.windows) {
-                                Bridge.callBridgeApi(
-                                  'pchome_mydoc',
-                                  JSON.stringify({
-                                    fileInfo: {
+                      switch (getPlatform()) {
+                        case ClientType.android:
+                        case ClientType.ios: {
+                          Bridge.callSyncBridgeApiWithCallback({
+                            api: 'getClientStatus',
+                            callback: async (status: ClientStatusType) => {
+                              switch (status) {
+                                case 'home':
+                                  Bridge.callBridgeApi(
+                                    'openPoDriveFile',
+                                    JSON.stringify({
                                       fileId: file.fileId,
-                                      fileRevision: file.fileRevision,
-                                      fileName: file.name
+                                      fileRevision: file.fileRevision
+                                    })
+                                  );
+                                  break;
+                                default: {
+                                  confirm({
+                                    title: '',
+                                    msg: t('Nova.Chat.FailOpenDoc'),
+                                    onOk: {
+                                      text: t('Confirm'),
+                                      callback: () => {}
                                     }
-                                  })
-                                );
-                              } else {
-                                const arg =
-                                  getPlatform() === ClientType.mac
-                                    ? {
-                                        fileId: file.fileId,
-                                        fileRevision: file.fileRevision,
-                                        fileName: file.name,
-                                        fileExtension: getFileExtension(file.name),
-                                        fileSize: file.file.size
-                                      }
-                                    : {
-                                        fileId: file.fileId,
-                                        fileRevision: file.fileRevision
-                                      };
-                                Bridge.callBridgeApi('openPoDriveFile', JSON.stringify(arg));
-                              }
-                              break;
-                            default: {
-                              confirm({
-                                title: '',
-                                msg: t('Nova.Chat.FailOpenDoc'),
-                                onOk: {
-                                  text: t('Confirm'),
-                                  callback: () => {}
+                                  });
+                                  break;
                                 }
-                              });
-                              break;
+                              }
                             }
-                          }
+                          });
+                          break;
                         }
-                      });
+                        case ClientType.windows: {
+                          Bridge.callBridgeApi(
+                            'pchome_mydoc',
+                            JSON.stringify({
+                              fileInfo: {
+                                fileId: file.fileId,
+                                fileRevision: file.fileRevision,
+                                fileName: file.name
+                              }
+                            })
+                          );
+                          break;
+                        }
+                        case ClientType.mac:
+                        case ClientType.windows:
+                        case ClientType.unknown: {
+                          Bridge.callBridgeApi(
+                            'openPoDriveFile',
+                            JSON.stringify({
+                              fileId: file.fileId,
+                              fileRevision: file.fileRevision,
+                              fileName: file.name,
+                              fileExtension: getFileExtension(file.name),
+                              fileSize: file.file.size
+                            })
+                          );
+                          break;
+                        }
+                      }
                     } else if (item.type === 'image') {
                       props.setImagePreview(file);
                     }
