@@ -162,6 +162,9 @@ const GuideExample = styled.div`
   background: #fff;
   font-size: 14px;
   color: var(--gray-gray-80-02);
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 // const StopButton = styled.div`
