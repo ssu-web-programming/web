@@ -24,6 +24,7 @@ import ico_file_sheet from 'img/ico_file_sheet.svg';
 import Tooltip from 'components/Tooltip';
 import ico_logo_po from 'img/ico_logo_po.svg';
 import ico_mobile from 'img/ico_mobile.svg';
+import ico_pc from 'img/ico_pc.svg';
 import ico_camera from 'img/ico_camera.svg';
 
 import { NovaChatType } from 'store/slices/novaHistorySlice';
@@ -470,7 +471,12 @@ const FileUploader = (props: FileUploaderProps) => {
       },
       {
         name: t(`Nova.UploadTooltip.Local`),
-        icon: { src: ico_mobile },
+        icon: {
+          src:
+            getPlatform() === ClientType.android || getPlatform() === ClientType.ios
+              ? ico_mobile
+              : ico_pc
+        },
         onClick: () => {
           const element = getCurrentFileInput(target)?.current;
           if (element) {
