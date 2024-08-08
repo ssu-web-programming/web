@@ -18,7 +18,7 @@ import Loading from 'img/agent_loading.gif';
 import Bridge, { ClientType, getPlatform } from 'util/bridge';
 import { ClientStatusType } from 'pages/Nova/Nova';
 import { useConfirm } from 'components/Confirm';
-import { sliceFileName } from 'util/common';
+import { getFileExtension, sliceFileName } from 'util/common';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -206,13 +206,20 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                                   })
                                 );
                               } else {
-                                Bridge.callBridgeApi(
-                                  'openPoDriveFile',
-                                  JSON.stringify({
-                                    fileId: file.fileId,
-                                    fileRevision: file.fileRevision
-                                  })
-                                );
+                                const arg =
+                                  getPlatform() === ClientType.mac
+                                    ? {
+                                        fileId: file.fileId,
+                                        fileRevision: file.fileRevision,
+                                        fileName: file.name,
+                                        fileExtension: getFileExtension(file.name),
+                                        fileSize: file.file.size
+                                      }
+                                    : {
+                                        fileId: file.fileId,
+                                        fileRevision: file.fileRevision
+                                      };
+                                Bridge.callBridgeApi('openPoDriveFile', JSON.stringify(arg));
                               }
                               break;
                             default: {

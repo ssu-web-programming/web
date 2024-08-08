@@ -45,7 +45,7 @@ import PoDrive, { DriveFileInfo } from 'components/PoDrive';
 import useUserInfoUtils from 'components/hooks/useUserInfoUtils';
 import { useChatNova } from 'components/hooks/useChatNova';
 import { ClientType, getPlatform } from 'util/bridge';
-import { sliceFileName } from 'util/common';
+import { getFileExtension, sliceFileName } from 'util/common';
 
 export const flexCenter = css`
   display: flex;
@@ -475,7 +475,7 @@ const FileUploader = (props: FileUploaderProps) => {
           const element = getCurrentFileInput(target)?.current;
           if (element) {
             const targetType = target === 'nova-image' ? SUPPORT_IMAGE_TYPE : SUPPORT_DOCUMENT_TYPE;
-            element.accept = getAccpet(targetType);
+            element.accept = getAccept(targetType);
             element.click();
           }
         }
@@ -532,7 +532,7 @@ const FileUploader = (props: FileUploaderProps) => {
           initPos>
           <FileButton
             target={btn.target}
-            accept={getAccpet(btn.accept)}
+            accept={getAccept(btn.accept)}
             handleOnChange={loadlocalFile}
             multiple
             isAgreed={isAgreed}
@@ -580,11 +580,20 @@ export const getFileIcon = (name: string) => {
   return fileIconMap[fileExt.toLowerCase()] || null;
 };
 
-const getAccpet = (infos: SupportFileType[]) => {
+export const getAccept = (infos: SupportFileType[] | File) => {
+  // web = extensioin, others = mimeType
   const platform = getPlatform();
-  if (platform === ClientType.unknown) {
-    return infos.map((type) => type.extensions).join(',');
+  if (infos instanceof File) {
+    if (platform === ClientType.unknown) {
+      return getFileExtension(infos.name);
+    } else {
+      return infos.type;
+    }
   } else {
-    return infos.map((type) => type.mimeType).join(',');
+    if (platform === ClientType.unknown) {
+      return infos.map((type) => type.extensions).join(',');
+    } else {
+      return infos.map((type) => type.mimeType).join(',');
+    }
   }
 };
