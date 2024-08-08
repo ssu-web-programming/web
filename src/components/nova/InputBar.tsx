@@ -591,7 +591,7 @@ export const getAccept = (infos: SupportFileType[] | File) => {
   const platform = getPlatform();
   if (infos instanceof File) {
     if (platform === ClientType.unknown) {
-      return getFileExtension(infos.name);
+      return getFileExtension(infos.name.toLowerCase());
     } else {
       return infos.type;
     }

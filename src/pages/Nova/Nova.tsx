@@ -538,12 +538,14 @@ export default function Nova() {
               }
             });
 
-          const getDocStatus = await checkDocStatus(fileInfo);
-          const invalid = getDocStatus.filter((doc) => doc.valid !== 'NORMAL');
-          if (invalid.length > 0) {
-            throw new DocUnopenableError(
-              invalid.map((inval) => ({ filename: inval.name, type: inval.valid }))
-            );
+          if (type === 'document') {
+            const getDocStatus = await checkDocStatus(fileInfo);
+            const invalid = getDocStatus.filter((doc) => doc.valid !== 'NORMAL');
+            if (invalid.length > 0) {
+              throw new DocUnopenableError(
+                invalid.map((inval) => ({ filename: inval.name, type: inval.valid }))
+              );
+            }
           }
           const convertedFileInfo = await convertFiles(fileInfo);
 
