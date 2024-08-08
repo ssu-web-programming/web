@@ -339,18 +339,18 @@ export default function Nova() {
   };
 
   const downloadConvertFile = async (fileInfo: PollingType) => {
-    const pollingConvertStatus = (mainResolve?: any, mainReject?: any) =>
-      new Promise((resolve, reject) => {
+    const pollingConvertStatus = () =>
+      new Promise<void>((resolve, reject) => {
         setTimeout(async () => {
           try {
             const status = await getConvertStatus(fileInfo);
             if (status === 'completed') {
-              mainResolve ? mainResolve(true) : resolve(true);
+              resolve();
             } else {
-              pollingConvertStatus(resolve, reject);
+              resolve(await pollingConvertStatus());
             }
           } catch (err) {
-            mainReject ? mainReject(err) : reject(err);
+            reject(err);
           }
         }, 100);
       });
