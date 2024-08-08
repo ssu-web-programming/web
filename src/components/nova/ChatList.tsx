@@ -1,4 +1,4 @@
-import { useEffect, forwardRef, useRef } from 'react';
+import { useEffect, forwardRef, useRef, useMemo } from 'react';
 import styled, { css } from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { NovaChatType, NovaFileInfo } from 'store/slices/novaHistorySlice';
@@ -19,6 +19,7 @@ import Bridge, { ClientType, getPlatform } from 'util/bridge';
 import { ClientStatusType } from 'pages/Nova/Nova';
 import { useConfirm } from 'components/Confirm';
 import { getFileExtension, sliceFileName } from 'util/common';
+import useLangParameterNavigate from 'components/hooks/useLangParameterNavigate';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -137,6 +138,7 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
   const { t } = useTranslation();
   const confirm = useConfirm();
   const { creating } = useAppSelector(selectTabSlice);
+  const { from } = useLangParameterNavigate();
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
   const CHAT_BUTTON_LIST: ChatButtonType[] = [
@@ -159,6 +161,13 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
       clickHandler: (history: NovaChatType) => handleInsertDocs(history)
     }
   ];
+  const chatButtonList = useMemo(
+    () =>
+      from === 'home'
+        ? CHAT_BUTTON_LIST.filter((btn) => btn.text !== t(`Nova.Chat.InsertDoc.Title`))
+        : CHAT_BUTTON_LIST,
+    [from, t]
+  );
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -270,22 +279,24 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                   <Overlay onSave={() => onSave(item)} />
                 </PreMarkdown>
                 <ChatButtonWrapper>
-                  {CHAT_BUTTON_LIST.filter((btn) => btn.status.includes(item.status)).map((btn) => (
-                    <IconTextButton
-                      disable={creating !== 'none' || expiredNOVA === true}
-                      key={btn.text}
-                      width={'fit'}
-                      iconSize={24}
-                      iconSrc={btn.iconSrc}
-                      iconPos="left"
-                      onClick={() => btn.clickHandler(item)}
-                      cssExt={css`
-                        background: transparent;
-                        padding: 0;
-                      `}>
-                      <ButtonText>{btn.text}</ButtonText>
-                    </IconTextButton>
-                  ))}
+                  {chatButtonList
+                    .filter((btn) => btn.status.includes(item.status))
+                    .map((btn) => (
+                      <IconTextButton
+                        disable={creating !== 'none' || expiredNOVA === true}
+                        key={btn.text}
+                        width={'fit'}
+                        iconSize={24}
+                        iconSrc={btn.iconSrc}
+                        iconPos="left"
+                        onClick={() => btn.clickHandler(item)}
+                        cssExt={css`
+                          background: transparent;
+                          padding: 0;
+                        `}>
+                        <ButtonText>{btn.text}</ButtonText>
+                      </IconTextButton>
+                    ))}
                 </ChatButtonWrapper>
               </div>
             )}
