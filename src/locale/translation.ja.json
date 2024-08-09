@@ -25,6 +25,8 @@
     "list": "目次",
     "table": "表"
   },
+  "SelectionComplete": "選択完了",
+  "Select": "選択",
   "WriteTab": {
     "WriteTopic": "トピックを下書きする",
     "WriteTextboxPlacehold": "作成する記事のトピックを入力してください。",

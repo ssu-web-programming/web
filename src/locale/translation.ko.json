@@ -25,6 +25,8 @@
     "list": "목차",
     "table": "표"
   },
+  "SelectionComplete": "선택 완료",
+  "Select": "선택하기",
   "WriteTab": {
     "WriteTopic": "주제 작성하기",
     "WriteTextboxPlacehold": "작성할 글의 주제를 입력하세요",

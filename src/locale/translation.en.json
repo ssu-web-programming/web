@@ -25,6 +25,8 @@
     "list": "Table of Contents",
     "table": "Table"
   },
+  "SelectionComplete": "Selection complete",
+  "Select": "Select",
   "WriteTab": {
     "WriteTopic": "Draft a topic",
     "WriteTextboxPlacehold": "Enter a topic of your article to write.",

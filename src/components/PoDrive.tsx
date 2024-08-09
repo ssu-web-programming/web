@@ -156,6 +156,7 @@ interface PoDriveProps {
   max: number;
   onChange: (files: DriveFileInfo[]) => void;
   target: string;
+  handleSelectedFiles?: (count: number) => void;
 }
 
 export default function PoDrive(props: PoDriveProps) {
@@ -258,6 +259,12 @@ export default function PoDrive(props: PoDriveProps) {
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (props.handleSelectedFiles) {
+      props.handleSelectedFiles(selected.length);
+    }
+  }, [props, selected]);
 
   const onBack = () => {
     const index = navi.length - 1;

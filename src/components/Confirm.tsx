@@ -6,7 +6,7 @@ import { activeConfirm, ConfirmType, initConfirm, selectConfirm } from '../store
 import Button from './buttons/Button';
 import { CustomScrollbar } from 'style/cssCommon';
 
-const ConfirmBox = styled.div`
+export const ConfirmBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -27,7 +27,7 @@ const ConfirmBox = styled.div`
   height: fit-content;
 `;
 
-const Header = styled.div`
+export const Header = styled.div`
   width: 100%;
   padding-bottom: 12px;
 `;
@@ -40,7 +40,7 @@ const Title = styled.h2`
   box-sizing: border-box;
 `;
 
-const ContentArea = styled.div`
+export const ContentArea = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -59,7 +59,7 @@ const ContentArea = styled.div`
   color: var(--gray-gray-80-02);
 `;
 
-const Footer = styled.div<{ direction?: 'column' | 'row' }>`
+export const Footer = styled.div<{ direction?: 'column' | 'row' }>`
   width: 100%;
   padding-top: 36px;
   display: flex;
