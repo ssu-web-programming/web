@@ -203,10 +203,10 @@ export type SupportFileType = {
 };
 
 export const SUPPORT_DOCUMENT_TYPE: SupportFileType[] = [
-  {
-    mimeType: 'application/msword',
-    extensions: '.doc'
-  },
+  // {
+  //   mimeType: 'application/msword',
+  //   extensions: '.doc'
+  // },
   {
     mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     extensions: '.docx'

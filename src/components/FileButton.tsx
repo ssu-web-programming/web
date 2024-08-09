@@ -123,7 +123,7 @@ const FileButton = forwardRef<HTMLInputElement, FileButtonProps>((props, ref) =>
             const invalid = files.filter((file) => !accept?.includes(getAccept(file)));
             const support = accept?.includes(SUPPORT_IMAGE_TYPE[0].mimeType)
               ? 'jpg, png, gif'
-              : 'doc, pptx, pdf, hwp, xlsx';
+              : 'docx, pptx, pdf, hwp, xlsx';
             if (invalid.length > 0) {
               confirm({
                 title: '',
