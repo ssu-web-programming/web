@@ -1,4 +1,4 @@
-import { useEffect, forwardRef, useRef, useMemo } from 'react';
+import { useEffect, forwardRef, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { NovaChatType, NovaFileInfo } from 'store/slices/novaHistorySlice';
@@ -161,13 +161,10 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
       clickHandler: (history: NovaChatType) => handleInsertDocs(history)
     }
   ];
-  const chatButtonList = useMemo(
-    () =>
-      from === 'home'
-        ? CHAT_BUTTON_LIST.filter((btn) => btn.text !== t(`Nova.Chat.InsertDoc.Title`))
-        : CHAT_BUTTON_LIST,
-    [from, t]
-  );
+  const chatButtonList =
+    from === 'home'
+      ? CHAT_BUTTON_LIST.filter((btn) => btn.text !== t(`Nova.Chat.InsertDoc.Title`))
+      : CHAT_BUTTON_LIST;
 
   useEffect(() => {
     if (scrollRef.current) {
