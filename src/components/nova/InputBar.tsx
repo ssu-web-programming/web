@@ -516,7 +516,6 @@ const FileUploader = (props: FileUploaderProps) => {
 
   const handleDriveCancel = () => {
     toggleDriveConfirm();
-    onLoadDriveFile([]);
     setUploadTarget('');
   };
 
