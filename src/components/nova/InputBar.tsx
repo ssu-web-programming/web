@@ -244,7 +244,7 @@ export default function InputBar(props: InputBarProps) {
       if (!!len) return acc + len;
       else return acc;
     }, 0);
-    if (uploadCnt >= uploadLimit) {
+    if (uploadCnt + files.length > uploadLimit) {
       await confirm({
         title: '',
         msg: t('Nova.Confirm.OverMaxFileUploadCnt', { max: uploadLimit })!,
@@ -447,6 +447,7 @@ const FileUploader = (props: FileUploaderProps) => {
           }
           const uploadLimit = getDriveSelectFileCount();
           if (uploadLimit === 0) {
+            setIsOpen(false);
             await confirm({
               title: '',
               msg: t('Nova.Confirm.OverMaxFileUploadCnt', { max: getUploadFileLimit() })!,
