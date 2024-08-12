@@ -241,7 +241,6 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                           break;
                         }
                         case ClientType.mac:
-                        case ClientType.windows:
                         case ClientType.unknown: {
                           Bridge.callBridgeApi(
                             'openPoDriveFile',

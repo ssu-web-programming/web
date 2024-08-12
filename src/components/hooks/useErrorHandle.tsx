@@ -1,5 +1,6 @@
 import { useLocation } from 'react-router-dom';
 import {
+  DelayDocConverting,
   DocConvertingError,
   DocUnopenableError,
   ERR_INVALID_SESSION,
@@ -146,6 +147,15 @@ const useErrorHandle = () => {
             )}
           </div>
         ),
+        onOk: {
+          text: t('Confirm'),
+          callback: () => {}
+        }
+      });
+    } else if (error instanceof DelayDocConverting) {
+      confirm({
+        title: '',
+        msg: t('Nova.Alert.ReQuestion'),
         onOk: {
           text: t('Confirm'),
           callback: () => {}
