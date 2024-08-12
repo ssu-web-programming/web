@@ -271,6 +271,12 @@ export default function InputBar(props: InputBarProps) {
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const inputText = event.target.value;
+
+    if (inputText === ' ') {
+      setContents('');
+      return;
+    }
+
     if (inputText.length <= 1000) {
       setContents(inputText);
     }
