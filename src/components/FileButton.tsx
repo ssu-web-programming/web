@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useConfirm } from './Confirm';
 import { useTranslation } from 'react-i18next';
 import { SUPPORT_IMAGE_TYPE } from 'pages/Nova/Nova';
+import { getAccept } from './nova/InputBar';
 
 const FileButtonBase = styled.button`
   width: fit-content;
@@ -11,9 +12,10 @@ const FileButtonBase = styled.button`
   padding: 0;
 `;
 
-const Label = styled.label`
+const Label = styled.label<{ disable: boolean }>`
   display: block;
-  cursor: pointer;
+  cursor: ${(props) => (!!props.disable ? 'pointer' : 'initial')};
+  color: ${(props) => (!!props.disable ? 'var(--gray-gray-80-02)' : '#454c5380')};
 `;
 
 const PersonalInfoContents = styled.div`
@@ -88,7 +90,7 @@ const FileButton = forwardRef<HTMLInputElement, FileButtonProps>((props, ref) =>
   };
 
   const handleAgreement = async () => {
-    if (isAgreed === true) return;
+    if (isAgreed === true || isAgreed === undefined) return;
 
     const isConfirmed = await confirm({
       title: t(`Nova.Confirm.PersonalInfo.Title`)!,
@@ -101,14 +103,14 @@ const FileButton = forwardRef<HTMLInputElement, FileButtonProps>((props, ref) =>
       direction: 'row'
     });
 
-    if (!!isConfirmed) {
+    if (isConfirmed) {
       handleOnClick();
     }
   };
 
   return (
     <FileButtonBase onClick={handleAgreement}>
-      <Label>{children}</Label>
+      <Label disable={!!isAgreed}>{children}</Label>
       <input
         ref={ref}
         id={inputId}
@@ -118,10 +120,10 @@ const FileButton = forwardRef<HTMLInputElement, FileButtonProps>((props, ref) =>
         onChange={async (e) => {
           if (e.currentTarget.files) {
             const files = Array.from(e.currentTarget.files);
-            const invalid = files.filter((file) => !accept?.includes(file.type));
+            const invalid = files.filter((file) => !accept?.includes(getAccept(file)));
             const support = accept?.includes(SUPPORT_IMAGE_TYPE[0].mimeType)
               ? 'jpg, png, gif'
-              : 'doc, pptx, pdf, hwp, xlsx';
+              : 'docx, pptx, pdf, hwp, xlsx';
             if (invalid.length > 0) {
               confirm({
                 title: '',

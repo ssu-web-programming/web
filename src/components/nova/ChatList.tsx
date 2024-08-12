@@ -11,13 +11,15 @@ import { ReactComponent as CopyChatIcon } from 'img/ico_copy_chat.svg';
 import { ReactComponent as InsertDocsIcon } from 'img/ico_insert_docs.svg';
 import ico_user from 'img/ico_user.svg';
 import ico_ai from 'img/ico_ai.svg';
-import { InputBarSubmitParam, flexCenter, getFileIcon, getFileName } from './InputBar';
+import { InputBarSubmitParam, flexCenter, getFileIcon } from './InputBar';
 import { useAppSelector } from 'store/store';
 import { selectTabSlice } from 'store/slices/tabSlice';
 import Loading from 'img/agent_loading.gif';
-import Bridge from 'util/bridge';
+import Bridge, { ClientType, getPlatform } from 'util/bridge';
 import { ClientStatusType } from 'pages/Nova/Nova';
 import { useConfirm } from 'components/Confirm';
+import { getFileExtension, sliceFileName } from 'util/common';
+import useLangParameterNavigate from 'components/hooks/useLangParameterNavigate';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -64,6 +66,7 @@ const QuestionContents = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
+  padding-top: 3px;
 `;
 
 const Answer = styled(Chat)`
@@ -108,6 +111,7 @@ const ButtonText = styled.div`
   font-size: 14px;
   line-height: 14px;
   font-weight: 500;
+  text-align: left;
 `;
 
 interface ChatListProps {
@@ -134,6 +138,7 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
   const { t } = useTranslation();
   const confirm = useConfirm();
   const { creating } = useAppSelector(selectTabSlice);
+  const { from } = useLangParameterNavigate();
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
   const CHAT_BUTTON_LIST: ChatButtonType[] = [
@@ -156,6 +161,10 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
       clickHandler: (history: NovaChatType) => handleInsertDocs(history)
     }
   ];
+  const chatButtonList =
+    from === 'home'
+      ? CHAT_BUTTON_LIST.filter((btn) => btn.text !== t(`Nova.Chat.InsertDoc.Title`))
+      : CHAT_BUTTON_LIST;
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -186,39 +195,72 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                   style={{ width: '100%' }}
                   onClick={async () => {
                     if (item.type === 'document') {
-                      Bridge.callSyncBridgeApiWithCallback({
-                        api: 'getClientStatus',
-                        callback: async (status: ClientStatusType) => {
-                          switch (status) {
-                            case 'home':
-                              Bridge.callBridgeApi(
-                                'openPoDriveFile',
-                                JSON.stringify({
-                                  fileId: file.fileId,
-                                  fileRevision: file.fileRevision
-                                })
-                              );
-                              break;
-                            default: {
-                              confirm({
-                                title: 'error',
-                                msg: 'only home state',
-                                onOk: {
-                                  text: 'ok',
-                                  callback: () => {}
+                      switch (getPlatform()) {
+                        case ClientType.android:
+                        case ClientType.ios: {
+                          Bridge.callSyncBridgeApiWithCallback({
+                            api: 'getClientStatus',
+                            callback: async (status: ClientStatusType) => {
+                              switch (status) {
+                                case 'home':
+                                  Bridge.callBridgeApi(
+                                    'openPoDriveFile',
+                                    JSON.stringify({
+                                      fileId: file.fileId,
+                                      fileRevision: file.fileRevision
+                                    })
+                                  );
+                                  break;
+                                default: {
+                                  confirm({
+                                    title: '',
+                                    msg: t('Nova.Chat.FailOpenDoc'),
+                                    onOk: {
+                                      text: t('Confirm'),
+                                      callback: () => {}
+                                    }
+                                  });
+                                  break;
                                 }
-                              });
-                              break;
+                              }
                             }
-                          }
+                          });
+                          break;
                         }
-                      });
+                        case ClientType.windows: {
+                          Bridge.callBridgeApi(
+                            'pchome_mydoc',
+                            JSON.stringify({
+                              fileInfo: {
+                                fileId: file.fileId,
+                                fileRevision: file.fileRevision,
+                                fileName: file.name
+                              }
+                            })
+                          );
+                          break;
+                        }
+                        case ClientType.mac:
+                        case ClientType.unknown: {
+                          Bridge.callBridgeApi(
+                            'openPoDriveFile',
+                            JSON.stringify({
+                              fileId: file.fileId,
+                              fileRevision: file.fileRevision,
+                              fileName: file.name,
+                              fileExtension: getFileExtension(file.name),
+                              fileSize: file.file.size
+                            })
+                          );
+                          break;
+                        }
+                      }
                     } else if (item.type === 'image') {
                       props.setImagePreview(file);
                     }
                   }}>
                   <Icon size={28} iconSrc={getFileIcon(file.name)}></Icon>
-                  <span>{getFileName(file.name)}</span>
+                  <span>{sliceFileName(file.name)}</span>
                 </FileItem>
               ))}
             </QuestionContents>
@@ -226,29 +268,31 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
           <Answer>
             <Icon size={32} iconSrc={ico_ai}></Icon>
             {item.status === 'request' ? (
-              <img src={Loading} alt="loading" />
+              <img src={Loading} alt="loading" style={{ paddingTop: '4px' }} />
             ) : (
-              <div>
+              <div style={{ paddingTop: '3px' }}>
                 <PreMarkdown text={item.output}>
                   <Overlay onSave={() => onSave(item)} />
                 </PreMarkdown>
                 <ChatButtonWrapper>
-                  {CHAT_BUTTON_LIST.filter((btn) => btn.status.includes(item.status)).map((btn) => (
-                    <IconTextButton
-                      disable={creating !== 'none' || expiredNOVA === true}
-                      key={btn.text}
-                      width={'fit'}
-                      iconSize={24}
-                      iconSrc={btn.iconSrc}
-                      iconPos="left"
-                      onClick={() => btn.clickHandler(item)}
-                      cssExt={css`
-                        background: transparent;
-                        padding: 0;
-                      `}>
-                      <ButtonText>{btn.text}</ButtonText>
-                    </IconTextButton>
-                  ))}
+                  {chatButtonList
+                    .filter((btn) => btn.status.includes(item.status))
+                    .map((btn) => (
+                      <IconTextButton
+                        disable={creating !== 'none' || expiredNOVA === true}
+                        key={btn.text}
+                        width={'fit'}
+                        iconSize={24}
+                        iconSrc={btn.iconSrc}
+                        iconPos="left"
+                        onClick={() => btn.clickHandler(item)}
+                        cssExt={css`
+                          background: transparent;
+                          padding: 0;
+                        `}>
+                        <ButtonText>{btn.text}</ButtonText>
+                      </IconTextButton>
+                    ))}
                 </ChatButtonWrapper>
               </div>
             )}

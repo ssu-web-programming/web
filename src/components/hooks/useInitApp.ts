@@ -1,12 +1,28 @@
 import { apiWrapper } from 'api/apiWrapper';
-import { AI_CREDIT_INFO, NOVA_GET_USER_INFO_AGREEMENT } from 'api/constant';
+import { AI_CREDIT_INFO, NOVA_GET_EXPIRED_TIME, NOVA_GET_USER_INFO_AGREEMENT } from 'api/constant';
 import { useCallback } from 'react';
+import { setNovaExpireTime } from 'store/slices/appState';
 import { setCreditInfo } from 'store/slices/creditInfo';
 import { setNovaAgreement, setUserInfo } from 'store/slices/userInfo';
 import { useAppDispatch } from 'store/store';
 
 export default function useInitApp() {
   const dispatch = useAppDispatch();
+
+  const initNovaExpireTime = useCallback(async () => {
+    try {
+      const { res } = await apiWrapper().request(NOVA_GET_EXPIRED_TIME, {
+        method: 'GET'
+      });
+      const {
+        success,
+        data: { expiredTime } // seconds
+      } = await res.json();
+      if (success) {
+        dispatch(setNovaExpireTime(expiredTime * 1000));
+      }
+    } catch (err) {}
+  }, [dispatch]);
 
   const initUserInfo = useCallback(async () => {
     try {
@@ -36,6 +52,7 @@ export default function useInitApp() {
   }, [dispatch]);
 
   return () => {
+    initNovaExpireTime();
     initUserInfo();
     initCreditInfo();
   };

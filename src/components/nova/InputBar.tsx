@@ -1,8 +1,9 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import FileButton from 'components/FileButton';
 import IconButton from 'components/buttons/IconButton';
 import Icon from 'components/Icon';
+import DriveConfirm from 'components/DriveConfirm';
 import { ReactComponent as DocsPlusIcon } from '../../img/ico_upload_docs_plus.svg';
 import { ReactComponent as ImagePlusIcon } from '../../img/ico_upload_img_plus.svg';
 import { ReactComponent as SendActiveIcon } from 'img/ico_send_active.svg';
@@ -24,18 +25,28 @@ import ico_file_sheet from 'img/ico_file_sheet.svg';
 import Tooltip from 'components/Tooltip';
 import ico_logo_po from 'img/ico_logo_po.svg';
 import ico_mobile from 'img/ico_mobile.svg';
-
+import ico_pc from 'img/ico_pc.svg';
+import ico_camera from 'img/ico_camera.svg';
 import { NovaChatType } from 'store/slices/novaHistorySlice';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import { setNovaAgreement, userInfoSelector } from 'store/slices/userInfo';
 import { apiWrapper } from 'api/apiWrapper';
 import { NOVA_SET_USER_INFO_AGREEMENT } from 'api/constant';
-import { SUPPORT_DOCUMENT_TYPE, SUPPORT_IMAGE_TYPE } from 'pages/Nova/Nova';
+import {
+  isValidFileSize,
+  MAX_FILE_UPLOAD_SIZE_MB,
+  MIN_FILE_UPLOAD_SIZE_KB,
+  SUPPORT_DOCUMENT_TYPE,
+  SUPPORT_IMAGE_TYPE,
+  SupportFileType
+} from 'pages/Nova/Nova';
 import { useConfirm } from 'components/Confirm';
 import PoDrive, { DriveFileInfo } from 'components/PoDrive';
 import useUserInfoUtils from 'components/hooks/useUserInfoUtils';
 import { useChatNova } from 'components/hooks/useChatNova';
+import { ClientType, getPlatform } from 'util/bridge';
+import { getFileExtension, sliceFileName } from 'util/common';
 
 export const flexCenter = css`
   display: flex;
@@ -181,12 +192,10 @@ interface FileListItemInfo {
 
 type FileUploaderProps = {
   loadlocalFile: (files: File[]) => void;
-  isAgreed: boolean;
+  isAgreed: boolean | undefined;
   setIsAgreed: (agree: boolean) => void;
   onLoadDriveFile: (files: DriveFileInfo[]) => void;
 };
-
-export const MAX_FILE_UPLOAD_SIZE_MB = 20;
 
 export default function InputBar(props: InputBarProps) {
   const dispatch = useAppDispatch();
@@ -216,11 +225,14 @@ export default function InputBar(props: InputBarProps) {
 
   const loadlocalFile = async (files: File[]) => {
     setDriveFiles([]);
-    const oversize = files.filter((file) => file.size >= MAX_FILE_UPLOAD_SIZE_MB * 1024 * 1024);
-    if (oversize.length > 0) {
+    const invalidSize = files.filter((file) => !isValidFileSize(file.size));
+    if (invalidSize.length > 0) {
       confirm({
         title: '',
-        msg: t('Nova.Alert.OverFileUploadSize', { max: MAX_FILE_UPLOAD_SIZE_MB })!,
+        msg: t('Nova.Alert.OverFileUploadSize', {
+          max: MAX_FILE_UPLOAD_SIZE_MB,
+          min: MIN_FILE_UPLOAD_SIZE_KB
+        })!,
         onOk: { text: t('Confirm'), callback: () => {} }
       });
       return;
@@ -232,7 +244,7 @@ export default function InputBar(props: InputBarProps) {
       if (!!len) return acc + len;
       else return acc;
     }, 0);
-    if (uploadCnt >= uploadLimit) {
+    if (uploadCnt + files.length > uploadLimit) {
       await confirm({
         title: '',
         msg: t('Nova.Confirm.OverMaxFileUploadCnt', { max: uploadLimit })!,
@@ -259,6 +271,12 @@ export default function InputBar(props: InputBarProps) {
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const inputText = event.target.value;
+
+    if (inputText === ' ') {
+      setContents('');
+      return;
+    }
+
     if (inputText.length <= 1000) {
       setContents(inputText);
     }
@@ -323,7 +341,7 @@ export default function InputBar(props: InputBarProps) {
           {localFiles.map((file: FileListItemInfo) => (
             <FileItem key={file.name}>
               <Icon size={28} iconSrc={getFileIcon(file.name)} />
-              <span>{getFileName(file.name)}</span>
+              <span>{sliceFileName(file.name)}</span>
               <IconButton
                 iconSize="lg"
                 iconComponent={DeleteIcon}
@@ -338,7 +356,7 @@ export default function InputBar(props: InputBarProps) {
           {driveFiles.map((file: FileListItemInfo) => (
             <FileItem key={file.name}>
               <Icon size={28} iconSrc={getFileIcon(file.name)} />
-              <span>{getFileName(file.name)}</span>
+              <span>{sliceFileName(file.name)}</span>
               <IconButton
                 iconSize="lg"
                 iconComponent={DeleteIcon}
@@ -382,6 +400,10 @@ export default function InputBar(props: InputBarProps) {
             onClick={handleOnClick}
             iconSize="lg"
             iconComponent={contents.length < 1 ? SendDisabledIcon : SendActiveIcon}
+            cssExt={css`
+              opacity: 1;
+              padding: 0;
+            `}
           />
         </IconBtnWrapper>
       </InputBtnWrapper>
@@ -397,6 +419,13 @@ const FileUploader = (props: FileUploaderProps) => {
   const { getUploadFileLimit, getDriveSelectFileCount } = useUserInfoUtils();
   const inputDocsFileRef = useRef<HTMLInputElement | null>(null);
   const inputImgFileRef = useRef<HTMLInputElement | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedFiles, setSelectedFiles] = useState<number>(0);
+  const [uploadTarget, setUploadTarget] = useState<string>('');
+
+  const toggleDriveConfirm = () => {
+    setIsOpen(!isOpen);
+  };
 
   const getCurrentFileInput = (target: string) => {
     if (target === 'nova-file') {
@@ -406,58 +435,63 @@ const FileUploader = (props: FileUploaderProps) => {
     }
   };
 
-  const TOOLTIP_UPLOAD_OPTION = (target: string) => [
-    {
-      name: t(`Nova.UploadTooltip.PolarisDrive`),
-      icon: { src: ico_logo_po },
-      onClick: async () => {
-        const uploadLimit = getDriveSelectFileCount();
-        if (uploadLimit === 0) {
-          await confirm({
-            title: '',
-            msg: t('Nova.Confirm.OverMaxFileUploadCnt', { max: getUploadFileLimit() })!,
-            onOk: { text: t('Nova.Confirm.NewChat.StartNewChat'), callback: chatNova.newCHat },
-            onCancel: { text: t('Cancel'), callback: () => {} }
-          });
-          return;
+  const TOOLTIP_UPLOAD_OPTION = (target: string) => {
+    const options = [
+      {
+        name: t(`Nova.UploadTooltip.PolarisDrive`),
+        icon: { src: ico_logo_po },
+        onClick: async () => {
+          if (isAgreed) {
+            setUploadTarget(target);
+            toggleDriveConfirm();
+          }
+          const uploadLimit = getDriveSelectFileCount();
+          if (uploadLimit === 0) {
+            setIsOpen(false);
+            await confirm({
+              title: '',
+              msg: t('Nova.Confirm.OverMaxFileUploadCnt', { max: getUploadFileLimit() })!,
+              onOk: { text: t('Nova.Confirm.NewChat.StartNewChat'), callback: chatNova.newCHat },
+              onCancel: { text: t('Cancel'), callback: () => {} }
+            });
+            return;
+          }
         }
-        const ret = await confirm({
-          title: t('Nova.UploadTooltip.PolarisDrive')!,
-          msg: (
-            <>
-              <div
-                style={{
-                  fontWeight: 400,
-                  fontSize: '16px',
-                  lineHeight: '24px',
-                  marginBottom: '24px'
-                }}>
-                {t(target === 'nova-file' ? 'Nova.PoDrive.Desc' : 'Nova.PoDrive.DescImg', {
-                  size: MAX_FILE_UPLOAD_SIZE_MB,
-                  count: uploadLimit
-                })}
-              </div>
-              <PoDrive
-                max={uploadLimit}
-                onChange={(files: DriveFileInfo[]) => onLoadDriveFile(files)}
-                target={target}
-              />
-            </>
-          ),
-          onOk: { text: t('Confirm'), callback: () => {} },
-          onCancel: { text: t('Cancel'), callback: () => {} }
-        });
-        if (!ret) {
-          onLoadDriveFile([]);
+      },
+      {
+        name: t(`Nova.UploadTooltip.Local`),
+        icon: {
+          src:
+            getPlatform() === ClientType.android || getPlatform() === ClientType.ios
+              ? ico_mobile
+              : ico_pc
+        },
+        onClick: () => {
+          const element = getCurrentFileInput(target)?.current;
+          if (element) {
+            const targetType = target === 'nova-image' ? SUPPORT_IMAGE_TYPE : SUPPORT_DOCUMENT_TYPE;
+            element.accept = getAccept(targetType);
+            element.click();
+          }
+        }
+      },
+      {
+        name: t(`Nova.UploadTooltip.Camera`),
+        icon: { src: ico_camera },
+        onClick: () => {
+          const element = getCurrentFileInput(target)?.current;
+          if (element) {
+            element.accept = 'camera';
+            element.click();
+          }
         }
       }
-    },
-    {
-      name: t(`Nova.UploadTooltip.Local`),
-      icon: { src: ico_mobile },
-      onClick: () => getCurrentFileInput(target)?.current?.click()
-    }
-  ];
+    ];
+
+    return target === 'nova-image' && getPlatform() === ClientType.android
+      ? options
+      : options.slice(0, 2);
+  };
 
   const handleOnClick = () => {
     if (!isAgreed) {
@@ -480,29 +514,70 @@ const FileUploader = (props: FileUploaderProps) => {
     }
   ];
 
+  const handleDriveCancel = () => {
+    toggleDriveConfirm();
+    setUploadTarget('');
+  };
+
   return (
     <UploadBtn>
       {UPLOAD_BTN_LIST.map((btn) => (
-        <Tooltip
-          key={btn.target}
-          placement="top-start"
-          type="selectable"
-          options={TOOLTIP_UPLOAD_OPTION(btn.target)}
-          distance={10}
-          condition={isAgreed}
-          initPos>
-          <FileButton
-            target={btn.target}
-            accept={btn.accept.map((acc) => acc.mimeType).join(',')}
-            handleOnChange={loadlocalFile}
-            multiple
-            isAgreed={isAgreed}
-            handleOnClick={handleOnClick}
-            ref={btn.ref}>
-            {btn.children}
-          </FileButton>
-        </Tooltip>
+        <React.Fragment key={btn.target}>
+          <Tooltip
+            key={btn.target}
+            placement="top-start"
+            type="selectable"
+            options={TOOLTIP_UPLOAD_OPTION(btn.target)}
+            distance={10}
+            condition={!!isAgreed}
+            initPos>
+            <FileButton
+              target={btn.target}
+              accept={getAccept(btn.accept)}
+              handleOnChange={loadlocalFile}
+              multiple
+              isAgreed={isAgreed}
+              handleOnClick={handleOnClick}
+              ref={btn.ref}>
+              {btn.children}
+            </FileButton>
+          </Tooltip>
+        </React.Fragment>
       ))}
+
+      {isOpen && (
+        <DriveConfirm
+          title={t('Nova.UploadTooltip.PolarisDrive')}
+          msg={
+            <>
+              <div
+                style={{
+                  fontWeight: 400,
+                  fontSize: '16px',
+                  lineHeight: '24px',
+                  marginBottom: '24px'
+                }}>
+                {t(uploadTarget === 'nova-file' ? 'Nova.PoDrive.Desc' : 'Nova.PoDrive.DescImg', {
+                  size: MAX_FILE_UPLOAD_SIZE_MB,
+                  count: getUploadFileLimit()
+                })}
+              </div>
+              <PoDrive
+                max={getUploadFileLimit()}
+                onChange={(files: DriveFileInfo[]) => onLoadDriveFile(files)}
+                target={uploadTarget}
+                handleSelectedFiles={(arg: number) => setSelectedFiles(arg)}
+              />
+            </>
+          }
+          onOk={{
+            text: !!selectedFiles ? t('SelectionComplete') : t('Select'),
+            callback: toggleDriveConfirm,
+            disable: !selectedFiles
+          }}
+          onCancel={{ text: t('Cancel'), callback: handleDriveCancel }}
+        />
+      )}
     </UploadBtn>
   );
 };
@@ -541,12 +616,20 @@ export const getFileIcon = (name: string) => {
   return fileIconMap[fileExt.toLowerCase()] || null;
 };
 
-export const getFileName = (name: string) => {
-  const fileName = name;
-  if (fileName.length > 20) {
-    const fileExt = fileName.split('.').pop() || '';
-    const fileNameWithoutExt = fileName.slice(0, 20 - fileExt.length - 1);
-    return `${fileNameWithoutExt}…${fileExt}`;
+export const getAccept = (infos: SupportFileType[] | File) => {
+  // web = extensioin, others = mimeType
+  const platform = getPlatform();
+  if (infos instanceof File) {
+    if (platform === ClientType.unknown) {
+      return getFileExtension(infos.name.toLowerCase());
+    } else {
+      return infos.type;
+    }
+  } else {
+    if (platform === ClientType.unknown) {
+      return infos.map((type) => type.extensions).join(',');
+    } else {
+      return infos.map((type) => type.mimeType).join(',');
+    }
   }
-  return fileName;
 };

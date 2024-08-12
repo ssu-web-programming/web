@@ -22,15 +22,15 @@ import {
   PO_DRIVE_CONVERT_DOWNLOAD,
   PO_DRIVE_CONVERT_STATUS,
   PO_DRIVE_DOWNLOAD,
+  PO_DRIVE_DOC_OPEN_STATUS,
   PO_DRIVE_UPLOAD
 } from 'api/constant';
 import { getFileExtension, getFileName, insertDoc, markdownToHtml } from 'util/common';
-import Bridge, { useCopyClipboard } from 'util/bridge';
+import Bridge, { ClientType, getPlatform, useCopyClipboard } from 'util/bridge';
 import { load } from 'cheerio';
 import Icon from 'components/Icon';
 import IconButton from 'components/buttons/IconButton';
 import ico_ai from 'img/ico_ai.svg';
-import ico_nova from 'img/ico_nova.svg';
 import ico_credit_info from 'img/ico_credit_line.svg';
 import ico_credit from 'img/ico_credit_gray.svg';
 import { ReactComponent as IconMessagePlus } from 'img/ico_message_plus.svg';
@@ -38,6 +38,10 @@ import { ReactComponent as AgentFraphicKo } from 'img/agent_graphic_ko.svg';
 import { ReactComponent as AgentFraphicEn } from 'img/agent_graphic_en.svg';
 import { ReactComponent as AgentFraphicJa } from 'img/agent_graphic_ja.svg';
 import { ReactComponent as IconArrowLeft } from 'img/ico_arrow_left.svg';
+import { ReactComponent as IconMax } from 'img/ico_nova_max.svg';
+import { ReactComponent as IconMin } from 'img/ico_nova_min.svg';
+import { ReactComponent as IconClose } from 'img/ico_nova_close.svg';
+import { ReactComponent as IconLogoNova } from 'img/ico_logo_nova.svg';
 import ChatList from 'components/nova/ChatList';
 import ico_image from 'img/ico_image.svg';
 import ico_documents from 'img/ico_documents.svg';
@@ -53,9 +57,16 @@ import { useShowCreditToast } from 'components/hooks/useShowCreditToast';
 import useErrorHandle from 'components/hooks/useErrorHandle';
 import { useChatNova } from 'components/hooks/useChatNova';
 import Header from 'components/layout/Header';
-import { ExceedPoDriveLimitError } from 'error/error';
-import { ReactComponent as closeIcon } from 'img/ico_ai_close.svg';
+import {
+  DelayDocConverting,
+  DocConvertingError,
+  DocUnopenableError,
+  ExceedPoDriveLimitError
+} from 'error/error';
+import { ReactComponent as xMarkIcon } from 'img/ico_xmark.svg';
 import { lang } from 'locale';
+import useLangParameterNavigate from 'components/hooks/useLangParameterNavigate';
+import { appStateSelector } from 'store/slices/appState';
 
 const flexCenter = css`
   display: flex;
@@ -117,6 +128,7 @@ const GuideWrapper = styled(Container)`
 `;
 
 const GuideTitle = styled.div`
+  padding: 0 17px;
   div.title {
     ${flexCenter}
     justify-content: center;
@@ -154,6 +166,10 @@ const GuideExample = styled.div`
   border-radius: 8px;
   background: #fff;
   font-size: 14px;
+  color: var(--gray-gray-80-02);
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 // const StopButton = styled.div`
@@ -186,19 +202,24 @@ const ScrollDownButton = styled.div`
   }
 `;
 
-export const SUPPORT_DOCUMENT_TYPE = [
-  {
-    mimeType: 'application/msword',
-    extensions: '.doc'
-  },
+export type SupportFileType = {
+  mimeType: string;
+  extensions: string;
+};
+
+export const SUPPORT_DOCUMENT_TYPE: SupportFileType[] = [
+  // {
+  //   mimeType: 'application/msword',
+  //   extensions: '.doc'
+  // },
   {
     mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     extensions: '.docx'
   },
-  {
-    mimeType: 'application/vnd.ms-powerpoint',
-    extensions: '.ppt'
-  },
+  // {
+  //   mimeType: 'application/vnd.ms-powerpoint',
+  //   extensions: '.ppt'
+  // },
   {
     mimeType: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
     extensions: '.pptx'
@@ -225,10 +246,14 @@ export const SUPPORT_DOCUMENT_TYPE = [
   }
 ];
 
-export const SUPPORT_IMAGE_TYPE = [
+export const SUPPORT_IMAGE_TYPE: SupportFileType[] = [
   {
     mimeType: 'image/jpeg',
     extensions: '.jpg'
+  },
+  {
+    mimeType: 'image/jpeg',
+    extensions: '.jpeg'
   },
   {
     mimeType: 'image/png',
@@ -242,8 +267,6 @@ export const SUPPORT_IMAGE_TYPE = [
 
 export type ClientStatusType = 'home' | 'doc_edit_mode' | 'doc_view_mode';
 
-export const SUPPORT_FILE_TYPE = [...SUPPORT_DOCUMENT_TYPE, ...SUPPORT_IMAGE_TYPE];
-export const NOVA_EXPIRED_TIME = 1800000;
 interface FileUpladState extends Pick<NovaChatType, 'type'> {
   state: 'ready' | 'upload' | 'wait' | 'delay';
   progress: number;
@@ -259,6 +282,7 @@ export default function Nova() {
   const novaHistory = useAppSelector(novaHistorySelector);
   const { creating } = useAppSelector(selectTabSlice);
   const creditInfo = useAppSelector(creditInfoSelector);
+  const { novaExpireTime } = useAppSelector(appStateSelector);
   const { t } = useTranslation();
   const confirm = useConfirm();
   const showCreditToast = useShowCreditToast();
@@ -295,42 +319,51 @@ export default function Nova() {
   const requestor = useRef<ReturnType<typeof apiWrapper>>();
 
   const getConvertStatus = async (fileInfo: { taskId: string }) => {
-    const { res } = await apiWrapper().request(PO_DRIVE_CONVERT_STATUS, {
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        taskId: fileInfo.taskId
-      }),
-      method: 'POST'
-    });
-    const json = await res.json();
-    const {
-      success,
-      data: { status }
-    } = json;
+    try {
+      requestor.current = apiWrapper();
+      const { res } = await requestor.current.request(PO_DRIVE_CONVERT_STATUS, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          taskId: fileInfo.taskId
+        }),
+        method: 'POST'
+      });
+      const json = await res.json();
+      const {
+        success,
+        data: { status }
+      } = json;
 
-    if (!success) throw new Error('Convert Error');
-    return status;
+      if (!success) throw new Error();
+      return status;
+    } catch (err) {
+      if (err instanceof DelayDocConverting) throw err;
+      else throw new DocConvertingError();
+    }
   };
 
-  const refPolling = useRef<any>(null); // TODO :type
   const downloadConvertFile = async (fileInfo: PollingType) => {
     const pollingConvertStatus = () =>
-      new Promise((resolve) => {
-        refPolling.current = {
-          [`${fileInfo.fileId}`]: setInterval(async () => {
+      new Promise<void>((resolve, reject) => {
+        setTimeout(async () => {
+          try {
             const status = await getConvertStatus(fileInfo);
             if (status === 'completed') {
-              clearInterval(refPolling.current[fileInfo.fileId]);
-              resolve(true);
+              resolve();
+            } else {
+              resolve(await pollingConvertStatus());
             }
-          }, 1000)
-        };
+          } catch (err) {
+            reject(err);
+          }
+        }, 100);
       });
     await pollingConvertStatus();
 
-    const { res } = await apiWrapper().request(PO_DRIVE_CONVERT_DOWNLOAD, {
+    requestor.current = apiWrapper();
+    const { res } = await requestor.current.request(PO_DRIVE_CONVERT_DOWNLOAD, {
       headers: {
         'Content-Type': 'application/json'
       },
@@ -345,7 +378,8 @@ export default function Nova() {
   };
 
   const reqConvertFile = async (fileInfo: NovaFileInfo) => {
-    const { res } = await apiWrapper().request(PO_DRIVE_CONVERT, {
+    requestor.current = apiWrapper();
+    const { res } = await requestor.current.request(PO_DRIVE_CONVERT, {
       headers: {
         'Content-Type': 'application/json'
       },
@@ -366,9 +400,36 @@ export default function Nova() {
     return converted;
   };
 
+  const checkDocStatus = async (files: NovaFileInfo[]) => {
+    const promises = files.map(async (file) => {
+      try {
+        requestor.current = apiWrapper();
+        const { res } = await requestor.current.request(PO_DRIVE_DOC_OPEN_STATUS, {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ fileId: file.fileId, fileRevision: file.fileRevision }),
+          method: 'POST'
+        });
+        const json = await res.json();
+        const {
+          success,
+          data: { status }
+        } = json;
+
+        if (!success) throw new Error('Invalid File');
+        return { ...file, valid: status };
+      } catch (err) {
+        throw err;
+      }
+    });
+    const results = await Promise.all(promises);
+    return results;
+  };
+
   const convertFiles = async (files: NovaFileInfo[]) => {
     const promises = files.map(async (file) => {
-      const ext = getFileExtension(file.name);
+      const ext = getFileExtension(file.file.name);
       if (ext === '.hwp' || ext === '.xls' || ext === '.xlsx') {
         const converted = await reqConvertFile(file);
         return {
@@ -456,36 +517,42 @@ export default function Nova() {
           if (type === 'image' || type === 'document')
             setFileUploadState({ type, state: 'upload', progress: 20 });
 
+          let targetFiles = [];
           if (files[0] instanceof File) {
-            const resUpload = await reqUploadFiles(files as File[]);
-            resUpload
-              .filter((res) => res.success)
-              .forEach((res) => {
-                if (res.success) {
-                  fileInfo.push({
-                    name: res.file.name,
-                    fileId: res.data.fileId,
-                    file: res.file,
-                    fileRevision: res.data.fileRevision
-                  });
-                }
-              });
+            targetFiles = await reqUploadFiles(files as File[]);
           } else if ('fileId' in files[0]) {
-            const resDownload = await reqDownloadFiles(files as DriveFileInfo[]);
-            resDownload
-              .filter((res) => res.success)
-              .forEach((res) => {
-                if (res.success) {
-                  fileInfo.push({
-                    name: res.file.name,
-                    fileId: res.data.fileId,
-                    file: res.file,
-                    fileRevision: res.data.fileRevision
-                  });
-                }
-              });
+            targetFiles = await reqDownloadFiles(files as DriveFileInfo[]);
           }
+          targetFiles
+            .filter((target) => target.success)
+            .forEach((target) => {
+              if (target.success) {
+                fileInfo.push({
+                  name: target.file.name,
+                  fileId: target.data.fileId,
+                  file: new File(
+                    [target.file],
+                    `${getFileName(target.file.name)}${getFileExtension(
+                      target.file.name
+                    ).toLowerCase()}`,
+                    {
+                      type: target.file.type
+                    }
+                  ),
+                  fileRevision: target.data.fileRevision
+                });
+              }
+            });
 
+          if (type === 'document') {
+            const getDocStatus = await checkDocStatus(fileInfo);
+            const invalid = getDocStatus.filter((doc) => doc.valid !== 'NORMAL');
+            if (invalid.length > 0) {
+              throw new DocUnopenableError(
+                invalid.map((inval) => ({ filename: inval.name, type: inval.valid }))
+              );
+            }
+          }
           const convertedFileInfo = await convertFiles(fileInfo);
 
           convertedFileInfo.forEach((info) => {
@@ -625,7 +692,7 @@ export default function Nova() {
 
         expireTimer.current = setTimeout(() => {
           setExpiredNOVA(true);
-        }, NOVA_EXPIRED_TIME);
+        }, novaExpireTime);
 
         const html = await markdownToHtml(result);
         if (html) {
@@ -794,8 +861,7 @@ export default function Nova() {
     <Wrapper>
       <NovaHeader title="" subTitle="">
         <TitleWrapper>
-          <Icon iconSrc={ico_ai} size="lg" />
-          <Icon iconSrc={ico_nova} size="lg" className="nova" />
+          <IconLogoNova width={107} height={32} />
         </TitleWrapper>
         <ButtonWrapper>
           {novaHistory.length > 0 && (
@@ -814,6 +880,18 @@ export default function Nova() {
             options={TOOLTIP_CREDIT_OPTIONS}>
             <Icon iconSrc={ico_credit_info} size={32} />
           </Tooltip>
+          {getPlatform() !== ClientType.android && getPlatform() !== ClientType.ios && (
+            <>
+              <ScreenChangeButton></ScreenChangeButton>
+              <IconButton
+                iconComponent={IconClose}
+                onClick={() => Bridge.callBridgeApi('closePanel')}
+                iconSize="lg"
+                width={32}
+                height={32}
+              />
+            </>
+          )}
         </ButtonWrapper>
       </NovaHeader>
       <Body>
@@ -891,6 +969,26 @@ export default function Nova() {
   );
 }
 
+const ScreenChangeButton = () => {
+  const [status, setStatus] = useState('min');
+  const { from } = useLangParameterNavigate();
+
+  if (from !== 'home') return null;
+
+  return (
+    <IconButton
+      iconComponent={status === 'min' ? IconMax : IconMin}
+      onClick={() => {
+        Bridge.callBridgeApi('changeScreenSize', status === 'min' ? 'max' : 'min');
+        setStatus(status === 'min' ? 'max' : 'min');
+      }}
+      iconSize="lg"
+      width={32}
+      height={32}
+    />
+  );
+};
+
 interface SearchGuideProps {
   setInputContents: React.Dispatch<React.SetStateAction<string>>;
 }
@@ -947,6 +1045,10 @@ const FileUploadWrapper = styled(Wrapper)`
     flex-direction: row;
     padding: 12px 16px;
     align-items: center;
+
+    .empty {
+      height: inherit;
+    }
   }
 
   .contents {
@@ -996,15 +1098,19 @@ const FileUploading = (props: FileUploadingProps) => {
   return (
     <FileUploadWrapper>
       <div className="header">
-        {state === 'upload' && (
+        {state === 'upload' ? (
           <IconButton
             iconComponent={IconArrowLeft}
             width={32}
             height={32}
             onClick={onClickBack}></IconButton>
+        ) : (
+          <div className="empty"></div>
         )}
       </div>
-      <ProgressBar progress={progress}></ProgressBar>
+      <div>
+        <ProgressBar progress={progress}></ProgressBar>
+      </div>
       <div className="contents">
         <div className="title">{t(`Nova.UploadState.Uploading`, { type: t(type) })}</div>
         <div className="desc">
@@ -1030,16 +1136,22 @@ const ImagePreviewWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.5);
+  background: #fff linear-gradient(0deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3));
   padding: 10px;
 
   .btns {
-    width: 100%;
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    z-index: 1;
   }
 
   img {
     background-color: white;
-    width: 100%;
+    position: fixed;
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
   }
 `;
 
@@ -1060,7 +1172,7 @@ const ImagePreview = (props: ImagePreviewProps) => {
             display: flex;
             justify-content: flex-end;
           `}
-          iconComponent={closeIcon}
+          iconComponent={xMarkIcon}
           onClick={() => props.onClose()}
         />
       </div>
@@ -1077,4 +1189,10 @@ export const filterCreditInfo = (
   nameMap: { [key: string]: string }
 ) => {
   return creditInfo.filter((item) => nameMap[item.serviceType]);
+};
+
+export const MAX_FILE_UPLOAD_SIZE_MB = 20;
+export const MIN_FILE_UPLOAD_SIZE_KB = 1;
+export const isValidFileSize = (size: number) => {
+  return size < MAX_FILE_UPLOAD_SIZE_MB * 1024 * 1024 && size > MIN_FILE_UPLOAD_SIZE_KB * 1024;
 };

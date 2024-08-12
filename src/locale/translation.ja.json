@@ -7,6 +7,7 @@
   "ASKDoc": "ASK Doc",
   "ShowExam": "例文",
   "Confirm": "確認",
+  "OK": "確認",
   "Cancel": "キャンセル",
   "Save": "保存",
   "Result": "結果",
@@ -17,11 +18,15 @@
   "TextToImage": "テキストを画像に",
   "image": "画像",
   "document": "ドキュメント",
+  "Purchase": "購入する",
+  "Subscribe": "購読する",
   "FormList": {
     "paragraph": "文",
     "list": "目次",
     "table": "表"
   },
+  "SelectionComplete": "選択完了",
+  "Select": "選択",
   "WriteTab": {
     "WriteTopic": "トピックを下書きする",
     "WriteTextboxPlacehold": "作成する記事のトピックを入力してください。",
@@ -260,11 +265,15 @@
     "RefPage": "参考 {{page}} ページ",
     "insertNote": "{{page}}ページにスライドノートを挿入する",
     "getCurrentSlideNote": "現在のスライドの内容を取得する",
-    "AlreadyExistSlideContents": "スライドの内容をインポートすると、以前の編集が失われます. 続行する?"
+    "AlreadyExistSlideContents": "スライドの内容をインポートすると、以前の編集が失われます. 続行する?",
+    "ReturnAppList": "アプリ一覧に戻る",
+    "RemoveAll": "すべてクリア"
   },
   "EOS": {
     "ASKDocEOSTitle": "ASK Doc V1のサービスが終了しました",
-    "ASKDocEOSDesc": "アプリをアップデートして、新しく改善されたASK Doc V2をご体験ください。"
+    "ASKDocEOSDesc": "アプリをアップデートして、新しく改善されたASK Doc V2をご体験ください。",
+    "AIChatTab": "AI Writeチャット機能は、より高度なAIエージェントにアップグレードされる予定です。そのため、チャット機能は終了いたします。ご理解のほど、よろしくお願いいたします。ありがとうございます。",
+    "AIChatTabEosDate": "チャットサービス終了日：2024年8月22日"
   },
   "Nova": {
     "CreditInfo": {
@@ -285,7 +294,8 @@
     },
     "UploadTooltip": {
       "PolarisDrive": "Polaris Drive",
-      "Local": "現在のデバイス"
+      "Local": "現在のデバイス",
+      "Camera": "写真撮影"
     },
     "UploadState": {
       "Uploading": "{{type}}をアップロード中です。",
@@ -307,7 +317,8 @@
             "Viewer": "ドキュメントに挿入するには、編集モードにしてください。回答は消えないのでご安心ください！"
           }
         }
-      }
+      },
+      "FailOpenDoc": "現在、ドキュメントが開いています！ まずドキュメントを閉じてから、希望のドキュメントを選択してください。"
     },
     "Alert": {
       "UnsupportFile": "このファイルはサポートされていません。{{support}}ファイルのみをアップロードしてください。",
@@ -321,7 +332,7 @@
         "Title": "クレジットが不足しています :(",
         "ios": "AIクレジットを追加購入して、スマートなNOVAと一緒に作業効率を高めましょう！"
       },
-      "OverFileUploadSize": "ファイルサイズが大きすぎます。{{max}}MB未満のファイルのみを選択してください。",
+      "OverFileUploadSize": "{{min}}KB以上{{max}}MB以下の文書のみ選択できます。もう一度お試しください。",
       "ReQuestion": "残念ながら、回答が遅れているようです。申し訳ありませんが、もう一度質問していただけますか？",
       "LackOfStorage": "Polaris Driveに十分なストレージ容量がありません。ファイルをアップロードするのに十分なストレージ容量があることを確認してください。",
       "LowResolution": "画像の解像度が低いため、分析が困難です。より高解像度の画像をアップロードしてください。",
@@ -332,7 +343,11 @@
         "Msg": "機能を点検中です。しばらくしてから再試行してください。"
       },
       "Error": "エラーが発生しました。しばらくしてからもう一度お試しください。",
-      "ExpiredNOVA": "NOVAとの会話が終了しました。新しい会話を開始します。"
+      "ExpiredNOVA": "NOVAとの会話が終了しました。新しい会話を開始します。",
+      "FailedConvertDoc": "ファイル変換が失敗し、回答を提供できません。より良いサービスを提供できるよう努めます。",
+      "UnopenableDocError": "暗号化されたドキュメントまたは破損したドキュメントはクエリを実行できません。ドキュメントを再確認してください。",
+      "Unopenable": "確認用ドキュメント",
+      "Password": "暗号ドキュメント"
     },
     "Confirm": {
       "NewChat": {

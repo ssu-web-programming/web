@@ -14,6 +14,7 @@ import { initComplete } from '../store/slices/initFlagSlice';
 import { setRecognizedVoice } from '../store/slices/recognizedVoice';
 import { initConfirm } from '../store/slices/confirm';
 import { resetCurrentWrite } from 'store/slices/writeHistorySlice';
+import { v4 as uuidv4 } from 'uuid';
 
 const UA_PREFIX: string = `__polaris_office_ai_`;
 
@@ -405,7 +406,9 @@ type ApiType =
   | 'getSlideContents'
   | 'insertNote'
   | 'getClientStatus'
-  | 'openPoDriveFile';
+  | 'openPoDriveFile'
+  | 'changeScreenSize'
+  | 'pchome_mydoc';
 
 const Bridge = {
   checkSession: (api: string) => {
@@ -448,7 +451,7 @@ const Bridge = {
       };
       try {
         const item = {
-          id: `${api}_${Date.now()}`,
+          id: `${api}_${Date.now()}_${uuidv4()}`,
           callback
         };
         BridgeList[item.id] = item;

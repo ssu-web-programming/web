@@ -1,5 +1,8 @@
 import { useLocation } from 'react-router-dom';
 import {
+  DelayDocConverting,
+  DocConvertingError,
+  DocUnopenableError,
   ERR_INVALID_SESSION,
   ERR_NOT_ONLINE,
   GPT_EXCEEDED_LIMIT,
@@ -15,7 +18,7 @@ import { useTranslation } from 'react-i18next';
 import { userInfoSelector } from 'store/slices/userInfo';
 import { ClientType, getPlatform } from 'util/bridge';
 import { useConfirm } from 'components/Confirm';
-import { openNewWindow } from 'util/common';
+import { openNewWindow, sliceFileName } from 'util/common';
 
 const useErrorHandle = () => {
   const dispatch = useAppDispatch();
@@ -110,6 +113,54 @@ const useErrorHandle = () => {
           });
         }
       }
+    } else if (error instanceof DocConvertingError) {
+      confirm({
+        title: '',
+        msg: t('Nova.Alert.FailedConvertDoc'),
+        onOk: {
+          text: t('Confirm'),
+          callback: () => {}
+        }
+      });
+    } else if (error instanceof DocUnopenableError) {
+      const unopenable = error.errorInfos.filter((info) => info.type === 'UNOPENABLE_DOCUMENT');
+      const password = error.errorInfos.filter((info) => info.type === 'PASSWORD');
+      confirm({
+        title: '',
+        msg: (
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'flex-start'
+            }}>
+            <div style={{ marginBottom: '20px' }}>{t('Nova.Alert.UnopenableDocError')}</div>
+            {unopenable.length > 0 && (
+              <div>{`- ${t('Nova.Alert.Unopenable')} : ${unopenable
+                .map((item) => sliceFileName(item.filename, 10))
+                .join(', ')}`}</div>
+            )}
+            {password.length > 0 && (
+              <div>{`- ${t('Nova.Alert.Password')} : ${password
+                .map((item) => sliceFileName(item.filename, 10))
+                .join(', ')}`}</div>
+            )}
+          </div>
+        ),
+        onOk: {
+          text: t('Confirm'),
+          callback: () => {}
+        }
+      });
+    } else if (error instanceof DelayDocConverting) {
+      confirm({
+        title: '',
+        msg: t('Nova.Alert.ReQuestion'),
+        onOk: {
+          text: t('Confirm'),
+          callback: () => {}
+        }
+      });
     } else {
       let msg: string | React.ReactNode = '';
       switch (error.message) {

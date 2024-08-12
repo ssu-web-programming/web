@@ -37,7 +37,7 @@ import {
   flexWrap
 } from '../style/cssCommon';
 import { calcToken, getElValue, parseGptVer } from '../api/usePostSplunkLog';
-import { setCreating } from '../store/slices/tabSlice';
+import { selectTabSlice, setCreating, setshowChatEOS } from '../store/slices/tabSlice';
 import { calLeftCredit } from '../util/common';
 import { useTranslation } from 'react-i18next';
 import useErrorHandle from '../components/hooks/useErrorHandle';
@@ -52,6 +52,7 @@ import TextLength from 'components/TextLength';
 import { ReactComponent as SendActiveIcon } from 'img/ico_send_active.svg';
 import { ReactComponent as SendDisabledIcon } from 'img/ico_send_disabled.svg';
 import IconButton from 'components/buttons/IconButton';
+import { useConfirm } from 'components/Confirm';
 
 const TEXT_MAX_HEIGHT = 268;
 
@@ -211,7 +212,9 @@ const AIChatTab = (props: WriteTabProps) => {
   const { selectedRecFunction, selectedSubRecFunction } = useAppSelector(selectRecFuncSlice);
   const { t } = useTranslation();
   const errorHandle = useErrorHandle();
+  const confirm = useConfirm();
   const showCreditToast = useShowCreditToast();
+  const { showChatEOS } = useAppSelector(selectTabSlice);
 
   const chatTipList = useMemo(() => {
     const platform = getPlatform();
@@ -253,6 +256,25 @@ const AIChatTab = (props: WriteTabProps) => {
     const text = exampleList[Math.floor(Math.random() * exampleList.length)];
     setChatInput((prev) => ({ ...prev, input: t(`ExampleList.${text}`) }));
   };
+
+  useEffect(() => {
+    if (showChatEOS === false) {
+      confirm({
+        title: '',
+        msg: (
+          <div>
+            <p style={{ marginBottom: '20px' }}>{t('EOS.AIChatTab')}</p>
+            <p>{t('EOS.AIChatTabEosDate')}</p>
+          </div>
+        ),
+        onOk: {
+          text: t('OK'),
+          callback: () => {}
+        }
+      });
+      dispatch(setshowChatEOS());
+    }
+  }, [showChatEOS, confirm]);
 
   useEffect(() => {
     if (isActiveInput && textRef?.current) {

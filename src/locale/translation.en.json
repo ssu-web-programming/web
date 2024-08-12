@@ -7,6 +7,7 @@
   "ASKDoc": "ASK Doc",
   "ShowExam": "example sentences",
   "Confirm": "Confirm",
+  "OK": "OK",
   "Cancel": "Cancel",
   "Save": "Save",
   "Result": "Result",
@@ -17,11 +18,15 @@
   "TextToImage": "Text to Image",
   "image": "image",
   "document": "document",
+  "Purchase": "Purchase",
+  "Subscribe": "Subscribe",
   "FormList": {
     "paragraph": "Sentence",
     "list": "Table of Contents",
     "table": "Table"
   },
+  "SelectionComplete": "Selection complete",
+  "Select": "Select",
   "WriteTab": {
     "WriteTopic": "Draft a topic",
     "WriteTextboxPlacehold": "Enter a topic of your article to write.",
@@ -260,11 +265,15 @@
     "RefPage": "Ref {{page}} Page",
     "insertNote": "Insert the slide note in {{page}} page",
     "getCurrentSlideNote": "Get the current slide contents",
-    "AlreadyExistSlideContents": "Previous edits are lost when the slide content is imported. Continue to proceed?"
+    "AlreadyExistSlideContents": "Previous edits are lost when the slide content is imported. Continue to proceed?",
+    "ReturnAppList": "Back to the app list",
+    "RemoveAll": "Clear All"
   },
   "EOS": {
     "ASKDocEOSTitle": "ASK Doc V1 Service Ended",
-    "ASKDocEOSDesc": "Meet the newly improved ASK Doc V2 after updating the app."
+    "ASKDocEOSDesc": "Meet the newly improved ASK Doc V2 after updating the app.",
+    "AIChatTab": "The AI Write chat feature will be upgraded to a more advanced AI agent. As a result, the chat function will be discontinued. We appreciate your understanding. Thank you.",
+    "AIChatTabEosDate": "Chat service end date: August 22, 2024"
   },
   "Nova": {
     "CreditInfo": {
@@ -285,7 +294,8 @@
     },
     "UploadTooltip": {
       "PolarisDrive": "Polaris Drive",
-      "Local": "Current device"
+      "Local": "Current device",
+      "Camera": "Camera"
     },
     "UploadState": {
       "Uploading": "Uploading {{type}}.",
@@ -307,7 +317,8 @@
             "Viewer": "To insert into the document, please enter edit mode. Don't worry, your response won't disappear!"
           }
         }
-      }
+      },
+      "FailOpenDoc": "A document is currently open! Please close the document first, then select the desired document."
     },
     "Alert": {
       "UnsupportFile": "This file is not supported. Please upload only {{support}} files.",
@@ -319,9 +330,9 @@
       },
       "NotEnoughCredit": {
         "Title": "Credits are insufficient :(",
-        "ios": "AIクレジットを追加購入して、スマートなNOVAと一緒に作業効率を高めましょう！"
+        "ios": "Purchase additional AI credits and enhance your productivity with the smart NOVA!"
       },
-      "OverFileUploadSize": "The file size is too large. Please select only files under {{max}}MB.",
+      "OverFileUploadSize": "You can only select documents between {{min}}KB and {{max}}MB. Please try again.",
       "ReQuestion": "Oh no! The answer is delayed. Sorry, but could you ask the question again?",
       "LackOfStorage": "There is not enough storage space on the Polaris Drive. Please make sure you have enough storage space to upload files!",
       "LowResolution": "The image's resolution is low, making analysis difficult. Please upload a higher resolution image.",
@@ -332,7 +343,11 @@
         "Msg": "The function is under maintenance. Please try again later."
       },
       "Error": "An error has occurred. Please try again later.",
-      "ExpiredNOVA": "The conversation with NOVA has expired. Starting a new conversation."
+      "ExpiredNOVA": "The conversation with NOVA has expired. Starting a new conversation.",
+      "FailedConvertDoc": "The selected document is encrypted and cannot be attached. Please decrypt it and try again.",
+      "UnopenableDocError": "Encrypted or corrupted documents cannot be queried. Please check the document again.",
+      "Unopenable": "Document to verify",
+      "Password": "Encrypted document"
     },
     "Confirm": {
       "NewChat": {

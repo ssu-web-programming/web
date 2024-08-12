@@ -6,7 +6,7 @@ import { activeConfirm, ConfirmType, initConfirm, selectConfirm } from '../store
 import Button from './buttons/Button';
 import { CustomScrollbar } from 'style/cssCommon';
 
-const ConfirmBox = styled.div`
+export const ConfirmBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -27,7 +27,7 @@ const ConfirmBox = styled.div`
   height: fit-content;
 `;
 
-const Header = styled.div`
+export const Header = styled.div`
   width: 100%;
   padding-bottom: 12px;
 `;
@@ -36,9 +36,11 @@ const Title = styled.h2`
   margin: 0;
   font-size: 20px;
   line-height: 30px;
+  pading-bottom: 12px;
+  box-sizing: border-box;
 `;
 
-const ContentArea = styled.div`
+export const ContentArea = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -57,7 +59,7 @@ const ContentArea = styled.div`
   color: var(--gray-gray-80-02);
 `;
 
-const Footer = styled.div<{ direction?: 'column' | 'row' }>`
+export const Footer = styled.div<{ direction?: 'column' | 'row' }>`
   width: 100%;
   padding-top: 36px;
   display: flex;
@@ -103,9 +105,11 @@ const Confirm = () => {
     <>
       <Blanket />
       <ConfirmBox>
-        <Header ref={headerRef}>
-          <Title>{title}</Title>
-        </Header>
+        {title && (
+          <Header ref={headerRef}>
+            <Title>{title}</Title>
+          </Header>
+        )}
         <ContentArea ref={contentsRef}>{msg}</ContentArea>
         <Footer direction={direction} ref={footerRef}>
           <Button
@@ -117,6 +121,8 @@ const Confirm = () => {
               order: ${direction === 'row' ? 2 : undefined};
               min-width: 92px;
               width: 100%;
+              border-radius: 8px;
+              line-height: 19px;
             `}>
             {onOk.text}
           </Button>
@@ -130,6 +136,8 @@ const Confirm = () => {
                 order: ${direction === 'row' ? 1 : undefined};
                 min-width: 92px;
                 width: 100%;
+                border-radius: 8px;
+                line-height: 19px;
               `}>
               {onCancel.text}
             </Button>
