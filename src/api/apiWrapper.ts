@@ -1,4 +1,5 @@
 import {
+  DelayDocConverting,
   ERR_INVALID_SESSION,
   ERR_NOT_ONLINE,
   ExceedPoDriveLimitError,
@@ -13,6 +14,7 @@ import {
   AI_WRITE_RESPONSE_STREAM_API,
   ALLI_RESPONSE_STREAM_API,
   NOVA_CHAT_API,
+  PO_DRIVE_CONVERT_STATUS,
   PO_DRIVE_UPLOAD,
   TEXT_TO_IMAGE_API
 } from './constant';
@@ -55,35 +57,38 @@ export function apiWrapper() {
         }
       });
 
-      if (
-        (api === AI_WRITE_RESPONSE_STREAM_API ||
+      if (res.status !== 200) {
+        if (
+          api === AI_WRITE_RESPONSE_STREAM_API ||
           api === TEXT_TO_IMAGE_API ||
           api === ALLI_RESPONSE_STREAM_API ||
-          api === NOVA_CHAT_API) &&
-        res.status !== 200
-      ) {
-        if (res.ok === false && res.status === 429) {
-          if (api === NOVA_CHAT_API) {
-            const body = await res.json();
-            throw new NovaNoCreditError({
-              current: body?.error?.code === 'no_credit' ? 0 : 1,
-              necessary: 0
+          api === NOVA_CHAT_API
+        ) {
+          if (res.ok === false && res.status === 429) {
+            if (api === NOVA_CHAT_API) {
+              const body = await res.json();
+              throw new NovaNoCreditError({
+                current: body?.error?.code === 'no_credit' ? 0 : 1,
+                necessary: 0
+              });
+            }
+            const { leftCredit, deductionCredit } = calLeftCredit(res.headers);
+            const current = parseInt(leftCredit);
+            const necessary = parseInt(deductionCredit);
+
+            throw new NoCreditError({
+              current,
+              necessary
             });
           }
-          const { leftCredit, deductionCredit } = calLeftCredit(res.headers);
-          const current = parseInt(leftCredit);
-          const necessary = parseInt(deductionCredit);
 
-          throw new NoCreditError({
-            current,
-            necessary
-          });
+          const body = await res.json();
+          if (body?.error?.code === 'invalid_prompt') throw new Error(INVALID_PROMPT);
+
+          throw res;
+        } else if (api === PO_DRIVE_CONVERT_STATUS) {
+          throw new DelayDocConverting();
         }
-
-        const body = await res.json();
-        if (body?.error?.code === 'invalid_prompt') throw new Error(INVALID_PROMPT);
-
-        throw res;
       }
 
       if (api === PO_DRIVE_UPLOAD && res.status === 400) {

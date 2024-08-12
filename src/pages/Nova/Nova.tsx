@@ -57,7 +57,12 @@ import { useShowCreditToast } from 'components/hooks/useShowCreditToast';
 import useErrorHandle from 'components/hooks/useErrorHandle';
 import { useChatNova } from 'components/hooks/useChatNova';
 import Header from 'components/layout/Header';
-import { DocConvertingError, DocUnopenableError, ExceedPoDriveLimitError } from 'error/error';
+import {
+  DelayDocConverting,
+  DocConvertingError,
+  DocUnopenableError,
+  ExceedPoDriveLimitError
+} from 'error/error';
 import { ReactComponent as xMarkIcon } from 'img/ico_xmark.svg';
 import { lang } from 'locale';
 import useLangParameterNavigate from 'components/hooks/useLangParameterNavigate';
@@ -331,10 +336,11 @@ export default function Nova() {
         data: { status }
       } = json;
 
-      if (!success) throw new DocConvertingError();
+      if (!success) throw new Error();
       return status;
     } catch (err) {
-      throw new DocConvertingError();
+      if (err instanceof DelayDocConverting) throw err;
+      else throw new DocConvertingError();
     }
   };
 

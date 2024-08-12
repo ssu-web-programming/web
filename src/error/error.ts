@@ -2,10 +2,11 @@ export const ERR_NOT_ONLINE = 'ERR_NOT_ONLINE';
 export const ERR_INVALID_SESSION = 'ERR_INVALID_SESSION';
 export const INVALID_PROMPT = 'INVALID_PROMPT';
 export const GPT_EXCEEDED_LIMIT = 'GPT_EXCEEDED_LIMIT';
-export const EXCEED_PO_DRIVE_LIMIT = 'EXCEED_PO_DRIVE_LIMIT';
-export const ERR_DOC_CONVERT = 'ERR_DOC_CONVERT';
-export const ERR_DOC_UNOPENABLE = 'ERR_DOC_UNOPENABLE';
+const EXCEED_PO_DRIVE_LIMIT = 'EXCEED_PO_DRIVE_LIMIT';
+const ERR_DOC_CONVERT = 'ERR_DOC_CONVERT';
+const ERR_DOC_UNOPENABLE = 'ERR_DOC_UNOPENABLE';
 const NOT_ENOUGH_CREDIT = 'NOT_ENOUGH_CREDIT';
+const DELAY_DOC_CONVERTING = 'DELAY_DOC_CONVERTING';
 
 interface CreditStatus {
   current: number;
@@ -48,5 +49,11 @@ export class DocUnopenableError extends Error {
   constructor(errorInfos: UnopeanbleType[]) {
     super(ERR_DOC_UNOPENABLE);
     this.errorInfos = errorInfos;
+  }
+}
+
+export class DelayDocConverting extends Error {
+  constructor() {
+    super(DELAY_DOC_CONVERTING);
   }
 }
