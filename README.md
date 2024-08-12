@@ -4,8 +4,9 @@ PO 서비스에서 사용하는 AI 기능들 입니다 :)
 
 ## Serving
 
-`Staging` : https://vf-berlin.polarisoffice.com/
-`Production` : https://berlin.polarisoffice.com/
+- `Staging` : https://vf-berlin.polarisoffice.com/
+- `Production` : https://berlin.polarisoffice.com/
+
 PO 서비스에서 사용하는 `인증 정보`가 필요합니다.
 
 ## 폴더 구조
