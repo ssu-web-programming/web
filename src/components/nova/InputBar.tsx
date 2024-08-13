@@ -201,7 +201,7 @@ export default function InputBar(props: InputBarProps) {
   const dispatch = useAppDispatch();
   const confirm = useConfirm();
   const chatNova = useChatNova();
-  const { getUploadFileLimit } = useUserInfoUtils();
+  const { getAvailableFileCnt } = useUserInfoUtils();
   const { novaHistory, disabled = false, expiredNOVA = false, contents = '', setContents } = props;
   const [localFiles, setLocalFiles] = useState<File[]>([]);
   const [driveFiles, setDriveFiles] = useState<DriveFileInfo[]>([]);
@@ -238,7 +238,7 @@ export default function InputBar(props: InputBarProps) {
       return;
     }
 
-    const uploadLimit = getUploadFileLimit();
+    const uploadLimit = getAvailableFileCnt();
     const uploadCnt = novaHistory.reduce((acc, cur) => {
       const len = cur.files?.length;
       if (!!len) return acc + len;
@@ -416,7 +416,7 @@ const FileUploader = (props: FileUploaderProps) => {
   const { t } = useTranslation();
   const confirm = useConfirm();
   const chatNova = useChatNova();
-  const { getUploadFileLimit, getDriveSelectFileCount } = useUserInfoUtils();
+  const { getAvailableFileCnt, calcAvailableFileCnt } = useUserInfoUtils();
   const inputDocsFileRef = useRef<HTMLInputElement | null>(null);
   const inputImgFileRef = useRef<HTMLInputElement | null>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -445,12 +445,12 @@ const FileUploader = (props: FileUploaderProps) => {
             setUploadTarget(target);
             toggleDriveConfirm();
           }
-          const uploadLimit = getDriveSelectFileCount();
+          const uploadLimit = calcAvailableFileCnt();
           if (uploadLimit === 0) {
             setIsOpen(false);
             await confirm({
               title: '',
-              msg: t('Nova.Confirm.OverMaxFileUploadCnt', { max: getUploadFileLimit() })!,
+              msg: t('Nova.Confirm.OverMaxFileUploadCnt', { max: getAvailableFileCnt() })!,
               onOk: { text: t('Nova.Confirm.NewChat.StartNewChat'), callback: chatNova.newCHat },
               onCancel: { text: t('Cancel'), callback: () => {} }
             });
@@ -559,11 +559,11 @@ const FileUploader = (props: FileUploaderProps) => {
                 }}>
                 {t(uploadTarget === 'nova-file' ? 'Nova.PoDrive.Desc' : 'Nova.PoDrive.DescImg', {
                   size: MAX_FILE_UPLOAD_SIZE_MB,
-                  count: getUploadFileLimit()
+                  count: calcAvailableFileCnt()
                 })}
               </div>
               <PoDrive
-                max={getUploadFileLimit()}
+                max={calcAvailableFileCnt()}
                 onChange={(files: DriveFileInfo[]) => onLoadDriveFile(files)}
                 target={uploadTarget}
                 handleSelectedFiles={(arg: number) => setSelectedFiles(arg)}

@@ -6,7 +6,7 @@ export default function useUserInfoUtils() {
   const { userInfo } = useAppSelector(userInfoSelector);
   const novaHistory = useAppSelector(novaHistorySelector);
 
-  const getUploadFileLimit = () => {
+  const getAvailableFileCnt = () => {
     switch (userInfo.ul) {
       case '8':
       case '9':
@@ -20,8 +20,8 @@ export default function useUserInfoUtils() {
     }
   };
 
-  const getDriveSelectFileCount = () => {
-    const uploadLimit = getUploadFileLimit();
+  const calcAvailableFileCnt = () => {
+    const uploadLimit = getAvailableFileCnt();
     const uploadCnt = novaHistory.reduce((acc, cur) => {
       const len = cur.files?.length;
       if (!!len) return acc + len;
@@ -30,5 +30,5 @@ export default function useUserInfoUtils() {
     return uploadLimit - uploadCnt;
   };
 
-  return { getUploadFileLimit, getDriveSelectFileCount };
+  return { getAvailableFileCnt, calcAvailableFileCnt };
 }
