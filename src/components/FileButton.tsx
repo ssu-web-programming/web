@@ -14,8 +14,8 @@ const FileButtonBase = styled.button`
 
 const Label = styled.label<{ disable: boolean }>`
   display: block;
-  cursor: ${(props) => (!!props.disable ? 'pointer' : 'initial')};
-  color: ${(props) => (!!props.disable ? 'var(--gray-gray-80-02)' : '#454c5380')};
+  cursor: ${(props) => (props.disable ? 'initial' : 'pointer')};
+  color: ${(props) => (props.disable ? '#454c5380' : 'var(--gray-gray-80-02)')};
 `;
 
 const PersonalInfoContents = styled.div`
@@ -110,7 +110,7 @@ const FileButton = forwardRef<HTMLInputElement, FileButtonProps>((props, ref) =>
 
   return (
     <FileButtonBase onClick={handleAgreement}>
-      <Label disable={!!isAgreed}>{children}</Label>
+      <Label disable={isAgreed === undefined}>{children}</Label>
       <input
         ref={ref}
         id={inputId}
