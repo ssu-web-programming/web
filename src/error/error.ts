@@ -7,6 +7,7 @@ const ERR_DOC_CONVERT = 'ERR_DOC_CONVERT';
 const ERR_DOC_UNOPENABLE = 'ERR_DOC_UNOPENABLE';
 const NOT_ENOUGH_CREDIT = 'NOT_ENOUGH_CREDIT';
 const DELAY_DOC_CONVERTING = 'DELAY_DOC_CONVERTING';
+const NO_FILE_IN_DRIVE = 'NO_FILE_IN_DRIVE';
 
 interface CreditStatus {
   current: number;
@@ -55,5 +56,11 @@ export class DocUnopenableError extends Error {
 export class DelayDocConverting extends Error {
   constructor() {
     super(DELAY_DOC_CONVERTING);
+  }
+}
+
+export class NoFileInDrive extends Error {
+  constructor() {
+    super(NO_FILE_IN_DRIVE);
   }
 }
