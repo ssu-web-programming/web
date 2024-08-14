@@ -126,6 +126,7 @@ interface ChatListProps {
 }
 
 type ChatButtonType = {
+  name: string;
   status: NovaChatType['status'][];
   text: string;
   iconSrc: React.ReactNode;
@@ -143,18 +144,21 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
 
   const CHAT_BUTTON_LIST: ChatButtonType[] = [
     {
+      name: 'recreating',
       status: ['done', 'cancel'],
       iconSrc: <CreditColorIcon />,
       text: t(`Nova.Chat.Recreating`),
       clickHandler: (history: NovaChatType) => onSubmit({ input: history.input, type: '' })
     },
     {
+      name: 'copy',
       status: ['done'],
       iconSrc: <CopyChatIcon />,
       text: t(`Nova.Chat.Copy`),
       clickHandler: (history: NovaChatType) => onCopy(history.output)
     },
     {
+      name: 'insert',
       status: ['done'],
       iconSrc: <InsertDocsIcon />,
       text: t(`Nova.Chat.InsertDoc.Title`),
@@ -162,9 +166,7 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
     }
   ];
   const chatButtonList =
-    from === 'home'
-      ? CHAT_BUTTON_LIST.filter((btn) => btn.text !== t(`Nova.Chat.InsertDoc.Title`))
-      : CHAT_BUTTON_LIST;
+    from === 'home' ? CHAT_BUTTON_LIST.filter((btn) => btn.name !== 'insert') : CHAT_BUTTON_LIST;
 
   useEffect(() => {
     if (scrollRef.current) {
