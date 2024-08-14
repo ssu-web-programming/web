@@ -5,6 +5,7 @@ import {
   ExceedPoDriveLimitError,
   INVALID_PROMPT,
   NoCreditError,
+  NoFileInDrive,
   NovaNoCreditError
 } from '../error/error';
 import { lang } from '../locale';
@@ -15,6 +16,7 @@ import {
   ALLI_RESPONSE_STREAM_API,
   NOVA_CHAT_API,
   PO_DRIVE_CONVERT_STATUS,
+  PO_DRIVE_DOWNLOAD,
   PO_DRIVE_UPLOAD,
   TEXT_TO_IMAGE_API
 } from './constant';
@@ -86,6 +88,8 @@ export function apiWrapper() {
           if (body?.error?.code === 'invalid_prompt') throw new Error(INVALID_PROMPT);
 
           throw res;
+        } else if (api === PO_DRIVE_DOWNLOAD) {
+          throw new NoFileInDrive();
         } else if (api === PO_DRIVE_CONVERT_STATUS) {
           throw new DelayDocConverting();
         }
