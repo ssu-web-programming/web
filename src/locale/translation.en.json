@@ -273,7 +273,9 @@
     "ASKDocEOSTitle": "ASK Doc V1 Service Ended",
     "ASKDocEOSDesc": "Meet the newly improved ASK Doc V2 after updating the app.",
     "AIChatTab": "The AI Write chat feature will be upgraded to a more advanced AI agent. As a result, the chat function will be discontinued. We appreciate your understanding. Thank you.",
-    "AIChatTabEosDate": "Chat service end date: August 22, 2024"
+    "AIChatTabEosDate": "Chat service end date: August 22, 2024",
+    "ASKDocEOSTitle2": "End of ASK Doc and Introduction to NOVA",
+    "ASKDocEOSDesc2": "The ASK Doc service was terminated on August 22, 2024. By updating the app, you can access these features through the integrated AI service, NOVA."
   },
   "Nova": {
     "CreditInfo": {
