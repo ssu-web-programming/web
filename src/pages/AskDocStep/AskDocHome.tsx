@@ -22,7 +22,7 @@ export const AskDocHome = () => {
         callback: () => Bridge.callBridgeApi('closePanel', '')
       }
     });
-  }, []);
+  });
 
   return (
     <WrapperPage>
