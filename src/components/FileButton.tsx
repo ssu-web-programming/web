@@ -4,6 +4,7 @@ import { useConfirm } from './Confirm';
 import { useTranslation } from 'react-i18next';
 import { SUPPORT_IMAGE_TYPE } from 'pages/Nova/Nova';
 import { getAccept } from './nova/InputBar';
+import { ClientType, getPlatform } from 'util/bridge';
 
 const FileButtonBase = styled.button`
   width: fit-content;
@@ -120,7 +121,14 @@ const FileButton = forwardRef<HTMLInputElement, FileButtonProps>((props, ref) =>
         onChange={async (e) => {
           if (e.currentTarget.files) {
             const files = Array.from(e.currentTarget.files);
-            const invalid = files.filter((file) => !accept?.includes(getAccept(file)));
+            const invalid = files.filter((file) => {
+              const fileAccept = getAccept(file);
+              if (getPlatform() === ClientType.unknown) {
+                return !accept?.split(',').includes(fileAccept);
+              } else {
+                return !accept?.includes(fileAccept);
+              }
+            });
             const support = accept?.includes(SUPPORT_IMAGE_TYPE[0].mimeType)
               ? 'jpg, png, gif'
               : 'docx, pptx, pdf, hwp, xlsx';
