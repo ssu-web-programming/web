@@ -19,7 +19,7 @@ export const AskDocHome = () => {
       msg: t('EOS.ASKDocEOSDesc2')!,
       onOk: {
         text: t('Confirm'),
-        callback: () => Bridge.callBridgeApi('closePanel', '')
+        callback: () => Bridge.callBridgeApi('closePanel', 'shutDown')
       }
     });
   });
