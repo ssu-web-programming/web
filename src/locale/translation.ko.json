@@ -320,6 +320,15 @@
       },
       "FailOpenDoc": "현재 문서가 열려 있어요! 문서를 먼저 닫고, 원하는 문서를 선택해 주세요."
     },
+    "ChatBanner": {
+      "Header": {
+        "Title": "오늘의 미션"
+      },
+      "Content": {
+        "Title": "NOVA로 하트 채우기",
+        "Desc": "NOVA와 대화하고 하트를 채우면\n랜덤 경품 증정!"
+      }
+    },
     "Alert": {
       "UnsupportFile": "지원되지 않는 파일입니다. {{support}} 파일만 업로드해 주세요",
       "NoCredit": {
@@ -391,6 +400,14 @@
       "ConsumeCredit": "{{deductionCredit}}크레딧이 사용되었어요. 남은 크레딧: {{leftCredit}}",
       "SelectDoc": "분석하고 싶은 문서를 선택해 보세요.",
       "SelectImg": "분석하고 싶은 이미지를 선택해 보세요."
+    },
+    "Modal": {
+      "MissionComplete": {
+        "Title": "미션 성공!",
+        "SubTitle": "최대 아이패드 당첨의 기회룰렛을 돌려\n경품을 확인해보세요!",
+        "Desc": "하루 <span class='highlight'>최대 3회</span> 행운권 추첨 가능!",
+        "ButtonText": "룰렛 돌리기"
+      }
     }
   }
 }

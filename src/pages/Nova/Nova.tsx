@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import React, { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import InputBar, { InputBarSubmitParam } from 'components/nova/InputBar';
+import { ChatBanner } from 'components/nova/ChatBanner';
 import styled, { css } from 'styled-components';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import {
@@ -67,6 +68,9 @@ import { ReactComponent as xMarkIcon } from 'img/ico_xmark.svg';
 import { lang } from 'locale';
 import useLangParameterNavigate from 'components/hooks/useLangParameterNavigate';
 import { appStateSelector } from 'store/slices/appState';
+import { userInfoSelector } from '../../store/slices/promotionUserInfo';
+import { ActiveHeart } from '../../components/nova/ActiveHeart';
+import Modals, { Overlay } from '../../components/nova/modals/Modals';
 
 const flexCenter = css`
   display: flex;
@@ -280,6 +284,7 @@ export default function Nova() {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const novaHistory = useAppSelector(novaHistorySelector);
+  const promotionUserInfo = useAppSelector(userInfoSelector);
   const { creating } = useAppSelector(selectTabSlice);
   const creditInfo = useAppSelector(creditInfoSelector);
   const { novaExpireTime } = useAppSelector(appStateSelector);
@@ -873,6 +878,7 @@ export default function Nova() {
               height={32}
             />
           )}
+          <ActiveHeart />
           <Tooltip
             title={t(`Nova.CreditInfo.Title`) as string}
             placement="bottom-end"
@@ -896,9 +902,12 @@ export default function Nova() {
       </NovaHeader>
       <Body>
         {novaHistory.length < 1 ? (
-          <GuideWrapper>
-            <Nova.SearchGuide setInputContents={setInputContents} />
-          </GuideWrapper>
+          <>
+            <ChatBanner />
+            <GuideWrapper>
+              <Nova.SearchGuide setInputContents={setInputContents} />
+            </GuideWrapper>
+          </>
         ) : (
           <>
             <ChatList
@@ -965,6 +974,9 @@ export default function Nova() {
       {imagePreview && (
         <ImagePreview {...imagePreview} onClose={() => setImagePreview(null)}></ImagePreview>
       )}
+      <Suspense fallback={<Overlay />}>
+        <Modals />
+      </Suspense>
     </Wrapper>
   );
 }

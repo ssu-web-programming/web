@@ -1,10 +1,16 @@
 import { apiWrapper } from 'api/apiWrapper';
-import { AI_CREDIT_INFO, NOVA_GET_EXPIRED_TIME, NOVA_GET_USER_INFO_AGREEMENT } from 'api/constant';
+import {
+  AI_CREDIT_INFO,
+  NOVA_GET_EXPIRED_TIME,
+  NOVA_GET_USER_INFO_AGREEMENT,
+  PROMOTION_USER_INFO
+} from 'api/constant';
 import { useCallback } from 'react';
 import { setNovaExpireTime } from 'store/slices/appState';
 import { setCreditInfo } from 'store/slices/creditInfo';
 import { setNovaAgreement, setUserInfo } from 'store/slices/userInfo';
 import { useAppDispatch } from 'store/store';
+import { IEventType } from '../../store/slices/promotionUserInfo';
 
 export default function useInitApp() {
   const dispatch = useAppDispatch();
@@ -51,8 +57,25 @@ export default function useInitApp() {
     } catch (err) {}
   }, [dispatch]);
 
+  const initPromotionUserInfo = useCallback(async () => {
+    try {
+      const eventType: IEventType = IEventType.AI_NOVA_LUCKY_EVENT;
+      const { res } = await apiWrapper().request(PROMOTION_USER_INFO, {
+        body: JSON.stringify({
+          type: eventType
+        }),
+        method: 'POST'
+      });
+      const response = await res.json();
+      if (response.resultCode === 0) {
+        dispatch(setUserInfo(response));
+      }
+    } catch (err) {}
+  }, [dispatch]);
+
   return () => {
     initNovaExpireTime();
+    initPromotionUserInfo();
     initUserInfo();
     initCreditInfo();
   };
