@@ -2,9 +2,15 @@ import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 
 type ModalState = {
-  type: 'missionComplete';
+  type:
+    | 'missionComplete'
+    | 'prizeCredit'
+    | 'notEnoughHeart'
+    | 'nextChance'
+    | 'prize'
+    | 'luckyDrawComplete';
   props: {
-    buttonOnclick: () => void;
+    buttonOnClick: () => void;
     leftButtonOnClick: () => void;
     rightButtonOnClick: () => void;
   };

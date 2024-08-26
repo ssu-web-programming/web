@@ -4,23 +4,28 @@ import { createPortal } from 'react-dom';
 import { modalSelector } from '../../../store/slices/novaModalsSlice';
 import styled from 'styled-components';
 import CloseIcon from '../../../img/nova/promotion/close.svg';
-import useModal from '../../hooks/useModal';
+import useModal from '../../hooks/nova/useModal';
 
 const MODAL_POMPONENTS = {
-  missionComplete: lazy(() => import('./MissionCompleteModal'))
+  missionComplete: lazy(() => import('./MissionCompleteModal')),
+  prizeCredit: lazy(() => import('./PrizeCreditModal')),
+  notEnoughHeart: lazy(() => import('./NotEnoughHeartModal')),
+  nextChance: lazy(() => import('./NextChanceModal')),
+  prize: lazy(() => import('./PrizeModal')),
+  luckyDrawComplete: lazy(() => import('./LuckyDrawCompleteModal'))
 };
 
 const Modals = () => {
   const modalList = useAppSelector(modalSelector);
   const { closeModal } = useModal();
-  const renderModal = modalList.map(({ type, props }) => {
+  const renderModal = modalList.map(({ type, props }, index) => {
     const ModalComponent = MODAL_POMPONENTS[type];
     return (
-      <Overlay>
-        <ModalWrapp>
+      <Overlay key={type || index}>
+        <ModalWrap>
           <Close src={CloseIcon} alt="close" onClick={closeModal} />
           <ModalComponent key={type} {...props} />
-        </ModalWrapp>
+        </ModalWrap>
       </Overlay>
     );
   });
@@ -44,16 +49,11 @@ export const Overlay = styled.div`
   align-items: center;
 `;
 
-const ModalWrapp = styled.div`
+const ModalWrap = styled.div`
   width: 340px;
   position: relative;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: #fff;
-  border-radius: 12px;
-  padding: 40px 12px 28px 12px;
+  font-family: Pretendard, sans-serif !important;
 `;
 
 const Close = styled.img`

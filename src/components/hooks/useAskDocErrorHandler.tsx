@@ -1,4 +1,4 @@
-import useModal from './useModal';
+import useModal from './askDoc/useModal';
 import Bridge from '../../util/bridge';
 import { useAppDispatch } from '../../store/store';
 import { setFiles } from '../../store/slices/askDocAnalyzeFiesSlice';

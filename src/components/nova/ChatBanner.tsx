@@ -11,7 +11,7 @@ import {
   justiSpaceBetween,
   justiStart
 } from '../../style/cssCommon';
-import { ReactComponent as ExpandMoreSvg } from 'img/nova/promotion/expand_more.svg';
+import { ReactComponent as ExpandMoreSvg } from 'img/nova/promotion/expand_more_purple.svg';
 import flag from 'img/nova/promotion/flag.svg';
 
 import { useTranslation } from 'react-i18next';
