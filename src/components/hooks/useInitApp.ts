@@ -9,6 +9,7 @@ import { useCallback } from 'react';
 import { setNovaExpireTime } from 'store/slices/appState';
 import { setCreditInfo } from 'store/slices/creditInfo';
 import { setNovaAgreement, setUserInfo } from 'store/slices/userInfo';
+import { setPromotionUserInfo } from '../../store/slices/promotionUserInfo';
 import { useAppDispatch } from 'store/store';
 import { IEventType } from '../../store/slices/promotionUserInfo';
 
@@ -70,16 +71,16 @@ export default function useInitApp() {
         method: 'POST'
       });
       const response = await res.json();
-      if (response.resultCode === 0) {
-        dispatch(setUserInfo(response));
+      if (response.success) {
+        dispatch(setPromotionUserInfo(response.data.accurePromotionUser));
       }
     } catch (err) {}
   }, [dispatch]);
 
   return () => {
+    initUserInfo();
     initNovaExpireTime();
     initPromotionUserInfo();
-    initUserInfo();
     initCreditInfo();
   };
 }

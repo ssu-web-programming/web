@@ -24,7 +24,8 @@ import {
   PO_DRIVE_CONVERT_STATUS,
   PO_DRIVE_DOWNLOAD,
   PO_DRIVE_DOC_OPEN_STATUS,
-  PO_DRIVE_UPLOAD
+  PO_DRIVE_UPLOAD,
+  PROMOTION_USER_INFO
 } from 'api/constant';
 import { getFileExtension, getFileName, insertDoc, markdownToHtml } from 'util/common';
 import Bridge, { ClientType, getPlatform, useCopyClipboard } from 'util/bridge';
@@ -68,9 +69,14 @@ import { ReactComponent as xMarkIcon } from 'img/ico_xmark.svg';
 import { lang } from 'locale';
 import useLangParameterNavigate from 'components/hooks/useLangParameterNavigate';
 import { appStateSelector } from 'store/slices/appState';
-import { userInfoSelector } from '../../store/slices/promotionUserInfo';
-import { ActiveHeart } from '../../components/nova/ActiveHeart';
+import {
+  IEventType,
+  IPromotionUserInfo,
+  setPromotionUserInfo,
+  userInfoSelector
+} from '../../store/slices/promotionUserInfo';
 import Modals, { Overlay } from '../../components/nova/modals/Modals';
+import { Heart } from '../../components/nova/Heart';
 
 const flexCenter = css`
   display: flex;
@@ -284,7 +290,7 @@ export default function Nova() {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const novaHistory = useAppSelector(novaHistorySelector);
-  const promotionUserInfo = useAppSelector(userInfoSelector);
+  const userInfo: IPromotionUserInfo = useAppSelector(userInfoSelector);
   const { creating } = useAppSelector(selectTabSlice);
   const creditInfo = useAppSelector(creditInfoSelector);
   const { novaExpireTime } = useAppSelector(appStateSelector);
@@ -502,6 +508,25 @@ export default function Nova() {
     return ret;
   };
 
+  const initPromotionUserInfo = useCallback(async () => {
+    try {
+      const eventType: IEventType = IEventType.AI_NOVA_LUCKY_EVENT;
+      const { res } = await apiWrapper().request(PROMOTION_USER_INFO, {
+        headers: {
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          type: eventType
+        }),
+        method: 'POST'
+      });
+      const response = await res.json();
+      if (response.success) {
+        dispatch(setPromotionUserInfo(response.data.accurePromotionUser));
+      }
+    } catch (err) {}
+  }, [dispatch]);
+
   const onSubmit = useCallback(
     async (submitParam: InputBarSubmitParam) => {
       const id = v4();
@@ -658,6 +683,7 @@ export default function Nova() {
           }
         );
         dispatch(updateChatStatus({ id, status: 'done' }));
+        initPromotionUserInfo();
       } catch (err) {
         if (timer) clearTimeout(timer);
         if (requestor.current?.isAborted() === true) {
@@ -869,6 +895,7 @@ export default function Nova() {
           <IconLogoNova width={107} height={32} />
         </TitleWrapper>
         <ButtonWrapper>
+          <Heart progress={Number(userInfo.point)} iconWidth={24} iconHeight={22} />
           {novaHistory.length > 0 && (
             <IconButton
               iconComponent={IconMessagePlus}
@@ -878,7 +905,6 @@ export default function Nova() {
               height={32}
             />
           )}
-          <ActiveHeart />
           <Tooltip
             title={t(`Nova.CreditInfo.Title`) as string}
             placement="bottom-end"

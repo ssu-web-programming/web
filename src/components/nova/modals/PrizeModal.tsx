@@ -6,7 +6,9 @@ import AmericanoIcon from '../../../img/nova/promotion/prize_americano.svg';
 import { ReactComponent as ExpandMoreSvg } from 'img/nova/promotion/expand_more_gray.svg';
 import {
   IAccurePromotionAction,
+  IEventType,
   IPromotionUserInfo,
+  setPromotionUserInfo,
   userInfoSelector
 } from '../../../store/slices/promotionUserInfo';
 import TextField from '@mui/material/TextField';
@@ -25,6 +27,8 @@ import {
   justiStart
 } from '../../../style/cssCommon';
 import { SvgIcon, SvgIconProps } from '@mui/material';
+import { apiWrapper } from '../../../api/apiWrapper';
+import { PROMOTION_AGREE, PROMOTION_OFFER } from '../../../api/constant';
 
 const ExpandMoreIcon = (props: SvgIconProps) => (
   <SvgIcon {...props}>
@@ -232,7 +236,7 @@ const PrizeModal = ({ buttonOnClick }: Props) => {
   const [nameErrMsg, setNameErrMsg] = useState('');
   const [namePhoneMsg, setPhoneErrMsg] = useState('');
 
-  const submitInfo = () => {
+  const submitInfo = async () => {
     const nameValue = nameRef.current?.value;
     const phoneValue = phoneRef.current?.value;
 
@@ -249,18 +253,30 @@ const PrizeModal = ({ buttonOnClick }: Props) => {
     }
 
     if (nameValue && phoneValue) {
-      // to do
-      // 당첨 정보 제출
+      const eventType: IEventType = IEventType.AI_NOVA_LUCKY_EVENT;
+      const { res } = await apiWrapper().request(PROMOTION_AGREE, {
+        headers: {
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          type: eventType,
+          name: nameValue,
+          phoneNumber: phoneValue
+        }),
+        method: 'POST'
+      });
+
       buttonOnClick();
     }
   };
 
   const getPromotionPrize = () => {
-    if (userInfo.accureAction === IAccurePromotionAction.WIN_STARBUCK_COUPON) {
+    const prize = userInfo.accureAction[userInfo.accureAction.length - 1];
+    if (prize === IAccurePromotionAction.WIN_STARBUCK_COUPON) {
       return <Img src={AmericanoIcon} alt="credit" width="72px" height="130px" />;
-    } else if (userInfo.accureAction === IAccurePromotionAction.WIN_BUZ) {
+    } else if (prize === IAccurePromotionAction.WIN_BUZ) {
       return <Img src={BuzIcon} alt="credit" width="130px" height="130px" />;
-    } else if (userInfo.accureAction === IAccurePromotionAction.WIN_IPAD) {
+    } else if (prize === IAccurePromotionAction.WIN_IPAD) {
       return <Img src={IPadIcon} alt="credit" width="112px" height="130px" />;
     } else {
       return <></>;
@@ -274,8 +290,7 @@ const PrizeModal = ({ buttonOnClick }: Props) => {
           <Title>{t('Nova.Modal.Prize.Title')}</Title>
           <SubTitle>{t('Nova.Modal.Prize.SubTitle')}</SubTitle>
           <Desc>{t('Nova.Modal.Prize.Desc')}</Desc>
-          {/*{getPromotionPrize()}*/}
-          <Img src={AmericanoIcon} alt="credit" width="72px" height="130px" />
+          {getPromotionPrize()}
         </ContentTop>
         <ContentBottom>
           <InputBoxWrap>

@@ -27,3 +27,5 @@ export const PO_DRIVE_CONVERT_DOWNLOAD = '/api/v2/nova/podrive/convert/download'
 export const PO_DRIVE_DOC_OPEN_STATUS = '/api/v2/nova/podrive/document-openstatus';
 
 export const PROMOTION_USER_INFO = '/api/v2/nova/promotion/get-userinfo';
+export const PROMOTION_OFFER = '/api/v2/nova/promotion/offer';
+export const PROMOTION_AGREE = '/api/v2/nova/promotion/agree';
