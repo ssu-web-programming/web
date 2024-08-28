@@ -5,6 +5,17 @@ import BuzIcon from '../../../img/nova/promotion/prize_buz_with_back.svg';
 import AmericanoIcon from '../../../img/nova/promotion/prize_americano_with_back.svg';
 import Roulette from '../../../img/nova/promotion/slot.gif';
 import { useState } from 'react';
+import {
+  IAccurePromotionAction,
+  IEventType,
+  IPromotionUserInfo,
+  setPromotionUserInfo
+} from '../../../store/slices/promotionUserInfo';
+import { apiWrapper } from '../../../api/apiWrapper';
+import { PROMOTION_OFFER, PROMOTION_USER_INFO } from '../../../api/constant';
+import useOpenModal from '../../hooks/nova/useOpenModal';
+import useModal from '../../hooks/nova/useModal';
+import { SplunkData } from 'api/usePostSplunkLog';
 
 const Wrap = styled.div`
   width: 100%;
@@ -58,6 +69,7 @@ const Desc = styled.li`
   font-weight: 500;
   line-height: 21px;
   color: #9ea4aa;
+
   .highlight {
     font-weight: 700;
     color: #6f3ad0;
@@ -90,15 +102,89 @@ type Props = {
 const MissionCompleteModal = ({ buttonOnClick }: Props) => {
   const { t } = useTranslation();
   const [roulette, setRoulette] = useState(false);
+  const { openModal, closeModal } = useModal();
+  let splunk:
+    | ((data: SplunkData) => Promise<Response | undefined>)
+    | ((arg0: { dp: string; dt: string; el: string }) => void)
+    | null = null;
   const text = t('Nova.Modal.MissionComplete.Desc');
 
   const handleClick = () => {
     setRoulette(true);
 
     const gifDuration = 5000;
-    setTimeout(() => {
-      buttonOnClick();
-    }, gifDuration);
+    Promise.all([OfferEvent(), new Promise((resolve) => setTimeout(resolve, gifDuration))]).then(
+      ([type]) => {
+        buttonOnClick();
+
+        if (type) {
+          openModal({
+            type: type,
+            props: {
+              buttonOnClick: async () => {
+                closeModal(type);
+                initPromotionUserInfo();
+              }
+            }
+          });
+        }
+        if (splunk) {
+          splunk({
+            dp: 'ai.nova',
+            dt: 'lucky_event',
+            el: 'spin_roulette'
+          });
+        }
+      }
+    );
+  };
+
+  const initPromotionUserInfo = async () => {
+    try {
+      const eventType: IEventType = IEventType.AI_NOVA_LUCKY_EVENT;
+      const { res } = await apiWrapper().request(PROMOTION_USER_INFO, {
+        headers: {
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          type: eventType
+        }),
+        method: 'POST'
+      });
+      const response = await res.json();
+      if (response.success) {
+        setPromotionUserInfo(response.data.accurePromotionUser);
+      }
+    } catch (err) {}
+  };
+
+  const OfferEvent = async () => {
+    try {
+      const eventType: IEventType = IEventType.AI_NOVA_LUCKY_EVENT;
+      const { res, logger } = await apiWrapper().request(PROMOTION_OFFER, {
+        headers: {
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          type: eventType
+        }),
+        method: 'POST'
+      });
+      splunk = logger;
+
+      const response = await res.json();
+      if (response.success) {
+        const accureAction =
+          response.data.result.accure?.length > 0
+            ? response.data.result.accure
+            : IAccurePromotionAction.UNKNOWN;
+
+        return accureAction === IAccurePromotionAction.UNKNOWN ? 'prizeCredit' : 'prize';
+      }
+    } catch (err) {
+      console.error('OfferEvent error:', err);
+      return null;
+    }
   };
 
   return (
