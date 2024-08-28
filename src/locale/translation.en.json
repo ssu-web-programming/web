@@ -322,6 +322,15 @@
       },
       "FailOpenDoc": "A document is currently open! Please close the document first, then select the desired document."
     },
+    "ChatBanner": {
+      "Header": {
+        "Title": "오늘의 미션"
+      },
+      "Content": {
+        "Title": "NOVA로 하트 채우기",
+        "Desc": "NOVA와 대화하고 하트를 채우면\n랜덤 경품 증정!"
+      }
+    },
     "Alert": {
       "UnsupportFile": "This file is not supported. Please upload only {{support}} files.",
       "NoCredit": {

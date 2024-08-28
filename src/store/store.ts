@@ -18,7 +18,9 @@ import alliApps from './slices/alliApps';
 import recognizedVoice from './slices/recognizedVoice';
 import appState from './slices/appState';
 import novaHistory from './slices/novaHistorySlice';
+import novaModal from './slices/novaModalsSlice';
 import userInfo from './slices/userInfo';
+import promotionUserInfo from './slices/promotionUserInfo';
 import creditInfo from './slices/creditInfo';
 
 const store = configureStore({
@@ -41,7 +43,9 @@ const store = configureStore({
     recognizedVoice,
     appState,
     novaHistory,
+    novaModal,
     userInfo,
+    promotionUserInfo,
     creditInfo
   },
   middleware: (getDefaultMiddleware) =>
