@@ -4,6 +4,7 @@ import { useConfirm } from './Confirm';
 import { useTranslation } from 'react-i18next';
 import { SUPPORT_IMAGE_TYPE } from 'pages/Nova/Nova';
 import { getAccept } from './nova/InputBar';
+import { ClientType, getPlatform } from 'util/bridge';
 
 const FileButtonBase = styled.button`
   width: fit-content;
@@ -14,8 +15,8 @@ const FileButtonBase = styled.button`
 
 const Label = styled.label<{ disable: boolean }>`
   display: block;
-  cursor: ${(props) => (!!props.disable ? 'pointer' : 'initial')};
-  color: ${(props) => (!!props.disable ? 'var(--gray-gray-80-02)' : '#454c5380')};
+  cursor: ${(props) => (props.disable ? 'initial' : 'pointer')};
+  color: ${(props) => (props.disable ? '#454c5380' : 'var(--gray-gray-80-02)')};
 `;
 
 const PersonalInfoContents = styled.div`
@@ -110,7 +111,7 @@ const FileButton = forwardRef<HTMLInputElement, FileButtonProps>((props, ref) =>
 
   return (
     <FileButtonBase onClick={handleAgreement}>
-      <Label disable={!!isAgreed}>{children}</Label>
+      <Label disable={isAgreed === undefined}>{children}</Label>
       <input
         ref={ref}
         id={inputId}
@@ -120,7 +121,14 @@ const FileButton = forwardRef<HTMLInputElement, FileButtonProps>((props, ref) =>
         onChange={async (e) => {
           if (e.currentTarget.files) {
             const files = Array.from(e.currentTarget.files);
-            const invalid = files.filter((file) => !accept?.includes(getAccept(file)));
+            const invalid = files.filter((file) => {
+              const fileAccept = getAccept(file);
+              if (getPlatform() === ClientType.unknown) {
+                return !accept?.split(',').includes(fileAccept);
+              } else {
+                return !accept?.includes(fileAccept);
+              }
+            });
             const support = accept?.includes(SUPPORT_IMAGE_TYPE[0].mimeType)
               ? 'jpg, png, gif'
               : 'docx, pptx, pdf, hwp, xlsx';

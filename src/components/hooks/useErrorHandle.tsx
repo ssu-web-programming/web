@@ -8,6 +8,7 @@ import {
   GPT_EXCEEDED_LIMIT,
   INVALID_PROMPT,
   NoCreditError,
+  NoFileInDrive,
   NovaNoCreditError
 } from '../../error/error';
 import { setOnlineStatus } from '../../store/slices/network';
@@ -156,6 +157,15 @@ const useErrorHandle = () => {
       confirm({
         title: '',
         msg: t('Nova.Alert.ReQuestion'),
+        onOk: {
+          text: t('Confirm'),
+          callback: () => {}
+        }
+      });
+    } else if (error instanceof NoFileInDrive) {
+      confirm({
+        title: '',
+        msg: t('Nova.Alert.NoFileInDrive'),
         onOk: {
           text: t('Confirm'),
           callback: () => {}

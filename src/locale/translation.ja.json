@@ -273,7 +273,9 @@
     "ASKDocEOSTitle": "ASK Doc V1のサービスが終了しました",
     "ASKDocEOSDesc": "アプリをアップデートして、新しく改善されたASK Doc V2をご体験ください。",
     "AIChatTab": "AI Writeチャット機能は、より高度なAIエージェントにアップグレードされる予定です。そのため、チャット機能は終了いたします。ご理解のほど、よろしくお願いいたします。ありがとうございます。",
-    "AIChatTabEosDate": "チャットサービス終了日：2024年8月22日"
+    "AIChatTabEosDate": "チャットサービス終了日：2024年8月22日",
+    "ASKDocEOSTitle2": "ASK Docの終了とNOVAのご案内",
+    "ASKDocEOSDesc2": "ASK Docサービスは2024年8月22日に終了しました。アプリをアップデートすると、統合AIサービスNOVAを通じてこの機能をご利用いただけます。"
   },
   "Nova": {
     "CreditInfo": {
@@ -347,7 +349,8 @@
       "FailedConvertDoc": "ファイル変換が失敗し、回答を提供できません。より良いサービスを提供できるよう努めます。",
       "UnopenableDocError": "暗号化されたドキュメントまたは破損したドキュメントはクエリを実行できません。ドキュメントを再確認してください。",
       "Unopenable": "確認用ドキュメント",
-      "Password": "暗号ドキュメント"
+      "Password": "暗号ドキュメント",
+      "NoFileInDrive": "ドキュメントが見つかりません。ファイルが削除されたかどうか確認してください。"
     },
     "Confirm": {
       "NewChat": {
