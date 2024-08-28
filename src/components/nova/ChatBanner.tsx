@@ -130,7 +130,12 @@ export const ChatBanner = () => {
               <span className="header">{t('Nova.ChatBanner.Content.Title')}</span>
               <span className="desc">{t('Nova.ChatBanner.Content.Desc')}</span>
             </TextWrap>
-            <Heart progress={Number(userInfo.point)} iconWidth={64} iconHeight={57} />
+            <Heart
+              progress={Number(userInfo.point)}
+              iconWidth={64}
+              iconHeight={57}
+              isHeader={false}
+            />
           </Content>
         </StyledAccordionDetails>
       </StyledAccordion>
