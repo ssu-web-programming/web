@@ -137,6 +137,7 @@ const PrizeCreditModal = ({ buttonOnClick }: Props) => {
 
   const goStorePage = () => {
     Bridge.callBridgeApi('openWindow', 'upgradePlan');
+    buttonOnClick();
   };
 
   return (

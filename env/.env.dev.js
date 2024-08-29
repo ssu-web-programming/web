@@ -1,4 +1,4 @@
-const REACT_APP_USE_LOGGER_SPLUNK = false;
+const REACT_APP_USE_LOGGER_SPLUNK = true;
 const GENERATE_SOURCEMAP = false;
 const REACT_APP_SHARE_TECH_API = 'https://dev-was2.polarishare.com/api/v1/share/office/contents';
 const REACT_APP_PO_API = 'https://vf-postatic.polarisoffice.com';
