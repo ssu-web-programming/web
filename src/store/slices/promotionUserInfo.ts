@@ -42,7 +42,7 @@ const initialState: IPromotionUserInfo = {
   idUser: '',
   timeUpdate: 0,
   timeRegist: 0,
-  point: 0,
+  point: -1,
   status: null
 };
 

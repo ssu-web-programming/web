@@ -4,10 +4,11 @@ import Heart_20credit from '../../img/nova/promotion/heart_20credit.svg';
 import Heart_30credit from '../../img/nova/promotion/heart_30credit.svg';
 import Heart_finish from '../../img/nova/promotion/Heart_finish.svg';
 import Heart_Empty from '../../img/nova/promotion/heart_empty.svg';
+import LoadingSpinner from '../../img/nova/promotion/loading_spiner.gif';
 import useOpenModal from '../hooks/nova/useOpenModal';
 
 import { flex } from 'style/cssCommon';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useMemo } from 'react';
 import {
   IEventType,
   IPromotionUserInfo,
@@ -64,6 +65,8 @@ export const Heart = ({ progress, iconWidth, iconHeight, isHeader }: HeartProps)
   };
 
   const handleOpenModal = useCallback(() => {
+    if (userInfo.point < 0) return;
+
     initPromotionUserInfo();
     if (splunk) {
       splunk({
@@ -77,29 +80,32 @@ export const Heart = ({ progress, iconWidth, iconHeight, isHeader }: HeartProps)
     }
   }, [userInfo, openModal]);
 
-  if (!userInfo.idUser) {
-    return null;
-  }
-
-  let imgSrc;
-  if (userInfo.status === 'ALREADY_USED') {
-    imgSrc = isHeader ? Heart_Empty : Heart_finish;
-  } else {
-    if (progress >= 0 && progress <= 10) {
-      imgSrc = Heart_10credit;
-    } else if (progress > 10 && progress <= 20) {
-      imgSrc = Heart_20credit;
-    } else if (progress > 20 && progress <= 30) {
-      imgSrc = Heart_30credit;
-    } else {
-      imgSrc = Heart_30credit;
+  const imgSrc = useMemo(() => {
+    if (userInfo.status === 'ALREADY_USED') {
+      return isHeader ? Heart_Empty : Heart_finish;
     }
-  }
 
-  const sizeStyle = css`
-    width: ${isHeader && imgSrc === Heart_Empty ? '32px' : `${iconWidth}px`};
-    height: ${isHeader && imgSrc === Heart_Empty ? '32px' : `${iconHeight}px`};
-  `;
+    if (progress >= 0 && progress <= 3) {
+      return Heart_10credit;
+    } else if (progress > 3 && progress <= 6) {
+      return Heart_20credit;
+    } else if (progress > 6 && progress <= 10) {
+      return Heart_30credit;
+    } else if (isHeader) {
+      return Heart_Empty;
+    } else {
+      return LoadingSpinner;
+    }
+  }, [userInfo.status, progress, isHeader]);
+
+  const sizeStyle = useMemo(
+    () => css`
+      width: ${imgSrc === Heart_Empty ? '32px' : `${iconWidth}px`};
+      height: ${imgSrc === Heart_Empty ? '32px' : `${iconHeight}px`};
+      transform: ${imgSrc === LoadingSpinner ? 'scale(0.5)' : 'none'};
+    `,
+    [imgSrc, iconWidth, iconHeight]
+  );
 
   return <Img src={imgSrc} alt="heart" size={sizeStyle} onClick={handleOpenModal} />;
 };

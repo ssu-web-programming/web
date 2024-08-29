@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import NovaIcon from '../../../img/nova/promotion/Nova3d.svg';
+import Bridge from '../../../util/bridge';
 
 const Wrap = styled.div`
   width: 100%;
@@ -87,9 +88,7 @@ const NextChanceModal = ({ buttonOnClick }: Props) => {
   const text = t('Nova.Modal.NextChance.Desc');
 
   const goEventPage = () => {
-    // to do
-    // 이벤트 페이지로 이동
-    // Bridge.callBridgeApi('openWindow', 'upgradePlan');
+    Bridge.callBridgeApi('openWindow', 'https://vf-ca-cloud.polarisoffice.com/ko/event_list');
   };
 
   return (
