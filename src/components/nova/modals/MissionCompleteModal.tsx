@@ -175,8 +175,8 @@ const MissionCompleteModal = ({ buttonOnClick }: Props) => {
       const response = await res.json();
       if (response.success) {
         const accureAction =
-          response.data.result.accure?.length > 0
-            ? response.data.result.accure
+          response.data.result.accrue?.length > 0
+            ? response.data.result.accrue
             : IAccurePromotionAction.UNKNOWN;
 
         return accureAction === IAccurePromotionAction.UNKNOWN ? 'prizeCredit' : 'prize';
