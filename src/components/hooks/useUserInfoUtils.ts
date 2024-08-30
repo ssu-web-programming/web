@@ -15,6 +15,8 @@ export default function useUserInfoUtils() {
       case '12':
       case '13':
         return 3;
+      case '14':
+        return -1;
       default:
         return 1;
     }
@@ -27,7 +29,7 @@ export default function useUserInfoUtils() {
       if (!!len) return acc + len;
       else return acc;
     }, 0);
-    return uploadLimit - uploadCnt;
+    return uploadLimit === -1 ? uploadLimit : uploadLimit - uploadCnt;
   };
 
   return { getAvailableFileCnt, calcAvailableFileCnt };

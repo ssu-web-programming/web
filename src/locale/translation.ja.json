@@ -386,7 +386,8 @@
       "OverMaxFileUploadCntOnce": "{{max}}個のファイルのみ添付して質問できます。ファイルを再選択してください。"
     },
     "PoDrive": {
-      "Desc": "{{size}}MB未満のファイルを最大{{count}}個選択できます。",
+      "Desc": "希望するファイルを選択してください。",
+      "LimitDesc": "{{size}}MB未満のファイルを最大{{count}}個選択できます。",
       "DescImg": "{{size}} MB未満のjpg、jpeg、png、webp、gifファイルを最大{{count}}個選択できます。",
       "NoFile": "添付可能な{{type}}がありません。"
     },

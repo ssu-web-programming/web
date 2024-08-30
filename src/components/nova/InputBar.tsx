@@ -184,6 +184,10 @@ interface InputBarProps {
   onSubmit: (param: InputBarSubmitParam) => Promise<void>;
   contents?: string;
   setContents: React.Dispatch<React.SetStateAction<string>>;
+  localFiles: File[];
+  setLocalFiles: React.Dispatch<React.SetStateAction<File[]>>;
+  driveFiles: DriveFileInfo[];
+  setDriveFiles: React.Dispatch<React.SetStateAction<DriveFileInfo[]>>;
 }
 
 interface FileListItemInfo {
@@ -203,8 +207,6 @@ export default function InputBar(props: InputBarProps) {
   const chatNova = useChatNova();
   const { getAvailableFileCnt } = useUserInfoUtils();
   const { novaHistory, disabled = false, expiredNOVA = false, contents = '', setContents } = props;
-  const [localFiles, setLocalFiles] = useState<File[]>([]);
-  const [driveFiles, setDriveFiles] = useState<DriveFileInfo[]>([]);
 
   const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
   const setIsAgreed = async (agree: boolean) => {
@@ -224,50 +226,59 @@ export default function InputBar(props: InputBarProps) {
   const { t } = useTranslation();
 
   const loadlocalFile = async (files: File[]) => {
-    setDriveFiles([]);
-    const invalidSize = files.filter((file) => !isValidFileSize(file.size));
-    if (invalidSize.length > 0) {
-      confirm({
-        title: '',
-        msg: t('Nova.Alert.OverFileUploadSize', {
-          max: MAX_FILE_UPLOAD_SIZE_MB,
-          min: MIN_FILE_UPLOAD_SIZE_KB
-        })!,
-        onOk: { text: t('Confirm'), callback: () => {} }
-      });
-      return;
-    }
+    props.setDriveFiles([]);
 
     const uploadLimit = getAvailableFileCnt();
-    const uploadCnt = novaHistory.reduce((acc, cur) => {
-      const len = cur.files?.length;
-      if (!!len) return acc + len;
-      else return acc;
-    }, 0);
+    if (uploadLimit !== -1) {
+      const invalidSize = files.filter((file) => !isValidFileSize(file.size));
+      if (invalidSize.length > 0) {
+        confirm({
+          title: '',
+          msg: t('Nova.Alert.OverFileUploadSize', {
+            max: MAX_FILE_UPLOAD_SIZE_MB,
+            min: MIN_FILE_UPLOAD_SIZE_KB
+          })!,
+          onOk: { text: t('Confirm'), callback: () => {} }
+        });
+        return;
+      }
 
-    if (files.length > uploadLimit) {
-      await confirm({
-        title: '',
-        msg: t('Nova.Confirm.OverMaxFileUploadCntOnce', { max: uploadLimit })!,
-        onOk: { text: t('Confirm'), callback: () => {} }
-      });
-      return;
-    }
+      const uploadCnt = novaHistory.reduce((acc, cur) => {
+        const len = cur.files?.length;
+        if (!!len) return acc + len;
+        else return acc;
+      }, 0);
 
-    if (uploadCnt + files.length > 3) {
-      await confirm({
-        title: '',
-        msg: t('Nova.Confirm.OverMaxFileUploadCnt', { max: 3 })!,
-        onOk: { text: t('Nova.Confirm.NewChat.StartNewChat'), callback: chatNova.newCHat },
-        onCancel: { text: t('Cancel'), callback: () => {} }
-      });
-      return;
+      if (files.length > uploadLimit) {
+        await confirm({
+          title: '',
+          msg: t('Nova.Confirm.OverMaxFileUploadCntOnce', { max: uploadLimit })!,
+          onOk: {
+            text: t('Confirm'),
+            callback: () => {}
+          }
+        });
+        return;
+      }
+
+      if (uploadCnt + files.length > 3) {
+        await confirm({
+          title: '',
+          msg: t('Nova.Confirm.OverMaxFileUploadCnt', { max: 3 })!,
+          onOk: { text: t('Nova.Confirm.NewChat.StartNewChat'), callback: chatNova.newChat },
+          onCancel: {
+            text: t('Cancel'),
+            callback: () => {}
+          }
+        });
+        return;
+      }
     }
-    setLocalFiles(files);
+    props.setLocalFiles(files);
   };
   const loadDriveFile = (files: DriveFileInfo[]) => {
-    setLocalFiles([]);
-    setDriveFiles(files);
+    props.setLocalFiles([]);
+    props.setDriveFiles(files);
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -284,11 +295,11 @@ export default function InputBar(props: InputBarProps) {
   };
 
   const handleRemoveLocalFile = (file: FileListItemInfo) => {
-    setLocalFiles(localFiles.filter((prev) => prev !== file));
+    props.setLocalFiles(props.localFiles.filter((prev) => prev !== file));
   };
 
   const handleRemoveDriveFile = (file: FileListItemInfo) => {
-    setDriveFiles(driveFiles.filter((prev) => prev !== file));
+    props.setDriveFiles(props.driveFiles.filter((prev) => prev !== file));
   };
 
   const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
@@ -309,8 +320,8 @@ export default function InputBar(props: InputBarProps) {
 
   useEffect(() => {
     if (expiredNOVA) {
-      setLocalFiles([]);
-      setDriveFiles([]);
+      props.setLocalFiles([]);
+      props.setDriveFiles([]);
       (document.activeElement as HTMLElement)?.blur();
     }
   }, [expiredNOVA]);
@@ -318,9 +329,9 @@ export default function InputBar(props: InputBarProps) {
   const handleOnClick = async () => {
     (document.activeElement as HTMLElement)?.blur();
     setContents('');
-    setLocalFiles([]);
-    setDriveFiles([]);
-    const targetFiles = localFiles.length > 0 ? localFiles : driveFiles;
+    props.setLocalFiles([]);
+    props.setDriveFiles([]);
+    const targetFiles = props.localFiles.length > 0 ? props.localFiles : props.driveFiles;
     const fileType =
       targetFiles.length < 1
         ? ''
@@ -329,7 +340,12 @@ export default function InputBar(props: InputBarProps) {
         : 'document';
     await props.onSubmit({
       input: contents,
-      files: localFiles.length > 0 ? localFiles : driveFiles.length > 0 ? driveFiles : [],
+      files:
+        props.localFiles.length > 0
+          ? props.localFiles
+          : props.driveFiles.length > 0
+          ? props.driveFiles
+          : [],
       type: fileType
     });
     textAreaRef.current?.focus();
@@ -337,9 +353,9 @@ export default function InputBar(props: InputBarProps) {
 
   return (
     <InputBarBase disabled={disabled || expiredNOVA}>
-      {localFiles.length > 0 && (
+      {props.localFiles.length > 0 && (
         <FileListViewer onWheel={handleWheel}>
-          {localFiles.map((file: FileListItemInfo) => (
+          {props.localFiles.map((file: FileListItemInfo) => (
             <FileItem key={file.name}>
               <Icon size={28} iconSrc={getFileIcon(file.name)} />
               <span>{sliceFileName(file.name)}</span>
@@ -352,9 +368,9 @@ export default function InputBar(props: InputBarProps) {
           ))}
         </FileListViewer>
       )}
-      {driveFiles.length > 0 && (
+      {props.driveFiles.length > 0 && (
         <FileListViewer onWheel={handleWheel}>
-          {driveFiles.map((file: FileListItemInfo) => (
+          {props.driveFiles.map((file: FileListItemInfo) => (
             <FileItem key={file.name}>
               <Icon size={28} iconSrc={getFileIcon(file.name)} />
               <span>{sliceFileName(file.name)}</span>
@@ -452,7 +468,7 @@ const FileUploader = (props: FileUploaderProps) => {
             await confirm({
               title: '',
               msg: t('Nova.Confirm.OverMaxFileUploadCnt', { max: getAvailableFileCnt() })!,
-              onOk: { text: t('Nova.Confirm.NewChat.StartNewChat'), callback: chatNova.newCHat },
+              onOk: { text: t('Nova.Confirm.NewChat.StartNewChat'), callback: chatNova.newChat },
               onCancel: { text: t('Cancel'), callback: () => {} }
             });
             return;
@@ -551,20 +567,26 @@ const FileUploader = (props: FileUploaderProps) => {
           title={t('Nova.UploadTooltip.PolarisDrive')}
           msg={
             <>
-              {calcAvailableFileCnt() >= 0 && (
-                <div
-                  style={{
-                    fontWeight: 400,
-                    fontSize: '16px',
-                    lineHeight: '24px',
-                    marginBottom: '24px'
-                  }}>
-                  {t(uploadTarget === 'nova-file' ? 'Nova.PoDrive.Desc' : 'Nova.PoDrive.DescImg', {
+              <div
+                style={{
+                  fontWeight: 400,
+                  fontSize: '16px',
+                  lineHeight: '24px',
+                  marginBottom: '24px'
+                }}>
+                {t(
+                  uploadTarget === 'nova-file'
+                    ? calcAvailableFileCnt() >= 0
+                      ? 'Nova.PoDrive.LimitDesc'
+                      : 'Nova.PoDrive.Desc'
+                    : 'Nova.PoDrive.DescImg',
+                  {
                     size: MAX_FILE_UPLOAD_SIZE_MB,
                     count: calcAvailableFileCnt()
-                  })}
-                </div>
-              )}
+                  }
+                )}
+              </div>
+
               <PoDrive
                 max={calcAvailableFileCnt()}
                 onChange={(files: DriveFileInfo[]) => onLoadDriveFile(files)}

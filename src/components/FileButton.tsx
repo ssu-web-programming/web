@@ -129,7 +129,7 @@ const FileButton = forwardRef<HTMLInputElement, FileButtonProps>((props, ref) =>
                 return !accept?.includes(fileAccept);
               }
             });
-            const support = accept?.includes(SUPPORT_IMAGE_TYPE[0].mimeType)
+            const support = accept?.includes(SUPPORT_IMAGE_TYPE[0].extensions)
               ? 'jpg, png, gif'
               : 'docx, pptx, pdf, hwp, xlsx';
             if (invalid.length > 0) {

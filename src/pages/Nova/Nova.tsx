@@ -305,7 +305,8 @@ export default function Nova() {
   const [expiredNOVA, setExpiredNOVA] = useState<boolean>(false);
   const [inputContents, setInputContents] = useState<string>('');
   const [imagePreview, setImagePreview] = useState<NovaFileInfo | null>(null);
-
+  const [localFiles, setLocalFiles] = useState<File[]>([]);
+  const [driveFiles, setDriveFiles] = useState<DriveFileInfo[]>([]);
   const [fileUploadState, setFileUploadState] = useState<FileUpladState>({
     type: '',
     state: 'ready',
@@ -748,7 +749,7 @@ export default function Nova() {
           text: t(`Confirm`),
           callback: () => {
             setExpiredNOVA(false);
-            chatNova.newCHat();
+            chatNova.newChat();
           }
         }
       });
@@ -774,7 +775,10 @@ export default function Nova() {
     });
 
     if (!!ret) {
-      chatNova.newCHat();
+      chatNova.newChat();
+      setInputContents('');
+      setLocalFiles([]);
+      setDriveFiles([]);
     }
   };
 
@@ -989,7 +993,11 @@ export default function Nova() {
         expiredNOVA={expiredNOVA}
         onSubmit={onSubmit}
         contents={inputContents}
-        setContents={setInputContents}></InputBar>
+        setContents={setInputContents}
+        localFiles={localFiles}
+        setLocalFiles={setLocalFiles}
+        driveFiles={driveFiles}
+        setDriveFiles={setDriveFiles}></InputBar>
       {
         <FileUploading
           {...fileUploadState}

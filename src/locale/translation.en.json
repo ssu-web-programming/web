@@ -395,7 +395,8 @@
       "OverMaxFileUploadCntOnce": "You can attach up to {{max}} files only. Please reselect the files."
     },
     "PoDrive": {
-      "Desc": "You can select up to {{count}} files under {{size}}MB.",
+      "Desc": "Please select the desired file.",
+      "LimitDesc": "You can select up to {{count}} files under {{size}}MB.",
       "DescImg": "You can select up to {{count}} jpg, jpeg, png, and gif files under {{size}} MB.",
       "NoFile": "There are no attachable {{type}}."
     },
