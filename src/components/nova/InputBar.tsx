@@ -244,21 +244,22 @@ export default function InputBar(props: InputBarProps) {
       if (!!len) return acc + len;
       else return acc;
     }, 0);
-    if (uploadCnt + files.length > uploadLimit) {
-      await confirm({
-        title: '',
-        msg: t('Nova.Confirm.OverMaxFileUploadCnt', { max: uploadLimit })!,
-        onOk: { text: t('Nova.Confirm.NewChat.StartNewChat'), callback: chatNova.newCHat },
-        onCancel: { text: t('Cancel'), callback: () => {} }
-      });
-      return;
-    }
 
     if (files.length > uploadLimit) {
       await confirm({
         title: '',
-        msg: t('Nova.Confirm.OverMaxFileUploadCntOnce', { max: uploadLimit - uploadCnt })!,
+        msg: t('Nova.Confirm.OverMaxFileUploadCntOnce', { max: uploadLimit })!,
         onOk: { text: t('Confirm'), callback: () => {} }
+      });
+      return;
+    }
+
+    if (uploadCnt + files.length > 3) {
+      await confirm({
+        title: '',
+        msg: t('Nova.Confirm.OverMaxFileUploadCnt', { max: 3 })!,
+        onOk: { text: t('Nova.Confirm.NewChat.StartNewChat'), callback: chatNova.newCHat },
+        onCancel: { text: t('Cancel'), callback: () => {} }
       });
       return;
     }
@@ -550,18 +551,20 @@ const FileUploader = (props: FileUploaderProps) => {
           title={t('Nova.UploadTooltip.PolarisDrive')}
           msg={
             <>
-              <div
-                style={{
-                  fontWeight: 400,
-                  fontSize: '16px',
-                  lineHeight: '24px',
-                  marginBottom: '24px'
-                }}>
-                {t(uploadTarget === 'nova-file' ? 'Nova.PoDrive.Desc' : 'Nova.PoDrive.DescImg', {
-                  size: MAX_FILE_UPLOAD_SIZE_MB,
-                  count: calcAvailableFileCnt()
-                })}
-              </div>
+              {calcAvailableFileCnt() >= 0 && (
+                <div
+                  style={{
+                    fontWeight: 400,
+                    fontSize: '16px',
+                    lineHeight: '24px',
+                    marginBottom: '24px'
+                  }}>
+                  {t(uploadTarget === 'nova-file' ? 'Nova.PoDrive.Desc' : 'Nova.PoDrive.DescImg', {
+                    size: MAX_FILE_UPLOAD_SIZE_MB,
+                    count: calcAvailableFileCnt()
+                  })}
+                </div>
+              )}
               <PoDrive
                 max={calcAvailableFileCnt()}
                 onChange={(files: DriveFileInfo[]) => onLoadDriveFile(files)}

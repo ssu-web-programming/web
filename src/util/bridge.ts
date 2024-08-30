@@ -416,12 +416,16 @@ const Bridge = {
       const callback = async (sessionInfo: CallbackMessage, id: BridgeItemID) => {
         try {
           const { body } = sessionInfo;
+          const AID = body['AID'] || '';
+          const BID = body['BID'] || '';
+          const SID = body['BID'] || '';
+
           const res = await fetch('/api/v2/user/getCurrentLoginStatus', {
             headers: {
               'content-type': 'application/json',
-              'X-PO-AI-MayFlower-Auth-AID': body['AID'] ? body['AID'] : '',
-              'X-PO-AI-MayFlower-Auth-BID': body['BID'],
-              'X-PO-AI-MayFlower-Auth-SID': body['SID'],
+              'X-PO-AI-MayFlower-Auth-AID': AID,
+              'X-PO-AI-MayFlower-Auth-BID': BID,
+              'X-PO-AI-MayFlower-Auth-SID': SID,
               'User-Agent': navigator.userAgent
             },
             method: 'GET'
@@ -435,7 +439,7 @@ const Bridge = {
             const { status, userId, level } = resJson.data.userInfo;
             resolve({
               success: true,
-              sessionInfo: { AID: body['AID'], BID: body['BID'], SID: body['SID'] },
+              sessionInfo: { AID: AID, BID: BID, SID: SID },
               userInfo: {
                 us: status,
                 uid: userId,
