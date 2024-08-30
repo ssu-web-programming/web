@@ -258,7 +258,7 @@ export default function InputBar(props: InputBarProps) {
       await confirm({
         title: '',
         msg: t('Nova.Confirm.OverMaxFileUploadCnt', { max: 3 })!,
-        onOk: { text: t('Nova.Confirm.NewChat.StartNewChat'), callback: chatNova.newCHat },
+        onOk: { text: t('Nova.Confirm.NewChat.StartNewChat'), callback: chatNova.newChat },
         onCancel: { text: t('Cancel'), callback: () => {} }
       });
       return;
@@ -452,7 +452,7 @@ const FileUploader = (props: FileUploaderProps) => {
             await confirm({
               title: '',
               msg: t('Nova.Confirm.OverMaxFileUploadCnt', { max: getAvailableFileCnt() })!,
-              onOk: { text: t('Nova.Confirm.NewChat.StartNewChat'), callback: chatNova.newCHat },
+              onOk: { text: t('Nova.Confirm.NewChat.StartNewChat'), callback: chatNova.newChat },
               onCancel: { text: t('Cancel'), callback: () => {} }
             });
             return;

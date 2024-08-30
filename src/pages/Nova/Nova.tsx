@@ -748,7 +748,7 @@ export default function Nova() {
           text: t(`Confirm`),
           callback: () => {
             setExpiredNOVA(false);
-            chatNova.newCHat();
+            chatNova.newChat();
           }
         }
       });
@@ -774,7 +774,8 @@ export default function Nova() {
     });
 
     if (!!ret) {
-      chatNova.newCHat();
+      chatNova.newChat();
+      setInputContents('');
     }
   };
 

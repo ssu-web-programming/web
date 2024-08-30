@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from 'store/store';
 export const useChatNova = () => {
   const dispatch = useAppDispatch();
   const novaHistory = useAppSelector(novaHistorySelector);
-  const newCHat = async () => {
+  const newChat = async () => {
     try {
       const lastChat = novaHistory[novaHistory.length - 1];
       apiWrapper().request(NOVA_DELETE_CONVERSATION, {
@@ -24,5 +24,5 @@ export const useChatNova = () => {
     }
   };
 
-  return { newCHat };
+  return { newChat };
 };
