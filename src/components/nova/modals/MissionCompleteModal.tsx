@@ -8,12 +8,10 @@ import { useState } from 'react';
 import {
   IAccurePromotionAction,
   IEventType,
-  IPromotionUserInfo,
   setPromotionUserInfo
 } from '../../../store/slices/promotionUserInfo';
 import { apiWrapper } from '../../../api/apiWrapper';
 import { PROMOTION_OFFER, PROMOTION_USER_INFO } from '../../../api/constant';
-import useOpenModal from '../../hooks/nova/useOpenModal';
 import useModal from '../../hooks/nova/useModal';
 import { SplunkData } from 'api/usePostSplunkLog';
 
@@ -112,7 +110,7 @@ const MissionCompleteModal = ({ buttonOnClick }: Props) => {
   const handleClick = () => {
     setRoulette(true);
 
-    const gifDuration = 5000;
+    const gifDuration = 4000;
     Promise.all([OfferEvent(), new Promise((resolve) => setTimeout(resolve, gifDuration))]).then(
       ([type]) => {
         buttonOnClick();
