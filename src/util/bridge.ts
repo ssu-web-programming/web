@@ -418,7 +418,7 @@ const Bridge = {
           const { body } = sessionInfo;
           const AID = body['AID'] || '';
           const BID = body['BID'] || '';
-          const SID = body['BID'] || '';
+          const SID = body['SID'] || '';
 
           const res = await fetch('/api/v2/user/getCurrentLoginStatus', {
             headers: {
