@@ -156,7 +156,12 @@ export const getFileExtension = (filename: string) => {
 };
 
 export const getFileName = (filename: string) => {
-  return filename.split('.').shift();
+  const parts = filename.split('.');
+  if (parts.length > 1) {
+    parts.pop();
+    return parts.join('.');
+  }
+  return filename;
 };
 
 export const sliceFileName = (name: string, index = 20) => {
