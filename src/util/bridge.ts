@@ -419,7 +419,7 @@ const Bridge = {
           const res = await fetch('/api/v2/user/getCurrentLoginStatus', {
             headers: {
               'content-type': 'application/json',
-              'X-PO-AI-MayFlower-Auth-AID': body['AID'],
+              'X-PO-AI-MayFlower-Auth-AID': body['AID'] ? body['AID'] : '',
               'X-PO-AI-MayFlower-Auth-BID': body['BID'],
               'X-PO-AI-MayFlower-Auth-SID': body['SID'],
               'User-Agent': navigator.userAgent

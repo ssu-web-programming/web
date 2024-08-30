@@ -83,13 +83,15 @@ export const Heart = ({ progress, iconWidth, iconHeight, isHeader }: HeartProps)
   const imgSrc = useMemo(() => {
     if (userInfo.status === 'ALREADY_USED') {
       return isHeader ? Heart_Empty : Heart_finish;
+    } else if (userInfo.status === 'NO_AGREEMENT_DATA') {
+      return Heart_30credit;
     }
 
-    if (progress >= 0 && progress <= 3) {
+    if (progress >= 0 && progress <= 4) {
       return Heart_10credit;
-    } else if (progress > 3 && progress <= 6) {
+    } else if (progress > 4 && progress <= 9) {
       return Heart_20credit;
-    } else if (progress > 6 && progress <= 10) {
+    } else if (progress >= 10) {
       return Heart_30credit;
     } else if (isHeader) {
       return Heart_Empty;
