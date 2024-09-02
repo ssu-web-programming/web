@@ -88,7 +88,7 @@ const NextChanceModal = ({ buttonOnClick }: Props) => {
   const text = t('Nova.Modal.NextChance.Desc');
 
   const goEventPage = () => {
-    Bridge.callBridgeApi('openWindow', 'https://vf-ca-cloud.polarisoffice.com/ko/event_list');
+    Bridge.callBridgeApi('openWindow', 'https://polarisoffice.com/ko/promotion/festival');
   };
 
   return (
