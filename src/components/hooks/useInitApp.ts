@@ -80,7 +80,7 @@ export default function useInitApp() {
   return () => {
     initUserInfo();
     initNovaExpireTime();
-    initPromotionUserInfo();
     initCreditInfo();
+    initPromotionUserInfo();
   };
 }
