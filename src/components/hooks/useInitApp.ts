@@ -87,7 +87,8 @@ export default function useInitApp() {
         const eventType: IEventType = IEventType.AI_NOVA_LUCKY_EVENT;
         const { res } = await apiWrapper().request(PROMOTION_USER_INFO, {
           headers: {
-            ...headers
+            ...headers,
+            'content-type': 'application/json'
           },
           body: JSON.stringify({
             type: eventType
