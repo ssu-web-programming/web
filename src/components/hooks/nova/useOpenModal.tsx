@@ -64,18 +64,12 @@ const useOpenModal = () => {
         type = 'prize';
       }
 
-      const handleModalOpen = async (
-        modalType: typeof type,
-        nextModalType?: typeof type,
-        nextModalClose?: () => void
-      ) => {
+      const handleModalOpen = async (modalType: typeof type, nextModalType?: typeof type) => {
         openModal({
           type: modalType,
           props: {
             buttonOnClick: async () => {
               closeEvent(modalType);
-              if (nextModalClose) nextModalClose();
-
               if (nextModalType) await handleModalOpen(nextModalType);
             }
           }
