@@ -66,7 +66,7 @@ import {
   ExceedPoDriveLimitError
 } from 'error/error';
 import { ReactComponent as xMarkIcon } from 'img/ico_xmark.svg';
-import { lang } from 'locale';
+import { lang, LANG_KO_KR } from 'locale';
 import useLangParameterNavigate from 'components/hooks/useLangParameterNavigate';
 import { appStateSelector } from 'store/slices/appState';
 import {
@@ -899,7 +899,13 @@ export default function Nova() {
           <IconLogoNova width={107} height={32} />
         </TitleWrapper>
         <ButtonWrapper>
-          <Heart progress={Number(userInfo.point)} iconWidth={24} iconHeight={22} isHeader={true} />
+          {lang === LANG_KO_KR && (
+            <Heart
+              iconWidth={24}
+              iconHeight={22}
+              isHeader={true}
+            />
+          )}
           {novaHistory.length > 0 && (
             <IconButton
               iconComponent={IconMessagePlus}
@@ -933,7 +939,7 @@ export default function Nova() {
       <Body>
         {novaHistory.length < 1 ? (
           <>
-            <ChatBanner />
+            {lang === LANG_KO_KR && <ChatBanner />}
             <GuideWrapper>
               <Nova.SearchGuide setInputContents={setInputContents} />
             </GuideWrapper>

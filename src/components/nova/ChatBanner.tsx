@@ -109,7 +109,6 @@ const TextWrap = styled.div`
 
 export const ChatBanner = () => {
   const { t } = useTranslation();
-  const userInfo: IPromotionUserInfo = useAppSelector(userInfoSelector);
 
   return (
     <Wrap>
@@ -130,12 +129,7 @@ export const ChatBanner = () => {
               <span className="header">{t('Nova.ChatBanner.Content.Title')}</span>
               <span className="desc">{t('Nova.ChatBanner.Content.Desc')}</span>
             </TextWrap>
-            <Heart
-              progress={Number(userInfo.point)}
-              iconWidth={64}
-              iconHeight={57}
-              isHeader={false}
-            />
+            <Heart iconWidth={64} iconHeight={57} isHeader={false} />
           </Content>
         </StyledAccordionDetails>
       </StyledAccordion>

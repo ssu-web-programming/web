@@ -27,13 +27,12 @@ const Img = styled.img<{ size: FlattenSimpleInterpolation }>`
 `;
 
 interface HeartProps {
-  progress: number;
   iconWidth: number;
   iconHeight: number;
   isHeader?: boolean;
 }
 
-export const Heart = ({ progress, iconWidth, iconHeight, isHeader }: HeartProps) => {
+export const Heart = ({ iconWidth, iconHeight, isHeader }: HeartProps) => {
   const userInfo: IPromotionUserInfo = useAppSelector(userInfoSelector);
   const dispatch = useAppDispatch();
   const openModal = useOpenModal();
@@ -87,18 +86,18 @@ export const Heart = ({ progress, iconWidth, iconHeight, isHeader }: HeartProps)
       return Heart_30credit;
     }
 
-    if (progress >= 0 && progress <= 4) {
+    if (userInfo.point >= 0 && userInfo.point <= 15) {
       return Heart_10credit;
-    } else if (progress > 4 && progress <= 9) {
+    } else if (userInfo.point > 15 && userInfo.point <= 29) {
       return Heart_20credit;
-    } else if (progress >= 10) {
+    } else if (userInfo.point >= 30) {
       return Heart_30credit;
     } else if (isHeader) {
       return Heart_Empty;
     } else {
       return LoadingSpinner;
     }
-  }, [userInfo.status, progress, isHeader]);
+  }, [userInfo, isHeader]);
 
   const sizeStyle = useMemo(
     () => css`

@@ -57,7 +57,7 @@ const useOpenModal = () => {
         | 'luckyDrawComplete' = 'missionComplete';
 
       if (userInfo.status === 'VALID') {
-        type = userInfo.point >= 10 ? 'missionComplete' : 'notEnoughHeart';
+        type = userInfo.point >= 30 ? 'missionComplete' : 'notEnoughHeart';
       } else if (userInfo.status === 'ALREADY_USED') {
         type = 'nextChance';
       } else if (userInfo.status === 'NO_AGREEMENT_DATA') {

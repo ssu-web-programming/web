@@ -147,7 +147,7 @@ const PrizeCreditModal = ({ buttonOnClick }: Props) => {
         <SubTitle>{t('Nova.Modal.NotEnoughHeart.SubTitle')}</SubTitle>
       </TextWrap>
       <ImageWrap>
-        <Heart progress={userInfo.point} iconWidth={90} iconHeight={80} />
+        <Heart iconWidth={90} iconHeight={80} />
         <CreditWrap>
           <div>현재</div>
           <div>
