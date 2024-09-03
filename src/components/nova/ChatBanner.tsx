@@ -16,8 +16,6 @@ import flag from 'img/nova/promotion/flag.svg';
 
 import { useTranslation } from 'react-i18next';
 import { Heart } from './Heart';
-import { useAppSelector } from '../../store/store';
-import { IPromotionUserInfo, userInfoSelector } from '../../store/slices/promotionUserInfo';
 
 const ExpandMoreIcon = (props: SvgIconProps) => (
   <SvgIcon {...props}>
@@ -27,17 +25,16 @@ const ExpandMoreIcon = (props: SvgIconProps) => (
 
 const Wrap = styled.div`
   width: 100%;
-  position: absolute;
-  top: 24px;
-  padding: 0 16px;
+  position: fixed;
+  top: 56px;
 `;
 
 const StyledAccordion = styled(Accordion)`
   &.MuiAccordion-root,
   &.MuiAccordion-root.Mui-expanded {
     box-shadow: none;
-    border: 1px solid #c6a9ff;
-    border-radius: 8px !important;
+    border-bottom: 1px solid #c6a9ff;
+    border-radius: 0 !important;
     background-color: #f5f1fd;
   }
 `;
@@ -91,7 +88,6 @@ const TextWrap = styled.div`
   ${flexColumn}
 
   gap: 8px;
-  border-top: 1px solid #e8ebed;
   span.header {
     font-size: 16px;
     font-weight: 700;
