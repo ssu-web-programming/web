@@ -764,16 +764,16 @@ export default function Nova() {
 
   useEffect(() => {
     const handleOrientationChange = () => {
+      console.log('change');
       if (chatListRef.current) {
+        console.log('current');
         ShowScrollButton(chatListRef.current);
       }
     };
 
-    // 방향 변경 이벤트 등록
     window.addEventListener('orientationchange', handleOrientationChange);
 
     return () => {
-      // 방향 변경 이벤트 해제
       window.removeEventListener('orientationchange', handleOrientationChange);
     };
   });
