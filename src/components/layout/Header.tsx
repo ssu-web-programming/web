@@ -66,7 +66,11 @@ export default function Header(props: HeaderProps) {
   const location = useLocation();
 
   if (location.pathname.toLowerCase() === '/nova') {
-    return <Contents style={{ height: '56px', padding: '0px 16px' }}>{children}</Contents>;
+    return (
+      <Contents style={{ height: '56px', padding: '0px 16px', borderBottom: '1px solid #c9cdd2' }}>
+        {children}
+      </Contents>
+    );
   }
 
   return (

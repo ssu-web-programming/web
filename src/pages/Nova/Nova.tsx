@@ -899,13 +899,7 @@ export default function Nova() {
           <IconLogoNova width={107} height={32} />
         </TitleWrapper>
         <ButtonWrapper>
-          {lang === LANG_KO_KR && (
-            <Heart
-              iconWidth={24}
-              iconHeight={22}
-              isHeader={true}
-            />
-          )}
+          {lang === LANG_KO_KR && <Heart iconWidth={24} iconHeight={22} isHeader={true} />}
           {novaHistory.length > 0 && (
             <IconButton
               iconComponent={IconMessagePlus}
