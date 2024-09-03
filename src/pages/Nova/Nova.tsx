@@ -762,6 +762,22 @@ export default function Nova() {
     }
   }, [location.state?.body]);
 
+  useEffect(() => {
+    const handleOrientationChange = () => {
+      if (chatListRef.current) {
+        ShowScrollButton(chatListRef.current);
+      }
+    };
+
+    // 방향 변경 이벤트 등록
+    window.addEventListener('orientationchange', handleOrientationChange);
+
+    return () => {
+      // 방향 변경 이벤트 해제
+      window.removeEventListener('orientationchange', handleOrientationChange);
+    };
+  });
+
   const newChat = async () => {
     const ret = await confirm({
       title: t(`Nova.Confirm.NewChat.Title`)!,
@@ -878,23 +894,23 @@ export default function Nova() {
     }
   };
 
-  const handleOnScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    const el = e.currentTarget;
+  const ShowScrollButton = (el: HTMLDivElement | null) => {
+    if (!el) return;
+
     const scrollPosition = el.scrollTop;
     const totalScrollHeight = el.scrollHeight;
     const visibleHeight = el.clientHeight;
     const scrollPercentage = (scrollPosition / (totalScrollHeight - visibleHeight)) * 100;
-
-    console.log('scrollPosition: ', scrollPosition);
-    console.log('totalScrollHeight: ', totalScrollHeight);
-    console.log('visibleHeight: ', visibleHeight);
-    console.log('scrollPercentage: ', scrollPercentage);
 
     if (scrollPercentage <= 30) {
       setShowScrollDownBtn(true);
     } else if (scrollPercentage > 30) {
       setShowScrollDownBtn(false);
     }
+  };
+
+  const handleOnScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    ShowScrollButton(e.currentTarget);
   };
 
   return (
