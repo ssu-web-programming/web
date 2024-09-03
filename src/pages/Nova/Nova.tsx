@@ -885,6 +885,11 @@ export default function Nova() {
     const visibleHeight = el.clientHeight;
     const scrollPercentage = (scrollPosition / (totalScrollHeight - visibleHeight)) * 100;
 
+    console.log('scrollPosition: ', scrollPosition);
+    console.log('totalScrollHeight: ', totalScrollHeight);
+    console.log('visibleHeight: ', visibleHeight);
+    console.log('scrollPercentage: ', scrollPercentage);
+
     if (scrollPercentage <= 30) {
       setShowScrollDownBtn(true);
     } else if (scrollPercentage > 30) {
