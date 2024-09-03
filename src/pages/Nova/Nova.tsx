@@ -102,7 +102,6 @@ const NovaHeader = styled(Header)`
 const Body = styled.div`
   flex: 1;
   width: 100%;
-  margin-bottom: 102px;
   display: flex;
   flex-direction: column;
   overflow-y: auto;

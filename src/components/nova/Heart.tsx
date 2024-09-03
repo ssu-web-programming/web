@@ -53,7 +53,16 @@ export const Heart = ({ iconWidth, iconHeight, isHeader }: HeartProps) => {
         }),
         method: 'POST'
       });
+
       splunk = logger;
+      if (splunk) {
+        splunk({
+          dp: 'ai.nova',
+          dt: 'lucky_event',
+          el: isHeader ? 'top_heart_click' : 'first_heart_click'
+        });
+      }
+
       const response = await res.json();
       if (response.success) {
         dispatch(setPromotionUserInfo(response.data.accurePromotionUser));
@@ -67,13 +76,6 @@ export const Heart = ({ iconWidth, iconHeight, isHeader }: HeartProps) => {
     if (userInfo.point < 0) return;
 
     initPromotionUserInfo();
-    if (splunk) {
-      splunk({
-        dp: 'ai.nova',
-        dt: 'lucky_event',
-        el: isHeader ? 'top_heart_click' : 'first_heart_click'
-      });
-    }
     if (userInfo) {
       openModal(userInfo);
     }
