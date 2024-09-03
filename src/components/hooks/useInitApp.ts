@@ -22,7 +22,7 @@ export default function useInitApp() {
   const initNovaExpireTime = useCallback(
     async (headers: HeadersInit) => {
       try {
-        const { res } = await apiWrapper().request(NOVA_GET_EXPIRED_TIME, {
+        const res = await fetch(NOVA_GET_EXPIRED_TIME, {
           method: 'GET',
           headers: {
             ...headers
@@ -43,7 +43,7 @@ export default function useInitApp() {
   const initUserInfo = useCallback(
     async (headers: HeadersInit) => {
       try {
-        const { res, userInfo } = await apiWrapper().request(NOVA_GET_USER_INFO_AGREEMENT, {
+        const res = await fetch(NOVA_GET_USER_INFO_AGREEMENT, {
           method: 'POST',
           headers: {
             ...headers
@@ -55,7 +55,6 @@ export default function useInitApp() {
         } = await res.json();
         if (success) {
           dispatch(setNovaAgreement(agreement));
-          dispatch(setUserInfo(userInfo));
         }
       } catch (err) {}
     },
@@ -85,7 +84,7 @@ export default function useInitApp() {
     async (headers: HeadersInit) => {
       try {
         const eventType: IEventType = IEventType.AI_NOVA_LUCKY_EVENT;
-        const { res } = await apiWrapper().request(PROMOTION_USER_INFO, {
+        const res = await fetch(PROMOTION_USER_INFO, {
           headers: {
             ...headers,
             'content-type': 'application/json'
@@ -95,9 +94,12 @@ export default function useInitApp() {
           }),
           method: 'POST'
         });
-        const response = await res.json();
-        if (response.success) {
-          dispatch(setPromotionUserInfo(response.data.accurePromotionUser));
+        const {
+          success,
+          data: { accurePromotionUser }
+        } = await res.json();
+        if (success.success) {
+          dispatch(setPromotionUserInfo(accurePromotionUser));
         }
       } catch (err) {}
     },
@@ -127,8 +129,8 @@ export default function useInitApp() {
 
     initUserInfo(headers);
     initNovaExpireTime(headers);
-    initCreditInfo(headers);
     initPromotionUserInfo(headers);
+    initCreditInfo(headers);
 
     dispatch(setUserInfo(resSession.userInfo));
   };
