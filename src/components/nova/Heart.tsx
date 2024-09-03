@@ -54,12 +54,9 @@ export const Heart = ({ iconWidth, iconHeight, isHeader }: HeartProps) => {
         method: 'POST'
       });
       splunk = logger;
-      const {
-        success,
-        data: { accurePromotionUser }
-      } = await res.json();
-      if (success.success) {
-        dispatch(setPromotionUserInfo(accurePromotionUser));
+      const response = await res.json();
+      if (response.success) {
+        dispatch(setPromotionUserInfo(response.data.accurePromotionUser));
       }
     } catch (err) {
       console.error('Failed to initialize promotion user info', err);
