@@ -54,8 +54,7 @@ export const flexCenter = css`
 `;
 
 const InputBarBase = styled.div<{ disabled: boolean }>`
-  position: fixed;
-  bottom: 0;
+  position: relative;
   width: 100%;
   ${flexCenter}
   flex-direction: column;
