@@ -1,4 +1,3 @@
-import { apiWrapper } from 'api/apiWrapper';
 import { ERR_INVALID_SESSION } from 'error/error';
 import { lang } from 'locale';
 import {
@@ -94,11 +93,12 @@ export default function useInitApp() {
           }),
           method: 'POST'
         });
+
         const {
           success,
           data: { accurePromotionUser }
         } = await res.json();
-        if (success.success) {
+        if (success) {
           dispatch(setPromotionUserInfo(accurePromotionUser));
         }
       } catch (err) {}
