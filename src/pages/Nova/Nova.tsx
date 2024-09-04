@@ -909,7 +909,7 @@ export default function Nova() {
 
     if (scrollPercentage <= 30) {
       setShowScrollDownBtn(true);
-    } else if (scrollPercentage > 30) {
+    } else {
       setShowScrollDownBtn(false);
     }
   };
