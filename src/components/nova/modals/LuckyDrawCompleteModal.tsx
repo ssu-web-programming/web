@@ -4,6 +4,7 @@ import NovaIcon from '../../../img/nova/promotion/Nova3d.svg';
 
 const Wrap = styled.div`
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;

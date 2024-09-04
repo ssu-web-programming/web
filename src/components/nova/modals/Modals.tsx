@@ -51,8 +51,11 @@ export const Overlay = styled.div`
 
 const ModalWrap = styled.div`
   width: 340px;
+  max-height: 100vh;
   position: relative;
   display: flex;
+  box-sizing: border-box;
+  overflow-y: auto;
   font-family: Pretendard, sans-serif !important;
 `;
 
