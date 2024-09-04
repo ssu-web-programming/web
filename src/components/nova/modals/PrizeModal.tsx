@@ -8,7 +8,6 @@ import {
   IAccurePromotionAction,
   IEventType,
   IPromotionUserInfo,
-  setPromotionUserInfo,
   userInfoSelector
 } from '../../../store/slices/promotionUserInfo';
 import TextField from '@mui/material/TextField';
@@ -17,18 +16,9 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import { useAppSelector } from '../../../store/store';
 import { useRef, useState } from 'react';
-import flag from '../../../img/nova/promotion/flag.svg';
-import { Heart } from '../Heart';
-import {
-  alignItemCenter,
-  flex,
-  flexColumn,
-  justiSpaceBetween,
-  justiStart
-} from '../../../style/cssCommon';
 import { SvgIcon, SvgIconProps } from '@mui/material';
 import { apiWrapper } from '../../../api/apiWrapper';
-import { PROMOTION_AGREE, PROMOTION_OFFER } from '../../../api/constant';
+import { PROMOTION_AGREE } from '../../../api/constant';
 
 const ExpandMoreIcon = (props: SvgIconProps) => (
   <SvgIcon {...props}>
@@ -45,6 +35,7 @@ const Wrap = styled.div`
 
 const ContentWrap = styled.div`
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
