@@ -77,6 +77,7 @@ import {
 } from '../../store/slices/promotionUserInfo';
 import Modals, { Overlay } from '../../components/nova/modals/Modals';
 import { Heart } from '../../components/nova/Heart';
+import useFileDrop from '../../components/hooks/useFileDrop';
 
 const flexCenter = css`
   display: flex;
@@ -290,7 +291,6 @@ export default function Nova() {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const novaHistory = useAppSelector(novaHistorySelector);
-  const userInfo: IPromotionUserInfo = useAppSelector(userInfoSelector);
   const { creating } = useAppSelector(selectTabSlice);
   const creditInfo = useAppSelector(creditInfoSelector);
   const { novaExpireTime } = useAppSelector(appStateSelector);
@@ -312,6 +312,7 @@ export default function Nova() {
     state: 'ready',
     progress: 0
   });
+  const { handleDragOver, handleDragLeave, handleDrop } = useFileDrop();
 
   const CREDIT_NAME_MAP: { [key: string]: string } = {
     NOVA_CHAT_GPT4O: t(`Nova.CreditInfo.Chat`),
@@ -902,11 +903,6 @@ export default function Nova() {
     const visibleHeight = el.clientHeight;
     const scrollPercentage = (scrollPosition / (totalScrollHeight - visibleHeight)) * 100;
 
-    console.log('scrollPosition: ', scrollPosition);
-    console.log('totalScrollHeight: ', totalScrollHeight);
-    console.log('visibleHeight: ', visibleHeight);
-    console.log('scrollPercentage: ', scrollPercentage);
-
     if (scrollPercentage <= 30) {
       setShowScrollDownBtn(true);
     } else {
@@ -956,7 +952,10 @@ export default function Nova() {
           )}
         </ButtonWrapper>
       </NovaHeader>
-      <Body>
+      <Body
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={(e) => handleDrop(e, setLocalFiles)}>
         {novaHistory.length < 1 ? (
           <>
             {lang === LANG_KO_KR && <ChatBanner />}
