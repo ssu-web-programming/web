@@ -518,11 +518,11 @@ const FileUploader = (props: FileUploaderProps) => {
                   marginBottom: '24px'
                 }}>
                 {t(
-                  uploadTarget === 'nova-file'
-                    ? calcAvailableFileCnt() >= 0
+                  calcAvailableFileCnt() >= 0
+                    ? uploadTarget === 'nova-file'
                       ? 'Nova.PoDrive.LimitDesc'
-                      : 'Nova.PoDrive.Desc'
-                    : 'Nova.PoDrive.DescImg',
+                      : 'Nova.PoDrive.DescImg'
+                    : 'Nova.PoDrive.Desc',
                   {
                     size: MAX_FILE_UPLOAD_SIZE_MB,
                     count: calcAvailableFileCnt()
