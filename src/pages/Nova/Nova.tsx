@@ -78,6 +78,7 @@ import {
 import Modals, { Overlay } from '../../components/nova/modals/Modals';
 import { Heart } from '../../components/nova/Heart';
 import useFileDrop from '../../components/hooks/useFileDrop';
+import useUserInfoUtils from '../../components/hooks/useUserInfoUtils';
 
 const flexCenter = css`
   display: flex;
@@ -313,6 +314,7 @@ export default function Nova() {
     progress: 0
   });
   const { handleDragOver, handleDragLeave, handleDrop } = useFileDrop();
+  const { getAvailableFileCnt } = useUserInfoUtils();
 
   const CREDIT_NAME_MAP: { [key: string]: string } = {
     NOVA_CHAT_GPT4O: t(`Nova.CreditInfo.Chat`),
@@ -914,6 +916,62 @@ export default function Nova() {
     ShowScrollButton(e.currentTarget);
   };
 
+  const loadLocalFile = async (files: File[]) => {
+    setDriveFiles([]);
+
+    const uploadLimit = getAvailableFileCnt();
+    if (uploadLimit !== -1) {
+      const invalidSize = files.filter((file) => !isValidFileSize(file.size));
+      if (invalidSize.length > 0) {
+        confirm({
+          title: '',
+          msg: t('Nova.Alert.OverFileUploadSize', {
+            max: MAX_FILE_UPLOAD_SIZE_MB,
+            min: MIN_FILE_UPLOAD_SIZE_KB
+          })!,
+          onOk: { text: t('Confirm'), callback: () => {} }
+        });
+        return;
+      }
+
+      const uploadCnt = novaHistory.reduce((acc, cur) => {
+        const len = cur.files?.length;
+        if (!!len) return acc + len;
+        else return acc;
+      }, 0);
+
+      if (files.length > uploadLimit) {
+        await confirm({
+          title: '',
+          msg: t('Nova.Confirm.OverMaxFileUploadCntOnce', { max: uploadLimit })!,
+          onOk: {
+            text: t('Confirm'),
+            callback: () => {}
+          }
+        });
+        return;
+      }
+
+      if (uploadCnt + files.length > 3) {
+        await confirm({
+          title: '',
+          msg: t('Nova.Confirm.OverMaxFileUploadCnt', { max: 3 })!,
+          onOk: { text: t('Nova.Confirm.NewChat.StartNewChat'), callback: chatNova.newChat },
+          onCancel: {
+            text: t('Cancel'),
+            callback: () => {}
+          }
+        });
+        return;
+      }
+    }
+    setLocalFiles(files);
+  };
+  const loadDriveFile = (files: DriveFileInfo[]) => {
+    setLocalFiles([]);
+    setDriveFiles(files);
+  };
+
   return (
     <Wrapper>
       <NovaHeader title="" subTitle="">
@@ -955,7 +1013,7 @@ export default function Nova() {
       <Body
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
-        onDrop={(e) => handleDrop(e, setLocalFiles)}>
+        onDrop={(e) => handleDrop(e, loadLocalFile)}>
         {novaHistory.length < 1 ? (
           <>
             {lang === LANG_KO_KR && <ChatBanner />}
@@ -1022,7 +1080,9 @@ export default function Nova() {
         localFiles={localFiles}
         setLocalFiles={setLocalFiles}
         driveFiles={driveFiles}
-        setDriveFiles={setDriveFiles}></InputBar>
+        setDriveFiles={setDriveFiles}
+        loadLocalFile={loadLocalFile}
+        loadDriveFile={loadDriveFile}></InputBar>
       {
         <FileUploading
           {...fileUploadState}
