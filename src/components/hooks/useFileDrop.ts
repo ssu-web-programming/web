@@ -1,11 +1,13 @@
 import React, { useCallback, useState } from 'react';
 export default function useFileDrop() {
   const handleDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
+    console.log('drag over');
     event.preventDefault();
     event.stopPropagation();
   }, []);
 
   const handleDragLeave = useCallback((event: React.DragEvent<HTMLDivElement>) => {
+    console.log('drag leave');
     event.preventDefault();
     event.stopPropagation();
   }, []);
@@ -15,10 +17,12 @@ export default function useFileDrop() {
       event: React.DragEvent<HTMLDivElement>,
       setDroppedFiles: React.Dispatch<React.SetStateAction<File[]>>
     ) => {
+      console.log('drop');
       event.preventDefault();
       event.stopPropagation();
 
       const files = Array.from(event.dataTransfer.files);
+      console.log('files: ', files);
       setDroppedFiles(files);
     },
     []
