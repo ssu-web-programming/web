@@ -376,6 +376,7 @@ export default function Alli() {
               setInputs((prev: any) => ({ ...prev, [prop.value]: texts.join('\n') }));
               setResult('');
               setRefSlideNum(slide_number);
+              setInsertSlideNum(slide_number);
             } catch (err) {}
           }
         });
