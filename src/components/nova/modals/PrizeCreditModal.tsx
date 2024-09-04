@@ -88,7 +88,7 @@ const PrizeCreditModal = ({ buttonOnClick }: Props) => {
   const { t } = useTranslation();
 
   const goStorePage = () => {
-    Bridge.callBridgeApi('openWindow', 'upgradePlan');
+    Bridge.callBridgeApi('openWindow', 'https://polarisoffice.com/ko/promotion/festival#EV01');
   };
 
   return (
