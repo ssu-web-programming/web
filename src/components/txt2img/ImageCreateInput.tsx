@@ -15,7 +15,7 @@ import { alignItemCenter, flex, flexColumn, justiCenter } from '../../style/cssC
 import { RowContainer, SubTitleArea } from '../../views/ImageCreate';
 import SubTitle from '../SubTitle';
 import ShowResultButton from '../buttons/ShowResultButton';
-import { useAppDispatch } from '../../store/store';
+import { useAppDispatch, useAppSelector } from '../../store/store';
 import {
   T2IOptionType,
   T2IType,
@@ -29,10 +29,12 @@ import Icon from '../Icon';
 import Grid from '../layout/Grid';
 import IconBoxTextButton from '../buttons/IconBoxTextButton';
 import { getIconColor } from 'util/getColor';
-import Button from '../buttons/Button';
 import { VersionInner, NewMark } from 'components/aiWrite/AIWriteInput';
-import IconTextButton from 'components/buttons/IconTextButton';
+import IconTextButton, { Chip } from 'components/buttons/IconTextButton';
 import icon_credit_outline from 'img/ico_credit_outline.svg';
+import icon_credit_gray from 'img/ico_credit_gray.svg';
+import { creditInfoSelector } from 'store/slices/creditInfo';
+import { useMemo } from 'react';
 
 const MakingInputWrapper = styled.div`
   ${flex}
@@ -217,11 +219,13 @@ export const ratioItemList = [
 export const versionItemList = [
   {
     id: VersionType.dalle3,
-    title: 'DALL-E-3'
+    title: 'DALL-E-3',
+    creditValue: 'DREAM_STUDIO'
   },
   {
     id: VersionType.sd3,
-    title: 'Stable Diffusion 3'
+    title: 'Stable Diffusion 3',
+    creditValue: 'TEXTTOIMAGE_DALLE3'
   }
 ];
 
@@ -239,7 +243,18 @@ const ImageCreateInput = ({
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
 
+  const creditInfo = useAppSelector(creditInfoSelector);
+
   const { input, style, ratio, type } = options;
+
+  const versionList = useMemo(
+    () =>
+      versionItemList.map((info) => ({
+        ...info,
+        deductCredit: creditInfo.find((item) => item.serviceType === info.creditValue)?.deductCredit
+      })),
+    [creditInfo]
+  );
 
   return (
     <MakingInputWrapper>
@@ -273,8 +288,13 @@ const ImageCreateInput = ({
         </SubTitleArea>
         <RowContainer>
           <Grid col={2}>
-            {versionItemList.map((item) => (
-              <Button
+            {versionList.map((item) => (
+              <IconTextButton
+                iconSrc={
+                  <Chip iconSrc={icon_credit_gray}>
+                    <span>{item.deductCredit}</span>
+                  </Chip>
+                }
                 key={item.id}
                 width="full"
                 variant="gray"
@@ -287,7 +307,7 @@ const ImageCreateInput = ({
                   {item.title}
                   {item.id === 'dalle3' && <NewMark />}
                 </VersionInner>
-              </Button>
+              </IconTextButton>
             ))}
           </Grid>
         </RowContainer>
