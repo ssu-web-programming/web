@@ -188,6 +188,8 @@ interface InputBarProps {
   setLocalFiles: React.Dispatch<React.SetStateAction<File[]>>;
   driveFiles: DriveFileInfo[];
   setDriveFiles: React.Dispatch<React.SetStateAction<DriveFileInfo[]>>;
+  loadLocalFile: (files: File[]) => Promise<void>;
+  loadDriveFile: (files: DriveFileInfo[]) => void;
 }
 
 interface FileListItemInfo {
@@ -195,7 +197,7 @@ interface FileListItemInfo {
 }
 
 type FileUploaderProps = {
-  loadlocalFile: (files: File[]) => void;
+  loadLocalFile: (files: File[]) => void;
   isAgreed: boolean | undefined;
   setIsAgreed: (agree: boolean) => void;
   onLoadDriveFile: (files: DriveFileInfo[]) => void;
@@ -203,10 +205,7 @@ type FileUploaderProps = {
 
 export default function InputBar(props: InputBarProps) {
   const dispatch = useAppDispatch();
-  const confirm = useConfirm();
-  const chatNova = useChatNova();
-  const { getAvailableFileCnt } = useUserInfoUtils();
-  const { novaHistory, disabled = false, expiredNOVA = false, contents = '', setContents } = props;
+  const { disabled = false, expiredNOVA = false, contents = '', setContents } = props;
 
   const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
   const setIsAgreed = async (agree: boolean) => {
@@ -224,62 +223,6 @@ export default function InputBar(props: InputBarProps) {
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   const { t } = useTranslation();
-
-  const loadlocalFile = async (files: File[]) => {
-    props.setDriveFiles([]);
-
-    const uploadLimit = getAvailableFileCnt();
-    if (uploadLimit !== -1) {
-      const invalidSize = files.filter((file) => !isValidFileSize(file.size));
-      if (invalidSize.length > 0) {
-        confirm({
-          title: '',
-          msg: t('Nova.Alert.OverFileUploadSize', {
-            max: MAX_FILE_UPLOAD_SIZE_MB,
-            min: MIN_FILE_UPLOAD_SIZE_KB
-          })!,
-          onOk: { text: t('Confirm'), callback: () => {} }
-        });
-        return;
-      }
-
-      const uploadCnt = novaHistory.reduce((acc, cur) => {
-        const len = cur.files?.length;
-        if (!!len) return acc + len;
-        else return acc;
-      }, 0);
-
-      if (files.length > uploadLimit) {
-        await confirm({
-          title: '',
-          msg: t('Nova.Confirm.OverMaxFileUploadCntOnce', { max: uploadLimit })!,
-          onOk: {
-            text: t('Confirm'),
-            callback: () => {}
-          }
-        });
-        return;
-      }
-
-      if (uploadCnt + files.length > 3) {
-        await confirm({
-          title: '',
-          msg: t('Nova.Confirm.OverMaxFileUploadCnt', { max: 3 })!,
-          onOk: { text: t('Nova.Confirm.NewChat.StartNewChat'), callback: chatNova.newChat },
-          onCancel: {
-            text: t('Cancel'),
-            callback: () => {}
-          }
-        });
-        return;
-      }
-    }
-    props.setLocalFiles(files);
-  };
-  const loadDriveFile = (files: DriveFileInfo[]) => {
-    props.setLocalFiles([]);
-    props.setDriveFiles(files);
-  };
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const inputText = event.target.value;
@@ -405,10 +348,10 @@ export default function InputBar(props: InputBarProps) {
       </InputTxtWrapper>
       <InputBtnWrapper>
         <InputBar.FileUploader
-          loadlocalFile={loadlocalFile}
+          loadLocalFile={props.loadLocalFile}
           isAgreed={isAgreed}
           setIsAgreed={setIsAgreed}
-          onLoadDriveFile={loadDriveFile}
+          onLoadDriveFile={props.loadDriveFile}
         />
 
         <IconBtnWrapper>
@@ -429,7 +372,7 @@ export default function InputBar(props: InputBarProps) {
 }
 
 const FileUploader = (props: FileUploaderProps) => {
-  const { loadlocalFile, isAgreed, setIsAgreed, onLoadDriveFile } = props;
+  const { loadLocalFile, isAgreed, setIsAgreed, onLoadDriveFile } = props;
   const { t } = useTranslation();
   const confirm = useConfirm();
   const chatNova = useChatNova();
@@ -551,7 +494,7 @@ const FileUploader = (props: FileUploaderProps) => {
             <FileButton
               target={btn.target}
               accept={getAccept(btn.accept)}
-              handleOnChange={loadlocalFile}
+              handleOnChange={loadLocalFile}
               multiple
               isAgreed={isAgreed}
               handleOnClick={handleOnClick}

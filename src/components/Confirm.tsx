@@ -46,6 +46,7 @@ export const ContentArea = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
+  white-space: break-spaces;
 
   height: fit-content;
   overflow-y: auto;
