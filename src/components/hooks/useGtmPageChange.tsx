@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import TagManager from 'react-gtm-module';
 import { useLocation } from 'react-router';
-import { useAppSelector } from '../../store/store';
+
 import { filesSelector } from '../../store/slices/askDocAnalyzeFiesSlice';
+import { useAppSelector } from '../../store/store';
 import { getPlatform } from '../../util/bridge';
 
 const useGtmPageChange = () => {

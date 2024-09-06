@@ -1,11 +1,12 @@
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import Credit from '../../../img/nova/promotion/credit.svg';
+
 import ArrowIcon from '../../../img/nova/promotion/arrow_right.svg';
-import { Heart } from '../Heart';
-import Bridge from '../../../util/bridge';
+import Credit from '../../../img/nova/promotion/credit.svg';
 import { IPromotionUserInfo, userInfoSelector } from '../../../store/slices/promotionUserInfo';
 import { useAppSelector } from '../../../store/store';
+import Bridge from '../../../util/bridge';
+import { Heart } from '../Heart';
 
 const Wrap = styled.div`
   width: 100%;

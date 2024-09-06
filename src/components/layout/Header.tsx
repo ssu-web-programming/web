@@ -1,18 +1,18 @@
-import styled from 'styled-components';
-import Icon from '../Icon';
 import icon_ai_tools from 'img/ico_ai_tools.svg';
-import { flex, alignItemCenter, justiSpaceBetween } from '../../style/cssCommon';
-import Bridge from '../../util/bridge';
-import IconButton from '../buttons/IconButton';
 import { useLocation } from 'react-router';
+import styled from 'styled-components';
 
 import { ReactComponent as IconClose } from '../../img/ico_ai_close.svg';
+import { alignItemCenter, flex, justiSpaceBetween } from '../../style/cssCommon';
+import Bridge from '../../util/bridge';
+import IconButton from '../buttons/IconButton';
+import Icon from '../Icon';
 
 const Contents = styled.div`
   ${flex}
   ${justiSpaceBetween}
   ${alignItemCenter}
-  
+
   padding: 8px 5px 8px 10px;
   height: 48px;
 `;

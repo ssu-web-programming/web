@@ -1,15 +1,16 @@
-import { Wrapper, GuideMessage, Footer } from '../../style/askDoc';
-import { useTranslation } from 'react-i18next';
-import ProgressBar from '../../components/ProgressBar';
-import Icon from '../../components/Icon';
-import Logo from '../../img/askDoc/ico_polaris_logo.svg';
-import styled from 'styled-components';
 import { useLayoutEffect } from 'react';
-import Loading from '../../components/Loading';
-import usePercentage from '../../components/hooks/usePercentage';
-import useLangParameterNavigate from '../../components/hooks/useLangParameterNavigate';
-import usePollingExtractText from '../../components/hooks/usePollingExtractText';
 import { Helmet } from 'react-helmet-async';
+import { useTranslation } from 'react-i18next';
+import styled from 'styled-components';
+
+import useLangParameterNavigate from '../../components/hooks/useLangParameterNavigate';
+import usePercentage from '../../components/hooks/usePercentage';
+import usePollingExtractText from '../../components/hooks/usePollingExtractText';
+import Icon from '../../components/Icon';
+import Loading from '../../components/Loading';
+import ProgressBar from '../../components/ProgressBar';
+import Logo from '../../img/askDoc/ico_polaris_logo.svg';
+import { Footer, GuideMessage, Wrapper } from '../../style/askDoc';
 
 export const ConfirmDoc = () => {
   const { t } = useTranslation();
@@ -74,6 +75,7 @@ export default ConfirmDoc;
 
 const SubText = styled.div`
   font-size: 14px;
+
   img {
     float: left;
     margin-top: 2px;

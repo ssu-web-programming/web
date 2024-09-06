@@ -1,10 +1,11 @@
 import React from 'react';
 import styled, {
-  FlattenSimpleInterpolation,
+  css,
   FlattenInterpolation,
-  ThemedStyledProps,
-  css
+  FlattenSimpleInterpolation,
+  ThemedStyledProps
 } from 'styled-components';
+
 import { alignItemCenter, flex, justiCenter, userSelectCss } from '../../style/cssCommon';
 
 const Body = styled.button<{

@@ -1,4 +1,4 @@
-import { openModal, closeModal } from '../../../store/slices/novaModalsSlice';
+import { closeModal, openModal } from '../../../store/slices/novaModalsSlice';
 import { useAppDispatch } from '../../../store/store';
 
 function useModal() {

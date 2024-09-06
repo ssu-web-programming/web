@@ -1,4 +1,4 @@
-import { openModal, closeModal } from '../../../store/slices/askDocModalsSlice';
+import { closeModal, openModal } from '../../../store/slices/askDocModalsSlice';
 import { useAppDispatch } from '../../../store/store';
 
 function useModal() {

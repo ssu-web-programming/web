@@ -1,35 +1,36 @@
-import styled from 'styled-components';
 import { useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { calcToken, parseGptVer } from '../api/usePostSplunkLog';
-import { activeToast } from '../store/slices/toastSlice';
+import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
+
+import { apiWrapper, streaming } from '../api/apiWrapper';
+import { AI_WRITE_RESPONSE_STREAM_API } from '../api/constant';
+import { calcToken, parseGptVer } from '../api/usePostSplunkLog';
+import AIWriteInput from '../components/aiWrite/AIWriteInput';
+import AiWriteResult from '../components/aiWrite/AiWriteResult';
+import { EngineVersion, WriteOptions } from '../components/chat/RecommendBox/FormRec';
+import useErrorHandle from '../components/hooks/useErrorHandle';
+import { useShowCreditToast } from '../components/hooks/useShowCreditToast';
+import { StreamPreprocessing } from '../store/slices/chatHistorySlice';
+import { setCreating } from '../store/slices/tabSlice';
+import { activeToast } from '../store/slices/toastSlice';
 import {
-  WriteType,
   addWriteHistory,
   removeWriteHistory,
   resetCurrentWrite,
   selectWriteHistorySlice,
   setCurrentWrite,
-  updateWriteHistory
+  updateWriteHistory,
+  WriteType
 } from '../store/slices/writeHistorySlice';
 import { useAppSelector } from '../store/store';
 import { flex, flexColumn } from '../style/cssCommon';
-import { setCreating } from '../store/slices/tabSlice';
 import { calLeftCredit } from '../util/common';
-import { useTranslation } from 'react-i18next';
-import useErrorHandle from '../components/hooks/useErrorHandle';
-import AiWriteResult from '../components/aiWrite/AiWriteResult';
-import AIWriteInput from '../components/aiWrite/AIWriteInput';
-import { EngineVersion, WriteOptions } from '../components/chat/RecommendBox/FormRec';
-import { useShowCreditToast } from '../components/hooks/useShowCreditToast';
-import { StreamPreprocessing } from '../store/slices/chatHistorySlice';
-import { AI_WRITE_RESPONSE_STREAM_API } from '../api/constant';
-import { apiWrapper, streaming } from '../api/apiWrapper';
 
 const TabWrapper = styled.div`
-  ${flex}
-  ${flexColumn}
+  ${flex};
+  ${flexColumn};
   height: 100%;
   overflow-x: hidden;
 `;
@@ -87,8 +88,7 @@ const AIWriteTab = (props: WriteTabProps) => {
     dispatch(setCreating('Write'));
 
     try {
-      requestor.current = apiWrapper();
-      const { res, logger } = await requestor.current?.request(AI_WRITE_RESPONSE_STREAM_API, {
+      const { res, logger } = await apiWrapper().request(AI_WRITE_RESPONSE_STREAM_API, {
         headers: {
           'Content-Type': 'application/json'
         },
@@ -107,22 +107,25 @@ const AIWriteTab = (props: WriteTabProps) => {
       splunk = logger;
 
       const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
-      showCreditToast(deductionCredit, leftCredit);
+      showCreditToast(deductionCredit ?? '', leftCredit ?? '');
 
       await streaming(res, (contents) => {
-        dispatch(
-          updateWriteHistory({
-            id: assistantId,
-            result: contents,
-            input: input,
-            preProcessing: preProc!,
-            version
-          })
-        );
+        if (preProc) {
+          dispatch(
+            updateWriteHistory({
+              id: assistantId,
+              result: contents,
+              input: input,
+              preProcessing: preProc,
+              version
+            })
+          );
+        }
         resultText += contents;
       });
-    } catch (error: any) {
+    } catch (error) {
       if (requestor.current?.isAborted() === true) {
+        /* empty */
       } else {
         dispatch(resetCurrentWrite());
         errorHandle(error);
@@ -150,7 +153,9 @@ const AIWriteTab = (props: WriteTabProps) => {
             output_token,
             gpt_ver
           });
-        } catch (err) {}
+        } catch (err) {
+          /* empty */
+        }
       }
     }
   };

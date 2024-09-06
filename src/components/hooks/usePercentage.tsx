@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react';
 const usePercentage = (
   isLoading: boolean,
   isSuccess: boolean,
-  startPercent: number = 0,
-  targetPercent: number = 100,
-  speed: number = 250
+  startPercent = 0,
+  targetPercent = 100,
+  speed = 250
 ) => {
   const [percentage, setPercentage] = useState(startPercent);
   useEffect(() => {

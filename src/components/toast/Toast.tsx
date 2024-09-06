@@ -1,20 +1,21 @@
-import { useEffect, useRef, useCallback } from 'react';
-import styled, { FlattenSimpleInterpolation, css, keyframes } from 'styled-components';
+import { useCallback, useEffect, useRef } from 'react';
+import { ReactComponent as IconClose } from 'img/ico_ai_close.svg';
+import icon_pass from 'img/ico_toast_completion.svg';
+import icon_warnning from 'img/ico_toast_warning.svg';
+import styled, { css, FlattenSimpleInterpolation, keyframes } from 'styled-components';
+
 import { initToast, selectToast } from '../../store/slices/toastSlice';
 import { useAppDispatch, useAppSelector } from '../../store/store';
-import Icon from '../Icon';
-import IconButton from '../buttons/IconButton';
-import icon_warnning from 'img/ico_toast_warning.svg';
-import icon_pass from 'img/ico_toast_completion.svg';
-import { ReactComponent as IconClose } from 'img/ico_ai_close.svg';
 import { alignItemStart, flex, flexGrow, flexShrink } from '../../style/cssCommon';
+import IconButton from '../buttons/IconButton';
+import Icon from '../Icon';
 
 const Fade = keyframes`
   0% {
-      opacity: 0;
+    opacity: 0;
   }
   100% {
-      opacity: 1;
+    opacity: 1;
   }
 `;
 
@@ -25,7 +26,7 @@ const ToastMsgWrapper = styled.div<{ variant: FlattenSimpleInterpolation }>`
   ${alignItemStart}
   ${flexShrink}
   ${flexGrow}
-  
+
   position: absolute;
   left: 50%;
   top: 92px;

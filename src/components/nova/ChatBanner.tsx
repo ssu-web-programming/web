@@ -1,9 +1,13 @@
-import styled from 'styled-components';
 import { SvgIcon, SvgIconProps } from '@mui/material';
-import Divider from '@mui/material/Divider';
 import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import Divider from '@mui/material/Divider';
+import { ReactComponent as ExpandMoreSvg } from 'img/nova/promotion/expand_more_purple.svg';
+import flag from 'img/nova/promotion/flag.svg';
+import { useTranslation } from 'react-i18next';
+import styled from 'styled-components';
+
 import {
   alignItemCenter,
   flex,
@@ -11,10 +15,7 @@ import {
   justiSpaceBetween,
   justiStart
 } from '../../style/cssCommon';
-import { ReactComponent as ExpandMoreSvg } from 'img/nova/promotion/expand_more_purple.svg';
-import flag from 'img/nova/promotion/flag.svg';
 
-import { useTranslation } from 'react-i18next';
 import { Heart } from './Heart';
 
 const ExpandMoreIcon = (props: SvgIconProps) => (

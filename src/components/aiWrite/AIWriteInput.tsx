@@ -1,24 +1,25 @@
-import styled, { css } from 'styled-components';
-import { flex, flexColumn } from '../../style/cssCommon';
-import { RowBox, exampleList } from '../../views/AIChatTab';
+import IconTextButton, { Chip } from 'components/buttons/IconTextButton';
+import icon_credit_gray from 'img/ico_credit_gray.svg';
 import { useTranslation } from 'react-i18next';
-import SubTitle from '../SubTitle';
-import ShowResultButton from '../buttons/ShowResultButton';
-import { useAppDispatch, useAppSelector } from '../../store/store';
-import { WriteType, setCurrentWrite } from '../../store/slices/writeHistorySlice';
-import ExTextbox from '../ExTextbox';
-import { WriteOptions, formRecList, lengthList, versionList } from '../chat/RecommendBox/FormRec';
+import { creditInfoSelector } from 'store/slices/creditInfo';
+import styled, { css } from 'styled-components';
+import { getIconColor } from 'util/getColor';
+
 import icon_write from '../../img/ico_creating_text_white.svg';
-import Icon from '../Icon';
+import icon_credit_outline from '../../img/ico_credit_outline.svg';
+import { setCurrentWrite, WriteType } from '../../store/slices/writeHistorySlice';
+import { useAppDispatch, useAppSelector } from '../../store/store';
+import { flex, flexColumn } from '../../style/cssCommon';
+import { exampleList, RowBox } from '../../views/AIChatTab';
 import Button from '../buttons/Button';
 import IconBoxTextButton from '../buttons/IconBoxTextButton';
+import ShowResultButton from '../buttons/ShowResultButton';
+import { formRecList, lengthList, versionList, WriteOptions } from '../chat/RecommendBox/FormRec';
+import ExTextbox from '../ExTextbox';
+import Icon from '../Icon';
 import Grid from '../layout/Grid';
-import { getIconColor } from 'util/getColor';
-import IconTextButton, { Chip } from 'components/buttons/IconTextButton';
-import icon_credit_outline from '../../img/ico_credit_outline.svg';
-import icon_credit_gray from 'img/ico_credit_gray.svg';
-import { creditInfoSelector } from 'store/slices/creditInfo';
-import { filterCreditInfo } from 'pages/Nova/Nova';
+import { filterCreditInfo } from '../nova/Header';
+import SubTitle from '../SubTitle';
 
 const WriteInputPage = styled.div`
   ${flex}
@@ -85,10 +86,13 @@ const AIWriteInput = ({
     WRITE_CLADE3: 'Claude 3.5 Sonnet'
   };
 
-  const credit = filterCreditInfo(creditInfo, CREDIT_NAME_MAP).reduce((acc, cur) => {
-    acc[CREDIT_NAME_MAP[cur.serviceType]] = cur;
-    return acc;
-  }, {} as { [key: string]: any });
+  const credit = filterCreditInfo(creditInfo, CREDIT_NAME_MAP).reduce(
+    (acc, cur) => {
+      acc[CREDIT_NAME_MAP[cur.serviceType]] = cur;
+      return acc;
+    },
+    {} as { [key: string]: any }
+  );
 
   return (
     <WriteInputPage>
@@ -124,6 +128,7 @@ const AIWriteInput = ({
               key={cur.version}
               cssExt={css`
                 padding: 4px 12px;
+
                 > div {
                   justify-content: space-between;
                 }

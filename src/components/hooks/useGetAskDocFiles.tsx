@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
-import { filesSelector, setFiles } from '../../store/slices/askDocAnalyzeFiesSlice';
-import { useAppDispatch, useAppSelector } from '../../store/store';
-import Bridge from '../../util/bridge';
-import { initFlagSelector } from '../../store/slices/initFlagSlice';
+
 import { apiWrapper } from '../../api/apiWrapper';
 import { ASKDOC_GET_ANALYZE_INFO } from '../../api/constant';
-import useErrorHandle from './useErrorHandle';
+import { filesSelector, setFiles } from '../../store/slices/askDocAnalyzeFiesSlice';
 import { setSummary } from '../../store/slices/askDocSummary';
+import { initFlagSelector } from '../../store/slices/initFlagSlice';
+import { useAppDispatch, useAppSelector } from '../../store/store';
+import Bridge from '../../util/bridge';
+
+import useErrorHandle from './useErrorHandle';
 import useInterval from './useInterval';
 
 export type Data = {

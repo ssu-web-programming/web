@@ -1,14 +1,15 @@
-import useModal from './useModal';
-import { useAppDispatch } from '../../../store/store';
+import { useCallback } from 'react';
+
+import { apiWrapper } from '../../../api/apiWrapper';
+import { PROMOTION_USER_INFO } from '../../../api/constant';
 import {
-  IAccurePromotionAction,
   IEventType,
   IPromotionUserInfo,
   setPromotionUserInfo
 } from '../../../store/slices/promotionUserInfo';
-import { useCallback } from 'react';
-import { apiWrapper } from '../../../api/apiWrapper';
-import { PROMOTION_USER_INFO } from '../../../api/constant';
+import { useAppDispatch } from '../../../store/store';
+
+import useModal from './useModal';
 
 const useOpenModal = () => {
   const { openModal, closeModal } = useModal();
@@ -30,7 +31,9 @@ const useOpenModal = () => {
       if (response.success) {
         dispatch(setPromotionUserInfo(response.data.accurePromotionUser));
       }
-    } catch (err) {}
+    } catch (err) {
+      /* empty */
+    }
   };
 
   const closeEvent = (

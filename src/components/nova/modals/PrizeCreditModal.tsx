@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import Credit from '../../../img/nova/promotion/credit.gif';
+
 import ArrowIcon from '../../../img/nova/promotion/arrow_right.svg';
+import Credit from '../../../img/nova/promotion/credit.gif';
 import Bridge from '../../../util/bridge';
 
 const Wrap = styled.div`

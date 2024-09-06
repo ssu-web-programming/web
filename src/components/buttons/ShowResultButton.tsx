@@ -1,6 +1,8 @@
-import icon_arrow_right from '../../img/ico_front.svg';
-import { css } from 'styled-components';
 import { useTranslation } from 'react-i18next';
+import { css } from 'styled-components';
+
+import icon_arrow_right from '../../img/ico_front.svg';
+
 import IconTextButton from './IconTextButton';
 
 interface ShowResultButtonProps {

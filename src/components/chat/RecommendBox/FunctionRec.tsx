@@ -1,21 +1,23 @@
-import { useTranslation } from 'react-i18next';
-import { recType, selectRecFuncSlice } from '../../../store/slices/recFuncSlice';
-import { useAppSelector } from '../../../store/store';
-import { RowWrapBox } from './ChatRecommend';
-import styled, { css } from 'styled-components';
 import { ReactComponent as IconResume } from 'img/aiChat/ico_ai_resume.svg';
+import { ReactComponent as IconSpelingcheck } from 'img/aiChat/ico_ai_spellingcheck.svg';
 import { ReactComponent as IconSummary } from 'img/aiChat/ico_ai_summary.svg';
 import { ReactComponent as IconTranslation } from 'img/aiChat/ico_ai_translation.svg';
 import { ReactComponent as IconStyle } from 'img/aiChat/ico_changing_style.svg';
-import { ReactComponent as IconSpelingcheck } from 'img/aiChat/ico_ai_spellingcheck.svg';
 import { ReactComponent as IconNewChat } from 'img/ico_newchat.svg';
-import IconTextButton from '../../buttons/IconTextButton';
+import { useTranslation } from 'react-i18next';
+import styled, { css } from 'styled-components';
+import { getIconColor } from 'util/getColor';
+
+import icon_prev from '../../../img/ico_arrow_prev.svg';
+import { recType, selectRecFuncSlice } from '../../../store/slices/recFuncSlice';
+import { useAppSelector } from '../../../store/store';
 import { RowBox } from '../../../views/AIChatTab';
 import Button from '../../buttons/Button';
-import icon_prev from '../../../img/ico_arrow_prev.svg';
+import IconTextButton from '../../buttons/IconTextButton';
 import Icon from '../../Icon';
 import Grid from '../../layout/Grid';
-import { getIconColor } from 'util/getColor';
+
+import { RowWrapBox } from './ChatRecommend';
 
 export const REC_ID_LIST = {
   RESUME_WRITING: 'resume_writing',
@@ -121,7 +123,9 @@ const FunctionRec = ({
                   <IconTextButton
                     width="full"
                     key={rec.id}
-                    iconSrc={<rec.icon color={getIconColor(rec.id, selectedRecFunction?.id!)} />}
+                    iconSrc={
+                      <rec.icon color={getIconColor(rec.id, selectedRecFunction?.id ?? '')} />
+                    }
                     iconPos="left"
                     selected={rec.id === selectedRecFunction?.id}
                     onClick={() => onClick(rec)}>

@@ -1,24 +1,25 @@
+import { useRef, useState } from 'react';
+import { SvgIcon, SvgIconProps } from '@mui/material';
+import Accordion from '@mui/material/Accordion';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import TextField from '@mui/material/TextField';
+import { ReactComponent as ExpandMoreSvg } from 'img/nova/promotion/expand_more_gray.svg';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import IPadIcon from '../../../img/nova/promotion/prize_ipad.svg';
-import BuzIcon from '../../../img/nova/promotion/prize_buz.svg';
+
+import { apiWrapper } from '../../../api/apiWrapper';
+import { PROMOTION_AGREE } from '../../../api/constant';
 import AmericanoIcon from '../../../img/nova/promotion/prize_americano.svg';
-import { ReactComponent as ExpandMoreSvg } from 'img/nova/promotion/expand_more_gray.svg';
+import BuzIcon from '../../../img/nova/promotion/prize_buz.svg';
+import IPadIcon from '../../../img/nova/promotion/prize_ipad.svg';
 import {
   IAccurePromotionAction,
   IEventType,
   IPromotionUserInfo,
   userInfoSelector
 } from '../../../store/slices/promotionUserInfo';
-import TextField from '@mui/material/TextField';
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
 import { useAppSelector } from '../../../store/store';
-import { useRef, useState } from 'react';
-import { SvgIcon, SvgIconProps } from '@mui/material';
-import { apiWrapper } from '../../../api/apiWrapper';
-import { PROMOTION_AGREE } from '../../../api/constant';
 
 const ExpandMoreIcon = (props: SvgIconProps) => (
   <SvgIcon {...props}>

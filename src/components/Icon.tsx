@@ -1,9 +1,10 @@
-import styled, { FlattenSimpleInterpolation, css } from 'styled-components';
+import styled, { css, FlattenSimpleInterpolation } from 'styled-components';
+
 import { flex } from '../style/cssCommon';
 
 const IconImg = styled.img<{ size: FlattenSimpleInterpolation }>`
-  ${flex}
-  ${(props) => props.size}
+  ${flex};
+  ${(props) => props.size};
 `;
 
 export const SIZES = {

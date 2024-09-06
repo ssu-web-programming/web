@@ -1,15 +1,15 @@
 import { load } from 'cheerio';
-import { marked } from 'marked';
 import { convert } from 'html-to-text';
+import { marked } from 'marked';
+
 import Bridge, { fileToString } from './bridge';
 
 const renderer = new marked.Renderer();
 renderer.link = (href, title, text) => {
   return `<a href="javascript:void(0)">${text}</a>`;
 };
-
 renderer.image = (href, title, text) =>
-  `<img src=${href} alt=${text} style="width: 100%; height: auto">`;
+  `<img src="${href}" alt="${text}" style="width: 100%; height: auto">`;
 
 marked.use({
   renderer: renderer,
@@ -18,6 +18,7 @@ marked.use({
 });
 
 const htmlBody = `
+
 <html>
 <head>
 <style>
@@ -58,7 +59,8 @@ th
 
 <!--EndFragment-->
 </body>
-</html>`;
+</html>
+`;
 
 export const markdownToHtml = async (markdown: string) => {
   try {
@@ -69,17 +71,21 @@ export const markdownToHtml = async (markdown: string) => {
     body.html(converted);
 
     return $.html();
-  } catch (err) {}
+  } catch (err) {
+    /* empty */
+  }
 };
 
 export const insertDoc = async (markdown: string) => {
   try {
     const html = await markdownToHtml(markdown);
     await Bridge.callBridgeApi('insertHtml', html);
-  } catch (error) {}
+  } catch (error) {
+    /* empty */
+  }
 };
 
-export const calLeftCredit = (headers: any) => {
+export const calLeftCredit = (headers: Headers) => {
   const leftCredit = headers?.get('X-PO-AI-Mayflower-Userinfo-Credit'.toLowerCase());
   const deductionCredit = headers?.get('X-PO-AI-Mayflower-Userinfo-Usedcredit'.toLowerCase());
 
@@ -133,7 +139,7 @@ export const removeRefPages = (contents: string) => {
 export const setCookie = (cname: string, cvalue: string, exdays: number) => {
   const d = new Date();
   d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
-  let expires = 'expires=' + d.toUTCString();
+  const expires = 'expires=' + d.toUTCString();
   const domain = 'polarisoffice.com';
   document.cookie = cname + '=' + cvalue + ';' + expires + ';path=/;' + 'domain=' + domain + ';';
 };
@@ -152,7 +158,12 @@ export const isHigherVersion = (targetVersion: string, currentVersion: string | 
 };
 
 export const getFileExtension = (filename: string) => {
-  return `.${filename.split('.').pop()}`;
+  return `
+.$
+{
+  filename.split('.').pop()
+}
+`;
 };
 
 export const getFileName = (filename: string) => {
@@ -168,7 +179,13 @@ export const sliceFileName = (name: string, index = 20) => {
   const fileName = name;
   if (fileName.length > index) {
     const fileNameWithoutExt = fileName.slice(0, index);
-    return `${fileNameWithoutExt}...`;
+    return `
+$
+{
+  fileNameWithoutExt
+}
+...
+`;
   }
   return fileName;
 };

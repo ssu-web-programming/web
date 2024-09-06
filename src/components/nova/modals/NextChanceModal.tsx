@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
+
 import NovaIcon from '../../../img/nova/promotion/Nova3d.svg';
 import Bridge from '../../../util/bridge';
 

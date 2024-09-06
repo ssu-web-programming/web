@@ -1,7 +1,8 @@
+import { useEffect, useMemo, useState } from 'react';
+import styled, { css } from 'styled-components';
+
 import { ReactComponent as IconArrowDown } from '../../img/ico_arrow_down_small.svg';
 import { ReactComponent as IconArrowUp } from '../../img/ico_arrow_up_small.svg';
-import { useMemo, useState, useEffect } from 'react';
-import styled, { css } from 'styled-components';
 import {
   alignItemCenter,
   flex,
@@ -11,14 +12,15 @@ import {
   justiCenter,
   justiStart
 } from '../../style/cssCommon';
-import Button, { ButtonProps } from './Button';
 import IconComponent from '../IconComponent';
+
+import Button, { ButtonProps } from './Button';
 
 const DropDownWrapper = styled.div<{ hasSelectedOption?: boolean; width?: ButtonProps['width'] }>`
   ${flex}
   ${justiCenter}
   ${alignItemCenter}
-  
+
   position: relative;
   box-sizing: border-box;
   height: 24px;
@@ -122,6 +124,7 @@ const DropDownButton = <T extends { id: string }>(props: DropDownProps<T>) => {
           <FloatingListWrapper>
             {list.map((item) => (
               <FloatingItem
+                key={item.id}
                 isSelected={selectedId === item.id}
                 onClick={() => {
                   onItemClick(item);

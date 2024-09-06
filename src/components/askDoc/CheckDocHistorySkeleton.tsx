@@ -1,22 +1,23 @@
-import Skeleton from '../Skeleton';
-import { Wrapper, GuideMessage, Footer } from '../../style/askDoc';
-import { alignItemCenter, flex, flexColumn, justiStart } from '../../style/cssCommon';
 import styled from 'styled-components';
 
+import { Footer, GuideMessage, Wrapper } from '../../style/askDoc';
+import { alignItemCenter, flex, flexColumn, justiStart } from '../../style/cssCommon';
+import Skeleton from '../Skeleton';
+
 const List = styled.ul`
-  ${flex}
-  ${flexColumn}
-  ${justiStart}
-  
+  ${flex};
+  ${flexColumn};
+  ${justiStart};
+
   width: 100%;
   height: 100%;
   padding: 40px 0 0 0;
 `;
 
 const Item = styled.li<{ checked: boolean }>`
-  ${flex}
-  ${alignItemCenter}
-  ${justiStart}
+  ${flex};
+  ${alignItemCenter};
+  ${justiStart};
   flex-direction: row;
   gap: 8px;
 

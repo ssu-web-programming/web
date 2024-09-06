@@ -3,6 +3,7 @@ import { NOVA_DELETE_CONVERSATION, PROMOTION_USER_INFO } from 'api/constant';
 import { initNovaHistory, novaHistorySelector } from 'store/slices/novaHistorySlice';
 import { setCreating } from 'store/slices/tabSlice';
 import { useAppDispatch, useAppSelector } from 'store/store';
+
 import { IEventType, setPromotionUserInfo } from '../../store/slices/promotionUserInfo';
 
 export const useChatNova = () => {
@@ -36,7 +37,9 @@ export const useChatNova = () => {
         if (response.success) {
           dispatch(setPromotionUserInfo(response.data.accurePromotionUser));
         }
-      } catch (err) {}
+      } catch (err) {
+        /* empty */
+      }
     } catch (err) {
       console.log(err);
     }

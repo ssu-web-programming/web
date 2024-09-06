@@ -1,89 +1,64 @@
 import React, { Suspense, useCallback, useEffect, useRef, useState } from 'react';
-import InputBar, { InputBarSubmitParam } from 'components/nova/InputBar';
-import { ChatBanner } from 'components/nova/ChatBanner';
-import styled, { css } from 'styled-components';
-import { useAppDispatch, useAppSelector } from 'store/store';
-import {
-  pushChat,
-  novaHistorySelector,
-  appendChatOutput,
-  addChatOutputRes,
-  updateChatStatus,
-  NovaChatType,
-  removeChat,
-  NovaFileInfo
-} from 'store/slices/novaHistorySlice';
 import { apiWrapper, streaming } from 'api/apiWrapper';
-import { v4 } from 'uuid';
-import Tooltip from 'components/Tooltip';
-import { useConfirm } from 'components/Confirm';
 import {
   NOVA_CHAT_API,
   PO_DRIVE_CONVERT,
   PO_DRIVE_CONVERT_DOWNLOAD,
   PO_DRIVE_CONVERT_STATUS,
-  PO_DRIVE_DOWNLOAD,
   PO_DRIVE_DOC_OPEN_STATUS,
+  PO_DRIVE_DOWNLOAD,
   PO_DRIVE_UPLOAD,
   PROMOTION_USER_INFO
 } from 'api/constant';
-import { getFileExtension, getFileName, insertDoc, markdownToHtml } from 'util/common';
-import Bridge, { ClientType, getPlatform, useCopyClipboard } from 'util/bridge';
 import { load } from 'cheerio';
-import Icon from 'components/Icon';
 import IconButton from 'components/buttons/IconButton';
-import ico_ai from 'img/ico_ai.svg';
-import ico_credit_info from 'img/ico_credit_line.svg';
-import ico_credit from 'img/ico_credit_gray.svg';
-import { ReactComponent as IconMessagePlus } from 'img/ico_message_plus.svg';
-import { ReactComponent as AgentFraphicKo } from 'img/agent_graphic_ko.svg';
-import { ReactComponent as AgentFraphicEn } from 'img/agent_graphic_en.svg';
-import { ReactComponent as AgentFraphicJa } from 'img/agent_graphic_ja.svg';
-import { ReactComponent as IconArrowLeft } from 'img/ico_arrow_left.svg';
-import { ReactComponent as IconMax } from 'img/ico_nova_max.svg';
-import { ReactComponent as IconMin } from 'img/ico_nova_min.svg';
-import { ReactComponent as IconClose } from 'img/ico_nova_close.svg';
-import { ReactComponent as IconLogoNova } from 'img/ico_logo_nova.svg';
-import ChatList from 'components/nova/ChatList';
-import ico_image from 'img/ico_image.svg';
-import ico_documents from 'img/ico_documents.svg';
-// import stop_circle from 'img/stop_circle.svg';
-import { useTranslation } from 'react-i18next';
-import { activeToast } from 'store/slices/toastSlice';
-import { selectTabSlice, setCreating } from 'store/slices/tabSlice';
-import { useLocation } from 'react-router-dom';
-// import IconTextButton from 'components/buttons/IconTextButton';
-import { creditInfoSelector, InitialState } from 'store/slices/creditInfo';
-import { DriveFileInfo } from 'components/PoDrive';
-import { useShowCreditToast } from 'components/hooks/useShowCreditToast';
-import useErrorHandle from 'components/hooks/useErrorHandle';
+import { useConfirm } from 'components/Confirm';
 import { useChatNova } from 'components/hooks/useChatNova';
-import Header from 'components/layout/Header';
+import useErrorHandle from 'components/hooks/useErrorHandle';
+import { useShowCreditToast } from 'components/hooks/useShowCreditToast';
+import { ChatBanner } from 'components/nova/ChatBanner';
+import ChatList from 'components/nova/ChatList';
+import InputBar, { InputBarSubmitParam } from 'components/nova/InputBar';
+import { DriveFileInfo } from 'components/PoDrive';
 import {
   DelayDocConverting,
   DocConvertingError,
   DocUnopenableError,
   ExceedPoDriveLimitError
 } from 'error/error';
-import { ReactComponent as xMarkIcon } from 'img/ico_xmark.svg';
+import { ReactComponent as IconArrowLeft } from 'img/ico_arrow_left.svg';
 import { lang, LANG_KO_KR } from 'locale';
-import useLangParameterNavigate from 'components/hooks/useLangParameterNavigate';
+import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
 import { appStateSelector } from 'store/slices/appState';
 import {
-  IEventType,
-  IPromotionUserInfo,
-  setPromotionUserInfo,
-  userInfoSelector
-} from '../../store/slices/promotionUserInfo';
-import Modals, { Overlay } from '../../components/nova/modals/Modals';
-import { Heart } from '../../components/nova/Heart';
-import useFileDrop from '../../components/hooks/useFileDrop';
-import useUserInfoUtils from '../../components/hooks/useUserInfoUtils';
+  addChatOutputRes,
+  appendChatOutput,
+  NovaChatType,
+  NovaFileInfo,
+  novaHistorySelector,
+  pushChat,
+  removeChat,
+  updateChatStatus
+} from 'store/slices/novaHistorySlice';
+import { selectTabSlice, setCreating } from 'store/slices/tabSlice';
+import { activeToast } from 'store/slices/toastSlice';
+import { useAppDispatch, useAppSelector } from 'store/store';
+import styled from 'styled-components';
+import Bridge from 'util/bridge';
+import { getFileExtension, getFileName, insertDoc, markdownToHtml } from 'util/common';
+import { v4 } from 'uuid';
 
-const flexCenter = css`
-  display: flex;
-  align-items: center;
-`;
+import useManageFile from '../../components/hooks/nova/useManageFile';
+import useFileDrop from '../../components/hooks/useFileDrop';
+import { FileUploading } from '../../components/nova/FileUploading';
+import NovaHeader from '../../components/nova/Header';
+import { ImagePreview } from '../../components/nova/ImagePreview';
+import Modals, { Overlay } from '../../components/nova/modals/Modals';
+import { SearchGuide } from '../../components/nova/SearchGuide';
+import { FileUpladState } from '../../constants/fileTypes';
+import { IEventType, setPromotionUserInfo } from '../../store/slices/promotionUserInfo';
+import { downloadImage } from '../../util/downloadImage';
 
 const Container = styled.div`
   width: 100%;
@@ -96,11 +71,6 @@ const Wrapper = styled(Container)`
   justify-content: flex-start;
 `;
 
-const NovaHeader = styled(Header)`
-  width: 100%;
-  color: var(--ai-purple-50-main);
-`;
-
 const Body = styled.div`
   flex: 1;
   width: 100%;
@@ -111,25 +81,6 @@ const Body = styled.div`
   position: relative;
 `;
 
-const TitleWrapper = styled.div`
-  gap: 4px;
-
-  img.nova {
-    width: 55px;
-    height: 16px;
-  }
-
-  ${flexCenter}
-  flex-direction: row;
-`;
-
-const ButtonWrapper = styled.div`
-  gap: 8px;
-
-  ${flexCenter}
-  flex-direction: row;
-`;
-
 const GuideWrapper = styled(Container)`
   flex-direction: column;
   justify-content: flex-end;
@@ -138,58 +89,6 @@ const GuideWrapper = styled(Container)`
   background-color: #f4f6f8;
   overflow-y: auto;
 `;
-
-const GuideTitle = styled.div`
-  padding: 0 17px;
-  div.title {
-    ${flexCenter}
-    justify-content: center;
-    margin-bottom: 8px;
-
-    font-size: 18px;
-    font-weight: 500;
-    line-height: 27px;
-    color: var(--ai-purple-50-main);
-  }
-
-  p.subTitle {
-    font-size: 14px;
-    line-height: 21px;
-    letter-spacing: -0.02em;
-    color: var(--gray-gray-80-02);
-    text-align: center;
-  }
-`;
-const Guidebody = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  width: 100%;
-  margin-bottom: 24px;
-`;
-
-const GuideExample = styled.div`
-  ${flexCenter}
-  justify-content: flex-start;
-  gap: 8px;
-  padding: 12px;
-  margin: 0 16px;
-  border: 1px solid var(--gray-gray-40);
-  border-radius: 8px;
-  background: #fff;
-  font-size: 14px;
-  color: var(--gray-gray-80-02);
-  &:hover {
-    cursor: pointer;
-  }
-`;
-
-// const StopButton = styled.div`
-//   position: absolute;
-//   left: 50%;
-//   bottom: 24px;
-//   transform: translate(-50%);
-// `;
 
 const ScrollDownButton = styled.div`
   width: 48px;
@@ -214,75 +113,7 @@ const ScrollDownButton = styled.div`
   }
 `;
 
-export type SupportFileType = {
-  mimeType: string;
-  extensions: string;
-};
-
-export const SUPPORT_DOCUMENT_TYPE: SupportFileType[] = [
-  // {
-  //   mimeType: 'application/msword',
-  //   extensions: '.doc'
-  // },
-  {
-    mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    extensions: '.docx'
-  },
-  // {
-  //   mimeType: 'application/vnd.ms-powerpoint',
-  //   extensions: '.ppt'
-  // },
-  {
-    mimeType: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-    extensions: '.pptx'
-  },
-  {
-    mimeType: 'application/vnd.ms-excel',
-    extensions: '.xls'
-  },
-  {
-    mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    extensions: '.xlsx'
-  },
-  {
-    mimeType: 'application/x-hwp',
-    extensions: '.hwp'
-  },
-  {
-    mimeType: 'application/vnd.hancom.hwp',
-    extensions: '.hwp'
-  },
-  {
-    mimeType: 'application/pdf',
-    extensions: '.pdf'
-  }
-];
-
-export const SUPPORT_IMAGE_TYPE: SupportFileType[] = [
-  {
-    mimeType: 'image/jpeg',
-    extensions: '.jpg'
-  },
-  {
-    mimeType: 'image/jpeg',
-    extensions: '.jpeg'
-  },
-  {
-    mimeType: 'image/png',
-    extensions: '.png'
-  },
-  {
-    mimeType: 'image/gif',
-    extensions: '.gif'
-  }
-];
-
 export type ClientStatusType = 'home' | 'doc_edit_mode' | 'doc_view_mode';
-
-interface FileUpladState extends Pick<NovaChatType, 'type'> {
-  state: 'ready' | 'upload' | 'wait' | 'delay';
-  progress: number;
-}
 
 interface PollingType extends NovaFileInfo {
   taskId: string;
@@ -293,41 +124,24 @@ export default function Nova() {
   const dispatch = useAppDispatch();
   const novaHistory = useAppSelector(novaHistorySelector);
   const { creating } = useAppSelector(selectTabSlice);
-  const creditInfo = useAppSelector(creditInfoSelector);
   const { novaExpireTime } = useAppSelector(appStateSelector);
   const { t } = useTranslation();
   const confirm = useConfirm();
   const showCreditToast = useShowCreditToast();
   const errorHandle = useErrorHandle();
   const chatNova = useChatNova();
-  const copyClipboard = useCopyClipboard();
   const [showScrollDownBtn, setShowScrollDownBtn] = useState(false);
   const chatListRef = useRef<HTMLDivElement>(null);
   const [expiredNOVA, setExpiredNOVA] = useState<boolean>(false);
   const [inputContents, setInputContents] = useState<string>('');
   const [imagePreview, setImagePreview] = useState<NovaFileInfo | null>(null);
-  const [localFiles, setLocalFiles] = useState<File[]>([]);
-  const [driveFiles, setDriveFiles] = useState<DriveFileInfo[]>([]);
   const [fileUploadState, setFileUploadState] = useState<FileUpladState>({
     type: '',
     state: 'ready',
     progress: 0
   });
   const { handleDragOver, handleDragLeave, handleDrop } = useFileDrop();
-  const { getAvailableFileCnt } = useUserInfoUtils();
-
-  const CREDIT_NAME_MAP: { [key: string]: string } = {
-    NOVA_CHAT_GPT4O: t(`Nova.CreditInfo.Chat`),
-    NOVA_ASK_DOC_GPT4O: t(`Nova.CreditInfo.DocImgQuery`),
-    NOVA_IMG_GPT4O: t(`Nova.CreditInfo.ImgGen`)
-  };
-
-  const credit = filterCreditInfo(creditInfo, CREDIT_NAME_MAP);
-
-  const TOOLTIP_CREDIT_OPTIONS = credit.map((item) => ({
-    name: CREDIT_NAME_MAP[item.serviceType] || 'Unknown',
-    icon: { src: ico_credit, txt: String(item.deductCredit) }
-  }));
+  const { loadLocalFile } = useManageFile();
 
   const expireTimer = useRef<NodeJS.Timeout | null>(null);
 
@@ -435,11 +249,10 @@ export default function Nova() {
         if (!success) throw new Error('Invalid File');
         return { ...file, valid: status };
       } catch (err) {
-        throw err;
+        throw new Error('Failed to handle file status');
       }
     });
-    const results = await Promise.all(promises);
-    return results;
+    return await Promise.all(promises);
   };
 
   const convertFiles = async (files: NovaFileInfo[]) => {
@@ -455,12 +268,10 @@ export default function Nova() {
         return file;
       }
     });
-    const results = await Promise.all(promises);
-    return results;
+    return await Promise.all(promises);
   };
 
   const reqUploadFiles = async (files: File[]) => {
-    // TODO : promise all
     const ret = [];
     for (const file of files) {
       const formData = new FormData();
@@ -474,21 +285,6 @@ export default function Nova() {
       ret.push({ ...json, file });
     }
     return ret;
-    // const promises = files.map(
-    //   (file) =>
-    //     new Promise<{ file: File; success: boolean; data: { fileId: string } }>(async (resolve) => {
-    //       const formData = new FormData();
-    //       formData.append('uploadFile', file);
-    //       const { res } = await apiWrapper().request(PO_DRIVE_UPLOAD, {
-    //         body: formData,
-    //         method: 'POST'
-    //       });
-    //       const json = await res.json();
-    //       resolve({ ...json, file });
-    //     })
-    // );
-    // const res = await Promise.all(promises);
-    // return res;
   };
 
   const reqDownloadFiles = async (files: DriveFileInfo[]) => {
@@ -528,7 +324,9 @@ export default function Nova() {
       if (response.success) {
         dispatch(setPromotionUserInfo(response.data.accurePromotionUser));
       }
-    } catch (err) {}
+    } catch (err) {
+      /* empty */
+    }
   }, [dispatch]);
 
   const onSubmit = useCallback(
@@ -723,7 +521,9 @@ export default function Nova() {
               });
             }
           }
-        } catch (err) {}
+        } catch (err) {
+          /* empty */
+        }
 
         expireTimer.current = setTimeout(() => {
           setExpiredNOVA(true);
@@ -767,9 +567,7 @@ export default function Nova() {
 
   useEffect(() => {
     const handleOrientationChange = () => {
-      console.log('change');
       if (chatListRef.current) {
-        console.log('current');
         ShowScrollButton(chatListRef.current);
       }
     };
@@ -780,51 +578,6 @@ export default function Nova() {
       window.removeEventListener('orientationchange', handleOrientationChange);
     };
   });
-
-  const newChat = async () => {
-    const ret = await confirm({
-      title: t(`Nova.Confirm.NewChat.Title`)!,
-      msg: t(`Nova.Confirm.NewChat.Msg`),
-      onCancel: { text: t(`Cancel`)!, callback: () => {} },
-      onOk: {
-        text: t(`Nova.Confirm.NewChat.Ok`),
-        callback: () => {}
-      },
-      direction: 'row'
-    });
-
-    if (!!ret) {
-      chatNova.newChat();
-      setInputContents('');
-      setLocalFiles([]);
-      setDriveFiles([]);
-    }
-  };
-
-  // const onStop = () => {
-  //   requestor.current?.abort();
-  //   dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.StopMsg`) }));
-  // };
-
-  const onCopy = async (output: string) => {
-    try {
-      const imgReg = /!\[.*\]\((.*)\)/;
-      const imgURL = output.match(imgReg)?.[1];
-
-      let target = undefined;
-      if (imgURL) {
-        const data = await fetch(String(imgURL));
-        target = await data.blob();
-      } else {
-        target = output;
-      }
-      copyClipboard(target);
-
-      dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.CopyCompleted`) }));
-    } catch {
-      dispatch(activeToast({ type: 'error', msg: t(`ToastMsg.CopyFailed`) }));
-    }
-  };
 
   const handleInsertDocs = (history: NovaChatType) => {
     Bridge.callSyncBridgeApiWithCallback({
@@ -859,7 +612,9 @@ export default function Nova() {
                   const blob = await res.blob();
                   Bridge.callBridgeApi('insertImage', blob);
                   dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.CompleteInsert`) }));
-                } catch (err) {}
+                } catch (err) {
+                  /* empty */
+                }
                 break;
               }
               case 'document':
@@ -875,18 +630,8 @@ export default function Nova() {
     });
   };
 
-  const downloadImage = async (imageURL: string): Promise<void> => {
-    try {
-      const response = await fetch(imageURL);
-      const blob: Blob = await response.blob();
-      Bridge.callBridgeApi('downloadImage', blob);
-    } catch (error) {
-      console.error('Fetch failed:', error);
-    }
-  };
-
   const onSave = async (currentChat?: NovaChatType) => {
-    const imageURL = currentChat?.res!;
+    const imageURL = currentChat?.res;
     try {
       if (imageURL) {
         await downloadImage(imageURL);
@@ -916,100 +661,9 @@ export default function Nova() {
     ShowScrollButton(e.currentTarget);
   };
 
-  const loadLocalFile = async (files: File[]) => {
-    setDriveFiles([]);
-
-    const uploadLimit = getAvailableFileCnt();
-    if (uploadLimit !== -1) {
-      const invalidSize = files.filter((file) => !isValidFileSize(file.size));
-      if (invalidSize.length > 0) {
-        confirm({
-          title: '',
-          msg: t('Nova.Alert.OverFileUploadSize', {
-            max: MAX_FILE_UPLOAD_SIZE_MB,
-            min: MIN_FILE_UPLOAD_SIZE_KB
-          })!,
-          onOk: { text: t('Confirm'), callback: () => {} }
-        });
-        return;
-      }
-
-      const uploadCnt = novaHistory.reduce((acc, cur) => {
-        const len = cur.files?.length;
-        if (!!len) return acc + len;
-        else return acc;
-      }, 0);
-
-      if (files.length > uploadLimit) {
-        await confirm({
-          title: '',
-          msg: t('Nova.Confirm.OverMaxFileUploadCntOnce', { max: uploadLimit })!,
-          onOk: {
-            text: t('Confirm'),
-            callback: () => {}
-          }
-        });
-        return;
-      }
-
-      if (uploadCnt + files.length > 3) {
-        await confirm({
-          title: '',
-          msg: t('Nova.Confirm.OverMaxFileUploadCnt', { max: 3 })!,
-          onOk: { text: t('Nova.Confirm.NewChat.StartNewChat'), callback: chatNova.newChat },
-          onCancel: {
-            text: t('Cancel'),
-            callback: () => {}
-          }
-        });
-        return;
-      }
-    }
-    setLocalFiles(files);
-  };
-  const loadDriveFile = (files: DriveFileInfo[]) => {
-    setLocalFiles([]);
-    setDriveFiles(files);
-  };
-
   return (
     <Wrapper>
-      <NovaHeader title="" subTitle="">
-        <TitleWrapper>
-          <IconLogoNova width={107} height={32} />
-        </TitleWrapper>
-        <ButtonWrapper>
-          {lang === LANG_KO_KR && <Heart iconWidth={24} iconHeight={22} isHeader={true} />}
-          {novaHistory.length > 0 && (
-            <IconButton
-              iconComponent={IconMessagePlus}
-              onClick={newChat}
-              iconSize="lg"
-              width={32}
-              height={32}
-            />
-          )}
-          <Tooltip
-            title={t(`Nova.CreditInfo.Title`) as string}
-            placement="bottom-end"
-            type="normal"
-            options={TOOLTIP_CREDIT_OPTIONS}>
-            <Icon iconSrc={ico_credit_info} size={32} />
-          </Tooltip>
-          {getPlatform() !== ClientType.android && getPlatform() !== ClientType.ios && (
-            <>
-              <ScreenChangeButton></ScreenChangeButton>
-              <IconButton
-                iconComponent={IconClose}
-                onClick={() => Bridge.callBridgeApi('closePanel')}
-                iconSize="lg"
-                width={32}
-                height={32}
-              />
-            </>
-          )}
-        </ButtonWrapper>
-      </NovaHeader>
+      <NovaHeader setInputContents={setInputContents} />
       <Body
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
@@ -1018,7 +672,7 @@ export default function Nova() {
           <>
             {lang === LANG_KO_KR && <ChatBanner />}
             <GuideWrapper>
-              <Nova.SearchGuide setInputContents={setInputContents} />
+              <SearchGuide setInputContents={setInputContents} />
             </GuideWrapper>
           </>
         ) : (
@@ -1027,32 +681,12 @@ export default function Nova() {
               expiredNOVA={expiredNOVA}
               novaHistory={novaHistory}
               onSubmit={onSubmit}
-              onCopy={onCopy}
               handleInsertDocs={handleInsertDocs}
               onSave={onSave}
               scrollHandler={handleOnScroll}
               setImagePreview={setImagePreview}
               ref={chatListRef}
             />
-            {/* {creating !== 'none' && (
-              <StopButton onClick={onStop}>
-                <IconTextButton
-                  iconPos="left"
-                  iconSrc={stop_circle}
-                  iconSize={21}
-                  width={78}
-                  height={36}
-                  cssExt={css`
-                    border-radius: 999px;
-                    box-shadow: 0px 2px 8px 0px #0000001a;
-                    font-weight: 500;
-                    font-size: 14px;
-                  `}>
-                  STOP
-                </IconTextButton>
-              </StopButton>
-            )} */}
-
             {creating === 'none' && showScrollDownBtn && (
               <ScrollDownButton>
                 <IconButton
@@ -1076,13 +710,7 @@ export default function Nova() {
         expiredNOVA={expiredNOVA}
         onSubmit={onSubmit}
         contents={inputContents}
-        setContents={setInputContents}
-        localFiles={localFiles}
-        setLocalFiles={setLocalFiles}
-        driveFiles={driveFiles}
-        setDriveFiles={setDriveFiles}
-        loadLocalFile={loadLocalFile}
-        loadDriveFile={loadDriveFile}></InputBar>
+        setContents={setInputContents}></InputBar>
       {
         <FileUploading
           {...fileUploadState}
@@ -1099,231 +727,3 @@ export default function Nova() {
     </Wrapper>
   );
 }
-
-const ScreenChangeButton = () => {
-  const [status, setStatus] = useState('min');
-  const { from } = useLangParameterNavigate();
-
-  if (from !== 'home') return null;
-
-  return (
-    <IconButton
-      iconComponent={status === 'min' ? IconMax : IconMin}
-      onClick={() => {
-        Bridge.callBridgeApi('changeScreenSize', status === 'min' ? 'max' : 'min');
-        setStatus(status === 'min' ? 'max' : 'min');
-      }}
-      iconSize="lg"
-      width={32}
-      height={32}
-    />
-  );
-};
-
-interface SearchGuideProps {
-  setInputContents: React.Dispatch<React.SetStateAction<string>>;
-}
-
-const SearchGuide = (props: SearchGuideProps) => {
-  const { t } = useTranslation();
-
-  const PROMPT_EXAMPLE = [
-    {
-      src: ico_documents,
-      txt: t(`Nova.SearchGuide.Example1`)
-    },
-    {
-      src: ico_image,
-      txt: t(`Nova.SearchGuide.Example2`)
-    },
-    {
-      src: ico_documents,
-      txt: t(`Nova.SearchGuide.Example3`)
-    }
-  ];
-
-  return (
-    <>
-      <GuideTitle>
-        <div className="title">
-          <Icon iconSrc={ico_ai} size="lg" />
-          <p>{t(`Nova.SearchGuide.Title`)}</p>
-        </div>
-        <p className="subTitle">{t(`Nova.SearchGuide.SubTitle`)}</p>
-      </GuideTitle>
-
-      <Guidebody>
-        {PROMPT_EXAMPLE.map((item) => (
-          <GuideExample key={item.txt} onClick={() => props.setInputContents(item.txt)}>
-            <Icon iconSrc={item.src} size="md" />
-            <span>{item.txt}</span>
-          </GuideExample>
-        ))}
-      </Guidebody>
-    </>
-  );
-};
-
-const FileUploadWrapper = styled(Wrapper)`
-  position: absolute;
-  left: 0;
-  top: 0;
-  background-color: white;
-
-  .header {
-    height: 56px;
-    display: flex;
-    flex-direction: row;
-    padding: 12px 16px;
-    align-items: center;
-
-    .empty {
-      height: inherit;
-    }
-  }
-
-  .contents {
-    padding: 40px 24px;
-
-    .title {
-      height: 24px;
-      font-weight: 400;
-      font-size: 16px;
-      line-height: 24px;
-    }
-
-    .desc {
-      height: 108px;
-      margin-top: 12px;
-      font-weight: 700;
-      font-size: 24px;
-      line-height: 36px;
-    }
-  }
-  .agentImage {
-    display: flex;
-    justify-content: center;
-  }
-`;
-
-const ProgressBar = styled.div<{ progress: number }>`
-  width: ${({ progress }) => progress}%;
-  height: 4px;
-  padding: 0px;
-  background-color: #6f3ad0;
-`;
-
-interface FileUploadingProps extends FileUpladState {
-  onClickBack: () => void;
-  progress: number;
-}
-
-const FileUploading = (props: FileUploadingProps) => {
-  const { type, state, progress, onClickBack } = props;
-  const { t } = useTranslation();
-  if (state === 'ready') return null;
-
-  const AgentFraphic =
-    lang === 'ko' ? AgentFraphicKo : lang === 'ja' ? AgentFraphicJa : AgentFraphicEn;
-
-  return (
-    <FileUploadWrapper>
-      <div className="header">
-        {state === 'upload' ? (
-          <IconButton
-            iconComponent={IconArrowLeft}
-            width={32}
-            height={32}
-            onClick={onClickBack}></IconButton>
-        ) : (
-          <div className="empty"></div>
-        )}
-      </div>
-      <div>
-        <ProgressBar progress={progress}></ProgressBar>
-      </div>
-      <div className="contents">
-        <div className="title">{t(`Nova.UploadState.Uploading`, { type: t(type) })}</div>
-        <div className="desc">
-          {state === 'upload'
-            ? t(`Nova.UploadState.${state}_${type}`)
-            : t(`Nova.UploadState.${state}`)}
-        </div>
-      </div>
-      <div className="agentImage">
-        <AgentFraphic></AgentFraphic>
-      </div>
-    </FileUploadWrapper>
-  );
-};
-
-const ImagePreviewWrapper = styled.div`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  left: 0;
-  top: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background: #fff linear-gradient(0deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3));
-  padding: 10px;
-
-  .btns {
-    position: absolute;
-    top: 12px;
-    right: 16px;
-    z-index: 1;
-  }
-
-  img {
-    background-color: white;
-    position: fixed;
-    display: block;
-    max-width: 100%;
-    max-height: 100%;
-  }
-`;
-
-interface ImagePreviewProps extends NovaFileInfo {
-  onClose: () => void;
-}
-
-const ImagePreview = (props: ImagePreviewProps) => {
-  return (
-    <ImagePreviewWrapper>
-      <div className="btns">
-        <IconButton
-          iconSize="lg"
-          cssExt={css`
-            color: #fff;
-            padding: 0;
-            width: 100%;
-            display: flex;
-            justify-content: flex-end;
-          `}
-          iconComponent={xMarkIcon}
-          onClick={() => props.onClose()}
-        />
-      </div>
-      <img src={URL.createObjectURL(props.file)} alt="preview" />
-    </ImagePreviewWrapper>
-  );
-};
-
-Nova.SearchGuide = SearchGuide;
-Nova.FileUploading = FileUploading;
-
-export const filterCreditInfo = (
-  creditInfo: InitialState[],
-  nameMap: { [key: string]: string }
-) => {
-  return creditInfo.filter((item) => nameMap[item.serviceType]);
-};
-
-export const MAX_FILE_UPLOAD_SIZE_MB = 20;
-export const MIN_FILE_UPLOAD_SIZE_KB = 1;
-export const isValidFileSize = (size: number) => {
-  return size < MAX_FILE_UPLOAD_SIZE_MB * 1024 * 1024 && size > MIN_FILE_UPLOAD_SIZE_KB * 1024;
-};

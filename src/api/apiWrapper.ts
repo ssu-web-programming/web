@@ -11,6 +11,7 @@ import {
 import { lang } from '../locale';
 import Bridge from '../util/bridge';
 import { calLeftCredit } from '../util/common';
+
 import {
   AI_WRITE_RESPONSE_STREAM_API,
   ALLI_RESPONSE_STREAM_API,
@@ -30,85 +31,81 @@ export function apiWrapper() {
   const abortController = new AbortController();
 
   const request = async function (api: string, init: ApiInit, logger = usePostSplunkLog) {
-    try {
-      if (!navigator.onLine) {
-        throw new Error(ERR_NOT_ONLINE);
+    if (!navigator.onLine) {
+      throw new Error(ERR_NOT_ONLINE);
+    }
+    const resSession = await Bridge.checkSession(api);
+    if (!resSession || !resSession.success) {
+      throw new Error(ERR_INVALID_SESSION);
+    }
+
+    const AID = resSession.sessionInfo['AID'];
+    const BID = resSession.sessionInfo['BID'];
+    const SID = resSession.sessionInfo['SID'];
+
+    const session: any = {};
+    session['X-PO-AI-MayFlower-Auth-AID'] = AID;
+    session['X-PO-AI-MayFlower-Auth-BID'] = BID;
+    session['X-PO-AI-MayFlower-Auth-SID'] = SID;
+
+    const res = await fetch(api, {
+      ...init,
+      signal: abortController.signal,
+      headers: {
+        'User-Agent': navigator.userAgent,
+        'X-PO-AI-API-LANGUAGE': lang,
+        ...session,
+        ...init.headers
       }
-      const resSession = await Bridge.checkSession(api);
-      if (!resSession || !resSession.success) {
-        throw new Error(ERR_INVALID_SESSION);
-      }
+    });
 
-      const AID = resSession.sessionInfo['AID'];
-      const BID = resSession.sessionInfo['BID'];
-      const SID = resSession.sessionInfo['SID'];
-
-      const session: any = {};
-      session['X-PO-AI-MayFlower-Auth-AID'] = AID;
-      session['X-PO-AI-MayFlower-Auth-BID'] = BID;
-      session['X-PO-AI-MayFlower-Auth-SID'] = SID;
-
-      const res = await fetch(api, {
-        ...init,
-        signal: abortController.signal,
-        headers: {
-          'User-Agent': navigator.userAgent,
-          'X-PO-AI-API-LANGUAGE': lang,
-          ...session,
-          ...init.headers
-        }
-      });
-
-      if (res.status !== 200) {
-        if (
-          api === AI_WRITE_RESPONSE_STREAM_API ||
-          api === TEXT_TO_IMAGE_API ||
-          api === ALLI_RESPONSE_STREAM_API ||
-          api === NOVA_CHAT_API
-        ) {
-          if (res.ok === false && res.status === 429) {
-            if (api === NOVA_CHAT_API) {
-              const body = await res.json();
-              throw new NovaNoCreditError({
-                current: body?.error?.code === 'no_credit' ? 0 : 1,
-                necessary: 0
-              });
-            }
-            const { leftCredit, deductionCredit } = calLeftCredit(res.headers);
-            const current = parseInt(leftCredit);
-            const necessary = parseInt(deductionCredit);
-
-            throw new NoCreditError({
-              current,
-              necessary
+    if (res.status !== 200) {
+      if (
+        api === AI_WRITE_RESPONSE_STREAM_API ||
+        api === TEXT_TO_IMAGE_API ||
+        api === ALLI_RESPONSE_STREAM_API ||
+        api === NOVA_CHAT_API
+      ) {
+        if (!res.ok && res.status === 429) {
+          if (api === NOVA_CHAT_API) {
+            const body = await res.json();
+            throw new NovaNoCreditError({
+              current: body?.error?.code === 'no_credit' ? 0 : 1,
+              necessary: 0
             });
           }
+          const { leftCredit, deductionCredit } = calLeftCredit(res.headers);
+          const current = parseInt(leftCredit ?? '0');
+          const necessary = parseInt(deductionCredit ?? '0');
 
-          const body = await res.json();
-          if (body?.error?.code === 'invalid_prompt') throw new Error(INVALID_PROMPT);
-
-          throw res;
-        } else if (api === PO_DRIVE_DOWNLOAD) {
-          throw new NoFileInDrive();
-        } else if (api === PO_DRIVE_CONVERT_STATUS) {
-          throw new DelayDocConverting();
+          throw new NoCreditError({
+            current,
+            necessary
+          });
         }
-      }
 
-      if (api === PO_DRIVE_UPLOAD && res.status === 400) {
         const body = await res.json();
-        if (body?.error?.code === '100') throw new ExceedPoDriveLimitError();
-        throw res;
-      }
+        if (body?.error?.code === 'invalid_prompt') throw new Error(INVALID_PROMPT);
 
-      return {
-        res,
-        logger: logger({ bid: BID, sid: SID, ...resSession.userInfo }),
-        userInfo: resSession.userInfo
-      };
-    } catch (err) {
-      throw err;
+        throw res;
+      } else if (api === PO_DRIVE_DOWNLOAD) {
+        throw new NoFileInDrive();
+      } else if (api === PO_DRIVE_CONVERT_STATUS) {
+        throw new DelayDocConverting();
+      }
     }
+
+    if (api === PO_DRIVE_UPLOAD && res.status === 400) {
+      const body = await res.json();
+      if (body?.error?.code === '100') throw new ExceedPoDriveLimitError();
+      throw res;
+    }
+
+    return {
+      res,
+      logger: logger({ bid: BID, sid: SID, ...resSession.userInfo }),
+      userInfo: resSession.userInfo
+    };
   };
 
   const abort = () => abortController.abort();

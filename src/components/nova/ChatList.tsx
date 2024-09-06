@@ -1,25 +1,28 @@
-import { useEffect, forwardRef, useRef } from 'react';
-import styled, { css } from 'styled-components';
-import { useTranslation } from 'react-i18next';
-import { NovaChatType, NovaFileInfo } from 'store/slices/novaHistorySlice';
+import { forwardRef, useEffect, useRef } from 'react';
 import IconTextButton from 'components/buttons/IconTextButton';
-import PreMarkdown from 'components/PreMarkdown';
+import { useConfirm } from 'components/Confirm';
+import useLangParameterNavigate from 'components/hooks/useLangParameterNavigate';
 import Icon from 'components/Icon';
 import Overlay from 'components/Overlay';
-import { ReactComponent as CreditColorIcon } from 'img/ico_credit_color.svg';
+import PreMarkdown from 'components/PreMarkdown';
+import Loading from 'img/agent_loading.gif';
+import ico_ai from 'img/ico_ai.svg';
 import { ReactComponent as CopyChatIcon } from 'img/ico_copy_chat.svg';
+import { ReactComponent as CreditColorIcon } from 'img/ico_credit_color.svg';
 import { ReactComponent as InsertDocsIcon } from 'img/ico_insert_docs.svg';
 import ico_user from 'img/ico_user.svg';
-import ico_ai from 'img/ico_ai.svg';
-import { InputBarSubmitParam, flexCenter, getFileIcon } from './InputBar';
-import { useAppSelector } from 'store/store';
-import { selectTabSlice } from 'store/slices/tabSlice';
-import Loading from 'img/agent_loading.gif';
-import Bridge, { ClientType, getPlatform } from 'util/bridge';
 import { ClientStatusType } from 'pages/Nova/Nova';
-import { useConfirm } from 'components/Confirm';
+import { useTranslation } from 'react-i18next';
+import { NovaChatType, NovaFileInfo } from 'store/slices/novaHistorySlice';
+import { selectTabSlice } from 'store/slices/tabSlice';
+import { useAppSelector } from 'store/store';
+import styled, { css } from 'styled-components';
+import Bridge, { ClientType, getPlatform } from 'util/bridge';
 import { getFileExtension, sliceFileName } from 'util/common';
-import useLangParameterNavigate from 'components/hooks/useLangParameterNavigate';
+
+import useCopyText from '../hooks/copyText';
+
+import { flexCenter, getFileIcon, InputBarSubmitParam } from './InputBar';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -95,7 +98,7 @@ const ChatButtonWrapper = styled.div`
 const FileItem = styled.div`
   width: fit-content;
   height: 40px;
-  ${flexCenter}
+  ${flexCenter};
   gap: 8px;
   padding: 8px;
   border: 1px solid var(--gray-gray-40);
@@ -117,7 +120,6 @@ const ButtonText = styled.div`
 interface ChatListProps {
   novaHistory: NovaChatType[];
   onSubmit: (submitParam: InputBarSubmitParam) => void;
-  onCopy: (text: string) => void;
   handleInsertDocs: (history: NovaChatType) => void;
   onSave: (history: NovaChatType) => void;
   scrollHandler: (e: React.UIEvent<HTMLDivElement>) => void;
@@ -134,12 +136,12 @@ type ChatButtonType = {
 };
 
 const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
-  const { novaHistory, onSubmit, onCopy, handleInsertDocs, onSave, scrollHandler, expiredNOVA } =
-    props;
+  const { novaHistory, onSubmit, handleInsertDocs, onSave, scrollHandler, expiredNOVA } = props;
   const { t } = useTranslation();
   const confirm = useConfirm();
   const { creating } = useAppSelector(selectTabSlice);
   const { from } = useLangParameterNavigate();
+  const { onCopy } = useCopyText();
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
   const CHAT_BUTTON_LIST: ChatButtonType[] = [
@@ -306,3 +308,5 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
 });
 
 export default ChatList;
+
+ChatList.displayName = 'ChatList';

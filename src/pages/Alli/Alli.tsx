@@ -1,23 +1,22 @@
-import styled, { css } from 'styled-components';
-import Header from '../../components/layout/Header';
-import { useTranslation } from 'react-i18next';
 import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
-import uiBuild from './builder';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Divider } from '@mui/material';
-
-import { ReactComponent as IconDocument } from '../../img/askDoc/ico_document_64.svg';
-
-import Button from '../../components/buttons/Button';
-import { useAppDispatch, useAppSelector } from '../../store/store';
-import { initFlagSelector } from '../../store/slices/initFlagSlice';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import IconTextButton from 'components/buttons/IconTextButton';
-import Loading from '../../components/Loading';
+import ReturnButton from 'components/buttons/ReturnButton';
+import ico_credit_purple from 'img/ico_credit_purple.svg';
+import { useTranslation } from 'react-i18next';
+import styled, { css } from 'styled-components';
+
+import { apiWrapper, streaming } from '../../api/apiWrapper';
 import { ALLI_RESPONSE_STREAM_API } from '../../api/constant';
-import { calLeftCredit, insertDoc } from '../../util/common';
-import { useShowCreditToast } from '../../components/hooks/useShowCreditToast';
+import Button from '../../components/buttons/Button';
+import { useConfirm } from '../../components/Confirm';
 import useErrorHandle from '../../components/hooks/useErrorHandle';
-import { activeToast } from '../../store/slices/toastSlice';
+import { useShowCreditToast } from '../../components/hooks/useShowCreditToast';
+import Header from '../../components/layout/Header';
+import Loading from '../../components/Loading';
+import PreMarkdown from '../../components/PreMarkdown';
+import { ReactComponent as IconDocument } from '../../img/askDoc/ico_document_64.svg';
 import { lang } from '../../locale';
 import {
   resetCreateResult,
@@ -25,15 +24,16 @@ import {
   setCreateResult,
   setSelectedApp
 } from '../../store/slices/alliApps';
-import AlliApps from './AlliApps';
-import ga, { init } from '../../util/gaConnect';
-import PreMarkdown from '../../components/PreMarkdown';
-import { apiWrapper, streaming } from '../../api/apiWrapper';
-import Bridge from '../../util/bridge';
-import { useConfirm } from '../../components/Confirm';
+import { initFlagSelector } from '../../store/slices/initFlagSlice';
 import { setCreating } from '../../store/slices/tabSlice';
-import ReturnButton from 'components/buttons/ReturnButton';
-import ico_credit_purple from 'img/ico_credit_purple.svg';
+import { activeToast } from '../../store/slices/toastSlice';
+import { useAppDispatch, useAppSelector } from '../../store/store';
+import Bridge from '../../util/bridge';
+import { calLeftCredit, insertDoc } from '../../util/common';
+import ga, { init } from '../../util/gaConnect';
+
+import AlliApps from './AlliApps';
+import uiBuild from './builder';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -274,8 +274,7 @@ export default function Alli() {
     try {
       dispatch(setCreating('AI Apps'));
       setStreamingStatus('request');
-      requestor.current = apiWrapper();
-      const { res } = await requestor.current?.request(ALLI_RESPONSE_STREAM_API, {
+      const { res } = await apiWrapper().request(ALLI_RESPONSE_STREAM_API, {
         headers: {
           'Content-Type': 'application/json'
         },
@@ -284,7 +283,7 @@ export default function Alli() {
       });
 
       const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
-      showCreditToast(deductionCredit, leftCredit);
+      showCreditToast(deductionCredit ?? '', leftCredit ?? '');
 
       setStreamingStatus('streaming');
       await streaming(res, (contents) => {
@@ -293,6 +292,7 @@ export default function Alli() {
       });
     } catch (err) {
       if (requestor.current?.isAborted() === true) {
+        /* empty */
       } else {
         errorHandle(err);
       }
@@ -350,8 +350,14 @@ export default function Alli() {
               </div>
             </>
           ),
-          onOk: { text: t('Confirm'), callback: () => {} },
-          onCancel: { text: t('Cancel'), callback: () => {} },
+          onOk: {
+            text: t('Confirm'),
+            callback: () => {}
+          },
+          onCancel: {
+            text: t('Cancel'),
+            callback: () => {}
+          },
           direction: 'column'
         });
         if (!ret) return;
@@ -377,10 +383,14 @@ export default function Alli() {
               setResult('');
               setRefSlideNum(slide_number);
               setInsertSlideNum(slide_number);
-            } catch (err) {}
+            } catch (err) {
+              /* empty */
+            }
           }
         });
-      } catch (err) {}
+      } catch (err) {
+        /* empty */
+      }
     },
     [inputs, confirm, dispatch, parseShape, t]
   );
@@ -428,8 +438,8 @@ export default function Alli() {
             cur.value === 'language'
               ? cur.options.find((opt) => opt.value.toLowerCase().startsWith(lang))?.value
               : isSlideNoteApp(selectedApp.id)
-              ? cur.options[0]?.value
-              : undefined
+                ? cur.options[0]?.value
+                : undefined
         };
       }, {});
       setInputs(initVal);
@@ -496,7 +506,9 @@ export default function Alli() {
                                 dispatch(
                                   activeToast({ type: success ? 'info' : 'error', msg: message })
                                 );
-                              } catch (err) {}
+                              } catch (err) {
+                                /* empty */
+                              }
                             }
                           });
                         } else {

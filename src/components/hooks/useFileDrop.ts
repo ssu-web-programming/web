@@ -1,8 +1,7 @@
-import React, { useCallback, useState } from 'react';
-import { getAccept } from '../nova/InputBar';
-import { ClientType, getPlatform } from '../../util/bridge';
-import { SUPPORT_DOCUMENT_TYPE, SUPPORT_IMAGE_TYPE } from '../../pages/Nova/Nova';
+import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { SUPPORT_DOCUMENT_TYPE, SUPPORT_IMAGE_TYPE } from '../../constants/fileTypes';
 import { useConfirm } from '../Confirm';
 
 export default function useFileDrop() {

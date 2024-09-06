@@ -1,21 +1,25 @@
-import styled, { FlattenSimpleInterpolation, css } from 'styled-components';
+import { useMemo } from 'react';
+import { NewMark, VersionInner } from 'components/aiWrite/AIWriteInput';
+import IconTextButton, { Chip } from 'components/buttons/IconTextButton';
+import icon_credit_gray from 'img/ico_credit_gray.svg';
+import icon_credit_outline from 'img/ico_credit_outline.svg';
 import { ReactComponent as IconStyleNone } from 'img/text2Img/non_select.svg';
-import iconStylePhoto from '../../img/text2Img/photo@2x.png';
-import iconStyleConcept from '../../img/text2Img/concept@2x.png';
+import { useTranslation } from 'react-i18next';
+import { creditInfoSelector } from 'store/slices/creditInfo';
+import styled, { css, FlattenSimpleInterpolation } from 'styled-components';
+import { getIconColor } from 'util/getColor';
+
+import iconCreatingWhite from '../../img/ico_creating_text_white.svg';
 import iconStyle3d from '../../img/text2Img/3d@2x.png';
 import iconStyleAni from '../../img/text2Img/ani@2x.png';
-import iconStyleRet from '../../img/text2Img/ret@2x.png';
-import iconStyleWater from '../../img/text2Img/water@2x.png';
-import iconStyleOil from '../../img/text2Img/oil@2x.png';
-import { ReactComponent as RatioSqure } from '../../img/text2Img/square.svg';
+import iconStyleConcept from '../../img/text2Img/concept@2x.png';
 import { ReactComponent as RatioHorizontal } from '../../img/text2Img/horizontal.svg';
+import iconStyleOil from '../../img/text2Img/oil@2x.png';
+import iconStylePhoto from '../../img/text2Img/photo@2x.png';
+import iconStyleRet from '../../img/text2Img/ret@2x.png';
+import { ReactComponent as RatioSqure } from '../../img/text2Img/square.svg';
 import { ReactComponent as RatioVertical } from '../../img/text2Img/vertical.svg';
-import iconCreatingWhite from '../../img/ico_creating_text_white.svg';
-import { alignItemCenter, flex, flexColumn, justiCenter } from '../../style/cssCommon';
-import { RowContainer, SubTitleArea } from '../../views/ImageCreate';
-import SubTitle from '../SubTitle';
-import ShowResultButton from '../buttons/ShowResultButton';
-import { useAppDispatch, useAppSelector } from '../../store/store';
+import iconStyleWater from '../../img/text2Img/water@2x.png';
 import {
   T2IOptionType,
   T2IType,
@@ -23,18 +27,15 @@ import {
   updateT2ICurListId,
   VersionType
 } from '../../store/slices/txt2imgHistory';
+import { useAppDispatch, useAppSelector } from '../../store/store';
+import { alignItemCenter, flex, flexColumn, justiCenter } from '../../style/cssCommon';
+import { RowContainer, SubTitleArea } from '../../views/ImageCreate';
+import IconBoxTextButton from '../buttons/IconBoxTextButton';
+import ShowResultButton from '../buttons/ShowResultButton';
 import ExTextbox from '../ExTextbox';
-import { useTranslation } from 'react-i18next';
 import Icon from '../Icon';
 import Grid from '../layout/Grid';
-import IconBoxTextButton from '../buttons/IconBoxTextButton';
-import { getIconColor } from 'util/getColor';
-import { VersionInner, NewMark } from 'components/aiWrite/AIWriteInput';
-import IconTextButton, { Chip } from 'components/buttons/IconTextButton';
-import icon_credit_outline from 'img/ico_credit_outline.svg';
-import icon_credit_gray from 'img/ico_credit_gray.svg';
-import { creditInfoSelector } from 'store/slices/creditInfo';
-import { useMemo } from 'react';
+import SubTitle from '../SubTitle';
 
 const MakingInputWrapper = styled.div`
   ${flex}
@@ -120,11 +121,10 @@ const ItemIconBox = styled.div<{
     padding: 2px;
   }
 
-  ${({ width, height }) =>
-    css`
-      width: ${width}px;
-      height: ${height}px;
-    `}
+  ${({ width, height }) => css`
+    width: ${width}px;
+    height: ${height}px;
+  `}
 
   ${({ isSelected }) =>
     isSelected &&

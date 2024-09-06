@@ -1,15 +1,19 @@
-import { useAppDispatch } from '../../store/store';
+import { useMemo, useState } from 'react';
+import IconTextButton from 'components/buttons/IconTextButton';
+import { useTranslation } from 'react-i18next';
+import styled, { css } from 'styled-components';
+
+import { ReactComponent as IconArrowDown } from '../../img/ico_arrow_down_small.svg';
+import { ReactComponent as IconArrowUp } from '../../img/ico_arrow_up_small.svg';
+import icon_credit_purple from '../../img/ico_credit_purple.svg';
+import { activeToast } from '../../store/slices/toastSlice';
 import {
   T2IOptionType,
   T2IType,
   updateT2ICurItemIndex,
   updateT2ICurListId
 } from '../../store/slices/txt2imgHistory';
-import { RowContainer, SubTitleArea } from '../../views/ImageCreate';
-import SubTitle from '../SubTitle';
-import ReturnButton from '../buttons/ReturnButton';
-import { useTranslation } from 'react-i18next';
-import styled, { css } from 'styled-components';
+import { useAppDispatch } from '../../store/store';
 import {
   alignItemCenter,
   flex,
@@ -17,23 +21,19 @@ import {
   flexGrow,
   flexShrink,
   justiCenter,
-  justiSpaceAround,
   justiSpaceBetween
 } from '../../style/cssCommon';
-import Button from '../buttons/Button';
-import { activeToast } from '../../store/slices/toastSlice';
-import LinkText from '../LinkText';
-import IconTextButton from 'components/buttons/IconTextButton';
-import Grid from '../layout/Grid';
 import Bridge from '../../util/bridge';
-import { useMemo, useState } from 'react';
-import IconButton from '../buttons/IconButton';
+import { RowContainer, SubTitleArea } from '../../views/ImageCreate';
 import ArrowSwitcher from '../ArrowSwitcher';
+import Button from '../buttons/Button';
+import IconButton from '../buttons/IconButton';
+import ReturnButton from '../buttons/ReturnButton';
+import Grid from '../layout/Grid';
+import LinkText from '../LinkText';
+import SubTitle from '../SubTitle';
 
-import { ReactComponent as IconArrowUp } from '../../img/ico_arrow_up_small.svg';
-import { ReactComponent as IconArrowDown } from '../../img/ico_arrow_down_small.svg';
 import { versionItemList } from './ImageCreateInput';
-import icon_credit_purple from '../../img/ico_credit_purple.svg';
 
 const ImagePreview = styled.div`
   width: 100%;
@@ -43,7 +43,7 @@ const ImagePreview = styled.div`
 `;
 
 const InputDescKor = styled.p`
-  ${flex}
+  ${flex};
   width: 100%;
   max-height: 40px;
 
@@ -63,18 +63,6 @@ const InputDescKor = styled.p`
 const InputDescEng = styled(InputDescKor)`
   height: 20px;
   -webkit-line-clamp: 1;
-`;
-
-const ImageList = styled.div`
-  ${flex}
-  ${justiSpaceAround}
-  ${alignItemCenter}
-  
-  width: 100%;
-  height: 84px;
-  padding: 12px 0px;
-  margin: 12px 0px 12px 0px;
-  gap: 0px 8px;
 `;
 
 const InputDescBox = styled.div`

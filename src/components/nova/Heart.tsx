@@ -1,14 +1,16 @@
+import { useCallback, useMemo } from 'react';
+import { SplunkData } from 'api/usePostSplunkLog';
+import { flex } from 'style/cssCommon';
 import styled, { css, FlattenSimpleInterpolation } from 'styled-components';
+
+import { apiWrapper } from '../../api/apiWrapper';
+import { PROMOTION_USER_INFO } from '../../api/constant';
 import Heart_10credit from '../../img/nova/promotion/heart_10credit.svg';
 import Heart_20credit from '../../img/nova/promotion/heart_20credit.svg';
 import Heart_30credit from '../../img/nova/promotion/heart_30credit.svg';
-import Heart_finish from '../../img/nova/promotion/Heart_finish.svg';
 import Heart_Empty from '../../img/nova/promotion/heart_empty.svg';
+import Heart_finish from '../../img/nova/promotion/Heart_finish.svg';
 import LoadingSpinner from '../../img/nova/promotion/loading_spiner.gif';
-import useOpenModal from '../hooks/nova/useOpenModal';
-
-import { flex } from 'style/cssCommon';
-import { useCallback, useMemo } from 'react';
 import {
   IEventType,
   IPromotionUserInfo,
@@ -16,13 +18,11 @@ import {
   userInfoSelector
 } from '../../store/slices/promotionUserInfo';
 import { useAppDispatch, useAppSelector } from '../../store/store';
-import { apiWrapper } from '../../api/apiWrapper';
-import { PROMOTION_USER_INFO } from '../../api/constant';
-import { SplunkData } from 'api/usePostSplunkLog';
+import useOpenModal from '../hooks/nova/useOpenModal';
 
 const Img = styled.img<{ size: FlattenSimpleInterpolation }>`
-  ${flex}
-  ${(props) => props.size}
+  ${flex};
+  ${(props) => props.size};
   cursor: pointer;
 `;
 

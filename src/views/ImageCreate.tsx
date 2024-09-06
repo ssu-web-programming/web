@@ -1,36 +1,37 @@
-import { useCallback, useState, useEffect } from 'react';
-import styled, { FlattenSimpleInterpolation } from 'styled-components';
-import { calcToken, parseGptVer } from '../api/usePostSplunkLog';
-import { flexColumn, justiSpaceBetween, flexWrap, alignItemCenter, flex } from '../style/cssCommon';
-import Loading from '../components/Loading';
-import { v4 as uuidv4 } from 'uuid';
-import { useAppDispatch, useAppSelector } from '../store/store';
-import {
-  T2IOptionType,
-  VersionType,
-  addT2I,
-  selectT2IHistory,
-  updateT2ICurItemIndex,
-  updateT2ICurListId
-} from '../store/slices/txt2imgHistory';
-import { TEXT_TO_IMAGE_API } from '../api/constant';
-import { activeToast } from '../store/slices/toastSlice';
-import { apiWrapper } from '../api/apiWrapper';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { calLeftCredit } from '../util/common';
+import styled, { FlattenSimpleInterpolation } from 'styled-components';
+import { v4 as uuidv4 } from 'uuid';
+
+import { apiWrapper } from '../api/apiWrapper';
+import { TEXT_TO_IMAGE_API } from '../api/constant';
+import { calcToken, parseGptVer } from '../api/usePostSplunkLog';
 import useErrorHandle from '../components/hooks/useErrorHandle';
-import { selectTabSlice, setCreating } from '../store/slices/tabSlice';
+import Loading from '../components/Loading';
 import ImageCreateInput, {
   ratioItemList,
   styleItemList,
   versionItemList
 } from '../components/txt2img/ImageCreateInput';
 import ImageCreateResult from '../components/txt2img/ImageCreateResult';
+import { selectTabSlice, setCreating } from '../store/slices/tabSlice';
+import { activeToast } from '../store/slices/toastSlice';
+import {
+  addT2I,
+  selectT2IHistory,
+  T2IOptionType,
+  updateT2ICurItemIndex,
+  updateT2ICurListId,
+  VersionType
+} from '../store/slices/txt2imgHistory';
+import { useAppDispatch, useAppSelector } from '../store/store';
+import { alignItemCenter, flex, flexColumn, flexWrap, justiSpaceBetween } from '../style/cssCommon';
+import { calLeftCredit } from '../util/common';
 
 const Body = styled.div`
-  ${flex}
-  ${flexColumn}
-  
+  ${flex};
+  ${flexColumn};
+
   width: 100%;
   height: 100%;
   padding: 5px 16px 16px 16px;
@@ -39,9 +40,9 @@ const Body = styled.div`
 `;
 
 export const SubTitleArea = styled.div`
-  ${flex}
-  ${justiSpaceBetween}
-  ${alignItemCenter}
+  ${flex};
+  ${justiSpaceBetween};
+  ${alignItemCenter};
 
   width: 100%;
 `;
@@ -51,8 +52,8 @@ export const RowContainer = styled.div<{
 }>`
   ${flex}
   ${flexWrap}
-  
-  width: '100%';
+
+  width: 100%;
   gap: 8px;
 
   ${({ cssExt }) => cssExt && cssExt}

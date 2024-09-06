@@ -1,18 +1,20 @@
-import { Dispatch, MutableRefObject, SetStateAction, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../store/store';
-import { filesSelector } from '../../store/slices/askDocAnalyzeFiesSlice';
-import { ASKDCO_ASK_QUESTION } from '../../api/constant';
-import { apiWrapper } from '../../api/apiWrapper';
-import useErrorHandle from './useErrorHandle';
-import { setCreating } from '../../store/slices/tabSlice';
-import { appendChat, removeChat, updateChat } from '../../store/slices/askDoc';
-import { useTranslation } from 'react-i18next';
-import { activeToast } from '../../store/slices/toastSlice';
-import NoCredit from '../toast/contents/NoCredit';
-import { useShowCreditToast } from './useShowCreditToast';
-import { getPlatform } from '../../util/bridge';
+import { MutableRefObject, useState } from 'react';
 import TagManager from 'react-gtm-module';
+import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router';
+
+import { apiWrapper } from '../../api/apiWrapper';
+import { ASKDCO_ASK_QUESTION } from '../../api/constant';
+import { appendChat, removeChat, updateChat } from '../../store/slices/askDoc';
+import { filesSelector } from '../../store/slices/askDocAnalyzeFiesSlice';
+import { setCreating } from '../../store/slices/tabSlice';
+import { activeToast } from '../../store/slices/toastSlice';
+import { useAppDispatch, useAppSelector } from '../../store/store';
+import { getPlatform } from '../../util/bridge';
+import NoCredit from '../toast/contents/NoCredit';
+
+import useErrorHandle from './useErrorHandle';
+import { useShowCreditToast } from './useShowCreditToast';
 
 export const useChatAskdoc = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -142,11 +144,12 @@ export const useChatAskdoc = () => {
       if (res.body) {
         const reader = res.body.getReader();
         let isExistPages = false;
-        let arrNumbers: number[] = [];
+        const arrNumbers: number[] = [];
 
         let answer_tesla = '';
 
-        while (true) {
+        const isEnabled = true;
+        while (isEnabled) {
           const { done, value } = await reader.read();
           if (done) break;
 

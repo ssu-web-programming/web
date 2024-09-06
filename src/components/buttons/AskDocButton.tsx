@@ -1,7 +1,9 @@
-import Button from './Button';
 import styled, { css } from 'styled-components';
+
 import { alignItemCenter, flex, justiCenter } from '../../style/cssCommon';
 import { IconSize, SIZES } from '../Icon';
+
+import Button from './Button';
 
 interface AskDocButtonProps {
   onClick: React.MouseEventHandler<HTMLButtonElement>;
@@ -19,10 +21,10 @@ const AskDocButton = (props: AskDocButtonProps) => {
       height={40}
       onClick={onClick}
       cssExt={css`
-        ${flex}
-        ${alignItemCenter}
-        ${justiCenter}
-    
+        ${flex};
+        ${alignItemCenter};
+        ${justiCenter};
+
         width: 100%;
         position: relative;
         background: ${isActive

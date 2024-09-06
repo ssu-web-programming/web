@@ -1,58 +1,59 @@
-import styled, { FlattenSimpleInterpolation, css } from 'styled-components';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import IconButton from 'components/buttons/IconButton';
+import { useConfirm } from 'components/Confirm';
+import TextLength from 'components/TextLength';
+import { ReactComponent as SendActiveIcon } from 'img/ico_send_active.svg';
+import { ReactComponent as SendDisabledIcon } from 'img/ico_send_disabled.svg';
+import { useTranslation } from 'react-i18next';
+import styled, { css, FlattenSimpleInterpolation } from 'styled-components';
+import { v4 as uuidv4 } from 'uuid';
+
+import { apiWrapper, streaming } from '../api/apiWrapper';
+import { AI_WRITE_RESPONSE_STREAM_API } from '../api/constant';
+import { calcToken, getElValue, parseGptVer } from '../api/usePostSplunkLog';
+import ChangeExampleButton from '../components/buttons/ChangeExampleButton';
+import DropDownButton from '../components/buttons/DropDownButton';
+import StopButton from '../components/buttons/StopButton';
+import ChatRecommend from '../components/chat/RecommendBox/ChatRecommend';
+import { versionList, VersionListType } from '../components/chat/RecommendBox/FormRec';
+import { REC_ID_LIST } from '../components/chat/RecommendBox/FunctionRec';
+import useErrorHandle from '../components/hooks/useErrorHandle';
+import { useShowCreditToast } from '../components/hooks/useShowCreditToast';
+import Icon from '../components/Icon';
 import SpeechBubble from '../components/SpeechBubble';
 import TextArea from '../components/TextArea';
-import { useAppDispatch, useAppSelector } from '../store/store';
+import icon_ai from '../img/ico_ai.svg';
 import {
+  appendChat,
   Chat,
   INPUT_MAX_LENGTH,
-  appendChat,
   removeChat,
   resetDefaultInput,
   selectChatHistory,
   updateChat
 } from '../store/slices/chatHistorySlice';
-import { v4 as uuidv4 } from 'uuid';
-import ChangeExampleButton from '../components/buttons/ChangeExampleButton';
-import ChatRecommend from '../components/chat/RecommendBox/ChatRecommend';
 import {
   activeRecFunc,
   inactiveRecFunc,
   initRecFunc,
   selectRecFuncSlice
 } from '../store/slices/recFuncSlice';
+import { selectTabSlice, setCreating, setshowChatEOS } from '../store/slices/tabSlice';
 import { activeToast } from '../store/slices/toastSlice';
-import icon_ai from '../img/ico_ai.svg';
-import Icon from '../components/Icon';
-import StopButton from '../components/buttons/StopButton';
+import { useAppDispatch, useAppSelector } from '../store/store';
 import {
-  TableCss,
-  justiCenter,
+  alignItemCenter,
+  flex,
   flexColumn,
   flexGrow,
   flexShrink,
-  alignItemCenter,
+  flexWrap,
+  justiCenter,
   justiSpaceBetween,
-  flex,
-  flexWrap
+  TableCss
 } from '../style/cssCommon';
-import { calcToken, getElValue, parseGptVer } from '../api/usePostSplunkLog';
-import { selectTabSlice, setCreating, setshowChatEOS } from '../store/slices/tabSlice';
-import { calLeftCredit } from '../util/common';
-import { useTranslation } from 'react-i18next';
-import useErrorHandle from '../components/hooks/useErrorHandle';
-import { REC_ID_LIST } from '../components/chat/RecommendBox/FunctionRec';
 import { ClientType, getPlatform } from '../util/bridge';
-import { VersionListType, versionList } from '../components/chat/RecommendBox/FormRec';
-import DropDownButton from '../components/buttons/DropDownButton';
-import { useShowCreditToast } from '../components/hooks/useShowCreditToast';
-import { AI_WRITE_RESPONSE_STREAM_API } from '../api/constant';
-import { apiWrapper, streaming } from '../api/apiWrapper';
-import TextLength from 'components/TextLength';
-import { ReactComponent as SendActiveIcon } from 'img/ico_send_active.svg';
-import { ReactComponent as SendDisabledIcon } from 'img/ico_send_disabled.svg';
-import IconButton from 'components/buttons/IconButton';
-import { useConfirm } from 'components/Confirm';
+import { calLeftCredit } from '../util/common';
 
 const TEXT_MAX_HEIGHT = 268;
 
@@ -60,7 +61,7 @@ const Wrapper = styled.div`
   ${flex}
   ${flexColumn}
   ${justiSpaceBetween}
-  
+
   width: 100%;
   height: 100%;
   background-color: var(--ai-purple-99-bg-light);
@@ -86,7 +87,7 @@ const FloatingBox = styled.div`
   ${flex}
   ${flexGrow}
   ${flexShrink}
-  
+
   position: absolute;
   top: 0px;
   width: 100%;
@@ -99,7 +100,7 @@ const InputBox = styled.div<{ activeInputWrap: boolean }>`
   ${alignItemCenter}
   ${flexColumn}
   ${flexShrink}
-  
+
   height: fit-content;
   width: 100%;
   background-color: white;
@@ -312,8 +313,6 @@ const AIChatTab = (props: WriteTabProps) => {
     return () => {
       setIsDefaultInput(false);
     };
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -396,11 +395,11 @@ const AIChatTab = (props: WriteTabProps) => {
     let splunk = undefined;
     const assistantId = uuidv4();
     const userId = uuidv4();
-    let input = chat
+    const input = chat
       ? chat.input
       : chatInput.length > 0
-      ? chatInput
-      : chatHistory[chatHistory.length - 1].result;
+        ? chatInput
+        : chatHistory[chatHistory.length - 1].result;
 
     const gptVer = chat ? chat.version : version.version;
 
@@ -411,7 +410,7 @@ const AIChatTab = (props: WriteTabProps) => {
     handleResizeHeight();
     if (textRef.current) textRef.current.style.height = 'auto';
 
-    let preProc = getPreProcessing(chat);
+    const preProc = getPreProcessing(chat);
 
     if (!chat && chatInput.length > 0) {
       dispatch(
@@ -437,8 +436,7 @@ const AIChatTab = (props: WriteTabProps) => {
     );
 
     try {
-      requestor.current = apiWrapper();
-      const { res, logger } = await requestor.current?.request(AI_WRITE_RESPONSE_STREAM_API, {
+      const { res, logger } = await apiWrapper().request(AI_WRITE_RESPONSE_STREAM_API, {
         headers: {
           'Content-Type': 'application/json'
         },
@@ -460,7 +458,7 @@ const AIChatTab = (props: WriteTabProps) => {
       splunk = logger;
 
       const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
-      showCreditToast(deductionCredit, leftCredit);
+      showCreditToast(deductionCredit ?? '', leftCredit ?? '');
 
       await streaming(res, (contents) => {
         dispatch(
@@ -507,7 +505,9 @@ const AIChatTab = (props: WriteTabProps) => {
             output_token,
             gpt_ver
           });
-        } catch (err) {}
+        } catch (err) {
+          /* empty */
+        }
       }
     }
   };
@@ -530,10 +530,9 @@ const AIChatTab = (props: WriteTabProps) => {
     <Wrapper>
       <ChatListWrapper
         style={{ position: 'relative' }}
-        isLoading={loadingId ? true : false}
-        onClick={(e) => {
+        isLoading={!!loadingId}
+        onClick={() => {
           toggleActiveInput(false);
-          // dispatch(closeRecFunc());
         }}
         ref={(el) => {
           if (el) {

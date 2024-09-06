@@ -1,14 +1,15 @@
-import styled from 'styled-components';
-import { apiWrapper } from '../../api/apiWrapper';
-import { lang } from '../../locale';
 import { Divider } from '@mui/material';
-import { AppInfo, isSlideNoteApp } from './Alli';
+import styled from 'styled-components';
+
 import { useSuspenseQuery } from '@tanstack/react-query';
 
+import { apiWrapper } from '../../api/apiWrapper';
 import AlliIconCandidate from '../../img/alli/appIcon/alli-icon-candidate.svg';
 import AlliIconCopyrighting from '../../img/alli/appIcon/alli-icon-copyrighting.svg';
 import AlliIconCrew from '../../img/alli/appIcon/alli-icon-crew.svg';
+import AlliIconEmail from '../../img/alli/appIcon/alli-icon-email.svg';
 import AlliIconEvent from '../../img/alli/appIcon/alli-icon-event.svg';
+import AlliIconGoodWord from '../../img/alli/appIcon/alli-icon-good-word.svg';
 import AlliIconLaw from '../../img/alli/appIcon/alli-icon-law.svg';
 import AlliIconManual from '../../img/alli/appIcon/alli-icon-manual.svg';
 import AlliIconNoti from '../../img/alli/appIcon/alli-icon-noti.svg';
@@ -16,14 +17,15 @@ import AlliIconPrivacy from '../../img/alli/appIcon/alli-icon-privacy.svg';
 import AlliIconPromotion from '../../img/alli/appIcon/alli-icon-promotion.svg';
 import AlliIconPush from '../../img/alli/appIcon/alli-icon-push.svg';
 import AlliIconSentence from '../../img/alli/appIcon/alli-icon-sentence.svg';
+import AlliIconSlideNote from '../../img/alli/appIcon/alli-icon-slide-note.svg';
 import AlliIconTranslator from '../../img/alli/appIcon/alli-icon-translator.svg';
 import AlliIconWelcome from '../../img/alli/appIcon/alli-icon-welcome.svg';
-import AlliIconEmail from '../../img/alli/appIcon/alli-icon-email.svg';
-import AlliIconGoodWord from '../../img/alli/appIcon/alli-icon-good-word.svg';
-import AlliIconSlideNote from '../../img/alli/appIcon/alli-icon-slide-note.svg';
-import Bridge from '../../util/bridge';
-import { useAppDispatch, useAppSelector } from '../../store/store';
+import { lang } from '../../locale';
 import { appStateSelector, setDocType } from '../../store/slices/appState';
+import { useAppDispatch, useAppSelector } from '../../store/store';
+import Bridge from '../../util/bridge';
+
+import { AppInfo, isSlideNoteApp } from './Alli';
 
 const Wrapper = styled.ul`
   width: 100%;
@@ -203,12 +205,14 @@ export default function AppList(props: AppListProps) {
           callback: (docType) => {
             try {
               dispatch(setDocType(docType));
-            } catch (err) {}
+            } catch (err) {
+              /*empty*/
+            }
           }
         });
         return list;
       } catch (err) {
-        throw err;
+        throw new Error('error');
       }
     },
     staleTime: Infinity

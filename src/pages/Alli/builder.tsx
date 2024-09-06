@@ -1,8 +1,9 @@
-import { MenuItem, Select, TextField } from '@mui/material';
-import styled from 'styled-components';
-import { ResponseAppInputInfo, isSlideNoteApp } from './Alli';
 import React from 'react';
+import { MenuItem, Select, TextField } from '@mui/material';
 import TextLength from 'components/TextLength';
+import styled from 'styled-components';
+
+import { isSlideNoteApp, ResponseAppInputInfo } from './Alli';
 
 const TEXT_MAX_LENGTH = 50;
 const PARAGRAPH_MAX_LENGTH = 2000;

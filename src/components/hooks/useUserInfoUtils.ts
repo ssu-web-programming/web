@@ -26,7 +26,7 @@ export default function useUserInfoUtils() {
     const uploadLimit = getAvailableFileCnt();
     const uploadCnt = novaHistory.reduce((acc, cur) => {
       const len = cur.files?.length;
-      if (!!len) return acc + len;
+      if (len) return acc + len;
       else return acc;
     }, 0);
     return uploadLimit === -1 ? uploadLimit : uploadLimit - uploadCnt;

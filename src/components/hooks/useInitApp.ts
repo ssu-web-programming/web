@@ -1,19 +1,19 @@
-import { ERR_INVALID_SESSION } from 'error/error';
-import { lang } from 'locale';
+import { useCallback } from 'react';
 import {
   AI_CREDIT_INFO,
   NOVA_GET_EXPIRED_TIME,
   NOVA_GET_USER_INFO_AGREEMENT,
   PROMOTION_USER_INFO
 } from 'api/constant';
-import { useCallback } from 'react';
+import { ERR_INVALID_SESSION } from 'error/error';
+import { lang } from 'locale';
 import { setNovaExpireTime } from 'store/slices/appState';
 import { setCreditInfo } from 'store/slices/creditInfo';
 import { setNovaAgreement, setUserInfo } from 'store/slices/userInfo';
-import { setPromotionUserInfo } from '../../store/slices/promotionUserInfo';
 import { useAppDispatch } from 'store/store';
-import { IEventType } from '../../store/slices/promotionUserInfo';
 import Bridge from 'util/bridge';
+
+import { IEventType, setPromotionUserInfo } from '../../store/slices/promotionUserInfo';
 
 export default function useInitApp() {
   const dispatch = useAppDispatch();
@@ -34,7 +34,9 @@ export default function useInitApp() {
         if (success) {
           dispatch(setNovaExpireTime(expiredTime * 1000));
         }
-      } catch (err) {}
+      } catch (err) {
+        /* empty */
+      }
     },
     [dispatch]
   );
@@ -55,7 +57,9 @@ export default function useInitApp() {
         if (success) {
           dispatch(setNovaAgreement(agreement));
         }
-      } catch (err) {}
+      } catch (err) {
+        /* empty */
+      }
     },
     [dispatch]
   );
@@ -74,7 +78,9 @@ export default function useInitApp() {
           data: { creditInfos }
         } = await res.json();
         if (success) dispatch(setCreditInfo(creditInfos));
-      } catch (err) {}
+      } catch (err) {
+        /* empty */
+      }
     },
     [dispatch]
   );
@@ -101,7 +107,9 @@ export default function useInitApp() {
         if (success) {
           dispatch(setPromotionUserInfo(accurePromotionUser));
         }
-      } catch (err) {}
+      } catch (err) {
+        /* empty */
+      }
     },
     [dispatch]
   );

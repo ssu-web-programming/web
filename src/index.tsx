@@ -1,16 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import { BrowserRouter } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
+import { ThemeProvider } from 'styled-components';
+
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
 import store from './store/store';
+import { selectTheme } from './theme/theme';
+import App from './App';
+
+import './index.css';
+
 // eslint-disable-next-line
 import './locale';
-import { ThemeProvider } from 'styled-components';
-import { selectTheme } from './theme/theme';
-import { HelmetProvider } from 'react-helmet-async';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 declare global {
   interface Window {

@@ -1,10 +1,12 @@
 import { forwardRef } from 'react';
-import styled from 'styled-components';
-import { useConfirm } from './Confirm';
 import { useTranslation } from 'react-i18next';
-import { SUPPORT_IMAGE_TYPE } from 'pages/Nova/Nova';
-import { getAccept } from './nova/InputBar';
+import styled from 'styled-components';
 import { ClientType, getPlatform } from 'util/bridge';
+
+import { SUPPORT_IMAGE_TYPE } from '../constants/fileTypes';
+
+import { getAccept } from './nova/FileUploader';
+import { useConfirm } from './Confirm';
 
 const FileButtonBase = styled.button`
   width: fit-content;
@@ -96,7 +98,10 @@ const FileButton = forwardRef<HTMLInputElement, FileButtonProps>((props, ref) =>
     const isConfirmed = await confirm({
       title: t(`Nova.Confirm.PersonalInfo.Title`)!,
       msg: <Msg />,
-      onCancel: { text: t(`Nova.Confirm.PersonalInfo.Cancel`), callback: () => {} },
+      onCancel: {
+        text: t(`Nova.Confirm.PersonalInfo.Cancel`),
+        callback: () => {}
+      },
       onOk: {
         text: t(`Nova.Confirm.PersonalInfo.Ok`),
         callback: () => {}
@@ -123,6 +128,9 @@ const FileButton = forwardRef<HTMLInputElement, FileButtonProps>((props, ref) =>
             const files = Array.from(e.currentTarget.files);
             const invalid = files.filter((file) => {
               const fileAccept = getAccept(file);
+              console.log(files);
+              console.log(accept);
+              console.log(fileAccept);
               if (getPlatform() === ClientType.unknown) {
                 return !accept?.split(',').includes(fileAccept);
               } else {
@@ -154,3 +162,5 @@ const FileButton = forwardRef<HTMLInputElement, FileButtonProps>((props, ref) =>
 });
 
 export default FileButton;
+
+FileButton.displayName = 'FileButton';

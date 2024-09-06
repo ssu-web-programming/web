@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+
 import { alignItemCenter, flex, justiCenter } from '../../../style/cssCommon';
 type IErrorModalProps = {
   title: string;

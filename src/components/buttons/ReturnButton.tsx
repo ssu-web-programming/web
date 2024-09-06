@@ -1,5 +1,7 @@
-import icon_recreating from '../../img/ico_back.svg';
 import { css } from 'styled-components';
+
+import icon_recreating from '../../img/ico_back.svg';
+
 import IconTextButton from './IconTextButton';
 
 interface ReturnButtonProps {

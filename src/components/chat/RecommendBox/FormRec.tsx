@@ -1,12 +1,12 @@
-import Grid from '../../layout/Grid';
-import IconBoxTextButton from '../../buttons/IconBoxTextButton';
 import { ReactComponent as IconSentence } from 'img/aiChat/ico_sentence.svg';
 import { ReactComponent as IconTable } from 'img/aiChat/ico_table.svg';
 import { ReactComponent as IconList } from 'img/aiChat/ico_table_of_contents.svg';
 import { useTranslation } from 'react-i18next';
-import { recSubType, recType } from '../../../store/slices/recFuncSlice';
-import { LANG_KO_KR, lang } from '../../../locale';
 import { getIconColor } from 'util/getColor';
+
+import { recSubType, recType } from '../../../store/slices/recFuncSlice';
+import IconBoxTextButton from '../../buttons/IconBoxTextButton';
+import Grid from '../../layout/Grid';
 
 export type EngineVersion = 'gpt3.5' | 'gpt4' | 'gpt4o' | 'clovax' | 'claude';
 
@@ -110,7 +110,7 @@ const FormRec = ({
           width="full"
           height={48}
           iconSize="md"
-          iconSrc={<rec.icon color={getIconColor(rec.id, selectedRecFunction?.id!)} />}
+          iconSrc={<rec.icon color={getIconColor(rec.id, selectedRecFunction?.id ?? '')} />}
           selected={selectedRecFunction ? selectedRecFunction.id === rec.id : false}
           onClick={() => onClick({ id: rec.id })}>
           {t(`FormList.${rec.id}`)}

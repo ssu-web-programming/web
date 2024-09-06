@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../store/store';
-import { filesSelector, setFiles } from '../../store/slices/askDocAnalyzeFiesSlice';
+
+import { apiWrapper } from '../../api/apiWrapper';
 import {
-  ASKDOC_EXTRACT_TEXT,
   ASKDOC_CREATE_VECTOR_DATA,
+  ASKDOC_EXTRACT_TEXT,
   ASKDOC_MAKE_SUMMARY
 } from '../../api/constant';
+import { filesSelector, setFiles } from '../../store/slices/askDocAnalyzeFiesSlice';
 import { setCreating } from '../../store/slices/tabSlice';
+import { useAppDispatch, useAppSelector } from '../../store/store';
+
 import useErrorHandle from './useErrorHandle';
-import { apiWrapper } from '../../api/apiWrapper';
 
 const useAskDocRequestHandler = (api: string) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -76,7 +78,6 @@ const useAskDocRequestHandler = (api: string) => {
     };
 
     fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return {

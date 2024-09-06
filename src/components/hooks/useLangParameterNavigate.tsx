@@ -1,5 +1,5 @@
-import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 const useLangParameterNavigate = () => {
   const navigator = useNavigate();

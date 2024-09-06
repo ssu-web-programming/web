@@ -1,30 +1,30 @@
-import Icon from '../Icon';
-import icon_ai from '../../img/ico_ai.svg';
-import styled from 'styled-components';
-import { alignItemCenter, flex, flexGrow, flexShrink } from '../../style/cssCommon';
-
-import { useTranslation } from 'react-i18next';
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import styled from 'styled-components';
+
+import icon_ai from '../../img/ico_ai.svg';
+import { alignItemCenter, flex, flexGrow, flexShrink } from '../../style/cssCommon';
+import Icon from '../Icon';
 
 const FloatingBox = styled.div`
-  ${flex}
-  ${flexGrow}
-  ${flexShrink}
-  
+  ${flex};
+  ${flexGrow};
+  ${flexShrink};
+
   position: absolute;
-  top: 0px;
+  top: 0;
   width: 100%;
   transform: translate(0, -100%);
   background-color: transparent;
 `;
 
 const Info = styled.div`
-  ${flex}
-  ${alignItemCenter}
+  ${flex};
+  ${alignItemCenter};
 
   background-color: var(--ai-purple-99-bg-light);
   color: var(--ai-purple-50-main);
-  padding: 0px 16px;
+  padding: 0 16px;
   line-height: 100%;
   font-size: 12px;
   height: 48px;

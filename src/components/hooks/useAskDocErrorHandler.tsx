@@ -1,8 +1,9 @@
-import useModal from './askDoc/useModal';
-import Bridge from '../../util/bridge';
-import { useAppDispatch } from '../../store/store';
 import { setFiles } from '../../store/slices/askDocAnalyzeFiesSlice';
 import { setCreating } from '../../store/slices/tabSlice';
+import { useAppDispatch } from '../../store/store';
+import Bridge from '../../util/bridge';
+
+import useModal from './askDoc/useModal';
 type Props = {
   code: 'success' | 'fail';
   data: any;

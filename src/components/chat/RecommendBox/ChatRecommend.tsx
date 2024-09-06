@@ -1,41 +1,41 @@
-import { useState, useEffect } from 'react';
-import styled, { FlattenSimpleInterpolation } from 'styled-components';
-import { useAppDispatch, useAppSelector } from '../../../store/store';
-import {
-  openRecFunc,
-  closeRecFunc,
-  initRecFunc,
-  selectRecFunc,
-  selectRecFuncSlice,
-  selectSubRecFunc,
-  recType,
-  recSubType
-} from '../../../store/slices/recFuncSlice';
-import icon_ai from '../../../img/ico_ai.svg';
-import Icon from '../../Icon';
-import {
-  justiCenter,
-  flexColumn,
-  justiSpaceBetween,
-  flexWrap,
-  alignItemCenter,
-  flex
-} from '../../../style/cssCommon';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import FunctionRec from './FunctionRec';
-import FormRec, { DEFAULT_WRITE_OPTION_FORM_VALUE } from './FormRec';
-import IconButton from '../../buttons/IconButton';
+import styled, { FlattenSimpleInterpolation } from 'styled-components';
 
+import icon_ai from '../../../img/ico_ai.svg';
 import { ReactComponent as IconArrowDown } from '../../../img/ico_arrow_down_small.svg';
 import { ReactComponent as IconArrowUp } from '../../../img/ico_arrow_up_small.svg';
+import {
+  closeRecFunc,
+  initRecFunc,
+  openRecFunc,
+  recSubType,
+  recType,
+  selectRecFunc,
+  selectRecFuncSlice,
+  selectSubRecFunc
+} from '../../../store/slices/recFuncSlice';
+import { useAppDispatch, useAppSelector } from '../../../store/store';
+import {
+  alignItemCenter,
+  flex,
+  flexColumn,
+  flexWrap,
+  justiCenter,
+  justiSpaceBetween
+} from '../../../style/cssCommon';
+import IconButton from '../../buttons/IconButton';
+import Icon from '../../Icon';
+
+import FormRec, { DEFAULT_WRITE_OPTION_FORM_VALUE } from './FormRec';
+import FunctionRec from './FunctionRec';
 
 const Wrapper = styled.div`
   ${flex}
   ${flexColumn}
   ${justiCenter}
-  
+
   width: 100%;
-  border-radius: 0;
   background-color: rgba(245, 241, 253, 0.7);
   box-shadow: 0 -2px 8px 0 rgba(111, 58, 208, 0.3);
   border-radius: 10px 10px 0px 0px;
@@ -43,9 +43,6 @@ const Wrapper = styled.div`
   border-top: solid 1px #fff;
 
   -webkit-backdrop-filter: blur(10px);
-  -moz-backdrop-filter: blur(10px);
-  -o-backdrop-filter: blur(10px);
-  -ms-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
 
   div {
@@ -127,7 +124,6 @@ const ChatRecommend = ({ isFormRec }: { isFormRec: boolean }) => {
 
   useEffect(() => {
     if (isFormRec) setSelectedFunc({ id: DEFAULT_WRITE_OPTION_FORM_VALUE.id, subList: null });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFormRec]);
 
   return (

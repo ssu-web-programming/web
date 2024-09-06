@@ -1,4 +1,10 @@
+import { useConfirm } from 'components/Confirm';
+import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
+import { userInfoSelector } from 'store/slices/userInfo';
+import { ClientType, getPlatform } from 'util/bridge';
+import { openNewWindow, sliceFileName } from 'util/common';
+
 import {
   DelayDocConverting,
   DocConvertingError,
@@ -15,11 +21,6 @@ import { setOnlineStatus } from '../../store/slices/network';
 import { activeToast } from '../../store/slices/toastSlice';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import NoCredit from '../toast/contents/NoCredit';
-import { useTranslation } from 'react-i18next';
-import { userInfoSelector } from 'store/slices/userInfo';
-import { ClientType, getPlatform } from 'util/bridge';
-import { useConfirm } from 'components/Confirm';
-import { openNewWindow, sliceFileName } from 'util/common';
 
 const useErrorHandle = () => {
   const dispatch = useAppDispatch();
@@ -35,7 +36,7 @@ const useErrorHandle = () => {
       dispatch(
         activeToast({
           type: 'error',
-          msg: !!error.credit.current ? (
+          msg: error.credit.current ? (
             <NoCredit />
           ) : (
             <NoCredit>

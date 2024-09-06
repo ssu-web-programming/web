@@ -1,4 +1,4 @@
-import styled, { FlattenSimpleInterpolation, css } from 'styled-components';
+import styled, { css, FlattenSimpleInterpolation } from 'styled-components';
 
 export const userSelectCss = css`
   -webkit-user-drag: none;
@@ -21,10 +21,12 @@ export const CustomScrollbar = css`
     width: 6px;
     background: #ffffff;
   }
+
   &::-webkit-scrollbar-thumb {
     border-radius: 4px;
     background-color: #c9cdd2;
   }
+
   &::-webkit-scrollbar-track {
     border-radius: 4px;
     background: #ffffff;

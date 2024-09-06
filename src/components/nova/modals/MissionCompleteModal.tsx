@@ -1,19 +1,20 @@
+import { useState } from 'react';
+import { SplunkData } from 'api/usePostSplunkLog';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import IPadIcon from '../../../img/nova/promotion/prize_ipad_with_back.svg';
-import BuzIcon from '../../../img/nova/promotion/prize_buz_with_back.svg';
+
+import { apiWrapper } from '../../../api/apiWrapper';
+import { PROMOTION_OFFER, PROMOTION_USER_INFO } from '../../../api/constant';
 import AmericanoIcon from '../../../img/nova/promotion/prize_americano_with_back.svg';
+import BuzIcon from '../../../img/nova/promotion/prize_buz_with_back.svg';
+import IPadIcon from '../../../img/nova/promotion/prize_ipad_with_back.svg';
 import Roulette from '../../../img/nova/promotion/slot.gif';
-import { useState } from 'react';
 import {
   IAccurePromotionAction,
   IEventType,
   setPromotionUserInfo
 } from '../../../store/slices/promotionUserInfo';
-import { apiWrapper } from '../../../api/apiWrapper';
-import { PROMOTION_OFFER, PROMOTION_USER_INFO } from '../../../api/constant';
 import useModal from '../../hooks/nova/useModal';
-import { SplunkData } from 'api/usePostSplunkLog';
 
 const Wrap = styled.div`
   width: 100%;
@@ -154,7 +155,9 @@ const MissionCompleteModal = ({ buttonOnClick }: Props) => {
       if (response.success) {
         setPromotionUserInfo(response.data.accurePromotionUser);
       }
-    } catch (err) {}
+    } catch (err) {
+      /* empty */
+    }
   };
 
   const OfferEvent = async () => {

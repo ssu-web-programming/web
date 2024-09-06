@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from '../store';
+
 import { AppInfo } from '../../pages/Alli/Alli';
+import { RootState } from '../store';
 
 interface AlliCreateResult {
   inputs: any;

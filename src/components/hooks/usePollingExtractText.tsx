@@ -1,12 +1,14 @@
-import { useEffect, useState, useRef } from 'react';
-import { useAppDispatch, useAppSelector } from '../../store/store';
+import { useEffect, useRef, useState } from 'react';
+
+import { apiWrapper } from '../../api/apiWrapper';
+import { ASKDOC_EXTRACT_TEXT, ASKDOC_GET_EXTRACT_TEXT_STATUS } from '../../api/constant';
 import { filesSelector, setFiles } from '../../store/slices/askDocAnalyzeFiesSlice';
-import { ASKDOC_GET_EXTRACT_TEXT_STATUS, ASKDOC_EXTRACT_TEXT } from '../../api/constant';
 import { setCreating } from '../../store/slices/tabSlice';
-import useErrorHandle from './useErrorHandle';
+import { useAppDispatch, useAppSelector } from '../../store/store';
+
 import useAskDocErrorHandler from './useAskDocErrorHandler';
 import useAskDocRequestHandler from './useAskDocRequestHandler';
-import { apiWrapper } from '../../api/apiWrapper';
+import useErrorHandle from './useErrorHandle';
 
 const usePollingExtractText = () => {
   const timerIdRef = useRef<any>(null);
@@ -86,7 +88,6 @@ const usePollingExtractText = () => {
     return () => {
       stopPolling();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isPollingEnabled, isLoading]);
 
   return {

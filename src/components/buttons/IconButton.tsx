@@ -1,13 +1,15 @@
 import styled, { css } from 'styled-components';
-import Button, { ButtonProps } from './Button';
+
 import { IconSize, SIZES } from '../Icon';
+
+import Button, { ButtonProps } from './Button';
 
 export const IconSizeStyle = css<{ size: IconSize }>`
   ${(props) => SIZES[props.size]}
 `;
 
 const WrappedSvg = styled.div`
-  ${IconSizeStyle}
+  ${IconSizeStyle};
 
   pointer-events: none;
 `;
@@ -26,8 +28,8 @@ const IconButton = (props: React.PropsWithChildren<IconButtonProps>) => {
       width={width ? width : 'fit'}
       height={height ? height : 'fit'}
       cssExt={css`
-        padding: 0px;
-        margin: 0px;
+        padding: 0;
+        margin: 0;
         ${cssExt}
       `}
       {...props}>

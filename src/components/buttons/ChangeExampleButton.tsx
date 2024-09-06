@@ -1,6 +1,8 @@
-import { css } from 'styled-components';
-import icon_ai_change from '../../img/ico_ai_change.svg';
 import { useTranslation } from 'react-i18next';
+import { css } from 'styled-components';
+
+import icon_ai_change from '../../img/ico_ai_change.svg';
+
 import IconTextButton from './IconTextButton';
 
 interface ExButtonProps {

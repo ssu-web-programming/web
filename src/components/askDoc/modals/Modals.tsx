@@ -1,8 +1,9 @@
 import { lazy } from 'react';
-import { useAppSelector } from '../../../store/store';
 import { createPortal } from 'react-dom';
-import { modalSelector } from '../../../store/slices/askDocModalsSlice';
 import styled from 'styled-components';
+
+import { modalSelector } from '../../../store/slices/askDocModalsSlice';
+import { useAppSelector } from '../../../store/store';
 
 const MODAL_POMPONENTS = {
   upgrade: lazy(() => import('./UpgradePlanModal')),
@@ -20,7 +21,7 @@ const Modals = () => {
   const renderModal = modalList.map(({ type, props }) => {
     const ModalComponent = MODAL_POMPONENTS[type] as any;
     return (
-      <Overlay>
+      <Overlay key={type}>
         <ModalWrapp>
           <ModalComponent key={type} {...props} />
         </ModalWrapp>

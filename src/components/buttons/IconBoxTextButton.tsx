@@ -1,11 +1,13 @@
 import { PropsWithChildren } from 'react';
-import IconTextButton, { IconTextButtonProps } from './IconTextButton';
 import styled, { css } from 'styled-components';
+
 import { flex, flexColumn } from '../../style/cssCommon';
 
+import IconTextButton, { IconTextButtonProps } from './IconTextButton';
+
 const Wrapper = styled.div`
-  ${flex}
-  ${flexColumn}
+  ${flex};
+  ${flexColumn};
 
   gap: 8px;
 `;
@@ -26,9 +28,7 @@ const Title = styled.div<{ selected: boolean }>`
         `};
 `;
 
-interface IconBoxTextButtonProps extends IconTextButtonProps {}
-
-export default function IconBoxTextButton(props: PropsWithChildren<IconBoxTextButtonProps>) {
+export default function IconBoxTextButton(props: PropsWithChildren<IconTextButtonProps>) {
   const { children, selected = false, ...rest } = props;
   return (
     <Wrapper>

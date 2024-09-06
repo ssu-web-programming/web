@@ -1,9 +1,6 @@
+import { useCallback, useEffect, useState } from 'react';
 import { apiWrapper } from 'api/apiWrapper';
 import { PO_DRIVE_LIST } from 'api/constant';
-import { isValidFileSize, SUPPORT_DOCUMENT_TYPE, SUPPORT_IMAGE_TYPE } from 'pages/Nova/Nova';
-import { useCallback, useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { getFileExtension } from 'util/common';
 import { ReactComponent as IconRight } from 'img/angle_right.svg';
 import file_loading from 'img/file_loading.svg';
 import ico_file_folder from 'img/ico_file_folder.svg';
@@ -11,13 +8,23 @@ import ico_file_inbox from 'img/ico_file_inbox.svg';
 import ico_file_poDrive from 'img/ico_file_po_drive.svg';
 import { ReactComponent as IconUploadDocs } from 'img/ico_upload_docs.svg';
 import { ReactComponent as IconUploadImg } from 'img/ico_upload_img.svg';
+import { useTranslation } from 'react-i18next';
+import { activeToast } from 'store/slices/toastSlice';
+import { useAppDispatch } from 'store/store';
+import { CustomScrollbar } from 'style/cssCommon';
+import styled from 'styled-components';
+import { getFileExtension } from 'util/common';
+
+import {
+  isValidFileSize,
+  SUPPORT_DOCUMENT_TYPE,
+  SUPPORT_IMAGE_TYPE,
+  SupportFileType
+} from '../constants/fileTypes';
+
+import { getFileIcon } from './nova/InputBar';
 import CheckBox from './CheckBox';
 import Icon from './Icon';
-import { CustomScrollbar } from 'style/cssCommon';
-import { getFileIcon } from './nova/InputBar';
-import { useAppDispatch } from 'store/store';
-import { activeToast } from 'store/slices/toastSlice';
-import { useTranslation } from 'react-i18next';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -100,6 +107,7 @@ const FileItem = styled.div`
     width: 100%;
     overflow: hidden;
     margin-left: 10px;
+
     .name {
       font-weight: 400;
       font-size: 16px;
@@ -203,7 +211,7 @@ export default function PoDrive(props: PoDriveProps) {
           const ext = getFileExtension(item.fileName).toLowerCase();
           const supports =
             props.target === 'nova-image' ? SUPPORT_IMAGE_TYPE : SUPPORT_DOCUMENT_TYPE;
-          const type = supports.find((type) => type.extensions === ext)?.mimeType;
+          const type = supports.find((type: SupportFileType) => type.extensions === ext)?.mimeType;
 
           return {
             ...item,
@@ -257,7 +265,6 @@ export default function PoDrive(props: PoDriveProps) {
         msg: t(props.target === 'nova-file' ? 'Nova.Toast.SelectDoc' : 'Nova.Toast.SelectImg')
       })
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
