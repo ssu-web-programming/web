@@ -30,6 +30,8 @@ import { sliceFileName } from 'util/common';
 import {
   getDriveFiles,
   getLocalFiles,
+  removeDriveFile,
+  removeLocalFile,
   setDriveFiles,
   setLocalFiles
 } from '../../store/slices/uploadFiles';
@@ -202,14 +204,13 @@ export default function InputBar(props: InputBarProps) {
     }
   };
 
-  const handleRemoveLocalFile = (file: FileListItemInfo) => {
-    setLocalFiles(localFiles.filter((prev) => prev !== file));
+  const handleRemoveLocalFile = (file: File) => {
+    dispatch(removeLocalFile(file));
   };
 
-  const handleRemoveDriveFile = (file: FileListItemInfo) => {
-    setDriveFiles(driveFiles.filter((prev) => prev !== file));
+  const handleRemoveDriveFile = (file: DriveFileInfo) => {
+    dispatch(removeDriveFile(file));
   };
-
   const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
     e.currentTarget.scrollLeft += e.deltaY;
   };
@@ -258,7 +259,7 @@ export default function InputBar(props: InputBarProps) {
     <InputBarBase disabled={disabled || expiredNOVA}>
       {localFiles.length > 0 && (
         <FileListViewer onWheel={handleWheel}>
-          {localFiles.map((file: FileListItemInfo) => (
+          {localFiles.map((file: File) => (
             <FileItem key={file.name}>
               <Icon size={28} iconSrc={getFileIcon(file.name)} />
               <span>{sliceFileName(file.name)}</span>
@@ -273,7 +274,7 @@ export default function InputBar(props: InputBarProps) {
       )}
       {driveFiles.length > 0 && (
         <FileListViewer onWheel={handleWheel}>
-          {driveFiles.map((file: FileListItemInfo) => (
+          {driveFiles.map((file: DriveFileInfo) => (
             <FileItem key={file.name}>
               <Icon size={28} iconSrc={getFileIcon(file.name)} />
               <span>{sliceFileName(file.name)}</span>

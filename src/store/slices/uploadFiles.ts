@@ -22,11 +22,18 @@ const uploadFilesSlice = createSlice({
     },
     setDriveFiles: (state, action: PayloadAction<DriveFileInfo[]>) => {
       state.driveFiles = action.payload;
+    },
+    removeLocalFile: (state, action: PayloadAction<File>) => {
+      state.localFiles = state.localFiles.filter((file) => file !== action.payload);
+    },
+    removeDriveFile: (state, action: PayloadAction<DriveFileInfo>) => {
+      state.driveFiles = state.driveFiles.filter((file) => file.name !== action.payload.name);
     }
   }
 });
 
-export const { setLocalFiles, setDriveFiles } = uploadFilesSlice.actions;
+export const { setLocalFiles, setDriveFiles, removeLocalFile, removeDriveFile } =
+  uploadFilesSlice.actions;
 
 export const getLocalFiles = (state: RootState) => state.uploadFiles.localFiles;
 export const getDriveFiles = (state: RootState) => state.uploadFiles.driveFiles;

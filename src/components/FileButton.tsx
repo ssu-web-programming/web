@@ -128,9 +128,6 @@ const FileButton = forwardRef<HTMLInputElement, FileButtonProps>((props, ref) =>
             const files = Array.from(e.currentTarget.files);
             const invalid = files.filter((file) => {
               const fileAccept = getAccept(file);
-              console.log(files);
-              console.log(accept);
-              console.log(fileAccept);
               if (getPlatform() === ClientType.unknown) {
                 return !accept?.split(',').includes(fileAccept);
               } else {

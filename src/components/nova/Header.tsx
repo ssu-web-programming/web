@@ -7,7 +7,6 @@ import styled, { css } from 'styled-components';
 
 import ico_credit from '../../img/ico_credit_gray.svg';
 import ico_credit_info from '../../img/ico_credit_line.svg';
-import { lang, LANG_KO_KR } from '../../locale';
 import { creditInfoSelector, InitialState } from '../../store/slices/creditInfo';
 import { novaHistorySelector } from '../../store/slices/novaHistorySlice';
 import { setDriveFiles, setLocalFiles } from '../../store/slices/uploadFiles';
@@ -20,7 +19,6 @@ import Icon from '../Icon';
 import Header from '../layout/Header';
 import Tooltip from '../Tooltip';
 
-import { Heart } from './Heart';
 import { ScreenChangeButton } from './ScreenChangeButton';
 
 const flexCenter = css`
@@ -53,7 +51,7 @@ const ButtonWrapper = styled.div`
 `;
 
 export interface NovaHeaderProps {
-  setInputContents: React.Dispatch<React.SetStateAction<string>>;
+  setInputContents?: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export default function NovaHeader(props: NovaHeaderProps) {
@@ -94,7 +92,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
 
     if (ret) {
       await chatNova.newChat();
-      props.setInputContents('');
+      if (props.setInputContents) props.setInputContents('');
       dispatch(setLocalFiles([]));
       dispatch(setDriveFiles([]));
     }
@@ -106,7 +104,6 @@ export default function NovaHeader(props: NovaHeaderProps) {
         <IconLogoNova width={107} height={32} />
       </TitleWrapper>
       <ButtonWrapper>
-        {lang === LANG_KO_KR && <Heart iconWidth={24} iconHeight={22} isHeader={true} />}
         {novaHistory.length > 0 && (
           <IconButton
             iconComponent={IconMessagePlus}

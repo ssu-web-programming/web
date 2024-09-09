@@ -21,6 +21,7 @@ import Bridge, { ClientType, getPlatform } from 'util/bridge';
 import { getFileExtension, sliceFileName } from 'util/common';
 
 import useCopyText from '../hooks/copyText';
+import { useInsertDocsHandler } from '../hooks/nova/useInsertDocsHandler';
 
 import { flexCenter, getFileIcon, InputBarSubmitParam } from './InputBar';
 
@@ -120,7 +121,6 @@ const ButtonText = styled.div`
 interface ChatListProps {
   novaHistory: NovaChatType[];
   onSubmit: (submitParam: InputBarSubmitParam) => void;
-  handleInsertDocs: (history: NovaChatType) => void;
   onSave: (history: NovaChatType) => void;
   scrollHandler: (e: React.UIEvent<HTMLDivElement>) => void;
   expiredNOVA: boolean;
@@ -136,9 +136,10 @@ type ChatButtonType = {
 };
 
 const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
-  const { novaHistory, onSubmit, handleInsertDocs, onSave, scrollHandler, expiredNOVA } = props;
+  const { novaHistory, onSubmit, onSave, scrollHandler, expiredNOVA } = props;
   const { t } = useTranslation();
   const confirm = useConfirm();
+  const { insertDocsHandler } = useInsertDocsHandler();
   const { creating } = useAppSelector(selectTabSlice);
   const { from } = useLangParameterNavigate();
   const { onCopy } = useCopyText();
@@ -164,7 +165,7 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
       status: ['done'],
       iconSrc: <InsertDocsIcon />,
       text: t(`Nova.Chat.InsertDoc.Title`),
-      clickHandler: (history: NovaChatType) => handleInsertDocs(history)
+      clickHandler: (history: NovaChatType) => insertDocsHandler(history)
     }
   ];
   const chatButtonList =

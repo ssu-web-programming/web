@@ -158,12 +158,7 @@ export const isHigherVersion = (targetVersion: string, currentVersion: string | 
 };
 
 export const getFileExtension = (filename: string) => {
-  return `
-.$
-{
-  filename.split('.').pop()
-}
-`;
+  return `.${filename.split('.').pop()}`;
 };
 
 export const getFileName = (filename: string) => {
@@ -179,13 +174,7 @@ export const sliceFileName = (name: string, index = 20) => {
   const fileName = name;
   if (fileName.length > index) {
     const fileNameWithoutExt = fileName.slice(0, index);
-    return `
-$
-{
-  fileNameWithoutExt
-}
-...
-`;
+    return `${fileNameWithoutExt}...`;
   }
   return fileName;
 };
