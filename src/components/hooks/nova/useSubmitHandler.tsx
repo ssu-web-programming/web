@@ -36,150 +36,9 @@ import { DriveFileInfo } from '../../PoDrive';
 import useErrorHandle from '../useErrorHandle';
 import { useShowCreditToast } from '../useShowCreditToast';
 
-type SubmitParams = {
-  input: string;
-  files: any[];
-  type: string;
-};
-
 interface PollingType extends NovaFileInfo {
   taskId: string;
 }
-
-const reqUploadFiles = async (files: File[]) => {
-  const ret = [];
-  const requestor = apiWrapper();
-  for (const file of files) {
-    const formData = new FormData();
-    formData.append('uploadFile', file);
-    const { res } = await requestor.request(PO_DRIVE_UPLOAD, {
-      body: formData,
-      method: 'POST'
-    });
-    const json = await res.json();
-    ret.push({ ...json, file });
-  }
-  return ret;
-};
-
-const reqDownloadFiles = async (files: DriveFileInfo[]) => {
-  const ret = [];
-  const requestor = apiWrapper();
-  for (const file of files) {
-    const { res } = await requestor.request(PO_DRIVE_DOWNLOAD, {
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ fileId: file.fileId }),
-      method: 'POST'
-    });
-    const blob = await res.blob();
-    ret.push({
-      success: true,
-      file: new File([blob], file.name, { type: file.type }),
-      data: { fileId: file.fileId, fileRevision: file.fileRevision }
-    });
-  }
-  return ret;
-};
-
-const getConvertStatus = async (fileInfo: { taskId: string }) => {
-  try {
-    const requestor = apiWrapper();
-    const { res } = await requestor.request(PO_DRIVE_CONVERT_STATUS, {
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ taskId: fileInfo.taskId }),
-      method: 'POST'
-    });
-    const json = await res.json();
-    const {
-      success,
-      data: { status }
-    } = json;
-    if (!success) throw new Error();
-    return status;
-  } catch (err) {
-    if (err instanceof DelayDocConverting) throw err;
-    else throw new DocConvertingError();
-  }
-};
-
-const downloadConvertFile = async (fileInfo: PollingType) => {
-  const pollingConvertStatus = () =>
-    new Promise<void>((resolve, reject) => {
-      setTimeout(async () => {
-        try {
-          const status = await getConvertStatus(fileInfo);
-          if (status === 'completed') {
-            resolve();
-          } else {
-            resolve(await pollingConvertStatus());
-          }
-        } catch (err) {
-          reject(err);
-        }
-      }, 100);
-    });
-  await pollingConvertStatus();
-
-  const requestor = apiWrapper();
-  const { res } = await requestor.request(PO_DRIVE_CONVERT_DOWNLOAD, {
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ fileId: fileInfo.fileId, fileRevision: fileInfo.fileRevision }),
-    method: 'POST'
-  });
-  const blob = await res.blob();
-  return new File([blob], `${getFileName(fileInfo.name)}.pdf`, { type: 'application/pdf' });
-};
-
-const checkDocStatus = async (files: NovaFileInfo[]) => {
-  const promises = files.map(async (file) => {
-    const requestor = apiWrapper();
-    const { res } = await requestor.request(PO_DRIVE_DOC_OPEN_STATUS, {
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ fileId: file.fileId, fileRevision: file.fileRevision }),
-      method: 'POST'
-    });
-    const json = await res.json();
-    const {
-      success,
-      data: { status }
-    } = json;
-    if (!success) throw new Error('Invalid File');
-    return { ...file, valid: status };
-  });
-
-  const results = await Promise.all(promises);
-  return results;
-};
-
-const reqConvertFile = async (fileInfo: NovaFileInfo) => {
-  const requestor = apiWrapper();
-  const { res } = await requestor.request(PO_DRIVE_CONVERT, {
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ ...fileInfo }),
-    method: 'POST'
-  });
-  const json = await res.json();
-  const {
-    success,
-    data: { taskId }
-  } = json;
-  if (!success) throw new Error('Convert Error');
-  const converted = await downloadConvertFile({ ...fileInfo, taskId });
-  return converted;
-};
-
-const convertFiles = async (files: NovaFileInfo[]) => {
-  const promises = files.map(async (file) => {
-    const ext = getFileExtension(file.file.name);
-    if (ext === '.hwp' || ext === '.xls' || ext === '.xlsx') {
-      const converted = await reqConvertFile(file);
-      return { ...file, file: converted };
-    } else {
-      return file;
-    }
-  });
-  return await Promise.all(promises);
-};
 
 const useSubmitHandler = (setFileUploadState: React.Dispatch<React.SetStateAction<any>>) => {
   const dispatch = useAppDispatch();
@@ -189,6 +48,145 @@ const useSubmitHandler = (setFileUploadState: React.Dispatch<React.SetStateActio
   const { t } = useTranslation();
   const confirm = useConfirm();
   const expireTimer = useRef<NodeJS.Timeout | null>(null);
+  const requestor = useRef<ReturnType<typeof apiWrapper>>();
+
+  const reqUploadFiles = async (files: File[]) => {
+    const ret = [];
+
+    for (const file of files) {
+      const formData = new FormData();
+      formData.append('uploadFile', file);
+
+      requestor.current = apiWrapper();
+      const { res } = await requestor.current.request(PO_DRIVE_UPLOAD, {
+        body: formData,
+        method: 'POST'
+      });
+      const json = await res.json();
+      ret.push({ ...json, file });
+    }
+    return ret;
+  };
+
+  const reqDownloadFiles = async (files: DriveFileInfo[]) => {
+    const ret = [];
+
+    for (const file of files) {
+      requestor.current = apiWrapper();
+      const { res } = await requestor.current.request(PO_DRIVE_DOWNLOAD, {
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fileId: file.fileId }),
+        method: 'POST'
+      });
+      const blob = await res.blob();
+      ret.push({
+        success: true,
+        file: new File([blob], file.name, { type: file.type }),
+        data: { fileId: file.fileId, fileRevision: file.fileRevision }
+      });
+    }
+    return ret;
+  };
+
+  const getConvertStatus = async (fileInfo: { taskId: string }) => {
+    try {
+      requestor.current = apiWrapper();
+      const { res } = await requestor.current.request(PO_DRIVE_CONVERT_STATUS, {
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ taskId: fileInfo.taskId }),
+        method: 'POST'
+      });
+      const json = await res.json();
+      const {
+        success,
+        data: { status }
+      } = json;
+      if (!success) throw new Error();
+      return status;
+    } catch (err) {
+      if (err instanceof DelayDocConverting) throw err;
+      else throw new DocConvertingError();
+    }
+  };
+
+  const downloadConvertFile = async (fileInfo: PollingType) => {
+    const pollingConvertStatus = () =>
+      new Promise<void>((resolve, reject) => {
+        setTimeout(async () => {
+          try {
+            const status = await getConvertStatus(fileInfo);
+            if (status === 'completed') {
+              resolve();
+            } else {
+              resolve(await pollingConvertStatus());
+            }
+          } catch (err) {
+            reject(err);
+          }
+        }, 100);
+      });
+    await pollingConvertStatus();
+
+    requestor.current = apiWrapper();
+    const { res } = await requestor.current.request(PO_DRIVE_CONVERT_DOWNLOAD, {
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ fileId: fileInfo.fileId, fileRevision: fileInfo.fileRevision }),
+      method: 'POST'
+    });
+    const blob = await res.blob();
+    return new File([blob], `${getFileName(fileInfo.name)}.pdf`, { type: 'application/pdf' });
+  };
+
+  const checkDocStatus = async (files: NovaFileInfo[]) => {
+    const promises = files.map(async (file) => {
+      requestor.current = apiWrapper();
+      const { res } = await requestor.current.request(PO_DRIVE_DOC_OPEN_STATUS, {
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fileId: file.fileId, fileRevision: file.fileRevision }),
+        method: 'POST'
+      });
+      const json = await res.json();
+      const {
+        success,
+        data: { status }
+      } = json;
+      if (!success) throw new Error('Invalid File');
+      return { ...file, valid: status };
+    });
+
+    const results = await Promise.all(promises);
+    return results;
+  };
+
+  const reqConvertFile = async (fileInfo: NovaFileInfo) => {
+    requestor.current = apiWrapper();
+    const { res } = await requestor.current.request(PO_DRIVE_CONVERT, {
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...fileInfo }),
+      method: 'POST'
+    });
+    const json = await res.json();
+    const {
+      success,
+      data: { taskId }
+    } = json;
+    if (!success) throw new Error('Convert Error');
+    const converted = await downloadConvertFile({ ...fileInfo, taskId });
+    return converted;
+  };
+
+  const convertFiles = async (files: NovaFileInfo[]) => {
+    const promises = files.map(async (file) => {
+      const ext = getFileExtension(file.file.name);
+      if (ext === '.hwp' || ext === '.xls' || ext === '.xlsx') {
+        const converted = await reqConvertFile(file);
+        return { ...file, file: converted };
+      } else {
+        return file;
+      }
+    });
+    return await Promise.all(promises);
+  };
 
   const createNovaSubmitHandler = useCallback(
     async (submitParam: InputBarSubmitParam) => {
@@ -274,7 +272,6 @@ const useSubmitHandler = (setFileUploadState: React.Dispatch<React.SetStateActio
           })
         );
 
-        const requestor = apiWrapper();
         if (type === 'image' || type === 'document') {
           setFileUploadState((prev: any) => ({ ...prev, state: 'wait', progress: 40 }));
           const progressing = () =>
@@ -291,7 +288,8 @@ const useSubmitHandler = (setFileUploadState: React.Dispatch<React.SetStateActio
           timer = progressing();
         }
 
-        const { res, logger } = await requestor.request(NOVA_CHAT_API, {
+        requestor.current = apiWrapper();
+        const { res, logger } = await requestor.current.request(NOVA_CHAT_API, {
           body: formData,
           method: 'POST'
         });
@@ -362,8 +360,7 @@ const useSubmitHandler = (setFileUploadState: React.Dispatch<React.SetStateActio
       } catch (err) {
         if (timer) clearTimeout(timer);
 
-        const requestor = apiWrapper();
-        if (requestor.isAborted()) {
+        if (requestor.current?.isAborted()) {
           dispatch(updateChatStatus({ id, status: 'cancel' }));
         } else if (err instanceof ExceedPoDriveLimitError) {
           await confirm({

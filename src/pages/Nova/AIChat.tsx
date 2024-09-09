@@ -1,12 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ReactComponent as IconArrowLeft } from 'img/ico_arrow_left.svg';
+import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import styled from 'styled-components';
 
 import { apiWrapper } from '../../api/apiWrapper';
 import IconButton from '../../components/buttons/IconButton';
+import { useConfirm } from '../../components/Confirm';
 import useSubmitHandler from '../../components/hooks/nova/useSubmitHandler';
+import { useChatNova } from '../../components/hooks/useChatNova';
 import ChatList from '../../components/nova/ChatList';
 import { FileUploading } from '../../components/nova/FileUploading';
 import { ImagePreview } from '../../components/nova/ImagePreview';
@@ -64,15 +67,14 @@ const ScrollDownButton = styled.div`
   }
 `;
 
-export interface AIChatProps {
-  expiredNOVA: boolean;
-  setExpiredNOVA: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-export default function AIChat(props: AIChatProps) {
+export default function AIChat() {
   const dispatch = useAppDispatch();
   const location = useLocation();
+  const { t } = useTranslation();
+  const confirm = useConfirm();
+  const chatNova = useChatNova();
   const novaHistory = useAppSelector(novaHistorySelector);
+  const [expiredNOVA, setExpiredNOVA] = useState<boolean>(false);
   const [inputContents, setInputContents] = useState<string>('');
   const [imagePreview, setImagePreview] = useState<NovaFileInfo | null>(null);
   const [fileUploadState, setFileUploadState] = useState<FileUpladState>({
@@ -86,6 +88,22 @@ export default function AIChat(props: AIChatProps) {
   const [showScrollDownBtn, setShowScrollDownBtn] = useState(false);
 
   const { createNovaSubmitHandler } = useSubmitHandler(setFileUploadState);
+
+  useEffect(() => {
+    if (expiredNOVA) {
+      confirm({
+        title: '',
+        msg: t('Nova.Alert.ExpiredNOVA'),
+        onOk: {
+          text: t(`Confirm`),
+          callback: () => {
+            setExpiredNOVA(false);
+            chatNova.newChat();
+          }
+        }
+      });
+    }
+  }, [expiredNOVA, t, confirm, chatNova]);
 
   useEffect(() => {
     if (location.state?.body) {
@@ -147,7 +165,7 @@ export default function AIChat(props: AIChatProps) {
       ) : (
         <>
           <ChatList
-            expiredNOVA={props.expiredNOVA}
+            expiredNOVA={expiredNOVA}
             novaHistory={novaHistory}
             onSubmit={createNovaSubmitHandler}
             onSave={onSave}
@@ -174,7 +192,7 @@ export default function AIChat(props: AIChatProps) {
       <InputBar
         novaHistory={novaHistory}
         disabled={creating !== 'none'}
-        expiredNOVA={props.expiredNOVA}
+        expiredNOVA={expiredNOVA}
         onSubmit={createNovaSubmitHandler}
         contents={inputContents}
         setContents={setInputContents}></InputBar>
