@@ -1,8 +1,12 @@
-import TextArea from '../TextArea';
-import { INPUT_MAX_LENGTH } from '../../store/slices/askDoc';
+import { Dispatch, SetStateAction, useEffect, useMemo, useRef } from 'react';
+import IconButton from 'components/buttons/IconButton';
 import { ReactComponent as SendActiveIcon } from 'img/ico_send_active.svg';
+import { useTranslation } from 'react-i18next';
 import styled, { css, FlattenSimpleInterpolation } from 'styled-components';
+
+import AudioInit from '../../audio/init.mpga';
 import { Tip } from '../../components/askDoc/Tip';
+import { INPUT_MAX_LENGTH } from '../../store/slices/askDoc';
 import {
   alignItemCenter,
   flex,
@@ -12,13 +16,10 @@ import {
   justiCenter,
   justiSpaceBetween
 } from '../../style/cssCommon';
-import { useTranslation } from 'react-i18next';
-import { Dispatch, SetStateAction, useEffect, useMemo, useRef } from 'react';
 import { RowWrapBox } from '../chat/RecommendBox/ChatRecommend';
-import useResizeHeight from '../hooks/useResizeHeight';
 import useLangParameterNavigate from '../hooks/useLangParameterNavigate';
-import AudioInit from '../../audio/init.mpga';
-import IconButton from 'components/buttons/IconButton';
+import useResizeHeight from '../hooks/useResizeHeight';
+import TextArea from '../TextArea';
 
 const TEXT_MAX_HEIGHT = 268;
 
@@ -27,7 +28,7 @@ const InputBox = styled.div<{ activeInputWrap: boolean; isTesla: boolean }>`
   ${alignItemCenter}
   ${flexColumn}
   ${flexShrink}
-  
+
   height: fit-content;
   width: 100%;
   position: relative;
@@ -102,7 +103,7 @@ export const ChatBottom = ({
   isActiveInput: boolean;
   setIsActiveInput: Dispatch<SetStateAction<boolean>>;
   chatInput: string;
-  onSubmitAskdocChat: (api: 'gpt' | 'askDoc', chatText?: string) => {};
+  onSubmitAskdocChat: (api: 'gpt' | 'askDoc', chatText?: string) => void;
   setChatInput: Dispatch<SetStateAction<string>>;
 }) => {
   const { t } = useTranslation();
@@ -149,7 +150,7 @@ export const ChatBottom = ({
             placeholder={!loadingId ? placeholder : ''}
             textRef={textRef}
             rows={1}
-            value={!!loadingId ? '' : chatInput}
+            value={loadingId ? '' : chatInput}
             onKeyDown={(e: React.KeyboardEvent<HTMLElement>) => {
               if (e.key === 'Enter' && e.ctrlKey) {
                 if (validCheckSubmit()) {

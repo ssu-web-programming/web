@@ -1,17 +1,18 @@
-import styled, { css } from 'styled-components';
-import Icon from '../Icon';
-import icon_ai from '../../img/ico_ai.svg';
-import icon_ai_loading from '../../img/loading_dot_2x.webp';
-import PreMarkdown from '../PreMarkdown';
-import { flexColumn, flex, justiSpaceBetween, alignItemCenter } from '../../style/cssCommon';
 import { PropsWithChildren, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
-import Grid from '../layout/Grid';
-import { AskDocChat } from '../../store/slices/askDoc';
-import Button from '../buttons/Button';
-import Bridge from '../../util/bridge';
 import IconTextButton from 'components/buttons/IconTextButton';
+import { useTranslation } from 'react-i18next';
+import styled, { css } from 'styled-components';
+
+import icon_ai from '../../img/ico_ai.svg';
 import icon_credit_purple from '../../img/ico_credit_purple.svg';
+import icon_ai_loading from '../../img/loading_dot_2x.webp';
+import { AskDocChat } from '../../store/slices/askDoc';
+import { alignItemCenter, flex, flexColumn, justiSpaceBetween } from '../../style/cssCommon';
+import Bridge from '../../util/bridge';
+import Button from '../buttons/Button';
+import Icon from '../Icon';
+import Grid from '../layout/Grid';
+import PreMarkdown from '../PreMarkdown';
 
 const Wrapper = styled.div<{ isUser: boolean }>`
   ${flex}

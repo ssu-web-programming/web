@@ -1,30 +1,31 @@
-import styled, { FlattenSimpleInterpolation, css } from 'styled-components';
-import { ColumDivider, RowBox } from '../views/AIChatTab';
-import Icon from './Icon';
+import { PropsWithChildren, useMemo } from 'react';
+import ClaudeLinkText from 'components/ClaudeLinkText';
+import icon_credit_purple from 'img/ico_credit_purple.svg';
+import { useTranslation } from 'react-i18next';
+import styled, { css, FlattenSimpleInterpolation } from 'styled-components';
+
 import icon_ai from '../img/ico_ai.svg';
 import icon_ai_loading from '../img/loading_dot_2x.webp';
-import PreMarkdown from './PreMarkdown';
-import { flexColumn, flex, justiSpaceBetween, alignItemCenter } from '../style/cssCommon';
-import OpenAILinkText from './OpenAILinkText';
-import { PropsWithChildren, useMemo } from 'react';
 import { Chat } from '../store/slices/chatHistorySlice';
-import { RowWrapBox } from './chat/RecommendBox/ChatRecommend';
-import { useTranslation } from 'react-i18next';
-import Button from './buttons/Button';
-import Grid from './layout/Grid';
-import CreditButton from './buttons/CreditButton';
-import { useAppDispatch, useAppSelector } from '../store/store';
-import { activeToast } from '../store/slices/toastSlice';
-import { insertDoc } from '../util/common';
+import { selectRecFuncSlice } from '../store/slices/recFuncSlice';
 import { selectTabSlice } from '../store/slices/tabSlice';
+import { activeToast } from '../store/slices/toastSlice';
+import { useAppDispatch, useAppSelector } from '../store/store';
+import { alignItemCenter, flex, flexColumn, justiSpaceBetween } from '../style/cssCommon';
+import { insertDoc } from '../util/common';
+import { ColumDivider, RowBox } from '../views/AIChatTab';
+
+import Button from './buttons/Button';
+import IconTextButton from './buttons/IconTextButton';
+import { RowWrapBox } from './chat/RecommendBox/ChatRecommend';
 import { formRecList } from './chat/RecommendBox/FormRec';
 import { REC_ID_LIST } from './chat/RecommendBox/FunctionRec';
-import { selectRecFuncSlice } from '../store/slices/recFuncSlice';
+import Grid from './layout/Grid';
 import ClovaXLinkText from './ClovaXLinkText';
+import Icon from './Icon';
+import OpenAILinkText from './OpenAILinkText';
+import PreMarkdown from './PreMarkdown';
 import { BoldTextLength } from './TextLength';
-import ClaudeLinkText from 'components/ClaudeLinkText';
-import IconTextButton from './buttons/IconTextButton';
-import icon_credit_purple from 'img/ico_credit_purple.svg';
 
 // clipboard
 // import { useCopyClipboard } from '../util/bridge';
@@ -75,13 +76,13 @@ const SpeechBubbleWrapper = styled.div<{ cssExt?: FlattenSimpleInterpolation; is
 `;
 
 const MarkDownWrapper = styled.div`
-  ${flex}
+  ${flex};
 
   padding: 8px 12px;
 `;
 
 const LoadingMsg = styled.div`
-  ${flex}
+  ${flex};
 
   margin: 8px 12px;
   font-size: 13px;
@@ -101,7 +102,7 @@ const BubbleArea = styled.div`
 const LisenceRight = styled.div`
   ${flex}
   ${alignItemCenter}
-  
+
   align-self: flex-end;
   margin-top: 9px;
 `;

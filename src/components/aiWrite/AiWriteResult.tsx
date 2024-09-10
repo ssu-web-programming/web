@@ -1,41 +1,41 @@
+import React from 'react';
+import { BoldTextLength } from 'components/TextLength';
+import { useTranslation } from 'react-i18next';
 import styled, { css } from 'styled-components';
+
+import icon_credit_purple from '../../img/ico_credit_purple.svg';
+import { selectTabSlice } from '../../store/slices/tabSlice';
+import { activeToast } from '../../store/slices/toastSlice';
 import {
-  TableCss,
+  resetCurrentWrite,
+  setCurrentWrite,
+  WriteType
+} from '../../store/slices/writeHistorySlice';
+import { useAppDispatch, useAppSelector } from '../../store/store';
+import {
   alignItemCenter,
   flex,
   flexColumn,
   flexGrow,
   flexShrink,
-  justiSpaceBetween
+  justiSpaceBetween,
+  TableCss
 } from '../../style/cssCommon';
+import { insertDoc } from '../../util/common';
 import { ColumDivider, RowBox } from '../../views/AIChatTab';
-import SubTitle from '../SubTitle';
-import Loading from '../Loading';
-import PreMarkdown from '../PreMarkdown';
-import { useTranslation } from 'react-i18next';
-import { useAppDispatch, useAppSelector } from '../../store/store';
+import ArrowSwitcher from '../ArrowSwitcher';
+import Button from '../buttons/Button';
+import IconTextButton from '../buttons/IconTextButton';
 import ReturnButton from '../buttons/ReturnButton';
 import StopButton from '../buttons/StopButton';
-import Button from '../buttons/Button';
-import OpenAILinkText from '../OpenAILinkText';
-import icon_chat_white from '../../img/ico_chat_white.svg';
-import {
-  WriteType,
-  resetCurrentWrite,
-  setCurrentWrite
-} from '../../store/slices/writeHistorySlice';
-import { insertDoc } from '../../util/common';
-import { activeToast } from '../../store/slices/toastSlice';
-import { selectTabSlice } from '../../store/slices/tabSlice';
-import IconTextButton from '../buttons/IconTextButton';
-import Grid from '../layout/Grid';
-import React from 'react';
-import { useMoveChatTab } from '../hooks/useMovePage';
-import ArrowSwitcher from '../ArrowSwitcher';
-import ClovaXLinkText from '../ClovaXLinkText';
 import ClaudeLinkText from '../ClaudeLinkText';
-import { BoldTextLength } from 'components/TextLength';
-import icon_credit_purple from '../../img/ico_credit_purple.svg';
+import ClovaXLinkText from '../ClovaXLinkText';
+import { useMoveChatTab } from '../hooks/useMovePage';
+import Grid from '../layout/Grid';
+import Loading from '../Loading';
+import OpenAILinkText from '../OpenAILinkText';
+import PreMarkdown from '../PreMarkdown';
+import SubTitle from '../SubTitle';
 
 // clipboard
 // import { useCopyClipboard } from '../../util/bridge';
@@ -66,7 +66,7 @@ const ResultBox = styled.div`
 `;
 
 const ResultWrapper = styled.div`
-  ${flex}
+  ${flex};
   overflow: auto;
   white-space: break-spaces;
   width: 100%;
