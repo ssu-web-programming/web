@@ -39,6 +39,7 @@ export default function Nova() {
   const { loadLocalFile } = useManageFile();
   const currentTab = useSelector(selectTabSlice).selectedNovaTab;
   const isTabSelected = (tab: NOVA_TAB_TYPE) => currentTab === tab;
+  console.log(currentTab);
 
   return (
     <Wrapper>
