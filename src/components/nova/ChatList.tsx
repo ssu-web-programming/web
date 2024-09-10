@@ -284,7 +284,7 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                     .filter((btn) => btn.status.includes(item.status))
                     .map((btn) => (
                       <IconTextButton
-                        disable={creating !== 'none' || expiredNOVA === true}
+                        disable={creating !== 'none' || expiredNOVA}
                         key={btn.text}
                         width={'fit'}
                         iconSize={24}

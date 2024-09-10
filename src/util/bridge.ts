@@ -1,22 +1,26 @@
 import { useCallback } from 'react';
-import { AppDispatch, RootState, useAppDispatch } from '../store/store';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
-// import { useMoveChatTab } from '../components/hooks/useMovePage';
-import { updateT2ICurItemIndex, updateT2ICurListId } from '../store/slices/txt2imgHistory';
-import { activeToast } from '../store/slices/toastSlice';
-import gI18n, { convertLangFromLangCode } from '../locale';
-import { createAsyncThunk } from '@reduxjs/toolkit';
-import { isHigherVersion, makeClipboardData } from './common';
-import { AskDocStatus, setSrouceId, setStatus } from '../store/slices/askDoc';
-import { setFiles } from '../store/slices/askDocAnalyzeFiesSlice';
-import { initComplete } from '../store/slices/initFlagSlice';
-import { setRecognizedVoice } from '../store/slices/recognizedVoice';
-import { initConfirm } from '../store/slices/confirm';
 import { resetCurrentWrite } from 'store/slices/writeHistorySlice';
 import { v4 as uuidv4 } from 'uuid';
 
-const UA_PREFIX: string = `__polaris_office_ai_`;
+import { createAsyncThunk } from '@reduxjs/toolkit';
+
+import gI18n, { convertLangFromLangCode } from '../locale';
+import { AskDocStatus, setSrouceId, setStatus } from '../store/slices/askDoc';
+import { setFiles } from '../store/slices/askDocAnalyzeFiesSlice';
+import { initConfirm } from '../store/slices/confirm';
+import { initComplete } from '../store/slices/initFlagSlice';
+import { setRecognizedVoice } from '../store/slices/recognizedVoice';
+import { selectNovaTab } from '../store/slices/tabSlice';
+import { activeToast } from '../store/slices/toastSlice';
+// import { useMoveChatTab } from '../components/hooks/useMovePage';
+import { updateT2ICurItemIndex, updateT2ICurListId } from '../store/slices/txt2imgHistory';
+import { AppDispatch, RootState, useAppDispatch } from '../store/store';
+
+import { isHigherVersion, makeClipboardData } from './common';
+
+const UA_PREFIX = `__polaris_office_ai_`;
 
 export enum ClientType {
   unknown = 'unknown',
@@ -29,7 +33,7 @@ export enum ClientType {
 
 function getAgentPlatform(userAgent: string) {
   if (userAgent) {
-    let ua = userAgent.toLowerCase();
+    const ua = userAgent.toLowerCase();
 
     const platform = Object.values(ClientType).find(
       (type) => ua.search(`${UA_PREFIX}${type}`) > -1
@@ -52,7 +56,7 @@ export const getVersion = () => getAgentVersion(navigator.userAgent);
 export async function fileToString(file: Blob) {
   return new Promise<string>((resolve, reject) => {
     try {
-      let reader = new FileReader();
+      const reader = new FileReader();
       reader.onloadend = function () {
         if (reader.result) {
           resolve(reader.result as string);
@@ -60,6 +64,7 @@ export async function fileToString(file: Blob) {
       };
       reader.readAsDataURL(file);
     } catch (err) {
+      console.error('An error occurred:', err);
       throw err;
     }
   });
@@ -169,16 +174,10 @@ const callApi = (api: ApiType, arg?: string | number) => {
         break;
       }
     }
-  } catch (err) {}
+  } catch (err) {
+    /*empty*/
+  }
 };
-
-type BridgeItemID = string;
-interface BridgeItem {
-  id: BridgeItemID;
-  callback: Function;
-}
-
-const BridgeList: { [id: BridgeItemID]: BridgeItem } = {};
 
 declare global {
   interface Window {
@@ -187,6 +186,8 @@ declare global {
   }
 }
 
+type BridgeItemID = string;
+
 interface CallbackMessage {
   cmdID: BridgeItemID;
   body: any;
@@ -194,8 +195,17 @@ interface CallbackMessage {
 
 interface ReceiveMessage {
   cmd: string;
-  body: string;
+  body: any;
 }
+
+type Callback = (msg: CallbackMessage, id: BridgeItemID) => void;
+
+interface BridgeItem {
+  id: BridgeItemID;
+  callback: Callback;
+}
+
+const BridgeList: { [id: BridgeItemID]: BridgeItem } = {};
 
 type PanelOpenCmd = 'openAiTools' | 'openTextToImg' | 'openAskDoc' | 'openAlli' | 'openNOVA';
 
@@ -212,7 +222,7 @@ export const useInitBridgeListener = () => {
         return '/aiWrite';
       case 'openTextToImg':
         return '/txt2img';
-      case 'openAskDoc':
+      case 'openAskDoc': {
         const platform = getPlatform();
         const version = getVersion();
         if (
@@ -224,6 +234,7 @@ export const useInitBridgeListener = () => {
           return '/AskDocStep';
         }
         return '/askdoc';
+      }
       case 'openAlli':
         return '/alli';
       case 'openNOVA':
@@ -281,9 +292,13 @@ export const useInitBridgeListener = () => {
           case 'openAiTools':
           case 'openTextToImg':
           case 'openAskDoc':
-          case 'openAlli':
-          case 'openNOVA': {
+          case 'openAlli': {
             dispatch(changePanel({ cmd, body }));
+            break;
+          }
+          case 'openNOVA': {
+            dispatch(changePanel({ cmd, body: body.inputText || '' }));
+            if (body && body.openTab != '') dispatch(selectNovaTab(body.openTab));
             break;
           }
           case 'showToast': {
@@ -297,8 +312,7 @@ export const useInitBridgeListener = () => {
             break;
           }
           case 'initAskDoc': {
-            const sourceId = body;
-            dispatch(setSrouceId(sourceId));
+            dispatch(setSrouceId(body));
             break;
           }
           case 'askDocState': {
@@ -333,7 +347,9 @@ export const useInitBridgeListener = () => {
           }
         }
       }
-    } catch (err) {}
+    } catch (err) {
+      /*empty*/
+    }
   };
 
   return () => {
@@ -346,7 +362,9 @@ export const useInitBridgeListener = () => {
             item.callback(msg, id);
           }
         }
-      } catch (err) {}
+      } catch (err) {
+        /*empty*/
+      }
     };
     window.receiveMessage = (msg: ReceiveMessage) => {
       procMsg(msg);
@@ -359,7 +377,9 @@ export const useInitBridgeListener = () => {
         } else {
           procMsg(msg.data);
         }
-      } catch (err) {}
+      } catch (err) {
+        /*empty*/
+      }
     });
 
     Bridge.callBridgeApi('initComplete');
@@ -485,6 +505,7 @@ const Bridge = {
           try {
             callback(msg.body);
           } catch (err) {
+            console.error('An error occurred:', err);
           } finally {
             delete BridgeList[id];
           }
@@ -493,7 +514,9 @@ const Bridge = {
       BridgeList[item.id] = item;
 
       callApi(api, arg);
-    } catch (err) {}
+    } catch (err) {
+      /*empty*/
+    }
   }
 };
 

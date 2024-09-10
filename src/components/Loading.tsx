@@ -1,8 +1,10 @@
 import styled from 'styled-components';
+
 // import ai_loading from '../img/ai_motion_mid_56.webp';
 import ai_loading from '../img/ezgif.com-gif-maker.png';
-import Icon from './Icon';
 import { alignItemCenter, flex, flexColumn, justiCenter } from '../style/cssCommon';
+
+import Icon from './Icon';
 
 const Wrapper = styled.div`
   width: 100%;

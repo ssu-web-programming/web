@@ -1,10 +1,12 @@
 import React, { Suspense } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import useManageFile from '../../components/hooks/nova/useManageFile';
 import useFileDrop from '../../components/hooks/useFileDrop';
 import NovaHeader from '../../components/nova/Header';
 import Modals, { Overlay } from '../../components/nova/modals/Modals';
+import { NOVA_TAB_TYPE, selectTabSlice } from '../../store/slices/tabSlice';
 
 import AIChat from './AIChat';
 
@@ -35,6 +37,8 @@ export type ClientStatusType = 'home' | 'doc_edit_mode' | 'doc_view_mode';
 export default function Nova() {
   const { handleDragOver, handleDragLeave, handleDrop } = useFileDrop();
   const { loadLocalFile } = useManageFile();
+  const currentTab = useSelector(selectTabSlice).selectedNovaTab;
+  const isTabSelected = (tab: NOVA_TAB_TYPE) => currentTab === tab;
 
   return (
     <Wrapper>
@@ -43,9 +47,8 @@ export default function Nova() {
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={(e) => handleDrop(e, loadLocalFile)}>
-        <AIChat />
+        {isTabSelected('aiChat') && <AIChat />}
       </Body>
-
       <Suspense fallback={<Overlay />}>
         <Modals />
       </Suspense>

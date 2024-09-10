@@ -1,5 +1,6 @@
 import { useCallback, useRef } from 'react';
 import { apiWrapper, streaming } from 'api/apiWrapper';
+import { load } from 'cheerio';
 import {
   DelayDocConverting,
   DocConvertingError,
@@ -8,6 +9,7 @@ import {
 } from 'error/error';
 import { useTranslation } from 'react-i18next';
 import {
+  addChatOutputRes,
   appendChatOutput,
   NovaChatType,
   NovaFileInfo,
@@ -17,7 +19,7 @@ import {
   updateChatStatus
 } from 'store/slices/novaHistorySlice';
 import { setCreating } from 'store/slices/tabSlice';
-import { getFileExtension, getFileName } from 'util/common';
+import { getFileExtension, getFileName, markdownToHtml } from 'util/common';
 import { v4 } from 'uuid';
 
 import {
@@ -29,6 +31,7 @@ import {
   PO_DRIVE_DOWNLOAD,
   PO_DRIVE_UPLOAD
 } from '../../../api/constant';
+import { appStateSelector } from '../../../store/slices/appState';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { useConfirm } from '../../Confirm';
 import { InputBarSubmitParam } from '../../nova/InputBar';
@@ -40,9 +43,15 @@ interface PollingType extends NovaFileInfo {
   taskId: string;
 }
 
-const useSubmitHandler = (setFileUploadState: React.Dispatch<React.SetStateAction<any>>) => {
+interface SubmitHandlerProps {
+  setFileUploadState: React.Dispatch<React.SetStateAction<any>>;
+  setExpiredNOVA: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerProps) => {
   const dispatch = useAppDispatch();
   const novaHistory = useAppSelector(novaHistorySelector);
+  const { novaExpireTime } = useAppSelector(appStateSelector);
   const errorHandle = useErrorHandle();
   const showCreditToast = useShowCreditToast();
   const { t } = useTranslation();
@@ -192,8 +201,11 @@ const useSubmitHandler = (setFileUploadState: React.Dispatch<React.SetStateActio
     async (submitParam: InputBarSubmitParam) => {
       const id = v4();
       let result = '';
-      let timer: NodeJS.Timeout | null = null;
-      let splunk: any = null;
+      const lastChat = novaHistory[novaHistory.length - 1];
+      const { vsId = '', threadId = '' } = lastChat || {};
+      const { input, files = [], type } = submitParam;
+      let splunk = null;
+      let timer = null;
 
       try {
         dispatch(setCreating('NOVA'));
@@ -202,12 +214,9 @@ const useSubmitHandler = (setFileUploadState: React.Dispatch<React.SetStateActio
         if (expireTimer.current) clearTimeout(expireTimer.current);
 
         const formData = new FormData();
-        const { files = [], type } = submitParam;
-
         if (files[0]) {
-          if (type === 'image' || type === 'document') {
+          if (type === 'image' || type === 'document')
             setFileUploadState({ type, state: 'upload', progress: 20 });
-          }
 
           let targetFiles = [];
           if (files[0] instanceof File) {
@@ -215,7 +224,6 @@ const useSubmitHandler = (setFileUploadState: React.Dispatch<React.SetStateActio
           } else if ('fileId' in files[0]) {
             targetFiles = await reqDownloadFiles(files as DriveFileInfo[]);
           }
-
           targetFiles
             .filter((target) => target.success)
             .forEach((target) => {
@@ -228,7 +236,9 @@ const useSubmitHandler = (setFileUploadState: React.Dispatch<React.SetStateActio
                     `${getFileName(target.file.name)}${getFileExtension(
                       target.file.name
                     ).toLowerCase()}`,
-                    { type: target.file.type }
+                    {
+                      type: target.file.type
+                    }
                   ),
                   fileRevision: target.data.fileRevision
                 });
@@ -244,8 +254,8 @@ const useSubmitHandler = (setFileUploadState: React.Dispatch<React.SetStateActio
               );
             }
           }
-
           const convertedFileInfo = await convertFiles(fileInfo);
+
           convertedFileInfo.forEach((info) => {
             formData.append('uploadFiles', info.file);
             formData.append('fileIds[]', info.fileId);
@@ -253,25 +263,15 @@ const useSubmitHandler = (setFileUploadState: React.Dispatch<React.SetStateActio
         }
 
         const role = 'user';
-        formData.append('content', submitParam.input);
+        formData.append('content', input);
         formData.append('role', role);
         formData.append('type', type);
-        formData.append('vsId', novaHistory[novaHistory.length - 1]?.vsId || '');
-        formData.append('threadId', novaHistory[novaHistory.length - 1]?.threadId || '');
+        formData.append('vsId', vsId);
+        formData.append('threadId', threadId);
 
-        dispatch(
-          pushChat({
-            id,
-            input: submitParam.input,
-            type: '',
-            role,
-            vsId: '',
-            threadId: '',
-            output: '',
-            files: fileInfo
-          })
-        );
+        dispatch(pushChat({ id, input, type, role, vsId, threadId, output: '', files: fileInfo }));
 
+        requestor.current = apiWrapper();
         if (type === 'image' || type === 'document') {
           setFileUploadState((prev: any) => ({ ...prev, state: 'wait', progress: 40 }));
           const progressing = () =>
@@ -287,8 +287,6 @@ const useSubmitHandler = (setFileUploadState: React.Dispatch<React.SetStateActio
             }, 3000);
           timer = progressing();
         }
-
-        requestor.current = apiWrapper();
         const { res, logger } = await requestor.current.request(NOVA_CHAT_API, {
           body: formData,
           method: 'POST'
@@ -355,17 +353,15 @@ const useSubmitHandler = (setFileUploadState: React.Dispatch<React.SetStateActio
               .join('');
           }
         );
-
         dispatch(updateChatStatus({ id, status: 'done' }));
       } catch (err) {
         if (timer) clearTimeout(timer);
-
-        if (requestor.current?.isAborted()) {
+        if (requestor.current?.isAborted() === true) {
           dispatch(updateChatStatus({ id, status: 'cancel' }));
         } else if (err instanceof ExceedPoDriveLimitError) {
           await confirm({
             title: '',
-            msg: t('Nova.Alert.LackOfStorage'),
+            msg: t(`Nova.Alert.LackOfStorage`),
             onOk: {
               text: t('Confirm'),
               callback: () => {}
@@ -373,7 +369,7 @@ const useSubmitHandler = (setFileUploadState: React.Dispatch<React.SetStateActio
           });
         } else {
           dispatch(removeChat(id));
-          errorHandle(err as Error);
+          errorHandle(err);
         }
       } finally {
         dispatch(setCreating('none'));
@@ -383,14 +379,32 @@ const useSubmitHandler = (setFileUploadState: React.Dispatch<React.SetStateActio
           if (splunk) {
             splunk({
               dp: 'ai.nova',
-              el:
-                novaHistory[novaHistory.length - 1]?.vsId || submitParam.type !== ''
-                  ? 'nova.error'
-                  : 'nova.poaio'
+              el: vsId || type !== '' ? 'nova_document_or_image' : 'nova_chating'
             });
+            if (type) {
+              splunk({
+                dp: 'ai.nova',
+                el: 'upload_file',
+                file_type: type
+              });
+            }
           }
-        } catch (error) {
-          console.error('Splunk Error:', error);
+        } catch (err) {
+          /*empty*/
+        }
+
+        expireTimer.current = setTimeout(() => {
+          setExpiredNOVA(true);
+        }, novaExpireTime);
+
+        const html = await markdownToHtml(result);
+        if (html) {
+          const $ = load(html);
+          const $image = $('img');
+          if ($image.length > 0) {
+            const image = $image[0] as cheerio.TagElement;
+            dispatch(addChatOutputRes({ id, res: image.attribs.src }));
+          }
         }
       }
     },

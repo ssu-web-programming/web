@@ -51,13 +51,14 @@ const ScrollDownButton = styled.div`
   left: 0;
   right: 0;
   margin: 0 auto;
-  bottom: 24px;
+  bottom: 126px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   background: white;
-  box-shadow: 0px 2px 8px 0px #0000001a;
+  box-shadow: 0 2px 8px 0 #0000001a;
+  z-index: 1;
 
   button {
     transform: rotate(-90deg);
@@ -71,8 +72,10 @@ export default function AIChat() {
   const dispatch = useAppDispatch();
   const location = useLocation();
   const { t } = useTranslation();
+  const requestor = useRef<ReturnType<typeof apiWrapper>>();
   const confirm = useConfirm();
   const chatNova = useChatNova();
+  const { creating } = useAppSelector(selectTabSlice);
   const novaHistory = useAppSelector(novaHistorySelector);
   const [expiredNOVA, setExpiredNOVA] = useState<boolean>(false);
   const [inputContents, setInputContents] = useState<string>('');
@@ -82,12 +85,9 @@ export default function AIChat() {
     state: 'ready',
     progress: 0
   });
-  const requestor = useRef<ReturnType<typeof apiWrapper>>();
-  const { creating } = useAppSelector(selectTabSlice);
+  const { createNovaSubmitHandler } = useSubmitHandler({ setFileUploadState, setExpiredNOVA });
   const chatListRef = useRef<HTMLDivElement>(null);
   const [showScrollDownBtn, setShowScrollDownBtn] = useState(false);
-
-  const { createNovaSubmitHandler } = useSubmitHandler(setFileUploadState);
 
   useEffect(() => {
     if (expiredNOVA) {
@@ -106,10 +106,10 @@ export default function AIChat() {
   }, [expiredNOVA, t, confirm, chatNova]);
 
   useEffect(() => {
-    if (location.state?.body) {
-      setInputContents(location.state.body);
+    if (location.state?.text) {
+      setInputContents(location.state.text);
     }
-  }, [location.state?.body]);
+  }, [location.state?.text]);
 
   useEffect(() => {
     const handleOrientationChange = () => {
