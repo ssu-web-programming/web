@@ -270,7 +270,9 @@ const AIChatTab = (props: WriteTabProps) => {
         ),
         onOk: {
           text: t('OK'),
-          callback: () => {}
+          callback: () => {
+            /*empty*/
+          }
         }
       });
       dispatch(setshowChatEOS());
@@ -497,7 +499,7 @@ const AIChatTab = (props: WriteTabProps) => {
           const el = getElValue(selectedRecFunction?.id);
           const input_token = calcToken(chatInput);
           const output_token = calcToken(resultText);
-          const gpt_ver = parseGptVer(gptVer!);
+          const gpt_ver = parseGptVer(gptVer ?? version.version);
           splunk({
             dp: 'ai.write',
             el,

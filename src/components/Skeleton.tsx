@@ -1,5 +1,5 @@
-import styled, { keyframes, css } from "styled-components";
-import React, { useMemo } from "react";
+import React, { useMemo } from 'react';
+import styled, { css, keyframes } from 'styled-components';
 
 interface Props {
   width?: number;
@@ -22,13 +22,13 @@ const Skeleton: React.FC<Props> = ({
   circle,
   $rounded,
   count,
-  $hUnit = "px",
-  $wUnit = "px",
+  $hUnit = 'px',
+  $wUnit = 'px',
   $animation = true,
-  color = "#f4f4f4",
+  color = '#f4f4f4',
   $mb = 0
 }) => {
-  const content = useMemo(() => [...Array({ length: count })].map(() => "-").join(""), [count]);
+  const content = useMemo(() => [...Array({ length: count })].map(() => '-').join(''), [count]);
   return (
     <Base
       style={style}

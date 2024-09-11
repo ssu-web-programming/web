@@ -1,12 +1,12 @@
 import { useLayoutEffect } from 'react';
-import CheckDocHistorySkeleton from '../../components/askDoc/CheckDocHistorySkeleton';
-
 import TagManager from 'react-gtm-module';
-import { WrapperPage } from '../../style/askDoc';
+
+import CheckDocHistorySkeleton from '../../components/askDoc/CheckDocHistorySkeleton';
 import useGetAskDocFiles, { Data } from '../../components/hooks/useGetAskDocFiles';
-import { useAppSelector } from '../../store/store';
-import { filesSelector } from '../../store/slices/askDocAnalyzeFiesSlice';
 import useLangParameterNavigate from '../../components/hooks/useLangParameterNavigate';
+import { filesSelector } from '../../store/slices/askDocAnalyzeFiesSlice';
+import { useAppSelector } from '../../store/store';
+import { WrapperPage } from '../../style/askDoc';
 export const FallbackComponent = () => {
   return (
     <WrapperPage>

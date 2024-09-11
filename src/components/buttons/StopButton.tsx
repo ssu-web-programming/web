@@ -1,5 +1,7 @@
 import { css } from 'styled-components';
+
 import icon_stop from '../../img/ico_stop.svg';
+
 import IconTextButton from './IconTextButton';
 
 interface StopButtonProps {

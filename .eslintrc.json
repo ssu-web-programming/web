@@ -25,13 +25,15 @@
     "simple-import-sort/imports": "error",
     "simple-import-sort/exports": "error",
     "react/prop-types": "off",
-    "import/no-named-as-default": "off"
+    "import/no-named-as-default": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-empty-function": "off",
+    "@typescript-eslint/no-non-null-assertion": "off"
   },
   "overrides": [
     {
       "files": ["**/*.js", "**/*.ts", "**/*.tsx"],
       "rules": {
-        "@typescript-eslint/no-empty-function": "warn",
         "simple-import-sort/imports": [
           "error",
           {

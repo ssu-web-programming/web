@@ -1,17 +1,16 @@
-import { useEffect, Dispatch, SetStateAction } from 'react';
-
-import ProgressBar from '../../ProgressBar';
-import useAskDocRequestHandler from '../../hooks/useAskDocRequestHandler';
+import { Dispatch, SetStateAction, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { ASKDOC_ALL_COMPLETE_ANALYZING } from '../../../api/constant';
 import { IFileStatus } from '../../../store/slices/askDocAnalyzeFiesSlice';
-import usePercentage from '../../hooks/usePercentage';
-import { useAppDispatch } from '../../../store/store';
-import { activeToast } from '../../../store/slices/toastSlice';
-import useAskDocErrorHandler from '../../hooks/useAskDocErrorHandler';
-import { useTranslation } from 'react-i18next';
 import { setCreating } from '../../../store/slices/tabSlice';
+import { activeToast } from '../../../store/slices/toastSlice';
+import { useAppDispatch } from '../../../store/store';
+import useAskDocErrorHandler from '../../hooks/useAskDocErrorHandler';
+import useAskDocRequestHandler from '../../hooks/useAskDocRequestHandler';
 import useLangParameterNavigate from '../../hooks/useLangParameterNavigate';
+import usePercentage from '../../hooks/usePercentage';
+import ProgressBar from '../../ProgressBar';
 
 type Props = {
   onNext: Dispatch<SetStateAction<'ready' | IFileStatus>>;

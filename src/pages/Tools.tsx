@@ -1,11 +1,9 @@
 import { useEffect, useState } from 'react';
-// import AIChatTab, { ChatOptions } from '../views/AIChatTab';
-import AIWriteTab from '../views/AIWriteTab';
 import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
 // import { AI_WRITE_TAB_TYPE, selectTab, selectTabSlice } from '../store/slices/tabSlice';
 import styled from 'styled-components';
-import { flex, flexColumn } from '../style/cssCommon';
-import Header from '../components/layout/Header';
+
 // import { useAppDispatch, useAppSelector } from '../store/store';
 // import { activeToast } from '../store/slices/toastSlice';
 // import Tabs from '../components/tabs/Tabs';
@@ -19,11 +17,13 @@ import {
   WriteOptions
   // versionClaude
 } from '../components/chat/RecommendBox/FormRec';
-
+import Header from '../components/layout/Header';
 // import { ReactComponent as IconChat } from '../img/ico_chat.svg';
 // import { ReactComponent as IconCreatingText } from '../img/ico_creating_text.svg';
-import { LANG_KO_KR, lang } from '../locale';
-import { useLocation } from 'react-router-dom';
+import { lang, LANG_KO_KR } from '../locale';
+import { flex, flexColumn } from '../style/cssCommon';
+// import AIChatTab, { ChatOptions } from '../views/AIChatTab';
+import AIWriteTab from '../views/AIWriteTab';
 
 const Wrapper = styled.div`
   ${flex}

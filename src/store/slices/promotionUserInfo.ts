@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
 import { RootState } from '../store';
-import { InitialState } from './creditInfo';
 
 export enum IEventType {
   UNKNOWN = -1,

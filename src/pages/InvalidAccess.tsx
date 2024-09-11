@@ -1,7 +1,8 @@
-import styled from 'styled-components';
-import { alignItemCenter, flex, flexColumn, justiCenter } from '../style/cssCommon';
-import Header from '../components/layout/Header';
 import { useTranslation } from 'react-i18next';
+import styled from 'styled-components';
+
+import Header from '../components/layout/Header';
+import { alignItemCenter, flex, flexColumn, justiCenter } from '../style/cssCommon';
 
 const Wrapper = styled.div`
   ${flex}

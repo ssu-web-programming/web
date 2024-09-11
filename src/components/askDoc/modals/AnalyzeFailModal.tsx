@@ -1,6 +1,8 @@
-import { ReactComponent as Icon } from '../../../img/askDoc/ico_document_64.svg';
-import ErrorModal from './ErrorModal';
 import { useTranslation } from 'react-i18next';
+
+import { ReactComponent as Icon } from '../../../img/askDoc/ico_document_64.svg';
+
+import ErrorModal from './ErrorModal';
 
 type Props = {
   buttonOnclick: () => void;

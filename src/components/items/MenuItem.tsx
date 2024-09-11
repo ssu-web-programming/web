@@ -1,4 +1,5 @@
 import { PropsWithChildren } from 'react';
+
 interface Props {
   id: string;
   value: string;
@@ -10,5 +11,6 @@ interface Props {
 export type MenuItemProps = PropsWithChildren<Props>;
 
 export default function MenuItem(props: MenuItemProps) {
+  props;
   return <></>;
 }

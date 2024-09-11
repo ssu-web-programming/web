@@ -1,21 +1,22 @@
-import styled, { FlattenSimpleInterpolation, css } from 'styled-components';
-import TextArea from '../components/TextArea';
+import { useTranslation } from 'react-i18next';
+import styled, { css, FlattenSimpleInterpolation } from 'styled-components';
+
+import AskDocSpeechBubble from '../components/askDoc/AskDocSpeechBubble';
+import Button from '../components/buttons/Button';
 import { RowWrapBox } from '../components/chat/RecommendBox/ChatRecommend';
+import Header from '../components/layout/Header';
+import TextArea from '../components/TextArea';
+import ico_askdoc_64 from '../img/askDoc/ico_askdoc_64.svg';
 import {
-  TableCss,
-  justiCenter,
+  alignItemCenter,
+  flex,
   flexColumn,
   flexGrow,
   flexShrink,
-  alignItemCenter,
+  justiCenter,
   justiSpaceBetween,
-  flex
+  TableCss
 } from '../style/cssCommon';
-import { useTranslation } from 'react-i18next';
-import Header from '../components/layout/Header';
-import AskDocSpeechBubble from '../components/askDoc/AskDocSpeechBubble';
-import Button from '../components/buttons/Button';
-import ico_askdoc_64 from '../img/askDoc/ico_askdoc_64.svg';
 
 const TEXT_MAX_HEIGHT = 268;
 

@@ -1,5 +1,6 @@
-import styled from 'styled-components';
 import { PropsWithChildren, ReactElement } from 'react';
+import styled from 'styled-components';
+
 import { MenuItemProps } from '../items/MenuItem';
 
 const Wrapper = styled.div`

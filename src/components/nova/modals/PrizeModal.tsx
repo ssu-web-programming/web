@@ -163,6 +163,7 @@ const Button = styled.div`
 
 const StyledAccordion = styled(Accordion)`
   width: 100%;
+
   &.MuiAccordion-root,
   &.MuiAccordion-root.Mui-expanded {
     margin: 0;
@@ -179,6 +180,7 @@ const StyledAccordionSummary = styled(AccordionSummary)`
     min-height: 24px;
     padding: 16px 24px;
   }
+
   &.MuiAccordionSummary-root.Mui-expanded {
     min-height: 24px;
     padding: 16px 24px 0 24px;
@@ -246,7 +248,7 @@ const PrizeModal = ({ buttonOnClick }: Props) => {
 
     if (nameValue && phoneValue) {
       const eventType: IEventType = IEventType.AI_NOVA_LUCKY_EVENT;
-      const { res } = await apiWrapper().request(PROMOTION_AGREE, {
+      await apiWrapper().request(PROMOTION_AGREE, {
         headers: {
           'content-type': 'application/json'
         },

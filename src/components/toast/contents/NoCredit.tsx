@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
+
 import { openNewWindow } from '../../../util/common';
 
 const TextLink = styled.p`

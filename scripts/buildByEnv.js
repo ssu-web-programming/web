@@ -1,5 +1,5 @@
-import { GetEnvVars } from 'env-cmd';
 import { spawnSync } from 'child_process';
+import { GetEnvVars } from 'env-cmd';
 
 const arg = process.argv.slice(2);
 const serverEnv = arg[0];
@@ -22,7 +22,7 @@ const buildTarget = async (target) => {
     env
   });
 
-  await spawnSync(`node`, ['-r', 'esm', './scripts/ready-to-deploy.js', serverEnv,target], {
+  await spawnSync(`node`, ['-r', 'esm', './scripts/ready-to-deploy.js', serverEnv, target], {
     stdio: 'inherit',
     shell: true,
     env

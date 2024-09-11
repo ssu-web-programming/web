@@ -1,13 +1,14 @@
-import { Outlet } from 'react-router-dom';
-import Header from '../../components/layout/Header';
-import { useTranslation } from 'react-i18next';
-import { WrapperPage, Body } from '../../style/askDoc';
-import Modals, { Overlay } from '../../components/askDoc/modals/Modals';
 import { Suspense, useEffect } from 'react';
-import useGtmPageChange from '../../components/hooks/useGtmPageChange';
 import { useConfirm } from 'components/Confirm';
-import Bridge from 'util/bridge';
 import useLangParameterNavigate from 'components/hooks/useLangParameterNavigate';
+import { useTranslation } from 'react-i18next';
+import { Outlet } from 'react-router-dom';
+import Bridge from 'util/bridge';
+
+import Modals, { Overlay } from '../../components/askDoc/modals/Modals';
+import useGtmPageChange from '../../components/hooks/useGtmPageChange';
+import Header from '../../components/layout/Header';
+import { Body, WrapperPage } from '../../style/askDoc';
 
 export const AskDocHome = () => {
   const { t } = useTranslation();

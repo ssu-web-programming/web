@@ -1,8 +1,9 @@
 //단일 파일로 압축
 
-import fs from 'fs';
-import { zipBuildResult } from './ready-to-deploy-utils';
 import { spawnSync } from 'child_process';
+import fs from 'fs';
+
+import { zipBuildResult } from './ready-to-deploy-utils';
 
 const arg = process.argv.slice(2);
 const buildTarget = arg[0];
@@ -53,7 +54,7 @@ const ready = async () => {
   //zip
   zipBuildResult(targetDir, `${buildName}.zip`);
 
- // fs.rmdirSync(tempDir, { recursive: true });
+  // fs.rmdirSync(tempDir, { recursive: true });
 };
 
 ready();

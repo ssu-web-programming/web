@@ -1,9 +1,11 @@
-import spinner from '../img/spinner.webp';
 import styled from 'styled-components';
-import Blanket from './Blanket';
-import { useAppSelector } from '../store/store';
+
+import spinner from '../img/spinner.webp';
 import { selectLoadingSpinner } from '../store/slices/loadingSpinner';
+import { useAppSelector } from '../store/store';
 import { alignItemCenter, flex, flexColumn, justiCenter } from '../style/cssCommon';
+
+import Blanket from './Blanket';
 
 const SpinnerWrapper = styled.div`
   ${flex}

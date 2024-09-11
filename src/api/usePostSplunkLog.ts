@@ -1,10 +1,12 @@
 import { encode } from 'gpt-tokenizer';
-import { REC_ID_LIST } from '../components/chat/RecommendBox/FunctionRec';
-import { EngineVersion } from '../components/chat/RecommendBox/FormRec';
-import { CheckSessionResponse } from '../util/bridge';
 import { VersionType } from 'store/slices/txt2imgHistory';
 
+import { EngineVersion } from '../components/chat/RecommendBox/FormRec';
+import { REC_ID_LIST } from '../components/chat/RecommendBox/FunctionRec';
+import { CheckSessionResponse } from '../util/bridge';
+
 export type LLMVersion = string | number;
+
 interface SplunkLogDataType {
   ti: {
     v: string;
@@ -179,7 +181,9 @@ export const postSplunkLog = async (sessionResponse: CheckSessionResponse, data:
     });
 
     return res;
-  } catch (err) {}
+  } catch (err) {
+    /*empty*/
+  }
 };
 
 const MAGIC_NUMBER = 8;
@@ -201,8 +205,7 @@ export const parseGptVer = (version: EngineVersion | VersionType): LLMVersion =>
     else if (version === 'sd3') return 'Stable_Diffusion';
     else if (version === 'dalle3') return 'Dalle-3';
     const gptVer = new RegExp(/gpt([0-9]*[.]?[0-9]+[a-z]?)/g).exec(version);
-    const gpt_ver = gptVer && gptVer[1] ? gptVer[1] : 0;
-    return gpt_ver;
+    return gptVer && gptVer[1] ? gptVer[1] : 0;
   } catch (err) {
     return 'unknown';
   }

@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
+
 import { flex, flexColumn } from './cssCommon';
 
 const GlobalStyle = createGlobalStyle`

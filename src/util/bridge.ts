@@ -54,7 +54,7 @@ export const getPlatform = () => getAgentPlatform(navigator.userAgent);
 export const getVersion = () => getAgentVersion(navigator.userAgent);
 
 export async function fileToString(file: Blob) {
-  return new Promise<string>((resolve, reject) => {
+  return new Promise<string>((resolve) => {
     try {
       const reader = new FileReader();
       reader.onloadend = function () {

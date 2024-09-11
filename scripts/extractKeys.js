@@ -1,8 +1,8 @@
 console.log('✅ 다국어 번역에서 누락된 키 찾기 ---------------------------------');
 
-const fs = require('fs');
-const path = require('path');
-const _ = require('lodash');
+import fs from 'fs';
+import _ from 'lodash';
+import path from 'path';
 
 const koPath = path.join(__dirname, '../src/locale/translation.ko.json');
 const enPath = path.join(__dirname, '../src/locale/translation.en.json');

@@ -1,4 +1,9 @@
+import { useTranslation } from 'react-i18next';
 import styled, { css } from 'styled-components';
+
+import icon_credit from '../../img/ico_credit_purple.svg';
+import { summarySelector } from '../../store/slices/askDocSummary';
+import { useAppSelector } from '../../store/store';
 import {
   alignItemCenter,
   alignItemStart,
@@ -9,10 +14,6 @@ import {
 } from '../../style/cssCommon';
 import Button from '../buttons/Button';
 import Icon from '../Icon';
-import icon_credit from '../../img/ico_credit_purple.svg';
-import { useTranslation } from 'react-i18next';
-import { useAppSelector } from '../../store/store';
-import { summarySelector } from '../../store/slices/askDocSummary';
 
 const Title = styled.div`
   color: var(--ai-purple-50-main);
@@ -23,7 +24,7 @@ const Title = styled.div`
 const Summary = styled.div`
   ${flex}
   ${flexColumn}
-  
+
   gap: 12px;
 `;
 
@@ -31,7 +32,7 @@ const SubTitle = styled.div`
   ${flex}
   ${alignItemCenter}
   ${justiStart}
-  
+
   padding: 9px 0 8px 0;
   color: #72787f;
   font-size: 12px;
@@ -41,7 +42,7 @@ const SubTitle = styled.div`
 const KeywordWrap = styled.div`
   ${flex}
   ${alignItemStart}
-  
+
   gap: 8px;
   flex-wrap: wrap;
 `;
@@ -50,7 +51,7 @@ const Keyword = styled.div<{ disable: boolean }>`
   ${flex}
   ${alignItemCenter}
   ${justiCenter}
-  
+
   padding: 4px 10px;
   border-radius: 4px;
   background-color: #f2f4f6;
@@ -63,7 +64,7 @@ const Keyword = styled.div<{ disable: boolean }>`
 const List = styled.div`
   ${flex}
   ${flexColumn}
-  
+
   gap: 6px;
   height: 100%;
   width: 100%;
@@ -76,7 +77,7 @@ export const QuestionList = ({
 }: {
   isLoading: boolean;
   isIncludeSummary: boolean;
-  onClick: (api: 'gpt' | 'askDoc', chatText?: string) => {};
+  onClick: (api: 'gpt' | 'askDoc', chatText?: string) => void;
 }) => {
   const { t } = useTranslation();
   const { keywords, questions, summary } = useAppSelector(summarySelector);

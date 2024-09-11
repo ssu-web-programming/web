@@ -1,38 +1,38 @@
-import styled from 'styled-components';
 import { useEffect, useRef, useState } from 'react';
-import { useAppSelector } from '../../store/store';
+import { Helmet } from 'react-helmet-async';
+import { useTranslation } from 'react-i18next';
+import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
-import { ChatList } from '../../components/askDoc/ChatList';
-import { ChatBottom } from '../../components/askDoc/ChatBottom';
 
-import {
-  TableCss,
-  flexColumn,
-  justiSpaceBetween,
-  flex,
-  alignItemCenter
-} from '../../style/cssCommon';
-import { AskDocChat, selectAskDoc } from '../../store/slices/askDoc';
-import { summarySelector } from '../../store/slices/askDocSummary';
-import { filesSelector } from '../../store/slices/askDocAnalyzeFiesSlice';
+import { apiWrapper } from '../../api/apiWrapper';
+import { VOICEDOC_MAKE_VOICE } from '../../api/constant';
+import { ChatBottom } from '../../components/askDoc/ChatBottom';
+import { ChatList } from '../../components/askDoc/ChatList';
+import Button from '../../components/buttons/Button';
 import { useChatAskdoc } from '../../components/hooks/useChatAskdoc';
 import useLangParameterNavigate from '../../components/hooks/useLangParameterNavigate';
 import Icon from '../../components/Icon';
-import icon_ai from '../../img/ico_ai.svg';
 import IconMic from '../../img/aiChat/mic.png';
-import { useTranslation } from 'react-i18next';
-import { VOICEDOC_MAKE_VOICE } from '../../api/constant';
-import { apiWrapper } from '../../api/apiWrapper';
-import { Helmet } from 'react-helmet-async';
-import Bridge from '../../util/bridge';
+import icon_ai from '../../img/ico_ai.svg';
+import { AskDocChat } from '../../store/slices/askDoc';
+import { filesSelector } from '../../store/slices/askDocAnalyzeFiesSlice';
+import { summarySelector } from '../../store/slices/askDocSummary';
 import { recognizedVoiceSelector } from '../../store/slices/recognizedVoice';
-import Button from '../../components/buttons/Button';
+import { useAppSelector } from '../../store/store';
+import {
+  alignItemCenter,
+  flex,
+  flexColumn,
+  justiSpaceBetween,
+  TableCss
+} from '../../style/cssCommon';
+import Bridge from '../../util/bridge';
 
 const Wrapper = styled.div`
   ${flex}
   ${flexColumn}
   ${justiSpaceBetween}
-  
+
   width: 100%;
   height: 100%;
   background-color: var(--ai-purple-99-bg-light);
@@ -43,7 +43,7 @@ const Wrapper = styled.div`
 const WrapperPage = styled.div`
   ${flex}
   ${flexColumn}
-  
+
   width: 100%;
   height: 100%;
 `;
@@ -109,7 +109,7 @@ const AskDoc = () => {
   const submitAskDoc = useChatAskdoc();
   const { isTesla, isObigo } = useLangParameterNavigate();
   const { fileStatus } = useAppSelector(filesSelector);
-  const { keywords, questions, summary } = useAppSelector(summarySelector);
+  const { questions, summary } = useAppSelector(summarySelector);
   const recogVoiceSelector = useAppSelector(recognizedVoiceSelector);
   const [userChatText, setUserChatText] = useState('');
   const [onPlayAudio, setOnPlayAudio] = useState<HTMLAudioElement | null>(null);

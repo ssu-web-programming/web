@@ -1,7 +1,9 @@
-import LinkText from './LinkText';
-import icon_claude from '../img/logo_anthropic.svg';
-import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
+import styled from 'styled-components';
+
+import icon_claude from '../img/logo_anthropic.svg';
+
+import LinkText from './LinkText';
 
 const Wrapper = styled.div`
   display: flex;

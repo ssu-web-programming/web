@@ -1,10 +1,12 @@
-import { useRef, useEffect } from 'react';
-import styled, { css } from 'styled-components';
-import Blanket from './Blanket';
-import { useAppDispatch, useAppSelector } from '../store/store';
-import { activeConfirm, ConfirmType, initConfirm, selectConfirm } from '../store/slices/confirm';
-import Button from './buttons/Button';
+import { useEffect, useRef } from 'react';
 import { CustomScrollbar } from 'style/cssCommon';
+import styled, { css } from 'styled-components';
+
+import { activeConfirm, ConfirmType, initConfirm, selectConfirm } from '../store/slices/confirm';
+import { useAppDispatch, useAppSelector } from '../store/store';
+
+import Button from './buttons/Button';
+import Blanket from './Blanket';
 
 export const ConfirmBox = styled.div`
   display: flex;
@@ -50,8 +52,8 @@ export const ContentArea = styled.div`
 
   height: fit-content;
   overflow-y: auto;
-  ${CustomScrollbar}
 
+  ${CustomScrollbar}
   & .important {
     color: red;
     font-weight: 700;

@@ -1,8 +1,10 @@
-import LinkText from './LinkText';
-import icon_openai from '../img/logo_open_ai.svg';
-import styled from 'styled-components';
-import { flex } from '../style/cssCommon';
 import { useTranslation } from 'react-i18next';
+import styled from 'styled-components';
+
+import icon_openai from '../img/logo_open_ai.svg';
+import { flex } from '../style/cssCommon';
+
+import LinkText from './LinkText';
 
 const Wrapper = styled.div`
   ${flex}

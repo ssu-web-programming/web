@@ -3,10 +3,9 @@ import styled, { css } from 'styled-components';
 const DEFAULT_SIZE = 200;
 
 const Body = styled.input<{ size: number }>`
-  ${({ size }) =>
-    css`
-      width: ${size}px;
-    `}
+  ${({ size }) => css`
+    width: ${size}px;
+  `}
   height: 50px;
   &:focus {
     outline: none;

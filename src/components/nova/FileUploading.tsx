@@ -1,4 +1,3 @@
-import React from 'react';
 import { ReactComponent as AgentFraphicEn } from 'img/agent_graphic_en.svg';
 import { ReactComponent as AgentFraphicJa } from 'img/agent_graphic_ja.svg';
 import { ReactComponent as AgentFraphicKo } from 'img/agent_graphic_ko.svg';
@@ -51,6 +50,7 @@ const FileUploadWrapper = styled.div`
       line-height: 36px;
     }
   }
+
   .agentImage {
     display: flex;
     justify-content: center;

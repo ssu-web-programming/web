@@ -30,7 +30,6 @@ import ReturnButton from '../buttons/ReturnButton';
 import StopButton from '../buttons/StopButton';
 import ClaudeLinkText from '../ClaudeLinkText';
 import ClovaXLinkText from '../ClovaXLinkText';
-import { useMoveChatTab } from '../hooks/useMovePage';
 import Grid from '../layout/Grid';
 import Loading from '../Loading';
 import OpenAILinkText from '../OpenAILinkText';
@@ -123,7 +122,6 @@ const AiWriteResult = ({
   const dispatch = useAppDispatch();
   // const copyClipboard = useCopyClipboard();
   const { creating } = useAppSelector(selectTabSlice);
-  const moveChat = useMoveChatTab();
 
   const currentWrite = history.filter((write) => write.id === currentWriteId)[0];
   const currentIndex = history.findIndex((write) => write.id === currentWriteId);

@@ -11,11 +11,11 @@ const Pre = styled.div`
   gap: 8px;
   font-weight: normal;
   font-size: 13px;
-  margin: 0px;
-  padding: 0px;
+  margin: 0;
+  padding: 0;
 
-  margin: 0px;
-  padding: 0px;
+  margin: 0;
+  padding: 0;
   word-break: break-all;
 
   img {

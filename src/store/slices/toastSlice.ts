@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from '../store';
+
 import { ToastType } from '../../components/toast/Toast';
+import { RootState } from '../store';
 
 interface ToastProps {
   type: ToastType;

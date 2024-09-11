@@ -1,9 +1,10 @@
 import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
-import ko from './translation.ko.json';
+import { initReactI18next } from 'react-i18next';
+
 import en from './translation.en.json';
 import ja from './translation.ja.json';
+import ko from './translation.ko.json';
 
 export const LANG_KO_KR = 'ko';
 export const LANG_JA_JP = 'ja';
@@ -15,6 +16,7 @@ const getLangCodeFromParams = () => {
     const lang = params.get('lang');
     return lang;
   } catch (err) {
+    console.log('err: ', err);
     throw err;
   }
 };
@@ -25,6 +27,7 @@ const getLangCodeFromUA = () => {
     if (!parse) return undefined;
     return parse[1];
   } catch (err) {
+    console.log('err: ', err);
     throw err;
   }
 };

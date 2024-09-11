@@ -1,13 +1,14 @@
-import { useTranslation } from 'react-i18next';
-import { Footer, GuideMessage, Wrapper } from '../../style/askDoc';
-import Loading from '../../components/Loading';
 import { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
+import { useTranslation } from 'react-i18next';
+
 import CreateVector from '../../components/askDoc/analyzeStep/CreateVector';
 import Keyword from '../../components/askDoc/analyzeStep/Keyword';
 import PreAsk from '../../components/askDoc/analyzeStep/PresAsk';
+import Loading from '../../components/Loading';
+import { filesSelector, IFileStatus } from '../../store/slices/askDocAnalyzeFiesSlice';
 import { useAppSelector } from '../../store/store';
-import { IFileStatus, filesSelector } from '../../store/slices/askDocAnalyzeFiesSlice';
-import { Helmet } from 'react-helmet-async';
+import { Footer, GuideMessage, Wrapper } from '../../style/askDoc';
 
 export const ProgressAnalysisDoc = () => {
   const { t } = useTranslation();

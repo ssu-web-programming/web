@@ -1,10 +1,10 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
-import IconTextButton from 'components/buttons/IconTextButton';
 import IconButton from 'components/buttons/IconButton';
+import IconTextButton from 'components/buttons/IconTextButton';
 import { ReactComponent as closeIcon } from 'img/ico_ai_close.svg';
 import ico_download from 'img/ico_download.svg';
 import { useTranslation } from 'react-i18next';
+import styled, { css } from 'styled-components';
 
 type OverlayProps = {
   image?: string;

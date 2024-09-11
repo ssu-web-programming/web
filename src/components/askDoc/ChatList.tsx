@@ -1,25 +1,26 @@
-import AskDocSpeechBubble from './AskDocSpeechBubble';
-import { QuestionList } from './QuestionList';
-import styled from 'styled-components';
-import { flex, flexColumn, flexGrow, justiCenter } from '../../style/cssCommon';
-import { useAppSelector } from '../../store/store';
-import { AskDocChat, selectAskDoc } from '../../store/slices/askDoc';
-import StopButton from '../buttons/StopButton';
-import { setCreating } from '../../store/slices/tabSlice';
-import { activeToast } from '../../store/slices/toastSlice';
 import { Dispatch, MutableRefObject, SetStateAction, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAppDispatch } from '../../store/store';
-import Button from '../buttons/Button';
-import Bridge from '../../util/bridge';
-import Icon from '../Icon';
+import styled from 'styled-components';
+
 import icon_retry from '../../img/ico_reanalyze.svg';
+import { AskDocChat, selectAskDoc } from '../../store/slices/askDoc';
+import { setCreating } from '../../store/slices/tabSlice';
+import { activeToast } from '../../store/slices/toastSlice';
+import { useAppDispatch, useAppSelector } from '../../store/store';
+import { flex, flexColumn, flexGrow, justiCenter } from '../../style/cssCommon';
+import Bridge from '../../util/bridge';
+import Button from '../buttons/Button';
+import StopButton from '../buttons/StopButton';
 import useLangParameterNavigate from '../hooks/useLangParameterNavigate';
+import Icon from '../Icon';
+
+import AskDocSpeechBubble from './AskDocSpeechBubble';
+import { QuestionList } from './QuestionList';
 
 const ChatListWrapper = styled.div<{ isLoading: boolean }>`
-  ${flex}
-  ${flexColumn}
-  ${flexGrow}
+  ${flex};
+  ${flexColumn};
+  ${flexGrow};
   position: relative;
 
   width: 100%;
@@ -52,7 +53,7 @@ export const ChatList = ({
   setLoadingId: Dispatch<SetStateAction<string | null>>;
   isActiveRetry: boolean;
   setIsActiveInput: Dispatch<SetStateAction<boolean>>;
-  handleClickQuestion: (api: 'gpt' | 'askDoc', chatText?: string) => {};
+  handleClickQuestion: (api: 'gpt' | 'askDoc', chatText?: string) => void;
   stopRef: MutableRefObject<string[]>;
   onPlayAudio: HTMLAudioElement | null;
   setOnPlayAudio: (audio: HTMLAudioElement | null) => void;
@@ -155,6 +156,7 @@ export const ChatList = ({
             borderType="gray"
             onClick={() => {
               if (status === 'completeAnalyze' && sourceId) {
+                /* empty */
               } else if (status === 'failedConvert' || status === 'failedAnalyze') {
                 setLoadingId('init');
                 Bridge.callBridgeApi('reInitAskDoc', '');

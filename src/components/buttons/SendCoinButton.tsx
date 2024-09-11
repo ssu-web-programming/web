@@ -1,8 +1,10 @@
 import styled, { css } from 'styled-components';
+
+import icon_credit from '../../img/ico_credit.svg';
+import icon_sand from '../../img/ico_send.svg';
 import { alignItemCenter, flex, justiCenter } from '../../style/cssCommon';
 import Icon from '../Icon';
-import icon_sand from '../../img/ico_send.svg';
-import icon_credit from '../../img/ico_credit.svg';
+
 import Button from './Button';
 
 const CoinIcon = styled.div`

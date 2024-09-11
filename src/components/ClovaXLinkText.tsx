@@ -1,8 +1,10 @@
-import LinkText from './LinkText';
-import { alignItemCenter, flex } from '../style/cssCommon';
 import styled from 'styled-components';
+
 import ico_clovax_primary from '../img/hyperClovaX_logotype_primary.svg';
 import ico_navercloud from '../img/naver_cloud_ci_green.svg';
+import { alignItemCenter, flex } from '../style/cssCommon';
+
+import LinkText from './LinkText';
 
 const Wrapper = styled.div`
   ${flex}

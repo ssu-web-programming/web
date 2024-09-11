@@ -160,10 +160,6 @@ interface InputBarProps {
   setContents: React.Dispatch<React.SetStateAction<string>>;
 }
 
-interface FileListItemInfo {
-  name: string;
-}
-
 export default function InputBar(props: InputBarProps) {
   const dispatch = useAppDispatch();
   const { disabled = false, expiredNOVA = false, contents = '', setContents } = props;

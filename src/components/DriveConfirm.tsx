@@ -1,8 +1,9 @@
-import { useRef, useEffect } from 'react';
+import { useEffect, useRef } from 'react';
+import { ConfirmBox, ContentArea, Footer, Header } from 'components/Confirm';
 import styled, { css } from 'styled-components';
-import Blanket from './Blanket';
+
 import Button from './buttons/Button';
-import { ConfirmBox, Header, ContentArea, Footer } from 'components/Confirm';
+import Blanket from './Blanket';
 
 const Wrapper = styled(ConfirmBox)`
   position: fixed;

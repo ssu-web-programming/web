@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { ReactComponent as IconMax } from 'img/ico_nova_max.svg';
 import { ReactComponent as IconMin } from 'img/ico_nova_min.svg';
 

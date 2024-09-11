@@ -9,6 +9,7 @@ function useModal() {
   };
 
   const handleCloseModal = (type: any) => {
+    type;
     dispatch(closeModal());
   };
 

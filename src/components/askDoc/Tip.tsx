@@ -39,9 +39,7 @@ export const Tip = () => {
     return ['1ChatingCredit'];
   }, []);
 
-  const [chatTip, setChatTip] = useState<string>(
-    chatTipList[Math.floor(Math.random() * chatTipList.length)]
-  );
+  const [chatTip] = useState<string>(chatTipList[Math.floor(Math.random() * chatTipList.length)]);
 
   return (
     <FloatingBox>

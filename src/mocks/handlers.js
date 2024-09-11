@@ -1,4 +1,4 @@
-import { http, HttpResponse, delay } from 'msw';
+import { delay, http, HttpResponse } from 'msw';
 const encoder = new TextEncoder();
 export const handlers = [
   http.post('/api/1/ai/askdoc/getAnalyzeInfo', async ({ request }) => {

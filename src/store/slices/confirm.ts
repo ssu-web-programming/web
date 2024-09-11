@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
 import { RootState } from '../store';
 
 export interface ConfirmType {
@@ -12,8 +13,14 @@ export interface ConfirmType {
 const initialState: ConfirmType = {
   title: '',
   msg: null,
-  onCancel: { text: '', callback: () => {} },
-  onOk: { text: '', callback: () => {} },
+  onCancel: {
+    text: '',
+    callback: () => {}
+  },
+  onOk: {
+    text: '',
+    callback: () => {}
+  },
   direction: 'column'
 };
 

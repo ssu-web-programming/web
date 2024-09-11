@@ -1,15 +1,16 @@
-import { Wrapper, GuideMessage, Footer } from '../../style/askDoc';
-import AskDocButton from '../../components/buttons/AskDocButton';
-import { useTranslation } from 'react-i18next';
 //import useModal from '../../components/hooks/useModal';
 import { useState } from 'react';
-import CheckBox from '../../components/CheckBox';
-import styled from 'styled-components';
-import { alignItemCenter, flex, flexColumn, justiStart } from '../../style/cssCommon';
-import { useAppDispatch, useAppSelector } from '../../store/store';
-import { filesSelector, setFiles } from '../../store/slices/askDocAnalyzeFiesSlice';
-import useLangParameterNavigate from '../../components/hooks/useLangParameterNavigate';
 import { Helmet } from 'react-helmet-async';
+import { useTranslation } from 'react-i18next';
+import styled from 'styled-components';
+
+import AskDocButton from '../../components/buttons/AskDocButton';
+import CheckBox from '../../components/CheckBox';
+import useLangParameterNavigate from '../../components/hooks/useLangParameterNavigate';
+import { filesSelector, setFiles } from '../../store/slices/askDocAnalyzeFiesSlice';
+import { useAppDispatch, useAppSelector } from '../../store/store';
+import { Footer, GuideMessage, Wrapper } from '../../style/askDoc';
+import { alignItemCenter, flex, flexColumn, justiStart } from '../../style/cssCommon';
 
 type File = {
   fileId: string;

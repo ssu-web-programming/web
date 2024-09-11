@@ -5,12 +5,14 @@ import { alignItemCenter, flex } from '../style/cssCommon';
 const Textarea = styled.textarea<{ cssExt?: FlattenSimpleInterpolation }>`
   resize: none;
   outline: none;
+
   ::placeholder {
     ${flex}
     ${alignItemCenter}
     font-size: 13px;
     color: var(--gray-gray-60-03);
   }
+
   font-size: 13px;
 
   ${({ cssExt }) => cssExt && cssExt}
@@ -32,10 +34,10 @@ interface TextAreaProps {
 
 const TextArea = ({
   value,
-  onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {},
-  onClick = (e: React.MouseEvent) => {},
-  onKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {},
-  onBlur = (e: React.FocusEvent<HTMLElement>) => {},
+  onChange = () => {},
+  onClick = () => {},
+  onKeyDown = () => {},
+  onBlur = () => {},
   cssExt,
   rows = 5,
   textRef,

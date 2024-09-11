@@ -1,10 +1,12 @@
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
+
+import { alignItemCenter, flex, flexColumn, justiSpaceBetween } from '../style/cssCommon';
+
+import ChangeExampleButton from './buttons/ChangeExampleButton';
 import SubTitle from './SubTitle';
 import TextArea from './TextArea';
-import ChangeExampleButton from './buttons/ChangeExampleButton';
-import { useState } from 'react';
-import { alignItemCenter, flex, flexColumn, justiSpaceBetween } from '../style/cssCommon';
-import { useTranslation } from 'react-i18next';
 import TextLength from './TextLength';
 
 const InputArea = styled.div<{ activeBorder: boolean }>`

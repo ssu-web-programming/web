@@ -1,9 +1,10 @@
 import styled from 'styled-components';
+
 import { flex, justiEnd } from '../style/cssCommon';
 import { openNewWindow } from '../util/common';
 
 const LinkTextWrapper = styled.div`
-  ${flex}
+  ${flex};
   color: black;
   cursor: pointer;
   width: fit-content;

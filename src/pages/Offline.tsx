@@ -1,9 +1,10 @@
-import styled from 'styled-components';
-import { useAppDispatch, useAppSelector } from '../store/store';
-import { selectNetwork, setOnlineStatus } from '../store/slices/network';
 import { useEffect } from 'react';
-import Header from '../components/layout/Header';
 import { useTranslation } from 'react-i18next';
+import styled from 'styled-components';
+
+import Header from '../components/layout/Header';
+import { selectNetwork, setOnlineStatus } from '../store/slices/network';
+import { useAppDispatch, useAppSelector } from '../store/store';
 import {
   alignItemCenter,
   flex,

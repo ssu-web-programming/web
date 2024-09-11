@@ -75,7 +75,7 @@ const ItemTitle = styled.div<{ isSelected: boolean }>`
   ${flex}
   ${justiCenter}
   ${alignItemCenter}
-  
+
   width: 100%;
   font-weight: bold;
   font-size: 12px;
@@ -108,7 +108,7 @@ const ItemIconBox = styled.div<{
   ${flex}
   ${justiCenter}
   ${alignItemCenter}
-  
+
   width: 100%;
   height: 100%;
   border-radius: 4px;
@@ -245,7 +245,7 @@ const ImageCreateInput = ({
 
   const creditInfo = useAppSelector(creditInfoSelector);
 
-  const { input, style, ratio, type } = options;
+  const { input, style, ratio } = options;
 
   const versionList = useMemo(
     () =>

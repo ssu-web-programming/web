@@ -1,8 +1,10 @@
-import { ReactComponent as IconPrev } from '../img/ico_arrow_prev.svg';
-import { ReactComponent as IconNext } from '../img/ico_arrow_next.svg';
-import IconButton from './buttons/IconButton';
 import { PropsWithChildren, ReactElement } from 'react';
+
+import { ReactComponent as IconNext } from '../img/ico_arrow_next.svg';
+import { ReactComponent as IconPrev } from '../img/ico_arrow_prev.svg';
+
 import { ButtonProps } from './buttons/Button';
+import IconButton from './buttons/IconButton';
 import { IconSize } from './Icon';
 
 type SwitcherType = 'index' | 'imgList';
@@ -57,8 +59,9 @@ const ArrowSwitcher = (props: PropsWithChildren<ArrowSwitcherProp>) => {
         </div>
       ) : (
         children &&
-        children.map((child) => (
+        children.map((child, index) => (
           <div
+            key={index}
             style={{
               width: IMG_LIST_SIZE[size],
               height: IMG_LIST_SIZE[size],

@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from '../store';
+
 import { EngineVersion } from '../../components/chat/RecommendBox/FormRec';
+import { RootState } from '../store';
 
 export interface StreamPreprocessing {
   type?: string;

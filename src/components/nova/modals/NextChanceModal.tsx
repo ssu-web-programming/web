@@ -90,6 +90,7 @@ const NextChanceModal = ({ buttonOnClick }: Props) => {
   const text = t('Nova.Modal.NextChance.Desc');
 
   const goEventPage = () => {
+    buttonOnClick();
     Bridge.callBridgeApi('openWindow', 'https://polarisoffice.com/ko/promotion/festival');
   };
 

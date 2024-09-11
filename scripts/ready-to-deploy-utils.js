@@ -1,8 +1,8 @@
+import archiver from 'archiver';
 import { spawnSync } from 'child_process';
 import fs from 'fs';
-import archiver from 'archiver';
-import xml2js from 'xml2js';
 import * as rra from 'recursive-readdir-async';
+import xml2js from 'xml2js';
 
 export const makeAuditReport = (targetDir, fileName) => {
   spawnSync(`yarn`, ['genAuditReport', `./${targetDir}/${fileName}`], {
@@ -40,7 +40,7 @@ export const zipBuildResult = (targetDir, fileName) => {
 };
 
 export const getSVNRev = (workingDir, targetDir) => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     //const tempID = Buffer.from(Math.random().toString()).toString('base64');
 
     spawnSync('svn', ['info', '--xml', '>', `${targetDir}/svnInfo.xml`], {
@@ -72,6 +72,7 @@ export const listSpecificExtFile = async (folder, ext) => {
 
     return res;
   } catch (err) {
+    console.log('err: ', err);
     throw err;
   }
 };

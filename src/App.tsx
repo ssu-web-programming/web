@@ -1,25 +1,26 @@
-import { Routes, Route } from 'react-router-dom';
-import Tools from './pages/Tools';
-import Toast from './components/toast/Toast';
 import { useEffect } from 'react';
-import TextToImage from './pages/TextToImage';
-import GlobalStyle from './style/globalStyle';
-import InvalidAccess from './pages/InvalidAccess';
-import Offline from './pages/Offline';
-import Spinner from './components/Spinner';
+import useInitApp from 'components/hooks/useInitApp';
+import Nova from 'pages/Nova/Nova';
+import { Route, Routes } from 'react-router-dom';
+
 import Confirm from './components/Confirm';
-import { useInitBridgeListener } from './util/bridge';
+import Spinner from './components/Spinner';
+import Toast from './components/toast/Toast';
+import Alli from './pages/Alli/Alli';
+import AskDoc from './pages/AskDoc';
 import AskDocHome from './pages/AskDocStep/AskDocHome';
+import AskDocLoading from './pages/AskDocStep/AskDocLoading';
+import Chat from './pages/AskDocStep/Chat';
 import CheckDocHistory from './pages/AskDocStep/CheckDocHistory';
 import ConfirmDoc from './pages/AskDocStep/ConfirmDoc';
 import ProgressAnalysisDoc from './pages/AskDocStep/ProgressAnalysisDoc';
 import StartAnalysisDoc from './pages/AskDocStep/StartAnalysisDoc';
-import AskDoc from './pages/AskDoc';
-import Chat from './pages/AskDocStep/Chat';
-import AskDocLoading from './pages/AskDocStep/AskDocLoading';
-import Alli from './pages/Alli/Alli';
-import Nova from 'pages/Nova/Nova';
-import useInitApp from 'components/hooks/useInitApp';
+import InvalidAccess from './pages/InvalidAccess';
+import Offline from './pages/Offline';
+import TextToImage from './pages/TextToImage';
+import Tools from './pages/Tools';
+import GlobalStyle from './style/globalStyle';
+import { useInitBridgeListener } from './util/bridge';
 
 function App() {
   const initBridgeListener = useInitBridgeListener();
@@ -28,7 +29,6 @@ function App() {
   useEffect(() => {
     initBridgeListener();
     initApp(); // initBridgeListener 다음에 호출되어야 함
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
