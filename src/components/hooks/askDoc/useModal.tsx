@@ -9,7 +9,7 @@ function useModal() {
   };
 
   const handleCloseModal = (type: any) => {
-    dispatch(closeModal());
+    dispatch(closeModal(type));
   };
 
   return { openModal: handleOpenModal, closeModal: handleCloseModal };

@@ -16,14 +16,16 @@ export type CREATING_TYPE =
   | 'AI Apps'
   | 'NOVA';
 export type AI_WRITE_TAB_TYPE = 'write' | 'chat';
-export type NOVA_TAB_TYPE =
-  | 'aiChat'
-  | 'removeBG'
-  | 'ChangeBG'
-  | 'remakeImg'
-  | 'ExpandImg'
-  | 'ImprovedRes'
-  | 'ChangeStyle';
+
+export enum NOVA_TAB_TYPE {
+  aiChat = 'aiChat',
+  removeBG = 'removeBG',
+  changeBG = 'changeBG',
+  remakeImg = 'remakeImg',
+  expandImg = 'expandImg',
+  improvedRes = 'improvedRes',
+  changeStyle = 'changeStyle'
+}
 
 interface TabType {
   creating: CREATING_TYPE;
@@ -44,7 +46,7 @@ const tabSlice = createSlice({
     initTab: (state) => {
       state.creating = 'none';
       state.selectedTabId = 'chat';
-      state.selectedNovaTab = 'aiChat';
+      state.selectedNovaTab = NOVA_TAB_TYPE.aiChat;
     },
     setCreating: (state, action: PayloadAction<CREATING_TYPE>) => {
       state.creating = action.payload;

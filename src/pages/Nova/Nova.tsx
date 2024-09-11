@@ -1,12 +1,13 @@
 import { Suspense } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import useManageFile from '../../components/hooks/nova/useManageFile';
 import useFileDrop from '../../components/hooks/useFileDrop';
 import NovaHeader from '../../components/nova/Header';
 import Modals, { Overlay } from '../../components/nova/modals/Modals';
-import { NOVA_TAB_TYPE, selectTabSlice } from '../../store/slices/tabSlice';
+import Tabs from '../../components/nova/Tabs';
+import { NOVA_TAB_TYPE, selectNovaTab, selectTabSlice } from '../../store/slices/tabSlice';
 
 import AIChat from './AIChat';
 
@@ -35,20 +36,27 @@ const Body = styled.div`
 export type ClientStatusType = 'home' | 'doc_edit_mode' | 'doc_view_mode';
 
 export default function Nova() {
+  const dispatch = useDispatch();
   const { handleDragOver, handleDragLeave, handleDrop } = useFileDrop();
   const { loadLocalFile } = useManageFile();
+
   const currentTab = useSelector(selectTabSlice).selectedNovaTab;
+  const tabValues: NOVA_TAB_TYPE[] = Object.values(NOVA_TAB_TYPE);
   const isTabSelected = (tab: NOVA_TAB_TYPE) => currentTab === tab;
-  console.log(currentTab);
+
+  const handleChangeTab = (selectTab: NOVA_TAB_TYPE) => {
+    dispatch(selectNovaTab(selectTab));
+  };
 
   return (
     <Wrapper>
       <NovaHeader />
+      <Tabs tabs={tabValues} activeTab={currentTab} onChangeTab={handleChangeTab} />
       <Body
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={(e) => handleDrop(e, loadLocalFile)}>
-        {isTabSelected('aiChat') && <AIChat />}
+        {isTabSelected(NOVA_TAB_TYPE.aiChat) && <AIChat />}
       </Body>
       <Suspense fallback={<Overlay />}>
         <Modals />

@@ -278,6 +278,15 @@
     "ASKDocEOSDesc2": "ASK Doc 서비스가 2024년 8월 22일에 종료되었습니다. 앱을 업데이트 하시면 통합 AI 서비스, NOVA를 통해 해당 기능을 만나보실 수 있습니다."
   },
   "Nova": {
+    "Tabs": {
+      "aiChat": "AI 채팅",
+      "removeBG": "배경 제거",
+      "changeBG": "배경 변경",
+      "remakeImg": "이미지 리메이크",
+      "expandImg": "이미지 확장",
+      "improvedRes": "해상도 향상",
+      "changeStyle": "스타일 변환"
+    },
     "CreditInfo": {
       "Title": "크레딧 안내",
       "Chat": "채팅",
