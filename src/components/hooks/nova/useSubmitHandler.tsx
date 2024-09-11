@@ -18,7 +18,7 @@ import {
   removeChat,
   updateChatStatus
 } from 'store/slices/novaHistorySlice';
-import { setCreating } from 'store/slices/tabSlice';
+import { setCreating, setUsingAI } from 'store/slices/tabSlice';
 import { getFileExtension, getFileName, markdownToHtml } from 'util/common';
 import { v4 } from 'uuid';
 
@@ -209,6 +209,7 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
 
       try {
         dispatch(setCreating('NOVA'));
+        dispatch(setUsingAI(true));
 
         const fileInfo: NovaChatType['files'] = [];
         if (expireTimer.current) clearTimeout(expireTimer.current);

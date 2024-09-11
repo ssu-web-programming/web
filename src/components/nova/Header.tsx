@@ -9,6 +9,7 @@ import ico_credit from '../../img/ico_credit_gray.svg';
 import ico_credit_info from '../../img/ico_credit_line.svg';
 import { creditInfoSelector, InitialState } from '../../store/slices/creditInfo';
 import { novaHistorySelector } from '../../store/slices/novaHistorySlice';
+import { NOVA_TAB_TYPE, selectTabSlice } from '../../store/slices/tabSlice';
 import { setDriveFiles, setLocalFiles } from '../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import Bridge, { ClientType, getPlatform } from '../../util/bridge';
@@ -57,6 +58,7 @@ export interface NovaHeaderProps {
 export default function NovaHeader(props: NovaHeaderProps) {
   const { t } = useTranslation();
   const novaHistory = useAppSelector(novaHistorySelector);
+  const { selectedNovaTab } = useAppSelector(selectTabSlice);
   const dispatch = useAppDispatch();
   const confirm = useConfirm();
   const chatNova = useChatNova();
@@ -104,7 +106,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
         <IconLogoNova width={107} height={32} />
       </TitleWrapper>
       <ButtonWrapper>
-        {novaHistory.length > 0 && (
+        {novaHistory.length > 0 && selectedNovaTab === NOVA_TAB_TYPE.aiChat && (
           <IconButton
             iconComponent={IconMessagePlus}
             onClick={newChat}

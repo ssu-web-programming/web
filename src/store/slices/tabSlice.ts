@@ -32,6 +32,7 @@ interface TabType {
   selectedTabId: AI_WRITE_TAB_TYPE;
   selectedNovaTab: NOVA_TAB_TYPE;
   showChatEOS: boolean;
+  usingAI: boolean;
 }
 
 const tabSlice = createSlice({
@@ -40,7 +41,8 @@ const tabSlice = createSlice({
     creating: 'none',
     selectedTabId: 'write',
     selectedNovaTab: 'aiChat',
-    showChatEOS: false
+    showChatEOS: false,
+    usingAI: false
   } as TabType,
   reducers: {
     initTab: (state) => {
@@ -59,11 +61,15 @@ const tabSlice = createSlice({
     },
     setshowChatEOS: (state) => {
       state.showChatEOS = true;
+    },
+    setUsingAI: (state, action: PayloadAction<boolean>) => {
+      state.usingAI = action.payload;
     }
   }
 });
 
-export const { initTab, setCreating, selectTab, selectNovaTab, setshowChatEOS } = tabSlice.actions;
+export const { initTab, setCreating, selectTab, selectNovaTab, setshowChatEOS, setUsingAI } =
+  tabSlice.actions;
 export const selectTabSlice = (state: RootState) => state.tab;
 export default tabSlice.reducer;
 

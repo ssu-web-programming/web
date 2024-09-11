@@ -30,8 +30,6 @@ const iconMap: Record<NOVA_TAB_TYPE, { default: string; selected: string }> = {
 const Wrap = styled.nav`
   width: 100%;
   height: 52px;
-  position: absolute;
-  top: 56px;
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -39,6 +37,13 @@ const Wrap = styled.nav`
   padding: 8px 16px;
   overflow-x: auto;
   overflow-y: hidden;
+  scrollbar-width: none;
+  background-color: rgb(244, 246, 248);
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
   white-space: nowrap;
   z-index: 1;
 `;

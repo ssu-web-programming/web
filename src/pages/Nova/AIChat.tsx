@@ -37,9 +37,9 @@ const Wrap = styled(Container)`
 
 const GuideWrapper = styled(Container)`
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
-  gap: 16px;
+  gap: 40px;
   background-color: #f4f6f8;
   overflow-y: auto;
 `;

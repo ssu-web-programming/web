@@ -2,9 +2,9 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styled, { css } from 'styled-components';
 
-import ico_ai from '../../img/ico_ai.svg';
 import ico_documents from '../../img/ico_documents.svg';
 import ico_image from '../../img/ico_image.svg';
+import AIChatIcon from '../../img/nova/aiChat/ai_chat.png';
 import Icon from '../Icon';
 
 const flexCenter = css`
@@ -12,26 +12,36 @@ const flexCenter = css`
   align-items: center;
 `;
 
+const GuideImage = styled.img`
+  width: 120px;
+  height: 80px;
+`;
+
 const GuideTitle = styled.div`
-  padding: 0 17px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 0 16px;
 
   div.title {
-    ${flexCenter}
+    ${flexCenter};
     justify-content: center;
-    margin-bottom: 8px;
 
-    font-size: 18px;
-    font-weight: 500;
-    line-height: 27px;
-    color: var(--ai-purple-50-main);
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 36px;
+    color: #6f3ad0;
   }
 
   p.subTitle {
-    font-size: 14px;
-    line-height: 21px;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
     letter-spacing: -0.02em;
-    color: var(--gray-gray-80-02);
+    color: #454c53;
     text-align: center;
+    white-space: break-spaces;
   }
 `;
 const Guidebody = styled.div`
@@ -39,16 +49,15 @@ const Guidebody = styled.div`
   flex-direction: column;
   gap: 8px;
   width: 100%;
-  margin-bottom: 24px;
 `;
 
 const GuideExample = styled.div`
-  ${flexCenter}
+  ${flexCenter};
   justify-content: flex-start;
   gap: 8px;
   padding: 12px;
   margin: 0 16px;
-  border: 1px solid var(--gray-gray-40);
+  border: 1px solid #c9cdd2;
   border-radius: 8px;
   background: #fff;
   font-size: 14px;
@@ -84,8 +93,8 @@ export const SearchGuide = (props: SearchGuideProps) => {
   return (
     <>
       <GuideTitle>
+        <GuideImage src={AIChatIcon} alt="aiChat" />
         <div className="title">
-          <Icon iconSrc={ico_ai} size="lg" />
           <p>{t(`Nova.SearchGuide.Title`)}</p>
         </div>
         <p className="subTitle">{t(`Nova.SearchGuide.SubTitle`)}</p>

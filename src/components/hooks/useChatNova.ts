@@ -1,7 +1,7 @@
 import { apiWrapper } from 'api/apiWrapper';
 import { NOVA_DELETE_CONVERSATION, PROMOTION_USER_INFO } from 'api/constant';
 import { initNovaHistory, novaHistorySelector } from 'store/slices/novaHistorySlice';
-import { setCreating } from 'store/slices/tabSlice';
+import { setCreating, setUsingAI } from 'store/slices/tabSlice';
 import { useAppDispatch, useAppSelector } from 'store/store';
 
 import { IEventType, setPromotionUserInfo } from '../../store/slices/promotionUserInfo';
@@ -21,6 +21,7 @@ export const useChatNova = () => {
       });
       dispatch(initNovaHistory());
       dispatch(setCreating('none'));
+      dispatch(setUsingAI(false));
 
       try {
         const eventType: IEventType = IEventType.AI_NOVA_LUCKY_EVENT;
