@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import ArrowIcon from '../../../img/nova/promotion/arrow_right.svg';
 import Credit from '../../../img/nova/promotion/credit.svg';
-import { IPromotionUserInfo, userInfoSelector } from '../../../store/slices/promotionUserInfo';
+import { IPromotionUserInfo, userInfoSelector } from '../../../store/slices/nova/promotionUserInfo';
 import { useAppSelector } from '../../../store/store';
 import Bridge from '../../../util/bridge';
 import { Heart } from '../Heart';

@@ -1,4 +1,4 @@
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
@@ -7,7 +7,9 @@ import useFileDrop from '../../components/hooks/useFileDrop';
 import NovaHeader from '../../components/nova/Header';
 import Modals, { Overlay } from '../../components/nova/modals/Modals';
 import Tabs from '../../components/nova/Tabs';
+import { selectPageStatus } from '../../store/slices/nova/pageStatusSlice';
 import { NOVA_TAB_TYPE, selectNovaTab, selectTabSlice } from '../../store/slices/tabSlice';
+import { setDriveFiles, setLocalFiles } from '../../store/slices/uploadFiles';
 import { useAppSelector } from '../../store/store';
 
 import AIChat from './AIChat';
@@ -47,17 +49,24 @@ export default function Nova() {
   const { handleDragOver, handleDragLeave, handleDrop } = useFileDrop();
   const { loadLocalFile } = useManageFile();
   const { usingAI, selectedNovaTab } = useAppSelector(selectTabSlice);
-
+  const status = useAppSelector(selectPageStatus(selectedNovaTab));
   const tabValues: NOVA_TAB_TYPE[] = Object.values(NOVA_TAB_TYPE);
   const isTabSelected = (tab: NOVA_TAB_TYPE) => selectedNovaTab === tab;
 
   const handleChangeTab = (selectTab: NOVA_TAB_TYPE) => {
     dispatch(selectNovaTab(selectTab));
+    dispatch(setLocalFiles([]));
+    dispatch(setDriveFiles([]));
   };
+
+  useEffect(() => {
+    console.log(usingAI);
+  }, [usingAI]);
 
   return (
     <Wrapper>
       <NovaHeader />
+      {/*status === 'home' 추가하기*/}
       {!usingAI && (
         <Tabs tabs={tabValues} activeTab={selectedNovaTab} onChangeTab={handleChangeTab} />
       )}

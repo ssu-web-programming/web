@@ -1,9 +1,7 @@
-import React, { useRef, useState } from 'react';
+import React, { RefObject, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import styled, { css } from 'styled-components';
 
 import {
-  MAX_FILE_UPLOAD_SIZE_MB,
   SUPPORT_DOCUMENT_TYPE,
   SUPPORT_IMAGE_TYPE,
   SupportFileType
@@ -12,65 +10,48 @@ import ico_camera from '../../img/ico_camera.svg';
 import ico_logo_po from '../../img/ico_logo_po.svg';
 import ico_mobile from '../../img/ico_mobile.svg';
 import ico_pc from '../../img/ico_pc.svg';
-import { ReactComponent as DocsPlusIcon } from '../../img/ico_upload_docs_plus.svg';
-import { ReactComponent as ImagePlusIcon } from '../../img/ico_upload_img_plus.svg';
+import { userInfoSelector } from '../../store/slices/userInfo';
+import { useAppSelector } from '../../store/store';
 import { ClientType, getPlatform } from '../../util/bridge';
 import { getFileExtension } from '../../util/common';
 import { useConfirm } from '../Confirm';
-import DriveConfirm from '../DriveConfirm';
 import FileButton from '../FileButton';
+import useManageFile from '../hooks/nova/useManageFile';
+import useNovaAgreement from '../hooks/nova/useNovaAgreement';
 import { useChatNova } from '../hooks/useChatNova';
 import useUserInfoUtils from '../hooks/useUserInfoUtils';
-import PoDrive, { DriveFileInfo } from '../PoDrive';
 import Tooltip from '../Tooltip';
 
-export const flexCenter = css`
-  display: flex;
-  align-items: center;
-`;
-
-const UploadBtn = styled.div`
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-
-  > button {
-    width: 32px;
-    height: 38px;
-    ${flexCenter};
-    justify-content: center;
-  }
-`;
+import PODriveList from './PODirveList';
 
 type FileUploaderProps = {
-  loadLocalFile: (files: File[]) => void;
-  isAgreed: boolean | undefined;
-  setIsAgreed: (agree: boolean) => void;
-  onLoadDriveFile: (files: DriveFileInfo[]) => void;
+  target: string;
+  accept: SupportFileType[];
+  children: React.ReactNode;
+  inputRef: RefObject<HTMLInputElement>;
+  tooltipStyle?: React.CSSProperties;
 };
 
 export const FileUploader = (props: FileUploaderProps) => {
-  const { loadLocalFile, isAgreed, setIsAgreed, onLoadDriveFile } = props;
+  const { target, accept, children, inputRef, tooltipStyle } = props;
+
+  const { loadLocalFile, loadDriveFile } = useManageFile();
   const { t } = useTranslation();
   const confirm = useConfirm();
   const chatNova = useChatNova();
   const { getAvailableFileCnt, calcAvailableFileCnt } = useUserInfoUtils();
-  const inputDocsFileRef = useRef<HTMLInputElement | null>(null);
-  const inputImgFileRef = useRef<HTMLInputElement | null>(null);
+
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedFiles, setSelectedFiles] = useState<number>(0);
   const [uploadTarget, setUploadTarget] = useState<string>('');
+  const { setIsAgreed } = useNovaAgreement();
+  const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
 
   const toggleDriveConfirm = () => {
     setIsOpen(!isOpen);
   };
 
-  const getCurrentFileInput = (target: string) => {
-    if (target === 'nova-file') {
-      return inputDocsFileRef;
-    } else if (target === 'nova-image') {
-      return inputImgFileRef;
-    }
+  const getCurrentFileInput = () => {
+    return inputRef;
   };
 
   const TOOLTIP_UPLOAD_OPTION = (target: string) => {
@@ -108,7 +89,7 @@ export const FileUploader = (props: FileUploaderProps) => {
               : ico_pc
         },
         onClick: () => {
-          const element = getCurrentFileInput(target)?.current;
+          const element = inputRef?.current;
           if (element) {
             const targetType = target === 'nova-image' ? SUPPORT_IMAGE_TYPE : SUPPORT_DOCUMENT_TYPE;
             element.accept = getAccept(targetType);
@@ -120,7 +101,7 @@ export const FileUploader = (props: FileUploaderProps) => {
         name: t(`Nova.UploadTooltip.Camera`),
         icon: { src: ico_camera },
         onClick: () => {
-          const element = getCurrentFileInput(target)?.current;
+          const element = getCurrentFileInput()?.current;
           if (element) {
             element.accept = 'camera';
             element.click();
@@ -140,94 +121,40 @@ export const FileUploader = (props: FileUploaderProps) => {
     }
   };
 
-  const UPLOAD_BTN_LIST = [
-    {
-      target: 'nova-file',
-      accept: SUPPORT_DOCUMENT_TYPE,
-      children: <DocsPlusIcon />,
-      ref: inputDocsFileRef
-    },
-    {
-      target: 'nova-image',
-      accept: SUPPORT_IMAGE_TYPE,
-      children: <ImagePlusIcon />,
-      ref: inputImgFileRef
-    }
-  ];
-
-  const handleDriveCancel = () => {
-    toggleDriveConfirm();
-    setUploadTarget('');
-  };
-
   return (
-    <UploadBtn>
-      {UPLOAD_BTN_LIST.map((btn) => (
-        <React.Fragment key={btn.target}>
-          <Tooltip
-            key={btn.target}
-            placement="top-start"
-            type="selectable"
-            options={TOOLTIP_UPLOAD_OPTION(btn.target)}
-            distance={10}
-            condition={!!isAgreed}
-            initPos>
-            <FileButton
-              target={btn.target}
-              accept={getAccept(btn.accept)}
-              handleOnChange={loadLocalFile}
-              multiple
-              isAgreed={isAgreed}
-              handleOnClick={handleOnClick}
-              ref={btn.ref}>
-              {btn.children}
-            </FileButton>
-          </Tooltip>
-        </React.Fragment>
-      ))}
+    <>
+      <React.Fragment key={target}>
+        <Tooltip
+          key={target}
+          placement="top-start"
+          type="selectable"
+          options={TOOLTIP_UPLOAD_OPTION(target)}
+          distance={10}
+          condition={!!isAgreed}
+          initPos
+          style={tooltipStyle}>
+          <FileButton
+            target={target}
+            accept={getAccept(accept)}
+            handleOnChange={loadLocalFile}
+            multiple
+            isAgreed={isAgreed}
+            handleOnClick={handleOnClick}
+            ref={inputRef}>
+            {children}
+          </FileButton>
+        </Tooltip>
+      </React.Fragment>
 
       {isOpen && (
-        <DriveConfirm
-          title={t('Nova.UploadTooltip.PolarisDrive')}
-          msg={
-            <>
-              <div
-                style={{
-                  fontWeight: 400,
-                  fontSize: '16px',
-                  lineHeight: '24px',
-                  marginBottom: '24px'
-                }}>
-                {t(
-                  calcAvailableFileCnt() >= 0
-                    ? uploadTarget === 'nova-file'
-                      ? 'Nova.PoDrive.LimitDesc'
-                      : 'Nova.PoDrive.DescImg'
-                    : 'Nova.PoDrive.Desc',
-                  {
-                    size: MAX_FILE_UPLOAD_SIZE_MB,
-                    count: calcAvailableFileCnt()
-                  }
-                )}
-              </div>
-
-              <PoDrive
-                max={calcAvailableFileCnt()}
-                onChange={(files: DriveFileInfo[]) => onLoadDriveFile(files)}
-                target={uploadTarget}
-                handleSelectedFiles={(arg: number) => setSelectedFiles(arg)}
-              />
-            </>
-          }
-          onOk={{
-            text: selectedFiles ? t('SelectionComplete') : t('Select'),
-            callback: toggleDriveConfirm,
-            disable: !selectedFiles
-          }}
-          onCancel={{ text: t('Cancel'), callback: handleDriveCancel }}
+        <PODriveList
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          uploadTarget={uploadTarget}
+          setUploadTarget={setUploadTarget}
         />
       )}
-    </UploadBtn>
+    </>
   );
 };
 

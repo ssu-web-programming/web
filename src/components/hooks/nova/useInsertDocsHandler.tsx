@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ClientStatusType } from '../../../pages/Nova/Nova';
-import { NovaChatType } from '../../../store/slices/novaHistorySlice';
+import { NovaChatType } from '../../../store/slices/nova/novaHistorySlice';
 import { activeToast } from '../../../store/slices/toastSlice';
 import { useAppDispatch } from '../../../store/store';
 import Bridge from '../../../util/bridge';

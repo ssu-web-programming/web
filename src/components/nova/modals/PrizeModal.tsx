@@ -18,7 +18,7 @@ import {
   IEventType,
   IPromotionUserInfo,
   userInfoSelector
-} from '../../../store/slices/promotionUserInfo';
+} from '../../../store/slices/nova/promotionUserInfo';
 import { useAppSelector } from '../../../store/store';
 
 const ExpandMoreIcon = (props: SvgIconProps) => (

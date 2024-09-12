@@ -10,7 +10,7 @@ import { ReactComponent as IconUploadDocs } from 'img/ico_upload_docs.svg';
 import { ReactComponent as IconUploadImg } from 'img/ico_upload_img.svg';
 import { useTranslation } from 'react-i18next';
 import { activeToast } from 'store/slices/toastSlice';
-import { useAppDispatch } from 'store/store';
+import { useAppDispatch, useAppSelector } from 'store/store';
 import { CustomScrollbar } from 'style/cssCommon';
 import styled from 'styled-components';
 import { getFileExtension } from 'util/common';
@@ -21,6 +21,7 @@ import {
   SUPPORT_IMAGE_TYPE,
   SupportFileType
 } from '../constants/fileTypes';
+import { selectTabSlice } from '../store/slices/tabSlice';
 
 import { getFileIcon } from './nova/InputBar';
 import CheckBox from './CheckBox';
@@ -162,13 +163,13 @@ export interface DriveFileInfo {
 
 interface PoDriveProps {
   max: number;
-  onChange: (files: DriveFileInfo[]) => void;
   target: string;
-  handleSelectedFiles?: (count: number) => void;
+  selectedFiles: DriveFileInfo[];
+  handleSelectedFiles: (selectedFiles: DriveFileInfo[]) => void;
+  isSingleFileSelection: boolean;
 }
 
 export default function PoDrive(props: PoDriveProps) {
-  const [selected, setSelected] = useState<DriveFileInfo[]>([]);
   const [state, setState] = useState<'none' | 'request'>('request');
   const [filelist, setFilelist] = useState<DriveFileInfo[]>([]);
   const [navi, setNavi] = useState<DriveFileInfo[]>([
@@ -185,6 +186,7 @@ export default function PoDrive(props: PoDriveProps) {
   ]);
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
+  const { selectedNovaTab } = useAppSelector(selectTabSlice);
 
   const getFileList = async (fileId?: DriveFileInfo['fileId']) => {
     try {
@@ -203,7 +205,10 @@ export default function PoDrive(props: PoDriveProps) {
       } = await res.json();
       if (!success) throw new Error('failed to get file list');
       return list
-        .filter((item: DriveFileInfo) => isValidFileSize(item.size) || item.fileType === 'DIR')
+        .filter(
+          (item: DriveFileInfo) =>
+            isValidFileSize(item.size, selectedNovaTab) || item.fileType === 'DIR'
+        )
         .sort((l: DriveFileInfo, r: DriveFileInfo) =>
           l.fileType < r.fileType ? -1 : l.fileType > r.fileType ? 1 : 0
         )
@@ -267,12 +272,6 @@ export default function PoDrive(props: PoDriveProps) {
     );
   }, []);
 
-  useEffect(() => {
-    if (props.handleSelectedFiles) {
-      props.handleSelectedFiles(selected.length);
-    }
-  }, [props, selected]);
-
   const onBack = () => {
     const index = navi.length - 1;
     if (index === 0) return;
@@ -314,14 +313,18 @@ export default function PoDrive(props: PoDriveProps) {
                     moveFolder(item.fileId);
                     setNavi((prev) => [...prev, item]);
                   } else if (item.fileType === 'FILE') {
-                    if (selected.includes(item)) {
-                      const sel = selected.filter((prevItem) => prevItem !== item);
-                      setSelected(sel);
-                      props.onChange(sel);
+                    if (props.isSingleFileSelection) {
+                      if (!props.selectedFiles.includes(item)) {
+                        props.handleSelectedFiles([item]);
+                      }
                     } else {
-                      const sel = [...selected, item].slice(props.max * -1);
-                      setSelected(sel);
-                      props.onChange(sel);
+                      if (props.selectedFiles.includes(item)) {
+                        const sel = props.selectedFiles.filter((prevItem) => prevItem !== item);
+                        props.handleSelectedFiles(sel);
+                      } else {
+                        const sel = [...props.selectedFiles, item].slice(props.max * -1);
+                        props.handleSelectedFiles(sel);
+                      }
                     }
                   }
                 }}>
@@ -332,7 +335,7 @@ export default function PoDrive(props: PoDriveProps) {
                 </div>
                 {item.fileType === 'FILE' && (
                   <CheckBox
-                    isChecked={selected.includes(item)}
+                    isChecked={props.selectedFiles.includes(item)}
                     setIsChecked={() => {}}
                     onClick={() => {}}></CheckBox>
                 )}

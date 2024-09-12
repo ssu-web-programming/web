@@ -6,9 +6,16 @@ import ImageUploader from '../../components/nova/ImageUploader';
 export default function ChangeStyle() {
   const { t } = useTranslation();
 
+  const changeStyle = () => {
+    // api to do
+  };
+
   return (
     <Guide>
-      <ImageUploader guideMsg={t(`Nova.removeBG.Guide.ImgUploader`)} />
+      <ImageUploader
+        guideMsg={t(`Nova.removeBG.Guide.ImgUploader`)}
+        handleUploadComplete={changeStyle}
+      />
     </Guide>
   );
 }

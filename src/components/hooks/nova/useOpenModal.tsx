@@ -6,7 +6,7 @@ import {
   IEventType,
   IPromotionUserInfo,
   setPromotionUserInfo
-} from '../../../store/slices/promotionUserInfo';
+} from '../../../store/slices/nova/promotionUserInfo';
 import { useAppDispatch } from '../../../store/store';
 
 import useModal from './useModal';

@@ -23,6 +23,7 @@ type TooltipProps = {
   distance?: number; // distance between tooltip and children
   initPos?: boolean; // if true, tooltip will be positioned as initial
   condition?: boolean; // if false, tooltip will not be opened
+  style?: React.CSSProperties;
 };
 
 const STYLE_BY_TYPE = {
@@ -39,12 +40,17 @@ const STYLE_BY_TYPE = {
 };
 
 const TooltipContainer = styled.div<{ initPos: boolean }>`
+  width: 100%;
+  height: 100%;
   position: ${({ initPos }) => (initPos ? 'initial' : 'relative')};
   display: flex;
   align-items: center;
+  justify-content: center;
 `;
 
 const TootipButton = styled.div`
+  width: 100%;
+  height: 100%;
   cursor: pointer;
   background-color: transparent;
 `;
@@ -154,7 +160,12 @@ const Tooltip = (props: TooltipProps) => {
   return (
     <TooltipContainer ref={tooltipRef} initPos={initPos}>
       <TootipButton onClick={toggleTooltip}>{children}</TootipButton>
-      <TooltipContent isOpen={isOpen} placement={placement} type={type} distance={distance}>
+      <TooltipContent
+        isOpen={isOpen}
+        placement={placement}
+        type={type}
+        distance={distance}
+        style={props.style}>
         {title && (
           <>
             <Title>{title}</Title>

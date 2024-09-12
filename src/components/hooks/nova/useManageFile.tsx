@@ -2,11 +2,12 @@ import { useConfirm } from 'components/Confirm';
 import { useTranslation } from 'react-i18next';
 
 import {
+  getMaxFileSize,
   isValidFileSize,
-  MAX_FILE_UPLOAD_SIZE_MB,
   MIN_FILE_UPLOAD_SIZE_KB
 } from '../../../constants/fileTypes';
-import { novaHistorySelector } from '../../../store/slices/novaHistorySlice';
+import { novaHistorySelector } from '../../../store/slices/nova/novaHistorySlice';
+import { selectTabSlice } from '../../../store/slices/tabSlice';
 import { setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { DriveFileInfo } from '../../PoDrive';
@@ -20,18 +21,19 @@ export function useManageFile() {
   const dispatch = useAppDispatch();
   const novaHistory = useAppSelector(novaHistorySelector);
   const { getAvailableFileCnt } = useUserInfoUtils();
+  const { selectedNovaTab } = useAppSelector(selectTabSlice);
 
   const loadLocalFile = async (files: File[]) => {
-    dispatch(setDriveFiles([])); // Redux 상태를 업데이트
+    dispatch(setDriveFiles([]));
 
     const uploadLimit = getAvailableFileCnt();
     if (uploadLimit !== -1) {
-      const invalidSize = files.filter((file) => !isValidFileSize(file.size));
+      const invalidSize = files.filter((file) => !isValidFileSize(file.size, selectedNovaTab));
       if (invalidSize.length > 0) {
         confirm({
           title: '',
           msg: t('Nova.Alert.OverFileUploadSize', {
-            max: MAX_FILE_UPLOAD_SIZE_MB,
+            max: getMaxFileSize(selectedNovaTab),
             min: MIN_FILE_UPLOAD_SIZE_KB
           })!,
           onOk: {

@@ -301,7 +301,8 @@
         "Title": "배경 제거",
         "SubTitle": "배경을 제거해 이미지를\n더욱 깔끔하게 만들 수 있어요",
         "ImgUploader": "최대 30MB 용량의\nJPG, PNG, WEBP 형식을 지원합니다."
-      }
+      },
+      "Loading": "배경을 제거하고 있어요"
     },
     "changeBG": {
       "Guide": {

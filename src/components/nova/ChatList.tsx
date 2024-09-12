@@ -13,7 +13,7 @@ import { ReactComponent as InsertDocsIcon } from 'img/ico_insert_docs.svg';
 import ico_user from 'img/ico_user.svg';
 import { ClientStatusType } from 'pages/Nova/Nova';
 import { useTranslation } from 'react-i18next';
-import { NovaChatType, NovaFileInfo } from 'store/slices/novaHistorySlice';
+import { NovaChatType, NovaFileInfo } from 'store/slices/nova/novaHistorySlice';
 import { selectTabSlice } from 'store/slices/tabSlice';
 import { useAppSelector } from 'store/store';
 import styled, { css } from 'styled-components';
@@ -284,7 +284,7 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                     .filter((btn) => btn.status.includes(item.status))
                     .map((btn) => (
                       <IconTextButton
-                        disable={creating !== 'none' || expiredNOVA}
+                        disable={creating == 'NOVA' || expiredNOVA}
                         key={btn.text}
                         width={'fit'}
                         iconSize={24}

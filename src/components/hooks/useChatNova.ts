@@ -1,10 +1,10 @@
 import { apiWrapper } from 'api/apiWrapper';
 import { NOVA_DELETE_CONVERSATION, PROMOTION_USER_INFO } from 'api/constant';
-import { initNovaHistory, novaHistorySelector } from 'store/slices/novaHistorySlice';
+import { initNovaHistory, novaHistorySelector } from 'store/slices/nova/novaHistorySlice';
 import { setCreating, setUsingAI } from 'store/slices/tabSlice';
 import { useAppDispatch, useAppSelector } from 'store/store';
 
-import { IEventType, setPromotionUserInfo } from '../../store/slices/promotionUserInfo';
+import { IEventType, setPromotionUserInfo } from '../../store/slices/nova/promotionUserInfo';
 
 export const useChatNova = () => {
   const dispatch = useAppDispatch();

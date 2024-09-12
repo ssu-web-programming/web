@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 
 import CloseIcon from '../../../img/nova/promotion/close.svg';
-import { modalSelector } from '../../../store/slices/novaModalsSlice';
+import { modalSelector } from '../../../store/slices/nova/novaModalsSlice';
 import { useAppSelector } from '../../../store/store';
 import useModal from '../../hooks/nova/useModal';
 

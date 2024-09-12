@@ -13,7 +13,7 @@ import {
   IAccurePromotionAction,
   IEventType,
   setPromotionUserInfo
-} from '../../../store/slices/promotionUserInfo';
+} from '../../../store/slices/nova/promotionUserInfo';
 import useModal from '../../hooks/nova/useModal';
 
 const Wrap = styled.div`

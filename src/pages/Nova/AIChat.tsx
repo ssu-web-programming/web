@@ -23,7 +23,7 @@ import {
   NovaChatType,
   NovaFileInfo,
   novaHistorySelector
-} from '../../store/slices/novaHistorySlice';
+} from '../../store/slices/nova/novaHistorySlice';
 import { selectTabSlice } from '../../store/slices/tabSlice';
 import { activeToast } from '../../store/slices/toastSlice';
 import { downloadImage } from '../../util/downloadImage';
@@ -222,7 +222,7 @@ export default function AIChat() {
       )}
       <InputBar
         novaHistory={novaHistory}
-        disabled={creating !== 'none'}
+        disabled={creating == 'NOVA'}
         expiredNOVA={expiredNOVA}
         onSubmit={createNovaSubmitHandler}
         contents={inputContents}

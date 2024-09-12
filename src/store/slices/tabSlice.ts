@@ -4,17 +4,24 @@ import Bridge from '../../util/bridge';
 import { RootState } from '../store';
 
 export type CREATING_TYPE =
-  | 'none'
+  | 'none' // 초기 상태
   | 'Chatting'
   | 'Write'
   | 'CreateImage'
-  | 'ASKDoc'
-  | 'TextExtract'
-  | 'CreateVectorData'
-  | 'PreAsk'
-  | 'MakeSummary'
+  | 'ASKDoc' // askdoc
+  | 'TextExtract' // askdoc text 추출
+  | 'CreateVectorData' // askdoc vector 생성
+  | 'PreAsk' // askdoc 질의
+  | 'MakeSummary' // askdoc 문서 요약
   | 'AI Apps'
-  | 'NOVA';
+  | 'NOVA' // nova 시작
+  | 'NOVAAsk' // nova 질의 중
+  | 'ChangeBG' // nova 배경변경 prompt 작성
+  | 'ExpandImg' // nova 이미지 사이즈 조절
+  | 'Loading' // nova 로딩
+  | 'Done' // nova 동작 완료
+  | 'TimeOver'; // nova time over;
+
 export type AI_WRITE_TAB_TYPE = 'write' | 'chat';
 
 export enum NOVA_TAB_TYPE {

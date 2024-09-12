@@ -9,16 +9,19 @@ import { getAccept } from './nova/FileUploader';
 import { useConfirm } from './Confirm';
 
 const FileButtonBase = styled.button`
-  width: fit-content;
-  height: fit-content;
+  width: 100%;
+  height: 100%;
   background-color: transparent;
   padding: 0;
 `;
 
 const Label = styled.label<{ disable: boolean }>`
+  width: 100%;
+  height: 100%;
   display: block;
   cursor: ${(props) => (props.disable ? 'initial' : 'pointer')};
   color: ${(props) => (props.disable ? '#454c5380' : 'var(--gray-gray-80-02)')};
+  -webkit-tap-highlight-color: transparent;
 `;
 
 const PersonalInfoContents = styled.div`

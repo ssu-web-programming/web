@@ -1,6 +1,4 @@
 import React, { useEffect, useRef } from 'react';
-import { apiWrapper } from 'api/apiWrapper';
-import { NOVA_SET_USER_INFO_AGREEMENT } from 'api/constant';
 import IconButton from 'components/buttons/IconButton';
 import Icon from 'components/Icon';
 import { DriveFileInfo } from 'components/PoDrive';
@@ -21,12 +19,14 @@ import ico_file_xls from 'img/ico_file_xls.svg';
 import { ReactComponent as SendActiveIcon } from 'img/ico_send_active.svg';
 import { ReactComponent as SendDisabledIcon } from 'img/ico_send_disabled.svg';
 import { useTranslation } from 'react-i18next';
-import { NovaChatType } from 'store/slices/novaHistorySlice';
-import { setNovaAgreement, userInfoSelector } from 'store/slices/userInfo';
+import { NovaChatType } from 'store/slices/nova/novaHistorySlice';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import styled, { css } from 'styled-components';
 import { sliceFileName } from 'util/common';
 
+import { SUPPORT_DOCUMENT_TYPE, SUPPORT_IMAGE_TYPE } from '../../constants/fileTypes';
+import { ReactComponent as DocsPlusIcon } from '../../img/ico_upload_docs_plus.svg';
+import { ReactComponent as ImagePlusIcon } from '../../img/ico_upload_img_plus.svg';
 import {
   getDriveFiles,
   getLocalFiles,
@@ -35,13 +35,25 @@ import {
   setDriveFiles,
   setLocalFiles
 } from '../../store/slices/uploadFiles';
-import useManageFile from '../hooks/nova/useManageFile';
 
 import { FileUploader } from './FileUploader';
 
 export const flexCenter = css`
   display: flex;
   align-items: center;
+`;
+
+const UploadBtn = styled.div`
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+
+  > button {
+    width: 32px;
+    height: 38px;
+    ${flexCenter};
+    justify-content: center;
+  }
 `;
 
 const InputBarBase = styled.div<{ disabled: boolean }>`
@@ -161,31 +173,16 @@ interface InputBarProps {
 }
 
 export default function InputBar(props: InputBarProps) {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { disabled = false, expiredNOVA = false, contents = '', setContents } = props;
 
-  const { loadLocalFile, loadDriveFile } = useManageFile();
   const localFiles = useAppSelector(getLocalFiles);
   const driveFiles = useAppSelector(getDriveFiles);
 
-  const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
-  const setIsAgreed = async (agree: boolean) => {
-    try {
-      dispatch(setNovaAgreement(agree));
-      await apiWrapper().request(NOVA_SET_USER_INFO_AGREEMENT, {
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        method: 'POST',
-        body: JSON.stringify({ agree: true })
-      });
-    } catch (err) {
-      /* empty */
-    }
-  };
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
-
-  const { t } = useTranslation();
+  const inputDocsFileRef = useRef<HTMLInputElement | null>(null);
+  const inputImgFileRef = useRef<HTMLInputElement | null>(null);
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const inputText = event.target.value;
@@ -251,6 +248,21 @@ export default function InputBar(props: InputBarProps) {
     textAreaRef.current?.focus();
   };
 
+  const UPLOAD_BTN_LIST = [
+    {
+      target: 'nova-file',
+      accept: SUPPORT_DOCUMENT_TYPE,
+      children: <DocsPlusIcon />,
+      ref: inputDocsFileRef
+    },
+    {
+      target: 'nova-image',
+      accept: SUPPORT_IMAGE_TYPE,
+      children: <ImagePlusIcon />,
+      ref: inputImgFileRef
+    }
+  ];
+
   return (
     <InputBarBase disabled={disabled || expiredNOVA}>
       {localFiles.length > 0 && (
@@ -304,12 +316,17 @@ export default function InputBar(props: InputBarProps) {
         </div>
       </InputTxtWrapper>
       <InputBtnWrapper>
-        <FileUploader
-          loadLocalFile={loadLocalFile}
-          isAgreed={isAgreed}
-          setIsAgreed={setIsAgreed}
-          onLoadDriveFile={loadDriveFile}
-        />
+        <UploadBtn>
+          {UPLOAD_BTN_LIST.map((btn) => (
+            <FileUploader
+              key={btn.target}
+              target={btn.target}
+              accept={btn.accept}
+              inputRef={btn.ref}>
+              {btn.children}
+            </FileUploader>
+          ))}
+        </UploadBtn>
 
         <IconBtnWrapper>
           <IconButton

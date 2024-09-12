@@ -13,7 +13,7 @@ import { setNovaAgreement, setUserInfo } from 'store/slices/userInfo';
 import { useAppDispatch } from 'store/store';
 import Bridge from 'util/bridge';
 
-import { IEventType, setPromotionUserInfo } from '../../store/slices/promotionUserInfo';
+import { IEventType, setPromotionUserInfo } from '../../store/slices/nova/promotionUserInfo';
 
 export default function useInitApp() {
   const dispatch = useAppDispatch();

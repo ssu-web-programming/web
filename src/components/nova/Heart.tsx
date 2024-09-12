@@ -16,7 +16,7 @@ import {
   IPromotionUserInfo,
   setPromotionUserInfo,
   userInfoSelector
-} from '../../store/slices/promotionUserInfo';
+} from '../../store/slices/nova/promotionUserInfo';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import useOpenModal from '../hooks/nova/useOpenModal';
 

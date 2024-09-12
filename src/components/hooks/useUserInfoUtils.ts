@@ -1,24 +1,31 @@
-import { novaHistorySelector } from 'store/slices/novaHistorySlice';
+import { novaHistorySelector } from 'store/slices/nova/novaHistorySlice';
 import { userInfoSelector } from 'store/slices/userInfo';
 import { useAppSelector } from 'store/store';
+
+import { NOVA_TAB_TYPE, selectTabSlice } from '../../store/slices/tabSlice';
 
 export default function useUserInfoUtils() {
   const { userInfo } = useAppSelector(userInfoSelector);
   const novaHistory = useAppSelector(novaHistorySelector);
+  const { selectedNovaTab } = useAppSelector(selectTabSlice);
 
   const getAvailableFileCnt = () => {
-    switch (userInfo.ul) {
-      case '8':
-      case '9':
-        return 2;
-      case '4':
-      case '12':
-      case '13':
-        return 3;
-      case '14':
-        return -1;
-      default:
-        return 1;
+    if (selectedNovaTab === NOVA_TAB_TYPE.aiChat) {
+      switch (userInfo.ul) {
+        case '8':
+        case '9':
+          return 2;
+        case '4':
+        case '12':
+        case '13':
+          return 3;
+        case '14':
+          return -1;
+        default:
+          return 1;
+      }
+    } else {
+      return 1;
     }
   };
 

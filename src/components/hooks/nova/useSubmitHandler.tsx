@@ -17,7 +17,7 @@ import {
   pushChat,
   removeChat,
   updateChatStatus
-} from 'store/slices/novaHistorySlice';
+} from 'store/slices/nova/novaHistorySlice';
 import { setCreating, setUsingAI } from 'store/slices/tabSlice';
 import { getFileExtension, getFileName, markdownToHtml } from 'util/common';
 import { v4 } from 'uuid';

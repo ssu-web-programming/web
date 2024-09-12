@@ -8,7 +8,7 @@ import styled, { css } from 'styled-components';
 import ico_credit from '../../img/ico_credit_gray.svg';
 import ico_credit_info from '../../img/ico_credit_line.svg';
 import { creditInfoSelector, InitialState } from '../../store/slices/creditInfo';
-import { novaHistorySelector } from '../../store/slices/novaHistorySlice';
+import { novaHistorySelector } from '../../store/slices/nova/novaHistorySlice';
 import { NOVA_TAB_TYPE, selectTabSlice } from '../../store/slices/tabSlice';
 import { setDriveFiles, setLocalFiles } from '../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../store/store';
@@ -63,7 +63,6 @@ export default function NovaHeader(props: NovaHeaderProps) {
   const confirm = useConfirm();
   const chatNova = useChatNova();
   const creditInfo = useAppSelector(creditInfoSelector);
-  console.log(creditInfo);
 
   const CREDIT_NAME_MAP: { [key: string]: string } = {
     NOVA_CHAT_GPT4O: t(`Nova.CreditInfo.Chat`),
