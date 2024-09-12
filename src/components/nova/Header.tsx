@@ -63,6 +63,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
   const confirm = useConfirm();
   const chatNova = useChatNova();
   const creditInfo = useAppSelector(creditInfoSelector);
+  console.log(creditInfo);
 
   const CREDIT_NAME_MAP: { [key: string]: string } = {
     NOVA_CHAT_GPT4O: t(`Nova.CreditInfo.Chat`),

@@ -10,12 +10,15 @@ import IconButton from '../../components/buttons/IconButton';
 import { useConfirm } from '../../components/Confirm';
 import useSubmitHandler from '../../components/hooks/nova/useSubmitHandler';
 import { useChatNova } from '../../components/hooks/useChatNova';
+import Icon from '../../components/Icon';
 import ChatList from '../../components/nova/ChatList';
 import { FileUploading } from '../../components/nova/FileUploading';
+import { Guide } from '../../components/nova/Guide';
 import { ImagePreview } from '../../components/nova/ImagePreview';
-import InputBar from '../../components/nova/InputBar';
-import { SearchGuide } from '../../components/nova/SearchGuide';
+import InputBar, { flexCenter } from '../../components/nova/InputBar';
 import { FileUpladState } from '../../constants/fileTypes';
+import ico_documents from '../../img/ico_documents.svg';
+import ico_image from '../../img/ico_image.svg';
 import {
   NovaChatType,
   NovaFileInfo,
@@ -35,13 +38,21 @@ const Wrap = styled(Container)`
   flex-direction: column;
 `;
 
-const GuideWrapper = styled(Container)`
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 40px;
-  background-color: #f4f6f8;
-  overflow-y: auto;
+const GuideExample = styled.div`
+  ${flexCenter};
+  justify-content: flex-start;
+  gap: 8px;
+  padding: 12px;
+  margin: 0 16px;
+  border: 1px solid #c9cdd2;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 14px;
+  color: var(--gray-gray-80-02);
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const ScrollDownButton = styled.div`
@@ -156,12 +167,32 @@ export default function AIChat() {
     ShowScrollButton(e.currentTarget);
   };
 
+  const PROMPT_EXAMPLE = [
+    {
+      src: ico_documents,
+      txt: t(`Nova.aiChat.Guide.Example1`)
+    },
+    {
+      src: ico_image,
+      txt: t(`Nova.aiChat.Guide.Example2`)
+    },
+    {
+      src: ico_documents,
+      txt: t(`Nova.aiChat.Guide.Example3`)
+    }
+  ];
+
   return (
     <Wrap>
       {novaHistory.length < 1 ? (
-        <GuideWrapper>
-          <SearchGuide setInputContents={setInputContents} />
-        </GuideWrapper>
+        <Guide>
+          {PROMPT_EXAMPLE.map((item) => (
+            <GuideExample key={item.txt} onClick={() => setInputContents?.(item.txt)}>
+              <Icon iconSrc={item.src} size="md" />
+              <span>{item.txt}</span>
+            </GuideExample>
+          ))}
+        </Guide>
       ) : (
         <>
           <ChatList

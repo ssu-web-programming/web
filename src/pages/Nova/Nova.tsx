@@ -11,6 +11,12 @@ import { NOVA_TAB_TYPE, selectNovaTab, selectTabSlice } from '../../store/slices
 import { useAppSelector } from '../../store/store';
 
 import AIChat from './AIChat';
+import ChangeBG from './ChangeBG';
+import ChangeStyle from './ChangeStyle';
+import ExpandImg from './ExpandImg';
+import ImprovedRes from './ImprovedRes';
+import RemakeImg from './RemakeImg';
+import RemoveBG from './RemoveBG';
 
 const Container = styled.div`
   width: 100%;
@@ -60,6 +66,12 @@ export default function Nova() {
         onDragLeave={handleDragLeave}
         onDrop={(e) => handleDrop(e, loadLocalFile)}>
         {isTabSelected(NOVA_TAB_TYPE.aiChat) && <AIChat />}
+        {isTabSelected(NOVA_TAB_TYPE.removeBG) && <RemoveBG />}
+        {isTabSelected(NOVA_TAB_TYPE.changeBG) && <ChangeBG />}
+        {isTabSelected(NOVA_TAB_TYPE.remakeImg) && <RemakeImg />}
+        {isTabSelected(NOVA_TAB_TYPE.expandImg) && <ExpandImg />}
+        {isTabSelected(NOVA_TAB_TYPE.improvedRes) && <ImprovedRes />}
+        {isTabSelected(NOVA_TAB_TYPE.changeStyle) && <ChangeStyle />}
       </Body>
       <Suspense fallback={<Overlay />}>
         <Modals />

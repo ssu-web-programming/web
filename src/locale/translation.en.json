@@ -287,6 +287,22 @@
       "improvedRes": "해상도 향상",
       "changeStyle": "스타일 변환"
     },
+    "aiChat": {
+      "Guide": {
+        "Title": "AI 채팅",
+        "SubTitle": "문서를 첨부하면\n주요 내용을 빠르게 파악할 수 있어요",
+        "Example1": "서류 합격을 위한 자기소개서 초안을 작성해줘",
+        "Example2": "AI를 주제로 한 이미지를 만들어줘",
+        "Example3": "2024년 전기차 시장의 성장 전망을 알려줘"
+      }
+    },
+    "removeBG": {
+      "Guide": {
+        "Title": "배경 제거",
+        "SubTitle": "배경을 제거해 이미지를\n더욱 깔끔하게 만들 수 있어요",
+        "ImgUploader": "최대 30MB 용량의\nJPG, PNG, WEBP 형식을 지원합니다."
+      }
+    },
     "CreditInfo": {
       "Title": "Credit Guide",
       "Chat": "Chat",
