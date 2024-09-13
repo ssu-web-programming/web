@@ -157,6 +157,12 @@ const callApi = (api: ApiType, arg?: string | number) => {
             }
             break;
           }
+          case 'curNovaTab': {
+            if (window.webkit.messageHandlers.curNovaTab) {
+              window.webkit.messageHandlers.curNovaTab.postMessage(arg);
+            }
+            break;
+          }
         }
         break;
       }
