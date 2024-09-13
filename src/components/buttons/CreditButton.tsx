@@ -8,7 +8,7 @@ import Icon from '../Icon';
 import Button, { ButtonProps } from './Button';
 
 const IconWrapper = styled.div`
-  ${flex}
+  ${flex};
   flex: none;
 `;
 

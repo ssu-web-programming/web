@@ -1,12 +1,7 @@
 import { useCallback, useRef } from 'react';
 import { apiWrapper, streaming } from 'api/apiWrapper';
 import { load } from 'cheerio';
-import {
-  DelayDocConverting,
-  DocConvertingError,
-  DocUnopenableError,
-  ExceedPoDriveLimitError
-} from 'error/error';
+import { DocUnopenableError, ExceedPoDriveLimitError } from 'error/error';
 import { useTranslation } from 'react-i18next';
 import {
   addChatOutputRes,
@@ -22,26 +17,15 @@ import { setCreating, setUsingAI } from 'store/slices/tabSlice';
 import { getFileExtension, getFileName, markdownToHtml } from 'util/common';
 import { v4 } from 'uuid';
 
-import {
-  NOVA_CHAT_API,
-  PO_DRIVE_CONVERT,
-  PO_DRIVE_CONVERT_DOWNLOAD,
-  PO_DRIVE_CONVERT_STATUS,
-  PO_DRIVE_DOC_OPEN_STATUS,
-  PO_DRIVE_DOWNLOAD,
-  PO_DRIVE_UPLOAD
-} from '../../../api/constant';
+import { NOVA_CHAT_API, PO_DRIVE_DOC_OPEN_STATUS } from '../../../api/constant';
 import { appStateSelector } from '../../../store/slices/appState';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
+import { convertFiles, downloadFiles, uploadFiles } from '../../../util/files';
 import { useConfirm } from '../../Confirm';
 import { InputBarSubmitParam } from '../../nova/InputBar';
 import { DriveFileInfo } from '../../PoDrive';
 import useErrorHandle from '../useErrorHandle';
 import { useShowCreditToast } from '../useShowCreditToast';
-
-interface PollingType extends NovaFileInfo {
-  taskId: string;
-}
 
 interface SubmitHandlerProps {
   setFileUploadState: React.Dispatch<React.SetStateAction<any>>;
@@ -58,93 +42,6 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
   const confirm = useConfirm();
   const expireTimer = useRef<NodeJS.Timeout | null>(null);
   const requestor = useRef<ReturnType<typeof apiWrapper>>();
-
-  const reqUploadFiles = async (files: File[]) => {
-    const ret = [];
-
-    for (const file of files) {
-      const formData = new FormData();
-      formData.append('uploadFile', file);
-
-      requestor.current = apiWrapper();
-      const { res } = await requestor.current.request(PO_DRIVE_UPLOAD, {
-        body: formData,
-        method: 'POST'
-      });
-      const json = await res.json();
-      ret.push({ ...json, file });
-    }
-    return ret;
-  };
-
-  const reqDownloadFiles = async (files: DriveFileInfo[]) => {
-    const ret = [];
-
-    for (const file of files) {
-      requestor.current = apiWrapper();
-      const { res } = await requestor.current.request(PO_DRIVE_DOWNLOAD, {
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ fileId: file.fileId }),
-        method: 'POST'
-      });
-      const blob = await res.blob();
-      ret.push({
-        success: true,
-        file: new File([blob], file.name, { type: file.type }),
-        data: { fileId: file.fileId, fileRevision: file.fileRevision }
-      });
-    }
-    return ret;
-  };
-
-  const getConvertStatus = async (fileInfo: { taskId: string }) => {
-    try {
-      requestor.current = apiWrapper();
-      const { res } = await requestor.current.request(PO_DRIVE_CONVERT_STATUS, {
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ taskId: fileInfo.taskId }),
-        method: 'POST'
-      });
-      const json = await res.json();
-      const {
-        success,
-        data: { status }
-      } = json;
-      if (!success) throw new Error();
-      return status;
-    } catch (err) {
-      if (err instanceof DelayDocConverting) throw err;
-      else throw new DocConvertingError();
-    }
-  };
-
-  const downloadConvertFile = async (fileInfo: PollingType) => {
-    const pollingConvertStatus = () =>
-      new Promise<void>((resolve, reject) => {
-        setTimeout(async () => {
-          try {
-            const status = await getConvertStatus(fileInfo);
-            if (status === 'completed') {
-              resolve();
-            } else {
-              resolve(await pollingConvertStatus());
-            }
-          } catch (err) {
-            reject(err);
-          }
-        }, 100);
-      });
-    await pollingConvertStatus();
-
-    requestor.current = apiWrapper();
-    const { res } = await requestor.current.request(PO_DRIVE_CONVERT_DOWNLOAD, {
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ fileId: fileInfo.fileId, fileRevision: fileInfo.fileRevision }),
-      method: 'POST'
-    });
-    const blob = await res.blob();
-    return new File([blob], `${getFileName(fileInfo.name)}.pdf`, { type: 'application/pdf' });
-  };
 
   const checkDocStatus = async (files: NovaFileInfo[]) => {
     const promises = files.map(async (file) => {
@@ -165,36 +62,6 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
 
     const results = await Promise.all(promises);
     return results;
-  };
-
-  const reqConvertFile = async (fileInfo: NovaFileInfo) => {
-    requestor.current = apiWrapper();
-    const { res } = await requestor.current.request(PO_DRIVE_CONVERT, {
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...fileInfo }),
-      method: 'POST'
-    });
-    const json = await res.json();
-    const {
-      success,
-      data: { taskId }
-    } = json;
-    if (!success) throw new Error('Convert Error');
-    const converted = await downloadConvertFile({ ...fileInfo, taskId });
-    return converted;
-  };
-
-  const convertFiles = async (files: NovaFileInfo[]) => {
-    const promises = files.map(async (file) => {
-      const ext = getFileExtension(file.file.name);
-      if (ext === '.hwp' || ext === '.xls' || ext === '.xlsx') {
-        const converted = await reqConvertFile(file);
-        return { ...file, file: converted };
-      } else {
-        return file;
-      }
-    });
-    return await Promise.all(promises);
   };
 
   const createNovaSubmitHandler = useCallback(
@@ -221,9 +88,9 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
 
           let targetFiles = [];
           if (files[0] instanceof File) {
-            targetFiles = await reqUploadFiles(files as File[]);
+            targetFiles = await uploadFiles(files as File[]);
           } else if ('fileId' in files[0]) {
-            targetFiles = await reqDownloadFiles(files as DriveFileInfo[]);
+            targetFiles = await downloadFiles(files as DriveFileInfo[]);
           }
           targetFiles
             .filter((target) => target.success)

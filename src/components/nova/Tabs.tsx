@@ -58,6 +58,7 @@ const Tap = styled.div<{ isHighlighted: boolean }>`
   border: 1px solid ${(props) => (props.isHighlighted ? '#c6a9ff' : '#c9cdd2')};
   border-radius: 8px;
   background-color: ${(props) => (props.isHighlighted ? '#ede5fe' : 'white')};
+  cursor: pointer;
 `;
 
 const Text = styled.div<{ isHighlighted: boolean }>`

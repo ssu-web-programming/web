@@ -309,36 +309,42 @@
         "Title": "배경 변경",
         "SubTitle": "어떤 물체든 AI로 이미지의 배경을\n자유롭게 바꿔보세요!",
         "ImgUploader": "최대 20MB 용량의\nJPG, PNG, WEBP 형식을 지원합니다."
-      }
+      },
+      "Loading": "배경을 변경하고 있어요"
     },
     "remakeImg": {
       "Guide": {
         "Title": "이미지 리메이크",
         "SubTitle": "이미지를 새로운 스타일로\n재탄생시켜 보세요",
         "ImgUploader": "JPG, PNG, WEBP 형식을 지원합니다."
-      }
+      },
+      "Loading": "이미지를 바꾸고 있어요"
     },
     "expandImg": {
       "Guide": {
         "Title": "이미지 확장",
         "SubTitle": "이미지를 원하는 크기까지\n확장시켜 자유롭게 활용하세요!",
         "ImgUploader": "최대 20MB 용량의\nJPG, PNG, WEBP 형식을 지원합니다. "
-      }
+      },
+      "Loading": "이미지를 확장시키고 있어요"
     },
     "improvedRes": {
       "Guide": {
         "Title": "해상도 향상",
         "SubTitle": "낮은 품질의 이미지를\n고화질로 업그레이드 하세요",
         "ImgUploader": "최대 30MB 용량의\nJPG, PNG, WEBP 형식을 지원합니다. "
-      }
+      },
+      "Loading": "해상도를 업그레디으 하고 있어요"
     },
     "changeStyle": {
       "Guide": {
         "Title": "스타일 변환",
         "SubTitle": "이미지를 다양한 예술 작품\n스타일로 바꿔보세요",
         "ImgUploader": "최대 10MB 용량의\nJPG, PNG, WEBP 형식을 지원합니다. "
-      }
+      },
+      "Loading": "스타일을 변환하고 있어요"
     },
+    "GoBackHeader": "돌아가기",
     "CreditInfo": {
       "Title": "크레딧 안내",
       "Chat": "채팅",

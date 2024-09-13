@@ -5,8 +5,10 @@ import styled from 'styled-components';
 import { SUPPORT_IMAGE_TYPE } from '../../constants/fileTypes';
 import CreditIcon from '../../img/ico_credit_gray.svg';
 import UploadIcon from '../../img/nova/upload_img.png';
+import { selectPageData, setPageData } from '../../store/slices/nova/pageStatusSlice';
+import { NOVA_TAB_TYPE } from '../../store/slices/tabSlice';
 import { getDriveFiles, getLocalFiles } from '../../store/slices/uploadFiles';
-import { useAppSelector } from '../../store/store';
+import { useAppDispatch, useAppSelector } from '../../store/store';
 
 import { FileUploader } from './FileUploader';
 
@@ -94,24 +96,27 @@ const Guide = styled.div`
 interface ImageUploaderProps {
   guideMsg: string;
   handleUploadComplete: () => void;
+  curTab: NOVA_TAB_TYPE;
 }
 
 export default function ImageUploader(props: ImageUploaderProps) {
   const { t } = useTranslation();
   const inputImgFileRef = useRef<HTMLInputElement | null>(null);
+  const dispatch = useAppDispatch();
   const localFiles = useAppSelector(getLocalFiles);
   const driveFiles = useAppSelector(getDriveFiles);
+  const currentFile = useAppSelector(selectPageData(props.curTab));
   const target = 'nova-image';
 
   useEffect(() => {
-    let file;
-    if (localFiles.length > 0) file = localFiles[0];
-    else if (driveFiles.length > 0) file = driveFiles[0];
+    if (localFiles.length > 0) dispatch(setPageData({ tab: props.curTab, data: localFiles[0] }));
+    else if (driveFiles.length > 0)
+      dispatch(setPageData({ tab: props.curTab, data: driveFiles[0] }));
 
-    if (file) {
+    if (currentFile) {
       props.handleUploadComplete();
     }
-  }, [localFiles, driveFiles]);
+  }, [localFiles, driveFiles, currentFile]);
 
   return (
     <Wrap>

@@ -428,7 +428,8 @@ type ApiType =
   | 'getClientStatus'
   | 'openPoDriveFile'
   | 'changeScreenSize'
-  | 'pchome_mydoc';
+  | 'pchome_mydoc'
+  | 'curNovaTab';
 
 const Bridge = {
   checkSession: (api: string) => {

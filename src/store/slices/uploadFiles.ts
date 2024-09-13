@@ -38,6 +38,4 @@ export const { setLocalFiles, setDriveFiles, removeLocalFile, removeDriveFile } 
 export const getLocalFiles = (state: RootState) => state.uploadFiles.localFiles;
 export const getDriveFiles = (state: RootState) => state.uploadFiles.driveFiles;
 
-export const uploadFilesSelector = (state: RootState) => state.uploadFiles;
-
 export default uploadFilesSlice.reducer;

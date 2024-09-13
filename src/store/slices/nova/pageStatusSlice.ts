@@ -1,34 +1,86 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+import { DriveFileInfo } from '../../../components/PoDrive';
 import { RootState } from '../../store';
 
-export type PageStatus = 'home' | 'loading' | 'done' | 'timeout';
-
-interface PageStatusState {
-  [tab: string]: PageStatus;
+export interface ResultImage {
+  contentType: string;
+  data: string;
 }
 
-const initialState: PageStatusState = {};
+export type PageStatus = 'home' | 'loading' | 'done' | 'timeout';
+export type PageData = File | DriveFileInfo | null;
+export type PageResult = ResultImage | null;
 
-const pageStatusSlice = createSlice({
-  name: 'pageStatus',
-  initialState,
+interface PageState<T> {
+  [tab: string]: T;
+}
+
+interface PageStateType {
+  status: PageState<PageStatus>;
+  data: PageState<PageData>;
+  result: PageState<PageResult>;
+}
+
+const initialPageState: PageStateType = {
+  status: {},
+  data: {},
+  result: {}
+};
+
+const pageSlice = createSlice({
+  name: 'page',
+  initialState: initialPageState,
   reducers: {
-    setPageStatus: (state, action: PayloadAction<{ tab: string; status: PageStatus }>) => {
+    setStatus: (state, action: PayloadAction<{ tab: string; status: PageStatus }>) => {
       const { tab, status } = action.payload;
-      state[tab] = status;
+      state.status[tab] = status;
     },
-    resetPageStatus: (state, action: PayloadAction<string>) => {
+    resetStatus: (state, action: PayloadAction<string>) => {
       const tab = action.payload;
-      state[tab] = 'home';
+      state.status[tab] = 'home';
+    },
+    setData: (state, action: PayloadAction<{ tab: string; data: PageData }>) => {
+      const { tab, data } = action.payload;
+      state.data[tab] = data;
+    },
+    resetData: (state, action: PayloadAction<string>) => {
+      const tab = action.payload;
+      state.data[tab] = null;
+    },
+    setResult: (state, action: PayloadAction<{ tab: string; result: PageResult }>) => {
+      const { tab, result } = action.payload;
+      state.result[tab] = result;
+    },
+    resetResult: (state, action: PayloadAction<string>) => {
+      const tab = action.payload;
+      state.result[tab] = null;
     }
   }
 });
 
-export const { setPageStatus, resetPageStatus } = pageStatusSlice.actions;
+export const {
+  setStatus: setPageStatus,
+  resetStatus: resetPageStatus,
+  setData: setPageData,
+  resetData: resetPageData,
+  setResult: setPageResult,
+  resetResult: resetPageResult
+} = pageSlice.actions;
+
 export const selectPageStatus =
   (tab: string) =>
-  (state: RootState): PageStatus => {
-    return state.pageStatusSlice[tab] || 'home';
-  };
-export default pageStatusSlice.reducer;
+  (state: RootState): PageStatus =>
+    state.pageStatusSlice.status[tab] || 'home';
+
+export const selectPageData =
+  (tab: string) =>
+  (state: RootState): PageData =>
+    state.pageStatusSlice.data[tab] || null;
+
+export const selectPageResult =
+  (tab: string) =>
+  (state: RootState): PageResult =>
+    state.pageStatusSlice.result[tab] || null;
+
+export default pageSlice.reducer;
