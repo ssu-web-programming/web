@@ -22,7 +22,7 @@ export type DownloadFileResult = {
   data: { fileId: string; fileRevision: number };
 };
 
-const downloadFileAsBlob = async (file: DriveFileInfo): Promise<Blob> => {
+export const downloadFileAsBlob = async (file: DriveFileInfo): Promise<Blob> => {
   const requestor = apiWrapper();
   const { res } = await requestor.request(PO_DRIVE_DOWNLOAD, {
     headers: { 'Content-Type': 'application/json' },
@@ -36,7 +36,7 @@ export const downloadFiles = async (files: DriveFileInfo[]): Promise<DownloadFil
   const results: DownloadFileResult[] = [];
   for (const file of files) {
     try {
-      const { res } = await apiWrapper().request(PO_DRIVE_DOWNLOAD, {
+      await apiWrapper().request(PO_DRIVE_DOWNLOAD, {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ fileId: file.fileId }),
         method: 'POST'
@@ -171,4 +171,50 @@ export const createFormDataFromFiles = async (
   }
 
   return formData;
+};
+
+export const fileToBase64 = async (
+  file: File | DriveFileInfo
+): Promise<{ contentType: string; data: string }> => {
+  let targetFile: File;
+  if (file instanceof File) {
+    targetFile = file;
+  } else if ('fileId' in file) {
+    const blob = await downloadFileAsBlob(file);
+    targetFile = new File([blob], file.fileName, { type: file.fileType });
+  }
+
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      if (reader.result) {
+        const result = reader.result as string;
+        const base64Data = result.split(',')[1];
+        const contentType = result.split(';')[0].split(':')[1];
+
+        resolve({ contentType, data: base64Data });
+      } else {
+        reject(new Error('Failed to convert file to Base64'));
+      }
+    };
+
+    reader.onerror = () => {
+      reject(new Error('Failed to read file'));
+    };
+
+    reader.readAsDataURL(targetFile);
+  });
+};
+
+export const base64ToBlob = (base64: string, mimeType: string): Blob => {
+  const byteCharacters = atob(base64);
+  const byteNumbers = new Array(byteCharacters.length);
+
+  for (let i = 0; i < byteCharacters.length; i++) {
+    byteNumbers[i] = byteCharacters.charCodeAt(i);
+  }
+  const byteArray = new Uint8Array(byteNumbers);
+
+  return new Blob([byteArray], { type: mimeType });
 };

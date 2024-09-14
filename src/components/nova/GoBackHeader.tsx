@@ -4,11 +4,13 @@ import styled from 'styled-components';
 import ArrowLeftIcon from '../../img/ico_arrow_left.svg';
 import { setPageData, setPageResult, setPageStatus } from '../../store/slices/nova/pageStatusSlice';
 import { selectTabSlice } from '../../store/slices/tabSlice';
-import { useAppSelector } from '../../store/store';
+import { setDriveFiles, setLocalFiles } from '../../store/slices/uploadFiles';
+import { useAppDispatch, useAppSelector } from '../../store/store';
 
 const Header = styled.div`
   width: 100%;
   height: 48px;
+  position: fixed;
   padding: 12px 16px;
 `;
 
@@ -38,12 +40,15 @@ const ImageWrap = styled.div`
 
 export default function GoBackHeader() {
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
 
   const handleGoBack = () => {
-    setPageStatus({ tab: selectedNovaTab, status: 'home' });
-    setPageData({ tab: selectedNovaTab, data: null });
-    setPageResult({ tab: selectedNovaTab, result: null });
+    dispatch(setLocalFiles([]));
+    dispatch(setDriveFiles([]));
+    dispatch(setPageStatus({ tab: selectedNovaTab, status: 'home' }));
+    dispatch(setPageData({ tab: selectedNovaTab, data: null }));
+    dispatch(setPageResult({ tab: selectedNovaTab, result: null }));
   };
 
   return (

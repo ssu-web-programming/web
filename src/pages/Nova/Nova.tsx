@@ -1,24 +1,29 @@
-import { Suspense, useEffect } from 'react';
+import React, { Suspense, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
+import { useChangeBackground } from '../../components/hooks/nova/useChangeBackground';
 import useManageFile from '../../components/hooks/nova/useManageFile';
+import { useRemoveBackground } from '../../components/hooks/nova/useRemoveBackground';
 import useFileDrop from '../../components/hooks/useFileDrop';
+import { Guide } from '../../components/nova/Guide';
 import NovaHeader from '../../components/nova/Header';
+import ImageUploader from '../../components/nova/ImageUploader';
+import Loading from '../../components/nova/Loading';
 import Modals, { Overlay } from '../../components/nova/modals/Modals';
+import Progress from '../../components/nova/Progress';
+import Prompt from '../../components/nova/Prompt';
+import Result from '../../components/nova/Result';
 import Tabs from '../../components/nova/Tabs';
+import TimeOut from '../../components/nova/TimeOut';
+import { selectPageStatus } from '../../store/slices/nova/pageStatusSlice';
 import { NOVA_TAB_TYPE, selectNovaTab, selectTabSlice } from '../../store/slices/tabSlice';
 import { setDriveFiles, setLocalFiles } from '../../store/slices/uploadFiles';
 import { useAppSelector } from '../../store/store';
 import Bridge from '../../util/bridge';
 
 import AIChat from './AIChat';
-import ChangeBG from './ChangeBG';
-import ChangeStyle from './ChangeStyle';
-import ExpandImg from './ExpandImg';
-import ImprovedRes from './ImprovedRes';
-import RemakeImg from './RemakeImg';
-import RemoveBG from './RemoveBG';
 
 const Container = styled.div`
   width: 100%;
@@ -45,12 +50,15 @@ const Body = styled.div`
 export type ClientStatusType = 'home' | 'doc_edit_mode' | 'doc_view_mode';
 
 export default function Nova() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { handleDragOver, handleDragLeave, handleDrop } = useFileDrop();
+  const { goPromptPage } = useChangeBackground();
+  const { handleRemoveBackground } = useRemoveBackground();
   const { loadLocalFile } = useManageFile();
   const { usingAI, selectedNovaTab } = useAppSelector(selectTabSlice);
+  const status = useAppSelector(selectPageStatus(selectedNovaTab));
   const tabValues: NOVA_TAB_TYPE[] = Object.values(NOVA_TAB_TYPE);
-  const isTabSelected = (tab: NOVA_TAB_TYPE) => selectedNovaTab === tab;
 
   const handleChangeTab = (selectTab: NOVA_TAB_TYPE) => {
     dispatch(selectNovaTab(selectTab));
@@ -60,14 +68,57 @@ export default function Nova() {
     Bridge.callBridgeApi('curNovaTab', selectTab);
   };
 
-  useEffect(() => {
-    console.log(usingAI);
-  }, [usingAI]);
+  useEffect(() => {}, [usingAI, status]);
+
+  const renderContent = () => {
+    const handleUploadComplete = async () => {
+      switch (selectedNovaTab) {
+        case NOVA_TAB_TYPE.removeBG:
+          await handleRemoveBackground();
+          break;
+        case NOVA_TAB_TYPE.changeBG:
+          await goPromptPage();
+          break;
+        default:
+          return async () => {};
+      }
+    };
+
+    if (selectedNovaTab == NOVA_TAB_TYPE.aiChat) {
+      return <AIChat />;
+    } else {
+      switch (status) {
+        case 'home':
+        case 'progress':
+          return (
+            <>
+              {status === 'progress' && <Progress />}
+              <Guide>
+                <ImageUploader
+                  guideMsg={t(`Nova.${selectedNovaTab}.Guide.ImgUploader`)}
+                  handleUploadComplete={handleUploadComplete}
+                  curTab={selectedNovaTab}
+                />
+              </Guide>
+            </>
+          );
+        case 'prompt':
+          return <Prompt />;
+        case 'loading':
+          return <Loading />;
+        case 'done':
+          return <Result />;
+        case 'timeout':
+          return <TimeOut />;
+        default:
+          return null;
+      }
+    }
+  };
 
   return (
     <Wrapper>
       <NovaHeader />
-      {/*status === 'home' 추가하기*/}
       {!usingAI && (
         <Tabs tabs={tabValues} activeTab={selectedNovaTab} onChangeTab={handleChangeTab} />
       )}
@@ -75,13 +126,7 @@ export default function Nova() {
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={(e) => handleDrop(e, loadLocalFile)}>
-        {isTabSelected(NOVA_TAB_TYPE.aiChat) && <AIChat />}
-        {isTabSelected(NOVA_TAB_TYPE.removeBG) && <RemoveBG />}
-        {isTabSelected(NOVA_TAB_TYPE.changeBG) && <ChangeBG />}
-        {isTabSelected(NOVA_TAB_TYPE.remakeImg) && <RemakeImg />}
-        {isTabSelected(NOVA_TAB_TYPE.expandImg) && <ExpandImg />}
-        {isTabSelected(NOVA_TAB_TYPE.improvedRes) && <ImprovedRes />}
-        {isTabSelected(NOVA_TAB_TYPE.changeStyle) && <ChangeStyle />}
+        {renderContent()}
       </Body>
       <Suspense fallback={<Overlay />}>
         <Modals />

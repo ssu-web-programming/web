@@ -31,3 +31,8 @@ export const PROMOTION_OFFER = '/api/v2/nova/promotion/offer';
 export const PROMOTION_AGREE = '/api/v2/nova/promotion/agree';
 
 export const NOVA_REMOVE_BACKGROUND = '/api/v2/nova/image/remove-background';
+export const NOVA_CHANGE_BACKGROUND = '/api/v2/nova/image/replace-background';
+export const NOVA_REMAKE_IMAGE = '/api/v2/nova/image/reimaging';
+export const NOVA_EXPAND_IMAGE = 'api/v2/nova/image/uncrop';
+export const NOVA_IMPROVED_RESOLUTION = '/api/v2/nova/image/resolution';
+export const NOVA_CHANGE_STYLE = '/api/v2/nova/image/transfer';

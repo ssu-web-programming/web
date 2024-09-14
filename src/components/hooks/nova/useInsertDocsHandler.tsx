@@ -3,19 +3,23 @@ import { useTranslation } from 'react-i18next';
 
 import { ClientStatusType } from '../../../pages/Nova/Nova';
 import { NovaChatType } from '../../../store/slices/nova/novaHistorySlice';
+import { selectPageResult } from '../../../store/slices/nova/pageStatusSlice';
+import { NOVA_TAB_TYPE, selectTabSlice } from '../../../store/slices/tabSlice';
 import { activeToast } from '../../../store/slices/toastSlice';
-import { useAppDispatch } from '../../../store/store';
+import { useAppDispatch, useAppSelector } from '../../../store/store';
 import Bridge from '../../../util/bridge';
-import { insertDoc } from '../../../util/common';
+import { base64ToBlob, insertDoc } from '../../../util/common';
 import { useConfirm } from '../../Confirm';
 
 export const useInsertDocsHandler = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const confirm = useConfirm();
+  const { selectedNovaTab } = useAppSelector(selectTabSlice);
+  const result = useAppSelector(selectPageResult(selectedNovaTab));
 
   const insertDocsHandler = useCallback(
-    async (history: NovaChatType) => {
+    async (history?: NovaChatType) => {
       Bridge.callSyncBridgeApiWithCallback({
         api: 'getClientStatus',
         callback: async (status: ClientStatusType) => {
@@ -41,24 +45,31 @@ export const useInsertDocsHandler = () => {
               });
               break;
             case 'doc_edit_mode':
-              switch (history.askType) {
-                case 'image': {
-                  try {
-                    const res = await fetch(history.res!);
-                    const blob = await res.blob();
-                    Bridge.callBridgeApi('insertImage', blob);
-                    dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.CompleteInsert`) }));
-                  } catch (err) {
-                    // Handle the error appropriately here
+              if (selectedNovaTab === NOVA_TAB_TYPE.aiChat && history) {
+                switch (history.askType) {
+                  case 'image': {
+                    try {
+                      const res = await fetch(history.res!);
+                      const blob = await res.blob();
+                      Bridge.callBridgeApi('insertImage', blob);
+                      dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.CompleteInsert`) }));
+                    } catch (err) {
+                      // Handle the error appropriately here
+                    }
+                    break;
                   }
-                  break;
+                  case 'document':
+                  default: {
+                    insertDoc(history.output);
+                    dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.CompleteInsert`) }));
+                    break;
+                  }
                 }
-                case 'document':
-                default: {
-                  insertDoc(history.output);
-                  dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.CompleteInsert`) }));
-                  break;
-                }
+              } else {
+                if (!result) break;
+                const blob = base64ToBlob(result.data, result.contentType);
+                Bridge.callBridgeApi('insertImage', blob);
+                dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.CompleteInsert`) }));
               }
               break;
           }

@@ -6,9 +6,18 @@ import { RootState } from '../../store';
 export interface ResultImage {
   contentType: string;
   data: string;
+  info?: any;
 }
 
-export type PageStatus = 'home' | 'loading' | 'done' | 'timeout';
+export type PageStatus =
+  | 'home'
+  | 'progress'
+  | 'loading'
+  | 'prompt'
+  | 'expand'
+  | 'theme'
+  | 'done'
+  | 'timeout';
 export type PageData = File | DriveFileInfo | null;
 export type PageResult = ResultImage | null;
 

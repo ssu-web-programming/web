@@ -369,6 +369,20 @@
       }
     },
     "GoBackHeader": "돌아가기",
+    "TimeOut": {
+      "Title": "작업 시간이 초과되었습니다.\n다시 시도해 주세요.",
+      "Retry": "재시도"
+    },
+    "Prompt": {
+      "Placeholder": "바꾸고 싶은 배경을 설명해 주세요.",
+      "ExamButton": "예시 보기",
+      "CreatingButton": "이미지 생성하기"
+    },
+    "Result": {
+      "Remake": "다시 만들기",
+      "InsertDoc": "문서에 삽입",
+      "Save": "저장"
+    },
     "CreditInfo": {
       "Title": "크레딧 안내",
       "Chat": "채팅",
