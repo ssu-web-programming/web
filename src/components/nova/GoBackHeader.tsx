@@ -12,6 +12,8 @@ const Header = styled.div`
   height: 48px;
   position: fixed;
   padding: 12px 16px;
+  z-index: 1;
+  background: rgb(244, 246, 248);
 `;
 
 const Wrap = styled.div`

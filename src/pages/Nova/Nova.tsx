@@ -4,7 +4,10 @@ import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
 import { useChangeBackground } from '../../components/hooks/nova/useChangeBackground';
+import { useChangeStyle } from '../../components/hooks/nova/useChangeStyle';
+import { useImprovedResolution } from '../../components/hooks/nova/useImprovedResolution';
 import useManageFile from '../../components/hooks/nova/useManageFile';
+import { useRemakeImage } from '../../components/hooks/nova/useRemakeImage';
 import { useRemoveBackground } from '../../components/hooks/nova/useRemoveBackground';
 import useFileDrop from '../../components/hooks/useFileDrop';
 import { Guide } from '../../components/nova/Guide';
@@ -16,6 +19,7 @@ import Progress from '../../components/nova/Progress';
 import Prompt from '../../components/nova/Prompt';
 import Result from '../../components/nova/Result';
 import Tabs from '../../components/nova/Tabs';
+import Theme from '../../components/nova/Theme';
 import TimeOut from '../../components/nova/TimeOut';
 import { selectPageStatus } from '../../store/slices/nova/pageStatusSlice';
 import { NOVA_TAB_TYPE, selectNovaTab, selectTabSlice } from '../../store/slices/tabSlice';
@@ -55,6 +59,9 @@ export default function Nova() {
   const { handleDragOver, handleDragLeave, handleDrop } = useFileDrop();
   const { goPromptPage } = useChangeBackground();
   const { handleRemoveBackground } = useRemoveBackground();
+  const { handleRemakeImage } = useRemakeImage();
+  const { goThemePage } = useChangeStyle();
+  const { handleImprovedResolution } = useImprovedResolution();
   const { loadLocalFile } = useManageFile();
   const { usingAI, selectedNovaTab } = useAppSelector(selectTabSlice);
   const status = useAppSelector(selectPageStatus(selectedNovaTab));
@@ -78,6 +85,15 @@ export default function Nova() {
           break;
         case NOVA_TAB_TYPE.changeBG:
           await goPromptPage();
+          break;
+        case NOVA_TAB_TYPE.remakeImg:
+          await handleRemakeImage();
+          break;
+        case NOVA_TAB_TYPE.changeStyle:
+          await goThemePage();
+          break;
+        case NOVA_TAB_TYPE.improvedRes:
+          await handleImprovedResolution();
           break;
         default:
           return async () => {};
@@ -104,6 +120,8 @@ export default function Nova() {
           );
         case 'prompt':
           return <Prompt />;
+        case 'theme':
+          return <Theme />;
         case 'loading':
           return <Loading />;
         case 'done':
