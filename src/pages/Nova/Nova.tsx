@@ -5,11 +5,13 @@ import styled from 'styled-components';
 
 import { useChangeBackground } from '../../components/hooks/nova/useChangeBackground';
 import { useChangeStyle } from '../../components/hooks/nova/useChangeStyle';
+import { useExapandImage } from '../../components/hooks/nova/useExpandImage';
 import { useImprovedResolution } from '../../components/hooks/nova/useImprovedResolution';
 import useManageFile from '../../components/hooks/nova/useManageFile';
 import { useRemakeImage } from '../../components/hooks/nova/useRemakeImage';
 import { useRemoveBackground } from '../../components/hooks/nova/useRemoveBackground';
 import useFileDrop from '../../components/hooks/useFileDrop';
+import Expand from '../../components/nova/Expand';
 import { Guide } from '../../components/nova/Guide';
 import NovaHeader from '../../components/nova/Header';
 import ImageUploader from '../../components/nova/ImageUploader';
@@ -60,8 +62,9 @@ export default function Nova() {
   const { goPromptPage } = useChangeBackground();
   const { handleRemoveBackground } = useRemoveBackground();
   const { handleRemakeImage } = useRemakeImage();
-  const { goThemePage } = useChangeStyle();
+  const { goExpandPage } = useExapandImage();
   const { handleImprovedResolution } = useImprovedResolution();
+  const { goThemePage } = useChangeStyle();
   const { loadLocalFile } = useManageFile();
   const { usingAI, selectedNovaTab } = useAppSelector(selectTabSlice);
   const status = useAppSelector(selectPageStatus(selectedNovaTab));
@@ -89,11 +92,14 @@ export default function Nova() {
         case NOVA_TAB_TYPE.remakeImg:
           await handleRemakeImage();
           break;
-        case NOVA_TAB_TYPE.changeStyle:
-          await goThemePage();
+        case NOVA_TAB_TYPE.expandImg:
+          await goExpandPage();
           break;
         case NOVA_TAB_TYPE.improvedRes:
           await handleImprovedResolution();
+          break;
+        case NOVA_TAB_TYPE.changeStyle:
+          await goThemePage();
           break;
         default:
           return async () => {};
@@ -122,6 +128,8 @@ export default function Nova() {
           return <Prompt />;
         case 'theme':
           return <Theme />;
+        case 'expand':
+          return <Expand />;
         case 'loading':
           return <Loading />;
         case 'done':

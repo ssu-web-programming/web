@@ -339,6 +339,7 @@
         "ImgUploader": "최대 20MB 용량의\nJPG, PNG, WEBP 형식을 지원합니다. "
       },
       "Loading": "이미지를 확장시키고 있어요",
+      "Button": "이미지 확장",
       "Done": {
         "Title": "이미지 확장 완료",
         "SubTitle": "이미지가 확대되었어요.\n이미지를 저장하거나, 문서에 삽입해 보세요!"
