@@ -324,6 +324,8 @@ export const useInitBridgeListener = () => {
             break;
           }
           case 'getFileInfo': {
+            console.log('cmd: ', cmd);
+            console.log('body: ', body);
             dispatch(
               setCurrentFile({
                 type: body.type,
@@ -333,7 +335,6 @@ export const useInitBridgeListener = () => {
                 isSaved: body.isSaved
               })
             );
-            console.log(body);
             break;
           }
           case 'finishUploadFile': {
