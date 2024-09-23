@@ -34,7 +34,7 @@ export const useExapandImage = () => {
   const handleExpandImage = async (
     extend_left: number,
     extend_right: number,
-    extend_top: number,
+    extend_up: number,
     extend_down: number
   ) => {
     if (!currentFile) return;
@@ -44,7 +44,7 @@ export const useExapandImage = () => {
       const formData = await createFormDataFromFiles([currentFile]);
       formData.append('extend_left', String(extend_left));
       formData.append('extend_right', String(extend_right));
-      formData.append('extend_top', String(extend_top));
+      formData.append('extend_up', String(extend_up));
       formData.append('extend_down', String(extend_down));
 
       const { res } = await apiWrapper().request(NOVA_EXPAND_IMAGE, {

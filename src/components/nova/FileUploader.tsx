@@ -124,7 +124,6 @@ export const FileUploader = (props: FileUploaderProps) => {
         icon: { src: ico_insert_docs },
         onClick: async () => {
           await analysisCurDoc();
-          console.log('to do');
         }
       });
     }
@@ -141,7 +140,6 @@ export const FileUploader = (props: FileUploaderProps) => {
   const analysisCurDoc = async () => {
     if (isAgreed) {
       setUploadTarget(target);
-      toggleDriveConfirm();
     }
 
     const uploadLimit = calcAvailableFileCnt();
