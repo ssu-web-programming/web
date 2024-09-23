@@ -154,10 +154,10 @@ export function useManageFile() {
 
       const {
         success,
-        data: { list }
+        data: { file }
       } = await res.json();
       if (!success) throw new Error('failed to get file list');
-      return list;
+      return file;
     } catch (err) {
       return [];
     }

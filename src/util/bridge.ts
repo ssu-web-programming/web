@@ -342,6 +342,7 @@ export const useInitBridgeListener = () => {
           }
           case 'finishUploadFile': {
             const currentFile = await getFileInfo(body.fileId);
+            console.log(currentFile);
             dispatch(setDriveFiles([currentFile]));
             dispatch(removeCurrentFile(currentFile));
             break;

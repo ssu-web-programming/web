@@ -55,8 +55,14 @@ const uploadFilesSlice = createSlice({
     setDriveFiles: (state, action: PayloadAction<DriveFileInfo[]>) => {
       state.driveFiles = action.payload;
     },
-    removeCurrentFile: (state, action: PayloadAction<CurrentFileInfo>) => {
-      state.currentFile = action.payload;
+    removeCurrentFile: (state) => {
+      state.currentFile = {
+        type: 'unknown',
+        id: '',
+        size: 0,
+        ext: '',
+        isSaved: false
+      };
     },
     removeLocalFile: (state, action: PayloadAction<File>) => {
       state.localFiles = state.localFiles.filter((file) => file !== action.payload);
