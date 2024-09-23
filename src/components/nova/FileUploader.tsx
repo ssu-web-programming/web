@@ -210,28 +210,26 @@ export const FileUploader = (props: FileUploaderProps) => {
   return (
     <>
       <React.Fragment key={target}>
-        {currentFile.id && (
-          <Tooltip
-            key={target}
-            placement="top-start"
-            type="selectable"
-            options={TOOLTIP_UPLOAD_OPTION(target)}
-            distance={10}
-            condition={!!isAgreed}
-            initPos
-            style={tooltipStyle}>
-            <FileButton
-              target={target}
-              accept={getAccept(accept)}
-              handleOnChange={loadLocalFile}
-              multiple
-              isAgreed={isAgreed}
-              handleOnClick={handleOnClick}
-              ref={inputRef}>
-              {children}
-            </FileButton>
-          </Tooltip>
-        )}
+        <Tooltip
+          key={target}
+          placement="top-start"
+          type="selectable"
+          options={TOOLTIP_UPLOAD_OPTION(target)}
+          distance={10}
+          condition={!!isAgreed}
+          initPos
+          style={tooltipStyle}>
+          <FileButton
+            target={target}
+            accept={getAccept(accept)}
+            handleOnChange={loadLocalFile}
+            multiple
+            isAgreed={isAgreed}
+            handleOnClick={handleOnClick}
+            ref={inputRef}>
+            {children}
+          </FileButton>
+        </Tooltip>
       </React.Fragment>
 
       {isOpen && (

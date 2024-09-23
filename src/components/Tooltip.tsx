@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 
+import { getCurrentFile } from '../store/slices/uploadFiles';
+import { useAppSelector } from '../store/store';
 import Bridge from '../util/bridge';
 
 import Icon from './Icon';
@@ -120,6 +122,7 @@ const ChipWrapper = styled.div`
 `;
 
 const Tooltip = (props: TooltipProps) => {
+  const currentFile = useAppSelector(getCurrentFile);
   const [isOpen, setIsOpen] = useState(false);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const {
@@ -177,16 +180,18 @@ const Tooltip = (props: TooltipProps) => {
           </>
         )}
 
-        <OptionList>
-          {options.map((option, idx) => (
-            <Tooltip.OptionItem
-              key={`${option.name}-${idx}`}
-              onSelect={() => handleOptionSelect(option)}
-              option={option}
-              type={type}
-            />
-          ))}
-        </OptionList>
+        {currentFile.id && (
+          <OptionList>
+            {options.map((option, idx) => (
+              <Tooltip.OptionItem
+                key={`${option.name}-${idx}`}
+                onSelect={() => handleOptionSelect(option)}
+                option={option}
+                type={type}
+              />
+            ))}
+          </OptionList>
+        )}
       </TooltipContent>
     </TooltipContainer>
   );
