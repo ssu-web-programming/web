@@ -157,7 +157,16 @@ export function useManageFile() {
         data: { file }
       } = await res.json();
       if (!success) throw new Error('failed to get file list');
-      return file;
+
+      const ext = getFileExtension(file.fileName).toLowerCase();
+      const supports = [...SUPPORT_IMAGE_TYPE, ...SUPPORT_DOCUMENT_TYPE];
+      const type = supports.find((type: SupportFileType) => type.extensions === ext)?.mimeType;
+
+      return {
+        ...file,
+        name: file.fileName,
+        type: type
+      };
     } catch (err) {
       return [];
     }
