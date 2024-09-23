@@ -309,6 +309,9 @@ export const useInitBridgeListener = () => {
   const procMsg = async (msg: any) => {
     try {
       const { cmd, body } = msg;
+      console.log(msg);
+      console.log('cmd: ', cmd);
+      console.log('body: ', body);
       if (cmd && cmd !== '') {
         switch (cmd) {
           case 'openAiTools':

@@ -180,18 +180,16 @@ const Tooltip = (props: TooltipProps) => {
           </>
         )}
 
-        {currentFile.id && (
-          <OptionList>
-            {options.map((option, idx) => (
-              <Tooltip.OptionItem
-                key={`${option.name}-${idx}`}
-                onSelect={() => handleOptionSelect(option)}
-                option={option}
-                type={type}
-              />
-            ))}
-          </OptionList>
-        )}
+        <OptionList>
+          {options.map((option, idx) => (
+            <Tooltip.OptionItem
+              key={`${option.name}-${idx}`}
+              onSelect={() => handleOptionSelect(option)}
+              option={option}
+              type={type}
+            />
+          ))}
+        </OptionList>
       </TooltipContent>
     </TooltipContainer>
   );
