@@ -6,9 +6,9 @@ import {
   PO_DRIVE_DOWNLOAD,
   PO_DRIVE_UPLOAD
 } from '../api/constant';
-import { DriveFileInfo } from '../components/PoDrive';
 import { DelayDocConverting, DocConvertingError } from '../error/error';
 import { NovaFileInfo } from '../store/slices/nova/novaHistorySlice';
+import { DriveFileInfo } from '../store/slices/uploadFiles';
 
 import { getFileExtension, getFileName } from './common';
 

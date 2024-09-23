@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
+import useManageFile from '../components/hooks/nova/useManageFile';
 import gI18n, { convertLangFromLangCode } from '../locale';
 import { AskDocStatus, setSrouceId, setStatus } from '../store/slices/askDoc';
 import { setFiles } from '../store/slices/askDocAnalyzeFiesSlice';
@@ -14,8 +15,8 @@ import { initComplete } from '../store/slices/initFlagSlice';
 import { setRecognizedVoice } from '../store/slices/recognizedVoice';
 import { selectNovaTab } from '../store/slices/tabSlice';
 import { activeToast } from '../store/slices/toastSlice';
-// import { useMoveChatTab } from '../components/hooks/useMovePage';
 import { updateT2ICurItemIndex, updateT2ICurListId } from '../store/slices/txt2imgHistory';
+import { removeCurrentFile, setCurrentFile, setDriveFiles } from '../store/slices/uploadFiles';
 import { AppDispatch, RootState, useAppDispatch } from '../store/store';
 
 import { isHigherVersion, makeClipboardData } from './common';
@@ -163,6 +164,18 @@ const callApi = (api: ApiType, arg?: string | number) => {
             }
             break;
           }
+          case 'analyzeCurFile': {
+            if (window.webkit.messageHandlers.analyzeCurFile) {
+              window.webkit.messageHandlers.analyzeCurFile.postMessage(arg);
+            }
+            break;
+          }
+          case 'uploadFile': {
+            if (window.webkit.messageHandlers.uploadFile) {
+              window.webkit.messageHandlers.uploadFile.postMessage(arg);
+            }
+            break;
+          }
         }
         break;
       }
@@ -221,6 +234,9 @@ export const useInitBridgeListener = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
+
+  const { getFileInfo } = useManageFile();
+
   // const movePage = useMoveChatTab();
   const getPath = useCallback((cmd: PanelOpenCmd) => {
     switch (cmd) {
@@ -305,6 +321,25 @@ export const useInitBridgeListener = () => {
           case 'openNOVA': {
             dispatch(changePanel({ cmd, body: body.inputText || '' }));
             if (body && body.openTab != '') dispatch(selectNovaTab(body.openTab));
+            break;
+          }
+          case 'getFileInfo': {
+            dispatch(
+              setCurrentFile({
+                type: body.type,
+                id: body.id,
+                size: body.size,
+                ext: body.ext,
+                isSaved: body.isSaved
+              })
+            );
+            console.log(body);
+            break;
+          }
+          case 'finishUploadFile': {
+            const currentFile = await getFileInfo(body.fileId);
+            dispatch(setDriveFiles(currentFile));
+            dispatch(removeCurrentFile(currentFile[0]));
             break;
           }
           case 'showToast': {
@@ -435,7 +470,9 @@ type ApiType =
   | 'openPoDriveFile'
   | 'changeScreenSize'
   | 'pchome_mydoc'
-  | 'curNovaTab';
+  | 'curNovaTab'
+  | 'analyzeCurFile'
+  | 'uploadFile';
 
 const Bridge = {
   checkSession: (api: string) => {

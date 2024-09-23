@@ -4,11 +4,12 @@ import styled from 'styled-components';
 
 import { getMaxFileSize } from '../../constants/fileTypes';
 import { NOVA_TAB_TYPE, selectTabSlice } from '../../store/slices/tabSlice';
+import { DriveFileInfo } from '../../store/slices/uploadFiles';
 import { useAppSelector } from '../../store/store';
 import DriveConfirm from '../DriveConfirm';
 import useManageFile from '../hooks/nova/useManageFile';
 import useUserInfoUtils from '../hooks/useUserInfoUtils';
-import PoDrive, { DriveFileInfo } from '../PoDrive';
+import PoDrive from '../PoDrive';
 
 const SubTitle = styled.div`
   font-size: 16px;

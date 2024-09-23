@@ -1,6 +1,4 @@
 import { useCallback, useEffect, useState } from 'react';
-import { apiWrapper } from 'api/apiWrapper';
-import { PO_DRIVE_LIST } from 'api/constant';
 import { ReactComponent as IconRight } from 'img/angle_right.svg';
 import file_loading from 'img/file_loading.svg';
 import ico_file_folder from 'img/ico_file_folder.svg';
@@ -10,19 +8,13 @@ import { ReactComponent as IconUploadDocs } from 'img/ico_upload_docs.svg';
 import { ReactComponent as IconUploadImg } from 'img/ico_upload_img.svg';
 import { useTranslation } from 'react-i18next';
 import { activeToast } from 'store/slices/toastSlice';
-import { useAppDispatch, useAppSelector } from 'store/store';
+import { useAppDispatch } from 'store/store';
 import { CustomScrollbar } from 'style/cssCommon';
 import styled from 'styled-components';
-import { getFileExtension } from 'util/common';
 
-import {
-  isValidFileSize,
-  SUPPORT_DOCUMENT_TYPE,
-  SUPPORT_IMAGE_TYPE,
-  SupportFileType
-} from '../constants/fileTypes';
-import { selectTabSlice } from '../store/slices/tabSlice';
+import { DriveFileInfo } from '../store/slices/uploadFiles';
 
+import useManageFile from './hooks/nova/useManageFile';
 import { getFileIcon } from './nova/InputBar';
 import CheckBox from './CheckBox';
 import Icon from './Icon';
@@ -149,18 +141,6 @@ const NoFile = styled.div`
   }
 `;
 
-export interface DriveFileInfo {
-  fileId: string;
-  fileName: string;
-  fileRevision: number;
-  fileType: 'DIR' | 'FILE';
-  lastModified: number; //??
-  size: number;
-
-  name: string;
-  type: string;
-}
-
 interface PoDriveProps {
   max: number;
   target: string;
@@ -186,52 +166,7 @@ export default function PoDrive(props: PoDriveProps) {
   ]);
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
-  const { selectedNovaTab } = useAppSelector(selectTabSlice);
-
-  const getFileList = async (fileId?: DriveFileInfo['fileId']) => {
-    try {
-      setState('request');
-      const { res } = await apiWrapper().request(PO_DRIVE_LIST, {
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        method: 'POST',
-        body: JSON.stringify({ fileId: fileId })
-      });
-
-      const {
-        success,
-        data: { list }
-      } = await res.json();
-      if (!success) throw new Error('failed to get file list');
-      return list
-        .filter(
-          (item: DriveFileInfo) =>
-            isValidFileSize(item.size, selectedNovaTab) || item.fileType === 'DIR'
-        )
-        .sort((l: DriveFileInfo, r: DriveFileInfo) =>
-          l.fileType < r.fileType ? -1 : l.fileType > r.fileType ? 1 : 0
-        )
-        .map((item: DriveFileInfo) => {
-          const ext = getFileExtension(item.fileName).toLowerCase();
-          const supports =
-            props.target === 'nova-image' ? SUPPORT_IMAGE_TYPE : SUPPORT_DOCUMENT_TYPE;
-          const type = supports.find((type: SupportFileType) => type.extensions === ext)?.mimeType;
-
-          return {
-            ...item,
-            name: item.fileName,
-            type: type
-          };
-        })
-        .filter((item: DriveFileInfo) => item.fileType === 'DIR' || !!item.type);
-    } catch (err) {
-      console.log(err);
-      return []; // TODO : error handling
-    } finally {
-      setState('none');
-    }
-  };
+  const { getFileList } = useManageFile();
 
   const getDirIcon = (dir: DriveFileInfo) => {
     const name = dir.fileName;
@@ -253,12 +188,12 @@ export default function PoDrive(props: PoDriveProps) {
   }, []);
 
   const moveFolder = async (fileId: DriveFileInfo['fileId']) => {
-    const list = await getFileList(fileId);
+    const list = await getFileList({ target: props.target, setState: setState, fileId: fileId });
     setFilelist(list);
   };
 
   const initFileList = async () => {
-    const list = await getFileList();
+    const list = await getFileList({ target: props.target, setState: setState });
     setFilelist(list);
   };
 

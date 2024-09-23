@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import IconButton from 'components/buttons/IconButton';
 import Icon from 'components/Icon';
-import { DriveFileInfo } from 'components/PoDrive';
 import { ReactComponent as DeleteIcon } from 'img/ico_delete.svg';
 import ico_file_csv from 'img/ico_file_csv.svg';
 import ico_file_doc from 'img/ico_file_doc.svg';
@@ -28,6 +27,7 @@ import { SUPPORT_DOCUMENT_TYPE, SUPPORT_IMAGE_TYPE } from '../../constants/fileT
 import { ReactComponent as DocsPlusIcon } from '../../img/ico_upload_docs_plus.svg';
 import { ReactComponent as ImagePlusIcon } from '../../img/ico_upload_img_plus.svg';
 import {
+  DriveFileInfo,
   getDriveFiles,
   getLocalFiles,
   removeDriveFile,

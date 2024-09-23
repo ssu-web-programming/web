@@ -19,6 +19,7 @@ export const NOVA_GET_EXPIRED_TIME = '/api/v2/nova/expired-time';
 
 export const AI_CREDIT_INFO = '/api/v2/nova/credit-info';
 export const PO_DRIVE_LIST = '/api/v2/nova/podrive/list';
+export const PO_DRIVE_FILEINFO = '/api/v2/nova/podrive/fileinfo';
 export const PO_DRIVE_UPLOAD = '/api/v2/nova/podrive/upload';
 export const PO_DRIVE_DOWNLOAD = '/api/v2/nova/podrive/download';
 export const PO_DRIVE_CONVERT = '/api/v2/nova/podrive/convert';

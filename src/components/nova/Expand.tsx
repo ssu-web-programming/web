@@ -240,7 +240,7 @@ export default function Expand() {
     type: 'width' | 'height'
   ) => {
     const value = parseInt(e.target.value, 10);
-    if (isNaN(value) || value < 0 || value > 2048 || !dimension) return;
+    if (isNaN(value) || value < 100 || value > 2048 || !dimension) return;
 
     setFormat('개인 맞춤');
     if (type === 'width') {

@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 
+import Bridge from '../util/bridge';
+
 import Icon from './Icon';
 
 export type TooltipType = 'selectable' | 'normal';
@@ -145,6 +147,8 @@ const Tooltip = (props: TooltipProps) => {
   }, []);
 
   const toggleTooltip = () => {
+    Bridge.callBridgeApi('analyzeCurFile');
+
     if (condition === false) return;
     setIsOpen(!isOpen);
   };

@@ -19,11 +19,11 @@ import { v4 } from 'uuid';
 
 import { NOVA_CHAT_API, PO_DRIVE_DOC_OPEN_STATUS } from '../../../api/constant';
 import { appStateSelector } from '../../../store/slices/appState';
+import { DriveFileInfo } from '../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { convertFiles, downloadFiles, uploadFiles } from '../../../util/files';
 import { useConfirm } from '../../Confirm';
 import { InputBarSubmitParam } from '../../nova/InputBar';
-import { DriveFileInfo } from '../../PoDrive';
 import useErrorHandle from '../useErrorHandle';
 import { useShowCreditToast } from '../useShowCreditToast';
 

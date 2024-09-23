@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { DriveFileInfo } from '../../../components/PoDrive';
 import { RootState } from '../../store';
+import { DriveFileInfo } from '../uploadFiles';
 
 export interface ResultImage {
   contentType: string;

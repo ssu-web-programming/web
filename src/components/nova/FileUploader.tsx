@@ -7,12 +7,14 @@ import {
   SupportFileType
 } from '../../constants/fileTypes';
 import ico_camera from '../../img/ico_camera.svg';
+import ico_insert_docs from '../../img/ico_insert_docs.svg';
 import ico_logo_po from '../../img/ico_logo_po.svg';
 import ico_mobile from '../../img/ico_mobile.svg';
 import ico_pc from '../../img/ico_pc.svg';
+import { getCurrentFile, removeCurrentFile, setDriveFiles } from '../../store/slices/uploadFiles';
 import { userInfoSelector } from '../../store/slices/userInfo';
-import { useAppSelector } from '../../store/store';
-import { ClientType, getPlatform } from '../../util/bridge';
+import { useAppDispatch, useAppSelector } from '../../store/store';
+import Bridge, { ClientType, getPlatform } from '../../util/bridge';
 import { getFileExtension } from '../../util/common';
 import { useConfirm } from '../Confirm';
 import FileButton from '../FileButton';
@@ -35,11 +37,14 @@ type FileUploaderProps = {
 export const FileUploader = (props: FileUploaderProps) => {
   const { target, accept, children, inputRef, tooltipStyle } = props;
 
-  const { loadLocalFile, loadDriveFile } = useManageFile();
+  const { loadLocalFile } = useManageFile();
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
   const confirm = useConfirm();
   const chatNova = useChatNova();
   const { getAvailableFileCnt, calcAvailableFileCnt } = useUserInfoUtils();
+  const currentFile = useAppSelector(getCurrentFile);
+  const { getFileList } = useManageFile();
 
   const [isOpen, setIsOpen] = useState(false);
   const [uploadTarget, setUploadTarget] = useState<string>('');
@@ -96,8 +101,11 @@ export const FileUploader = (props: FileUploaderProps) => {
             element.click();
           }
         }
-      },
-      {
+      }
+    ];
+
+    if (target === 'nova-image' && getPlatform() === ClientType.android) {
+      options.push({
         name: t(`Nova.UploadTooltip.Camera`),
         icon: { src: ico_camera },
         onClick: () => {
@@ -107,17 +115,95 @@ export const FileUploader = (props: FileUploaderProps) => {
             element.click();
           }
         }
-      }
-    ];
+      });
+    }
 
-    return target === 'nova-image' && getPlatform() === ClientType.android
-      ? options
-      : options.slice(0, 2);
+    if (currentFile.type !== 'new' && currentFile.type !== 'unknown') {
+      options.push({
+        name: t(`Nova.UploadTooltip.CurrentFile`),
+        icon: { src: ico_insert_docs },
+        onClick: async () => {
+          await analysisCurDoc();
+          console.log('to do');
+        }
+      });
+    }
+
+    return options;
   };
 
   const handleOnClick = () => {
     if (!isAgreed) {
       setIsAgreed(true);
+    }
+  };
+
+  const analysisCurDoc = async () => {
+    if (isAgreed) {
+      setUploadTarget(target);
+      toggleDriveConfirm();
+    }
+
+    const uploadLimit = calcAvailableFileCnt();
+    if (uploadLimit === 0) {
+      setIsOpen(false);
+      await confirm({
+        title: '',
+        msg: t('Nova.Confirm.OverMaxFileUploadCnt', { max: getAvailableFileCnt() })!,
+        onOk: { text: t('Nova.Confirm.NewChat.StartNewChat'), callback: chatNova.newChat },
+        onCancel: {
+          text: t('Cancel'),
+          callback: () => {}
+        }
+      });
+      return;
+    }
+
+    if (currentFile.type === 'notSupported') {
+      await confirm({
+        title: '',
+        msg: t('Nova.Alert.UnopenableDocError', { max: getAvailableFileCnt() })!,
+        onOk: {
+          text: t('Confirm'),
+          callback: () => {}
+        }
+      });
+    } else if (currentFile.type === 'drive') {
+      const list = await getFileList({ target: target, fileId: currentFile.id });
+      if (currentFile.isSaved) {
+        setDriveFiles(list);
+        dispatch(removeCurrentFile(list[0]));
+      } else {
+        await confirm({
+          title: '',
+          msg: t('Nova.Confirm.NotSavedFile.Msg'),
+          onOk: {
+            text: t('Nova.Confirm.NotSavedFile.Ok'),
+            callback: () => {
+              Bridge.callBridgeApi('uploadFile');
+            }
+          },
+          onCancel: {
+            text: t('Cancel'),
+            callback: () => {}
+          }
+        });
+      }
+    } else if (currentFile.type === 'local') {
+      await confirm({
+        title: '',
+        msg: t('Nova.Confirm.UploadFile.Msg'),
+        onOk: {
+          text: t('Nova.Confirm.UploadFile.Ok'),
+          callback: () => {
+            Bridge.callBridgeApi('uploadFile');
+          }
+        },
+        onCancel: {
+          text: t('Cancel'),
+          callback: () => {}
+        }
+      });
     }
   };
 

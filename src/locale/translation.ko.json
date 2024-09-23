@@ -401,7 +401,8 @@
       "UploadImage": "이미지 업로드",
       "PolarisDrive": "폴라리스 드라이브",
       "Local": "현재 장치",
-      "Camera": "사진 촬영"
+      "Camera": "사진 촬영",
+      "CurrentFile": "현재 문서 분석하기"
     },
     "UploadState": {
       "Uploading": "{{type}} 업로드 중",
@@ -497,7 +498,17 @@
         "Ok": "이동하기"
       },
       "OverMaxFileUploadCnt": "하나의 대화에서는 {{max}}개의 파일만 첨부해 질문할 수 있어요. 새 대화를 실행해 질문을 이어가 보세요!",
-      "OverMaxFileUploadCntOnce": "{{max}}개의 파일만 첨부해 질문할 수 있어요. 파일을 다시 선택해 주세요."
+      "OverMaxFileUploadCntOnce": "{{max}}개의 파일만 첨부해 질문할 수 있어요. 파일을 다시 선택해 주세요.",
+      "NotSavedFile": {
+        "Msg": "수정한 내용이 아직 저장되지 않았어요. 저장하지 않으면 수정한 내용이 NOVA의 답변에 반영되지 않아요.",
+        "Ok": "지금 저장",
+        "Cancel": "변경 없이 진행"
+      },
+      "UploadFile": {
+        "Msg": "문서를 분석하려면 폴라리스 드라이브에 저장해야 합니다. 지금 저장하시겠어요?",
+        "Ok": "지금 저장",
+        "Cancel": "취소"
+      }
     },
     "PoDrive": {
       "Desc": "원하는 파일을 선택해 주세요.",
