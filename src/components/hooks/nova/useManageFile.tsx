@@ -107,6 +107,7 @@ export function useManageFile() {
         method: 'POST',
         body: JSON.stringify({ fileId: fileId })
       });
+      console.log('res: ', res);
 
       const {
         success,
