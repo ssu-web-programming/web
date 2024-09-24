@@ -135,6 +135,7 @@ const Button = styled.div<{ isActive: boolean }>`
   background: ${(props) => (props.isActive ? '#6f3ad0' : '#f7f8f9')};
   border-radius: 8px;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 
   span {
     font-size: 16px;
@@ -191,7 +192,7 @@ export default function Theme() {
         </ThemeSelectionWrap>
         <Button
           isActive={!!selectedImage}
-          onClick={() => handleChangeStyle(selectedImage?.alt ?? '')}>
+          onClick={() => (selectedImage ? handleChangeStyle(selectedImage?.alt ?? '') : undefined)}>
           <span>{t(`Nova.Theme.Button`)}</span>
         </Button>
       </Body>

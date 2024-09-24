@@ -106,18 +106,6 @@ const CategoryItem = styled.li`
   }
 `;
 
-const Item = styled.li`
-  list-style: disc;
-
-  ::marker {
-    font-size: 10px;
-  }
-
-  li {
-    margin-left: -4px;
-  }
-`;
-
 const Title = styled.div`
   padding-bottom: 8px;
   line-height: 24px;
@@ -126,7 +114,7 @@ const Title = styled.div`
   color: var(--gray-gray-90-01);
 `;
 
-const OptionItemWrapper = styled.li<{ type: TooltipType }>`
+const OptionItemWrapper = styled.div<{ type: TooltipType }>`
   ${({ type }) => STYLE_BY_TYPE[type]}
   display: flex;
   align-items: center;
@@ -227,13 +215,13 @@ const Tooltip = (props: TooltipProps) => {
                   <span>{category}</span>
                   <ul className="list">
                     {categorizedOptions[category].map((option, idx) => (
-                      <Item key={`${option.name}-${idx}`}>
-                        <Tooltip.OptionItem
-                          onSelect={() => handleOptionSelect(option)}
-                          option={option}
-                          type={type}
-                        />
-                      </Item>
+                      <Tooltip.OptionItem
+                        key={`${option.name}-${idx}`}
+                        onSelect={() => handleOptionSelect(option)}
+                        option={option}
+                        type={type}
+                        isBullet={true}
+                      />
                     ))}
                   </ul>
                 </CategoryItem>
@@ -248,6 +236,7 @@ const Tooltip = (props: TooltipProps) => {
               onSelect={() => handleOptionSelect(option)}
               option={option}
               type={type}
+              isBullet={false}
             />
           ))}
         </OptionList>
@@ -256,8 +245,13 @@ const Tooltip = (props: TooltipProps) => {
   );
 };
 
-const OptionItem = (props: { option: TooltipOption; type: TooltipType; onSelect?: () => void }) => {
-  const { option, type, onSelect } = props;
+const OptionItem = (props: {
+  option: TooltipOption;
+  type: TooltipType;
+  isBullet: boolean;
+  onSelect?: () => void;
+}) => {
+  const { option, type, onSelect, isBullet } = props;
 
   const handleOnClick = () => {
     if (type === 'selectable' && onSelect) {
@@ -267,7 +261,7 @@ const OptionItem = (props: { option: TooltipOption; type: TooltipType; onSelect?
 
   if (type === 'selectable') {
     return (
-      <>
+      <li style={{ listStyle: isBullet ? 'disc' : 'none' }}>
         <OptionItemWrapper type={type} onClick={handleOnClick}>
           <div style={{ marginRight: '6px' }}>
             <Icon iconSrc={option.icon?.src} size={24} />
@@ -275,15 +269,17 @@ const OptionItem = (props: { option: TooltipOption; type: TooltipType; onSelect?
           <span>{option.name}</span>
         </OptionItemWrapper>
         <Divider />
-      </>
+      </li>
     );
   }
 
   return (
-    <OptionItemWrapper type={type}>
-      {option.name}
-      <Tooltip.Chip option={option} />
-    </OptionItemWrapper>
+    <li style={{ listStyle: isBullet ? 'disc' : 'none' }}>
+      <OptionItemWrapper type={type}>
+        {option.name}
+        <Tooltip.Chip option={option} />
+      </OptionItemWrapper>
+    </li>
   );
 };
 

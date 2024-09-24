@@ -12,12 +12,17 @@ import {
 import { NOVA_TAB_TYPE } from '../../../store/slices/tabSlice';
 import { setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
+import { calLeftCredit } from '../../../util/common';
 import { convertDriveFileToFile, createFormDataFromFiles } from '../../../util/files';
 import { useConfirm } from '../../Confirm';
+import useErrorHandle from '../useErrorHandle';
+import { useShowCreditToast } from '../useShowCreditToast';
 
 export const useImprovedResolution = () => {
   const { t } = useTranslation();
   const confirm = useConfirm();
+  const showCreditToast = useShowCreditToast();
+  const errorHandle = useErrorHandle();
   const dispatch = useAppDispatch();
   const currentFile = useAppSelector(selectPageData(NOVA_TAB_TYPE.improvedRes));
 
@@ -58,9 +63,14 @@ export const useImprovedResolution = () => {
         dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.improvedRes, status: 'done' }));
       } else {
         dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.improvedRes, status: 'timeout' }));
+        errorHandle(response.error.code);
       }
+
+      const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
+      showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');
     } catch (err) {
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.improvedRes, status: 'timeout' }));
+      errorHandle(err);
     }
   };
 

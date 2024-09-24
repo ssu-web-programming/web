@@ -13,12 +13,17 @@ import {
 import { NOVA_TAB_TYPE } from '../../../store/slices/tabSlice';
 import { setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
+import { calLeftCredit } from '../../../util/common';
 import { convertDriveFileToFile, createFormDataFromFiles, fileToBase64 } from '../../../util/files';
 import { useConfirm } from '../../Confirm';
+import useErrorHandle from '../useErrorHandle';
+import { useShowCreditToast } from '../useShowCreditToast';
 
-export const useExapandImage = () => {
+export const useExpandImage = () => {
   const { t } = useTranslation();
   const confirm = useConfirm();
+  const showCreditToast = useShowCreditToast();
+  const errorHandle = useErrorHandle();
   const dispatch = useAppDispatch();
   const currentFile = useAppSelector(selectPageData(NOVA_TAB_TYPE.expandImg));
 
@@ -26,8 +31,8 @@ export const useExapandImage = () => {
 
   const goExpandPage = async () => {
     if (!currentFile) return;
-
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.expandImg, status: 'progress' }));
+
     const file = await convertDriveFileToFile(currentFile);
     if (!file) return;
 
@@ -40,22 +45,16 @@ export const useExapandImage = () => {
           callback: () => {}
         }
       });
-
-      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.expandImg, status: 'home' }));
       dispatch(resetPageData(NOVA_TAB_TYPE.expandImg));
       dispatch(setLocalFiles([]));
       dispatch(setDriveFiles([]));
-
+      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.expandImg, status: 'home' }));
       return;
     }
 
-    fileToBase64(file)
-      .then((data) => {
-        dispatch(setPageResult({ tab: NOVA_TAB_TYPE.expandImg, result: data }));
-      })
-      .then(() => {
-        dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.expandImg, status: 'expand' }));
-      });
+    const base64Data = await fileToBase64(file);
+    dispatch(setPageResult({ tab: NOVA_TAB_TYPE.expandImg, result: base64Data }));
+    dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.expandImg, status: 'expand' }));
   };
 
   const handleExpandImage = async (
@@ -67,6 +66,7 @@ export const useExapandImage = () => {
     if (!currentFile) return;
 
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.expandImg, status: 'loading' }));
+
     try {
       const formData = await createFormDataFromFiles([currentFile]);
       formData.append('extend_left', String(extend_left));
@@ -78,8 +78,8 @@ export const useExapandImage = () => {
         body: formData,
         method: 'POST'
       });
-
       const response = await res.json();
+
       if (response.success) {
         const image = response.data.image[0];
         dispatch(
@@ -88,17 +88,36 @@ export const useExapandImage = () => {
             result: {
               contentType: image.contentType,
               data: image.data,
-              info: prompt
+              info: { extend_left, extend_right, extend_up, extend_down }
             }
           })
         );
         dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.expandImg, status: 'done' }));
       } else {
-        dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.expandImg, status: 'timeout' }));
+        handleExpandError({ extend_left, extend_right, extend_up, extend_down });
+        errorHandle(response.error.code);
       }
+
+      const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
+      showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');
     } catch (err) {
-      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.expandImg, status: 'timeout' }));
+      handleExpandError({ extend_left, extend_right, extend_up, extend_down });
+      errorHandle(err);
     }
+  };
+
+  const handleExpandError = ({ extend_left, extend_right, extend_up, extend_down }: any) => {
+    dispatch(
+      setPageResult({
+        tab: NOVA_TAB_TYPE.expandImg,
+        result: {
+          contentType: '',
+          data: '',
+          info: { extend_left, extend_right, extend_up, extend_down }
+        }
+      })
+    );
+    dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.expandImg, status: 'timeout' }));
   };
 
   return { goExpandPage, handleExpandImage };

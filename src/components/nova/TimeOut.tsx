@@ -3,6 +3,18 @@ import CreditColorIcon from 'img/ico_credit_color_outline.svg';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
+import { selectPageResult } from '../../store/slices/nova/pageStatusSlice';
+import { NOVA_TAB_TYPE, selectTabSlice } from '../../store/slices/tabSlice';
+import { useAppSelector } from '../../store/store';
+import { useChangeBackground } from '../hooks/nova/useChangeBackground';
+import { useChangeStyle } from '../hooks/nova/useChangeStyle';
+import { useExpandImage } from '../hooks/nova/useExpandImage';
+import { useImprovedResolution } from '../hooks/nova/useImprovedResolution';
+import { useRemakeImage } from '../hooks/nova/useRemakeImage';
+import { useRemoveBackground } from '../hooks/nova/useRemoveBackground';
+
+import GoBackHeader from './GoBackHeader';
+
 const Wrap = styled.div`
   width: 100%;
   height: 100%;
@@ -50,14 +62,54 @@ const ButtonWrap = styled.div`
 
 export default function TimeOut() {
   const { t } = useTranslation();
+  const { selectedNovaTab } = useAppSelector(selectTabSlice);
+  const result = useAppSelector(selectPageResult(selectedNovaTab));
+  const { handleRemoveBackground } = useRemoveBackground();
+  const { handleChangeBackground } = useChangeBackground();
+  const { handleRemakeImage } = useRemakeImage();
+  const { handleExpandImage } = useExpandImage();
+  const { handleImprovedResolution } = useImprovedResolution();
+  const { handleChangeStyle } = useChangeStyle();
+  const handleRetry = async () => {
+    switch (selectedNovaTab) {
+      case NOVA_TAB_TYPE.removeBG:
+        await handleRemoveBackground();
+        break;
+      case NOVA_TAB_TYPE.changeBG:
+        await handleChangeBackground(result?.info);
+        break;
+      case NOVA_TAB_TYPE.remakeImg:
+        await handleRemakeImage();
+        break;
+      case NOVA_TAB_TYPE.expandImg:
+        await handleExpandImage(
+          result?.info.extend_left,
+          result?.info.extend_right,
+          result?.info.extend_up,
+          result?.info.extend_down
+        );
+        break;
+      case NOVA_TAB_TYPE.improvedRes:
+        await handleImprovedResolution();
+        break;
+      case NOVA_TAB_TYPE.changeStyle:
+        await handleChangeStyle(result?.info);
+        break;
+      default:
+        return async () => {};
+    }
+  };
 
   return (
-    <Wrap>
-      <Title>{t(`Nova.TimeOut.Title`)}</Title>
-      <ButtonWrap>
-        <span>{t(`Nova.TimeOut.Retry`)}</span>
-        <img src={CreditColorIcon} alt="credit" />
-      </ButtonWrap>
-    </Wrap>
+    <>
+      <GoBackHeader />
+      <Wrap>
+        <Title>{t(`Nova.TimeOut.Title`)}</Title>
+        <ButtonWrap onClick={handleRetry}>
+          <span>{t(`Nova.TimeOut.Retry`)}</span>
+          <img src={CreditColorIcon} alt="credit" />
+        </ButtonWrap>
+      </Wrap>
+    </>
   );
 }

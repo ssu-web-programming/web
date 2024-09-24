@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import { useChangeBackground } from '../../components/hooks/nova/useChangeBackground';
 import { useChangeStyle } from '../../components/hooks/nova/useChangeStyle';
-import { useExapandImage } from '../../components/hooks/nova/useExpandImage';
+import { useExpandImage } from '../../components/hooks/nova/useExpandImage';
 import { useImprovedResolution } from '../../components/hooks/nova/useImprovedResolution';
 import useManageFile from '../../components/hooks/nova/useManageFile';
 import { useRemakeImage } from '../../components/hooks/nova/useRemakeImage';
@@ -62,7 +62,7 @@ export default function Nova() {
   const { goPromptPage } = useChangeBackground();
   const { handleRemoveBackground } = useRemoveBackground();
   const { handleRemakeImage } = useRemakeImage();
-  const { goExpandPage } = useExapandImage();
+  const { goExpandPage } = useExpandImage();
   const { handleImprovedResolution } = useImprovedResolution();
   const { goThemePage } = useChangeStyle();
   const { loadLocalFile } = useManageFile();
@@ -145,7 +145,7 @@ export default function Nova() {
   return (
     <Wrapper>
       <NovaHeader />
-      {!usingAI && (
+      {!usingAI && status === 'home' && (
         <Tabs tabs={tabValues} activeTab={selectedNovaTab} onChangeTab={handleChangeTab} />
       )}
       <Body

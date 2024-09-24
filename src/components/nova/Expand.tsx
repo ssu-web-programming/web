@@ -12,7 +12,7 @@ import MultiplyIcon from '../../img/nova/expandImg/xmark.png';
 import { selectPageResult } from '../../store/slices/nova/pageStatusSlice';
 import { selectTabSlice } from '../../store/slices/tabSlice';
 import { useAppSelector } from '../../store/store';
-import { useExapandImage } from '../hooks/nova/useExpandImage';
+import { useExpandImage } from '../hooks/nova/useExpandImage';
 import SelectBox from '../SelectBox';
 
 import GoBackHeader from './GoBackHeader';
@@ -140,7 +140,7 @@ const SelectBoxItem = [
 export default function Expand() {
   const { t } = useTranslation();
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
-  const { handleExpandImage } = useExapandImage();
+  const { handleExpandImage } = useExpandImage();
   const result = useAppSelector(selectPageResult(selectedNovaTab));
 
   const imageBoxRef = useRef<HTMLDivElement>(null);

@@ -14,12 +14,17 @@ import {
 import { NOVA_TAB_TYPE } from '../../../store/slices/tabSlice';
 import { setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
+import { calLeftCredit } from '../../../util/common';
 import { convertDriveFileToFile, createFormDataFromFiles, fileToBase64 } from '../../../util/files';
 import { useConfirm } from '../../Confirm';
+import useErrorHandle from '../useErrorHandle';
+import { useShowCreditToast } from '../useShowCreditToast';
 
 export const useChangeBackground = () => {
   const { t } = useTranslation();
   const confirm = useConfirm();
+  const showCreditToast = useShowCreditToast();
+  const errorHandle = useErrorHandle();
   const dispatch = useAppDispatch();
   const currentFile = useAppSelector(selectPageData(NOVA_TAB_TYPE.changeBG));
   const status = useAppSelector(selectPageStatus(NOVA_TAB_TYPE.changeBG));
@@ -87,11 +92,32 @@ export const useChangeBackground = () => {
         );
         dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeBG, status: 'done' }));
       } else {
+        handleChangeBGError(prompt);
         dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeBG, status: 'timeout' }));
+        errorHandle(response.error.code);
       }
+
+      const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
+      showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');
     } catch (err) {
+      handleChangeBGError(prompt);
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeBG, status: 'timeout' }));
+      errorHandle(err);
     }
+  };
+
+  const handleChangeBGError = (prompt: string) => {
+    dispatch(
+      setPageResult({
+        tab: NOVA_TAB_TYPE.changeBG,
+        result: {
+          contentType: '',
+          data: '',
+          info: prompt
+        }
+      })
+    );
+    dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeBG, status: 'timeout' }));
   };
 
   return { goPromptPage, handleChangeBackground };
