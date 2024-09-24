@@ -118,7 +118,7 @@ export const FileUploader = (props: FileUploaderProps) => {
       });
     }
 
-    if (currentFile.type !== 'new' && currentFile.type !== 'unknown') {
+    if (target === 'nova-file' && currentFile.type !== 'new' && currentFile.type !== 'unknown') {
       options.push({
         name: t(`Nova.UploadTooltip.CurrentFile`),
         icon: { src: ico_insert_docs },
