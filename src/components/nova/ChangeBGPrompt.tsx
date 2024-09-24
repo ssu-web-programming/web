@@ -114,7 +114,8 @@ const CreatingButton = styled.div<{ isActive: boolean }>`
   justify-content: center;
   background: ${(props) => (props.isActive ? '#6f3ad0' : '#f7f8f9')};
   border-radius: 8px;
-  cursor: pointer;
+  cursor: ${(props) => (props.isActive ? 'pointer' : 'default')};
+  -webkit-tap-highlight-color: transparent;
 
   span {
     font-size: 16px;
@@ -124,7 +125,7 @@ const CreatingButton = styled.div<{ isActive: boolean }>`
   }
 `;
 
-export default function Promt() {
+export default function ChangeBGPrompt() {
   const { t } = useTranslation();
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
   const result = useAppSelector(selectPageResult(selectedNovaTab));
@@ -175,7 +176,9 @@ export default function Promt() {
             </ExamButton>
           </ButtonWrap>
         </TextWrap>
-        <CreatingButton isActive={isEnabled} onClick={() => handleChangeBackground(text)}>
+        <CreatingButton
+          isActive={isEnabled}
+          onClick={isEnabled ? () => handleChangeBackground(text) : undefined}>
           <span>{t(`Nova.Prompt.CreatingButton`)}</span>
         </CreatingButton>
       </Body>

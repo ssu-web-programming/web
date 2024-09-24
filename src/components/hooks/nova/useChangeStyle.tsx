@@ -11,8 +11,9 @@ import {
   setPageStatus
 } from '../../../store/slices/nova/pageStatusSlice';
 import { NOVA_TAB_TYPE } from '../../../store/slices/tabSlice';
+import { setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
-import { createFormDataFromFiles, fileToBase64 } from '../../../util/files';
+import { convertDriveFileToFile, createFormDataFromFiles, fileToBase64 } from '../../../util/files';
 import { useConfirm } from '../../Confirm';
 
 export const useChangeStyle = () => {
@@ -27,7 +28,10 @@ export const useChangeStyle = () => {
     if (!currentFile) return;
 
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeStyle, status: 'progress' }));
-    if (await isPixelLimitExceeded(currentFile, NOVA_TAB_TYPE.changeStyle)) {
+    const file = await convertDriveFileToFile(currentFile);
+    if (!file) return;
+
+    if (await isPixelLimitExceeded(file, NOVA_TAB_TYPE.changeStyle)) {
       await confirm({
         title: '',
         msg: t('Nova.Confirm.OverMaxFilePixel'),
@@ -39,11 +43,13 @@ export const useChangeStyle = () => {
 
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeStyle, status: 'home' }));
       dispatch(resetPageData(NOVA_TAB_TYPE.changeStyle));
+      dispatch(setLocalFiles([]));
+      dispatch(setDriveFiles([]));
 
       return;
     }
 
-    fileToBase64(currentFile)
+    fileToBase64(file)
       .then((data) => {
         dispatch(setPageResult({ tab: NOVA_TAB_TYPE.changeStyle, result: data }));
       })

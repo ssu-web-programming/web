@@ -10,8 +10,9 @@ import {
   setPageStatus
 } from '../../../store/slices/nova/pageStatusSlice';
 import { NOVA_TAB_TYPE } from '../../../store/slices/tabSlice';
+import { setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
-import { createFormDataFromFiles } from '../../../util/files';
+import { convertDriveFileToFile, createFormDataFromFiles } from '../../../util/files';
 import { useConfirm } from '../../Confirm';
 
 export const useRemakeImage = () => {
@@ -24,7 +25,10 @@ export const useRemakeImage = () => {
     if (!currentFile) return;
 
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.remakeImg, status: 'loading' }));
-    if (await isPixelLimitExceeded(currentFile, NOVA_TAB_TYPE.remakeImg)) {
+    const file = await convertDriveFileToFile(currentFile);
+    if (!file) return;
+
+    if (await isPixelLimitExceeded(file, NOVA_TAB_TYPE.remakeImg)) {
       await confirm({
         title: '',
         msg: t('Nova.Confirm.OverMaxFilePixel'),
@@ -36,6 +40,8 @@ export const useRemakeImage = () => {
 
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.remakeImg, status: 'home' }));
       dispatch(resetPageData(NOVA_TAB_TYPE.remakeImg));
+      dispatch(setLocalFiles([]));
+      dispatch(setDriveFiles([]));
 
       return;
     }

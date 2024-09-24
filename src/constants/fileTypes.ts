@@ -1,7 +1,5 @@
 import { NovaChatType } from '../store/slices/nova/novaHistorySlice';
 import { NOVA_TAB_TYPE } from '../store/slices/tabSlice';
-import { DriveFileInfo } from '../store/slices/uploadFiles';
-import { downloadFileAsBlob } from '../util/files';
 
 export type SupportFileType = {
   mimeType: string;
@@ -121,19 +119,8 @@ function getImageDimensions(file: File): Promise<{ width: number; height: number
   });
 }
 
-export const isPixelLimitExceeded = async (file: File | DriveFileInfo, tab: NOVA_TAB_TYPE) => {
-  let curFile;
-  if (file instanceof File) {
-    curFile = file;
-  } else if ('fileId' in file) {
-    const blob = await downloadFileAsBlob(file);
-    const fileName = file.name;
-    const fileType = file.type;
-    curFile = new File([blob], fileName, { type: fileType });
-  }
-  if (!curFile) return false;
-
-  return getImageDimensions(curFile)
+export const isPixelLimitExceeded = async (file: File, tab: NOVA_TAB_TYPE) => {
+  return getImageDimensions(file)
     .then(async (dimensions) => {
       const { width, height } = dimensions;
       const megapixels = (width * height) / 1000000;

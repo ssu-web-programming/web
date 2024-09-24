@@ -173,17 +173,22 @@ export const createFormDataFromFiles = async (
   return formData;
 };
 
-export const fileToBase64 = async (
-  file: File | DriveFileInfo
-): Promise<{ contentType: string; data: string }> => {
-  let targetFile: File;
-  if (file instanceof File) {
-    targetFile = file;
-  } else if ('fileId' in file) {
-    const blob = await downloadFileAsBlob(file);
-    targetFile = new File([blob], file.fileName, { type: file.fileType });
+export const convertDriveFileToFile = async (file: File | DriveFileInfo) => {
+  try {
+    if (file instanceof File) {
+      return file;
+    } else if ('fileId' in file) {
+      const blob = await downloadFileAsBlob(file);
+      return new File([blob], file.fileName, { type: file.fileType });
+    }
+    return null;
+  } catch (error) {
+    console.error('Error converting DriveFile to File:', error);
+    return null;
   }
+};
 
+export const fileToBase64 = async (file: File): Promise<{ contentType: string; data: string }> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
 
@@ -203,7 +208,7 @@ export const fileToBase64 = async (
       reject(new Error('Failed to read file'));
     };
 
-    reader.readAsDataURL(targetFile);
+    reader.readAsDataURL(file);
   });
 };
 

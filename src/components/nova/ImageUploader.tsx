@@ -7,12 +7,7 @@ import CreditIcon from '../../img/ico_credit_gray.svg';
 import { ReactComponent as UploadIcon } from '../../img/ico_upload_img_plus.svg';
 import { selectPageData, setPageData } from '../../store/slices/nova/pageStatusSlice';
 import { NOVA_TAB_TYPE } from '../../store/slices/tabSlice';
-import {
-  getDriveFiles,
-  getLocalFiles,
-  setDriveFiles,
-  setLocalFiles
-} from '../../store/slices/uploadFiles';
+import { getDriveFiles, getLocalFiles } from '../../store/slices/uploadFiles';
 import { userInfoSelector } from '../../store/slices/userInfo';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 
@@ -124,8 +119,6 @@ export default function ImageUploader(props: ImageUploaderProps) {
 
     if (currentFile) {
       props.handleUploadComplete();
-      dispatch(setLocalFiles([]));
-      dispatch(setDriveFiles([]));
     }
   }, [localFiles, driveFiles, currentFile]);
 
