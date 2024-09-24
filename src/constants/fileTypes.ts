@@ -1,5 +1,7 @@
 import { NovaChatType } from '../store/slices/nova/novaHistorySlice';
 import { NOVA_TAB_TYPE } from '../store/slices/tabSlice';
+import { DriveFileInfo } from '../store/slices/uploadFiles';
+import { downloadFileAsBlob } from '../util/files';
 
 export type SupportFileType = {
   mimeType: string;
@@ -90,6 +92,64 @@ export const isValidFileSize = (size: number, tab: NOVA_TAB_TYPE) => {
   return maxFileSize < 0
     ? true
     : size < getMaxFileSize(tab) * 1024 * 1024 && size > MIN_FILE_UPLOAD_SIZE_KB * 1024;
+};
+
+function getImageDimensions(file: File): Promise<{ width: number; height: number }> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      if (e.target?.result) {
+        img.src = e.target.result as string;
+      }
+    };
+
+    img.onload = () => {
+      resolve({ width: img.width, height: img.height });
+    };
+
+    img.onerror = (err) => {
+      reject(err);
+    };
+
+    reader.onerror = (err) => {
+      reject(err);
+    };
+
+    reader.readAsDataURL(file);
+  });
+}
+
+export const isPixelLimitExceeded = async (file: File | DriveFileInfo, tab: NOVA_TAB_TYPE) => {
+  let curFile;
+  if (file instanceof File) {
+    curFile = file;
+  } else if ('fileId' in file) {
+    const blob = await downloadFileAsBlob(file);
+    const fileName = file.name;
+    const fileType = file.type;
+    curFile = new File([blob], fileName, { type: fileType });
+  }
+  if (!curFile) return false;
+
+  return getImageDimensions(curFile)
+    .then(async (dimensions) => {
+      const { width, height } = dimensions;
+      const megapixels = (width * height) / 1000000;
+
+      return (
+        (tab === 'removeBG' && megapixels > 25) ||
+        (tab === 'changeBG' && (width > 2048 || height > 2048)) ||
+        (tab === 'remakeImg' && (width > 1024 || height > 1024)) ||
+        (tab === 'expandImg' && megapixels > 10) ||
+        (tab === 'improvedRes' && (width > 2000 || height > 2000))
+      );
+    })
+    .catch((err) => {
+      console.error('이미지 정보를 가져오는 데 실패했습니다:', err);
+      return false;
+    });
 };
 
 export interface FileUpladState extends Pick<NovaChatType, 'type'> {

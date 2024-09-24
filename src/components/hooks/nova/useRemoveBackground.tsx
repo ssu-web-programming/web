@@ -1,6 +1,10 @@
+import { useTranslation } from 'react-i18next';
+
 import { apiWrapper } from '../../../api/apiWrapper';
 import { NOVA_REMOVE_BACKGROUND } from '../../../api/constant';
+import { isPixelLimitExceeded } from '../../../constants/fileTypes';
 import {
+  resetPageData,
   selectPageData,
   setPageResult,
   setPageStatus
@@ -8,8 +12,11 @@ import {
 import { NOVA_TAB_TYPE } from '../../../store/slices/tabSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { createFormDataFromFiles } from '../../../util/files';
+import { useConfirm } from '../../Confirm';
 
 export const useRemoveBackground = () => {
+  const { t } = useTranslation();
+  const confirm = useConfirm();
   const dispatch = useAppDispatch();
   const currentFile = useAppSelector(selectPageData(NOVA_TAB_TYPE.removeBG));
 
@@ -17,6 +24,21 @@ export const useRemoveBackground = () => {
     if (!currentFile) return;
 
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.removeBG, status: 'loading' }));
+    if (await isPixelLimitExceeded(currentFile, NOVA_TAB_TYPE.improvedRes)) {
+      await confirm({
+        title: '',
+        msg: t('Nova.Confirm.OverMaxFilePixel'),
+        onOk: {
+          text: t('OK'),
+          callback: () => {}
+        }
+      });
+
+      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.improvedRes, status: 'home' }));
+      dispatch(resetPageData(NOVA_TAB_TYPE.improvedRes));
+
+      return;
+    }
 
     try {
       const formData = await createFormDataFromFiles([currentFile]);

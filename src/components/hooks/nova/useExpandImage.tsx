@@ -1,8 +1,11 @@
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { apiWrapper } from '../../../api/apiWrapper';
 import { NOVA_EXPAND_IMAGE } from '../../../api/constant';
+import { isPixelLimitExceeded } from '../../../constants/fileTypes';
 import {
+  resetPageData,
   selectPageData,
   setPageResult,
   setPageStatus
@@ -10,8 +13,11 @@ import {
 import { NOVA_TAB_TYPE } from '../../../store/slices/tabSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { createFormDataFromFiles, fileToBase64 } from '../../../util/files';
+import { useConfirm } from '../../Confirm';
 
 export const useExapandImage = () => {
+  const { t } = useTranslation();
+  const confirm = useConfirm();
   const dispatch = useAppDispatch();
   const currentFile = useAppSelector(selectPageData(NOVA_TAB_TYPE.expandImg));
 
@@ -21,6 +27,21 @@ export const useExapandImage = () => {
     if (!currentFile) return;
 
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.expandImg, status: 'progress' }));
+    if (await isPixelLimitExceeded(currentFile, NOVA_TAB_TYPE.expandImg)) {
+      await confirm({
+        title: '',
+        msg: t('Nova.Confirm.OverMaxFilePixel'),
+        onOk: {
+          text: t('OK'),
+          callback: () => {}
+        }
+      });
+
+      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.expandImg, status: 'home' }));
+      dispatch(resetPageData(NOVA_TAB_TYPE.expandImg));
+
+      return;
+    }
 
     fileToBase64(currentFile)
       .then((data) => {

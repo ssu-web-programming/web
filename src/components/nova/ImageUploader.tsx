@@ -4,10 +4,16 @@ import styled from 'styled-components';
 
 import { SUPPORT_IMAGE_TYPE } from '../../constants/fileTypes';
 import CreditIcon from '../../img/ico_credit_gray.svg';
-import UploadIcon from '../../img/nova/upload_img.png';
+import { ReactComponent as UploadIcon } from '../../img/ico_upload_img_plus.svg';
 import { selectPageData, setPageData } from '../../store/slices/nova/pageStatusSlice';
 import { NOVA_TAB_TYPE } from '../../store/slices/tabSlice';
-import { getDriveFiles, getLocalFiles } from '../../store/slices/uploadFiles';
+import {
+  getDriveFiles,
+  getLocalFiles,
+  setDriveFiles,
+  setLocalFiles
+} from '../../store/slices/uploadFiles';
+import { userInfoSelector } from '../../store/slices/userInfo';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 
 import { FileUploader } from './FileUploader';
@@ -35,15 +41,18 @@ const ImageBox = styled.div`
   gap: 8px;
 `;
 
-const Icon = styled.div`
+const Icon = styled.div<{ disable: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 
-  img {
+  svg {
     width: 48px;
     height: 48px;
+
+    cursor: ${(props) => (props.disable ? 'initial' : 'pointer')};
+    color: ${(props) => (props.disable ? '#454c5380' : 'var(--gray-gray-80-02)')};
   }
 
   span {
@@ -103,18 +112,20 @@ export default function ImageUploader(props: ImageUploaderProps) {
   const { t } = useTranslation();
   const inputImgFileRef = useRef<HTMLInputElement | null>(null);
   const dispatch = useAppDispatch();
+  const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
   const localFiles = useAppSelector(getLocalFiles);
   const driveFiles = useAppSelector(getDriveFiles);
   const currentFile = useAppSelector(selectPageData(props.curTab));
   const target = 'nova-image';
 
   useEffect(() => {
-    if (localFiles.length > 0) dispatch(setPageData({ tab: props.curTab, data: localFiles[0] }));
-    else if (driveFiles.length > 0)
-      dispatch(setPageData({ tab: props.curTab, data: driveFiles[0] }));
+    const selectedFile = localFiles[0] || driveFiles[0];
+    dispatch(setPageData({ tab: props.curTab, data: selectedFile }));
 
     if (currentFile) {
       props.handleUploadComplete();
+      dispatch(setLocalFiles([]));
+      dispatch(setDriveFiles([]));
     }
   }, [localFiles, driveFiles, currentFile]);
 
@@ -127,8 +138,8 @@ export default function ImageUploader(props: ImageUploaderProps) {
         inputRef={inputImgFileRef}
         tooltipStyle={{ inset: 'unset', top: '12px' }}>
         <ImageBox>
-          <Icon>
-            <img src={UploadIcon} alt="upload" />
+          <Icon disable={!isAgreed ?? false}>
+            <UploadIcon />
             <span>{t(`Nova.UploadTooltip.UploadImage`)}</span>
           </Icon>
           <Credit>

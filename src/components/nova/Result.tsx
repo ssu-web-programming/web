@@ -91,6 +91,7 @@ const ImageBox = styled.div<{ isBordered: boolean }>`
     object-fit: contain;
     max-width: 100%;
     max-height: 100%;
+    border-radius: 8px;
   }
 `;
 
