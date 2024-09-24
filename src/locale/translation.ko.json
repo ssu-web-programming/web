@@ -390,9 +390,18 @@
     },
     "CreditInfo": {
       "Title": "크레딧 안내",
-      "Chat": "채팅",
-      "DocImgQuery": "문서/이미지 질의",
-      "ImgGen": "이미지 생성"
+      "AIChat": {
+        "Title": "AI 채팅",
+        "Chat": "일반 채팅",
+        "DocImgQuery": "문서/이미지 질의",
+        "ImgGen": "이미지 생성"
+      },
+      "RemoveBG": "배경 제거",
+      "ChangeBG": "배경 변경",
+      "RemakeImg": "이미지 리메이크",
+      "ExpandImg": "이미지 확장",
+      "ImprovedRes": "해상도 향상",
+      "ChangeStyle": "스타일 변환"
     },
     "ActionWindow": {
       "Placeholder": "NOVA에게 무엇이든 물어보기"

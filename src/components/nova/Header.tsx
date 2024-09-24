@@ -64,18 +64,65 @@ export default function NovaHeader(props: NovaHeaderProps) {
   const chatNova = useChatNova();
   const creditInfo = useAppSelector(creditInfoSelector);
 
-  const CREDIT_NAME_MAP: { [key: string]: string } = {
-    NOVA_CHAT_GPT4O: t(`Nova.CreditInfo.Chat`),
-    NOVA_ASK_DOC_GPT4O: t(`Nova.CreditInfo.DocImgQuery`),
-    NOVA_IMG_GPT4O: t(`Nova.CreditInfo.ImgGen`)
+  const CREDIT_NAME_MAP: { [category: string]: { [serviceType: string]: string } | string } = {
+    [t('Nova.CreditInfo.AIChat.Title')]: {
+      NOVA_CHAT_GPT4O: t(`Nova.CreditInfo.AIChat.Chat`),
+      NOVA_ASK_DOC_GPT4O: t(`Nova.CreditInfo.AIChat.DocImgQuery`),
+      NOVA_IMG_GPT4O: t(`Nova.CreditInfo.AIChat.ImgGen`)
+    },
+    NOVA_REMOVE_BG: t(`Nova.CreditInfo.RemoveBG`) || '',
+    NOVA_REPLACE_BG_CLIPDROP: t(`Nova.CreditInfo.ChangeBG`) || '',
+    NOVA_REIMAGE_CLIPDROP: t(`Nova.CreditInfo.RemakeImg`) || '',
+    NOVA_UNCROP_CLIPDROP: t(`Nova.CreditInfo.ExpandImg`) || '',
+    NOVA_PO_RESOLUTION: t(`Nova.CreditInfo.ImprovedRes`) || '',
+    NOVA_PO_STYLE_TRANSFER: t(`Nova.CreditInfo.ChangeStyle`) || ''
+  };
+
+  const filterCreditInfo = (
+    creditInfo: InitialState[],
+    nameMap: { [category: string]: { [serviceType: string]: string } | string }
+  ) => {
+    return creditInfo.filter((item) => {
+      if (typeof nameMap[item.serviceType] === 'string') {
+        return !!nameMap[item.serviceType];
+      }
+
+      return Object.values(nameMap).some((subMap) => {
+        if (typeof subMap === 'object' && subMap[item.serviceType]) {
+          return true;
+        }
+        return false;
+      });
+    });
   };
 
   const credit = filterCreditInfo(creditInfo, CREDIT_NAME_MAP);
 
-  const TOOLTIP_CREDIT_OPTIONS = credit.map((item) => ({
-    name: CREDIT_NAME_MAP[item.serviceType] || 'Unknown',
-    icon: { src: ico_credit, txt: String(item.deductCredit) }
-  }));
+  const TOOLTIP_CREDIT_OPTIONS = credit.flatMap((item) => {
+    const category = Object.keys(CREDIT_NAME_MAP).find((cat) => {
+      const subMap = CREDIT_NAME_MAP[cat];
+      return typeof subMap === 'object' && subMap[item.serviceType];
+    });
+
+    let serviceName: string | undefined;
+    let categoryName = '';
+
+    if (category) {
+      const subMap = CREDIT_NAME_MAP[category];
+      if (typeof subMap === 'object') {
+        serviceName = subMap[item.serviceType];
+        categoryName = category;
+      }
+    } else {
+      serviceName = CREDIT_NAME_MAP[item.serviceType] as string;
+    }
+
+    return {
+      name: serviceName || 'Unknown',
+      icon: { src: ico_credit, txt: String(item.deductCredit) },
+      category: categoryName || ''
+    };
+  });
 
   const newChat = async () => {
     const ret = await confirm({
@@ -141,7 +188,18 @@ export default function NovaHeader(props: NovaHeaderProps) {
 
 export const filterCreditInfo = (
   creditInfo: InitialState[],
-  nameMap: { [key: string]: string }
+  nameMap: { [category: string]: { [serviceType: string]: string } | string }
 ) => {
-  return creditInfo.filter((item) => nameMap[item.serviceType]);
+  return creditInfo.filter((item) => {
+    if (nameMap[item.serviceType]) {
+      return true;
+    }
+
+    return Object.values(nameMap).some((subMap) => {
+      if (typeof subMap === 'object' && subMap[item.serviceType]) {
+        return true;
+      }
+      return false;
+    });
+  });
 };

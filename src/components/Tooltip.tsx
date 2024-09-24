@@ -1,8 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 
-import { getCurrentFile } from '../store/slices/uploadFiles';
-import { useAppSelector } from '../store/store';
 import Bridge from '../util/bridge';
 
 import Icon from './Icon';
@@ -15,8 +13,15 @@ export type TooltipOption = {
     src: string;
     txt?: string;
   };
+  category?: string;
   onClick?: () => void;
 };
+
+interface GroupedTooltipOption {
+  options: TooltipOption[];
+  handleOptionSelect: (option: TooltipOption) => void;
+  type: string;
+}
 
 type TooltipProps = {
   title?: string;
@@ -87,6 +92,30 @@ const TooltipContent = styled.div<{
 const OptionList = styled.ul`
   margin: 0;
   padding: 0;
+  font-size: 14px;
+  font-weight: 400;
+  color: #26282b;
+`;
+
+const CategoryItem = styled.li`
+  margin: 8px 0;
+
+  ::marker {
+    display: none;
+    content: '';
+  }
+`;
+
+const Item = styled.li`
+  list-style: disc;
+
+  ::marker {
+    font-size: 10px;
+  }
+
+  li {
+    margin-left: -4px;
+  }
 `;
 
 const Title = styled.div`
@@ -122,7 +151,6 @@ const ChipWrapper = styled.div`
 `;
 
 const Tooltip = (props: TooltipProps) => {
-  const currentFile = useAppSelector(getCurrentFile);
   const [isOpen, setIsOpen] = useState(false);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const {
@@ -164,6 +192,18 @@ const Tooltip = (props: TooltipProps) => {
     setIsOpen(false);
   };
 
+  const categorizedOptions: { [key: string]: TooltipOption[] } = options.reduce(
+    (acc, option) => {
+      const category = option.category || 'uncategorized';
+      if (!acc[category]) {
+        acc[category] = [];
+      }
+      acc[category].push(option);
+      return acc;
+    },
+    {} as { [key: string]: TooltipOption[] }
+  );
+
   return (
     <TooltipContainer ref={tooltipRef} initPos={initPos}>
       <TootipButton onClick={toggleTooltip}>{children}</TootipButton>
@@ -179,9 +219,30 @@ const Tooltip = (props: TooltipProps) => {
             <Divider />
           </>
         )}
-
         <OptionList>
-          {options.map((option, idx) => (
+          {Object.keys(categorizedOptions).map((category) => {
+            if (category !== 'uncategorized') {
+              return (
+                <CategoryItem key={category}>
+                  <span>{category}</span>
+                  <ul className="list">
+                    {categorizedOptions[category].map((option, idx) => (
+                      <Item key={`${option.name}-${idx}`}>
+                        <Tooltip.OptionItem
+                          onSelect={() => handleOptionSelect(option)}
+                          option={option}
+                          type={type}
+                        />
+                      </Item>
+                    ))}
+                  </ul>
+                </CategoryItem>
+              );
+            }
+            return null;
+          })}
+          <Divider />
+          {categorizedOptions['uncategorized']?.map((option, idx) => (
             <Tooltip.OptionItem
               key={`${option.name}-${idx}`}
               onSelect={() => handleOptionSelect(option)}
