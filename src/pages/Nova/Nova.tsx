@@ -165,7 +165,7 @@ export default function Nova() {
       <Wrapper {...getRootProps()}>
         {(usingAI || status === 'home') && isDragActive && <Uploading />}
         <NovaHeader />
-        {!usingAI && status != 'progress' && (
+        {!usingAI && status === 'home' && (
           <Tabs tabs={tabValues} activeTab={selectedNovaTab} onChangeTab={handleChangeTab} />
         )}
         <Body>{renderContent()}</Body>
