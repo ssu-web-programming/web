@@ -63,7 +63,7 @@ export const useRemoveBackground = () => {
         dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.removeBG, status: 'done' }));
       } else {
         dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.removeBG, status: 'timeout' }));
-        errorHandle(response.error.code);
+        errorHandle(response);
       }
 
       const { deductionCredit, leftCredit } = calLeftCredit(res.headers);

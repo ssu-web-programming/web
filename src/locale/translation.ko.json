@@ -388,6 +388,10 @@
       "InsertDoc": "문서에 삽입",
       "Save": "저장"
     },
+    "DragAndDrop": {
+      "Title": "업로드",
+      "Desc": "파일을 이곳에 드래그해\n업로드해 주세요."
+    },
     "CreditInfo": {
       "Title": "크레딧 안내",
       "AIChat": {

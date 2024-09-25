@@ -143,7 +143,6 @@ export const FileUploader = (props: FileUploaderProps) => {
     }
 
     const uploadLimit = calcAvailableFileCnt();
-    console.log('uploadLimit: ', uploadLimit);
     if (uploadLimit === 0) {
       setIsOpen(false);
       await confirm({
@@ -158,7 +157,6 @@ export const FileUploader = (props: FileUploaderProps) => {
       return;
     }
 
-    console.log('currentFile : ', currentFile);
     if (currentFile.type === 'notSupported') {
       await confirm({
         title: '',

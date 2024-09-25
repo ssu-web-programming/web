@@ -1,16 +1,18 @@
-import React, { Suspense, useEffect } from 'react';
+import React, { Suspense, useCallback, useEffect } from 'react';
+import { FileRejection, FileWithPath, useDropzone } from 'react-dropzone';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
+import { useConfirm } from '../../components/Confirm';
 import { useChangeBackground } from '../../components/hooks/nova/useChangeBackground';
 import { useChangeStyle } from '../../components/hooks/nova/useChangeStyle';
 import { useExpandImage } from '../../components/hooks/nova/useExpandImage';
 import { useImprovedResolution } from '../../components/hooks/nova/useImprovedResolution';
-import useManageFile from '../../components/hooks/nova/useManageFile';
 import { useRemakeImage } from '../../components/hooks/nova/useRemakeImage';
 import { useRemoveBackground } from '../../components/hooks/nova/useRemoveBackground';
 import useFileDrop from '../../components/hooks/useFileDrop';
+import useUserInfoUtils from '../../components/hooks/useUserInfoUtils';
 import Prompt from '../../components/nova/ChangeBGPrompt';
 import Expand from '../../components/nova/Expand';
 import { Guide } from '../../components/nova/Guide';
@@ -23,6 +25,7 @@ import Result from '../../components/nova/Result';
 import Tabs from '../../components/nova/Tabs';
 import Theme from '../../components/nova/Theme';
 import TimeOut from '../../components/nova/TimeOut';
+import Uploading from '../../components/nova/Uploading';
 import { selectPageStatus } from '../../store/slices/nova/pageStatusSlice';
 import { NOVA_TAB_TYPE, selectNovaTab, selectTabSlice } from '../../store/slices/tabSlice';
 import { setDriveFiles, setLocalFiles } from '../../store/slices/uploadFiles';
@@ -58,17 +61,32 @@ export type ClientStatusType = 'home' | 'doc_edit_mode' | 'doc_view_mode';
 export default function Nova() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const { handleDragOver, handleDragLeave, handleDrop } = useFileDrop();
+  const confirm = useConfirm();
   const { goPromptPage } = useChangeBackground();
   const { handleRemoveBackground } = useRemoveBackground();
   const { handleRemakeImage } = useRemakeImage();
   const { goExpandPage } = useExpandImage();
   const { handleImprovedResolution } = useImprovedResolution();
   const { goThemePage } = useChangeStyle();
-  const { loadLocalFile } = useManageFile();
+  const { calcAvailableFileCnt } = useUserInfoUtils();
   const { usingAI, selectedNovaTab } = useAppSelector(selectTabSlice);
   const status = useAppSelector(selectPageStatus(selectedNovaTab));
   const tabValues: NOVA_TAB_TYPE[] = Object.values(NOVA_TAB_TYPE);
+  const { handleDrop } = useFileDrop();
+
+  const onDrop = useCallback(
+    async (acceptedFiles: FileWithPath[], fileRejections: FileRejection[]) => {
+      handleDrop(acceptedFiles, fileRejections);
+    },
+    [confirm, t]
+  );
+
+  const { getRootProps, isDragActive } = useDropzone({
+    onDrop,
+    noClick: true,
+    noKeyboard: true,
+    maxFiles: calcAvailableFileCnt()
+  });
 
   const handleChangeTab = (selectTab: NOVA_TAB_TYPE) => {
     dispatch(selectNovaTab(selectTab));
@@ -143,20 +161,18 @@ export default function Nova() {
   };
 
   return (
-    <Wrapper>
-      <NovaHeader />
-      {!usingAI && status === 'home' && (
-        <Tabs tabs={tabValues} activeTab={selectedNovaTab} onChangeTab={handleChangeTab} />
-      )}
-      <Body
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={(e) => handleDrop(e, loadLocalFile)}>
-        {renderContent()}
-      </Body>
-      <Suspense fallback={<Overlay />}>
-        <Modals />
-      </Suspense>
-    </Wrapper>
+    <>
+      <Wrapper {...getRootProps()}>
+        {(usingAI || status === 'home') && isDragActive && <Uploading />}
+        <NovaHeader />
+        {!usingAI && status != 'progress' && (
+          <Tabs tabs={tabValues} activeTab={selectedNovaTab} onChangeTab={handleChangeTab} />
+        )}
+        <Body>{renderContent()}</Body>
+        <Suspense fallback={<Overlay />}>
+          <Modals />
+        </Suspense>
+      </Wrapper>
+    </>
   );
 }
