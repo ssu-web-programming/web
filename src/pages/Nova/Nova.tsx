@@ -16,7 +16,6 @@ import { useRemakeImage } from '../../components/hooks/nova/useRemakeImage';
 import { useRemoveBackground } from '../../components/hooks/nova/useRemoveBackground';
 import useFileDrop from '../../components/hooks/useFileDrop';
 import useUserInfoUtils from '../../components/hooks/useUserInfoUtils';
-import Prompt from '../../components/nova/ChangeBGPrompt';
 import Expand from '../../components/nova/Expand';
 import { Guide } from '../../components/nova/Guide';
 import NovaHeader from '../../components/nova/Header';
@@ -24,6 +23,7 @@ import ImageUploader from '../../components/nova/ImageUploader';
 import Loading from '../../components/nova/Loading';
 import Modals, { Overlay } from '../../components/nova/modals/Modals';
 import Progress from '../../components/nova/Progress';
+import Prompt from '../../components/nova/Prompt';
 import Result from '../../components/nova/Result';
 import Tabs from '../../components/nova/Tabs';
 import Theme from '../../components/nova/Theme';
@@ -58,7 +58,7 @@ const Body = styled.div<{ isNonSelect: boolean }>`
   position: relative;
   flex-direction: column;
   background-color: rgb(244, 246, 248);
-  //pointer-events: ${(props) => (props.isNonSelect ? 'none' : 'all')};
+  pointer-events: ${(props) => (props.isNonSelect ? 'none' : 'all')};
 `;
 
 export type ClientStatusType = 'home' | 'doc_edit_mode' | 'doc_view_mode';
@@ -184,7 +184,7 @@ export default function Nova() {
       <Wrapper {...getRootProps()}>
         {(usingAI || status === 'home') && isDragActive && <Uploading />}
         <NovaHeader />
-        {!usingAI && status === 'home' && (
+        {!usingAI && (status === 'home' || status === 'progress') && (
           <Tabs tabs={tabValues} activeTab={selectedNovaTab} onChangeTab={handleChangeTab} />
         )}
         <Body isNonSelect={announceInfo.isShow}>

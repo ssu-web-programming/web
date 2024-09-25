@@ -279,17 +279,17 @@
   },
   "Nova": {
     "Tabs": {
-      "aiChat": "AI 채팅",
-      "removeBG": "배경 제거",
-      "changeBG": "배경 변경",
-      "remakeImg": "이미지 리메이크",
-      "expandImg": "이미지 확장",
-      "improvedRes": "해상도 향상",
-      "changeStyle": "스타일 변환"
+      "aiChat": "AI Chat",
+      "removeBG": "Remove Background",
+      "changeBG": "Change Background",
+      "remakeImg": "Remake Image",
+      "expandImg": "Expand Image",
+      "improvedRes": "Improve Resolution",
+      "changeStyle": "Change Style"
     },
     "aiChat": {
       "Guide": {
-        "Title": "AI 채팅",
+        "Title": "AI Chat",
         "SubTitle": "문서를 첨부하면\n주요 내용을 빠르게 파악할 수 있어요",
         "Example1": "서류 합격을 위한 자기소개서 초안을 작성해줘",
         "Example2": "AI를 주제로 한 이미지를 만들어줘",
@@ -298,10 +298,111 @@
     },
     "removeBG": {
       "Guide": {
-        "Title": "배경 제거",
-        "SubTitle": "배경을 제거해 이미지를\n더욱 깔끔하게 만들 수 있어요",
-        "ImgUploader": "최대 30MB 용량의\nJPG, PNG, WEBP 형식을 지원합니다."
+        "Title": "Remove Background",
+        "SubTitle": "You can remove the background to make the image cleaner.",
+        "ImgUploader": "Supports JPG, PNG, and WEBP formats up to 30MB in size."
+      },
+      "Loading": "Removing the background...",
+      "Done": {
+        "Title": "Background removal complete",
+        "SubTitle": "Background removal was successful.\nSave the image or insert it into your document!"
       }
+    },
+    "changeBG": {
+      "Guide": {
+        "Title": "Change Background",
+        "SubTitle": "Freely change the background of any object’s image using AI!",
+        "ImgUploader": "Supports JPG, PNG, and WEBP formats up to 20MB in size."
+      },
+      "Loading": "Changing the background...",
+      "Done": {
+        "Title": "Background change complete",
+        "SubTitle": "The image has been modified with a new style.\nSave the image or insert it into your document!"
+      }
+    },
+    "remakeImg": {
+      "Guide": {
+        "Title": "Remake Image",
+        "SubTitle": "Give the image a new life with a fresh style.",
+        "ImgUploader": "Supports JPG, PNG, and WEBP formats."
+      },
+      "Loading": "Changing the image...",
+      "Done": {
+        "Title": "Image remake complete",
+        "SubTitle": "The image has been modified with a new style.\nSave the image or insert it into your document!"
+      }
+    },
+    "expandImg": {
+      "Guide": {
+        "Title": "Expand Image",
+        "SubTitle": "Enlarge the image to your desired size and use it freely!",
+        "ImgUploader": "Supports JPG, PNG, and WEBP formats up to 20MB in size."
+      },
+      "Loading": "Expanding the image...",
+      "Button": "Expand Image",
+      "SelectBox": {
+        "Custom": "Personalized",
+        "Horizontal": "Horizontal",
+        "Vertical": "Stacked",
+        "Square": "Square"
+      },
+      "Done": {
+        "Title": "Image expansion complete",
+        "SubTitle": "The image has been expanded.\nSave the image or insert it into your document!"
+      }
+    },
+    "improvedRes": {
+      "Guide": {
+        "Title": "Improve Resolution",
+        "SubTitle": "Upgrade your low-quality images to high resolution.",
+        "ImgUploader": "Supports JPG, PNG, and WEBP formats up to 30MB in size."
+      },
+      "Loading": "Upgrading the resolution...",
+      "Done": {
+        "Title": "Resolution enhancement complete",
+        "SubTitle": "The image resolution has been enhanced.\nSave the image or insert it into your document!"
+      }
+    },
+    "changeStyle": {
+      "Guide": {
+        "Title": "Change Style",
+        "SubTitle": "Transform your images into a variety of art styles",
+        "ImgUploader": "Supports JPG, PNG, and WEBP formats up to 10MB in size."
+      },
+      "Loading": "Applying a new style...",
+      "Done": {
+        "Title": "Style change complete",
+        "SubTitle": "The image has been changed to your desired style.\nSave the image or insert it into your document!"
+      }
+    },
+    "GoBackHeader": "Go Back",
+    "TimeOut": {
+      "Title": "The operation has exceeded the time limit.\nPlease try again.",
+      "Retry": "Retry"
+    },
+    "Prompt": {
+      "Placeholder": "Please describe the background you would like to change.",
+      "ExamButton": "View Examples",
+      "CreatingButton": "Create Image",
+      "Exmaple1": "Vibrant nightscape, skyscrapers, neon signs, dark night sky ",
+      "Exmaple2": "Quiet desert, small pond, cactus, blue water",
+      "Exmaple3": "Green forest, tall trees, calm river, wildflowers",
+      "Exmaple4": "Star-filled space, distant galaxies, giant planet, glowing nebula",
+      "Exmaple5": "Emerald sea, white sand, palm trees, clear sky",
+      "Exmaple6": "Wooden table, brick walls, books and plants, large window"
+    },
+    "Theme": {
+      "Guide": "Please select the theme you want to apply",
+      "Button": "Apply a new style"
+    },
+    "Result": {
+      "Remake": "Regenerate",
+      "InsertDoc": "Insert into document",
+      "Save": "Save"
+    },
+    "DragAndDrop": {
+      "Title": "업로드",
+      "Desc": "파일을 이곳에 드래그해\n업로드해 주세요."
     },
     "CreditInfo": {
       "Title": "Credit Guide",
@@ -320,9 +421,11 @@
       "Placeholder": "NOVA, ask anything"
     },
     "UploadTooltip": {
+      "UploadImage": "Upload image",
       "PolarisDrive": "Polaris Drive",
       "Local": "Current device",
-      "Camera": "Camera"
+      "Camera": "Camera",
+      "CurrentFile": "Analyze the current document"
     },
     "UploadState": {
       "Uploading": "Uploading {{type}}.",

@@ -130,13 +130,6 @@ const ButtonWrap = styled.div`
   }
 `;
 
-const SelectBoxItem = [
-  { name: '개인 맞춤', icon: CustomIcon },
-  { name: '가로형', icon: HorizontalIcon },
-  { name: '세로형', icon: VerticalIcon },
-  { name: '정사각형', icon: SqureIcon }
-];
-
 export default function Expand() {
   const { t } = useTranslation();
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
@@ -149,9 +142,16 @@ export default function Expand() {
   const [dimension, setDimensions] = useState<number | null>(null);
   const [boxInfo, setBoxInfo] = useState<BoxInfo>({ width: 0, height: 0, top: 0, left: 0 });
   const [imgSize, setImgSize] = useState({ width: 0, height: 0 });
-  const [format, setFormat] = useState<string>(SelectBoxItem[2].name);
   const [inputWidth, setInputWidth] = useState<number>(0);
   const [inputHeight, setInputHeight] = useState<number>(0);
+
+  const SelectBoxItem = [
+    { name: t(`Nova.expandImg.SelectBox.Custom`), icon: CustomIcon },
+    { name: t(`Nova.expandImg.SelectBox.Horizontal`), icon: HorizontalIcon },
+    { name: t(`Nova.expandImg.SelectBox.Vertical`), icon: VerticalIcon },
+    { name: t(`Nova.expandImg.SelectBox.Square`), icon: SqureIcon }
+  ];
+  const [format, setFormat] = useState<string>(SelectBoxItem[2].name);
 
   useEffect(() => {
     if (dimension && format) selectBox(format);

@@ -125,7 +125,7 @@ const CreatingButton = styled.div<{ isActive: boolean }>`
   }
 `;
 
-export default function ChangeBGPrompt() {
+export default function Prompt() {
   const { t } = useTranslation();
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
   const result = useAppSelector(selectPageResult(selectedNovaTab));
@@ -134,11 +134,12 @@ export default function ChangeBGPrompt() {
   const [text, setText] = useState('');
   const [isEnabled, setIsEnabled] = useState(false);
   const [strings] = useState<string[]>([
-    '모래사장과 바다가 있는 풍경',
-    '회사 사무실 안',
-    '숲 속 산책길',
-    '쇼핑몰 거리',
-    '고양이가 많은 거리'
+    t(`Nova.Prompt.Exmaple1`),
+    t(`Nova.Prompt.Exmaple2`),
+    t(`Nova.Prompt.Exmaple3`),
+    t(`Nova.Prompt.Exmaple4`),
+    t(`Nova.Prompt.Exmaple5`),
+    t(`Nova.Prompt.Exmaple6`)
   ]);
   const [index, setIndex] = useState<number>(0);
 
