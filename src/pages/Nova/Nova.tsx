@@ -76,7 +76,7 @@ export default function Nova() {
   const { calcAvailableFileCnt } = useUserInfoUtils();
   const { usingAI, selectedNovaTab } = useAppSelector(selectTabSlice);
   const status = useAppSelector(selectPageStatus(selectedNovaTab));
-  const { setAnnouncementInfo } = useNovaAnnouncement(selectedNovaTab);
+  const { setAnnouncementInfo } = useNovaAnnouncement();
   const announceInfo = useAppSelector(announceInfoSelector(selectedNovaTab));
   const tabValues: NOVA_TAB_TYPE[] = Object.values(NOVA_TAB_TYPE);
   const { handleDrop } = useFileDrop();
@@ -107,7 +107,9 @@ export default function Nova() {
 
   useEffect(() => {}, [usingAI, status]);
   useEffect(() => {
-    setAnnouncementInfo();
+    if (announceInfo.type != '' && !announceInfo.isShow) return;
+
+    setAnnouncementInfo(selectedNovaTab);
   }, [selectedNovaTab]);
 
   const renderContent = () => {

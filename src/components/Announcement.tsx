@@ -52,16 +52,14 @@ export default function Announcement(props: AnnouncementProps) {
   const dispatch = useDispatch();
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
   const announceInfo = useAppSelector(announceInfoSelector(selectedNovaTab));
-  const text =
-    '<b>현재 기능이 일시적으로 중단되었습니다</b><span>빠른 시일 내에 문제를 해결해, 더 나은 서비스로 보답하겠습니다. 감사합니다.</span>';
+
   return (
     <>
       <AnnouncementWrap>
         <Content>
-          <div dangerouslySetInnerHTML={{ __html: text }} />
+          <div dangerouslySetInnerHTML={{ __html: content }} />
           <CloseIcon
             onClick={() => {
-              console.log('set false');
               dispatch(
                 setAnnounceInfo({ tab: selectedNovaTab, info: { ...announceInfo, isShow: false } })
               );
