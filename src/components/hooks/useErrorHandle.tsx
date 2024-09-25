@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { userInfoSelector } from 'store/slices/userInfo';
 import { ClientType, getPlatform } from 'util/bridge';
-import { openNewWindow, sliceFileName } from 'util/common';
+import { calLeftCredit, openNewWindow, sliceFileName } from 'util/common';
 
 import {
   DelayDocConverting,
@@ -45,8 +45,8 @@ const useErrorHandle = () => {
           )
         })
       );
-    } else if (error instanceof NovaNoCreditError) {
-      const { current } = error.credit;
+    } else if (error instanceof NovaNoCreditError || error.error.code === 'no_credit') {
+      const { current } = error.credit || calLeftCredit(error.headers);
       const platform = getPlatform();
 
       switch (ul) {

@@ -91,14 +91,14 @@ export const useChangeBackground = () => {
           })
         );
         dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeBG, status: 'done' }));
+
+        const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
+        showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');
       } else {
         handleChangeBGError(prompt);
         dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeBG, status: 'timeout' }));
-        errorHandle(response.error.code);
+        errorHandle(response);
       }
-
-      const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
-      showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');
     } catch (err) {
       handleChangeBGError(prompt);
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeBG, status: 'timeout' }));

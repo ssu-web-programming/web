@@ -89,14 +89,14 @@ export const useChangeStyle = () => {
           })
         );
         dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeStyle, status: 'done' }));
+
+        const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
+        showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');
       } else {
         handleChangeStyleError(style);
         dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeStyle, status: 'timeout' }));
-        errorHandle(response.error.code);
+        errorHandle(response);
       }
-
-      const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
-      showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');
     } catch (err) {
       handleChangeStyleError(style);
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeStyle, status: 'timeout' }));

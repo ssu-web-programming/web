@@ -93,13 +93,13 @@ export const useExpandImage = () => {
           })
         );
         dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.expandImg, status: 'done' }));
+
+        const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
+        showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');
       } else {
         handleExpandError({ extend_left, extend_right, extend_up, extend_down });
-        errorHandle(response.error.code);
+        errorHandle(response);
       }
-
-      const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
-      showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');
     } catch (err) {
       handleExpandError({ extend_left, extend_right, extend_up, extend_down });
       errorHandle(err);

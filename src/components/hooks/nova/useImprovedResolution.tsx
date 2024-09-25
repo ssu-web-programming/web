@@ -61,13 +61,13 @@ export const useImprovedResolution = () => {
       if (response.success) {
         dispatch(setPageResult({ tab: NOVA_TAB_TYPE.improvedRes, result: response.data.image[0] }));
         dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.improvedRes, status: 'done' }));
+
+        const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
+        showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');
       } else {
         dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.improvedRes, status: 'timeout' }));
-        errorHandle(response.error.code);
+        errorHandle(response);
       }
-
-      const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
-      showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');
     } catch (err) {
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.improvedRes, status: 'timeout' }));
       errorHandle(err);
