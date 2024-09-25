@@ -5,11 +5,13 @@ import { useDispatch } from 'react-redux';
 import { CustomScrollbar } from 'style/cssCommon';
 import styled from 'styled-components';
 
+import Announcement from '../../components/Announcement';
 import { useConfirm } from '../../components/Confirm';
 import { useChangeBackground } from '../../components/hooks/nova/useChangeBackground';
 import { useChangeStyle } from '../../components/hooks/nova/useChangeStyle';
 import { useExpandImage } from '../../components/hooks/nova/useExpandImage';
 import { useImprovedResolution } from '../../components/hooks/nova/useImprovedResolution';
+import useNovaAnnouncement from '../../components/hooks/nova/useNovaAnnouncement';
 import { useRemakeImage } from '../../components/hooks/nova/useRemakeImage';
 import { useRemoveBackground } from '../../components/hooks/nova/useRemoveBackground';
 import useFileDrop from '../../components/hooks/useFileDrop';
@@ -27,6 +29,7 @@ import Tabs from '../../components/nova/Tabs';
 import Theme from '../../components/nova/Theme';
 import TimeOut from '../../components/nova/TimeOut';
 import Uploading from '../../components/nova/Uploading';
+import { announceInfoSelector } from '../../store/slices/nova/announceSlice';
 import { selectPageStatus } from '../../store/slices/nova/pageStatusSlice';
 import { NOVA_TAB_TYPE, selectNovaTab, selectTabSlice } from '../../store/slices/tabSlice';
 import { setDriveFiles, setLocalFiles } from '../../store/slices/uploadFiles';
@@ -47,7 +50,7 @@ const Wrapper = styled(Container)`
   ${CustomScrollbar}
 `;
 
-const Body = styled.div`
+const Body = styled.div<{ isNonSelect: boolean }>`
   flex: 1;
   width: 100%;
   height: 100%;
@@ -55,6 +58,7 @@ const Body = styled.div`
   position: relative;
   flex-direction: column;
   background-color: rgb(244, 246, 248);
+  pointer-events: ${(props) => (props.isNonSelect ? 'none' : 'all')};
 `;
 
 export type ClientStatusType = 'home' | 'doc_edit_mode' | 'doc_view_mode';
@@ -72,6 +76,8 @@ export default function Nova() {
   const { calcAvailableFileCnt } = useUserInfoUtils();
   const { usingAI, selectedNovaTab } = useAppSelector(selectTabSlice);
   const status = useAppSelector(selectPageStatus(selectedNovaTab));
+  const { setAnnouncementInfo } = useNovaAnnouncement(selectedNovaTab);
+  const announceInfo = useAppSelector(announceInfoSelector(selectedNovaTab));
   const tabValues: NOVA_TAB_TYPE[] = Object.values(NOVA_TAB_TYPE);
   const { handleDrop } = useFileDrop();
 
@@ -100,6 +106,9 @@ export default function Nova() {
   };
 
   useEffect(() => {}, [usingAI, status]);
+  useEffect(() => {
+    setAnnouncementInfo();
+  }, [selectedNovaTab]);
 
   const renderContent = () => {
     const handleUploadComplete = async () => {
@@ -171,7 +180,10 @@ export default function Nova() {
         {!usingAI && status === 'home' && (
           <Tabs tabs={tabValues} activeTab={selectedNovaTab} onChangeTab={handleChangeTab} />
         )}
-        <Body>{renderContent()}</Body>
+        <Body isNonSelect={announceInfo.isShow}>
+          {announceInfo.isShow && <Announcement content={announceInfo.content} />}
+          {renderContent()}
+        </Body>
         <Suspense fallback={<Overlay />}>
           <Modals />
         </Suspense>

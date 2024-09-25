@@ -14,6 +14,7 @@ import creditInfo from './slices/creditInfo';
 import initFlagSlice from './slices/initFlagSlice';
 import loadingSpinner from './slices/loadingSpinner';
 import network from './slices/network';
+import announceInfoSlice from './slices/nova/announceSlice';
 import novaHistory from './slices/nova/novaHistorySlice';
 import novaModal from './slices/nova/novaModalsSlice';
 import pageStatusSlice from './slices/nova/pageStatusSlice';
@@ -52,7 +53,8 @@ const store = configureStore({
     promotionUserInfo,
     creditInfo,
     uploadFiles,
-    pageStatusSlice
+    pageStatusSlice,
+    announceInfoSlice
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }).concat(shareAnswerState),
