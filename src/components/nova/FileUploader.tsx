@@ -11,6 +11,8 @@ import ico_insert_docs from '../../img/ico_insert_docs.svg';
 import ico_logo_po from '../../img/ico_logo_po.svg';
 import ico_mobile from '../../img/ico_mobile.svg';
 import ico_pc from '../../img/ico_pc.svg';
+import { setPageStatus } from '../../store/slices/nova/pageStatusSlice';
+import { selectTabSlice } from '../../store/slices/tabSlice';
 import { getCurrentFile, removeCurrentFile, setDriveFiles } from '../../store/slices/uploadFiles';
 import { userInfoSelector } from '../../store/slices/userInfo';
 import { useAppDispatch, useAppSelector } from '../../store/store';
@@ -50,6 +52,7 @@ export const FileUploader = (props: FileUploaderProps) => {
   const [uploadTarget, setUploadTarget] = useState<string>('');
   const { setIsAgreed } = useNovaAgreement();
   const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
+  const { selectedNovaTab } = useAppSelector(selectTabSlice);
 
   const toggleDriveConfirm = () => {
     setIsOpen(!isOpen);
@@ -167,6 +170,8 @@ export const FileUploader = (props: FileUploaderProps) => {
         }
       });
     } else if (currentFile.type === 'drive') {
+      dispatch(setPageStatus({ tab: selectedNovaTab, status: 'progress' }));
+
       const list = await getFileList({ target: target, fileId: currentFile.id });
       if (currentFile.isSaved) {
         setDriveFiles(list);
@@ -203,6 +208,8 @@ export const FileUploader = (props: FileUploaderProps) => {
         }
       });
     }
+
+    dispatch(setPageStatus({ tab: selectedNovaTab, status: 'home' }));
   };
 
   return (

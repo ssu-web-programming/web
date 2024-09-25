@@ -58,7 +58,7 @@ const Body = styled.div<{ isNonSelect: boolean }>`
   position: relative;
   flex-direction: column;
   background-color: rgb(244, 246, 248);
-  pointer-events: ${(props) => (props.isNonSelect ? 'none' : 'all')};
+  //pointer-events: ${(props) => (props.isNonSelect ? 'none' : 'all')};
 `;
 
 export type ClientStatusType = 'home' | 'doc_edit_mode' | 'doc_view_mode';

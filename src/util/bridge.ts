@@ -12,12 +12,13 @@ import { AskDocStatus, setSrouceId, setStatus } from '../store/slices/askDoc';
 import { setFiles } from '../store/slices/askDocAnalyzeFiesSlice';
 import { initConfirm } from '../store/slices/confirm';
 import { initComplete } from '../store/slices/initFlagSlice';
+import { setPageStatus } from '../store/slices/nova/pageStatusSlice';
 import { setRecognizedVoice } from '../store/slices/recognizedVoice';
-import { selectNovaTab } from '../store/slices/tabSlice';
+import { selectNovaTab, selectTabSlice } from '../store/slices/tabSlice';
 import { activeToast } from '../store/slices/toastSlice';
 import { updateT2ICurItemIndex, updateT2ICurListId } from '../store/slices/txt2imgHistory';
 import { removeCurrentFile, setCurrentFile, setDriveFiles } from '../store/slices/uploadFiles';
-import { AppDispatch, RootState, useAppDispatch } from '../store/store';
+import { AppDispatch, RootState, useAppDispatch, useAppSelector } from '../store/store';
 
 import { isHigherVersion, makeClipboardData } from './common';
 
@@ -236,6 +237,7 @@ export const useInitBridgeListener = () => {
   const location = useLocation();
 
   const { getFileInfo } = useManageFile();
+  const { selectedNovaTab } = useAppSelector(selectTabSlice);
 
   // const movePage = useMoveChatTab();
   const getPath = useCallback((cmd: PanelOpenCmd) => {
@@ -336,10 +338,11 @@ export const useInitBridgeListener = () => {
             break;
           }
           case 'finishUploadFile': {
+            dispatch(setPageStatus({ tab: selectedNovaTab, status: 'progress' }));
             const currentFile = await getFileInfo(body.fileId);
-            console.log(currentFile);
             dispatch(setDriveFiles([currentFile]));
             dispatch(removeCurrentFile(currentFile));
+            dispatch(setPageStatus({ tab: selectedNovaTab, status: 'home' }));
             break;
           }
           case 'showToast': {
