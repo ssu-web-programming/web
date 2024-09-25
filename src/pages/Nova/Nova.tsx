@@ -77,6 +77,8 @@ export default function Nova() {
 
   const onDrop = useCallback(
     async (acceptedFiles: FileWithPath[], fileRejections: FileRejection[]) => {
+      if (selectedNovaTab !== NOVA_TAB_TYPE.aiChat && status != 'home') return;
+
       handleDrop(acceptedFiles, fileRejections);
     },
     [confirm, t]
