@@ -139,7 +139,12 @@ export default function Nova() {
     };
 
     if (selectedNovaTab == NOVA_TAB_TYPE.aiChat) {
-      return <AIChat />;
+      return (
+        <>
+          {status === 'progress' && <Progress />}
+          <AIChat />
+        </>
+      );
     } else {
       switch (status) {
         case 'home':
