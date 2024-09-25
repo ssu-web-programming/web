@@ -41,6 +41,7 @@ const iconMap: Record<NOVA_TAB_TYPE, { default: string; selected: string }> = {
 const Wrap = styled.div`
   width: 100%;
   height: 52px;
+  min-height: 52px;
   position: relative;
   display: flex;
   align-items: center;

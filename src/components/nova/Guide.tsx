@@ -25,8 +25,8 @@ const GuideWrapper = styled.div`
   justify-content: center;
   align-items: center;
   gap: 40px;
+  margin: 40px 0;
   background-color: #f4f6f8;
-  overflow-y: auto;
 `;
 
 const GuideImage = styled.img`

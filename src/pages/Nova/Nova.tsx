@@ -54,7 +54,6 @@ const Body = styled.div`
   display: flex;
   position: relative;
   flex-direction: column;
-  overflow-y: auto;
   background-color: rgb(244, 246, 248);
 `;
 

@@ -9,23 +9,21 @@ import IconButton from '../buttons/IconButton';
 import Icon from '../Icon';
 
 const Contents = styled.div`
-  ${flex}
-  ${justiSpaceBetween}
-  ${alignItemCenter}
+  ${flex};
+  ${justiSpaceBetween};
+  ${alignItemCenter};
 
   padding: 8px 5px 8px 10px;
   height: 48px;
 `;
 
 const TitleWrapper = styled.div`
-  ${flex}
-  ${alignItemCenter}
-  /* line-height: 100%; */
-  width: fit-content;
+  ${flex};
+  ${alignItemCenter} /* line-height: 100%; */ width: fit-content;
 `;
 
 const Title = styled.div`
-  ${flex}
+  ${flex};
 
   font-size: 16px;
   font-weight: bold;
@@ -36,7 +34,7 @@ const Title = styled.div`
 `;
 
 const SubTitle = styled.div`
-  ${flex}
+  ${flex};
 
   font-size: 14px;
   font-weight: normal;
@@ -67,7 +65,13 @@ export default function Header(props: HeaderProps) {
 
   if (location.pathname.toLowerCase() === '/nova') {
     return (
-      <Contents style={{ height: '56px', padding: '0px 16px', borderBottom: '1px solid #c9cdd2' }}>
+      <Contents
+        style={{
+          height: '56px',
+          minHeight: '56px',
+          padding: '0px 16px',
+          borderBottom: '1px solid #c9cdd2'
+        }}>
         {children}
       </Contents>
     );
