@@ -30,6 +30,7 @@ const Body = styled.div`
   gap: 24px;
   padding: 0 16px;
   margin-top: 48px;
+  margin-bottom: 24px;
 `;
 
 const Guide = styled.div`

@@ -2,6 +2,7 @@ import React, { Suspense, useCallback, useEffect } from 'react';
 import { FileRejection, FileWithPath, useDropzone } from 'react-dropzone';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
+import { CustomScrollbar } from 'style/cssCommon';
 import styled from 'styled-components';
 
 import { useConfirm } from '../../components/Confirm';
@@ -43,6 +44,7 @@ const Container = styled.div`
 const Wrapper = styled(Container)`
   flex-direction: column;
   justify-content: flex-start;
+  ${CustomScrollbar}
 `;
 
 const Body = styled.div`
