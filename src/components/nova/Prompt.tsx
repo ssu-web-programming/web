@@ -167,6 +167,7 @@ export default function Prompt() {
         </ImageBox>
         <TextWrap isActive={isEnabled}>
           <TextArea
+            maxLength={400}
             placeholder={t(`Nova.Prompt.Placeholder`) || ''}
             onChange={handleChange}
             value={text}
