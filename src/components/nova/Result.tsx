@@ -14,6 +14,7 @@ import Bridge from '../../util/bridge';
 import { base64ToBlob } from '../../util/files';
 import { useChangeBackground } from '../hooks/nova/useChangeBackground';
 import { useInsertDocsHandler } from '../hooks/nova/useInsertDocsHandler';
+import { useRemakeImage } from '../hooks/nova/useRemakeImage';
 
 import GoBackHeader from './GoBackHeader';
 
@@ -175,6 +176,7 @@ export default function Result() {
   const result = useAppSelector(selectPageResult(selectedNovaTab));
   const { insertDocsHandler } = useInsertDocsHandler();
   const { handleChangeBackground } = useChangeBackground();
+  const { handleRemakeImage } = useRemakeImage();
 
   const OnSave = async () => {
     if (result) {
@@ -192,7 +194,7 @@ export default function Result() {
         await handleChangeBackground(result?.info);
         break;
       case NOVA_TAB_TYPE.remakeImg:
-        return async () => {};
+        await handleRemakeImage();
     }
   };
 

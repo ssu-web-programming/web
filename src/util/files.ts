@@ -68,7 +68,6 @@ export const uploadFiles = async (files: File[]) => {
     formData.append('uploadFile', file);
 
     const { res } = await apiWrapper().request(PO_DRIVE_UPLOAD, {
-      headers: { 'Content-Type': 'application/json' },
       body: formData,
       method: 'POST'
     });
