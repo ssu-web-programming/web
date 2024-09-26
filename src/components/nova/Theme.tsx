@@ -11,6 +11,7 @@ import { selectPageResult } from '../../store/slices/nova/pageStatusSlice';
 import { NOVA_TAB_TYPE, selectTabSlice } from '../../store/slices/tabSlice';
 import { useAppSelector } from '../../store/store';
 import { useChangeStyle } from '../hooks/nova/useChangeStyle';
+import { ReactComponent as CheckIcon } from '../../img/ico_check.svg';
 
 import GoBackHeader from './GoBackHeader';
 
@@ -126,6 +127,24 @@ const Image = styled.img`
   cursor: pointer;
 `;
 
+const CheckBox = styled.div`
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #6f3ad0;
+
+  svg {
+    width: 13px;
+    height: 14px;
+    margin-left: -1px;
+  }
+`;
+
 const Button = styled.div<{ isActive: boolean }>`
   width: 100%;
   height: 48px;
@@ -181,6 +200,11 @@ export default function Theme() {
               <ImageContainer key={image.src} isSelected={selectedImage?.src === image.src}>
                 <OuterBorder isSelected={selectedImage?.src === image.src} />
                 <InnerBorder isSelected={selectedImage?.src === image.src} />
+                {selectedImage?.src === image.src && (
+                  <CheckBox>
+                    <CheckIcon />
+                  </CheckBox>
+                )}
                 <Image
                   src={image.src}
                   alt={image.alt}
