@@ -239,8 +239,14 @@ export default function Expand() {
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     type: 'width' | 'height'
   ) => {
-    const value = parseInt(e.target.value, 10);
-    if (isNaN(value) || value < 100 || value > 2048 || !dimension) return;
+    let value = parseInt(e.target.value, 10);
+    if (isNaN(value) || !dimension) return;
+
+    if (value < 100) {
+      value = 100;
+    } else if (value > 2048) {
+      value = 2048;
+    }
 
     setFormat('개인 맞춤');
     if (type === 'width') {
@@ -281,7 +287,12 @@ export default function Expand() {
               <ResizableContainer
                 guideBoxInfo={{ width: dimension, height: dimension, top: 0, left: 0 }}
                 boxInfo={boxInfo}
-                setBoxInfo={setBoxInfo}
+                setBoxInfo={(newBoxInfo: BoxInfo) => {
+                  setBoxInfo(newBoxInfo);
+
+                  setInputWidth(Math.round(newBoxInfo.width * rate));
+                  setInputHeight(Math.round(newBoxInfo.height * rate));
+                }}
                 maxDimensions={dimension}
               />
             </Box>
