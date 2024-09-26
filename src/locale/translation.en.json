@@ -336,7 +336,7 @@
       "Guide": {
         "Title": "Expand Image",
         "SubTitle": "Enlarge the image to your desired size and use it freely!",
-        "ImgUploader": "Supports JPG, PNG, and WEBP formats up to 20MB in size."
+        "ImgUploader": "Supports JPG, PNG, and WEBP formats up to 30MB in size."
       },
       "Loading": "Expanding the image...",
       "Button": "Expand Image",
@@ -355,7 +355,7 @@
       "Guide": {
         "Title": "Improve Resolution",
         "SubTitle": "Upgrade your low-quality images to high resolution.",
-        "ImgUploader": "Supports JPG, PNG, and WEBP formats up to 30MB in size."
+        "ImgUploader": "Supports JPG, PNG, BMP and WEBP formats up to 10MB in size."
       },
       "Loading": "Upgrading the resolution...",
       "Done": {
@@ -367,7 +367,7 @@
       "Guide": {
         "Title": "Change Style",
         "SubTitle": "Transform your images into a variety of art styles",
-        "ImgUploader": "Supports JPG, PNG, and WEBP formats up to 10MB in size."
+        "ImgUploader": "Supports JPG, PNG, BMP and WEBP formats up to 10MB in size."
       },
       "Loading": "Applying a new style...",
       "Done": {

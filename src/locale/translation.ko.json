@@ -336,7 +336,7 @@
       "Guide": {
         "Title": "이미지 확장",
         "SubTitle": "이미지를 원하는 크기까지\n확장시켜 자유롭게 활용하세요!",
-        "ImgUploader": "최대 20MB 용량의\nJPG, PNG, WEBP 형식을 지원합니다. "
+        "ImgUploader": "최대 30MB 용량의\nJPG, PNG, WEBP 형식을 지원합니다. "
       },
       "Loading": "이미지를 확장시키고 있어요",
       "Button": "이미지 확장",
@@ -355,7 +355,7 @@
       "Guide": {
         "Title": "해상도 향상",
         "SubTitle": "낮은 품질의 이미지를\n고화질로 업그레이드 하세요",
-        "ImgUploader": "최대 30MB 용량의\nJPG, PNG, WEBP 형식을 지원합니다. "
+        "ImgUploader": "최대 10MB 용량의\nJPG, PNG, BMP, WEBP 형식을 지원합니다. "
       },
       "Loading": "해상도를 업그레이드 하고 있어요",
       "Done": {
@@ -367,7 +367,7 @@
       "Guide": {
         "Title": "스타일 변환",
         "SubTitle": "이미지를 다양한 예술 작품\n스타일로 바꿔보세요",
-        "ImgUploader": "최대 10MB 용량의\nJPG, PNG, WEBP 형식을 지원합니다. "
+        "ImgUploader": "최대 10MB 용량의\nJPG, PNG, BMP, WEBP 형식을 지원합니다. "
       },
       "Loading": "스타일을 변환하고 있어요",
       "Done": {

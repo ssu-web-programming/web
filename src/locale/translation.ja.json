@@ -336,7 +336,7 @@
       "Guide": {
         "Title": "画像を拡大",
         "SubTitle": "画像をお好みのサイズに拡大してご自由にお使いください！",
-        "ImgUploader": "最大20MBのサイズまでのJPG、PNG、WEBP形式をサポートします。"
+        "ImgUploader": "最大30MBのサイズまでのJPG、PNG、WEBP形式をサポートします。"
       },
       "Loading": "画像を拡大しています...",
       "Button": "画像を拡大",
@@ -355,7 +355,7 @@
       "Guide": {
         "Title": "解像度を上げる",
         "SubTitle": "低品質の画像を高解像度にアップグレードします。",
-        "ImgUploader": "最大30MBのサイズまでのJPG、PNG、WEBP形式をサポートします。"
+        "ImgUploader": "最大10MBのサイズまでのJPG、PNG、BMP、WEBP形式をサポートします。"
       },
       "Loading": "解像度をアップグレードしています...",
       "Done": {
@@ -367,7 +367,7 @@
       "Guide": {
         "Title": "スタイルを変更",
         "SubTitle": "画像をさまざまなアートスタイルに変換します",
-        "ImgUploader": "最大10MBのサイズまでのJPG、PNG、WEBP形式をサポートします。"
+        "ImgUploader": "最大10MBのサイズまでのJPG、PNG、BMP、WEBP形式をサポートします。"
       },
       "Loading": "新しいスタイルを適用しています...",
       "Done": {
