@@ -17,7 +17,12 @@ import { setRecognizedVoice } from '../store/slices/recognizedVoice';
 import { selectNovaTab, selectTabSlice } from '../store/slices/tabSlice';
 import { activeToast } from '../store/slices/toastSlice';
 import { updateT2ICurItemIndex, updateT2ICurListId } from '../store/slices/txt2imgHistory';
-import { removeCurrentFile, setCurrentFile, setDriveFiles } from '../store/slices/uploadFiles';
+import {
+  removeCurrentFile,
+  setCurrentFile,
+  setDriveFiles,
+  setLocalFiles
+} from '../store/slices/uploadFiles';
 import { AppDispatch, RootState, useAppDispatch, useAppSelector } from '../store/store';
 
 import { isHigherVersion, makeClipboardData } from './common';
@@ -322,7 +327,11 @@ export const useInitBridgeListener = () => {
           }
           case 'openNOVA': {
             dispatch(changePanel({ cmd, body: body.inputText || '' }));
-            if (body && body.openTab != '') dispatch(selectNovaTab(body.openTab));
+            if (body && body.openTab != '') {
+              dispatch(selectNovaTab(body.openTab));
+              dispatch(setLocalFiles([]));
+              dispatch(setDriveFiles([]));
+            }
             break;
           }
           case 'getFileInfo': {
