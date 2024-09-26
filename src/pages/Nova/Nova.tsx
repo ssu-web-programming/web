@@ -50,7 +50,7 @@ const Wrapper = styled(Container)`
   ${CustomScrollbar}
 `;
 
-const Body = styled.div<{ isNonSelect: boolean }>`
+const Body = styled.div`
   flex: 1;
   width: 100%;
   height: 100%;
@@ -58,7 +58,6 @@ const Body = styled.div<{ isNonSelect: boolean }>`
   position: relative;
   flex-direction: column;
   background-color: rgb(244, 246, 248);
-  pointer-events: ${(props) => (props.isNonSelect ? 'none' : 'all')};
 `;
 
 export type ClientStatusType = 'home' | 'doc_edit_mode' | 'doc_view_mode';
@@ -187,7 +186,7 @@ export default function Nova() {
         {!usingAI && (status === 'home' || status === 'progress') && (
           <Tabs tabs={tabValues} activeTab={selectedNovaTab} onChangeTab={handleChangeTab} />
         )}
-        <Body isNonSelect={announceInfo.isShow}>
+        <Body>
           {announceInfo.isShow && <Announcement content={announceInfo.content} />}
           {renderContent()}
         </Body>
