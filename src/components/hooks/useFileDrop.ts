@@ -49,12 +49,11 @@ export default function useFileDrop() {
         const fileExtension = `.${file.name.split('.').pop()?.toLowerCase()}`;
         return !supportedExtensions.includes(fileExtension);
       });
-      const support = `${supportedExtensions.join(', ')}`;
 
       if (invalidFiles.length > 0) {
         await confirm({
           title: '',
-          msg: t('Nova.Alert.UnsupportFile', { support }),
+          msg: t('Nova.Alert.CommonUnsupportFile'),
           onOk: {
             text: t('Confirm'),
             callback: () => {
