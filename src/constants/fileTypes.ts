@@ -53,8 +53,39 @@ export const SUPPORT_IMAGE_TYPE: SupportFileType[] = [
   {
     mimeType: 'image/gif',
     extensions: '.gif'
+  },
+  {
+    mimeType: 'image/bmp',
+    extensions: '.bmp'
+  },
+  {
+    mimeType: 'image/webp',
+    extensions: '.webp'
   }
 ];
+
+export const getValidExt = (tab: NOVA_TAB_TYPE) => {
+  switch (tab) {
+    case 'aiChat':
+      return SUPPORT_IMAGE_TYPE.filter(({ extensions }) =>
+        ['.jpg', '.jpeg', '.png'].includes(extensions)
+      );
+    case 'removeBG':
+    case 'changeBG':
+    case 'remakeImg':
+    case 'expandImg':
+      return SUPPORT_IMAGE_TYPE.filter(({ extensions }) =>
+        ['.jpg', '.png', '.webp'].includes(extensions)
+      );
+    case 'improvedRes':
+    case 'changeStyle':
+      return SUPPORT_IMAGE_TYPE.filter(({ extensions }) =>
+        ['.jpg', '.png', '.bmp', '.webp'].includes(extensions)
+      );
+    default:
+      return [];
+  }
+};
 
 export const MAX_FILE_UPLOAD_SIZE_MB_AI_CHAT = 20;
 export const MAX_FILE_UPLOAD_SIZE_MB_REMOVE_BG = 30;
@@ -85,6 +116,7 @@ export const getMaxFileSize = (tab: NOVA_TAB_TYPE): number => {
       return MAX_FILE_UPLOAD_SIZE_MB_AI_CHAT;
   }
 };
+
 export const isValidFileSize = (size: number, tab: NOVA_TAB_TYPE) => {
   const maxFileSize = getMaxFileSize(tab);
   return maxFileSize < 0

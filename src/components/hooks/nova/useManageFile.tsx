@@ -6,10 +6,10 @@ import { apiWrapper } from '../../../api/apiWrapper';
 import { PO_DRIVE_FILEINFO, PO_DRIVE_LIST } from '../../../api/constant';
 import {
   getMaxFileSize,
+  getValidExt,
   isValidFileSize,
   MIN_FILE_UPLOAD_SIZE_KB,
   SUPPORT_DOCUMENT_TYPE,
-  SUPPORT_IMAGE_TYPE,
   SupportFileType
 } from '../../../constants/fileTypes';
 import { novaHistorySelector } from '../../../store/slices/nova/novaHistorySlice';
@@ -124,7 +124,8 @@ export function useManageFile() {
         )
         .map((item: DriveFileInfo) => {
           const ext = getFileExtension(item.fileName).toLowerCase();
-          const supports = target === 'nova-image' ? SUPPORT_IMAGE_TYPE : SUPPORT_DOCUMENT_TYPE;
+          const supports =
+            target === 'nova-image' ? getValidExt(selectedNovaTab) : SUPPORT_DOCUMENT_TYPE;
           const type = supports.find((type: SupportFileType) => type.extensions === ext)?.mimeType;
 
           return {
@@ -159,7 +160,7 @@ export function useManageFile() {
       if (!success) throw new Error('failed to get file list');
 
       const ext = getFileExtension(file.fileName).toLowerCase();
-      const supports = [...SUPPORT_IMAGE_TYPE, ...SUPPORT_DOCUMENT_TYPE];
+      const supports = [...getValidExt(selectedNovaTab), ...SUPPORT_DOCUMENT_TYPE];
       const type = supports.find((type: SupportFileType) => type.extensions === ext)?.mimeType;
 
       return {

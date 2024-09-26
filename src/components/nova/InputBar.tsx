@@ -23,7 +23,7 @@ import { useAppDispatch, useAppSelector } from 'store/store';
 import styled, { css } from 'styled-components';
 import { sliceFileName } from 'util/common';
 
-import { SUPPORT_DOCUMENT_TYPE, SUPPORT_IMAGE_TYPE } from '../../constants/fileTypes';
+import { getValidExt, SUPPORT_DOCUMENT_TYPE } from '../../constants/fileTypes';
 import { ReactComponent as DocsPlusIcon } from '../../img/ico_upload_docs_plus.svg';
 import { ReactComponent as ImagePlusIcon } from '../../img/ico_upload_img_plus.svg';
 import {
@@ -37,6 +37,7 @@ import {
 } from '../../store/slices/uploadFiles';
 
 import { FileUploader } from './FileUploader';
+import { selectTabSlice } from '../../store/slices/tabSlice';
 
 export const flexCenter = css`
   display: flex;
@@ -179,6 +180,7 @@ export default function InputBar(props: InputBarProps) {
 
   const localFiles = useAppSelector(getLocalFiles);
   const driveFiles = useAppSelector(getDriveFiles);
+  const { selectedNovaTab } = useAppSelector(selectTabSlice);
 
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const inputDocsFileRef = useRef<HTMLInputElement | null>(null);
@@ -238,8 +240,8 @@ export default function InputBar(props: InputBarProps) {
       targetFiles.length < 1
         ? ''
         : targetFiles[0].type.split('/')[0].includes('image')
-          ? 'image'
-          : 'document';
+        ? 'image'
+        : 'document';
     await props.onSubmit({
       input: contents,
       files: localFiles.length > 0 ? localFiles : driveFiles.length > 0 ? driveFiles : [],
@@ -257,7 +259,7 @@ export default function InputBar(props: InputBarProps) {
     },
     {
       target: 'nova-image',
-      accept: SUPPORT_IMAGE_TYPE,
+      accept: getValidExt(selectedNovaTab),
       children: <ImagePlusIcon />,
       ref: inputImgFileRef
     }

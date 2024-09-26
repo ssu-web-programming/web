@@ -1,11 +1,7 @@
 import React, { RefObject, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import {
-  SUPPORT_DOCUMENT_TYPE,
-  SUPPORT_IMAGE_TYPE,
-  SupportFileType
-} from '../../constants/fileTypes';
+import { getValidExt, SUPPORT_DOCUMENT_TYPE, SupportFileType } from '../../constants/fileTypes';
 import ico_camera from '../../img/ico_camera.svg';
 import ico_insert_docs from '../../img/ico_insert_docs.svg';
 import ico_logo_po from '../../img/ico_logo_po.svg';
@@ -99,7 +95,8 @@ export const FileUploader = (props: FileUploaderProps) => {
         onClick: () => {
           const element = inputRef?.current;
           if (element) {
-            const targetType = target === 'nova-image' ? SUPPORT_IMAGE_TYPE : SUPPORT_DOCUMENT_TYPE;
+            const targetType =
+              target === 'nova-image' ? getValidExt(selectedNovaTab) : SUPPORT_DOCUMENT_TYPE;
             element.accept = getAccept(targetType);
             element.click();
           }

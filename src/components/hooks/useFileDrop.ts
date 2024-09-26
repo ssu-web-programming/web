@@ -3,9 +3,9 @@ import { FileRejection } from 'react-dropzone';
 import { useTranslation } from 'react-i18next';
 
 import {
+  getValidExt,
   isPixelLimitExceeded,
-  SUPPORT_DOCUMENT_TYPE,
-  SUPPORT_IMAGE_TYPE
+  SUPPORT_DOCUMENT_TYPE
 } from '../../constants/fileTypes';
 import { selectTabSlice } from '../../store/slices/tabSlice';
 import { useAppSelector } from '../../store/store';
@@ -41,9 +41,9 @@ export default function useFileDrop() {
         selectedNovaTab === 'aiChat'
           ? [
               ...SUPPORT_DOCUMENT_TYPE.flatMap((type) => type.extensions),
-              ...SUPPORT_IMAGE_TYPE.flatMap((type) => type.extensions)
+              ...getValidExt(selectedNovaTab).flatMap((type) => type.extensions)
             ]
-          : [...SUPPORT_IMAGE_TYPE.flatMap((type) => type.extensions)];
+          : [...getValidExt(selectedNovaTab).flatMap((type) => type.extensions)];
 
       const invalidFiles = acceptedFiles.filter((file) => {
         const fileExtension = `.${file.name.split('.').pop()?.toLowerCase()}`;

@@ -3,10 +3,12 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { ClientType, getPlatform } from 'util/bridge';
 
-import { SUPPORT_IMAGE_TYPE } from '../constants/fileTypes';
+import { getValidExt } from '../constants/fileTypes';
 
 import { getAccept } from './nova/FileUploader';
 import { useConfirm } from './Confirm';
+import { useAppSelector } from '../store/store';
+import { selectTabSlice } from '../store/slices/tabSlice';
 
 const FileButtonBase = styled.button`
   width: 100%;
@@ -39,6 +41,7 @@ interface FileButtonProps extends React.ComponentPropsWithoutRef<'input'> {
 
 const FileButton = forwardRef<HTMLInputElement, FileButtonProps>((props, ref) => {
   const { t } = useTranslation();
+  const { selectedNovaTab } = useAppSelector(selectTabSlice);
   const { target, children, accept, handleOnChange, isAgreed, handleOnClick, ...otherProps } =
     props;
 
@@ -137,7 +140,7 @@ const FileButton = forwardRef<HTMLInputElement, FileButtonProps>((props, ref) =>
                 return !accept?.includes(fileAccept);
               }
             });
-            const support = accept?.includes(SUPPORT_IMAGE_TYPE[0].extensions[0])
+            const support = accept?.includes(getValidExt(selectedNovaTab)[0].extensions[0])
               ? 'jpg, png, gif'
               : 'docx, pptx, pdf, hwp, xlsx';
             if (invalid.length > 0) {
