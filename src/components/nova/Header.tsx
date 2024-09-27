@@ -174,7 +174,9 @@ export default function NovaHeader(props: NovaHeaderProps) {
             <ScreenChangeButton></ScreenChangeButton>
             <IconButton
               iconComponent={IconClose}
-              onClick={() => Bridge.callBridgeApi('closePanel', selectedNovaTab as string)}
+              onClick={() => {
+                Bridge.callBridgeApi('closePanel', selectedNovaTab as string);
+              }}
               iconSize="lg"
               width={32}
               height={32}
