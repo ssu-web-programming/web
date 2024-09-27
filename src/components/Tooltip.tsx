@@ -4,6 +4,8 @@ import styled, { css } from 'styled-components';
 import Bridge from '../util/bridge';
 
 import Icon from './Icon';
+import { useAppSelector } from '../store/store';
+import { selectTabSlice } from '../store/slices/tabSlice';
 
 export type TooltipType = 'selectable' | 'normal';
 export type TooltipPlacement = 'top-start' | 'top-end' | 'bottom-start' | 'bottom-end';
@@ -151,6 +153,7 @@ const Tooltip = (props: TooltipProps) => {
     condition,
     initPos = false
   } = props;
+  const { selectedNovaTab } = useAppSelector(selectTabSlice);
 
   const handleClickOutside = (event: MouseEvent) => {
     if (tooltipRef.current && !tooltipRef.current.contains(event.target as Node)) {
@@ -168,7 +171,7 @@ const Tooltip = (props: TooltipProps) => {
   const toggleTooltip = () => {
     Bridge.callBridgeApi('analyzeCurFile');
 
-    if (condition === false) return;
+    if (condition === false && selectedNovaTab === 'aiChat') return;
     setIsOpen(!isOpen);
   };
 

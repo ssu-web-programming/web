@@ -461,7 +461,7 @@
     },
     "Alert": {
       "CommonUnsupportFile": "This file format is not supported.\nPlease check the supported file formats and try again.\n\n- Documents : doc, pptx, pdf, hwp, xlsx\n- Images : jpg, png, gif",
-      "CommonUnsupportImage": "This file format is not supported.\nPlease check the supported file formats and try again.\n\n- Images : jpg, png, gif",
+      "CommonUnsupportImage": "This file format is not supported.\nPlease check the supported file formats and try again.\n\n- Images : {{support}}",
       "UnsupportFile": "This file is not supported. Please upload only {{support}} files.",
       "NoCredit": {
         "Title": "All credits have been used :(",

@@ -73,13 +73,14 @@ export default function useFileDrop() {
         return !supportedExtensions.includes(fileExtension);
       });
 
+      const support = supportedExtensions.join(', ');
       if (invalidFiles.length > 0) {
         await confirm({
           title: '',
           msg:
             selectedNovaTab === 'aiChat'
               ? t('Nova.Alert.CommonUnsupportFile')
-              : t(`Nova.Alert.CommonUnsupportImage`),
+              : t(`Nova.Alert.CommonUnsupportImage`, { support }),
           onOk: {
             text: t('Confirm'),
             callback: () => {

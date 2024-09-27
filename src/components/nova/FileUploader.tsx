@@ -64,7 +64,7 @@ export const FileUploader = (props: FileUploaderProps) => {
         name: t(`Nova.UploadTooltip.PolarisDrive`),
         icon: { src: ico_logo_po },
         onClick: async () => {
-          if (isAgreed) {
+          if (isAgreed || selectedNovaTab !== 'aiChat') {
             setUploadTarget(target);
             toggleDriveConfirm();
           }

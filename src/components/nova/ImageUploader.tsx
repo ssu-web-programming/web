@@ -131,7 +131,7 @@ export default function ImageUploader(props: ImageUploaderProps) {
         inputRef={inputImgFileRef}
         tooltipStyle={{ inset: 'unset', top: '12px' }}>
         <ImageBox>
-          <Icon disable={!isAgreed ?? false}>
+          <Icon disable={isAgreed === undefined}>
             <UploadIcon />
             <span>{t(`Nova.UploadTooltip.UploadImage`)}</span>
           </Icon>

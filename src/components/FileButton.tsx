@@ -99,6 +99,7 @@ const FileButton = forwardRef<HTMLInputElement, FileButtonProps>((props, ref) =>
   };
 
   const handleAgreement = async () => {
+    if (selectedNovaTab !== 'aiChat') return;
     if (isAgreed === true || isAgreed === undefined) return;
 
     const isConfirmed = await confirm({
