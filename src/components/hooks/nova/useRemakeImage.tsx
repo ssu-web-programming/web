@@ -87,6 +87,8 @@ export const useRemakeImage = () => {
       );
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.remakeImg, status: 'timeout' }));
     } else {
+      dispatch(setLocalFiles([]));
+      dispatch(setDriveFiles([]));
       resetPageResult(NOVA_TAB_TYPE.remakeImg);
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.remakeImg, status: 'home' }));
     }
