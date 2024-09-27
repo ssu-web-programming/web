@@ -8,15 +8,17 @@ import {
   SUPPORT_DOCUMENT_TYPE
 } from '../../constants/fileTypes';
 import { selectTabSlice } from '../../store/slices/tabSlice';
-import { useAppSelector } from '../../store/store';
+import { useAppDispatch, useAppSelector } from '../../store/store';
 import { useConfirm } from '../Confirm';
 
 import useManageFile from './nova/useManageFile';
 import useUserInfoUtils from './useUserInfoUtils';
+import { setPageStatus } from '../../store/slices/nova/pageStatusSlice';
 
 export default function useFileDrop() {
   const { t } = useTranslation();
   const confirm = useConfirm();
+  const dispatch = useAppDispatch();
   const { loadLocalFile } = useManageFile();
   const { getAvailableFileCnt, calcAvailableFileCnt } = useUserInfoUtils();
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
@@ -72,6 +74,7 @@ export default function useFileDrop() {
             onOk: {
               text: t('OK'),
               callback: () => {
+                dispatch(setPageStatus({ tab: selectedNovaTab, status: 'home' }));
                 return;
               }
             }
