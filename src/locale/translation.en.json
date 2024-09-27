@@ -290,10 +290,10 @@
     "aiChat": {
       "Guide": {
         "Title": "AI Chat",
-        "SubTitle": "문서를 첨부하면\n주요 내용을 빠르게 파악할 수 있어요",
-        "Example1": "서류 합격을 위한 자기소개서 초안을 작성해줘",
-        "Example2": "AI를 주제로 한 이미지를 만들어줘",
-        "Example3": "2024년 전기차 시장의 성장 전망을 알려줘"
+        "SubTitle": "Attach a document and quickly grasp the main contents through chat.",
+        "Example1": "Draft a personal statement for application approval.",
+        "Example2": "Create an AI-themed image.",
+        "Example3": "Growth prospects of the 2024 EV market."
       }
     },
     "removeBG": {
@@ -409,13 +409,6 @@
       "Chat": "Chat",
       "DocImgQuery": "Document/Image query",
       "ImgGen": "Generate Image"
-    },
-    "SearchGuide": {
-      "Title": "Ask the smart AI anything.",
-      "SubTitle": "Attach a document and quickly grasp the main contents through chat.",
-      "Example1": "Draft a personal statement for application approval.",
-      "Example2": "Create an AI-themed image.",
-      "Example3": "Growth prospects of the 2024 EV market."
     },
     "ActionWindow": {
       "Placeholder": "NOVA, ask anything"
