@@ -324,7 +324,7 @@
       "Guide": {
         "Title": "이미지 리메이크",
         "SubTitle": "이미지를 새로운 스타일로\n재탄생시켜 보세요",
-        "ImgUploader": "JPG, PNG, WEBP 형식을 지원합니다."
+        "ImgUploader": "최대 30MB 용량의\nJPG, PNG, WEBP 형식을 지원합니다."
       },
       "Loading": "이미지를 바꾸고 있어요",
       "Done": {

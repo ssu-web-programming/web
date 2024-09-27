@@ -3,8 +3,11 @@ import { FileRejection } from 'react-dropzone';
 import { useTranslation } from 'react-i18next';
 
 import {
+  getMaxFileSize,
   getValidExt,
   isPixelLimitExceeded,
+  isValidFileSize,
+  MIN_FILE_UPLOAD_SIZE_KB,
   SUPPORT_DOCUMENT_TYPE
 } from '../../constants/fileTypes';
 import { selectTabSlice } from '../../store/slices/tabSlice';
@@ -34,6 +37,24 @@ export default function useFileDrop() {
             callback: () => {
               return;
             }
+          }
+        });
+        return;
+      }
+
+      const invalidSize = acceptedFiles.filter(
+        (file) => !isValidFileSize(file.size, selectedNovaTab)
+      );
+      if (invalidSize.length > 0) {
+        confirm({
+          title: '',
+          msg: t('Nova.Alert.OverFileUploadSize', {
+            max: getMaxFileSize(selectedNovaTab),
+            min: MIN_FILE_UPLOAD_SIZE_KB
+          })!,
+          onOk: {
+            text: t('Confirm'),
+            callback: () => {}
           }
         });
         return;

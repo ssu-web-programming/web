@@ -324,7 +324,7 @@
       "Guide": {
         "Title": "Remake Image",
         "SubTitle": "Give the image a new life with a fresh style.",
-        "ImgUploader": "Supports JPG, PNG, and WEBP formats."
+        "ImgUploader": "Supports JPG, PNG, and WEBP formats up to 30MB in size."
       },
       "Loading": "Changing the image...",
       "Done": {

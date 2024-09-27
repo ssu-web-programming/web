@@ -324,7 +324,7 @@
       "Guide": {
         "Title": "画像を再編集",
         "SubTitle": "新しいスタイルでイメージに新たな命を吹き込みます。",
-        "ImgUploader": "サイズまでのJPG、PNG、WEBP形式をサポートします。"
+        "ImgUploader": "最大30MBのサイズまでのJPG、PNG、WEBP形式をサポートします。"
       },
       "Loading": "画像を変更しています...",
       "Done": {
