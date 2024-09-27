@@ -150,6 +150,8 @@ export default function Prompt() {
   };
 
   const handleExamButtonClick = () => {
+    if (text != '') return;
+
     const newIndex = (index + 1) % strings.length;
     setIndex(newIndex);
     setText(strings[newIndex]);
