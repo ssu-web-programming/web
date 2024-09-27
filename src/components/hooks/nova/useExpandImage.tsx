@@ -128,6 +128,8 @@ export const useExpandImage = () => {
       );
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.expandImg, status: 'timeout' }));
     } else {
+      dispatch(setLocalFiles([]));
+      dispatch(setDriveFiles([]));
       resetPageResult(NOVA_TAB_TYPE.expandImg);
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.expandImg, status: 'home' }));
     }

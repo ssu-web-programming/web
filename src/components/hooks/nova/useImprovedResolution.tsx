@@ -87,6 +87,8 @@ export const useImprovedResolution = () => {
       );
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.improvedRes, status: 'timeout' }));
     } else {
+      dispatch(setLocalFiles([]));
+      dispatch(setDriveFiles([]));
       resetPageResult(NOVA_TAB_TYPE.improvedRes);
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.improvedRes, status: 'home' }));
     }

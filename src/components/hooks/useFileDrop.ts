@@ -76,7 +76,10 @@ export default function useFileDrop() {
       if (invalidFiles.length > 0) {
         await confirm({
           title: '',
-          msg: t('Nova.Alert.CommonUnsupportFile'),
+          msg:
+            selectedNovaTab === 'aiChat'
+              ? t('Nova.Alert.CommonUnsupportFile')
+              : t(`Nova.Alert.CommonUnsupportImage`),
           onOk: {
             text: t('Confirm'),
             callback: () => {
@@ -87,22 +90,24 @@ export default function useFileDrop() {
         return;
       }
 
-      acceptedFiles.map(async (file) => {
-        if (await isPixelLimitExceeded(file, selectedNovaTab)) {
-          await confirm({
-            title: '',
-            msg: t('Nova.Confirm.OverMaxFilePixel'),
-            onOk: {
-              text: t('OK'),
-              callback: () => {
-                dispatch(setPageStatus({ tab: selectedNovaTab, status: 'home' }));
-                return;
+      await Promise.all(
+        acceptedFiles.map(async (file) => {
+          if (await isPixelLimitExceeded(file, selectedNovaTab)) {
+            await confirm({
+              title: '',
+              msg: t('Nova.Confirm.OverMaxFilePixel'),
+              onOk: {
+                text: t('OK'),
+                callback: () => {
+                  dispatch(setPageStatus({ tab: selectedNovaTab, status: 'home' }));
+                  return;
+                }
               }
-            }
-          });
-          return;
-        }
-      });
+            });
+            return;
+          }
+        })
+      );
 
       loadLocalFile(acceptedFiles);
     },

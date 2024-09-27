@@ -118,6 +118,8 @@ export const useChangeBackground = () => {
       );
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeBG, status: 'timeout' }));
     } else {
+      dispatch(setLocalFiles([]));
+      dispatch(setDriveFiles([]));
       resetPageResult(NOVA_TAB_TYPE.changeBG);
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeBG, status: 'home' }));
     }

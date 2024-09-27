@@ -116,6 +116,8 @@ export const useChangeStyle = () => {
       );
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeStyle, status: 'timeout' }));
     } else {
+      dispatch(setLocalFiles([]));
+      dispatch(setDriveFiles([]));
       resetPageResult(NOVA_TAB_TYPE.changeStyle);
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeStyle, status: 'home' }));
     }

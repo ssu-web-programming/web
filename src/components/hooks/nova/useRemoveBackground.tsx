@@ -87,6 +87,8 @@ export const useRemoveBackground = () => {
       );
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.removeBG, status: 'timeout' }));
     } else {
+      dispatch(setLocalFiles([]));
+      dispatch(setDriveFiles([]));
       resetPageResult(NOVA_TAB_TYPE.removeBG);
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.removeBG, status: 'home' }));
     }
