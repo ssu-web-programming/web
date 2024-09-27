@@ -69,6 +69,8 @@ export const useRemoveBackground = () => {
         handleRemoveBGError(response.error.code);
       }
     } catch (err) {
+      resetPageData(NOVA_TAB_TYPE.removeBG);
+      resetPageResult(NOVA_TAB_TYPE.removeBG);
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.removeBG, status: 'home' }));
       errorHandle(err);
     }
@@ -89,7 +91,7 @@ export const useRemoveBackground = () => {
     } else {
       dispatch(setLocalFiles([]));
       dispatch(setDriveFiles([]));
-      resetPageResult(NOVA_TAB_TYPE.removeBG);
+      dispatch(resetPageData(NOVA_TAB_TYPE.removeBG));
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.removeBG, status: 'home' }));
     }
     errorHandle(errCode);

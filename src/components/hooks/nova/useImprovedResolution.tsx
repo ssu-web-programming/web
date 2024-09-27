@@ -89,6 +89,7 @@ export const useImprovedResolution = () => {
     } else {
       dispatch(setLocalFiles([]));
       dispatch(setDriveFiles([]));
+      dispatch(resetPageData(NOVA_TAB_TYPE.improvedRes));
       resetPageResult(NOVA_TAB_TYPE.improvedRes);
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.improvedRes, status: 'home' }));
     }

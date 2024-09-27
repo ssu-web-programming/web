@@ -130,6 +130,7 @@ export const useExpandImage = () => {
     } else {
       dispatch(setLocalFiles([]));
       dispatch(setDriveFiles([]));
+      dispatch(resetPageData(NOVA_TAB_TYPE.expandImg));
       resetPageResult(NOVA_TAB_TYPE.expandImg);
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.expandImg, status: 'home' }));
     }

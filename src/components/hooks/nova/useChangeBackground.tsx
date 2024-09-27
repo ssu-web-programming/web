@@ -120,6 +120,7 @@ export const useChangeBackground = () => {
     } else {
       dispatch(setLocalFiles([]));
       dispatch(setDriveFiles([]));
+      dispatch(resetPageData(NOVA_TAB_TYPE.changeBG));
       resetPageResult(NOVA_TAB_TYPE.changeBG);
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeBG, status: 'home' }));
     }

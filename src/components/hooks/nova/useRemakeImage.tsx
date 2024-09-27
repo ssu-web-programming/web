@@ -69,6 +69,8 @@ export const useRemakeImage = () => {
         handleRemakeImgError(response.error.code);
       }
     } catch (err) {
+      resetPageData(NOVA_TAB_TYPE.remakeImg);
+      resetPageResult(NOVA_TAB_TYPE.remakeImg);
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.remakeImg, status: 'home' }));
       errorHandle(err);
     }
@@ -89,7 +91,7 @@ export const useRemakeImage = () => {
     } else {
       dispatch(setLocalFiles([]));
       dispatch(setDriveFiles([]));
-      resetPageResult(NOVA_TAB_TYPE.remakeImg);
+      dispatch(resetPageData(NOVA_TAB_TYPE.remakeImg));
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.remakeImg, status: 'home' }));
     }
     errorHandle(errCode);

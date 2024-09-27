@@ -118,6 +118,7 @@ export const useChangeStyle = () => {
     } else {
       dispatch(setLocalFiles([]));
       dispatch(setDriveFiles([]));
+      dispatch(resetPageData(NOVA_TAB_TYPE.changeStyle));
       resetPageResult(NOVA_TAB_TYPE.changeStyle);
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeStyle, status: 'home' }));
     }
