@@ -5,6 +5,7 @@ import { NOVA_REMAKE_IMAGE } from '../../../api/constant';
 import { isPixelLimitExceeded } from '../../../constants/fileTypes';
 import {
   resetPageData,
+  resetPageResult,
   selectPageData,
   setPageResult,
   setPageStatus
@@ -65,13 +66,31 @@ export const useRemakeImage = () => {
         const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
         showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');
       } else {
-        dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.remakeImg, status: 'timeout' }));
-        errorHandle(response);
+        handleRemakeImgError(response.error.code);
       }
     } catch (err) {
-      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.remakeImg, status: 'timeout' }));
+      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.remakeImg, status: 'home' }));
       errorHandle(err);
     }
+  };
+
+  const handleRemakeImgError = (errCode: string) => {
+    if (errCode === 'Timeout') {
+      dispatch(
+        setPageResult({
+          tab: NOVA_TAB_TYPE.remakeImg,
+          result: {
+            contentType: '',
+            data: ''
+          }
+        })
+      );
+      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.remakeImg, status: 'timeout' }));
+    } else {
+      resetPageResult(NOVA_TAB_TYPE.remakeImg);
+      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.remakeImg, status: 'home' }));
+    }
+    errorHandle(errCode);
   };
 
   return { handleRemakeImage };

@@ -5,6 +5,7 @@ import { NOVA_IMPROVED_RESOLUTION } from '../../../api/constant';
 import { isPixelLimitExceeded } from '../../../constants/fileTypes';
 import {
   resetPageData,
+  resetPageResult,
   selectPageData,
   setPageResult,
   setPageStatus
@@ -65,13 +66,31 @@ export const useImprovedResolution = () => {
         const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
         showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');
       } else {
-        dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.improvedRes, status: 'timeout' }));
-        errorHandle(response);
+        handleImprovedResError(response.error.code);
       }
     } catch (err) {
-      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.improvedRes, status: 'timeout' }));
+      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.improvedRes, status: 'home' }));
       errorHandle(err);
     }
+  };
+
+  const handleImprovedResError = (errCode: string) => {
+    if (errCode === 'Timeout') {
+      dispatch(
+        setPageResult({
+          tab: NOVA_TAB_TYPE.improvedRes,
+          result: {
+            contentType: '',
+            data: ''
+          }
+        })
+      );
+      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.improvedRes, status: 'timeout' }));
+    } else {
+      resetPageResult(NOVA_TAB_TYPE.improvedRes);
+      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.improvedRes, status: 'home' }));
+    }
+    errorHandle(errCode);
   };
 
   return { handleImprovedResolution };

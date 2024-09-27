@@ -45,7 +45,7 @@ const useErrorHandle = () => {
           )
         })
       );
-    } else if (error instanceof NovaNoCreditError || error.error.code === 'no_credit') {
+    } else if (error instanceof NovaNoCreditError || error === 'no_credit') {
       const { current } = error.credit || calLeftCredit(error.headers);
       const platform = getPlatform();
 

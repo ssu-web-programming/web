@@ -6,6 +6,7 @@ import { NOVA_CHANGE_BACKGROUND } from '../../../api/constant';
 import { isPixelLimitExceeded } from '../../../constants/fileTypes';
 import {
   resetPageData,
+  resetPageResult,
   selectPageData,
   selectPageStatus,
   setPageResult,
@@ -95,29 +96,32 @@ export const useChangeBackground = () => {
         const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
         showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');
       } else {
-        handleChangeBGError(prompt);
-        dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeBG, status: 'timeout' }));
-        errorHandle(response);
+        handleChangeBGError(response.error.code, prompt);
       }
     } catch (err) {
-      handleChangeBGError(prompt);
-      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeBG, status: 'timeout' }));
+      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeBG, status: 'home' }));
       errorHandle(err);
     }
   };
 
-  const handleChangeBGError = (prompt: string) => {
-    dispatch(
-      setPageResult({
-        tab: NOVA_TAB_TYPE.changeBG,
-        result: {
-          contentType: '',
-          data: '',
-          info: prompt
-        }
-      })
-    );
-    dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeBG, status: 'timeout' }));
+  const handleChangeBGError = (errCode: string, prompt: string) => {
+    if (errCode === 'Timeout') {
+      dispatch(
+        setPageResult({
+          tab: NOVA_TAB_TYPE.changeBG,
+          result: {
+            contentType: '',
+            data: '',
+            info: prompt
+          }
+        })
+      );
+      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeBG, status: 'timeout' }));
+    } else {
+      resetPageResult(NOVA_TAB_TYPE.changeBG);
+      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeBG, status: 'home' }));
+    }
+    errorHandle(errCode);
   };
 
   return { goPromptPage, handleChangeBackground };

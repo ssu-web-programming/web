@@ -5,6 +5,7 @@ import { NOVA_REMOVE_BACKGROUND } from '../../../api/constant';
 import { isPixelLimitExceeded } from '../../../constants/fileTypes';
 import {
   resetPageData,
+  resetPageResult,
   selectPageData,
   setPageResult,
   setPageStatus
@@ -65,13 +66,31 @@ export const useRemoveBackground = () => {
         const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
         showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');
       } else {
-        dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.removeBG, status: 'timeout' }));
-        errorHandle(response);
+        handleRemoveBGError(response.error.code);
       }
     } catch (err) {
-      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.removeBG, status: 'timeout' }));
+      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.removeBG, status: 'home' }));
       errorHandle(err);
     }
+  };
+
+  const handleRemoveBGError = (errCode: string) => {
+    if (errCode === 'Timeout') {
+      dispatch(
+        setPageResult({
+          tab: NOVA_TAB_TYPE.removeBG,
+          result: {
+            contentType: '',
+            data: ''
+          }
+        })
+      );
+      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.removeBG, status: 'timeout' }));
+    } else {
+      resetPageResult(NOVA_TAB_TYPE.removeBG);
+      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.removeBG, status: 'home' }));
+    }
+    errorHandle(errCode);
   };
 
   return { handleRemoveBackground };

@@ -6,6 +6,7 @@ import { NOVA_CHANGE_STYLE } from '../../../api/constant';
 import { isPixelLimitExceeded } from '../../../constants/fileTypes';
 import {
   resetPageData,
+  resetPageResult,
   selectPageData,
   setPageResult,
   setPageStatus
@@ -93,29 +94,32 @@ export const useChangeStyle = () => {
         const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
         showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');
       } else {
-        handleChangeStyleError(style);
-        dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeStyle, status: 'timeout' }));
-        errorHandle(response);
+        handleChangeStyleError(response.error.code, style);
       }
     } catch (err) {
-      handleChangeStyleError(style);
-      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeStyle, status: 'timeout' }));
+      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeStyle, status: 'home' }));
       errorHandle(err);
     }
   };
 
-  const handleChangeStyleError = (style: string) => {
-    dispatch(
-      setPageResult({
-        tab: NOVA_TAB_TYPE.changeStyle,
-        result: {
-          contentType: '',
-          data: '',
-          info: style
-        }
-      })
-    );
-    dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeStyle, status: 'timeout' }));
+  const handleChangeStyleError = (errCode: string, style: string) => {
+    if (errCode === 'Timeout') {
+      dispatch(
+        setPageResult({
+          tab: NOVA_TAB_TYPE.changeStyle,
+          result: {
+            contentType: '',
+            data: '',
+            info: style
+          }
+        })
+      );
+      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeStyle, status: 'timeout' }));
+    } else {
+      resetPageResult(NOVA_TAB_TYPE.changeStyle);
+      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeStyle, status: 'home' }));
+    }
+    errorHandle(errCode);
   };
 
   return { goThemePage, handleChangeStyle };

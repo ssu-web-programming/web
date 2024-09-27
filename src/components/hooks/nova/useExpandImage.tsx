@@ -6,6 +6,7 @@ import { NOVA_EXPAND_IMAGE } from '../../../api/constant';
 import { isPixelLimitExceeded } from '../../../constants/fileTypes';
 import {
   resetPageData,
+  resetPageResult,
   selectPageData,
   setPageResult,
   setPageStatus
@@ -97,27 +98,40 @@ export const useExpandImage = () => {
         const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
         showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');
       } else {
-        handleExpandError({ extend_left, extend_right, extend_up, extend_down });
-        errorHandle(response);
+        handleExpandError(response.error.code, {
+          extend_left,
+          extend_right,
+          extend_up,
+          extend_down
+        });
       }
     } catch (err) {
-      handleExpandError({ extend_left, extend_right, extend_up, extend_down });
+      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.expandImg, status: 'home' }));
       errorHandle(err);
     }
   };
 
-  const handleExpandError = ({ extend_left, extend_right, extend_up, extend_down }: any) => {
-    dispatch(
-      setPageResult({
-        tab: NOVA_TAB_TYPE.expandImg,
-        result: {
-          contentType: '',
-          data: '',
-          info: { extend_left, extend_right, extend_up, extend_down }
-        }
-      })
-    );
-    dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.expandImg, status: 'timeout' }));
+  const handleExpandError = (
+    errCode: string,
+    { extend_left, extend_right, extend_up, extend_down }: any
+  ) => {
+    if (errCode === 'Timeout') {
+      dispatch(
+        setPageResult({
+          tab: NOVA_TAB_TYPE.expandImg,
+          result: {
+            contentType: '',
+            data: '',
+            info: { extend_left, extend_right, extend_up, extend_down }
+          }
+        })
+      );
+      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.expandImg, status: 'timeout' }));
+    } else {
+      resetPageResult(NOVA_TAB_TYPE.expandImg);
+      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.expandImg, status: 'home' }));
+    }
+    errorHandle(errCode);
   };
 
   return { goExpandPage, handleExpandImage };
