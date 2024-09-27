@@ -102,6 +102,8 @@ const OptionList = styled.ul`
 const CategoryItem = styled.li`
   margin: 8px 0;
 
+  list-style: none;
+
   ::marker {
     display: none;
     content: '';
