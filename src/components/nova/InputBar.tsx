@@ -371,6 +371,8 @@ export const getFileIcon = (name: string) => {
     jpeg: ico_file_img,
     png: ico_file_img,
     gif: ico_file_img,
+    bmp: ico_file_img,
+    webp: ico_file_img,
     word: ico_file_word,
     slide: ico_file_slide,
     sheet: ico_file_sheet
