@@ -6,6 +6,7 @@ import Bridge from '../util/bridge';
 import Icon from './Icon';
 import { useAppSelector } from '../store/store';
 import { selectTabSlice } from '../store/slices/tabSlice';
+import { getLocalFiles } from '../store/slices/uploadFiles';
 
 export type TooltipType = 'selectable' | 'normal';
 export type TooltipPlacement = 'top-start' | 'top-end' | 'bottom-start' | 'bottom-end';
@@ -156,8 +157,10 @@ const Tooltip = (props: TooltipProps) => {
     initPos = false
   } = props;
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
+  const localFiles = useAppSelector(getLocalFiles);
 
   const handleClickOutside = (event: MouseEvent) => {
+    if (localFiles.length > 0) setIsOpen(false);
     if (tooltipRef.current && !tooltipRef.current.contains(event.target as Node)) {
       setIsOpen(false);
     }

@@ -91,24 +91,22 @@ export default function useFileDrop() {
         return;
       }
 
-      await Promise.all(
-        acceptedFiles.map(async (file) => {
-          if (await isPixelLimitExceeded(file, selectedNovaTab)) {
-            await confirm({
-              title: '',
-              msg: t('Nova.Confirm.OverMaxFilePixel'),
-              onOk: {
-                text: t('OK'),
-                callback: () => {
-                  dispatch(setPageStatus({ tab: selectedNovaTab, status: 'home' }));
-                  return;
-                }
+      for (const file of acceptedFiles) {
+        if (await isPixelLimitExceeded(file, selectedNovaTab)) {
+          await confirm({
+            title: '',
+            msg: t('Nova.Confirm.OverMaxFilePixel'),
+            onOk: {
+              text: t('OK'),
+              callback: () => {
+                dispatch(setPageStatus({ tab: selectedNovaTab, status: 'home' }));
+                return;
               }
-            });
-            return;
-          }
-        })
-      );
+            }
+          });
+          return;
+        }
+      }
 
       loadLocalFile(acceptedFiles);
     },
