@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import DownloadIcon from 'img/ico_download_white.svg';
 import InsertDocsIcon from 'img/ico_insert_docs.svg';
 import { useTranslation } from 'react-i18next';
@@ -10,13 +10,14 @@ import { selectPageResult } from '../../store/slices/nova/pageStatusSlice';
 import { NOVA_TAB_TYPE, selectTabSlice } from '../../store/slices/tabSlice';
 import { activeToast } from '../../store/slices/toastSlice';
 import { useAppDispatch, useAppSelector } from '../../store/store';
-import Bridge from '../../util/bridge';
+import Bridge, { ClientType, getPlatform } from '../../util/bridge';
 import { base64ToBlob } from '../../util/files';
 import { useChangeBackground } from '../hooks/nova/useChangeBackground';
 import { useInsertDocsHandler } from '../hooks/nova/useInsertDocsHandler';
 import { useRemakeImage } from '../hooks/nova/useRemakeImage';
 
 import GoBackHeader from './GoBackHeader';
+import { ClientStatusType } from '../../pages/Nova/Nova';
 
 const Wrap = styled.div`
   width: 100%;
@@ -30,7 +31,6 @@ const Body = styled.div`
   flex-direction: column;
   gap: 24px;
   padding: 0 16px;
-  margin-top: 48px;
   margin-bottom: 24px;
 `;
 
@@ -170,6 +170,7 @@ const SaveButton = styled.div`
 `;
 
 export default function Result() {
+  const platform = getPlatform();
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
@@ -177,6 +178,20 @@ export default function Result() {
   const { insertDocsHandler } = useInsertDocsHandler();
   const { handleChangeBackground } = useChangeBackground();
   const { handleRemakeImage } = useRemakeImage();
+  const [showInsertDocBtn, setShowInsertDocBtn] = useState(true);
+
+  useEffect(() => {
+    Bridge.callSyncBridgeApiWithCallback({
+      api: 'getClientStatus',
+      callback: async (status: ClientStatusType) => {
+        if (status === 'home' && platform !== ClientType.android && platform !== ClientType.ios) {
+          setShowInsertDocBtn(false);
+        } else {
+          setShowInsertDocBtn(true);
+        }
+      }
+    });
+  }, []);
 
   const OnSave = async () => {
     if (result) {
@@ -223,10 +238,12 @@ export default function Result() {
             </RemakeButton>
           )}
           <DefaultButtonWrap>
-            <InsertDocButton onClick={() => insertDocsHandler()}>
-              <img src={InsertDocsIcon} alt="docs" />
-              <span>{t(`Nova.Result.InsertDoc`)}</span>
-            </InsertDocButton>
+            {showInsertDocBtn && (
+              <InsertDocButton onClick={() => insertDocsHandler()}>
+                <img src={InsertDocsIcon} alt="docs" />
+                <span>{t(`Nova.Result.InsertDoc`)}</span>
+              </InsertDocButton>
+            )}
             <SaveButton onClick={OnSave}>
               <img src={DownloadIcon} alt="download" />
               <span>{t(`Nova.Result.Save`)}</span>
