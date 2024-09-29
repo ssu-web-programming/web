@@ -12,6 +12,7 @@ import { useExpandImage } from '../hooks/nova/useExpandImage';
 import { useImprovedResolution } from '../hooks/nova/useImprovedResolution';
 import { useRemakeImage } from '../hooks/nova/useRemakeImage';
 import { useRemoveBackground } from '../hooks/nova/useRemoveBackground';
+import { ReactComponent as BangIcon } from '../../img/bang_circle.svg';
 
 import GoBackHeader from './GoBackHeader';
 
@@ -24,6 +25,15 @@ const Wrap = styled.div`
   justify-content: center;
   gap: 24px;
   padding: 0 16px;
+`;
+
+const ContentWrap = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 21.5px;
 `;
 
 const Title = styled.div`
@@ -104,7 +114,10 @@ export default function TimeOut() {
     <>
       <GoBackHeader />
       <Wrap>
-        <Title>{t(`Nova.TimeOut.Title`)}</Title>
+        <ContentWrap>
+          <BangIcon />
+          <Title>{t(`Nova.TimeOut.Title`)}</Title>
+        </ContentWrap>
         <ButtonWrap onClick={handleRetry}>
           <span>{t(`Nova.TimeOut.Retry`)}</span>
           <img src={CreditColorIcon} alt="credit" />

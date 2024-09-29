@@ -3,13 +3,12 @@ import { createGlobalStyle } from 'styled-components';
 import { flex, flexColumn } from './cssCommon';
 
 const GlobalStyle = createGlobalStyle`
-html,
-    body,
-    #root {
+  html,
+  body,
+  #root {
     margin: 0;
     padding: 0;
-    font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    font-family: 'Pretendard', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 
@@ -17,25 +16,27 @@ html,
     scrollbar-width: thin;
   }
 
-  html, body, #root, div, textarea{
+  html, body, #root, div, textarea {
     &::-webkit-scrollbar {
       width: 8px;
     }
+
     &::-webkit-scrollbar-thumb {
       border-radius: 4px;
       background-color: rgba(0, 0, 0, 0.2);
 
       &:hover {
-       background-color: rgba(0, 0, 0, 0.4);
-       cursor: pointer;
+        background-color: rgba(0, 0, 0, 0.4);
+        cursor: pointer;
       }
     }
+
     &::-webkit-scrollbar-track {
       background: transparent;
     }
   }
-  
-  img{
+
+  img {
     -webkit-user-drag: none;
     -khtml-user-drag: none;
     -moz-user-drag: none;
@@ -66,26 +67,26 @@ html,
     --primary-po-red-40: #FA8C8C;
     --primary-po-red-50: #F95C5C;
     --primary-po-red-60: #D34E4E;
-    
+
     --primary-po-green-40: #85CA5F;
     --primary-po-green-50: #51B41B;
     --primary-po-green-60: #449916;
-    
+
     --primary-po-blue-40: #60A5FA;
     --primary-po-blue-50: #1D7FF9;
     --primary-po-blue-60: #186CD3;
   }
 
-  textarea, button, pre{
-        font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  textarea, button, pre {
+    font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-      }
+  }
 
   pre {
     white-space: pre-wrap;
   }
 
-  ol, ul{
+  ol, ul {
     ${flex}
     ${flexColumn}
 
@@ -95,13 +96,13 @@ html,
     margin-block-end: 0px;
     height: fit-content;
 
-    li{
-      ::marker{
+    li {
+      ::marker {
       }
     }
   }
 
-  p{
+  p {
     /* css reset */
     margin: 0;
     padding: 0;
@@ -111,9 +112,9 @@ html,
     vertical-align: baseline;
 
     line-height: 160%;
-  }  
+  }
 
-  html, *{
+  html, * {
     box-sizing: border-box;
     font-stretch: normal;
     font-style: normal;
@@ -126,7 +127,7 @@ html,
     width: inherit;
     border: revert;
   }
- 
+
 `;
 
 export default GlobalStyle;

@@ -53,7 +53,6 @@ const Box = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgb(244, 246, 248);
 
   img {
     position: absolute;

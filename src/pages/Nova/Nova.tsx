@@ -43,6 +43,7 @@ const Wrapper = styled.div<{ isScroll: boolean }>`
   flex-direction: column;
   justify-content: flex-start;
   ${CustomScrollbar};
+  background: rgb(244, 246, 248);
 `;
 
 const Body = styled.div`
@@ -52,7 +53,6 @@ const Body = styled.div`
   display: flex;
   position: relative;
   flex-direction: column;
-  background-color: rgb(244, 246, 248);
 `;
 
 export type ClientStatusType = 'home' | 'doc_edit_mode' | 'doc_view_mode';

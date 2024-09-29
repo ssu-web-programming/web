@@ -1,29 +1,29 @@
-import { forwardRef, useEffect, useRef } from 'react';
-import IconTextButton from 'components/buttons/IconTextButton';
-import { useConfirm } from 'components/Confirm';
-import useLangParameterNavigate from 'components/hooks/useLangParameterNavigate';
-import Icon from 'components/Icon';
-import Overlay from 'components/Overlay';
-import PreMarkdown from 'components/PreMarkdown';
-import Loading from 'img/agent_loading.gif';
-import ico_ai from 'img/ico_ai.svg';
-import { ReactComponent as CopyChatIcon } from 'img/ico_copy_chat.svg';
-import { ReactComponent as CreditColorIcon } from 'img/ico_credit_color.svg';
-import { ReactComponent as InsertDocsIcon } from 'img/ico_insert_docs.svg';
-import ico_user from 'img/ico_user.svg';
-import { ClientStatusType } from 'pages/Nova/Nova';
-import { useTranslation } from 'react-i18next';
-import { NovaChatType, NovaFileInfo } from 'store/slices/nova/novaHistorySlice';
-import { selectTabSlice } from 'store/slices/tabSlice';
-import { useAppSelector } from 'store/store';
-import styled, { css } from 'styled-components';
-import Bridge, { ClientType, getPlatform } from 'util/bridge';
-import { getFileExtension, sliceFileName } from 'util/common';
+import { forwardRef, useEffect, useRef } from "react";
+import IconTextButton from "components/buttons/IconTextButton";
+import { useConfirm } from "components/Confirm";
+import useLangParameterNavigate from "components/hooks/useLangParameterNavigate";
+import Icon from "components/Icon";
+import Overlay from "components/Overlay";
+import PreMarkdown from "components/PreMarkdown";
+import Loading from "img/agent_loading.gif";
+import ico_ai from "img/ico_ai.svg";
+import { ReactComponent as CopyChatIcon } from "img/ico_copy_chat.svg";
+import { ReactComponent as CreditColorIcon } from "img/ico_credit_color.svg";
+import { ReactComponent as InsertDocsIcon } from "img/ico_insert_docs.svg";
+import ico_user from "img/ico_user.svg";
+import { ClientStatusType } from "pages/Nova/Nova";
+import { useTranslation } from "react-i18next";
+import { NovaChatType, NovaFileInfo } from "store/slices/nova/novaHistorySlice";
+import { selectTabSlice } from "store/slices/tabSlice";
+import { useAppSelector } from "store/store";
+import styled, { css } from "styled-components";
+import Bridge, { ClientType, getPlatform } from "util/bridge";
+import { getFileExtension, sliceFileName } from "util/common";
 
-import useCopyText from '../hooks/copyText';
-import { useInsertDocsHandler } from '../hooks/nova/useInsertDocsHandler';
+import useCopyText from "../hooks/copyText";
+import { useInsertDocsHandler } from "../hooks/nova/useInsertDocsHandler";
 
-import { flexCenter, getFileIcon, InputBarSubmitParam } from './InputBar';
+import { flexCenter, getFileIcon, InputBarSubmitParam } from "./InputBar";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -110,6 +110,11 @@ const FileItem = styled.div`
   font-size: 14px;
   line-height: 21px;
   text-align: left;
+
+  &:hover {
+    background-color: #c9cdd2;
+    cursor: pointer;
+  }
 `;
 
 const ButtonText = styled.div`
@@ -130,7 +135,7 @@ interface ChatListProps {
 
 type ChatButtonType = {
   name: string;
-  status: NovaChatType['status'][];
+  status: NovaChatType["status"][];
   text: string;
   iconSrc: React.ReactNode;
   clickHandler: (arg: NovaChatType | any) => void;
@@ -148,29 +153,29 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
 
   const CHAT_BUTTON_LIST: ChatButtonType[] = [
     {
-      name: 'recreating',
-      status: ['done', 'cancel'],
+      name: "recreating",
+      status: ["done", "cancel"],
       iconSrc: <CreditColorIcon />,
       text: t(`Nova.Chat.Recreating`),
-      clickHandler: (history: NovaChatType) => onSubmit({ input: history.input, type: '' })
+      clickHandler: (history: NovaChatType) => onSubmit({ input: history.input, type: "" })
     },
     {
-      name: 'copy',
-      status: ['done'],
+      name: "copy",
+      status: ["done"],
       iconSrc: <CopyChatIcon />,
       text: t(`Nova.Chat.Copy`),
       clickHandler: (history: NovaChatType) => onCopy(history.output)
     },
     {
-      name: 'insert',
-      status: ['done'],
+      name: "insert",
+      status: ["done"],
       iconSrc: <InsertDocsIcon />,
       text: t(`Nova.Chat.InsertDoc.Title`),
       clickHandler: (history: NovaChatType) => insertDocsHandler(history)
     }
   ];
   const chatButtonList =
-    from === 'home' ? CHAT_BUTTON_LIST.filter((btn) => btn.name !== 'insert') : CHAT_BUTTON_LIST;
+    from === "home" ? CHAT_BUTTON_LIST.filter((btn) => btn.name !== "insert") : CHAT_BUTTON_LIST;
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -182,7 +187,7 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
     <Wrapper
       ref={(node) => {
         scrollRef.current = node;
-        if (typeof ref === 'function') {
+        if (typeof ref === "function") {
           ref(node);
         } else if (ref) {
           (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
@@ -198,19 +203,19 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
               {item.files?.map((file) => (
                 <FileItem
                   key={file.name}
-                  style={{ width: '100%' }}
+                  style={{ width: "100%" }}
                   onClick={async () => {
-                    if (item.type === 'document') {
+                    if (item.type === "document") {
                       switch (getPlatform()) {
                         case ClientType.android:
                         case ClientType.ios: {
                           Bridge.callSyncBridgeApiWithCallback({
-                            api: 'getClientStatus',
+                            api: "getClientStatus",
                             callback: async (status: ClientStatusType) => {
                               switch (status) {
-                                case 'home':
+                                case "home":
                                   Bridge.callBridgeApi(
-                                    'openPoDriveFile',
+                                    "openPoDriveFile",
                                     JSON.stringify({
                                       fileId: file.fileId,
                                       fileRevision: file.fileRevision
@@ -219,11 +224,12 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                                   break;
                                 default: {
                                   confirm({
-                                    title: '',
-                                    msg: t('Nova.Chat.FailOpenDoc'),
+                                    title: "",
+                                    msg: t("Nova.Chat.FailOpenDoc"),
                                     onOk: {
-                                      text: t('Confirm'),
-                                      callback: () => {}
+                                      text: t("Confirm"),
+                                      callback: () => {
+                                      }
                                     }
                                   });
                                   break;
@@ -235,7 +241,7 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                         }
                         case ClientType.windows: {
                           Bridge.callBridgeApi(
-                            'pchome_mydoc',
+                            "pchome_mydoc",
                             JSON.stringify({
                               fileInfo: {
                                 fileId: file.fileId,
@@ -249,7 +255,7 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                         case ClientType.mac:
                         case ClientType.unknown: {
                           Bridge.callBridgeApi(
-                            'openPoDriveFile',
+                            "openPoDriveFile",
                             JSON.stringify({
                               fileId: file.fileId,
                               fileRevision: file.fileRevision,
@@ -261,7 +267,7 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                           break;
                         }
                       }
-                    } else if (item.type === 'image') {
+                    } else if (item.type === "image") {
                       props.setImagePreview(file);
                     }
                   }}>
@@ -273,10 +279,10 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
           </Question>
           <Answer>
             <Icon size={32} iconSrc={ico_ai}></Icon>
-            {item.status === 'request' ? (
-              <img src={Loading} alt="loading" style={{ paddingTop: '4px' }} />
+            {item.status === "request" ? (
+              <img src={Loading} alt="loading" style={{ paddingTop: "4px" }} />
             ) : (
-              <div style={{ paddingTop: '3px' }}>
+              <div style={{ paddingTop: "3px" }}>
                 <PreMarkdown text={item.output}>
                   <Overlay onSave={() => onSave(item)} />
                 </PreMarkdown>
@@ -285,9 +291,9 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                     .filter((btn) => btn.status.includes(item.status))
                     .map((btn) => (
                       <IconTextButton
-                        disable={creating == 'NOVA' || expiredNOVA}
+                        disable={creating == "NOVA" || expiredNOVA}
                         key={btn.text}
-                        width={'fit'}
+                        width={"fit"}
                         iconSize={24}
                         iconSrc={btn.iconSrc}
                         iconPos="left"
@@ -311,4 +317,4 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
 
 export default ChatList;
 
-ChatList.displayName = 'ChatList';
+ChatList.displayName = "ChatList";

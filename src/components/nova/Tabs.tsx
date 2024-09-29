@@ -49,7 +49,6 @@ const Wrap = styled.div`
   gap: 8px;
   padding: 8px 16px;
   overflow: hidden;
-  background-color: rgb(244, 246, 248);
   z-index: 1;
 `;
 

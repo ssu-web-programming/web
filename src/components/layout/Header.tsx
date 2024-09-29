@@ -70,7 +70,8 @@ export default function Header(props: HeaderProps) {
           height: '56px',
           minHeight: '56px',
           padding: '0px 16px',
-          borderBottom: '1px solid #c9cdd2'
+          borderBottom: '1px solid #c9cdd2',
+          backgroundColor: 'white'
         }}>
         {children}
       </Contents>
