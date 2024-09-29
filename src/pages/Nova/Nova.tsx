@@ -4,8 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { CustomScrollbar } from 'style/cssCommon';
 import styled from 'styled-components';
-
-import Announcement from '../../components/Announcement';
 import { useConfirm } from '../../components/Confirm';
 import { useChangeBackground } from '../../components/hooks/nova/useChangeBackground';
 import { useChangeStyle } from '../../components/hooks/nova/useChangeStyle';
@@ -38,16 +36,13 @@ import Bridge from '../../util/bridge';
 
 import AIChat from './AIChat';
 
-const Container = styled.div`
+const Wrapper = styled.div<{ isScroll: boolean }>`
   width: 100%;
   height: 100%;
   display: flex;
-`;
-
-const Wrapper = styled(Container)`
   flex-direction: column;
   justify-content: flex-start;
-  ${CustomScrollbar}
+  ${CustomScrollbar};
 `;
 
 const Body = styled.div`
@@ -180,16 +175,13 @@ export default function Nova() {
 
   return (
     <>
-      <Wrapper {...getRootProps()}>
+      <Wrapper {...getRootProps()} isScroll={selectedNovaTab != 'aiChat'}>
         {(usingAI || status === 'home') && isDragActive && <Uploading />}
         <NovaHeader />
         {!usingAI && (status === 'home' || status === 'progress') && (
           <Tabs tabs={tabValues} activeTab={selectedNovaTab} onChangeTab={handleChangeTab} />
         )}
-        <Body>
-          {announceInfo.isShow && <Announcement content={announceInfo.content} />}
-          {renderContent()}
-        </Body>
+        <Body>{renderContent()}</Body>
         <Suspense fallback={<Overlay />}>
           <Modals />
         </Suspense>

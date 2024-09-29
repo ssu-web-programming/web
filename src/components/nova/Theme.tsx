@@ -30,7 +30,6 @@ const Body = styled.div`
   align-items: center;
   gap: 16px;
   padding: 0 16px;
-  margin-top: 48px;
 `;
 
 const ImageBox = styled.div<{ isBordered: boolean }>`

@@ -25,7 +25,6 @@ const Body = styled.div`
   justify-content: center;
   gap: 16px;
   padding: 0 16px;
-  margin-top: 48px;
 `;
 
 const ImageBox = styled.div<{ isBordered: boolean }>`

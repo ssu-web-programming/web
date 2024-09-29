@@ -64,6 +64,7 @@ const InputBarBase = styled.div<{ disabled: boolean }>`
   flex-direction: column;
   justify-content: center;
   border-top: 2px solid var(--ai-purple-50-main);
+  background-color: white;
 
   ${({ disabled }) =>
     disabled &&

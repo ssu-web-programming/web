@@ -185,14 +185,16 @@ export default function AIChat() {
   return (
     <Wrap>
       {novaHistory.length < 1 ? (
-        <Guide>
-          {PROMPT_EXAMPLE.map((item) => (
-            <GuideExample key={item.txt} onClick={() => setInputContents?.(item.txt)}>
-              <Icon iconSrc={item.src} size="md" />
-              <span>{item.txt}</span>
-            </GuideExample>
-          ))}
-        </Guide>
+        <>
+          <Guide>
+            {PROMPT_EXAMPLE.map((item) => (
+              <GuideExample key={item.txt} onClick={() => setInputContents?.(item.txt)}>
+                <Icon iconSrc={item.src} size="md" />
+                <span>{item.txt}</span>
+              </GuideExample>
+            ))}
+          </Guide>
+        </>
       ) : (
         <>
           <ChatList

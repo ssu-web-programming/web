@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import ArrowLeftIcon from '../../img/ico_arrow_left.svg';
+import { ReactComponent as ArrowLeftIcon } from '../../img/nova/arrow_left.svg';
 import { setPageData, setPageResult, setPageStatus } from '../../store/slices/nova/pageStatusSlice';
 import { selectTabSlice } from '../../store/slices/tabSlice';
 import { setDriveFiles, setLocalFiles } from '../../store/slices/uploadFiles';
@@ -19,7 +19,7 @@ const Wrap = styled.div`
   width: fit-content;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   gap: 4px;
   cursor: pointer;
 
@@ -28,15 +28,13 @@ const Wrap = styled.div`
     font-weight: 500;
     line-height: 21px;
     color: #454c53;
+    margin-bottom: 2px;
   }
-`;
 
-const ImageWrap = styled.div`
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  svg {
+    width: 24px;
+    height: 24px;
+  }
 `;
 
 export default function GoBackHeader() {
@@ -55,9 +53,7 @@ export default function GoBackHeader() {
   return (
     <Header>
       <Wrap onClick={handleGoBack}>
-        <ImageWrap>
-          <img src={ArrowLeftIcon} alt="arrow" />
-        </ImageWrap>
+        <ArrowLeftIcon />
         <span>{t(`Nova.GoBackHeader`)}</span>
       </Wrap>
     </Header>

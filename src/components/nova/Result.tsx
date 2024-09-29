@@ -21,17 +21,20 @@ import { ClientStatusType } from '../../pages/Nova/Nova';
 
 const Wrap = styled.div`
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
 `;
 
 const Body = styled.div`
   width: 100%;
+  height: 100%;
   display: flex;
+  flex: 1 1 0;
   flex-direction: column;
   gap: 24px;
   padding: 0 16px;
-  margin-bottom: 24px;
+  overflow-y: auto;
 `;
 
 const Guide = styled.div`
@@ -103,6 +106,7 @@ const ButtonWrap = styled.div`
   align-items: center;
   justify-content: space-between;
   gap: 8px;
+  padding-bottom: 16px;
 `;
 
 const RemakeButton = styled.div`
@@ -117,6 +121,7 @@ const RemakeButton = styled.div`
   border: 1px solid #c9cdd2;
   border-radius: 8px;
   cursor: pointer;
+  background: white;
 
   span {
     font-size: 16px;
@@ -152,6 +157,7 @@ const InsertDocButton = styled.div`
   border-radius: 8px;
   cursor: pointer;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  background: white;
 `;
 
 const SaveButton = styled.div`
