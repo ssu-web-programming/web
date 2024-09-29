@@ -350,6 +350,8 @@ export const useInitBridgeListener = () => {
           }
           case 'finishUploadFile': {
             dispatch(setPageStatus({ tab: selectedNovaTab, status: 'home' }));
+            dispatch(setLocalFiles([]));
+            dispatch(setDriveFiles([]));
             dispatch(setLoadingFile({ id: body.fileId }));
             const currentFile = await getFileInfo(body.fileId);
             dispatch(removeLoadingFile());

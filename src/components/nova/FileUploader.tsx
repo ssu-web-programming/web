@@ -14,7 +14,8 @@ import {
   removeCurrentFile,
   removeLoadingFile,
   setDriveFiles,
-  setLoadingFile
+  setLoadingFile,
+  setLocalFiles
 } from '../../store/slices/uploadFiles';
 import { userInfoSelector } from '../../store/slices/userInfo';
 import { useAppDispatch, useAppSelector } from '../../store/store';
@@ -179,6 +180,8 @@ export const FileUploader = (props: FileUploaderProps) => {
       });
     } else if (currentFile.type === 'drive') {
       if (currentFile.isSaved) {
+        dispatch(setLocalFiles([]));
+        dispatch(setDriveFiles([]));
         dispatch(setLoadingFile({ id: currentFile.id }));
         const curFile = await getFileInfo(currentFile.id);
         dispatch(removeLoadingFile());
