@@ -1,22 +1,20 @@
-import React, { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react';
-import TextField from '@mui/material/TextField';
-import { debounce } from 'lodash';
-import { useTranslation } from 'react-i18next';
+import React, { useEffect, useRef, useState } from 'react';
+import Konva from 'konva';
+import { Group, Image, Layer, Stage, Transformer } from 'react-konva';
 import styled from 'styled-components';
 
-import CustomIcon from '../../img/nova/expandImg/customization.png';
-import HorizontalIcon from '../../img/nova/expandImg/horizontal.png';
-import SqureIcon from '../../img/nova/expandImg/square.png';
-import VerticalIcon from '../../img/nova/expandImg/vertical.png';
-import MultiplyIcon from '../../img/nova/expandImg/xmark.png';
+import { ReactComponent as HorizontalIcon } from '../../img/nova/expandImg/horizontal_n.svg';
+import { ReactComponent as HorizontalIconSelected } from '../../img/nova/expandImg/horizontal_s.svg';
+import { ReactComponent as SquareIcon } from '../../img/nova/expandImg/square_n.svg';
+import { ReactComponent as SquareIconSelected } from '../../img/nova/expandImg/square_s.svg';
+import { ReactComponent as VerticalIcon } from '../../img/nova/expandImg/vertical_n.svg';
+import { ReactComponent as VerticalIconSelected } from '../../img/nova/expandImg/vertical_s.svg';
 import { selectPageResult } from '../../store/slices/nova/pageStatusSlice';
 import { selectTabSlice } from '../../store/slices/tabSlice';
 import { useAppSelector } from '../../store/store';
 import { useExpandImage } from '../hooks/nova/useExpandImage';
-import SelectBox from '../SelectBox';
 
 import GoBackHeader from './GoBackHeader';
-import ResizableContainer, { BoxInfo } from './ResizableContainer';
 
 const Wrap = styled.div`
   width: 100%;
@@ -28,93 +26,110 @@ const Wrap = styled.div`
 const Body = styled.div`
   width: 100%;
   display: flex;
+  flex: 1 1 0;
   flex-direction: column;
-  gap: 24px;
-  padding: 0 16px;
-  margin-top: 97px;
+  align-items: center;
+  justify-content: safe center;
+  gap: 30px;
+  padding: 0 16px 16px 16px;
+  overflow-y: auto;
 `;
 
-const ImageBox = styled.div`
+const GuideBox = styled.div`
   width: 100%;
+  padding-bottom: 100%;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-bottom: 100%;
-  border-radius: 8px;
   touch-action: none;
 `;
 
-const Box = styled.div`
-  width: 100%;
-  height: 100%;
+const ImageBox = styled.div<{ height: number; width: number }>`
+  width: ${({ width }) => width}px;
+  height: ${({ height }) => height}px;
   position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: none;
+  background: #e8ebed;
+  border: 1px solid #c9cdd2;
+`;
+
+const StyledStage = styled(Stage)<{ width: number; height: number }>`
+  width: ${({ width }) => width}px;
+  height: ${({ height }) => height}px;
   top: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-
-  img {
-    position: absolute;
-  }
-`;
-
-const CustomWrap = styled.div`
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  justify-content: center;
-`;
-
-const InputWrap = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  img {
-    width: 24px;
-    height: 24px;
-  }
-`;
-
-const InputBox = styled(TextField)`
-  input {
-    padding: 12px 16px;
-    font-size: 16px;
-    font-family: Pretendard, sans-serif;
-    font-weight: 500;
-    text-align: center;
-    letter-spacing: -0.5px;
-    color: #454c53;
-  }
-
-  legend {
-    display: none;
-  }
-
-  .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
-    height: 48px;
-    top: 0;
-    border-color: #c9cdd2 !important;
-  }
-
-  .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
-    border-color: #6f3ad0 !important;
-    border-width: 1px;
-  }
 `;
 
 const ButtonWrap = styled.div`
   width: 100%;
-  height: 48px;
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+`;
+
+const CanvasSizeButtonGroup = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #6f3ad0;
+  gap: 16px;
+`;
+
+const RatioButton = styled.div<{ selected: boolean }>`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5.5px 22px;
+  background-color: ${({ selected }) => (selected ? '#ede5fe' : '#ffffff')};
+  color: ${({ selected }) => (selected ? '#ffffff' : '#6f3ad0')};
+  border: 1px solid ${({ selected }) => (selected ? '#6f3ad0' : 'none')};
   border-radius: 8px;
-  cursor: pointer;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  box-sizing: border-box;
+
+  svg {
+    fill: ${({ selected }) => (selected ? '#ffffff' : '#6f3ad0')};
+  }
+
+  span {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 21px;
+    color: ${({ selected }) => (selected ? '#6f3ad0' : '#454c53')};
+  }
+`;
+
+const CurSizeBox = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  span {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    color: #26282b;
+  }
+`;
+
+const ExpandButton = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #6f3ad0;
+  padding: 12px 0;
+  border-radius: 8px;
 
   span {
     font-size: 16px;
@@ -122,146 +137,139 @@ const ButtonWrap = styled.div`
     line-height: 24px;
     color: white;
   }
-
-  img {
-    position: absolute;
-    right: 12px;
-  }
 `;
 
 export default function Expand() {
-  const { t } = useTranslation();
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
-  const { handleExpandImage } = useExpandImage();
   const result = useAppSelector(selectPageResult(selectedNovaTab));
+  const { handleExpandImage } = useExpandImage();
 
-  const imageBoxRef = useRef<HTMLDivElement>(null);
-  const imageRef = useRef<HTMLImageElement>(null);
+  const [imageObj, setImageObj] = useState<HTMLImageElement | null>(null);
+  const [canvasSize, setCanvasSize] = useState({
+    width: 0,
+    height: 0
+  });
+  const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
+  const [canvasDiff, setCanvasDiff] = useState({
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0
+  });
+  const [scaleRatio, setScaleRatio] = useState({ widthRatio: 1, heightRatio: 1 });
 
-  const [dimension, setDimensions] = useState<number | null>(null);
-  const [boxInfo, setBoxInfo] = useState<BoxInfo>({ width: 0, height: 0, top: 0, left: 0 });
-  const [imgSize, setImgSize] = useState({ width: 0, height: 0 });
-  const [inputWidth, setInputWidth] = useState<number>(0);
-  const [inputHeight, setInputHeight] = useState<number>(0);
-
-  const SelectBoxItem = [
-    { name: t(`Nova.expandImg.SelectBox.Custom`), icon: CustomIcon },
-    { name: t(`Nova.expandImg.SelectBox.Horizontal`), icon: HorizontalIcon },
-    { name: t(`Nova.expandImg.SelectBox.Vertical`), icon: VerticalIcon },
-    { name: t(`Nova.expandImg.SelectBox.Square`), icon: SqureIcon }
-  ];
-  const [format, setFormat] = useState<string>(SelectBoxItem[2].name);
+  const [selectedRatio, setSelectedRatio] = useState<'square' | 'horizontal' | 'vertical'>(
+    'square'
+  );
+  const stageRef = useRef<Konva.Stage | null>(null);
+  const imageRef = useRef<Konva.Image | null>(null);
+  const imageTrRef = useRef<Konva.Transformer | null>(null);
 
   useEffect(() => {
-    if (dimension && format) selectBox(format);
-  }, [dimension, format]);
-
-  useEffect(() => {
-    const element = imageBoxRef.current;
-    if (element) {
-      const resizeObserver = new ResizeObserver(
-        debounce((entries) => {
-          for (const entry of entries) setDimensions(entry.contentRect.width);
-        }, 100)
-      );
-      resizeObserver.observe(element);
-      return () => resizeObserver.unobserve(element);
+    if (result) {
+      const img = new window.Image();
+      img.src = `data:${result.contentType};base64,${result.data}`;
+      img.onload = () => setImageObj(img);
     }
   }, [result]);
 
   useEffect(() => {
-    if (imageRef.current) {
-      const { naturalWidth, naturalHeight } = imageRef.current;
-      setImgSize({ width: naturalWidth, height: naturalHeight });
+    if (imageTrRef.current && imageRef.current) {
+      imageTrRef.current.nodes([imageRef.current]);
+      imageTrRef.current.getLayer()?.batchDraw();
     }
-  }, [result]);
+  }, [imageObj]);
 
-  const scale = useMemo(() => (dimension ? dimension / 2048 : 1), [dimension]);
-  const rate = useMemo(() => (dimension ? 2048 / dimension : 1), [dimension]);
+  useEffect(() => {
+    handleCanvasSizeChange('square');
+  }, [imageObj]);
 
-  const expandImage = () => {
-    if (imageRef.current && boxInfo.width && boxInfo.height) {
-      const imgElement = imageRef.current;
-      const imgScaledWidth = imgElement.naturalWidth * scale;
-      const imgScaledHeight = imgElement.naturalHeight * scale;
+  useEffect(() => {
+    calculateImageBounds();
+  }, [canvasSize]);
 
-      const left = Math.round(((boxInfo.width - imgScaledWidth) / 2) * rate);
-      const right = Math.round(((boxInfo.width - imgScaledWidth) / 2) * rate);
-      const top = Math.round(((boxInfo.height - imgScaledHeight) / 2) * rate);
-      const bottom = Math.round(((boxInfo.height - imgScaledHeight) / 2) * rate);
+  const calculateImageBounds = () => {
+    if (!stageRef.current || !imageRef.current || !imageObj) return;
 
-      // console.log('left:', left);
-      // console.log('right:', right);
-      // console.log('top:', top);
-      // console.log('bottom:', bottom);
+    const imageNode = imageRef.current;
 
-      handleExpandImage(left, right, top, bottom);
-    }
-  };
+    const boundingBox = imageNode.getClientRect();
 
-  const selectBox = (selectedItem: string) => {
-    setFormat(selectedItem);
-    if (!dimension) return;
-
-    let newWidth = 100;
-    let newHeight = 100;
-    switch (selectedItem) {
-      case '개인 맞춤':
-        newWidth = inputWidth;
-        newHeight = inputHeight;
-        break;
-      case '가로형':
-        newWidth = 2048;
-        newHeight = 1152;
-        break;
-      case '세로형':
-        newWidth = 1152;
-        newHeight = 2048;
-        break;
-      case '정사각형':
-        newWidth = 2048;
-        newHeight = 2048;
-        break;
-    }
-
-    setInputWidth(Math.round(newWidth));
-    setInputHeight(Math.round(newHeight));
-    setBoxInfo({
-      width: newWidth / rate,
-      height: newHeight / rate,
-      top: Math.max(0, (dimension - newHeight / rate) / 2),
-      left: Math.max(0, (dimension - newWidth / rate) / 2)
+    // 거리 값만 저장하고, 스케일링된 값은 나중에 출력할 때 곱해서 표시
+    setCanvasDiff({
+      top: boundingBox.y,
+      bottom: canvasSize.height - (boundingBox.y + boundingBox.height),
+      left: boundingBox.x,
+      right: canvasSize.width - (boundingBox.x + boundingBox.width)
     });
+
+    setImageSize({
+      width: boundingBox.width,
+      height: boundingBox.height
+    });
+
+    stageRef.current?.batchDraw();
   };
 
-  const handleInputChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    type: 'width' | 'height'
-  ) => {
-    let value = parseInt(e.target.value, 10);
-    if (isNaN(value) || !dimension) return;
+  const handleCanvasSizeChange = (ratio: 'square' | 'horizontal' | 'vertical') => {
+    let width = window.innerWidth - 32;
+    let height;
+    let selectedBoxWidth, selectedBoxHeight;
 
-    if (value < 100) {
-      value = 100;
-    } else if (value > 2048) {
-      value = 2048;
+    switch (ratio) {
+      case 'square':
+        height = width; // 1:1 비율
+        selectedBoxWidth = 2048;
+        selectedBoxHeight = 2048;
+        break;
+      case 'horizontal':
+        height = (width / 16) * 9; // 16:9 비율
+        selectedBoxWidth = 2048;
+        selectedBoxHeight = 1152;
+        break;
+      case 'vertical':
+        height = width;
+        width = (height * 9) / 16; // 9:16 비율
+        selectedBoxWidth = 1152;
+        selectedBoxHeight = 2048;
+        break;
+      default:
+        height = width; // 기본 1:1 비율
+        selectedBoxWidth = 2048;
+        selectedBoxHeight = 2048;
     }
 
-    setFormat('개인 맞춤');
-    if (type === 'width') {
-      setInputWidth(value);
-      setBoxInfo((prev) => ({
-        ...prev,
-        width: value / rate,
-        left: Math.max(0, (dimension - value / rate) / 2)
-      }));
-    } else if (type === 'height') {
-      setInputHeight(value);
-      setBoxInfo((prev) => ({
-        ...prev,
-        height: value / rate,
-        top: Math.max(0, (dimension - value / rate) / 2)
-      }));
+    // 캔버스 사이즈 및 선택된 비율 상태 업데이트
+    setCanvasSize({ width, height });
+    setSelectedRatio(ratio);
+
+    // 비율 계산 및 상태로 저장
+    setScaleRatio({
+      widthRatio: selectedBoxWidth / width,
+      heightRatio: selectedBoxHeight / height
+    });
+
+    setCanvasDiff({ top: 0, bottom: 0, left: 0, right: 0 });
+
+    if (imageRef.current && imageObj) {
+      const imageNode = imageRef.current;
+      const { naturalWidth: imageWidth, naturalHeight: imageHeight } = imageObj;
+
+      const scale = Math.min(width / imageWidth, height / imageHeight);
+
+      const scaledImageWidth = imageWidth * scale;
+      const scaledImageHeight = imageHeight * scale;
+
+      const xPos = (width - scaledImageWidth) / 2;
+      const yPos = (height - scaledImageHeight) / 2;
+
+      imageNode.width(scaledImageWidth);
+      imageNode.height(scaledImageHeight);
+      imageNode.scale({ x: 1, y: 1 });
+      imageNode.position({ x: xPos, y: yPos });
+      imageNode.rotation(0);
+
+      stageRef.current?.batchDraw();
     }
   };
 
@@ -269,54 +277,80 @@ export default function Expand() {
     <Wrap>
       <GoBackHeader />
       <Body>
-        <ImageBox ref={imageBoxRef}>
-          {dimension && (
-            <Box>
-              <img
-                ref={imageRef}
-                src={`data:${result?.contentType};base64,${result?.data}`}
-                style={{ transform: `scale(${scale})`, transition: 'transform 0.2s ease' }}
-                onLoad={() => {
-                  if (imageRef.current) {
-                    const { naturalWidth, naturalHeight } = imageRef.current;
-                    setImgSize({ width: naturalWidth, height: naturalHeight });
-                  }
-                }}
-              />
-              <ResizableContainer
-                guideBoxInfo={{ width: dimension, height: dimension, top: 0, left: 0 }}
-                boxInfo={boxInfo}
-                setBoxInfo={(newBoxInfo: BoxInfo) => {
-                  setBoxInfo(newBoxInfo);
+        <GuideBox>
+          <ImageBox width={canvasSize.width} height={canvasSize.height}>
+            <StyledStage width={canvasSize.width} height={canvasSize.height} ref={stageRef}>
+              <Layer>
+                {imageObj && (
+                  <Group>
+                    <Image
+                      image={imageObj}
+                      draggable
+                      ref={imageRef}
+                      onDragMove={calculateImageBounds}
+                      onTransformEnd={calculateImageBounds}
+                    />
+                    <Transformer
+                      ref={imageTrRef}
+                      resizeEnabled={true}
+                      rotateEnabled={false}
+                      anchorSize={10}
+                      anchorCornerRadius={10}
+                      borderStroke="#6f3ad0"
+                      borderStrokeWidth={2}
+                      anchorStroke="#6f3ad0"
+                      anchorFill="#6f3ad0"
+                      anchorStrokeWidth={2}
+                      enabledAnchors={['top-left', 'top-right', 'bottom-left', 'bottom-right']}
+                    />
+                  </Group>
+                )}
+              </Layer>
+            </StyledStage>
+          </ImageBox>
+        </GuideBox>
 
-                  setInputWidth(Math.round(newBoxInfo.width * rate));
-                  setInputHeight(Math.round(newBoxInfo.height * rate));
-                }}
-                maxDimensions={dimension}
-              />
-            </Box>
-          )}
-        </ImageBox>
+        <ButtonWrap>
+          <CanvasSizeButtonGroup>
+            <RatioButton
+              selected={selectedRatio === 'square'}
+              onClick={() => handleCanvasSizeChange('square')}>
+              {selectedRatio === 'square' ? <SquareIconSelected /> : <SquareIcon />}
+              <span>1:1</span>
+            </RatioButton>
+            <RatioButton
+              selected={selectedRatio === 'horizontal'}
+              onClick={() => handleCanvasSizeChange('horizontal')}>
+              {selectedRatio === 'horizontal' ? <HorizontalIconSelected /> : <HorizontalIcon />}
+              <span>16:9</span>
+            </RatioButton>
+            <RatioButton
+              selected={selectedRatio === 'vertical'}
+              onClick={() => handleCanvasSizeChange('vertical')}>
+              {selectedRatio === 'vertical' ? <VerticalIconSelected /> : <VerticalIcon />}
+              <span>9:16</span>
+            </RatioButton>
+          </CanvasSizeButtonGroup>
 
-        <CustomWrap>
-          <SelectBox menuItem={SelectBoxItem} selectedItem={format} setSelectedItem={selectBox} />
-          <InputWrap>
-            <InputBox
-              type="number"
-              value={inputWidth}
-              onChange={(e) => handleInputChange(e, 'width')}
-            />
-            <img src={MultiplyIcon} alt="multiply" />
-            <InputBox
-              type="number"
-              value={inputHeight}
-              onChange={(e) => handleInputChange(e, 'height')}
-            />
-          </InputWrap>
-        </CustomWrap>
+          <CurSizeBox>
+            <span>
+              {selectedRatio === 'square' && '2048 x 2048'}
+              {selectedRatio === 'horizontal' && '2048 x 1152'}
+              {selectedRatio === 'vertical' && '1152 x 2048'}
+            </span>
+          </CurSizeBox>
 
-        <ButtonWrap onClick={expandImage}>
-          <span>{t('Nova.expandImg.Button')}</span>
+          <ExpandButton
+            onClick={() =>
+              handleExpandImage(
+                Math.round(canvasDiff.left * scaleRatio.widthRatio),
+                Math.round(canvasDiff.right * scaleRatio.widthRatio),
+                Math.round(canvasDiff.top * scaleRatio.heightRatio),
+                Math.round(canvasDiff.bottom * scaleRatio.heightRatio)
+              )
+            }>
+            <span>이미지 확장</span>
+          </ExpandButton>
         </ButtonWrap>
       </Body>
     </Wrap>
