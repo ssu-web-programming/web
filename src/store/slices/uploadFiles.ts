@@ -24,10 +24,15 @@ export interface CurrentFileInfo {
   isSaved: boolean;
 }
 
+export interface LoadingFileInfo {
+  id: string;
+}
+
 type UploadFilesState = {
   localFiles: File[];
   driveFiles: DriveFileInfo[];
   currentFile: CurrentFileInfo;
+  loadingFile: LoadingFileInfo;
 };
 
 const initialState: UploadFilesState = {
@@ -39,6 +44,9 @@ const initialState: UploadFilesState = {
     size: 0,
     ext: '',
     isSaved: false
+  },
+  loadingFile: {
+    id: ''
   }
 };
 
@@ -55,6 +63,9 @@ const uploadFilesSlice = createSlice({
     setDriveFiles: (state, action: PayloadAction<DriveFileInfo[]>) => {
       state.driveFiles = action.payload;
     },
+    setLoadingFile: (state, action: PayloadAction<LoadingFileInfo>) => {
+      state.loadingFile = action.payload;
+    },
     removeCurrentFile: (state) => {
       state.currentFile = {
         type: 'unknown',
@@ -69,6 +80,11 @@ const uploadFilesSlice = createSlice({
     },
     removeDriveFile: (state, action: PayloadAction<DriveFileInfo>) => {
       state.driveFiles = state.driveFiles.filter((file) => file.name !== action.payload.name);
+    },
+    removeLoadingFile: (state) => {
+      state.loadingFile = {
+        id: ''
+      };
     }
   }
 });
@@ -77,13 +93,16 @@ export const {
   setCurrentFile,
   setLocalFiles,
   setDriveFiles,
+  setLoadingFile,
   removeCurrentFile,
   removeLocalFile,
-  removeDriveFile
+  removeDriveFile,
+  removeLoadingFile
 } = uploadFilesSlice.actions;
 
 export const getCurrentFile = (state: RootState) => state.uploadFiles.currentFile;
 export const getLocalFiles = (state: RootState) => state.uploadFiles.localFiles;
 export const getDriveFiles = (state: RootState) => state.uploadFiles.driveFiles;
+export const getLoadingFile = (state: RootState) => state.uploadFiles.loadingFile;
 
 export default uploadFilesSlice.reducer;

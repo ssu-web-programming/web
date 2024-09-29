@@ -22,6 +22,7 @@ import { NovaChatType } from 'store/slices/nova/novaHistorySlice';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import styled, { css } from 'styled-components';
 import { sliceFileName } from 'util/common';
+import LoadingSpinner from '../../img/spinner.webp';
 
 import { getValidExt, SUPPORT_DOCUMENT_TYPE } from '../../constants/fileTypes';
 import { ReactComponent as DocsPlusIcon } from '../../img/ico_upload_docs_plus.svg';
@@ -29,8 +30,11 @@ import { ReactComponent as ImagePlusIcon } from '../../img/ico_upload_img_plus.s
 import {
   DriveFileInfo,
   getDriveFiles,
+  getLoadingFile,
   getLocalFiles,
+  removeCurrentFile,
   removeDriveFile,
+  removeLoadingFile,
   removeLocalFile,
   setDriveFiles,
   setLocalFiles
@@ -100,6 +104,11 @@ const FileItem = styled.div`
   font-size: 14px;
   line-height: 21px;
   text-align: left;
+
+  .uploading {
+    font-weight: 700;
+    color: #6f3ad0;
+  }
 `;
 
 const InputBtnWrapper = styled.div`
@@ -181,6 +190,7 @@ export default function InputBar(props: InputBarProps) {
 
   const localFiles = useAppSelector(getLocalFiles);
   const driveFiles = useAppSelector(getDriveFiles);
+  const loadingFile = useAppSelector(getLoadingFile);
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
 
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
@@ -207,6 +217,12 @@ export default function InputBar(props: InputBarProps) {
   const handleRemoveDriveFile = (file: DriveFileInfo) => {
     dispatch(removeDriveFile(file));
   };
+
+  const handleRemoveLodingFile = () => {
+    dispatch(removeLoadingFile());
+    dispatch(removeCurrentFile());
+  };
+
   const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
     e.currentTarget.scrollLeft += e.deltaY;
   };
@@ -296,6 +312,14 @@ export default function InputBar(props: InputBarProps) {
               />
             </FileItem>
           ))}
+        </FileListViewer>
+      )}
+      {loadingFile.id !== '' && (
+        <FileListViewer onWheel={handleWheel}>
+          <FileItem>
+            <Icon size={21} iconSrc={LoadingSpinner} />
+            <span className="uploading">업로드 중..</span>
+          </FileItem>
         </FileListViewer>
       )}
       <InputTxtWrapper hasValue={!!contents}>

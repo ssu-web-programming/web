@@ -14,13 +14,15 @@ import { initConfirm } from '../store/slices/confirm';
 import { initComplete } from '../store/slices/initFlagSlice';
 import { setPageStatus } from '../store/slices/nova/pageStatusSlice';
 import { setRecognizedVoice } from '../store/slices/recognizedVoice';
-import { selectNovaTab, selectTabSlice } from '../store/slices/tabSlice';
+import { selectNovaTab, selectTabSlice, setCreating } from '../store/slices/tabSlice';
 import { activeToast } from '../store/slices/toastSlice';
 import { updateT2ICurItemIndex, updateT2ICurListId } from '../store/slices/txt2imgHistory';
 import {
   removeCurrentFile,
+  removeLoadingFile,
   setCurrentFile,
   setDriveFiles,
+  setLoadingFile,
   setLocalFiles
 } from '../store/slices/uploadFiles';
 import { AppDispatch, RootState, useAppDispatch, useAppSelector } from '../store/store';
@@ -347,11 +349,14 @@ export const useInitBridgeListener = () => {
             break;
           }
           case 'finishUploadFile': {
-            dispatch(setPageStatus({ tab: selectedNovaTab, status: 'progress' }));
-            const currentFile = await getFileInfo(body.fileId);
-            dispatch(setDriveFiles([currentFile]));
-            dispatch(removeCurrentFile(currentFile));
             dispatch(setPageStatus({ tab: selectedNovaTab, status: 'home' }));
+            dispatch(setLoadingFile({ id: body.fileId }));
+            const currentFile = await getFileInfo(body.fileId);
+            dispatch(removeLoadingFile());
+
+            dispatch(setDriveFiles([currentFile]));
+            dispatch(removeCurrentFile());
+            dispatch(setCreating('none'));
             break;
           }
           case 'showToast': {

@@ -8,8 +8,14 @@ import ico_logo_po from '../../img/ico_logo_po.svg';
 import ico_mobile from '../../img/ico_mobile.svg';
 import ico_pc from '../../img/ico_pc.svg';
 import { setPageStatus } from '../../store/slices/nova/pageStatusSlice';
-import { selectTabSlice } from '../../store/slices/tabSlice';
-import { getCurrentFile, removeCurrentFile, setDriveFiles } from '../../store/slices/uploadFiles';
+import { selectTabSlice, setCreating } from '../../store/slices/tabSlice';
+import {
+  getCurrentFile,
+  removeCurrentFile,
+  removeLoadingFile,
+  setDriveFiles,
+  setLoadingFile
+} from '../../store/slices/uploadFiles';
 import { userInfoSelector } from '../../store/slices/userInfo';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import Bridge, { ClientType, getPlatform } from '../../util/bridge';
@@ -142,6 +148,7 @@ export const FileUploader = (props: FileUploaderProps) => {
       setUploadTarget(target);
     }
 
+    dispatch(setCreating('NOVA'));
     const uploadLimit = calcAvailableFileCnt();
     if (uploadLimit === 0) {
       setIsOpen(false);
@@ -151,7 +158,9 @@ export const FileUploader = (props: FileUploaderProps) => {
         onOk: { text: t('Nova.Confirm.NewChat.StartNewChat'), callback: chatNova.newChat },
         onCancel: {
           text: t('Cancel'),
-          callback: () => {}
+          callback: () => {
+            dispatch(setCreating('none'));
+          }
         }
       });
       return;
@@ -163,16 +172,20 @@ export const FileUploader = (props: FileUploaderProps) => {
         msg: t('Nova.Alert.UnopenableDocError', { max: getAvailableFileCnt() })!,
         onOk: {
           text: t('Confirm'),
-          callback: () => {}
+          callback: () => {
+            dispatch(setCreating('none'));
+          }
         }
       });
     } else if (currentFile.type === 'drive') {
-      dispatch(setPageStatus({ tab: selectedNovaTab, status: 'progress' }));
-
-      const list = await getFileList({ target: target, fileId: currentFile.id });
       if (currentFile.isSaved) {
-        setDriveFiles(list);
+        dispatch(setLoadingFile({ id: currentFile.id }));
+        const list = await getFileList({ target: target, fileId: currentFile.id });
+        dispatch(removeLoadingFile());
+
+        dispatch(setDriveFiles(list));
         dispatch(removeCurrentFile(list[0]));
+        dispatch(setCreating('none'));
       } else {
         await confirm({
           title: '',
@@ -180,6 +193,7 @@ export const FileUploader = (props: FileUploaderProps) => {
           onOk: {
             text: t('Nova.Confirm.NotSavedFile.Ok'),
             callback: () => {
+              dispatch(setPageStatus({ tab: selectedNovaTab, status: 'progress' }));
               Bridge.callBridgeApi('uploadFile');
             }
           },
@@ -196,6 +210,7 @@ export const FileUploader = (props: FileUploaderProps) => {
         onOk: {
           text: t('Nova.Confirm.UploadFile.Ok'),
           callback: () => {
+            dispatch(setPageStatus({ tab: selectedNovaTab, status: 'progress' }));
             Bridge.callBridgeApi('uploadFile');
           }
         },
@@ -205,8 +220,6 @@ export const FileUploader = (props: FileUploaderProps) => {
         }
       });
     }
-
-    dispatch(setPageStatus({ tab: selectedNovaTab, status: 'home' }));
   };
 
   return (

@@ -78,8 +78,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   textarea, button, pre {
-    font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    font-family: 'Pretendard', sans-serif;
   }
 
   pre {
