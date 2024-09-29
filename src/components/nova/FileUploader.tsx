@@ -48,7 +48,7 @@ export const FileUploader = (props: FileUploaderProps) => {
   const chatNova = useChatNova();
   const { getAvailableFileCnt, calcAvailableFileCnt } = useUserInfoUtils();
   const currentFile = useAppSelector(getCurrentFile);
-  const { getFileList } = useManageFile();
+  const { getFileInfo } = useManageFile();
 
   const [isOpen, setIsOpen] = useState(false);
   const [uploadTarget, setUploadTarget] = useState<string>('');
@@ -180,11 +180,11 @@ export const FileUploader = (props: FileUploaderProps) => {
     } else if (currentFile.type === 'drive') {
       if (currentFile.isSaved) {
         dispatch(setLoadingFile({ id: currentFile.id }));
-        const list = await getFileList({ target: target, fileId: currentFile.id });
+        const curFile = await getFileInfo(currentFile.id);
         dispatch(removeLoadingFile());
 
-        dispatch(setDriveFiles(list));
-        dispatch(removeCurrentFile(list[0]));
+        dispatch(setDriveFiles([curFile]));
+        dispatch(removeCurrentFile());
         dispatch(setCreating('none'));
       } else {
         await confirm({
