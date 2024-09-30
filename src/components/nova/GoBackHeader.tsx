@@ -27,7 +27,6 @@ const Wrap = styled.div`
     font-weight: 500;
     line-height: 21px;
     color: #454c53;
-    margin-bottom: 2px;
   }
 
   svg {

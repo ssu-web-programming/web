@@ -181,6 +181,18 @@ export default function Expand() {
   }, [imageObj]);
 
   useEffect(() => {
+    const handleResize = () => {
+      handleCanvasSizeChange(selectedRatio);
+      calculateImageBounds();
+    };
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [selectedRatio]);
+
+  useEffect(() => {
     handleCanvasSizeChange('square');
   }, [imageObj]);
 
@@ -211,59 +223,53 @@ export default function Expand() {
   };
 
   const handleCanvasSizeChange = (ratio: 'square' | 'horizontal' | 'vertical') => {
-    let width = window.innerWidth - 32;
-    let height;
-    let selectedBoxWidth, selectedBoxHeight;
+    let actualCanvasWidth = window.innerWidth - 32;
+    let actualCanvasHeight;
+    let virtualBoxWidth, virtualBoxHeight;
 
     switch (ratio) {
       case 'square':
-        height = width;
-        selectedBoxWidth = 2048;
-        selectedBoxHeight = 2048;
+        actualCanvasHeight = actualCanvasWidth;
+        virtualBoxWidth = 2048;
+        virtualBoxHeight = 2048;
         break;
       case 'horizontal':
-        height = (width / 16) * 9;
-        selectedBoxWidth = 2048;
-        selectedBoxHeight = 1152;
+        actualCanvasHeight = (actualCanvasWidth / 16) * 9;
+        virtualBoxWidth = 2048;
+        virtualBoxHeight = 1152;
         break;
       case 'vertical':
-        height = width;
-        width = (height * 9) / 16;
-        selectedBoxWidth = 1152;
-        selectedBoxHeight = 2048;
+        actualCanvasHeight = actualCanvasWidth;
+        actualCanvasWidth = (actualCanvasHeight * 9) / 16;
+        virtualBoxWidth = 1152;
+        virtualBoxHeight = 2048;
         break;
       default:
-        height = width;
-        selectedBoxWidth = 2048;
-        selectedBoxHeight = 2048;
+        actualCanvasHeight = actualCanvasWidth;
+        virtualBoxWidth = 2048;
+        virtualBoxHeight = 2048;
     }
 
-    setCanvasSize({ width, height });
+    setCanvasSize({ width: actualCanvasWidth, height: actualCanvasHeight });
     setSelectedRatio(ratio);
 
-    setScaleRatio({
-      widthRatio: selectedBoxWidth / width,
-      heightRatio: selectedBoxHeight / height
-    });
-
-    setCanvasDiff({ top: 0, bottom: 0, left: 0, right: 0 });
+    const widthScale = actualCanvasWidth / virtualBoxWidth;
+    const heightScale = actualCanvasHeight / virtualBoxHeight;
 
     if (imageRef.current && imageObj) {
       const imageNode = imageRef.current;
       const { naturalWidth: imageWidth, naturalHeight: imageHeight } = imageObj;
 
-      const scale = Math.min(width / imageWidth, height / imageHeight);
+      const scaledImageWidth = imageWidth * widthScale;
+      const scaledImageHeight = imageHeight * heightScale;
 
-      const scaledImageWidth = imageWidth * scale;
-      const scaledImageHeight = imageHeight * scale;
-
-      const xPos = (width - scaledImageWidth) / 2;
-      const yPos = (height - scaledImageHeight) / 2;
+      const xPos = (actualCanvasWidth - scaledImageWidth) / 2;
+      const yPos = (actualCanvasHeight - scaledImageHeight) / 2;
 
       imageNode.width(scaledImageWidth);
       imageNode.height(scaledImageHeight);
-      imageNode.scale({ x: 1, y: 1 });
       imageNode.position({ x: xPos, y: yPos });
+      imageNode.scale({ x: 1, y: 1 });
       imageNode.rotation(0);
 
       stageRef.current?.batchDraw();
