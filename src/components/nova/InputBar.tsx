@@ -22,11 +22,12 @@ import { NovaChatType } from 'store/slices/nova/novaHistorySlice';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import styled, { css } from 'styled-components';
 import { sliceFileName } from 'util/common';
-import LoadingSpinner from '../../img/spinner.webp';
 
 import { getValidExt, SUPPORT_DOCUMENT_TYPE } from '../../constants/fileTypes';
 import { ReactComponent as DocsPlusIcon } from '../../img/ico_upload_docs_plus.svg';
 import { ReactComponent as ImagePlusIcon } from '../../img/ico_upload_img_plus.svg';
+import LoadingSpinner from '../../img/spinner.webp';
+import { selectTabSlice } from '../../store/slices/tabSlice';
 import {
   DriveFileInfo,
   getDriveFiles,
@@ -41,7 +42,6 @@ import {
 } from '../../store/slices/uploadFiles';
 
 import { FileUploader } from './FileUploader';
-import { selectTabSlice } from '../../store/slices/tabSlice';
 
 export const flexCenter = css`
   display: flex;
@@ -257,8 +257,8 @@ export default function InputBar(props: InputBarProps) {
       targetFiles.length < 1
         ? ''
         : targetFiles[0].type.split('/')[0].includes('image')
-        ? 'image'
-        : 'document';
+          ? 'image'
+          : 'document';
     await props.onSubmit({
       input: contents,
       files: localFiles.length > 0 ? localFiles : driveFiles.length > 0 ? driveFiles : [],

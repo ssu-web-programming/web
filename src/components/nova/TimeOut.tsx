@@ -3,6 +3,7 @@ import CreditColorIcon from 'img/ico_credit_color_outline.svg';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
+import { ReactComponent as BangIcon } from '../../img/bang_circle.svg';
 import { selectPageResult } from '../../store/slices/nova/pageStatusSlice';
 import { NOVA_TAB_TYPE, selectTabSlice } from '../../store/slices/tabSlice';
 import { useAppSelector } from '../../store/store';
@@ -12,7 +13,6 @@ import { useExpandImage } from '../hooks/nova/useExpandImage';
 import { useImprovedResolution } from '../hooks/nova/useImprovedResolution';
 import { useRemakeImage } from '../hooks/nova/useRemakeImage';
 import { useRemoveBackground } from '../hooks/nova/useRemoveBackground';
-import { ReactComponent as BangIcon } from '../../img/bang_circle.svg';
 
 import GoBackHeader from './GoBackHeader';
 

@@ -4,11 +4,11 @@ import styled from 'styled-components';
 import { ClientType, getPlatform } from 'util/bridge';
 
 import { getValidExt } from '../constants/fileTypes';
+import { selectTabSlice } from '../store/slices/tabSlice';
+import { useAppSelector } from '../store/store';
 
 import { getAccept } from './nova/FileUploader';
 import { useConfirm } from './Confirm';
-import { useAppSelector } from '../store/store';
-import { selectTabSlice } from '../store/slices/tabSlice';
 
 const FileButtonBase = styled.button`
   width: 100%;

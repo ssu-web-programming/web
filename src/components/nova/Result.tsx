@@ -6,6 +6,7 @@ import styled from 'styled-components';
 
 import CreditColorIcon from '../../img/ico_credit_color_outline.svg';
 import CheckIcon from '../../img/nova/check_purple.png';
+import { ClientStatusType } from '../../pages/Nova/Nova';
 import { selectPageResult } from '../../store/slices/nova/pageStatusSlice';
 import { NOVA_TAB_TYPE, selectTabSlice } from '../../store/slices/tabSlice';
 import { activeToast } from '../../store/slices/toastSlice';
@@ -17,7 +18,6 @@ import { useInsertDocsHandler } from '../hooks/nova/useInsertDocsHandler';
 import { useRemakeImage } from '../hooks/nova/useRemakeImage';
 
 import GoBackHeader from './GoBackHeader';
-import { ClientStatusType } from '../../pages/Nova/Nova';
 
 const Wrap = styled.div`
   width: 100%;

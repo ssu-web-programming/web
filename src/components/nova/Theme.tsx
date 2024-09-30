@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
+import { ReactComponent as CheckIcon } from '../../img/ico_check.svg';
 import Composition from '../../img/nova/changeStyle/change_style_composition.png';
 import Mosaic from '../../img/nova/changeStyle/change_style_mosaic.png';
 import Scream from '../../img/nova/changeStyle/change_style_scream.png';
@@ -11,7 +12,6 @@ import { selectPageResult } from '../../store/slices/nova/pageStatusSlice';
 import { NOVA_TAB_TYPE, selectTabSlice } from '../../store/slices/tabSlice';
 import { useAppSelector } from '../../store/store';
 import { useChangeStyle } from '../hooks/nova/useChangeStyle';
-import { ReactComponent as CheckIcon } from '../../img/ico_check.svg';
 
 import GoBackHeader from './GoBackHeader';
 

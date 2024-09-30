@@ -10,13 +10,13 @@ import {
   MIN_FILE_UPLOAD_SIZE_KB,
   SUPPORT_DOCUMENT_TYPE
 } from '../../constants/fileTypes';
+import { setPageStatus } from '../../store/slices/nova/pageStatusSlice';
 import { selectTabSlice } from '../../store/slices/tabSlice';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { useConfirm } from '../Confirm';
 
 import useManageFile from './nova/useManageFile';
 import useUserInfoUtils from './useUserInfoUtils';
-import { setPageStatus } from '../../store/slices/nova/pageStatusSlice';
 
 export default function useFileDrop() {
   const { t } = useTranslation();

@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 
+import { selectTabSlice } from '../store/slices/tabSlice';
+import { getLocalFiles } from '../store/slices/uploadFiles';
+import { useAppSelector } from '../store/store';
 import Bridge from '../util/bridge';
 
 import Icon from './Icon';
-import { useAppSelector } from '../store/store';
-import { selectTabSlice } from '../store/slices/tabSlice';
-import { getLocalFiles } from '../store/slices/uploadFiles';
 
 export type TooltipType = 'selectable' | 'normal';
 export type TooltipPlacement = 'top-start' | 'top-end' | 'bottom-start' | 'bottom-end';

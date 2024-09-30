@@ -9,10 +9,10 @@ import expandImgIcon from '../../img/nova/imgSample/image_expand_sample.png';
 import remakeImgIcon from '../../img/nova/imgSample/image_remake_sample.png';
 import changeStyleIcon from '../../img/nova/imgSample/image_style_sample.png';
 import improvedResIcon from '../../img/nova/imgSample/image_upscaling_sample.png';
+import { announceInfoSelector } from '../../store/slices/nova/announceSlice';
 import { NOVA_TAB_TYPE, selectTabSlice } from '../../store/slices/tabSlice';
 import { useAppSelector } from '../../store/store';
 import Announcement from '../Announcement';
-import { announceInfoSelector } from '../../store/slices/nova/announceSlice';
 
 const GuideWrapper = styled.div`
   width: 100%;

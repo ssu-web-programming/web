@@ -1,10 +1,10 @@
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { FileUpladState } from '../../constants/fileTypes';
-import Spinner from '../../img/nova/nova_spinner_2x.webp';
-import React from 'react';
 import BlurIcon from '../../img/nova/bg_blur_loading.png';
+import Spinner from '../../img/nova/nova_spinner_2x.webp';
 
 const FileUploadWrapper = styled.div`
   width: 100%;

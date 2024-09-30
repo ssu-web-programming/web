@@ -333,6 +333,7 @@ export const useInitBridgeListener = () => {
             break;
           }
           case 'openNOVA': {
+            console.log(body.inputText);
             dispatch(changePanel({ cmd, body: body.inputText || '' }));
             dispatch(setLocalFiles([]));
             dispatch(setDriveFiles([]));
