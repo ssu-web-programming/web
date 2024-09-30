@@ -122,7 +122,7 @@ export default function AIChat() {
       console.log('location.state: ', location.state);
       console.log('location.state.body: ', location.state.body);
       console.log('location.state.body?.inputText: ', location.state.body?.inputText);
-      setInputContents(location.state.body?.inputText);
+      setInputContents(location.state.body);
     }
   }, [location.state]);
 
