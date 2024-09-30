@@ -195,7 +195,6 @@ export default function Expand() {
 
     const boundingBox = imageNode.getClientRect();
 
-    // 거리 값만 저장하고, 스케일링된 값은 나중에 출력할 때 곱해서 표시
     setCanvasDiff({
       top: boundingBox.y,
       bottom: canvasSize.height - (boundingBox.y + boundingBox.height),
@@ -218,32 +217,30 @@ export default function Expand() {
 
     switch (ratio) {
       case 'square':
-        height = width; // 1:1 비율
+        height = width;
         selectedBoxWidth = 2048;
         selectedBoxHeight = 2048;
         break;
       case 'horizontal':
-        height = (width / 16) * 9; // 16:9 비율
+        height = (width / 16) * 9;
         selectedBoxWidth = 2048;
         selectedBoxHeight = 1152;
         break;
       case 'vertical':
         height = width;
-        width = (height * 9) / 16; // 9:16 비율
+        width = (height * 9) / 16;
         selectedBoxWidth = 1152;
         selectedBoxHeight = 2048;
         break;
       default:
-        height = width; // 기본 1:1 비율
+        height = width;
         selectedBoxWidth = 2048;
         selectedBoxHeight = 2048;
     }
 
-    // 캔버스 사이즈 및 선택된 비율 상태 업데이트
     setCanvasSize({ width, height });
     setSelectedRatio(ratio);
 
-    // 비율 계산 및 상태로 저장
     setScaleRatio({
       widthRatio: selectedBoxWidth / width,
       heightRatio: selectedBoxHeight / height
@@ -301,7 +298,6 @@ export default function Expand() {
                       anchorStroke="#6f3ad0"
                       anchorFill="#6f3ad0"
                       anchorStrokeWidth={2}
-                      enabledAnchors={['top-left', 'top-right', 'bottom-left', 'bottom-right']}
                     />
                   </Group>
                 )}

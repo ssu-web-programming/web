@@ -291,6 +291,7 @@ export const useInitBridgeListener = () => {
     } = thunkAPI.getState();
 
     const path = getPath(cmd as PanelOpenCmd);
+    console.log('creating: ', creating);
     if (creating === 'none') {
       if (cmd === `openAiTools`) {
         if (body && body !== '') {
