@@ -118,7 +118,10 @@ export default function AIChat() {
 
   useEffect(() => {
     if (location.state) {
-      console.log(location.state.body?.inputText);
+      console.log('location: ', location);
+      console.log('location.state: ', location.state);
+      console.log('location.state.body: ', location.state.body);
+      console.log('location.state.body?.inputText: ', location.state.body?.inputText);
       setInputContents(location.state.body?.inputText);
     }
   }, [location.state]);

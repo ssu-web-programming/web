@@ -303,6 +303,8 @@ export const useInitBridgeListener = () => {
           thunkAPI.dispatch(updateT2ICurItemIndex(null));
         }
       }
+      console.log('location: ', `${path}${location.search}`);
+      console.log('body: ', body);
       navigate(`${path}${location.search}`, {
         state: { body },
         replace: true
@@ -333,6 +335,7 @@ export const useInitBridgeListener = () => {
             break;
           }
           case 'openNOVA': {
+            console.log('body: ', body);
             dispatch(changePanel({ cmd, body }));
             dispatch(setLocalFiles([]));
             dispatch(setDriveFiles([]));
