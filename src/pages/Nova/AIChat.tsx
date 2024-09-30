@@ -117,6 +117,8 @@ export default function AIChat() {
   }, [expiredNOVA, t, confirm, chatNova]);
 
   useEffect(() => {
+    console.log(location.state);
+    console.log(location.state?.text);
     if (location.state?.text) {
       setInputContents(location.state.text);
     }
