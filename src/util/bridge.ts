@@ -291,7 +291,6 @@ export const useInitBridgeListener = () => {
     } = thunkAPI.getState();
 
     const path = getPath(cmd as PanelOpenCmd);
-    console.log('creating: ', creating);
     if (creating === 'none') {
       if (cmd === `openAiTools`) {
         if (body && body !== '') {
@@ -334,7 +333,6 @@ export const useInitBridgeListener = () => {
             break;
           }
           case 'openNOVA': {
-            console.log(body.inputText);
             dispatch(changePanel({ cmd, body: body.inputText || '' }));
             dispatch(setLocalFiles([]));
             dispatch(setDriveFiles([]));
