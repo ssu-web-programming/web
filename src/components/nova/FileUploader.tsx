@@ -194,7 +194,7 @@ export const FileUploader = (props: FileUploaderProps) => {
         await confirm({
           title: '',
           msg:
-            platform === ClientType.web
+            platform === ClientType.web || platform === 'unknown'
               ? t('Nova.Confirm.NotSavedFileInWeb.Msg')
               : t('Nova.Confirm.NotSavedFile.Msg'),
           onOk: {
