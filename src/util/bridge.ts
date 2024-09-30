@@ -14,7 +14,12 @@ import { initConfirm } from '../store/slices/confirm';
 import { initComplete } from '../store/slices/initFlagSlice';
 import { setPageStatus } from '../store/slices/nova/pageStatusSlice';
 import { setRecognizedVoice } from '../store/slices/recognizedVoice';
-import { selectNovaTab, selectTabSlice, setCreating } from '../store/slices/tabSlice';
+import {
+  NOVA_TAB_TYPE,
+  selectNovaTab,
+  selectTabSlice,
+  setCreating
+} from '../store/slices/tabSlice';
 import { activeToast } from '../store/slices/toastSlice';
 import { updateT2ICurItemIndex, updateT2ICurListId } from '../store/slices/txt2imgHistory';
 import {
@@ -329,10 +334,10 @@ export const useInitBridgeListener = () => {
           }
           case 'openNOVA': {
             dispatch(changePanel({ cmd, body: body.inputText || '' }));
-            if (body && body.openTab != '') {
-              dispatch(selectNovaTab(body.openTab));
-              dispatch(setLocalFiles([]));
-              dispatch(setDriveFiles([]));
+            dispatch(setLocalFiles([]));
+            dispatch(setDriveFiles([]));
+            if (body.openTab in NOVA_TAB_TYPE) {
+              selectNovaTab(NOVA_TAB_TYPE[body.openTab as keyof typeof NOVA_TAB_TYPE]);
             }
             break;
           }
