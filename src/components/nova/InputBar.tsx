@@ -311,7 +311,7 @@ export default function InputBar(props: InputBarProps) {
         <FileListViewer onWheel={handleWheel}>
           <FileItem>
             <Icon size={21} iconSrc={LoadingSpinner} />
-            <span className="uploading">업로드 중..</span>
+            <span className="uploading">{t(`Nova.aiChat.Uploading`)}</span>
           </FileItem>
         </FileListViewer>
       )}
