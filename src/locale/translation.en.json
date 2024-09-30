@@ -514,7 +514,22 @@
         "Ok": "Move"
       },
       "OverMaxFileUploadCnt": "You can attach up to {{max}} files in one conversation. Start a new conversation to continue asking questions!",
-      "OverMaxFileUploadCntOnce": "You can attach up to {{max}} files only. Please reselect the files."
+      "OverMaxFileUploadCntOnce": "You can attach up to {{max}} files only. Please reselect the files.",
+      "NotSavedFile": {
+        "Msg": "The changes have not been saved yet. If not saved, the changes will not be reflected in NOVA's response.",
+        "Ok": "Save now",
+        "Cancel": "Proceed without changes"
+      },
+      "NotSavedFileInWeb": {
+        "Msg": "The document needs to be saved before analysis can proceed. Would you like to save now?",
+        "Ok": "Save now",
+        "Cancel": "Proceed without changes"
+      },
+      "UploadFile": {
+        "Msg": "To proceed without changes and analyze the document, it must be saved on Polaris Drive. Would you like to save now?",
+        "Ok": "Save now",
+        "Cancel": "Cancel"
+      }
     },
     "PoDrive": {
       "Desc": "Please select the desired file.",

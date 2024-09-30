@@ -46,6 +46,7 @@ export const FileUploader = (props: FileUploaderProps) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const confirm = useConfirm();
+  const platform = getPlatform();
   const chatNova = useChatNova();
   const { getAvailableFileCnt, calcAvailableFileCnt } = useUserInfoUtils();
   const currentFile = useAppSelector(getCurrentFile);
@@ -192,7 +193,10 @@ export const FileUploader = (props: FileUploaderProps) => {
       } else {
         await confirm({
           title: '',
-          msg: t('Nova.Confirm.NotSavedFile.Msg'),
+          msg:
+            platform === ClientType.web
+              ? t('Nova.Confirm.NotSavedFileInWeb.Msg')
+              : t('Nova.Confirm.NotSavedFile.Msg'),
           onOk: {
             text: t('Nova.Confirm.NotSavedFile.Ok'),
             callback: () => {

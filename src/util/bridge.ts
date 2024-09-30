@@ -303,8 +303,6 @@ export const useInitBridgeListener = () => {
           thunkAPI.dispatch(updateT2ICurItemIndex(null));
         }
       }
-      console.log('location: ', `${path}${location.search}`);
-      console.log('body: ', body);
       navigate(`${path}${location.search}`, {
         state: { body },
         replace: true

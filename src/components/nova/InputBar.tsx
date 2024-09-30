@@ -33,9 +33,7 @@ import {
   getDriveFiles,
   getLoadingFile,
   getLocalFiles,
-  removeCurrentFile,
   removeDriveFile,
-  removeLoadingFile,
   removeLocalFile,
   setDriveFiles,
   setLocalFiles
@@ -216,11 +214,6 @@ export default function InputBar(props: InputBarProps) {
 
   const handleRemoveDriveFile = (file: DriveFileInfo) => {
     dispatch(removeDriveFile(file));
-  };
-
-  const handleRemoveLodingFile = () => {
-    dispatch(removeLoadingFile());
-    dispatch(removeCurrentFile());
   };
 
   const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
