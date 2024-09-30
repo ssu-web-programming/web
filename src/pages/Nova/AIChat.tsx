@@ -122,7 +122,7 @@ export default function AIChat() {
     if (location.state?.text) {
       setInputContents(location.state.text);
     }
-  }, [location.state?.text]);
+  }, [location.state]);
 
   useEffect(() => {
     const handleOrientationChange = () => {
