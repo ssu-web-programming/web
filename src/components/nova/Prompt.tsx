@@ -86,7 +86,7 @@ const ButtonWrap = styled.div`
   -webkit-tap-highlight-color: transparent;
 `;
 
-const ExamButton = styled.button`
+const ExamButton = styled.button<{ isActive: boolean }>`
   width: fit-content;
   height: 100%;
   display: flex;
@@ -94,8 +94,12 @@ const ExamButton = styled.button`
   justify-content: center;
   padding: 0 12px;
   border-radius: 4px;
-  background-color: #f2f4f6;
-  cursor: pointer;
+  background-color: ${(props) => (props.isActive ? '#f2f4f6' : '#f2f4f6')};
+  cursor: ${(props) => (props.isActive ? 'pointer' : 'default')};
+
+  :hover {
+    background-color: ${(props) => (props.isActive ? '#c9cdd2' : '#f2f4f6')};
+  }
 
   span {
     font-size: 12px;
@@ -111,10 +115,14 @@ const CreatingButton = styled.div<{ isActive: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: ${(props) => (props.isActive ? '#6f3ad0' : '#f7f8f9')};
+  background: ${(props) => (props.isActive ? '#6f3ad0' : '#f2f4f6')};
   border-radius: 8px;
   cursor: ${(props) => (props.isActive ? 'pointer' : 'default')};
   -webkit-tap-highlight-color: transparent;
+
+  :hover {
+    background-color: ${(props) => (props.isActive ? '#511bb2' : '#f2f4f6')};
+  }
 
   span {
     font-size: 16px;
@@ -174,7 +182,7 @@ export default function Prompt() {
             value={text}
           />
           <ButtonWrap>
-            <ExamButton onClick={handleExamButtonClick}>
+            <ExamButton isActive={!isEnabled} onClick={handleExamButtonClick}>
               <span>{t(`Nova.Prompt.ExamButton`)}</span>
             </ExamButton>
           </ButtonWrap>
