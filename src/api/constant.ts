@@ -27,10 +27,6 @@ export const PO_DRIVE_CONVERT_STATUS = '/api/v2/nova/podrive/convert/status';
 export const PO_DRIVE_CONVERT_DOWNLOAD = '/api/v2/nova/podrive/convert/download';
 export const PO_DRIVE_DOC_OPEN_STATUS = '/api/v2/nova/podrive/document-openstatus';
 
-export const PROMOTION_USER_INFO = '/api/v2/nova/promotion/get-userinfo';
-export const PROMOTION_OFFER = '/api/v2/nova/promotion/offer';
-export const PROMOTION_AGREE = '/api/v2/nova/promotion/agree';
-
 export const NOVA_REMOVE_BACKGROUND = '/api/v2/nova/image/remove-background';
 export const NOVA_CHANGE_BACKGROUND = '/api/v2/nova/image/replace-background';
 export const NOVA_REMAKE_IMAGE = '/api/v2/nova/image/reimagine';

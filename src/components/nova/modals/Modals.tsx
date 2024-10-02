@@ -1,4 +1,3 @@
-import { lazy } from 'react';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 
@@ -7,25 +6,16 @@ import { modalSelector } from '../../../store/slices/nova/novaModalsSlice';
 import { useAppSelector } from '../../../store/store';
 import useModal from '../../hooks/nova/useModal';
 
-const MODAL_POMPONENTS = {
-  missionComplete: lazy(() => import('./MissionCompleteModal')),
-  prizeCredit: lazy(() => import('./PrizeCreditModal')),
-  notEnoughHeart: lazy(() => import('./NotEnoughHeartModal')),
-  nextChance: lazy(() => import('./NextChanceModal')),
-  prize: lazy(() => import('./PrizeModal')),
-  luckyDrawComplete: lazy(() => import('./LuckyDrawCompleteModal'))
-};
+const MODAL_POMPONENTS = {};
 
 const Modals = () => {
   const modalList = useAppSelector(modalSelector);
   const { closeModal } = useModal();
   const renderModal = modalList.map(({ type, props }, index) => {
-    const ModalComponent = MODAL_POMPONENTS[type];
     return (
       <Overlay key={type || index}>
         <ModalWrap>
           <Close src={CloseIcon} alt="close" onClick={closeModal} />
-          <ModalComponent key={type} {...props} />
         </ModalWrap>
       </Overlay>
     );

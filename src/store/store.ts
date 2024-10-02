@@ -18,7 +18,6 @@ import announceInfoSlice from './slices/nova/announceSlice';
 import novaHistory from './slices/nova/novaHistorySlice';
 import novaModal from './slices/nova/novaModalsSlice';
 import pageStatusSlice from './slices/nova/pageStatusSlice';
-import promotionUserInfo from './slices/nova/promotionUserInfo';
 import recFunction from './slices/recFuncSlice';
 import recognizedVoice from './slices/recognizedVoice';
 import tab, { shareAnswerState } from './slices/tabSlice';
@@ -50,7 +49,6 @@ const store = configureStore({
     novaHistory,
     novaModal,
     userInfo,
-    promotionUserInfo,
     creditInfo,
     uploadFiles,
     pageStatusSlice,

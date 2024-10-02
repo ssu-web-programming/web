@@ -1,10 +1,5 @@
 import { useCallback } from 'react';
-import {
-  AI_CREDIT_INFO,
-  NOVA_GET_EXPIRED_TIME,
-  NOVA_GET_USER_INFO_AGREEMENT,
-  PROMOTION_USER_INFO
-} from 'api/constant';
+import { AI_CREDIT_INFO, NOVA_GET_EXPIRED_TIME, NOVA_GET_USER_INFO_AGREEMENT } from 'api/constant';
 import { ERR_INVALID_SESSION } from 'error/error';
 import { lang } from 'locale';
 import { setNovaExpireTime } from 'store/slices/appState';
@@ -12,8 +7,6 @@ import { setCreditInfo } from 'store/slices/creditInfo';
 import { setNovaAgreement, setUserInfo } from 'store/slices/userInfo';
 import { useAppDispatch } from 'store/store';
 import Bridge from 'util/bridge';
-
-import { IEventType, setPromotionUserInfo } from '../../store/slices/nova/promotionUserInfo';
 
 export default function useInitApp() {
   const dispatch = useAppDispatch();
@@ -85,35 +78,6 @@ export default function useInitApp() {
     [dispatch]
   );
 
-  const initPromotionUserInfo = useCallback(
-    async (headers: HeadersInit) => {
-      try {
-        const eventType: IEventType = IEventType.AI_NOVA_LUCKY_EVENT;
-        const res = await fetch(PROMOTION_USER_INFO, {
-          headers: {
-            ...headers,
-            'content-type': 'application/json'
-          },
-          body: JSON.stringify({
-            type: eventType
-          }),
-          method: 'POST'
-        });
-
-        const {
-          success,
-          data: { accurePromotionUser }
-        } = await res.json();
-        if (success) {
-          dispatch(setPromotionUserInfo(accurePromotionUser));
-        }
-      } catch (err) {
-        /* empty */
-      }
-    },
-    [dispatch]
-  );
-
   return async () => {
     const resSession = await Bridge.checkSession('app init');
     if (!resSession || !resSession.success) {
@@ -137,7 +101,6 @@ export default function useInitApp() {
 
     initUserInfo(headers);
     initNovaExpireTime(headers);
-    initPromotionUserInfo(headers);
     initCreditInfo(headers);
 
     dispatch(setUserInfo(resSession.userInfo));
