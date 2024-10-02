@@ -144,7 +144,6 @@ export const FileUploader = (props: FileUploaderProps) => {
       setUploadTarget(target);
     }
 
-    dispatch(setCreating('NOVA'));
     const uploadLimit = calcAvailableFileCnt();
     if (uploadLimit === 0) {
       setIsOpen(false);
@@ -175,6 +174,7 @@ export const FileUploader = (props: FileUploaderProps) => {
       });
     } else if (currentFile.type === 'drive') {
       if (currentFile.isSaved) {
+        dispatch(setCreating('NOVA'));
         dispatch(setLocalFiles([]));
         dispatch(setDriveFiles([]));
 
@@ -201,9 +201,7 @@ export const FileUploader = (props: FileUploaderProps) => {
           },
           onCancel: {
             text: t('Cancel'),
-            callback: () => {
-              dispatch(setCreating('none'));
-            }
+            callback: () => {}
           }
         });
       }
