@@ -183,6 +183,7 @@ export const FileUploader = (props: FileUploaderProps) => {
       if (currentFile.isSaved) {
         dispatch(setLocalFiles([]));
         dispatch(setDriveFiles([]));
+
         dispatch(setLoadingFile({ id: currentFile.id }));
         const curFile = await getFileInfo(currentFile.id);
         dispatch(removeLoadingFile());
@@ -206,7 +207,9 @@ export const FileUploader = (props: FileUploaderProps) => {
           },
           onCancel: {
             text: t('Cancel'),
-            callback: () => {}
+            callback: () => {
+              dispatch(setCreating('none'));
+            }
           }
         });
       }
