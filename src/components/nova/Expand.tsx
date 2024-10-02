@@ -97,10 +97,6 @@ const RatioButton = styled.div<{ selected: boolean }>`
   border-radius: 8px;
   box-sizing: border-box;
 
-  svg {
-    fill: ${({ selected }) => (selected ? '#ffffff' : '#6f3ad0')};
-  }
-
   span {
     font-size: 14px;
     font-weight: 500;
@@ -139,31 +135,29 @@ const ExpandButton = styled.div`
   }
 `;
 
+const SIZES = {
+  square: { width: 2048, height: 2048 },
+  horizontal: { width: 2048, height: 1152 },
+  vertical: { width: 1152, height: 2048 }
+};
+
 export default function Expand() {
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
   const result = useAppSelector(selectPageResult(selectedNovaTab));
   const { handleExpandImage } = useExpandImage();
 
   const [imageObj, setImageObj] = useState<HTMLImageElement | null>(null);
-  const [canvasSize, setCanvasSize] = useState({
-    width: 0,
-    height: 0
-  });
   const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
-  const [canvasDiff, setCanvasDiff] = useState({
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0
-  });
+  const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 });
+  const [canvasDiff, setCanvasDiff] = useState({ top: 0, bottom: 0, left: 0, right: 0 });
   const [scaleRatio, setScaleRatio] = useState({ widthRatio: 1, heightRatio: 1 });
+  const stageRef = useRef<Konva.Stage | null>(null);
+  const imageRef = useRef<Konva.Image | null>(null);
+  const imageTrRef = useRef<Konva.Transformer | null>(null);
 
   const [selectedRatio, setSelectedRatio] = useState<'square' | 'horizontal' | 'vertical'>(
     'square'
   );
-  const stageRef = useRef<Konva.Stage | null>(null);
-  const imageRef = useRef<Konva.Image | null>(null);
-  const imageTrRef = useRef<Konva.Transformer | null>(null);
 
   useEffect(() => {
     if (result) {
@@ -204,19 +198,21 @@ export default function Expand() {
     if (!stageRef.current || !imageRef.current || !imageObj) return;
 
     const imageNode = imageRef.current;
-
     const boundingBox = imageNode.getClientRect();
 
+    const widthRatio = canvasSize.width / SIZES[selectedRatio].width;
+    const heightRatio = canvasSize.height / SIZES[selectedRatio].height;
+
     setCanvasDiff({
-      top: boundingBox.y,
-      bottom: canvasSize.height - (boundingBox.y + boundingBox.height),
-      left: boundingBox.x,
-      right: canvasSize.width - (boundingBox.x + boundingBox.width)
+      top: boundingBox.y / heightRatio,
+      bottom: (canvasSize.height - (boundingBox.y + boundingBox.height)) / heightRatio,
+      left: boundingBox.x / widthRatio,
+      right: (canvasSize.width - (boundingBox.x + boundingBox.width)) / widthRatio
     });
 
     setImageSize({
-      width: boundingBox.width,
-      height: boundingBox.height
+      width: boundingBox.width / widthRatio,
+      height: boundingBox.height / heightRatio
     });
 
     stageRef.current?.batchDraw();
