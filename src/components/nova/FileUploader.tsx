@@ -139,12 +139,6 @@ export const FileUploader = (props: FileUploaderProps) => {
     return options;
   };
 
-  const handleOnClick = () => {
-    if (!isAgreed) {
-      setIsAgreed(true);
-    }
-  };
-
   const analysisCurDoc = async () => {
     if (isAgreed) {
       setUploadTarget(target);
@@ -249,8 +243,6 @@ export const FileUploader = (props: FileUploaderProps) => {
             accept={getAccept(accept)}
             handleOnChange={loadLocalFile}
             multiple
-            isAgreed={isAgreed}
-            handleOnClick={handleOnClick}
             ref={inputRef}>
             {children}
           </FileButton>

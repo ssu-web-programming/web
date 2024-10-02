@@ -16,18 +16,22 @@ import { useAppDispatch, useAppSelector } from '../../store/store';
 import { useConfirm } from '../Confirm';
 
 import useManageFile from './nova/useManageFile';
+import usePrivacyConsent from './nova/usePrivacyConsent';
 import useUserInfoUtils from './useUserInfoUtils';
 
 export default function useFileDrop() {
   const { t } = useTranslation();
   const confirm = useConfirm();
   const dispatch = useAppDispatch();
+  const { handleAgreement } = usePrivacyConsent();
   const { loadLocalFile } = useManageFile();
   const { getAvailableFileCnt, calcAvailableFileCnt } = useUserInfoUtils();
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
 
   const handleDrop = useCallback(
     async (acceptedFiles: File[], fileRejections: FileRejection[]) => {
+      if (!(await handleAgreement())) return;
+
       if (fileRejections.length > calcAvailableFileCnt()) {
         await confirm({
           title: '',

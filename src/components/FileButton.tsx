@@ -5,8 +5,10 @@ import { ClientType, getPlatform } from 'util/bridge';
 
 import { getValidExt } from '../constants/fileTypes';
 import { selectTabSlice } from '../store/slices/tabSlice';
+import { userInfoSelector } from '../store/slices/userInfo';
 import { useAppSelector } from '../store/store';
 
+import usePrivacyConsent from './hooks/nova/usePrivacyConsent';
 import { getAccept } from './nova/FileUploader';
 import { useConfirm } from './Confirm';
 
@@ -35,94 +37,20 @@ const PersonalInfoContents = styled.div`
 interface FileButtonProps extends React.ComponentPropsWithoutRef<'input'> {
   target: string;
   handleOnChange?: (files: File[]) => void;
-  isAgreed?: boolean;
-  handleOnClick: () => void;
 }
 
 const FileButton = forwardRef<HTMLInputElement, FileButtonProps>((props, ref) => {
   const { t } = useTranslation();
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
-  const { target, children, accept, handleOnChange, isAgreed, handleOnClick, ...otherProps } =
-    props;
+  const { target, children, accept, handleOnChange, ...otherProps } = props;
 
   const inputId = `__upload-local-file-${target}`;
   const confirm = useConfirm();
-
-  const Msg = () => {
-    const chatRetention = t('Nova.Confirm.PersonalInfo.ChatRetention');
-    const fileRetention = t('Nova.Confirm.PersonalInfo.FileRetention');
-
-    const msg1 = t('Nova.Confirm.PersonalInfo.Msg1');
-    const msg2 = t('Nova.Confirm.PersonalInfo.Msg2', {
-      chatRetention,
-      fileRetention
-    });
-    const msg3 = t('Nova.Confirm.PersonalInfo.Msg3');
-    const msg = `${msg1}\n\n${msg2}\n\n${msg3}`;
-    const splitMsg = msg.split('\n');
-
-    const boldText = (line: string) => {
-      const mappings = [
-        { key: chatRetention, highlight: <strong>{chatRetention}</strong> },
-        { key: fileRetention, highlight: <strong>{fileRetention}</strong> }
-      ];
-
-      for (const { key, highlight } of mappings) {
-        if (line.includes(key)) {
-          const [before, after] = line.split(key);
-
-          return (
-            <div>
-              {before}
-              {highlight}
-              {after}
-            </div>
-          );
-        }
-      }
-
-      return (
-        <div>
-          {line}
-          <br />
-        </div>
-      );
-    };
-
-    return (
-      <PersonalInfoContents>
-        {splitMsg.map((line, idx) => (
-          <div key={idx}>{boldText(line)}</div>
-        ))}
-      </PersonalInfoContents>
-    );
-  };
-
-  const handleAgreement = async () => {
-    if (selectedNovaTab !== 'aiChat') return;
-    if (isAgreed === true || isAgreed === undefined) return;
-
-    const isConfirmed = await confirm({
-      title: t(`Nova.Confirm.PersonalInfo.Title`)!,
-      msg: <Msg />,
-      onCancel: {
-        text: t(`Nova.Confirm.PersonalInfo.Cancel`),
-        callback: () => {}
-      },
-      onOk: {
-        text: t(`Nova.Confirm.PersonalInfo.Ok`),
-        callback: () => {}
-      },
-      direction: 'row'
-    });
-
-    if (isConfirmed) {
-      handleOnClick();
-    }
-  };
+  const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
+  const { handleAgreement } = usePrivacyConsent();
 
   return (
-    <FileButtonBase onClick={handleAgreement}>
+    <FileButtonBase onClick={() => handleAgreement()}>
       <Label disable={isAgreed === undefined}>{children}</Label>
       <input
         ref={ref}
