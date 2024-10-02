@@ -337,7 +337,7 @@ export const useInitBridgeListener = () => {
             dispatch(setLocalFiles([]));
             dispatch(setDriveFiles([]));
             if (body.openTab in NOVA_TAB_TYPE) {
-              selectNovaTab(NOVA_TAB_TYPE[body.openTab as keyof typeof NOVA_TAB_TYPE]);
+              dispatch(selectNovaTab(NOVA_TAB_TYPE[body.openTab as keyof typeof NOVA_TAB_TYPE]));
             }
             break;
           }
