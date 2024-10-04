@@ -24,7 +24,6 @@ import { getFileExtension } from '../../util/common';
 import { useConfirm } from '../Confirm';
 import FileButton from '../FileButton';
 import useManageFile from '../hooks/nova/useManageFile';
-import useNovaAgreement from '../hooks/nova/useNovaAgreement';
 import { useChatNova } from '../hooks/useChatNova';
 import useUserInfoUtils from '../hooks/useUserInfoUtils';
 import Tooltip from '../Tooltip';
@@ -54,7 +53,6 @@ export const FileUploader = (props: FileUploaderProps) => {
 
   const [isOpen, setIsOpen] = useState(false);
   const [uploadTarget, setUploadTarget] = useState<string>('');
-  const { setIsAgreed } = useNovaAgreement();
   const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
 

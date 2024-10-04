@@ -156,6 +156,8 @@ export const isPixelLimitExceeded = async (file: File, tab: NOVA_TAB_TYPE) => {
     .then(async (dimensions) => {
       const { width, height } = dimensions;
       const megapixels = (width * height) / 1000000;
+      console.log('luna width: ', width);
+      console.log('luna height: ', height);
 
       return (
         (tab === 'removeBG' && megapixels > 25) ||

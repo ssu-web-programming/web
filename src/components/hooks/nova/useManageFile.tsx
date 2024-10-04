@@ -113,6 +113,8 @@ export function useManageFile() {
       return;
     }
 
+    console.log('luna set local files: ', files);
+
     dispatch(setLocalFiles(files));
   };
 
