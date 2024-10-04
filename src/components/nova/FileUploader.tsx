@@ -11,7 +11,6 @@ import { setPageStatus } from '../../store/slices/nova/pageStatusSlice';
 import { selectTabSlice, setCreating } from '../../store/slices/tabSlice';
 import {
   getCurrentFile,
-  removeCurrentFile,
   removeLoadingFile,
   setDriveFiles,
   setLoadingFile,
@@ -181,7 +180,6 @@ export const FileUploader = (props: FileUploaderProps) => {
         dispatch(removeLoadingFile());
 
         dispatch(setDriveFiles([curFile]));
-        dispatch(removeCurrentFile());
         dispatch(setCreating('none'));
       } else {
         await confirm({

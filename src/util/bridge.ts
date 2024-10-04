@@ -23,7 +23,6 @@ import {
 import { activeToast } from '../store/slices/toastSlice';
 import { updateT2ICurItemIndex, updateT2ICurListId } from '../store/slices/txt2imgHistory';
 import {
-  removeCurrentFile,
   removeLoadingFile,
   setCurrentFile,
   setDriveFiles,
@@ -362,7 +361,6 @@ export const useInitBridgeListener = () => {
             dispatch(removeLoadingFile());
 
             dispatch(setDriveFiles([currentFile]));
-            dispatch(removeCurrentFile());
             dispatch(setCreating('none'));
             break;
           }
