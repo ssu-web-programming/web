@@ -198,7 +198,7 @@ export const FileUploader = (props: FileUploaderProps) => {
             }
           },
           onCancel: {
-            text: t('Cancel'),
+            text: t('Nova.Confirm.NotSavedFile.Cancel'),
             callback: () => {}
           }
         });
