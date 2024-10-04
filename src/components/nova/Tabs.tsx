@@ -77,6 +77,7 @@ const CustomNavButton = styled.button<{ isVisible: boolean }>`
   background: none;
   border: none;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 
   &.left {
     left: 0;
@@ -120,6 +121,8 @@ const Tabs = ({ tabs, activeTab, onChangeTab }: TabProps) => {
   const handleNextClick = () => {
     if (swiperRef.current) {
       swiperRef.current.slideNext(20);
+      setIsEnd(swiperRef.current.isEnd);
+      setIsBeginning(swiperRef.current.isBeginning);
     }
   };
 
