@@ -82,6 +82,37 @@ export function useManageFile() {
       }
     }
 
+    const supportedExtensions =
+      selectedNovaTab === 'aiChat'
+        ? [
+            ...SUPPORT_DOCUMENT_TYPE.flatMap((type) => type.extensions),
+            ...getValidExt(selectedNovaTab).flatMap((type) => type.extensions)
+          ]
+        : [...getValidExt(selectedNovaTab).flatMap((type) => type.extensions)];
+
+    const invalidFiles = files.filter((file) => {
+      const fileExtension = `.${file.name.split('.').pop()?.toLowerCase()}`;
+      return !supportedExtensions.includes(fileExtension);
+    });
+
+    const support = supportedExtensions.join(', ');
+    if (invalidFiles.length > 0) {
+      await confirm({
+        title: '',
+        msg:
+          selectedNovaTab === 'aiChat'
+            ? t('Nova.Alert.CommonUnsupportFile')
+            : t(`Nova.Alert.CommonUnsupportImage`, { support }),
+        onOk: {
+          text: t('Confirm'),
+          callback: () => {
+            return;
+          }
+        }
+      });
+      return;
+    }
+
     dispatch(setLocalFiles(files));
   };
 

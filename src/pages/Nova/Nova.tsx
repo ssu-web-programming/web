@@ -1,5 +1,5 @@
 import React, { Suspense, useCallback, useEffect } from 'react';
-import { FileRejection, FileWithPath, useDropzone } from 'react-dropzone';
+import { FileWithPath, useDropzone } from 'react-dropzone';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { CustomScrollbar } from 'style/cssCommon';
@@ -10,10 +10,11 @@ import { useChangeBackground } from '../../components/hooks/nova/useChangeBackgr
 import { useChangeStyle } from '../../components/hooks/nova/useChangeStyle';
 import { useExpandImage } from '../../components/hooks/nova/useExpandImage';
 import { useImprovedResolution } from '../../components/hooks/nova/useImprovedResolution';
+import useManageFile from '../../components/hooks/nova/useManageFile';
 import useNovaAnnouncement from '../../components/hooks/nova/useNovaAnnouncement';
+import usePrivacyConsent from '../../components/hooks/nova/usePrivacyConsent';
 import { useRemakeImage } from '../../components/hooks/nova/useRemakeImage';
 import { useRemoveBackground } from '../../components/hooks/nova/useRemoveBackground';
-import useFileDrop from '../../components/hooks/useFileDrop';
 import useUserInfoUtils from '../../components/hooks/useUserInfoUtils';
 import Expand from '../../components/nova/Expand';
 import { Guide } from '../../components/nova/Guide';
@@ -74,13 +75,15 @@ export default function Nova() {
   const { setAnnouncementInfo } = useNovaAnnouncement();
   const announceInfo = useAppSelector(announceInfoSelector(selectedNovaTab));
   const tabValues: NOVA_TAB_TYPE[] = Object.values(NOVA_TAB_TYPE);
-  const { handleDrop } = useFileDrop();
+  const { handleAgreement } = usePrivacyConsent();
+  const { loadLocalFile } = useManageFile();
 
   const onDrop = useCallback(
-    async (acceptedFiles: FileWithPath[], fileRejections: FileRejection[]) => {
+    async (acceptedFiles: FileWithPath[]) => {
       if (selectedNovaTab !== NOVA_TAB_TYPE.aiChat && status != 'home') return;
+      if (!(await handleAgreement())) return;
 
-      handleDrop(acceptedFiles, fileRejections);
+      loadLocalFile(acceptedFiles);
     },
     [confirm, t]
   );
