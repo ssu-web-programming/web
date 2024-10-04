@@ -66,7 +66,8 @@ export const useRemoveBackground = () => {
         const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
         showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');
       } else {
-        handleRemoveBGError(response.error.code);
+        const { leftCredit } = calLeftCredit(res.headers);
+        handleRemoveBGError(response.error.code, Number(leftCredit));
       }
     } catch (err) {
       resetPageData(NOVA_TAB_TYPE.removeBG);
@@ -76,7 +77,7 @@ export const useRemoveBackground = () => {
     }
   };
 
-  const handleRemoveBGError = (errCode: string) => {
+  const handleRemoveBGError = (errCode: string, leftCredit: number) => {
     if (errCode === 'Timeout') {
       dispatch(
         setPageResult({
@@ -94,7 +95,7 @@ export const useRemoveBackground = () => {
       dispatch(resetPageData(NOVA_TAB_TYPE.removeBG));
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.removeBG, status: 'home' }));
     }
-    errorHandle(errCode);
+    errorHandle({ code: errCode, credit: leftCredit });
   };
 
   return { handleRemoveBackground };

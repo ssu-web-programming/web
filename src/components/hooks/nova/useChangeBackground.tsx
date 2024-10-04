@@ -96,7 +96,8 @@ export const useChangeBackground = () => {
         const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
         showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');
       } else {
-        handleChangeBGError(response.error.code, prompt);
+        const { leftCredit } = calLeftCredit(res.headers);
+        handleChangeBGError(response.error.code, Number(leftCredit), prompt);
       }
     } catch (err) {
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeBG, status: 'home' }));
@@ -104,7 +105,7 @@ export const useChangeBackground = () => {
     }
   };
 
-  const handleChangeBGError = (errCode: string, prompt: string) => {
+  const handleChangeBGError = (errCode: string, leftCredit: number, prompt: string) => {
     if (errCode === 'Timeout') {
       dispatch(
         setPageResult({
@@ -124,7 +125,7 @@ export const useChangeBackground = () => {
       resetPageResult(NOVA_TAB_TYPE.changeBG);
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeBG, status: 'home' }));
     }
-    errorHandle(errCode);
+    errorHandle({ code: errCode, credit: leftCredit });
   };
 
   return { goPromptPage, handleChangeBackground };

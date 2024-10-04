@@ -66,7 +66,8 @@ export const useImprovedResolution = () => {
         const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
         showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');
       } else {
-        handleImprovedResError(response.error.code);
+        const { leftCredit } = calLeftCredit(res.headers);
+        handleImprovedResError(response.error.code, Number(leftCredit));
       }
     } catch (err) {
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.improvedRes, status: 'home' }));
@@ -74,7 +75,7 @@ export const useImprovedResolution = () => {
     }
   };
 
-  const handleImprovedResError = (errCode: string) => {
+  const handleImprovedResError = (errCode: string, leftCredit: number) => {
     if (errCode === 'Timeout') {
       dispatch(
         setPageResult({
@@ -93,7 +94,7 @@ export const useImprovedResolution = () => {
       resetPageResult(NOVA_TAB_TYPE.improvedRes);
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.improvedRes, status: 'home' }));
     }
-    errorHandle(errCode);
+    errorHandle({ code: errCode, credit: leftCredit });
   };
 
   return { handleImprovedResolution };

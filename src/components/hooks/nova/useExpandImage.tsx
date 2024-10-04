@@ -98,7 +98,8 @@ export const useExpandImage = () => {
         const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
         showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');
       } else {
-        handleExpandError(response.error.code, {
+        const { leftCredit } = calLeftCredit(res.headers);
+        handleExpandError(response.error.code, Number(leftCredit), {
           extend_left,
           extend_right,
           extend_up,
@@ -113,6 +114,7 @@ export const useExpandImage = () => {
 
   const handleExpandError = (
     errCode: string,
+    leftCredit: number,
     { extend_left, extend_right, extend_up, extend_down }: any
   ) => {
     if (errCode === 'Timeout') {
@@ -134,7 +136,7 @@ export const useExpandImage = () => {
       resetPageResult(NOVA_TAB_TYPE.expandImg);
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.expandImg, status: 'home' }));
     }
-    errorHandle(errCode);
+    errorHandle({ code: errCode, credit: leftCredit });
   };
 
   return { goExpandPage, handleExpandImage };

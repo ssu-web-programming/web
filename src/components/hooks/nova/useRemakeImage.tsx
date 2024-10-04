@@ -66,7 +66,8 @@ export const useRemakeImage = () => {
         const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
         showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');
       } else {
-        handleRemakeImgError(response.error.code);
+        const { leftCredit } = calLeftCredit(res.headers);
+        handleRemakeImgError(response.error.code, Number(leftCredit));
       }
     } catch (err) {
       resetPageData(NOVA_TAB_TYPE.remakeImg);
@@ -76,7 +77,7 @@ export const useRemakeImage = () => {
     }
   };
 
-  const handleRemakeImgError = (errCode: string) => {
+  const handleRemakeImgError = (errCode: string, leftCredit: number) => {
     if (errCode === 'Timeout') {
       dispatch(
         setPageResult({
@@ -94,7 +95,7 @@ export const useRemakeImage = () => {
       dispatch(resetPageData(NOVA_TAB_TYPE.remakeImg));
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.remakeImg, status: 'home' }));
     }
-    errorHandle(errCode);
+    errorHandle({ code: errCode, credit: leftCredit });
   };
 
   return { handleRemakeImage };

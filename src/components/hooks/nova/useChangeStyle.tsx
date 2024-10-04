@@ -94,7 +94,8 @@ export const useChangeStyle = () => {
         const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
         showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');
       } else {
-        handleChangeStyleError(response.error.code, style);
+        const { leftCredit } = calLeftCredit(res.headers);
+        handleChangeStyleError(response.error.code, Number(leftCredit), style);
       }
     } catch (err) {
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeStyle, status: 'home' }));
@@ -102,7 +103,7 @@ export const useChangeStyle = () => {
     }
   };
 
-  const handleChangeStyleError = (errCode: string, style: string) => {
+  const handleChangeStyleError = (errCode: string, leftCredit: number, style: string) => {
     if (errCode === 'Timeout') {
       dispatch(
         setPageResult({
@@ -122,7 +123,7 @@ export const useChangeStyle = () => {
       resetPageResult(NOVA_TAB_TYPE.changeStyle);
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeStyle, status: 'home' }));
     }
-    errorHandle(errCode);
+    errorHandle({ code: errCode, credit: leftCredit });
   };
 
   return { goThemePage, handleChangeStyle };

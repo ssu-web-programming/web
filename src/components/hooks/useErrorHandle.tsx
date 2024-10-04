@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { userInfoSelector } from 'store/slices/userInfo';
 import { ClientType, getPlatform } from 'util/bridge';
-import { calLeftCredit, openNewWindow, sliceFileName } from 'util/common';
+import { openNewWindow, sliceFileName } from 'util/common';
 
 import {
   DelayDocConverting,
@@ -47,11 +47,14 @@ const useErrorHandle = () => {
       );
     } else if (
       error instanceof NovaNoCreditError ||
-      error === 'no_credit' ||
-      error === 'not_enough_credit'
+      error.code === 'no_credit' ||
+      error.code === 'not_enough_credit'
     ) {
-      const { current } = error.credit || calLeftCredit(error.headers);
       const platform = getPlatform();
+      const leftCredit =
+        typeof error.credit === 'object' && error.credit !== null
+          ? error.credit.current
+          : error.credit;
 
       switch (ul) {
         case '12':
@@ -60,7 +63,7 @@ const useErrorHandle = () => {
           switch (platform) {
             case ClientType.ios:
             case ClientType.mac: {
-              if (current === 0) {
+              if (leftCredit === 0) {
                 confirm({
                   title: t(`Nova.Alert.NoCredit.Title`)!,
                   msg: t(`Nova.Alert.NoCredit.ios`),
@@ -84,7 +87,7 @@ const useErrorHandle = () => {
             default: {
               confirm({
                 title:
-                  current === 0
+                  leftCredit === 0
                     ? t(`Nova.Alert.NoCredit.Title`)!
                     : t(`Nova.Alert.NotEnoughCredit.Title`)!,
                 msg: t(`Nova.Alert.NoCredit.android`),
@@ -104,7 +107,7 @@ const useErrorHandle = () => {
         default: {
           confirm({
             title:
-              current === 0
+              leftCredit === 0
                 ? t(`Nova.Alert.NoCredit.Title`)!
                 : t(`Nova.Alert.NotEnoughCredit.Title`)!,
             msg: t(`Nova.Alert.NoCredit.UpgradeLevel`),
