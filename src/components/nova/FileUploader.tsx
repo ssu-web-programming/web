@@ -197,7 +197,18 @@ export const FileUploader = (props: FileUploaderProps) => {
           },
           onCancel: {
             text: t('Nova.Confirm.NotSavedFile.Cancel'),
-            callback: () => {}
+            callback: async () => {
+              dispatch(setCreating('NOVA'));
+              dispatch(setLocalFiles([]));
+              dispatch(setDriveFiles([]));
+
+              dispatch(setLoadingFile({ id: currentFile.id }));
+              const curFile = await getFileInfo(currentFile.id);
+              dispatch(removeLoadingFile());
+
+              dispatch(setDriveFiles([curFile]));
+              dispatch(setCreating('none'));
+            }
           }
         });
       }
