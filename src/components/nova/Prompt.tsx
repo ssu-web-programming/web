@@ -152,8 +152,10 @@ export default function Prompt() {
 
   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     const newText = event.target.value;
-    setText(newText);
-    setIsEnabled(newText.trim().length > 0);
+    if (newText.length <= 400) {
+      setText(newText);
+      setIsEnabled(newText.trim().length > 0);
+    }
   };
 
   const handleExamButtonClick = () => {
