@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Konva from 'konva';
+import { useTranslation } from 'react-i18next';
 import { Group, Image, Layer, Stage, Transformer } from 'react-konva';
 import styled from 'styled-components';
 
@@ -142,6 +143,7 @@ const SIZES = {
 };
 
 export default function Expand() {
+  const { t } = useTranslation();
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
   const result = useAppSelector(selectPageResult(selectedNovaTab));
   const { handleExpandImage } = useExpandImage();
@@ -347,7 +349,7 @@ export default function Expand() {
                 Math.round(canvasDiff.bottom * scaleRatio.heightRatio)
               )
             }>
-            <span>이미지 확장</span>
+            <span>{t(`Nova.expandImg.Button`)}</span>
           </ExpandButton>
         </ButtonWrap>
       </Body>
