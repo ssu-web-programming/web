@@ -14,16 +14,19 @@ import { NOVA_TAB_TYPE, selectTabSlice } from '../../store/slices/tabSlice';
 import { useAppSelector } from '../../store/store';
 import Announcement from '../Announcement';
 
-const GuideWrapper = styled.div`
-  width: 100%;
+const Container = styled.div`
   height: 100%;
-  display: grid;
-  place-items: center;
-  gap: 40px;
-  padding: 8px 16px;
-  background-color: #f4f6f8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex: 1 1 0;
   overflow-y: auto;
+  background-color: #f4f6f8;
+`;
+
+const GuideWrapper = styled.div`
+  width: 100%;
+  margin: auto;
 `;
 
 const GuideImage = styled.img`
@@ -36,6 +39,7 @@ const GuideTitle = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 8px;
+  margin-bottom: 40px;
 
   div.title {
     display: flex;
@@ -59,10 +63,11 @@ const GuideTitle = styled.div`
   }
 `;
 const Guidebody = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  width: 100%;
+  margin-bottom: 16px;
 `;
 
 interface GuideProps {
@@ -85,17 +90,19 @@ export const Guide = (props: GuideProps) => {
   };
 
   return (
-    <GuideWrapper>
-      {announceInfo.isShow && <Announcement content={announceInfo.content} />}
-      <GuideTitle>
-        <GuideImage src={iconMap[selectedNovaTab]} alt="aiChat" />
-        <div className="title">
-          <p>{t(`Nova.${selectedNovaTab}.Guide.Title`)}</p>
-        </div>
-        <p className="subTitle">{t(`Nova.${selectedNovaTab}.Guide.SubTitle`)}</p>
-      </GuideTitle>
+    <Container>
+      <GuideWrapper>
+        {announceInfo.isShow && <Announcement content={announceInfo.content} />}
+        <GuideTitle>
+          <GuideImage src={iconMap[selectedNovaTab]} alt="aiChat" />
+          <div className="title">
+            <p>{t(`Nova.${selectedNovaTab}.Guide.Title`)}</p>
+          </div>
+          <p className="subTitle">{t(`Nova.${selectedNovaTab}.Guide.SubTitle`)}</p>
+        </GuideTitle>
 
-      <Guidebody>{props.children}</Guidebody>
-    </GuideWrapper>
+        <Guidebody>{props.children}</Guidebody>
+      </GuideWrapper>
+    </Container>
   );
 };

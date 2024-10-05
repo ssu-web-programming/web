@@ -13,6 +13,7 @@ const AnnouncementWrap = styled.div`
   top: 0;
   padding: 0 16px;
   pointer-events: all;
+  margin-bottom: 40px;
 `;
 
 const Content = styled.div`
