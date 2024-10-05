@@ -402,8 +402,8 @@
       "Save": "Save"
     },
     "DragAndDrop": {
-      "Title": "업로드",
-      "Desc": "파일을 이곳에 드래그해\n업로드해 주세요."
+      "Title": "Upload",
+      "Desc": "Please drag and drop the file here to upload."
     },
     "CreditInfo": {
       "Title": "Credit Guide",
