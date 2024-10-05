@@ -68,7 +68,7 @@ export const getValidExt = (tab: NOVA_TAB_TYPE) => {
   switch (tab) {
     case 'aiChat':
       return SUPPORT_IMAGE_TYPE.filter(({ extensions }) =>
-        ['.jpg', '.jpeg', '.png'].includes(extensions)
+        ['.jpg', '.jpeg', '.png', '.gif'].includes(extensions)
       );
     case 'removeBG':
     case 'changeBG':
