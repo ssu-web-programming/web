@@ -407,9 +407,18 @@
     },
     "CreditInfo": {
       "Title": "Credit Guide",
-      "Chat": "Chat",
-      "DocImgQuery": "Document/Image query",
-      "ImgGen": "Generate Image"
+      "AIChat": {
+        "Title": "AI Chat",
+        "Chat": "Chat",
+        "DocImgQuery": "Document/Image query",
+        "ImgGen": "Generate Image"
+      },
+      "RemoveBG": "Remove Background",
+      "ChangeBG": "Change Background",
+      "RemakeImg": "Remake Image",
+      "ExpandImg": "Expand Image",
+      "ImprovedRes": "Improve Resolution",
+      "ChangeStyle": "Change Style"
     },
     "ActionWindow": {
       "Placeholder": "NOVA, ask anything"

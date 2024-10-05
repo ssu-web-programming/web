@@ -407,9 +407,18 @@
     },
     "CreditInfo": {
       "Title": "Creditガイド",
-      "Chat": "チャット",
-      "DocImgQuery": "ドキュメント/画像クエリ",
-      "ImgGen": "画像生成"
+      "AIChat": {
+        "Title": "チャット",
+        "Chat": "AIチャット",
+        "DocImgQuery": "ドキュメント/画像クエリ",
+        "ImgGen": "画像生成"
+      },
+      "RemoveBG": "背景を消す",
+      "ChangeBG": "背景を変更",
+      "RemakeImg": "画像を再編集",
+      "ExpandImg": "画像を拡大",
+      "ImprovedRes": "解像度を上げる",
+      "ChangeStyle": "スタイルを変更"
     },
     "ActionWindow": {
       "Placeholder": "NOVAに何でも聞いてください。"
