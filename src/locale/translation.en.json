@@ -525,6 +525,7 @@
       },
       "OverMaxFileUploadCnt": "You can attach up to {{max}} files in one conversation. Start a new conversation to continue asking questions!",
       "OverMaxFileUploadCntOnce": "You can attach up to {{max}} files only. Please reselect the files.",
+      "OverMaxFilePixel": "The uploaded image exceeds the maximum allowed pixel size. Please reduce the image size to use this feature.",
       "NotSavedFile": {
         "Msg": "The changes have not been saved yet. If not saved, the changes will not be reflected in NOVA's response.",
         "Ok": "Save now",
