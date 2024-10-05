@@ -171,6 +171,7 @@ export function useConfirm() {
       };
 
       const handleCancel = () => {
+        onCancel?.callback();
         dispatch(initConfirm());
         resolve(false);
       };
