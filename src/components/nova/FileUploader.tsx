@@ -198,7 +198,6 @@ export const FileUploader = (props: FileUploaderProps) => {
           onCancel: {
             text: t('Nova.Confirm.NotSavedFile.Cancel'),
             callback: async () => {
-              console.log('cancel');
               dispatch(setCreating('NOVA'));
               dispatch(setLocalFiles([]));
               dispatch(setDriveFiles([]));

@@ -17,10 +17,8 @@ import Announcement from '../Announcement';
 const GuideWrapper = styled.div`
   width: 100%;
   height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: safe center;
-  align-items: center;
+  display: grid;
+  place-items: center;
   gap: 40px;
   padding: 8px 16px;
   background-color: #f4f6f8;

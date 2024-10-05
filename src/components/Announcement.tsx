@@ -9,6 +9,8 @@ import { useAppSelector } from '../store/store';
 const AnnouncementWrap = styled.div`
   width: 100%;
   height: fit-content;
+  position: sticky;
+  top: 0;
   padding: 0 16px;
   pointer-events: all;
 `;
@@ -54,19 +56,17 @@ export default function Announcement(props: AnnouncementProps) {
   const announceInfo = useAppSelector(announceInfoSelector(selectedNovaTab));
 
   return (
-    <>
-      <AnnouncementWrap>
-        <Content>
-          <div dangerouslySetInnerHTML={{ __html: content }} />
-          <CloseIcon
-            onClick={() => {
-              dispatch(
-                setAnnounceInfo({ tab: selectedNovaTab, info: { ...announceInfo, isShow: false } })
-              );
-            }}
-          />
-        </Content>
-      </AnnouncementWrap>
-    </>
+    <AnnouncementWrap>
+      <Content>
+        <div dangerouslySetInnerHTML={{ __html: content }} />
+        <CloseIcon
+          onClick={() => {
+            dispatch(
+              setAnnounceInfo({ tab: selectedNovaTab, info: { ...announceInfo, isShow: false } })
+            );
+          }}
+        />
+      </Content>
+    </AnnouncementWrap>
   );
 }
