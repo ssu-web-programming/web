@@ -265,7 +265,9 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
           setExpiredNOVA(true);
         }, novaExpireTime);
 
+        console.log(result);
         const html = await markdownToHtml(result);
+        console.log(html);
         if (html) {
           const $ = load(html);
           const $image = $('img');
