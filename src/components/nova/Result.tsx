@@ -19,6 +19,12 @@ import { useRemakeImage } from '../hooks/nova/useRemakeImage';
 
 import GoBackHeader from './GoBackHeader';
 
+const Container = styled.div`
+  height: 100%;
+  display: flex;
+  flex: 1 1 0;
+`;
+
 const Wrap = styled.div`
   width: 100%;
   height: 100%;
@@ -28,12 +34,8 @@ const Wrap = styled.div`
 
 const Body = styled.div`
   width: 100%;
-  height: 100%;
-  display: flex;
-  flex: 1 1 0;
-  flex-direction: column;
-  gap: 24px;
   padding: 0 16px;
+  margin: auto;
   overflow-y: auto;
 `;
 
@@ -44,6 +46,7 @@ const Guide = styled.div`
   justify-content: center;
   gap: 8px;
   margin-top: 8px;
+  margin-bottom: 24px;
 `;
 
 const Title = styled.div`
@@ -79,6 +82,7 @@ const ImageBox = styled.div<{ isBordered: boolean }>`
   align-items: center;
   justify-content: center;
   padding-bottom: 100%;
+  margin-bottom: 24px;
   border: ${(props) => (props.isBordered ? '1px solid #c9cdd2' : 'none')};
   border-radius: 8px;
 
@@ -222,41 +226,43 @@ export default function Result() {
   return (
     <Wrap>
       <GoBackHeader />
-      <Body>
-        <Guide>
-          <Title>
-            <img src={CheckIcon} alt="check" />
-            <span>{t(`Nova.${selectedNovaTab}.Done.Title`)}</span>
-          </Title>
-          <SubTitle>{t(`Nova.${selectedNovaTab}.Done.SubTitle`)}</SubTitle>
-        </Guide>
-        <ImageBox isBordered={selectedNovaTab === NOVA_TAB_TYPE.removeBG}>
-          <div>
-            <img src={`data:${result?.contentType};base64,${result?.data}`} alt="result" />
-          </div>
-        </ImageBox>
-        <ButtonWrap>
-          {(selectedNovaTab === NOVA_TAB_TYPE.changeBG ||
-            selectedNovaTab === NOVA_TAB_TYPE.remakeImg) && (
-            <RemakeButton onClick={handleRemake}>
-              <span>{t(`Nova.Result.Remake`)}</span>
-              <img src={CreditColorIcon} alt="credit" />
-            </RemakeButton>
-          )}
-          <DefaultButtonWrap>
-            {showInsertDocBtn && (
-              <InsertDocButton onClick={() => insertDocsHandler()}>
-                <img src={InsertDocsIcon} alt="docs" />
-                <span>{t(`Nova.Result.InsertDoc`)}</span>
-              </InsertDocButton>
+      <Container>
+        <Body>
+          <Guide>
+            <Title>
+              <img src={CheckIcon} alt="check" />
+              <span>{t(`Nova.${selectedNovaTab}.Done.Title`)}</span>
+            </Title>
+            <SubTitle>{t(`Nova.${selectedNovaTab}.Done.SubTitle`)}</SubTitle>
+          </Guide>
+          <ImageBox isBordered={selectedNovaTab === NOVA_TAB_TYPE.removeBG}>
+            <div>
+              <img src={`data:${result?.contentType};base64,${result?.data}`} alt="result" />
+            </div>
+          </ImageBox>
+          <ButtonWrap>
+            {(selectedNovaTab === NOVA_TAB_TYPE.changeBG ||
+              selectedNovaTab === NOVA_TAB_TYPE.remakeImg) && (
+              <RemakeButton onClick={handleRemake}>
+                <span>{t(`Nova.Result.Remake`)}</span>
+                <img src={CreditColorIcon} alt="credit" />
+              </RemakeButton>
             )}
-            <SaveButton onClick={OnSave}>
-              <img src={DownloadIcon} alt="download" />
-              <span>{t(`Nova.Result.Save`)}</span>
-            </SaveButton>
-          </DefaultButtonWrap>
-        </ButtonWrap>
-      </Body>
+            <DefaultButtonWrap>
+              {showInsertDocBtn && (
+                <InsertDocButton onClick={() => insertDocsHandler()}>
+                  <img src={InsertDocsIcon} alt="docs" />
+                  <span>{t(`Nova.Result.InsertDoc`)}</span>
+                </InsertDocButton>
+              )}
+              <SaveButton onClick={OnSave}>
+                <img src={DownloadIcon} alt="download" />
+                <span>{t(`Nova.Result.Save`)}</span>
+              </SaveButton>
+            </DefaultButtonWrap>
+          </ButtonWrap>
+        </Body>
+      </Container>
     </Wrap>
   );
 }

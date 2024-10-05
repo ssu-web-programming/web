@@ -52,6 +52,7 @@ const ImageBox = styled.div<{ isBordered: boolean }>`
     object-fit: contain;
     max-width: 100%;
     max-height: 100%;
+    border-radius: 8px;
   }
 `;
 
@@ -75,6 +76,7 @@ const TextArea = styled.textarea`
   padding: 0;
   outline: none;
   resize: none;
+  font-size: 14px;
 `;
 
 const ButtonWrap = styled.div`
@@ -112,6 +114,7 @@ const ExamButton = styled.button<{ isActive: boolean }>`
 const CreatingButton = styled.div<{ isActive: boolean }>`
   width: 100%;
   height: 48px;
+  min-height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;

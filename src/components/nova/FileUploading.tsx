@@ -40,6 +40,7 @@ const Background = styled.div`
     line-height: 24px;
     color: #6f3ad0;
     white-space: break-spaces;
+    text-align: center;
   }
 `;
 

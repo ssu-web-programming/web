@@ -41,7 +41,6 @@ type TooltipProps = {
 const STYLE_BY_TYPE = {
   selectable: css`
     cursor: pointer;
-    padding: 12px 0;
     justify-content: flex-start;
   `,
   normal: css`
@@ -90,6 +89,10 @@ const TooltipContent = styled.div<{
 
   z-index: 10;
   margin-left: ${({ distance }) => distance}px;
+
+  ul {
+    gap: ${({ type }) => (type === 'selectable' ? '6px' : '0')};
+  }
 `;
 
 const OptionList = styled.ul`
@@ -237,7 +240,7 @@ const Tooltip = (props: TooltipProps) => {
             }
             return null;
           })}
-          <Divider />
+          {type === 'normal' && <Divider />}
           {categorizedOptions['uncategorized']?.map((option, idx) => (
             <Tooltip.OptionItem
               key={`${option.name}-${idx}`}
@@ -269,15 +272,17 @@ const OptionItem = (props: {
 
   if (type === 'selectable') {
     return (
-      <li style={{ listStyle: isBullet ? 'disc' : 'none' }}>
-        <OptionItemWrapper type={type} onClick={handleOnClick}>
-          <div style={{ marginRight: '6px' }}>
-            <Icon iconSrc={option.icon?.src} size={24} />
-          </div>
-          <span>{option.name}</span>
-        </OptionItemWrapper>
+      <>
+        <li style={{ listStyle: isBullet ? 'disc' : 'none' }}>
+          <OptionItemWrapper type={type} onClick={handleOnClick}>
+            <div style={{ marginRight: '6px' }}>
+              <Icon iconSrc={option.icon?.src} size={24} />
+            </div>
+            <span>{option.name}</span>
+          </OptionItemWrapper>
+        </li>
         <Divider />
-      </li>
+      </>
     );
   }
 

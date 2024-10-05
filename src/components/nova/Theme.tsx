@@ -57,6 +57,7 @@ const ImageBox = styled.div<{ isBordered: boolean }>`
     object-fit: contain;
     max-width: 100%;
     max-height: 100%;
+    border-radius: 8px;
   }
 `;
 
@@ -147,6 +148,7 @@ const CheckBox = styled.div`
 const Button = styled.div<{ isActive: boolean }>`
   width: 100%;
   height: 48px;
+  min-height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;

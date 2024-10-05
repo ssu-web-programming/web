@@ -74,6 +74,7 @@ const CustomNavButton = styled.button<{ isVisible: boolean }>`
   height: 52px;
   top: var(--swiper-navigation-top-offset, 40%);
   display: ${(props) => (props.isVisible ? 'block' : 'none')};
+  padding: 0;
   background: none;
   border: none;
   cursor: pointer;

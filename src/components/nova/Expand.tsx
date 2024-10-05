@@ -302,6 +302,7 @@ export default function Expand() {
                       anchorStroke="#6f3ad0"
                       anchorFill="#6f3ad0"
                       anchorStrokeWidth={2}
+                      enabledAnchors={['top-left', 'top-right', 'bottom-left', 'bottom-right']}
                     />
                   </Group>
                 )}

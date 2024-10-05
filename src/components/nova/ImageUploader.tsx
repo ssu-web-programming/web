@@ -129,7 +129,11 @@ export default function ImageUploader(props: ImageUploaderProps) {
         target={target}
         accept={SUPPORT_IMAGE_TYPE}
         inputRef={inputImgFileRef}
-        tooltipStyle={{ inset: 'unset', top: '12px' }}>
+        tooltipStyle={{
+          inset: 'unset',
+          top: '12px',
+          padding: '12px 16px'
+        }}>
         <ImageBox>
           <Icon disable={isAgreed === undefined}>
             <UploadIcon />
