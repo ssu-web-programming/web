@@ -94,6 +94,9 @@ export function useManageFile() {
       const fileExtension = `.${file.name.split('.').pop()?.toLowerCase()}`;
       return !supportedExtensions.includes(fileExtension);
     });
+    console.log('supportedExtensions: ', supportedExtensions);
+    console.log('files: ', files);
+    console.log('invalid files: ', invalidFiles);
 
     const support = supportedExtensions.join(', ');
     if (invalidFiles.length > 0) {
@@ -112,8 +115,6 @@ export function useManageFile() {
       });
       return;
     }
-
-    console.log('luna set local files: ', files);
 
     dispatch(setLocalFiles(files));
   };
