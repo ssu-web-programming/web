@@ -139,21 +139,28 @@ export async function compressImage(file: File, tab: NOVA_TAB_TYPE): Promise<Fil
     const megapixels = (width * height) / 1_000_000;
 
     if (tab === 'removeBG' && megapixels > 25) {
-      options.maxWidthOrHeight = 4999;
+      options.maxWidthOrHeight = 5000;
     } else if (tab === 'changeBG' && (width > 2048 || height > 2048)) {
-      options.maxWidthOrHeight = 2047;
+      options.maxWidthOrHeight = 2048;
     } else if (tab === 'remakeImg' && (width > 1024 || height > 1024)) {
-      options.maxWidthOrHeight = 1023;
+      options.maxWidthOrHeight = 1024;
     } else if (tab === 'expandImg' && megapixels > 10) {
-      options.maxWidthOrHeight = 2999;
+      options.maxWidthOrHeight = 3000;
     } else if (tab === 'improvedRes' && (width > 2000 || height > 2000)) {
-      options.maxWidthOrHeight = 1999;
+      options.maxWidthOrHeight = 2000;
     }
   };
 
   setOptimizationOptions(width, height);
 
-  return await imageCompression(file, options);
+  const compressedBlob = await imageCompression(file, options);
+
+  const compressedFile = new File([compressedBlob], file.name, {
+    type: file.type,
+    lastModified: Date.now()
+  });
+
+  return compressedFile;
 }
 
 async function getImageDimensions(file: File): Promise<{ width: number; height: number }> {

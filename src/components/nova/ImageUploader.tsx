@@ -6,7 +6,7 @@ import { compressImage, SUPPORT_IMAGE_TYPE } from '../../constants/fileTypes';
 import CreditIcon from '../../img/ico_credit_gray.svg';
 import { ReactComponent as UploadIcon } from '../../img/ico_upload_img_plus.svg';
 import { selectPageData, setPageData } from '../../store/slices/nova/pageStatusSlice';
-import { NOVA_TAB_TYPE, selectTabSlice } from '../../store/slices/tabSlice';
+import { NOVA_TAB_TYPE } from '../../store/slices/tabSlice';
 import { getDriveFiles, getLocalFiles } from '../../store/slices/uploadFiles';
 import { userInfoSelector } from '../../store/slices/userInfo';
 import { useAppDispatch, useAppSelector } from '../../store/store';
@@ -108,7 +108,6 @@ export default function ImageUploader(props: ImageUploaderProps) {
   const { t } = useTranslation();
   const inputImgFileRef = useRef<HTMLInputElement | null>(null);
   const dispatch = useAppDispatch();
-  const { selectedNovaTab } = useAppSelector(selectTabSlice);
   const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
   const localFiles = useAppSelector(getLocalFiles);
   const driveFiles = useAppSelector(getDriveFiles);
@@ -116,29 +115,29 @@ export default function ImageUploader(props: ImageUploaderProps) {
   const target = 'nova-image';
 
   useEffect(() => {
-    const compressFile = async (file: File) => {
-      return await compressImage(file, selectedNovaTab);
+    const selectedFile = localFiles[0] || driveFiles[0];
+    const isIos = getPlatform() === ClientType.ios;
+
+    const handleFileProcessing = async () => {
+      if (!selectedFile) return;
+
+      const fileData = isIos ? await compressImage(selectedFile, props.curTab) : selectedFile;
+      dispatch(
+        setPageData({
+          tab: props.curTab,
+          data: fileData
+        })
+      );
     };
 
-    const processFile = async () => {
-      const selectedFile = localFiles[0] || driveFiles[0];
-      let file = selectedFile;
-
-      if (getPlatform() === ClientType.ios && selectedFile) {
-        file = await compressFile(selectedFile);
-      }
-
-      dispatch(setPageData({ tab: props.curTab, data: file }));
-
-      if (currentFile) {
-        props.handleUploadComplete();
-      }
-    };
-
-    if (localFiles.length > 0 || driveFiles.length > 0) {
-      processFile();
+    if (currentFile) {
+      props.handleUploadComplete();
     }
-  }, [localFiles, driveFiles, currentFile]);
+
+    if (!currentFile) {
+      handleFileProcessing();
+    }
+  }, [localFiles, driveFiles, currentFile, props.curTab]);
 
   return (
     <Wrap>
