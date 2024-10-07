@@ -46,6 +46,7 @@ const Wrapper = styled.div<{ isScroll: boolean }>`
   justify-content: flex-start;
   ${CustomScrollbar};
   background: rgb(244, 246, 248);
+  overflow: hidden;
 `;
 
 const Body = styled.div`

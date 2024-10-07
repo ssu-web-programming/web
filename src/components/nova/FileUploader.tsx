@@ -124,8 +124,6 @@ export const FileUploader = (props: FileUploaderProps) => {
     }
 
     const supportedExtensions = SUPPORT_DOCUMENT_TYPE.flatMap((type) => type.extensions);
-    console.log('cur: ', currentFile);
-    console.log('supportedExtensions: ', supportedExtensions);
     if (
       target === 'nova-file' &&
       currentFile.type !== 'new' &&
