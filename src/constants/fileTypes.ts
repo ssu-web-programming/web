@@ -141,15 +141,15 @@ async function getImageDimensions(
     const megapixels = (width * height) / 1_000_000;
 
     if (tab === 'removeBG' && megapixels > 25) {
-      options.maxWidthOrHeight = 5000;
+      options.maxWidthOrHeight = 4999;
     } else if (tab === 'changeBG' && (width > 2048 || height > 2048)) {
-      options.maxWidthOrHeight = 2048;
+      options.maxWidthOrHeight = 2047;
     } else if (tab === 'remakeImg' && (width > 1024 || height > 1024)) {
-      options.maxWidthOrHeight = 1024;
+      options.maxWidthOrHeight = 1023;
     } else if (tab === 'expandImg' && megapixels > 10) {
-      options.maxWidthOrHeight = 3000;
+      options.maxWidthOrHeight = 2999;
     } else if (tab === 'improvedRes' && (width > 2000 || height > 2000)) {
-      options.maxWidthOrHeight = 2000;
+      options.maxWidthOrHeight = 1999;
     }
   };
 
