@@ -153,8 +153,6 @@ async function getImageDimensions(
     }
   };
 
-  let imageFile = file;
-
   const imageSize = await new Promise<{ width: number; height: number }>((resolve, reject) => {
     const img = new Image();
     const reader = new FileReader();
@@ -174,8 +172,28 @@ async function getImageDimensions(
 
         imageCompression(file, options)
           .then((compressedFile) => {
-            imageFile = compressedFile;
-            resolve({ width, height });
+            const compressedImg = new Image();
+            const compressedReader = new FileReader();
+
+            compressedReader.onload = (e) => {
+              if (e.target?.result) {
+                compressedImg.src = e.target.result as string;
+              }
+            };
+
+            compressedImg.onload = () => {
+              resolve({ width: compressedImg.width, height: compressedImg.height });
+            };
+
+            compressedImg.onerror = (err) => {
+              reject(err);
+            };
+
+            compressedReader.onerror = (err) => {
+              reject(err);
+            };
+
+            compressedReader.readAsDataURL(compressedFile);
           })
           .catch((error) => {
             console.log('Image compression failed:', error);
