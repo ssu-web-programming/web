@@ -480,7 +480,7 @@
         "Title": "Credits are insufficient :(",
         "ios": "Purchase additional AI credits and enhance your productivity with the smart NOVA!"
       },
-      "OverFileUploadSize": "You can only select documents between {{min}}KB and {{max}}MB. Please try again.",
+      "OverFileUploadSize": "Only files between {{min}}KB and {{max}}MB can be selected. Please try again.",
       "ReQuestion": "Oh no! The answer is delayed. Sorry, but could you ask the question again?",
       "LackOfStorage": "There is not enough storage space on the Polaris Drive. Please make sure you have enough storage space to upload files!",
       "LowResolution": "The image's resolution is low, making analysis difficult. Please upload a higher resolution image.",
