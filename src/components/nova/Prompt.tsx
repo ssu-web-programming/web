@@ -16,15 +16,19 @@ const Wrap = styled.div`
   flex-direction: column;
 `;
 
-const Body = styled.div`
+const Container = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 16px;
-  padding: 0 16px;
+  flex: 1 1 0;
+  overflow-y: auto;
+  background-color: #f4f6f8;
+`;
+
+const Body = styled.div`
+  margin: auto;
 `;
 
 const ImageBox = styled.div<{ isBordered: boolean }>`
@@ -36,7 +40,8 @@ const ImageBox = styled.div<{ isBordered: boolean }>`
   justify-content: center;
   border: ${(props) => (props.isBordered ? '1px solid #c9cdd2' : 'none')};
   border-radius: 8px;
-  margin-top: 45px;
+  margin-top: 16px;
+  margin-bottom: 16px;
 
   div {
     width: 100%;
@@ -118,6 +123,8 @@ const CreatingButton = styled.div<{ isActive: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 16px;
+  margin-bottom: 16px;
   background: ${(props) => (props.isActive ? '#6f3ad0' : '#f2f4f6')};
   border-radius: 8px;
   cursor: ${(props) => (props.isActive ? 'pointer' : 'default')};
@@ -173,31 +180,33 @@ export default function Prompt() {
   return (
     <Wrap>
       <GoBackHeader />
-      <Body>
-        <ImageBox isBordered={selectedNovaTab === NOVA_TAB_TYPE.removeBG}>
-          <div>
-            <img src={`data:${result?.contentType};base64,${result?.data}`} alt="result" />
-          </div>
-        </ImageBox>
-        <TextWrap isActive={isEnabled}>
-          <TextArea
-            maxLength={400}
-            placeholder={t(`Nova.Prompt.Placeholder`) || ''}
-            onChange={handleChange}
-            value={text}
-          />
-          <ButtonWrap>
-            <ExamButton isActive={!isEnabled} onClick={handleExamButtonClick}>
-              <span>{t(`Nova.Prompt.ExamButton`)}</span>
-            </ExamButton>
-          </ButtonWrap>
-        </TextWrap>
-        <CreatingButton
-          isActive={isEnabled}
-          onClick={isEnabled ? () => handleChangeBackground(text) : undefined}>
-          <span>{t(`Nova.Prompt.CreatingButton`)}</span>
-        </CreatingButton>
-      </Body>
+      <Container>
+        <Body>
+          <ImageBox isBordered={selectedNovaTab === NOVA_TAB_TYPE.removeBG}>
+            <div>
+              <img src={`data:${result?.contentType};base64,${result?.data}`} alt="result" />
+            </div>
+          </ImageBox>
+          <TextWrap isActive={isEnabled}>
+            <TextArea
+              maxLength={400}
+              placeholder={t(`Nova.Prompt.Placeholder`) || ''}
+              onChange={handleChange}
+              value={text}
+            />
+            <ButtonWrap>
+              <ExamButton isActive={!isEnabled} onClick={handleExamButtonClick}>
+                <span>{t(`Nova.Prompt.ExamButton`)}</span>
+              </ExamButton>
+            </ButtonWrap>
+          </TextWrap>
+          <CreatingButton
+            isActive={isEnabled}
+            onClick={isEnabled ? () => handleChangeBackground(text) : undefined}>
+            <span>{t(`Nova.Prompt.CreatingButton`)}</span>
+          </CreatingButton>
+        </Body>
+      </Container>
     </Wrap>
   );
 }
