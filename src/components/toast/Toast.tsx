@@ -55,7 +55,7 @@ const IconWrapper = styled.div`
 const ToastText = styled.div`
   flex: 1;
   height: fit-content;
-  padding: 6px 0px;
+  padding: 8px 0;
 `;
 
 const CloseWrapper = styled.div<{ type: ToastType }>`
