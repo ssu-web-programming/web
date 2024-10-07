@@ -467,7 +467,7 @@
       }
     },
     "Alert": {
-      "CommonUnsupportFile": "이 파일 형식은 지원되지 않습니다.\n첨부 가능한 파일 형식을 확인한 뒤 다시 시도해 주세요.\n\n- 문서 : doc, pptx, pdf, hwp, xlsx\n- 이미지 : jpg, png, gif",
+      "CommonUnsupportFile": "이 파일 형식은 지원되지 않습니다.\n첨부 가능한 파일 형식을 확인한 뒤 다시 시도해 주세요.\n\n- 문서 : docx, pptx, pdf, hwp, xlsx\n- 이미지 : jpg, png, gif",
       "CommonUnsupportImage": "이 파일 형식은 지원되지 않습니다.\n첨부 가능한 파일 형식을 확인한 뒤 다시 시도해 주세요.\n- 이미지 : {{support}}",
       "UnsupportFile": "지원되지 않는 파일입니다. {{support}} 파일만 업로드해 주세요",
       "NoCredit": {
