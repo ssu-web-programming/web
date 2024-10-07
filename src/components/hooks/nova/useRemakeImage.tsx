@@ -37,7 +37,10 @@ export const useRemakeImage = () => {
     if (await isPixelLimitExceeded(file, NOVA_TAB_TYPE.remakeImg)) {
       await confirm({
         title: '',
-        msg: t('Nova.Confirm.OverMaxFilePixel'),
+        msg:
+          t('Nova.Confirm.OverMaxFilePixel') +
+          '\n\n' +
+          t(`Nova.${NOVA_TAB_TYPE.remakeImg}.AllowImageSize`),
         onOk: {
           text: t('OK'),
           callback: () => {}

@@ -42,7 +42,10 @@ export const useChangeBackground = () => {
     if (await isPixelLimitExceeded(file, NOVA_TAB_TYPE.changeBG)) {
       await confirm({
         title: '',
-        msg: t('Nova.Confirm.OverMaxFilePixel'),
+        msg:
+          t('Nova.Confirm.OverMaxFilePixel') +
+          '\n\n' +
+          t(`Nova.${NOVA_TAB_TYPE.changeBG}.AllowImageSize`),
         onOk: {
           text: t('OK'),
           callback: () => {}

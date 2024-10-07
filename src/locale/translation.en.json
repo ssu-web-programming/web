@@ -307,7 +307,8 @@
       "Done": {
         "Title": "Background removal complete",
         "SubTitle": "Background removal was successful.\nSave the image or insert it into your document!"
-      }
+      },
+      "AllowImageSize": "- Permitted image size : Maximum 25 megapixels"
     },
     "changeBG": {
       "Guide": {
@@ -319,7 +320,8 @@
       "Done": {
         "Title": "Background change complete",
         "SubTitle": "The image has been modified with a new style.\nSave the image or insert it into your document!"
-      }
+      },
+      "AllowImageSize": "- Permitted image size : Maximum 2048 x 2048"
     },
     "remakeImg": {
       "Guide": {
@@ -331,7 +333,8 @@
       "Done": {
         "Title": "Image remake complete",
         "SubTitle": "The image has been modified with a new style.\nSave the image or insert it into your document!"
-      }
+      },
+      "AllowImageSize": "- Permitted image size : Maximum 1024 x 1024"
     },
     "expandImg": {
       "Guide": {
@@ -350,7 +353,8 @@
       "Done": {
         "Title": "Image expansion complete",
         "SubTitle": "The image has been expanded.\nSave the image or insert it into your document!"
-      }
+      },
+      "AllowImageSize": "- Permitted image size : Maximum 10 megapixels"
     },
     "improvedRes": {
       "Guide": {
@@ -362,7 +366,8 @@
       "Done": {
         "Title": "Resolution enhancement complete",
         "SubTitle": "The image resolution has been enhanced.\nSave the image or insert it into your document!"
-      }
+      },
+      "AllowImageSize": "- Permitted image size : Maximum 2048 x 1080 (2K resolution)"
     },
     "changeStyle": {
       "Guide": {

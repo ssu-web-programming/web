@@ -37,7 +37,10 @@ export const useRemoveBackground = () => {
     if (await isPixelLimitExceeded(file, NOVA_TAB_TYPE.removeBG)) {
       await confirm({
         title: '',
-        msg: t('Nova.Confirm.OverMaxFilePixel'),
+        msg:
+          t('Nova.Confirm.OverMaxFilePixel') +
+          '\n\n' +
+          t(`Nova.${NOVA_TAB_TYPE.removeBG}.AllowImageSize`),
         onOk: {
           text: t('OK'),
           callback: () => {}

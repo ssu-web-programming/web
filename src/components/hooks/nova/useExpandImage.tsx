@@ -40,7 +40,10 @@ export const useExpandImage = () => {
     if (await isPixelLimitExceeded(file, NOVA_TAB_TYPE.expandImg)) {
       await confirm({
         title: '',
-        msg: t('Nova.Confirm.OverMaxFilePixel'),
+        msg:
+          t('Nova.Confirm.OverMaxFilePixel') +
+          '\n\n' +
+          t(`Nova.${NOVA_TAB_TYPE.expandImg}.AllowImageSize`),
         onOk: {
           text: t('OK'),
           callback: () => {}

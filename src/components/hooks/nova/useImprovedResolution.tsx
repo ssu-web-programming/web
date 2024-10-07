@@ -37,7 +37,10 @@ export const useImprovedResolution = () => {
     if (await isPixelLimitExceeded(file, NOVA_TAB_TYPE.improvedRes)) {
       await confirm({
         title: '',
-        msg: t('Nova.Confirm.OverMaxFilePixel'),
+        msg:
+          t('Nova.Confirm.OverMaxFilePixel') +
+          '\n\n' +
+          t(`Nova.${NOVA_TAB_TYPE.improvedRes}.AllowImageSize`),
         onOk: {
           text: t('OK'),
           callback: () => {}
