@@ -496,7 +496,8 @@
       "UnopenableDocError": "Encrypted or corrupted documents cannot be queried. Please check the document again.",
       "Unopenable": "Document to verify",
       "Password": "Encrypted document",
-      "NoFileInDrive": "The document cannot be found. Please check if the file has been deleted."
+      "NoFileInDrive": "The document cannot be found. Please check if the file has been deleted.",
+      "MoveImageInBox": "Please move the image within the guide box range."
     },
     "Confirm": {
       "NewChat": {

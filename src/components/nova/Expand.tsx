@@ -13,6 +13,7 @@ import { ReactComponent as VerticalIconSelected } from '../../img/nova/expandImg
 import { selectPageResult } from '../../store/slices/nova/pageStatusSlice';
 import { selectTabSlice } from '../../store/slices/tabSlice';
 import { useAppSelector } from '../../store/store';
+import { useConfirm } from '../Confirm';
 import { useExpandImage } from '../hooks/nova/useExpandImage';
 
 import GoBackHeader from './GoBackHeader';
@@ -144,6 +145,7 @@ const SIZES = {
 
 export default function Expand() {
   const { t } = useTranslation();
+  const confirm = useConfirm();
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
   const result = useAppSelector(selectPageResult(selectedNovaTab));
   const { handleExpandImage } = useExpandImage();
@@ -274,6 +276,43 @@ export default function Expand() {
     }
   };
 
+  const checkImageOutOfBounds = () => {
+    if (!stageRef.current || !imageRef.current) return;
+
+    const stage = stageRef.current;
+    const imageNode = imageRef.current;
+
+    const imageBoundaries = imageNode.getClientRect();
+    const topLeft = { x: imageBoundaries.x, y: imageBoundaries.y };
+    const topRight = { x: imageBoundaries.x + imageBoundaries.width, y: imageBoundaries.y };
+    const bottomLeft = { x: imageBoundaries.x, y: imageBoundaries.y + imageBoundaries.height };
+    const bottomRight = {
+      x: imageBoundaries.x + imageBoundaries.width,
+      y: imageBoundaries.y + imageBoundaries.height
+    };
+
+    const canvasSize = { width: stage.width(), height: stage.height() };
+    const allOutOfBounds =
+      (topLeft.x < 0 ||
+        topLeft.x > canvasSize.width ||
+        topLeft.y < 0 ||
+        topLeft.y > canvasSize.height) &&
+      (topRight.x < 0 ||
+        topRight.x > canvasSize.width ||
+        topRight.y < 0 ||
+        topRight.y > canvasSize.height) &&
+      (bottomLeft.x < 0 ||
+        bottomLeft.x > canvasSize.width ||
+        bottomLeft.y < 0 ||
+        bottomLeft.y > canvasSize.height) &&
+      (bottomRight.x < 0 ||
+        bottomRight.x > canvasSize.width ||
+        bottomRight.y < 0 ||
+        bottomRight.y > canvasSize.height);
+
+    return allOutOfBounds;
+  };
+
   return (
     <Wrap>
       <GoBackHeader />
@@ -342,14 +381,28 @@ export default function Expand() {
           </CurSizeBox>
 
           <ExpandButton
-            onClick={() =>
-              handleExpandImage(
-                Math.round(canvasDiff.left * scaleRatio.widthRatio),
-                Math.round(canvasDiff.right * scaleRatio.widthRatio),
-                Math.round(canvasDiff.top * scaleRatio.heightRatio),
-                Math.round(canvasDiff.bottom * scaleRatio.heightRatio)
-              )
-            }>
+            onClick={async () => {
+              if (!checkImageOutOfBounds()) {
+                handleExpandImage(
+                  Math.round(canvasDiff.left * scaleRatio.widthRatio),
+                  Math.round(canvasDiff.right * scaleRatio.widthRatio),
+                  Math.round(canvasDiff.top * scaleRatio.heightRatio),
+                  Math.round(canvasDiff.bottom * scaleRatio.heightRatio)
+                );
+              } else {
+                await confirm({
+                  title: '',
+                  msg: t('Nova.Alert.MoveImageInBox'),
+                  onOk: {
+                    text: t('Confirm'),
+                    callback: () => {
+                      handleCanvasSizeChange(selectedRatio);
+                      calculateImageBounds();
+                    }
+                  }
+                });
+              }
+            }}>
             <span>{t(`Nova.expandImg.Button`)}</span>
           </ExpandButton>
         </ButtonWrap>
