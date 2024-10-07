@@ -2,7 +2,6 @@ import imageCompression from 'browser-image-compression';
 
 import { NovaChatType } from '../store/slices/nova/novaHistorySlice';
 import { NOVA_TAB_TYPE } from '../store/slices/tabSlice';
-import { ClientType, getPlatform } from '../util/bridge';
 
 export type SupportFileType = {
   mimeType: string;
@@ -127,15 +126,14 @@ export const isValidFileSize = (size: number, tab: NOVA_TAB_TYPE) => {
     : size < getMaxFileSize(tab) * 1024 * 1024 && size > MIN_FILE_UPLOAD_SIZE_KB * 1024;
 };
 
-async function getImageDimensions(
-  file: File,
-  tab: NOVA_TAB_TYPE
-): Promise<{ width: number; height: number }> {
+export async function compressImage(file: File, tab: NOVA_TAB_TYPE): Promise<File> {
   const options = {
     maxSizeMB: getMaxFileSize(tab),
     maxWidthOrHeight: 2048,
     useWebWorker: true
   };
+
+  const { width, height } = await getImageDimensions(file);
 
   const setOptimizationOptions = (width: number, height: number) => {
     const megapixels = (width * height) / 1_000_000;
@@ -153,7 +151,13 @@ async function getImageDimensions(
     }
   };
 
-  const imageSize = await new Promise<{ width: number; height: number }>((resolve, reject) => {
+  setOptimizationOptions(width, height);
+
+  return await imageCompression(file, options);
+}
+
+async function getImageDimensions(file: File): Promise<{ width: number; height: number }> {
+  return new Promise((resolve, reject) => {
     const img = new Image();
     const reader = new FileReader();
 
@@ -164,44 +168,7 @@ async function getImageDimensions(
     };
 
     img.onload = () => {
-      const width = img.width;
-      const height = img.height;
-
-      if (getPlatform() === ClientType.ios) {
-        setOptimizationOptions(width, height);
-
-        imageCompression(file, options)
-          .then((compressedFile) => {
-            const compressedImg = new Image();
-            const compressedReader = new FileReader();
-
-            compressedReader.onload = (e) => {
-              if (e.target?.result) {
-                compressedImg.src = e.target.result as string;
-              }
-            };
-
-            compressedImg.onload = () => {
-              resolve({ width: compressedImg.width, height: compressedImg.height });
-            };
-
-            compressedImg.onerror = (err) => {
-              reject(err);
-            };
-
-            compressedReader.onerror = (err) => {
-              reject(err);
-            };
-
-            compressedReader.readAsDataURL(compressedFile);
-          })
-          .catch((error) => {
-            console.log('Image compression failed:', error);
-            resolve({ width, height });
-          });
-      } else {
-        resolve({ width, height });
-      }
+      resolve({ width: img.width, height: img.height });
     };
 
     img.onerror = (err) => {
@@ -214,12 +181,10 @@ async function getImageDimensions(
 
     reader.readAsDataURL(file);
   });
-
-  return imageSize;
 }
 
 export const isPixelLimitExceeded = async (file: File, tab: NOVA_TAB_TYPE) => {
-  return getImageDimensions(file, tab)
+  return getImageDimensions(file)
     .then(async (dimensions) => {
       const { width, height } = dimensions;
       const megapixels = (width * height) / 1000000;
