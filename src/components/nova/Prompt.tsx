@@ -165,7 +165,7 @@ export default function Prompt() {
     const newText = event.target.value;
     if (newText.length <= 400) {
       setText(newText);
-      setIsEnabled(newText.trim().length > 0);
+      setIsEnabled(newText.length > 0);
     }
   };
 
