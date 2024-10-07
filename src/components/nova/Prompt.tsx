@@ -22,12 +22,14 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0 16px;
   flex: 1 1 0;
   overflow-y: auto;
   background-color: #f4f6f8;
 `;
 
 const Body = styled.div`
+  width: 100%;
   margin: auto;
 `;
 
@@ -40,8 +42,7 @@ const ImageBox = styled.div<{ isBordered: boolean }>`
   justify-content: center;
   border: ${(props) => (props.isBordered ? '1px solid #c9cdd2' : 'none')};
   border-radius: 8px;
-  margin-top: 16px;
-  margin-bottom: 16px;
+  margin: 16px auto;
 
   div {
     width: 100%;
