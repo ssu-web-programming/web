@@ -113,7 +113,7 @@ const ExamButton = styled.button<{ isActive: boolean }>`
     font-size: 12px;
     font-weight: 500;
     line-height: 18px;
-    color: #26282b;
+    color: ${(props) => (props.isActive ? '#26282b' : '#c9cdd2')};
   }
 `;
 
