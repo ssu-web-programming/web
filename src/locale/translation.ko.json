@@ -295,7 +295,8 @@
         "Example2": "AI를 주제로 한 이미지를 만들어줘",
         "Example3": "2024년 전기차 시장의 성장 전망을 알려줘"
       },
-      "Uploading": "업로드 중.."
+      "Uploading": "업로드 중..",
+      "CreateImage": "요청하신 이미지가 생성되었어요."
     },
     "removeBG": {
       "Guide": {

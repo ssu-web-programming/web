@@ -1,15 +1,26 @@
 import { load } from 'cheerio';
 import { convert } from 'html-to-text';
+import i18n from 'i18next';
 import { marked } from 'marked';
 
 import Bridge, { fileToString } from './bridge';
 
+let isLink = false;
 const renderer = new marked.Renderer();
 renderer.link = (href, title, text) => {
-  return `<a href="javascript:void(0)">${text}</a>`;
+  isLink = true;
+  return `<img src="${href}" alt="${text}" style="width: 100%; height: auto">`;
 };
 renderer.image = (href, title, text) =>
   `<img src="${href}" alt="${text}" style="width: 100%; height: auto">`;
+renderer.paragraph = (text) => {
+  if (isLink) {
+    const imgTagMatch = text.match(/<img[^>]*>/g);
+    return `<p>${i18n.t(`Nova.aiChat.CreateImage`)}</p>${imgTagMatch?.join('')}`;
+  } else {
+    return `<p>${text}</p>`;
+  }
+};
 
 marked.use({
   renderer: renderer,

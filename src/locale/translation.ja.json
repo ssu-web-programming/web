@@ -295,7 +295,8 @@
         "Example2": "AIテーマの画像を作成。",
         "Example3": "2024年EV市場の成長見通し。"
       },
-      "Uploading": "アップロード中.."
+      "Uploading": "アップロード中..",
+      "CreateImage": "リクエストされた画像が生成されました。"
     },
     "removeBG": {
       "Guide": {

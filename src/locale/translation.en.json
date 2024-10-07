@@ -295,7 +295,8 @@
         "Example2": "Create an AI-themed image.",
         "Example3": "Growth prospects of the 2024 EV market."
       },
-      "Uploading": "Uploading.."
+      "Uploading": "Uploading..",
+      "CreateImage": "The requested image has been created."
     },
     "removeBG": {
       "Guide": {
