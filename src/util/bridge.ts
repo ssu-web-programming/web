@@ -338,6 +338,7 @@ export const useInitBridgeListener = () => {
             if (body.openTab in NOVA_TAB_TYPE) {
               dispatch(selectNovaTab(NOVA_TAB_TYPE[body.openTab as keyof typeof NOVA_TAB_TYPE]));
             }
+            Bridge.callBridgeApi('analyzeCurFile');
             break;
           }
           case 'getFileInfo': {
