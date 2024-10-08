@@ -124,13 +124,14 @@ export const FileUploader = (props: FileUploaderProps) => {
     }
 
     const supportedExtensions = SUPPORT_DOCUMENT_TYPE.flatMap((type) => type.extensions);
-    console.log('currentFile: ', currentFile);
-    if (
-      target === 'nova-file' &&
-      currentFile.type !== 'new' &&
-      currentFile.type !== 'unknown' &&
-      supportedExtensions.includes(`.${currentFile.ext}`)
-    ) {
+    if (target === 'nova-file' && currentFile.type != 'new' && currentFile.type != 'unknown') {
+      if (
+        currentFile.type != 'notSupported' &&
+        !supportedExtensions.includes(`.${currentFile.ext}`)
+      ) {
+        return;
+      }
+
       options.push({
         name: t(`Nova.UploadTooltip.CurrentFile`),
         icon: { src: ico_insert_docs },
