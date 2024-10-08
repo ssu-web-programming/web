@@ -15,6 +15,14 @@ import { useChangeStyle } from '../hooks/nova/useChangeStyle';
 
 import GoBackHeader from './GoBackHeader';
 
+const Container = styled.div`
+  height: 100%;
+  display: flex;
+  flex: 1 1 0;
+  background-color: rgb(244, 246, 248);
+  overflow-y: auto;
+`;
+
 const Wrap = styled.div`
   width: 100%;
   height: 100%;
@@ -24,12 +32,9 @@ const Wrap = styled.div`
 
 const Body = styled.div`
   width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
   padding: 0 16px;
+  margin: auto;
+  overflow-y: auto;
 `;
 
 const ImageBox = styled.div<{ isBordered: boolean }>`
@@ -42,6 +47,7 @@ const ImageBox = styled.div<{ isBordered: boolean }>`
   border: ${(props) => (props.isBordered ? '1px solid #c9cdd2' : 'none')};
   border-radius: 8px;
   margin-top: 24px;
+  margin-bottom: 16px;
 
   div {
     width: 100%;
@@ -68,6 +74,7 @@ const ThemeSelectionWrap = styled.div`
   align-items: center;
   justify-content: center;
   gap: 8px;
+  margin-bottom: 16px;
 
   span {
     width: 100%;
@@ -156,6 +163,7 @@ const Button = styled.div<{ isActive: boolean }>`
   border-radius: 8px;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
+  margin-bottom: 16px;
 
   span {
     font-size: 16px;
@@ -188,39 +196,43 @@ export default function Theme() {
   return (
     <Wrap>
       <GoBackHeader />
-      <Body>
-        <ImageBox isBordered={selectedNovaTab === NOVA_TAB_TYPE.removeBG}>
-          <div>
-            <img src={`data:${result?.contentType};base64,${result?.data}`} alt="result" />
-          </div>
-        </ImageBox>
-        <ThemeSelectionWrap>
-          <span>{t(`Nova.Theme.Guide`)}</span>
-          <ThemeWrap>
-            {images.map((image) => (
-              <ImageContainer key={image.src} isSelected={selectedImage?.src === image.src}>
-                <OuterBorder isSelected={selectedImage?.src === image.src} />
-                <InnerBorder isSelected={selectedImage?.src === image.src} />
-                {selectedImage?.src === image.src && (
-                  <CheckBox>
-                    <CheckIcon />
-                  </CheckBox>
-                )}
-                <Image
-                  src={image.src}
-                  alt={image.alt}
-                  onClick={() => handleImageClick(image.src, image.alt)}
-                />
-              </ImageContainer>
-            ))}
-          </ThemeWrap>
-        </ThemeSelectionWrap>
-        <Button
-          isActive={!!selectedImage}
-          onClick={() => (selectedImage ? handleChangeStyle(selectedImage?.alt ?? '') : undefined)}>
-          <span>{t(`Nova.Theme.Button`)}</span>
-        </Button>
-      </Body>
+      <Container>
+        <Body>
+          <ImageBox isBordered={selectedNovaTab === NOVA_TAB_TYPE.removeBG}>
+            <div>
+              <img src={`data:${result?.contentType};base64,${result?.data}`} alt="result" />
+            </div>
+          </ImageBox>
+          <ThemeSelectionWrap>
+            <span>{t(`Nova.Theme.Guide`)}</span>
+            <ThemeWrap>
+              {images.map((image) => (
+                <ImageContainer key={image.src} isSelected={selectedImage?.src === image.src}>
+                  <OuterBorder isSelected={selectedImage?.src === image.src} />
+                  <InnerBorder isSelected={selectedImage?.src === image.src} />
+                  {selectedImage?.src === image.src && (
+                    <CheckBox>
+                      <CheckIcon />
+                    </CheckBox>
+                  )}
+                  <Image
+                    src={image.src}
+                    alt={image.alt}
+                    onClick={() => handleImageClick(image.src, image.alt)}
+                  />
+                </ImageContainer>
+              ))}
+            </ThemeWrap>
+          </ThemeSelectionWrap>
+          <Button
+            isActive={!!selectedImage}
+            onClick={() =>
+              selectedImage ? handleChangeStyle(selectedImage?.alt ?? '') : undefined
+            }>
+            <span>{t(`Nova.Theme.Button`)}</span>
+          </Button>
+        </Body>
+      </Container>
     </Wrap>
   );
 }
