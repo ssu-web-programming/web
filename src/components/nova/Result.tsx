@@ -24,6 +24,7 @@ const Container = styled.div`
   display: flex;
   flex: 1 1 0;
   background-color: rgb(244, 246, 248);
+  overflow-y: auto;
 `;
 
 const Wrap = styled.div`
