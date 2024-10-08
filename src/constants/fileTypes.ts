@@ -77,12 +77,12 @@ export const getValidExt = (tab: NOVA_TAB_TYPE) => {
     case 'remakeImg':
     case 'expandImg':
       return SUPPORT_IMAGE_TYPE.filter(({ extensions }) =>
-        ['.jpg', '.png', '.webp'].includes(extensions)
+        ['.jpg', '.jpeg', '.png', '.webp'].includes(extensions)
       );
     case 'improvedRes':
     case 'changeStyle':
       return SUPPORT_IMAGE_TYPE.filter(({ extensions }) =>
-        ['.jpg', '.png', '.bmp', '.webp'].includes(extensions)
+        ['.jpg', '.jpeg', '.png', '.bmp', '.webp'].includes(extensions)
       );
     default:
       return [];
