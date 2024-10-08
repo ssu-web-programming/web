@@ -116,14 +116,14 @@ export default function ImageUploader(props: ImageUploaderProps) {
 
   useEffect(() => {
     const selectedFile = localFiles[0] || driveFiles[0];
-    const isIos = getPlatform() === ClientType.ios;
+    const isMobile = getPlatform() === ClientType.ios || getPlatform() === ClientType.android;
     const isLocalFile = !!localFiles[0];
 
     const handleFileProcessing = async () => {
       if (!selectedFile) return;
 
       const fileData =
-        isIos && isLocalFile ? await compressImage(selectedFile, props.curTab) : selectedFile;
+        isMobile && isLocalFile ? await compressImage(selectedFile, props.curTab) : selectedFile;
 
       dispatch(
         setPageData({
