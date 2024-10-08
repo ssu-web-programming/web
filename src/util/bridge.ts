@@ -341,6 +341,7 @@ export const useInitBridgeListener = () => {
             break;
           }
           case 'getFileInfo': {
+            console.log('body: ', body);
             dispatch(
               setCurrentFile({
                 type: body.type,
