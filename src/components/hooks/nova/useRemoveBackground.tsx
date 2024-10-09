@@ -57,7 +57,7 @@ export const useRemoveBackground = () => {
 
     try {
       const formData = await createFormDataFromFiles([currentFile]);
-      const { res } = await apiWrapper().request(NOVA_REMOVE_BACKGROUND, {
+      const { res, logger } = await apiWrapper().request(NOVA_REMOVE_BACKGROUND, {
         body: formData,
         method: 'POST'
       });
@@ -65,6 +65,12 @@ export const useRemoveBackground = () => {
       if (response.success) {
         dispatch(setPageResult({ tab: NOVA_TAB_TYPE.removeBG, result: response.data.image[0] }));
         dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.removeBG, status: 'done' }));
+
+        await logger({
+          dp: 'ai.nova',
+          el: 'nova_background_remove',
+          gpt_ver: 'NOVA_REMOVE_BG'
+        });
 
         const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
         showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');

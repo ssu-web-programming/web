@@ -57,7 +57,7 @@ export const useRemakeImage = () => {
 
     try {
       const formData = await createFormDataFromFiles([currentFile]);
-      const { res } = await apiWrapper().request(NOVA_REMAKE_IMAGE, {
+      const { res, logger } = await apiWrapper().request(NOVA_REMAKE_IMAGE, {
         body: formData,
         method: 'POST'
       });
@@ -65,6 +65,12 @@ export const useRemakeImage = () => {
       if (response.success) {
         dispatch(setPageResult({ tab: NOVA_TAB_TYPE.remakeImg, result: response.data.image[0] }));
         dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.remakeImg, status: 'done' }));
+
+        await logger({
+          dp: 'ai.nova',
+          el: 'nova_image_remake',
+          gpt_ver: 'NOVA_REIMAGE_CLIPDROP'
+        });
 
         const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
         showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');

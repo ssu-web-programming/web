@@ -78,7 +78,7 @@ export const useExpandImage = () => {
       formData.append('extend_up', String(extend_up));
       formData.append('extend_down', String(extend_down));
 
-      const { res } = await apiWrapper().request(NOVA_EXPAND_IMAGE, {
+      const { res, logger } = await apiWrapper().request(NOVA_EXPAND_IMAGE, {
         body: formData,
         method: 'POST'
       });
@@ -97,6 +97,12 @@ export const useExpandImage = () => {
           })
         );
         dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.expandImg, status: 'done' }));
+
+        await logger({
+          dp: 'ai.nova',
+          el: 'nova_image_expansion',
+          gpt_ver: 'NOVA_UNCROP_CLIPDROP'
+        });
 
         const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
         showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');

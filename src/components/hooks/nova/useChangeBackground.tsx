@@ -77,7 +77,7 @@ export const useChangeBackground = () => {
     try {
       const formData = await createFormDataFromFiles([currentFile]);
       formData.append('prompt', prompt);
-      const { res } = await apiWrapper().request(NOVA_CHANGE_BACKGROUND, {
+      const { res, logger } = await apiWrapper().request(NOVA_CHANGE_BACKGROUND, {
         body: formData,
         method: 'POST'
       });
@@ -96,6 +96,11 @@ export const useChangeBackground = () => {
         );
         dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeBG, status: 'done' }));
 
+        await logger({
+          dp: 'ai.nova',
+          el: 'nova_background_change',
+          gpt_ver: 'NOVA_REPLACE_BG_CLIPDROP'
+        });
         const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
         showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');
       } else {

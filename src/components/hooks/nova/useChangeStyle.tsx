@@ -72,7 +72,7 @@ export const useChangeStyle = () => {
     try {
       const formData = await createFormDataFromFiles([currentFile]);
       formData.append('style', style);
-      const { res } = await apiWrapper().request(NOVA_CHANGE_STYLE, {
+      const { res, logger } = await apiWrapper().request(NOVA_CHANGE_STYLE, {
         body: formData,
         method: 'POST'
       });
@@ -90,6 +90,12 @@ export const useChangeStyle = () => {
           })
         );
         dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeStyle, status: 'done' }));
+
+        await logger({
+          dp: 'ai.nova',
+          el: 'nova_style_change',
+          gpt_ver: 'NOVA_PO_STYLE_TRANSFER'
+        });
 
         const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
         showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');

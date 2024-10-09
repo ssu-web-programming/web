@@ -247,7 +247,8 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
           if (splunk) {
             splunk({
               dp: 'ai.nova',
-              el: vsId || type !== '' ? 'nova_document_or_image' : 'nova_chating'
+              el: vsId || type !== '' ? 'nova_document_or_image' : 'nova_chating',
+              gpt_ver: vsId || type !== '' ? 'NOVA_ASK_DOC_GPT4O' : 'NOVA_CHAT_GPT4O'
             });
             if (type) {
               splunk({

@@ -57,7 +57,7 @@ export const useImprovedResolution = () => {
 
     try {
       const formData = await createFormDataFromFiles([currentFile]);
-      const { res } = await apiWrapper().request(NOVA_IMPROVED_RESOLUTION, {
+      const { res, logger } = await apiWrapper().request(NOVA_IMPROVED_RESOLUTION, {
         body: formData,
         method: 'POST'
       });
@@ -65,6 +65,12 @@ export const useImprovedResolution = () => {
       if (response.success) {
         dispatch(setPageResult({ tab: NOVA_TAB_TYPE.improvedRes, result: response.data.image[0] }));
         dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.improvedRes, status: 'done' }));
+
+        await logger({
+          dp: 'ai.nova',
+          el: 'nova_resolution_elevation',
+          gpt_ver: 'NOVA_PO_RESOLUTION'
+        });
 
         const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
         showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');
