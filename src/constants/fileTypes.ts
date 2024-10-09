@@ -18,10 +18,6 @@ export const SUPPORT_DOCUMENT_TYPE: SupportFileType[] = [
     extensions: '.pptx'
   },
   {
-    mimeType: 'application/vnd.ms-excel',
-    extensions: '.xls'
-  },
-  {
     mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     extensions: '.xlsx'
   },
