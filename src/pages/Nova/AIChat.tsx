@@ -43,7 +43,6 @@ const GuideExample = styled.div`
   justify-content: flex-start;
   gap: 8px;
   padding: 12px;
-  margin: 0 16px;
   border: 1px solid #c9cdd2;
   border-radius: 8px;
   background: #fff;

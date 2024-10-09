@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import DownloadIcon from 'img/ico_download_white.svg';
 import InsertDocsIcon from 'img/ico_insert_docs.svg';
+import { lang } from 'locale';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
@@ -36,6 +37,9 @@ const Wrap = styled.div`
 
 const Body = styled.div`
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding: 0 16px;
   margin: auto;
   overflow-y: auto;
@@ -51,9 +55,9 @@ const Guide = styled.div`
   margin-bottom: 24px;
 `;
 
-const Title = styled.div`
-  height: 36px;
+const Title = styled.div<{ lang: string }>`
   display: flex;
+  flex-direction: ${(props) => (props.lang === 'en' ? 'column' : 'row')};
   justify-content: center;
   align-items: center;
   gap: 4px;
@@ -79,34 +83,29 @@ const SubTitle = styled.span`
 
 const ImageBox = styled.div<{ isBordered: boolean }>`
   width: 100%;
+  height: 100%;
+  max-width: 480px;
+  max-height: 480px;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-bottom: 100%;
   margin-bottom: 24px;
   border: ${(props) => (props.isBordered ? '1px solid #c9cdd2' : 'none')};
   border-radius: 8px;
 
-  div {
+  img {
     width: 100%;
     height: 100%;
-    position: absolute;
-    top: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  img {
+    max-width: 480px;
+    max-height: 480px;
     object-fit: contain;
-    max-width: 100%;
-    max-height: 100%;
     border-radius: 8px;
   }
 `;
 
 const ButtonWrap = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -164,6 +163,10 @@ const InsertDocButton = styled.div`
   cursor: pointer;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   background: white;
+
+  span {
+    max-width: 80px;
+  }
 `;
 
 const SaveButton = styled.div`
@@ -231,7 +234,7 @@ export default function Result() {
       <Container>
         <Body>
           <Guide>
-            <Title>
+            <Title lang={lang}>
               <img src={CheckIcon} alt="check" />
               <span>{t(`Nova.${selectedNovaTab}.Done.Title`)}</span>
             </Title>

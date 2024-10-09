@@ -19,6 +19,7 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0 16px;
   flex: 1 1 0;
   overflow-y: auto;
   background-color: #f4f6f8;

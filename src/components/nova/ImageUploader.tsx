@@ -21,7 +21,7 @@ const Wrap = styled.div`
   justify-content: center;
   position: relative;
   height: 206px;
-  margin: 0 16px;
+  padding: 0 16px;
   border: 1px dashed #c9cdd2;
   border-radius: 8px;
   background-color: white;
