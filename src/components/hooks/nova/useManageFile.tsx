@@ -13,7 +13,7 @@ import {
   SupportFileType
 } from '../../../constants/fileTypes';
 import { novaHistorySelector } from '../../../store/slices/nova/novaHistorySlice';
-import { selectTabSlice } from '../../../store/slices/tabSlice';
+import { NOVA_TAB_TYPE, selectTabSlice } from '../../../store/slices/tabSlice';
 import { DriveFileInfo, setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { getFileExtension } from '../../../util/common';
@@ -50,12 +50,6 @@ export function useManageFile() {
         return;
       }
 
-      const uploadCnt = novaHistory.reduce((acc, cur) => {
-        const len = cur.files?.length;
-        if (len) return acc + len;
-        else return acc;
-      }, 0);
-
       if (files.length > uploadLimit) {
         await confirm({
           title: '',
@@ -68,17 +62,25 @@ export function useManageFile() {
         return;
       }
 
-      if (uploadCnt + files.length > 3) {
-        await confirm({
-          title: '',
-          msg: t('Nova.Confirm.OverMaxFileUploadCnt', { max: 3 })!,
-          onOk: { text: t('Nova.Confirm.NewChat.StartNewChat'), callback: chatNova.newChat },
-          onCancel: {
-            text: t('Cancel'),
-            callback: () => {}
-          }
-        });
-        return;
+      if (selectedNovaTab === NOVA_TAB_TYPE.aiChat) {
+        const uploadCnt = novaHistory.reduce((acc, cur) => {
+          const len = cur.files?.length;
+          if (len) return acc + len;
+          else return acc;
+        }, 0);
+
+        if (uploadCnt + files.length > 3) {
+          await confirm({
+            title: '',
+            msg: t('Nova.Confirm.OverMaxFileUploadCnt', { max: 3 })!,
+            onOk: { text: t('Nova.Confirm.NewChat.StartNewChat'), callback: chatNova.newChat },
+            onCancel: {
+              text: t('Cancel'),
+              callback: () => {}
+            }
+          });
+          return;
+        }
       }
     }
 

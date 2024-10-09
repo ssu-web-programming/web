@@ -92,8 +92,7 @@ export default function Nova() {
   const { getRootProps, isDragActive } = useDropzone({
     onDrop,
     noClick: true,
-    noKeyboard: true,
-    maxFiles: calcAvailableFileCnt()
+    noKeyboard: true
   });
 
   const handleChangeTab = (selectTab: NOVA_TAB_TYPE) => {
