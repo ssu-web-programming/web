@@ -16,7 +16,7 @@ renderer.image = (href, title, text) =>
 renderer.paragraph = (text) => {
   if (isLink) {
     const imgTagMatch = text.match(/<img[^>]*>/g);
-    return `<p>${i18n.t(`Nova.aiChat.CreateImage`)}</p>${imgTagMatch?.join('')}`;
+    return imgTagMatch ? `<p>${i18n.t(`Nova.aiChat.CreateImage`)}</p>${imgTagMatch?.join('')}` : ``;
   } else {
     return `<p>${text}</p>`;
   }
