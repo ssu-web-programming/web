@@ -333,7 +333,6 @@ export const useInitBridgeListener = () => {
           }
           case 'openNOVA': {
             dispatch(changePanel({ cmd, body: body.inputText || '' }));
-            dispatch(setLocalFiles([]));
             dispatch(setDriveFiles([]));
             if (body.openTab in NOVA_TAB_TYPE) {
               dispatch(selectNovaTab(NOVA_TAB_TYPE[body.openTab as keyof typeof NOVA_TAB_TYPE]));
@@ -344,6 +343,8 @@ export const useInitBridgeListener = () => {
                 const file = new File([blob], 'image.png', { type: blob.type });
                 console.log('file: ', file);
                 dispatch(setLocalFiles([file]));
+              } else {
+                dispatch(setLocalFiles([]));
               }
             }
             Bridge.callBridgeApi('analyzeCurFile');
