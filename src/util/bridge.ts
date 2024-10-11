@@ -337,6 +337,13 @@ export const useInitBridgeListener = () => {
             dispatch(setDriveFiles([]));
             if (body.openTab in NOVA_TAB_TYPE) {
               dispatch(selectNovaTab(NOVA_TAB_TYPE[body.openTab as keyof typeof NOVA_TAB_TYPE]));
+              if (body.image) {
+                console.log('image: ', body.image);
+                console.log('image type: ', body.image.type);
+                const file = new File(body.image, 'image', body.image.type);
+                console.log('file: ', file);
+                dispatch(setLocalFiles([file]));
+              }
             }
             Bridge.callBridgeApi('analyzeCurFile');
             break;
