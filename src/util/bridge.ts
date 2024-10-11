@@ -340,7 +340,8 @@ export const useInitBridgeListener = () => {
               if (body.image) {
                 console.log('image: ', body.image);
                 console.log('image type: ', body.image.type);
-                const file = new File(body.image, 'image', body.image.type);
+                const blob = body.image;
+                const file = new File([blob], 'image', blob.type);
                 console.log('file: ', file);
                 dispatch(setLocalFiles([file]));
               }
