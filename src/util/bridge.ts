@@ -336,7 +336,7 @@ export const useInitBridgeListener = () => {
             dispatch(setDriveFiles([]));
             if (body.openTab in NOVA_TAB_TYPE) {
               dispatch(selectNovaTab(NOVA_TAB_TYPE[body.openTab as keyof typeof NOVA_TAB_TYPE]));
-              if (body.image) {
+              if (body.image && body.image.size > 0 && body.image.type) {
                 console.log('image: ', body.image);
                 console.log('image type: ', body.image.type);
                 const blob = body.image;
