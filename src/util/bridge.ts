@@ -340,8 +340,18 @@ export const useInitBridgeListener = () => {
                 console.log('image: ', body.image);
                 console.log('image type: ', body.image.type);
                 const blob = body.image;
-                const file = new File([blob], 'image.png', { type: blob.type });
+                const file = new File([blob], 'image', { type: blob.type });
                 console.log('file: ', file);
+                if (getPlatform() === 'unknown') {
+                  const url = URL.createObjectURL(file);
+                  const link = document.createElement('a');
+                  link.href = url;
+                  link.download = file.name; // 파일 이름 설정
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                  URL.revokeObjectURL(url); // 메모리 해제
+                }
                 dispatch(setLocalFiles([file]));
               } else {
                 dispatch(setLocalFiles([]));
