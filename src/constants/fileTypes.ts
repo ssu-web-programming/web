@@ -165,8 +165,12 @@ async function getImageDimensions(file: File): Promise<{ width: number; height: 
     const reader = new FileReader();
 
     reader.onload = (e) => {
-      if (e.target?.result) {
-        img.src = e.target.result as string;
+      console.log('FileReader onload result:', e.target?.result);
+      const result = e.target?.result;
+      if (result) {
+        img.src = result as string;
+      } else {
+        reject(new Error('Failed to load image'));
       }
     };
 
@@ -175,11 +179,11 @@ async function getImageDimensions(file: File): Promise<{ width: number; height: 
     };
 
     img.onerror = (err) => {
-      reject(err);
+      reject(new Error(`Image load error: ${err}`));
     };
 
     reader.onerror = (err) => {
-      reject(err);
+      reject(new Error(`FileReader error: ${err}`));
     };
 
     reader.readAsDataURL(file);

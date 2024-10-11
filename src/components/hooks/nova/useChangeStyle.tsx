@@ -37,6 +37,7 @@ export const useChangeStyle = () => {
     const file = await convertDriveFileToFile(currentFile);
     if (!file) return;
 
+    console.log('use file: ', file);
     if (await isPixelLimitExceeded(file, NOVA_TAB_TYPE.changeStyle)) {
       await confirm({
         title: '',
