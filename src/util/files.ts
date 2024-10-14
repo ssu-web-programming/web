@@ -6,6 +6,7 @@ import {
   PO_DRIVE_DOWNLOAD,
   PO_DRIVE_UPLOAD
 } from '../api/constant';
+import { SUPPORT_IMAGE_TYPE } from '../constants/fileTypes';
 import { DelayDocConverting, DocConvertingError } from '../error/error';
 import { NovaFileInfo } from '../store/slices/nova/novaHistorySlice';
 import { DriveFileInfo } from '../store/slices/uploadFiles';
@@ -224,7 +225,9 @@ export const base64ToBlob = (base64: string, mimeType: string): Blob => {
 };
 
 export const blobToFile = (blob: Blob): File => {
-  return new File([blob], `image.${blob.type}`, { type: blob.type });
+  const fileType = SUPPORT_IMAGE_TYPE.find((type) => type.mimeType === blob.type);
+  const ext = fileType ? fileType.extensions : '.png';
+  return new File([blob], `image${ext}`, { type: blob.type });
 };
 
 export const base64ToFile = (base64: string, mimeType: string): File => {

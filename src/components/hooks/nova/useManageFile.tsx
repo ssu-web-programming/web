@@ -94,6 +94,7 @@ export function useManageFile() {
 
     const invalidFiles = files.filter((file) => {
       const fileExtension = `.${file.name.split('.').pop()?.toLowerCase()}`;
+      console.log('fileExtension: ', fileExtension);
       return !supportedExtensions.includes(fileExtension);
     });
 
