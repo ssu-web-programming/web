@@ -340,17 +340,26 @@ export const useInitBridgeListener = () => {
               if (body.image) {
                 let file: File | null = null;
 
-                console.log('body.image: ', body.image);
                 if (body.image.size > 0 && body.image.type) {
                   console.log('blob: ', body.image);
                   file = blobToFile(body.image);
                 } else if (typeof body.image === 'string' && body.image.startsWith('data:')) {
-                  console.log('base64: ', body.image);
+                  console.log('image: ', body.image);
                   const base64Data = body.image.split(',')[1];
                   const mimeType = body.image.match(/data:(.*);base64/)?.[1] || 'image/png';
-                  console.log('base64Data: ', base64Data);
-                  console.log('mimeType: ', mimeType);
                   file = base64ToFile(base64Data, mimeType);
+
+                  const url = URL.createObjectURL(file);
+                  const link = document.createElement('a');
+                  link.href = url;
+                  link.download = file.name;
+                  console.log('download link: ', link);
+
+                  document.body.appendChild(link);
+                  link.click();
+
+                  document.body.removeChild(link);
+                  URL.revokeObjectURL(url);
                   console.log('file: ', file);
                 }
 
