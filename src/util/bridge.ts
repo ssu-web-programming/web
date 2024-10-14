@@ -349,7 +349,6 @@ export const useInitBridgeListener = () => {
                 }
 
                 if (file) {
-                  console.log('file: ', file);
                   await loadLocalFile([file]);
                 } else {
                   dispatch(setLocalFiles([]));
