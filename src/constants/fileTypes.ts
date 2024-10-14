@@ -165,7 +165,6 @@ async function getImageDimensions(file: File): Promise<{ width: number; height: 
     const reader = new FileReader();
 
     reader.onload = (e) => {
-      console.log('FileReader onload result:', e.target?.result);
       const result = e.target?.result;
       if (result) {
         img.src = result as string;

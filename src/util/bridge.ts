@@ -248,7 +248,7 @@ export const useInitBridgeListener = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { getFileInfo } = useManageFile();
+  const { getFileInfo, loadLocalFile } = useManageFile();
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
 
   // const movePage = useMoveChatTab();
@@ -341,30 +341,16 @@ export const useInitBridgeListener = () => {
                 let file: File | null = null;
 
                 if (body.image.size > 0 && body.image.type) {
-                  console.log('blob: ', body.image);
                   file = blobToFile(body.image);
                 } else if (typeof body.image === 'string' && body.image.startsWith('data:')) {
-                  console.log('image: ', body.image);
                   const base64Data = body.image.split(',')[1];
                   const mimeType = body.image.match(/data:(.*);base64/)?.[1] || 'image/png';
                   file = base64ToFile(base64Data, mimeType);
-
-                  const url = URL.createObjectURL(file);
-                  const link = document.createElement('a');
-                  link.href = url;
-                  link.download = file.name;
-                  console.log('download link: ', link);
-
-                  document.body.appendChild(link);
-                  link.click();
-
-                  document.body.removeChild(link);
-                  URL.revokeObjectURL(url);
-                  console.log('file: ', file);
                 }
 
                 if (file) {
-                  dispatch(setLocalFiles([file]));
+                  console.log('file: ', file);
+                  await loadLocalFile([file]);
                 } else {
                   dispatch(setLocalFiles([]));
                 }
