@@ -224,7 +224,7 @@ export const base64ToBlob = (base64: string, mimeType: string): Blob => {
 };
 
 export const blobToFile = (blob: Blob): File => {
-  return new File([blob], 'image', { type: blob.type });
+  return new File([blob], `image.${blob.type}`, { type: blob.type });
 };
 
 export const base64ToFile = (base64: string, mimeType: string): File => {
