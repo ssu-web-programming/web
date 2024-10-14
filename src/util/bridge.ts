@@ -32,6 +32,7 @@ import {
 import { AppDispatch, RootState, useAppDispatch, useAppSelector } from '../store/store';
 
 import { isHigherVersion, makeClipboardData } from './common';
+import { base64ToFile, blobToFile } from './files';
 
 const UA_PREFIX = `__polaris_office_ai_`;
 
@@ -336,23 +337,22 @@ export const useInitBridgeListener = () => {
             dispatch(setDriveFiles([]));
             if (body.openTab in NOVA_TAB_TYPE) {
               dispatch(selectNovaTab(NOVA_TAB_TYPE[body.openTab as keyof typeof NOVA_TAB_TYPE]));
-              if (body.image && body.image.size > 0 && body.image.type) {
-                console.log('image: ', body.image);
-                console.log('image type: ', body.image.type);
-                const blob = body.image;
-                const file = new File([blob], 'image', { type: blob.type });
-                console.log('file: ', file);
-                if (getPlatform() === 'unknown') {
-                  const url = URL.createObjectURL(file);
-                  const link = document.createElement('a');
-                  link.href = url;
-                  link.download = file.name; // 파일 이름 설정
-                  document.body.appendChild(link);
-                  link.click();
-                  document.body.removeChild(link);
-                  URL.revokeObjectURL(url); // 메모리 해제
+              if (body.image) {
+                let file: File | null = null;
+
+                if (body.image.size > 0 && body.image.type) {
+                  file = blobToFile(body.image);
+                } else if (typeof body.image === 'string' && body.image.startsWith('data:')) {
+                  const base64Data = body.image.split(',')[1];
+                  const mimeType = body.image.match(/data:(.*);base64/)?.[1] || 'image/png';
+                  file = base64ToFile(base64Data, mimeType);
                 }
-                dispatch(setLocalFiles([file]));
+
+                if (file) {
+                  dispatch(setLocalFiles([file]));
+                } else {
+                  dispatch(setLocalFiles([]));
+                }
               } else {
                 dispatch(setLocalFiles([]));
               }
