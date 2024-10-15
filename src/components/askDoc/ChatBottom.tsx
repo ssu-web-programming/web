@@ -49,7 +49,7 @@ export const RowBox = styled.div<{ cssExt?: FlattenSimpleInterpolation }>`
   width: 100%;
   gap: 6px;
 
-  ${({ cssExt }) => cssExt && cssExt}
+  ${(props) => (props.cssExt ? props.cssExt : '')};
 `;
 
 const TextBox = styled(RowBox)`

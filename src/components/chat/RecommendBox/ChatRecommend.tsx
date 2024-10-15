@@ -57,7 +57,7 @@ export const RowWrapBox = styled.div<{ cssExt?: FlattenSimpleInterpolation }>`
   ${alignItemCenter}
 
   width: 100%;
-  ${({ cssExt }) => cssExt && cssExt}
+  ${(props) => (props.cssExt ? props.cssExt : '')};
 `;
 
 const OpenedBox = styled(RowWrapBox)`

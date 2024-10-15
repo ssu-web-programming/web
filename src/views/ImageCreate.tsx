@@ -56,7 +56,7 @@ export const RowContainer = styled.div<{
   width: 100%;
   gap: 8px;
 
-  ${({ cssExt }) => cssExt && cssExt}
+  ${(props) => (props.cssExt ? props.cssExt : '')}
 `;
 
 const ImageCreate = ({ contents }: { contents: string }) => {

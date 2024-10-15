@@ -24,7 +24,7 @@ const Wrapper = styled.div`
   ${flex}
   ${flexColumn}
   ${justiSpaceBetween}
-  
+
   width: 100%;
   height: 100%;
   background-color: var(--ai-purple-99-bg-light);
@@ -53,7 +53,7 @@ const InputBox = styled.div<{ activeInputWrap: boolean }>`
   ${alignItemCenter}
   ${flexColumn}
   ${flexShrink}
-  
+
   height: fit-content;
   width: 100%;
   background-color: white;
@@ -67,7 +67,7 @@ export const RowBox = styled.div<{ cssExt?: FlattenSimpleInterpolation }>`
   width: 100%;
   gap: 6px;
 
-  ${({ cssExt }) => cssExt && cssExt}
+  ${(props) => (props.cssExt ? props.cssExt : '')};
 `;
 
 const LengthWrapper = styled.div<{ isError?: boolean }>`
@@ -112,7 +112,7 @@ const InputBottomArea = styled(RowWrapBox)`
 const WrapperPage = styled.div`
   ${flex}
   ${flexColumn}
-  
+
   width: 100%;
   height: 100%;
 `;
