@@ -9,6 +9,9 @@ import ko from './translation.ko.json';
 export const LANG_KO_KR = 'ko';
 export const LANG_JA_JP = 'ja';
 export const LANG_EN_US = 'en';
+export const LANG_KO_KR_CODE = 'ko_KR';
+export const LANG_JA_JP_CODE = 'ja_JP';
+export const LANG_EN_US_CODE = 'en_US';
 
 const getLangCodeFromParams = () => {
   try {
@@ -55,7 +58,23 @@ const getLang = () => {
     return LANG_EN_US;
   }
 };
+const getLangCode = () => {
+  const code = getLangCodeFromParams() || getLangCodeFromUA() || LANG_EN_US_CODE;
+  try {
+    const lower = code?.toLowerCase();
+    if (lower?.startsWith('ko')) {
+      return LANG_KO_KR_CODE;
+    } else if (lower?.startsWith('ja')) {
+      return LANG_JA_JP_CODE;
+    } else {
+      return LANG_EN_US_CODE;
+    }
+  } catch (err) {
+    return LANG_EN_US_CODE;
+  }
+};
 export const lang = getLang();
+export const langCode = getLangCode();
 
 const resources = {
   ko: {
