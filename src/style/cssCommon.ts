@@ -70,10 +70,6 @@ export const justiSpaceBetween = css`
   justify-content: space-between;
 `;
 
-export const justiSpaceAround = css`
-  justify-content: space-around;
-`;
-
 export const justiStart = css`
   justify-content: flex-start;
 `;
@@ -92,10 +88,6 @@ export const alignItemStart = css`
 
 export const alignItemCenter = css`
   align-items: center;
-`;
-
-export const alignItemEnd = css`
-  align-items: flex-end;
 `;
 
 export const flexGrow = css`
