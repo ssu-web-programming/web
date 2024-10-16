@@ -114,19 +114,19 @@ export const CheckDocHistory = () => {
 export default CheckDocHistory;
 
 const List = styled.ul`
-  ${flex}
-  ${flexColumn}
-  ${justiStart}
-  
+  ${flex};
+  ${flexColumn};
+  ${justiStart};
+
   width: 100%;
   height: 100%;
   padding: 40px 0 0 0;
 `;
 
 const Item = styled.li<{ checked: boolean }>`
-  ${flex}
-  ${alignItemCenter}
-  ${justiStart}
+  ${flex};
+  ${alignItemCenter};
+  ${justiStart};
   flex-direction: row;
   gap: 8px;
 

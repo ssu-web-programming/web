@@ -19,7 +19,8 @@ const Contents = styled.div`
 
 const TitleWrapper = styled.div`
   ${flex};
-  ${alignItemCenter} /* line-height: 100%; */ width: fit-content;
+  ${alignItemCenter};
+  width: fit-content;
 `;
 
 const Title = styled.div`

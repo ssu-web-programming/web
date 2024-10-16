@@ -58,21 +58,21 @@ import { calLeftCredit } from '../util/common';
 const TEXT_MAX_HEIGHT = 268;
 
 const Wrapper = styled.div`
-  ${flex}
-  ${flexColumn}
-  ${justiSpaceBetween}
+  ${flex};
+  ${flexColumn};
+  ${justiSpaceBetween};
 
   width: 100%;
   height: 100%;
   background-color: var(--ai-purple-99-bg-light);
 
-  ${TableCss}
+  ${TableCss};
 `;
 
 const ChatListWrapper = styled.div<{ isLoading: boolean }>`
-  ${flex}
-  ${flexColumn}
-  ${flexGrow}
+  ${flex};
+  ${flexColumn};
+  ${flexGrow};
   position: relative;
 
   width: 100%;
@@ -84,9 +84,9 @@ const ChatListWrapper = styled.div<{ isLoading: boolean }>`
 `;
 
 const FloatingBox = styled.div`
-  ${flex}
-  ${flexGrow}
-  ${flexShrink}
+  ${flex};
+  ${flexGrow};
+  ${flexShrink};
 
   position: absolute;
   top: 0px;
@@ -96,10 +96,10 @@ const FloatingBox = styled.div`
 `;
 
 const InputBox = styled.div<{ activeInputWrap: boolean }>`
-  ${flex}
-  ${alignItemCenter}
-  ${flexColumn}
-  ${flexShrink}
+  ${flex};
+  ${alignItemCenter};
+  ${flexColumn};
+  ${flexShrink};
 
   height: fit-content;
   width: 100%;
@@ -108,11 +108,13 @@ const InputBox = styled.div<{ activeInputWrap: boolean }>`
 `;
 
 export const RowBox = styled.div<{ cssExt?: FlattenSimpleInterpolation }>`
-  ${flex}
-  ${justiSpaceBetween}
-  ${alignItemCenter}
+  ${flex};
+  ${justiSpaceBetween};
+  ${alignItemCenter};
   width: 100%;
   gap: 6px;
+
+  ${(props) => props.cssExt || ''};
 `;
 
 export const VersionWrapper = styled.div`
@@ -124,8 +126,8 @@ export const VersionWrapper = styled.div`
 `;
 
 const Info = styled.div`
-  ${flex}
-  ${alignItemCenter}
+  ${flex};
+  ${alignItemCenter};
 
   background-color: var(--ai-purple-99-bg-light);
   color: var(--ai-purple-50-main);
@@ -138,7 +140,7 @@ const Info = styled.div`
 `;
 
 const CenterBox = styled.div`
-  ${flex}
+  ${flex};
   ${justiCenter};
 
   width: 100%;
@@ -153,9 +155,9 @@ export const ColumDivider = styled.div`
 
 const TextBox = styled(RowBox)`
   textarea {
-    ${flex}
-    ${justiCenter}
-    ${flexGrow}
+    ${flex};
+    ${justiCenter};
+    ${flexGrow};
 
     width: fit-content;
     border: 0;
@@ -172,11 +174,11 @@ const TextBox = styled(RowBox)`
 
 const InputBottomArea = styled.div`
   width: 100%;
-  ${flex}
-  ${flexWrap}
-  ${justiCenter}
-  ${justiSpaceBetween}
-  ${alignItemCenter}
+  ${flex};
+  ${flexWrap};
+  ${justiCenter};
+  ${justiSpaceBetween};
+  ${alignItemCenter};
   height: 34px;
   padding: 0px 3px 0px 9px;
   border-top: 1px solid var(--ai-purple-99-bg-light);

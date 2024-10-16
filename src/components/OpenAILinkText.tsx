@@ -7,7 +7,7 @@ import { flex } from '../style/cssCommon';
 import LinkText from './LinkText';
 
 const Wrapper = styled.div`
-  ${flex}
+  ${flex};
 
   font-family: Pretendard;
   font-size: 11px;

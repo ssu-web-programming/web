@@ -15,7 +15,6 @@ import {
   versionClova,
   versionGpt4o,
   WriteOptions
-  // versionClaude
 } from '../components/chat/RecommendBox/FormRec';
 import Header from '../components/layout/Header';
 // import { ReactComponent as IconChat } from '../img/ico_chat.svg';
@@ -26,9 +25,9 @@ import { flex, flexColumn } from '../style/cssCommon';
 import AIWriteTab from '../views/AIWriteTab';
 
 const Wrapper = styled.div`
-  ${flex}
-  ${flexColumn}
-  
+  ${flex};
+  ${flexColumn};
+
   width: 100%;
   height: 100%;
 `;

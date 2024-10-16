@@ -31,9 +31,9 @@ import FormRec, { DEFAULT_WRITE_OPTION_FORM_VALUE } from './FormRec';
 import FunctionRec from './FunctionRec';
 
 const Wrapper = styled.div`
-  ${flex}
-  ${flexColumn}
-  ${justiCenter}
+  ${flex};
+  ${flexColumn};
+  ${justiCenter};
 
   width: 100%;
   background-color: rgba(245, 241, 253, 0.7);
@@ -51,12 +51,13 @@ const Wrapper = styled.div`
 `;
 
 export const RowWrapBox = styled.div<{ cssExt?: FlattenSimpleInterpolation }>`
-  ${flex}
-  ${flexWrap}
-  ${justiSpaceBetween}
-  ${alignItemCenter}
+  ${flex};
+  ${flexWrap};
+  ${justiSpaceBetween};
+  ${alignItemCenter};
 
   width: 100%;
+  ${(props) => props.cssExt || ''};
 `;
 
 const OpenedBox = styled(RowWrapBox)`
@@ -66,10 +67,10 @@ const OpenedBox = styled(RowWrapBox)`
 `;
 
 const CommentWrapper = styled.div`
-  ${flex}
-  ${justiCenter}
-  ${alignItemCenter}
-  ${justiCenter}
+  ${flex};
+  ${justiCenter};
+  ${alignItemCenter};
+  ${justiCenter};
   align-self: center;
 
   width: fit-content;

@@ -8,10 +8,10 @@ import { alignItemCenter, flex, flexColumn, justiCenter } from '../style/cssComm
 import Blanket from './Blanket';
 
 const SpinnerWrapper = styled.div`
-  ${flex}
-  ${flexColumn}
-  ${justiCenter}
-  ${alignItemCenter}
+  ${flex};
+  ${flexColumn};
+  ${justiCenter};
+  ${alignItemCenter};
 
   position: absolute;
   left: 50%;
@@ -31,7 +31,7 @@ const SpinnerWrapper = styled.div`
 `;
 
 const SpinnerImg = styled.img`
-  ${flex}
+  ${flex};
 
   background-color: white;
   border-radius: 50%;

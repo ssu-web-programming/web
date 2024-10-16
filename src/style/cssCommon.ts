@@ -176,9 +176,11 @@ export const grid = css`
 `;
 
 export const RowBox = styled.div<{ cssExt?: FlattenSimpleInterpolation }>`
-  ${flex}
-  ${justiSpaceBetween}
-  ${alignItemCenter}
+  ${flex};
+  ${justiSpaceBetween};
+  ${alignItemCenter};
   width: 100%;
   gap: 6px;
+
+  ${(props) => props.cssExt || ''};
 `;

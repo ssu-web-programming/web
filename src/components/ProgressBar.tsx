@@ -18,6 +18,7 @@ const ProgressWrap = styled.div`
 const Progress = styled.div<{ width?: number }>`
   &.back {
     border-radius: 4px;
+
     .bg {
       width: ${(props) => props.width}%;
       position: absolute;
@@ -31,10 +32,10 @@ const Progress = styled.div<{ width?: number }>`
 
 const Text = styled.div<{ width?: number }>`
   &.back_num {
-    ${flex}
-    ${alignItemCenter}
-    ${justiCenter}
-    
+    ${flex};
+    ${alignItemCenter};
+    ${justiCenter};
+
     position: relative;
     height: 40px;
     color: #000;
@@ -42,10 +43,10 @@ const Text = styled.div<{ width?: number }>`
   }
 
   &.front_num {
-    ${flex}
-    ${alignItemCenter}
-    ${justiCenter}
-    
+    ${flex};
+    ${alignItemCenter};
+    ${justiCenter};
+
     z-index: 2;
     position: absolute;
     top: 0;

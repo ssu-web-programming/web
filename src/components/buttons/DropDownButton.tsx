@@ -17,9 +17,9 @@ import IconComponent from '../IconComponent';
 import Button, { ButtonProps } from './Button';
 
 const DropDownWrapper = styled.div<{ hasSelectedOption?: boolean; width?: ButtonProps['width'] }>`
-  ${flex}
-  ${justiCenter}
-  ${alignItemCenter}
+  ${flex};
+  ${justiCenter};
+  ${alignItemCenter};
 
   position: relative;
   box-sizing: border-box;

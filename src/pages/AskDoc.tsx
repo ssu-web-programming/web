@@ -21,9 +21,9 @@ import {
 const TEXT_MAX_HEIGHT = 268;
 
 const Wrapper = styled.div`
-  ${flex}
-  ${flexColumn}
-  ${justiSpaceBetween}
+  ${flex};
+  ${flexColumn};
+  ${justiSpaceBetween};
 
   width: 100%;
   height: 100%;
@@ -35,9 +35,9 @@ const Wrapper = styled.div`
 `;
 
 const ChatListWrapper = styled.div`
-  ${flex}
-  ${flexColumn}
-  ${flexGrow}
+  ${flex};
+  ${flexColumn};
+  ${flexGrow};
   position: relative;
 
   width: 100%;
@@ -49,10 +49,10 @@ const ChatListWrapper = styled.div`
 `;
 
 const InputBox = styled.div<{ activeInputWrap: boolean }>`
-  ${flex}
-  ${alignItemCenter}
-  ${flexColumn}
-  ${flexShrink}
+  ${flex};
+  ${alignItemCenter};
+  ${flexColumn};
+  ${flexShrink};
 
   height: fit-content;
   width: 100%;
@@ -61,16 +61,18 @@ const InputBox = styled.div<{ activeInputWrap: boolean }>`
 `;
 
 export const RowBox = styled.div<{ cssExt?: FlattenSimpleInterpolation }>`
-  ${flex}
-  ${justiSpaceBetween}
-  ${alignItemCenter}
+  ${flex};
+  ${justiSpaceBetween};
+  ${alignItemCenter};
   width: 100%;
   gap: 6px;
+
+  ${(props) => props.cssExt || ''};
 `;
 
 const LengthWrapper = styled.div<{ isError?: boolean }>`
-  ${flex}
-  ${alignItemCenter}
+  ${flex};
+  ${alignItemCenter};
 
   font-size: 12px;
   color: var(--gray-gray-70);
@@ -84,9 +86,9 @@ const LengthWrapper = styled.div<{ isError?: boolean }>`
 
 const TextBox = styled(RowBox)`
   textarea {
-    ${flex}
-    ${justiCenter}
-    ${flexGrow}
+    ${flex};
+    ${justiCenter};
+    ${flexGrow};
 
     width: fit-content;
     border: 0;
@@ -108,8 +110,8 @@ const InputBottomArea = styled(RowWrapBox)`
 `;
 
 const WrapperPage = styled.div`
-  ${flex}
-  ${flexColumn}
+  ${flex};
+  ${flexColumn};
 
   width: 100%;
   height: 100%;

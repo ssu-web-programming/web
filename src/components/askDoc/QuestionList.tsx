@@ -22,16 +22,16 @@ const Title = styled.div`
 `;
 
 const Summary = styled.div`
-  ${flex}
-  ${flexColumn}
+  ${flex};
+  ${flexColumn};
 
   gap: 12px;
 `;
 
 const SubTitle = styled.div`
-  ${flex}
-  ${alignItemCenter}
-  ${justiStart}
+  ${flex};
+  ${alignItemCenter};
+  ${justiStart};
 
   padding: 9px 0 8px 0;
   color: #72787f;
@@ -40,17 +40,17 @@ const SubTitle = styled.div`
 `;
 
 const KeywordWrap = styled.div`
-  ${flex}
-  ${alignItemStart}
+  ${flex};
+  ${alignItemStart};
 
   gap: 8px;
   flex-wrap: wrap;
 `;
 
 const Keyword = styled.div<{ disable: boolean }>`
-  ${flex}
-  ${alignItemCenter}
-  ${justiCenter}
+  ${flex};
+  ${alignItemCenter};
+  ${justiCenter};
 
   padding: 4px 10px;
   border-radius: 4px;
@@ -62,8 +62,8 @@ const Keyword = styled.div<{ disable: boolean }>`
 `;
 
 const List = styled.div`
-  ${flex}
-  ${flexColumn}
+  ${flex};
+  ${flexColumn};
 
   gap: 6px;
   height: 100%;

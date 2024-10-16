@@ -22,9 +22,9 @@ const CheckBox = (props: CheckBoxProps) => {
 export default CheckBox;
 
 const Circle = styled.div<{ checked: boolean }>`
-  ${flex}
-  ${justiCenter}
-  ${alignItemCenter}
+  ${flex};
+  ${justiCenter};
+  ${alignItemCenter};
 
   width: 20px;
   min-width: 20px;

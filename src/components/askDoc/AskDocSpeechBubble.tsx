@@ -15,8 +15,8 @@ import Grid from '../layout/Grid';
 import PreMarkdown from '../PreMarkdown';
 
 const Wrapper = styled.div<{ isUser: boolean }>`
-  ${flex}
-  ${flexColumn}
+  ${flex};
+  ${flexColumn};
 
   min-height: fit-content;
   width: fit-content;

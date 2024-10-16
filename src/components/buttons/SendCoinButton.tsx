@@ -8,7 +8,7 @@ import Icon from '../Icon';
 import Button from './Button';
 
 const CoinIcon = styled.div`
-  ${flex}
+  ${flex};
   position: absolute;
   bottom: 3px;
   right: 4px;
@@ -30,9 +30,9 @@ const SendCoinButton = ({
         onClick();
       }}
       cssExt={css`
-        ${flex}
-        ${alignItemCenter}
-        ${justiCenter}
+        ${flex};
+        ${alignItemCenter};
+        ${justiCenter};
         align-self: flex-end;
         position: relative;
 

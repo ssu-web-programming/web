@@ -24,10 +24,10 @@ import TextArea from '../TextArea';
 const TEXT_MAX_HEIGHT = 268;
 
 const InputBox = styled.div<{ activeInputWrap: boolean; isTesla: boolean }>`
-  ${flex}
-  ${alignItemCenter}
-  ${flexColumn}
-  ${flexShrink}
+  ${flex};
+  ${alignItemCenter};
+  ${flexColumn};
+  ${flexShrink};
 
   height: fit-content;
   width: 100%;
@@ -43,18 +43,20 @@ const InputBox = styled.div<{ activeInputWrap: boolean; isTesla: boolean }>`
 `;
 
 export const RowBox = styled.div<{ cssExt?: FlattenSimpleInterpolation }>`
-  ${flex}
-  ${justiSpaceBetween}
-  ${alignItemCenter}
+  ${flex};
+  ${justiSpaceBetween};
+  ${alignItemCenter};
   width: 100%;
   gap: 6px;
+
+  ${(props) => props.cssExt || ''};
 `;
 
 const TextBox = styled(RowBox)`
   textarea {
-    ${flex}
-    ${justiCenter}
-    ${flexGrow}
+    ${flex};
+    ${justiCenter};
+    ${flexGrow};
 
     width: fit-content;
     border: 0;
@@ -76,8 +78,8 @@ const InputBottomArea = styled(RowWrapBox)`
 `;
 
 const LengthWrapper = styled.div<{ isError?: boolean }>`
-  ${flex}
-  ${alignItemCenter}
+  ${flex};
+  ${alignItemCenter};
 
   font-size: 12px;
   color: var(--gray-gray-70);

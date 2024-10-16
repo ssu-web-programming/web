@@ -7,13 +7,14 @@ const Textarea = styled.textarea<{ cssExt?: FlattenSimpleInterpolation }>`
   outline: none;
 
   ::placeholder {
-    ${flex}
-    ${alignItemCenter}
+    ${flex};
+    ${alignItemCenter};
     font-size: 13px;
     color: var(--gray-gray-60-03);
   }
 
   font-size: 13px;
+  ${(props) => props.cssExt || ''};
 `;
 
 interface TextAreaProps {

@@ -12,11 +12,11 @@ const Wrapper = styled.div`
   font-size: 13px;
   font-weight: 500;
 
-  ${flex}
-  ${flexColumn}
-  ${justiCenter}
-  ${alignItemCenter}
-  
+  ${flex};
+  ${flexColumn};
+  ${justiCenter};
+  ${alignItemCenter};
+
   color: var(--ai-purple-50-main);
   word-break: keep-all;
   text-align: center;

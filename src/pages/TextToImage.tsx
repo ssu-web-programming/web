@@ -7,9 +7,9 @@ import { flex, flexColumn, flexGrow, flexShrink } from '../style/cssCommon';
 import ImageCreate from '../views/ImageCreate';
 
 const Wrapper = styled.div`
-  ${flex}
-  ${flexColumn}
-  
+  ${flex};
+  ${flexColumn};
+
   width: 100%;
   height: 100%;
   overflow-y: auto;
@@ -17,9 +17,9 @@ const Wrapper = styled.div`
 `;
 
 const Body = styled.div`
-  ${flex}
-  ${flexShrink}
-  ${flexGrow}
+  ${flex};
+  ${flexShrink};
+  ${flexGrow};
 `;
 
 const TextToImage = () => {

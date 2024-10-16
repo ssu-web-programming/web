@@ -29,20 +29,20 @@ import {
 import Bridge from '../../util/bridge';
 
 const Wrapper = styled.div`
-  ${flex}
-  ${flexColumn}
-  ${justiSpaceBetween}
+  ${flex};
+  ${flexColumn};
+  ${justiSpaceBetween};
 
   width: 100%;
   height: 100%;
   background-color: var(--ai-purple-99-bg-light);
 
-  ${TableCss}
+  ${TableCss};
 `;
 
 const WrapperPage = styled.div`
-  ${flex}
-  ${flexColumn}
+  ${flex};
+  ${flexColumn};
 
   width: 100%;
   height: 100%;
@@ -56,8 +56,8 @@ const Body = styled.div`
 `;
 
 const InfoArea = styled.div`
-  ${flex}
-  ${alignItemCenter}
+  ${flex};
+  ${alignItemCenter};
 
   color: var(--ai-purple-50-main);
   padding: 0px 16px;

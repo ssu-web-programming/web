@@ -8,18 +8,18 @@ export const Body = styled.div`
 `;
 
 export const WrapperPage = styled.div`
-  ${flex}
-  ${flexColumn}
-  
+  ${flex};
+  ${flexColumn};
+
   width: 100%;
   height: 100%;
 `;
 
 export const Wrapper = styled.div<{ background: boolean }>`
-  ${flex}
-  ${flexColumn}
-  ${justiSpaceBetween}
-  
+  ${flex};
+  ${flexColumn};
+  ${justiSpaceBetween};
+
   width: 100%;
   height: 100%;
   background-color: ${(props) => (props.background ? 'var(--ai-purple-99-bg-light)' : 'none')};

@@ -5,19 +5,19 @@ import Header from '../components/layout/Header';
 import { alignItemCenter, flex, flexColumn, justiCenter } from '../style/cssCommon';
 
 const Wrapper = styled.div`
-  ${flex}
-  ${flexColumn}
-  
+  ${flex};
+  ${flexColumn};
+
   width: 100%;
   height: 100%;
 `;
 
 const Contents = styled.div`
-  ${flex}
-  ${flexColumn}
-  ${justiCenter}
-  ${alignItemCenter}
-  
+  ${flex};
+  ${flexColumn};
+  ${justiCenter};
+  ${alignItemCenter};
+
   flex: 1;
 `;
 

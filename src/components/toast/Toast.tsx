@@ -22,10 +22,10 @@ const Fade = keyframes`
 const TIME = 500;
 
 const ToastMsgWrapper = styled.div<{ variant: FlattenSimpleInterpolation }>`
-  ${flex}
-  ${alignItemStart}
-  ${flexShrink}
-  ${flexGrow}
+  ${flex};
+  ${alignItemStart};
+  ${flexShrink};
+  ${flexGrow};
 
   position: absolute;
   left: 50%;

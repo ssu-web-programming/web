@@ -12,19 +12,19 @@ import {
 import { MenuItemProps } from '../items/MenuItem';
 
 const Wrapper = styled.div`
-  ${flex}
-  ${justiStart}
+  ${flex};
+  ${justiStart};
 
   height: 34px;
   border-bottom: 1px solid #c9cdd2;
 `;
 
 const TabItem = styled.div<{ selected: boolean }>`
-  ${flex}
-  ${flexGrow}
-  ${flexShrink}
-  ${alignItemCenter}
-  ${justiCenter}
+  ${flex};
+  ${flexGrow};
+  ${flexShrink};
+  ${alignItemCenter};
+  ${justiCenter};
 
   font-size: 13px;
   color: var(--gray-gray-90-01);
@@ -50,7 +50,6 @@ const TabItem = styled.div<{ selected: boolean }>`
         color: var(--ai-purple-70);
       }
     `}
-
   svg {
     pointer-events: none;
   }

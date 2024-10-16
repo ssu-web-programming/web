@@ -86,8 +86,8 @@ const GlobalStyle = createGlobalStyle`
   }
 
   ol, ul {
-    ${flex}
-    ${flexColumn}
+    ${flex};
+    ${flexColumn};
 
     margin: 0;
     padding-left: 20px;

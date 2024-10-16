@@ -21,11 +21,11 @@ const Body = styled.button<{
   disabled: boolean;
   cssExt?: FlattenSimpleInterpolation;
 }>`
-  ${flex}
-  ${justiCenter}
-  ${alignItemCenter}
+  ${flex};
+  ${justiCenter};
+  ${alignItemCenter};
 
-  ${userSelectCss}
+  ${userSelectCss};
 
   border-radius: 4px;
   padding: 6px;
@@ -57,6 +57,8 @@ const Body = styled.button<{
       opacity: 0.3;
       pointer-events: none;
     `}
+
+  ${(props) => props.cssExt || ''};
 `;
 
 export type ButtonSize = 'sm' | 'md' | 'lg' | 'full' | 'fit';

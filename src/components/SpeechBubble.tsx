@@ -33,8 +33,8 @@ import { BoldTextLength } from "./TextLength";
 // import { ReactComponent as IconCopy } from '../img/ico_copy.svg';
 
 const Wrapper = styled.div<{ isUser: boolean }>`
-  ${flex}
-  ${flexColumn}
+  ${flex};
+  ${flexColumn};
 
   min-height: fit-content;
 
@@ -61,8 +61,8 @@ const Profile = styled.div`
 `;
 
 const SpeechBubbleWrapper = styled.div<{ cssExt?: FlattenSimpleInterpolation; isUser: boolean }>`
-  ${flex}
-  ${flexColumn}
+  ${flex};
+  ${flexColumn};
   align-self: flex-start;
 
   width: 100%;
@@ -71,6 +71,8 @@ const SpeechBubbleWrapper = styled.div<{ cssExt?: FlattenSimpleInterpolation; is
     isUser ? 'var(--ai-purple-70)' : 'white'};
   color: ${({ isUser }: { isUser: boolean }) => isUser && 'white'};
   overflow-x: auto;
+
+  ${(props) => props.cssExt || ''};
 `;
 
 const MarkDownWrapper = styled.div`
@@ -89,17 +91,17 @@ const LoadingMsg = styled.div`
 `;
 
 const BubbleArea = styled.div`
-  ${flex}
-  ${justiSpaceBetween}
-  ${alignItemCenter}
+  ${flex};
+  ${justiSpaceBetween};
+  ${alignItemCenter};
 
   width: 100%;
   gap: 8px;
 `;
 
 const LisenceRight = styled.div`
-  ${flex}
-  ${alignItemCenter}
+  ${flex};
+  ${alignItemCenter};
 
   align-self: flex-end;
   margin-top: 9px;

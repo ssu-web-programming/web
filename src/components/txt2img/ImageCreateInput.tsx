@@ -38,8 +38,8 @@ import Grid from '../layout/Grid';
 import SubTitle from '../SubTitle';
 
 const MakingInputWrapper = styled.div`
-  ${flex}
-  ${flexColumn}
+  ${flex};
+  ${flexColumn};
   gap: 16px;
 `;
 
@@ -54,25 +54,25 @@ const GridContainer = styled.div<{
 `;
 
 const SelectOptionArea = styled.div`
-  ${flex}
-  ${flexColumn}
+  ${flex};
+  ${flexColumn};
 
   width: 100%;
   gap: 8px;
 `;
 
 const ContainerItem = styled.div`
-  ${flex}
-  ${flexColumn}
-  ${alignItemCenter}
+  ${flex};
+  ${flexColumn};
+  ${alignItemCenter};
 
   gap: 8px;
 `;
 
 const ItemTitle = styled.div<{ isSelected: boolean }>`
-  ${flex}
-  ${justiCenter}
-  ${alignItemCenter}
+  ${flex};
+  ${justiCenter};
+  ${alignItemCenter};
 
   width: 100%;
   font-weight: bold;
@@ -103,9 +103,9 @@ const ItemIconBox = styled.div<{
   isSelected: boolean;
   cssExt?: FlattenSimpleInterpolation;
 }>`
-  ${flex}
-  ${justiCenter}
-  ${alignItemCenter}
+  ${flex};
+  ${justiCenter};
+  ${alignItemCenter};
 
   width: 100%;
   height: 100%;
@@ -131,6 +131,8 @@ const ItemIconBox = styled.div<{
       background-color: var(--ai-purple-97-list-over);
       padding: 2px;
     `}
+
+  ${(props) => props.cssExt || ''};
 `;
 
 const StyledCreditButton = styled.div`

@@ -50,8 +50,8 @@ export const SubTitleArea = styled.div`
 export const RowContainer = styled.div<{
   cssExt?: FlattenSimpleInterpolation;
 }>`
-  ${flex}
-  ${flexWrap}
+  ${flex};
+  ${flexWrap};
 
   width: 100%;
   gap: 8px;

@@ -15,9 +15,9 @@ import {
 } from '../style/cssCommon';
 
 const Wrapper = styled.div`
-  ${flex}
-  ${flexColumn}
-  
+  ${flex};
+  ${flexColumn};
+
   position: absolute;
   left: 0;
   top: 0;
@@ -26,12 +26,12 @@ const Wrapper = styled.div`
 `;
 
 const Contents = styled.div`
-  ${flex}
-  ${flexColumn}
-  ${justiCenter}
-  ${alignItemCenter}
-  ${flexShrink}
-  ${flexGrow}
+  ${flex};
+  ${flexColumn};
+  ${justiCenter};
+  ${alignItemCenter};
+  ${flexShrink};
+  ${flexGrow};
 
   background-color: white;
 `;

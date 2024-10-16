@@ -22,8 +22,8 @@ import { filterCreditInfo } from '../nova/Header';
 import SubTitle from '../SubTitle';
 
 const WriteInputPage = styled.div`
-  ${flex}
-  ${flexColumn}
+  ${flex};
+  ${flexColumn};
   padding: 16px;
   width: 100%;
   height: 100%;

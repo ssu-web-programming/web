@@ -1,17 +1,13 @@
-import React from 'react';
-import { BoldTextLength } from 'components/TextLength';
-import { useTranslation } from 'react-i18next';
-import styled, { css } from 'styled-components';
+import React from "react";
+import { BoldTextLength } from "components/TextLength";
+import { useTranslation } from "react-i18next";
+import styled, { css } from "styled-components";
 
-import icon_credit_purple from '../../img/ico_credit_purple.svg';
-import { selectTabSlice } from '../../store/slices/tabSlice';
-import { activeToast } from '../../store/slices/toastSlice';
-import {
-  resetCurrentWrite,
-  setCurrentWrite,
-  WriteType
-} from '../../store/slices/writeHistorySlice';
-import { useAppDispatch, useAppSelector } from '../../store/store';
+import icon_credit_purple from "../../img/ico_credit_purple.svg";
+import { selectTabSlice } from "../../store/slices/tabSlice";
+import { activeToast } from "../../store/slices/toastSlice";
+import { resetCurrentWrite, setCurrentWrite, WriteType } from "../../store/slices/writeHistorySlice";
+import { useAppDispatch, useAppSelector } from "../../store/store";
 import {
   alignItemCenter,
   flex,
@@ -20,21 +16,21 @@ import {
   flexShrink,
   justiSpaceBetween,
   TableCss
-} from '../../style/cssCommon';
-import { insertDoc } from '../../util/common';
-import { ColumDivider, RowBox } from '../../views/AIChatTab';
-import ArrowSwitcher from '../ArrowSwitcher';
-import Button from '../buttons/Button';
-import IconTextButton from '../buttons/IconTextButton';
-import ReturnButton from '../buttons/ReturnButton';
-import StopButton from '../buttons/StopButton';
-import ClaudeLinkText from '../ClaudeLinkText';
-import ClovaXLinkText from '../ClovaXLinkText';
-import Grid from '../layout/Grid';
-import Loading from '../Loading';
-import OpenAILinkText from '../OpenAILinkText';
-import PreMarkdown from '../PreMarkdown';
-import SubTitle from '../SubTitle';
+} from "../../style/cssCommon";
+import { insertDoc } from "../../util/common";
+import { ColumDivider, RowBox } from "../../views/AIChatTab";
+import ArrowSwitcher from "../ArrowSwitcher";
+import Button from "../buttons/Button";
+import IconTextButton from "../buttons/IconTextButton";
+import ReturnButton from "../buttons/ReturnButton";
+import StopButton from "../buttons/StopButton";
+import ClaudeLinkText from "../ClaudeLinkText";
+import ClovaXLinkText from "../ClovaXLinkText";
+import Grid from "../layout/Grid";
+import Loading from "../Loading";
+import OpenAILinkText from "../OpenAILinkText";
+import PreMarkdown from "../PreMarkdown";
+import SubTitle from "../SubTitle";
 
 // clipboard
 // import { useCopyClipboard } from '../../util/bridge';
@@ -42,18 +38,18 @@ import SubTitle from '../SubTitle';
 // import { ReactComponent as IconCopy } from '../../img/ico_copy.svg';
 
 const Wrapper = styled.div`
-  ${flex}
-  ${flexColumn}
+  ${flex};
+  ${flexColumn};
   background-color: var(--ai-purple-99-bg-light);
   height: 100%;
 `;
 
 const ResultBox = styled.div`
-  ${flex}
-  ${flexColumn}
-  ${justiSpaceBetween}
-  ${flexShrink}
-  ${flexGrow}
+  ${flex};
+  ${flexColumn};
+  ${justiSpaceBetween};
+  ${flexShrink};
+  ${flexGrow};
 
   width: 100%;
   border-radius: 4px;
@@ -74,8 +70,8 @@ const ResultWrapper = styled.div`
 `;
 
 const ResWrapper = styled.div`
-  ${flex}
-  ${flexColumn}
+  ${flex};
+  ${flexColumn};
 
   padding: 16px;
   width: 100%;
@@ -86,21 +82,21 @@ const ResWrapper = styled.div`
 `;
 
 const ButtonBox = styled.div<{ creating: boolean }>`
-  ${flex}
-  ${flexColumn}
+  ${flex};
+  ${flexColumn};
 
   gap: 8px;
   visibility: ${({ creating }: { creating: boolean }) => (creating ? 'hidden' : 'visible')};
 `;
 
 const ResultInfo = styled.div`
-  ${flex}
-  ${flexColumn}
+  ${flex};
+  ${flexColumn};
 `;
 
 const RightBox = styled.div`
-  ${flex}
-  ${alignItemCenter}
+  ${flex};
+  ${alignItemCenter};
 
   align-self: flex-end;
   gap: 4px;

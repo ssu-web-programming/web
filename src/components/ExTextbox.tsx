@@ -10,8 +10,8 @@ import TextArea from './TextArea';
 import TextLength from './TextLength';
 
 const InputArea = styled.div<{ activeBorder: boolean }>`
-  ${flex}
-  ${flexColumn}
+  ${flex};
+  ${flexColumn};
 
   /* margin: 10px 0px 10px; */
   border-radius: 4px;
@@ -26,9 +26,9 @@ const InputArea = styled.div<{ activeBorder: boolean }>`
 `;
 
 const TopBorer = styled.div`
-  ${flex}
-  ${justiSpaceBetween}
-  ${alignItemCenter}
+  ${flex};
+  ${justiSpaceBetween};
+  ${alignItemCenter};
   width: 100%;
 
   border-top: 1px solid #e8ebed;
