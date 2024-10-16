@@ -108,9 +108,9 @@ const InputBox = styled.div<{ activeInputWrap: boolean }>`
 `;
 
 export const RowBox = styled.div<{ cssExt?: FlattenSimpleInterpolation }>`
-  ${flex};
-  ${justiSpaceBetween};
-  ${alignItemCenter};
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   width: 100%;
   gap: 6px;
 

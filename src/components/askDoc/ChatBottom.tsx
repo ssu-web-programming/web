@@ -13,8 +13,7 @@ import {
   flexColumn,
   flexGrow,
   flexShrink,
-  justiCenter,
-  justiSpaceBetween
+  justiCenter
 } from '../../style/cssCommon';
 import { RowWrapBox } from '../chat/RecommendBox/ChatRecommend';
 import useLangParameterNavigate from '../hooks/useLangParameterNavigate';
@@ -43,9 +42,9 @@ const InputBox = styled.div<{ activeInputWrap: boolean; isTesla: boolean }>`
 `;
 
 export const RowBox = styled.div<{ cssExt?: FlattenSimpleInterpolation }>`
-  ${flex};
-  ${justiSpaceBetween};
-  ${alignItemCenter};
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   width: 100%;
   gap: 6px;
 
