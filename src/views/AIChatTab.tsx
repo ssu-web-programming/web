@@ -114,9 +114,7 @@ export const RowBox = styled.div<{ cssExt?: FlattenSimpleInterpolation }>`
   width: 100%;
   gap: 6px;
 
-  ${function (props) {
-    return props.cssExt ? props.cssExt : '';
-  }}
+  ${(props) => (props.cssExt ? props.cssExt : '')};
 `;
 
 export const VersionWrapper = styled.div`
@@ -402,8 +400,8 @@ const AIChatTab = (props: WriteTabProps) => {
     const input = chat
       ? chat.input
       : chatInput.length > 0
-        ? chatInput
-        : chatHistory[chatHistory.length - 1].result;
+      ? chatInput
+      : chatHistory[chatHistory.length - 1].result;
 
     const gptVer = chat ? chat.version : version.version;
 
