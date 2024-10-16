@@ -1,31 +1,31 @@
-import { PropsWithChildren, useMemo } from 'react';
-import ClaudeLinkText from 'components/ClaudeLinkText';
-import icon_credit_purple from 'img/ico_credit_purple.svg';
-import { useTranslation } from 'react-i18next';
-import styled, { css, FlattenSimpleInterpolation } from 'styled-components';
+import { PropsWithChildren, useMemo } from "react";
+import ClaudeLinkText from "components/ClaudeLinkText";
+import icon_credit_purple from "img/ico_credit_purple.svg";
+import { useTranslation } from "react-i18next";
+import styled, { css, FlattenSimpleInterpolation } from "styled-components";
 
-import icon_ai from '../img/ico_ai.svg';
-import icon_ai_loading from '../img/loading_dot_2x.webp';
-import { Chat } from '../store/slices/chatHistorySlice';
-import { selectRecFuncSlice } from '../store/slices/recFuncSlice';
-import { selectTabSlice } from '../store/slices/tabSlice';
-import { activeToast } from '../store/slices/toastSlice';
-import { useAppDispatch, useAppSelector } from '../store/store';
-import { alignItemCenter, flex, flexColumn, justiSpaceBetween } from '../style/cssCommon';
-import { insertDoc } from '../util/common';
-import { ColumDivider, RowBox } from '../views/AIChatTab';
+import icon_ai from "../img/ico_ai.svg";
+import icon_ai_loading from "../img/loading_dot_2x.webp";
+import { Chat } from "../store/slices/chatHistorySlice";
+import { selectRecFuncSlice } from "../store/slices/recFuncSlice";
+import { selectTabSlice } from "../store/slices/tabSlice";
+import { activeToast } from "../store/slices/toastSlice";
+import { useAppDispatch, useAppSelector } from "../store/store";
+import { alignItemCenter, flex, flexColumn, justiSpaceBetween } from "../style/cssCommon";
+import { insertDoc } from "../util/common";
+import { ColumDivider, RowBox } from "../views/AIChatTab";
 
-import Button from './buttons/Button';
-import IconTextButton from './buttons/IconTextButton';
-import { RowWrapBox } from './chat/RecommendBox/ChatRecommend';
-import { formRecList } from './chat/RecommendBox/FormRec';
-import { REC_ID_LIST } from './chat/RecommendBox/FunctionRec';
-import Grid from './layout/Grid';
-import ClovaXLinkText from './ClovaXLinkText';
-import Icon from './Icon';
-import OpenAILinkText from './OpenAILinkText';
-import PreMarkdown from './PreMarkdown';
-import { BoldTextLength } from './TextLength';
+import Button from "./buttons/Button";
+import IconTextButton from "./buttons/IconTextButton";
+import { RowWrapBox } from "./chat/RecommendBox/ChatRecommend";
+import { formRecList } from "./chat/RecommendBox/FormRec";
+import { REC_ID_LIST } from "./chat/RecommendBox/FunctionRec";
+import Grid from "./layout/Grid";
+import ClovaXLinkText from "./ClovaXLinkText";
+import Icon from "./Icon";
+import OpenAILinkText from "./OpenAILinkText";
+import PreMarkdown from "./PreMarkdown";
+import { BoldTextLength } from "./TextLength";
 
 // clipboard
 // import { useCopyClipboard } from '../util/bridge';
@@ -72,7 +72,7 @@ const SpeechBubbleWrapper = styled.div<{ cssExt?: FlattenSimpleInterpolation; is
   color: ${({ isUser }: { isUser: boolean }) => isUser && 'white'};
   overflow-x: auto;
 
-  ${(props) => (props.cssExt ? props.cssExt : '')};
+  ${(props) => props.cssExt || ''};
 `;
 
 const MarkDownWrapper = styled.div`

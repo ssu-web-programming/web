@@ -114,7 +114,7 @@ export const RowBox = styled.div<{ cssExt?: FlattenSimpleInterpolation }>`
   width: 100%;
   gap: 6px;
 
-  ${(props) => (props.cssExt ? props.cssExt : '')};
+  ${(props) => props.cssExt || ''};
 `;
 
 export const VersionWrapper = styled.div`
