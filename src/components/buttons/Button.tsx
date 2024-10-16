@@ -57,8 +57,6 @@ const Body = styled.button<{
       opacity: 0.3;
       pointer-events: none;
     `}
-
-  ${(props) => props.cssExt || ''};
 `;
 
 export type ButtonSize = 'sm' | 'md' | 'lg' | 'full' | 'fit';

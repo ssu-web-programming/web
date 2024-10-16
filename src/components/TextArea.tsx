@@ -14,8 +14,6 @@ const Textarea = styled.textarea<{ cssExt?: FlattenSimpleInterpolation }>`
   }
 
   font-size: 13px;
-
-  ${(props) => props.cssExt || ''};
 `;
 
 interface TextAreaProps {
