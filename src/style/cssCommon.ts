@@ -2,12 +2,8 @@ import { css } from 'styled-components';
 
 export const userSelectCss = css`
   -webkit-user-drag: none;
-  -khtml-user-drag: none;
-  -moz-user-drag: none;
-  -o-user-drag: none;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
-  -khtml-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
@@ -33,21 +29,6 @@ export const CustomScrollbar = css`
   }
 `;
 
-export const purpleBtnCss = css`
-  background-image: linear-gradient(to left, #a86cea, var(--ai-purple-50-main));
-  color: #fff;
-  box-shadow: none;
-`;
-
-export const TextBtnCss = css`
-  box-shadow: none;
-  display: flex;
-  width: fit-content;
-  height: fit-content;
-  flex-grow: 0;
-  flex-shrink: 0;
-`;
-
 export const TableCss = css`
   table {
     border-collapse: collapse;
@@ -56,9 +37,7 @@ export const TableCss = css`
 
   th,
   td {
-    padding: 1em;
-    padding-top: 0.5em;
-    padding-bottom: 0.5em;
+    padding: 0.5em 1em;
   }
 
   table,
@@ -87,28 +66,24 @@ export const flex = css`
 
 export const flexColumn = css`
   -webkit-box-orient: vertical;
-  -moz-flex-direction: column;
   -ms-flex-direction: column;
   flex-direction: column;
 `;
 
 export const flexWrap = css`
   -webkit-box-lines: multiple;
-  -moz-flex-wrap: wrap;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
 `;
 
 export const justiSpaceBetween = css`
   -webkit-box-pack: justify;
-  -moz-justify-content: space-between;
   -ms-flex-pack: justify;
   justify-content: space-between;
 `;
 
 export const justiSpaceAround = css`
   -webkit-box-pack: justify;
-  -moz-justify-content: space-around;
   -ms-flex-pack: justify;
   justify-content: space-around;
 `;
@@ -133,7 +108,6 @@ export const justiEnd = css`
 
 export const alignItemStart = css`
   -webkit-box-align: start;
-  -moz-align-items: start;
   -ms-flex-align: start;
   align-items: flex-start;
 `;
@@ -141,7 +115,6 @@ export const alignItemStart = css`
 export const alignItemCenter = css`
   /* [정렬] 교차축 - 가운데 기준 */
   -webkit-box-align: center;
-  -moz-align-items: center;
   -ms-flex-align: center;
   align-items: center;
 `;
@@ -171,6 +144,5 @@ export const flexShrink = css`
 `;
 
 export const grid = css`
-  display: -webkit-grid;
   display: grid;
 `;
