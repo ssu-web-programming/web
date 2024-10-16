@@ -58,7 +58,9 @@ const Body = styled.button<{
       pointer-events: none;
     `}
 
-  ${(props) => (props.cssExt ? props.cssExt : '')};
+  ${function (props) {
+    return props.cssExt ? props.cssExt : '';
+  }}
 `;
 
 export type ButtonSize = 'sm' | 'md' | 'lg' | 'full' | 'fit';

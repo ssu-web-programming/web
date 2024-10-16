@@ -52,7 +52,9 @@ const GridContainer = styled.div<{
   width: 100%;
   gap: 16px 8px;
 
-  ${(props) => (props.cssExt ? props.cssExt : '')};
+  ${function (props) {
+    return props.cssExt ? props.cssExt : '';
+  }}
 `;
 
 const SelectOptionArea = styled.div`
@@ -134,7 +136,9 @@ const ItemIconBox = styled.div<{
       padding: 2px;
     `}
 
-  ${(props) => (props.cssExt ? props.cssExt : '')};
+  ${function (props) {
+    return props.cssExt ? props.cssExt : '';
+  }}
 `;
 
 const StyledCreditButton = styled.div`

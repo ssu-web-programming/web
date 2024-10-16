@@ -67,7 +67,9 @@ export const RowBox = styled.div<{ cssExt?: FlattenSimpleInterpolation }>`
   width: 100%;
   gap: 6px;
 
-  ${(props) => (props.cssExt ? props.cssExt : '')};
+  ${function (props) {
+    return props.cssExt ? props.cssExt : '';
+  }}
 `;
 
 const LengthWrapper = styled.div<{ isError?: boolean }>`

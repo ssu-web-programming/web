@@ -72,7 +72,9 @@ const SpeechBubbleWrapper = styled.div<{ cssExt?: FlattenSimpleInterpolation; is
   color: ${({ isUser }: { isUser: boolean }) => isUser && 'white'};
   overflow-x: auto;
 
-  ${(props) => (props.cssExt ? props.cssExt : '')};
+  ${function (props) {
+    return props.cssExt ? props.cssExt : '';
+  }}
 `;
 
 const MarkDownWrapper = styled.div`
