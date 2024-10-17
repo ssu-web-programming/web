@@ -10,7 +10,6 @@ import { useChangeStyle } from '../../components/hooks/nova/useChangeStyle';
 import { useExpandImage } from '../../components/hooks/nova/useExpandImage';
 import { useImprovedResolution } from '../../components/hooks/nova/useImprovedResolution';
 import useManageFile from '../../components/hooks/nova/useManageFile';
-import useNovaAnnouncement from '../../components/hooks/nova/useNovaAnnouncement';
 import usePrivacyConsent from '../../components/hooks/nova/usePrivacyConsent';
 import { useRemakeImage } from '../../components/hooks/nova/useRemakeImage';
 import { useRemoveBackground } from '../../components/hooks/nova/useRemoveBackground';
@@ -27,7 +26,6 @@ import Tabs from '../../components/nova/Tabs';
 import Theme from '../../components/nova/Theme';
 import TimeOut from '../../components/nova/TimeOut';
 import Uploading from '../../components/nova/Uploading';
-import { announceInfoSelector } from '../../store/slices/nova/announceSlice';
 import { selectPageStatus } from '../../store/slices/nova/pageStatusSlice';
 import { NOVA_TAB_TYPE, selectNovaTab, selectTabSlice } from '../../store/slices/tabSlice';
 import { setDriveFiles, setLocalFiles } from '../../store/slices/uploadFiles';
@@ -87,8 +85,6 @@ export default function Nova() {
   const { goThemePage } = useChangeStyle();
   const { usingAI, selectedNovaTab } = useAppSelector(selectTabSlice);
   const status = useAppSelector(selectPageStatus(selectedNovaTab));
-  const { setAnnouncementInfo } = useNovaAnnouncement();
-  const announceInfo = useAppSelector(announceInfoSelector(selectedNovaTab));
   const tabValues: NOVA_TAB_TYPE[] = Object.values(NOVA_TAB_TYPE);
   const { handleAgreement } = usePrivacyConsent();
   const { loadLocalFile } = useManageFile();
@@ -118,11 +114,6 @@ export default function Nova() {
   };
 
   useEffect(() => {}, [usingAI, status]);
-  useEffect(() => {
-    if (announceInfo.type != '' && !announceInfo.isShow) return;
-
-    // setAnnouncementInfo(selectedNovaTab);
-  }, [selectedNovaTab]);
 
   const renderContent = () => {
     const handleUploadComplete = async () => {

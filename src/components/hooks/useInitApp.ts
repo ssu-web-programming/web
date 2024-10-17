@@ -1,19 +1,25 @@
 import { useCallback } from 'react';
-import { AI_CREDIT_INFO, NOVA_GET_EXPIRED_TIME, NOVA_GET_USER_INFO_AGREEMENT } from 'api/constant';
+import {
+  AI_CREDIT_INFO,
+  NOVA_GET_ANNOUNCEMENT,
+  NOVA_GET_EXPIRED_TIME,
+  NOVA_GET_USER_INFO_AGREEMENT
+} from 'api/constant';
 import { ERR_INVALID_SESSION } from 'error/error';
-import { lang } from 'locale';
+import { lang, langCode } from 'locale';
 import { setNovaExpireTime } from 'store/slices/appState';
 import { setCreditInfo } from 'store/slices/creditInfo';
 import { setNovaAgreement, setUserInfo } from 'store/slices/userInfo';
 import { useAppDispatch } from 'store/store';
 import Bridge from 'util/bridge';
 
+import { setAnnounceInfo, tabTypeMap } from '../../store/slices/nova/announceSlice';
+
 export default function useInitApp() {
   const dispatch = useAppDispatch();
 
   const initNovaExpireTime = useCallback(
     async (headers: HeadersInit) => {
-      console.log('get expired time');
       try {
         const res = await fetch(NOVA_GET_EXPIRED_TIME, {
           method: 'GET',
@@ -37,7 +43,6 @@ export default function useInitApp() {
 
   const initUserInfo = useCallback(
     async (headers: HeadersInit) => {
-      console.log('init user info agreement');
       try {
         const res = await fetch(NOVA_GET_USER_INFO_AGREEMENT, {
           method: 'POST',
@@ -61,7 +66,6 @@ export default function useInitApp() {
 
   const initCreditInfo = useCallback(
     async (headers: HeadersInit) => {
-      console.log('init credit info');
       try {
         const res = await fetch(AI_CREDIT_INFO, {
           method: 'POST',
@@ -81,16 +85,41 @@ export default function useInitApp() {
     [dispatch]
   );
 
+  const initAnnouncementInfo = useCallback(
+    async (headers: HeadersInit) => {
+      for (const [tab, value] of Object.entries(tabTypeMap)) {
+        try {
+          const res = await fetch(NOVA_GET_ANNOUNCEMENT, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              ...headers
+            },
+            body: JSON.stringify({ type: value, language: langCode })
+          });
+          const {
+            data: { announcementInfos }
+          } = await res.json();
+          dispatch(
+            setAnnounceInfo({
+              tab: tab,
+              info: { ...announcementInfos, isShow: announcementInfos.status }
+            })
+          );
+        } catch (err) {
+          /* empty */
+        }
+      }
+    },
+    [dispatch]
+  );
+
   return async () => {
     try {
-      console.log('useInitApp');
       const resSession = await Bridge.checkSession('app init');
-      console.log('resSession: ', resSession);
       if (!resSession || !resSession.success) {
-        console.log('error: ', resSession);
         throw new Error(ERR_INVALID_SESSION);
       }
-      console.log('get res session');
 
       const AID = resSession.sessionInfo['AID'];
       const BID = resSession.sessionInfo['BID'];
@@ -110,6 +139,7 @@ export default function useInitApp() {
       await initUserInfo(headers);
       await initNovaExpireTime(headers);
       await initCreditInfo(headers);
+      await initAnnouncementInfo(headers);
 
       dispatch(setUserInfo(resSession.userInfo));
     } catch (err) {

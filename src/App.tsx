@@ -28,7 +28,6 @@ function App() {
 
   useEffect(() => {
     const init = async () => {
-      console.log('init app');
       await initBridgeListener();
       await initApp();
     };
