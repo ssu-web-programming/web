@@ -37,11 +37,11 @@ const useErrorHandle = () => {
         activeToast({
           type: 'error',
           msg: error.credit.current ? (
-            <NoCredit />
-          ) : (
             <NoCredit>
               <p>{t(`ToastMsg.NoCredit`, { credit: error.credit.necessary })}</p>
             </NoCredit>
+          ) : (
+            <NoCredit />
           )
         })
       );
