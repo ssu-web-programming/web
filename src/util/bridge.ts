@@ -333,7 +333,6 @@ export const useInitBridgeListener = () => {
             break;
           }
           case 'openNOVA': {
-            console.log('body: ', body);
             dispatch(changePanel({ cmd, body: body.inputText || '' }));
             dispatch(setDriveFiles([]));
             if (body.openTab in NOVA_TAB_TYPE) {
@@ -349,7 +348,7 @@ export const useInitBridgeListener = () => {
                   file = base64ToFile(base64Data, mimeType);
                 }
 
-                if (file) {
+                if (body.openTab != NOVA_TAB_TYPE.aiChat && file) {
                   await loadLocalFile([file]);
                 } else {
                   dispatch(setLocalFiles([]));
