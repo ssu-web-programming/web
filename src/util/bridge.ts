@@ -555,6 +555,15 @@ const Bridge = {
                 ul: level.toString()
               }
             });
+            console.log('Resolving with:', {
+              success: true,
+              sessionInfo: { AID: AID, BID: BID, SID: SID },
+              userInfo: {
+                us: status,
+                uid: userId,
+                ul: level.toString()
+              }
+            });
           }
         } catch (err) {
           console.log('err: ', err);
@@ -585,6 +594,7 @@ const Bridge = {
       arg && typeof arg !== 'string' && typeof arg !== 'number' ? await fileToString(arg) : arg;
     callApi(api, apiArg);
   },
+
   callSyncBridgeApiWithCallback: (param: {
     api: ApiType;
     arg?: string | number;
