@@ -115,35 +115,31 @@ export default function useInitApp() {
   );
 
   return async () => {
-    try {
-      const resSession = await Bridge.checkSession('app init');
-      if (!resSession || !resSession.success) {
-        throw new Error(ERR_INVALID_SESSION);
-      }
-
-      const AID = resSession.sessionInfo['AID'];
-      const BID = resSession.sessionInfo['BID'];
-      const SID = resSession.sessionInfo['SID'];
-
-      const session: any = {};
-      session['X-PO-AI-MayFlower-Auth-AID'] = AID;
-      session['X-PO-AI-MayFlower-Auth-BID'] = BID;
-      session['X-PO-AI-MayFlower-Auth-SID'] = SID;
-
-      const headers = {
-        ...session,
-        'User-Agent': navigator.userAgent,
-        'X-PO-AI-API-LANGUAGE': lang
-      };
-
-      await initUserInfo(headers);
-      await initNovaExpireTime(headers);
-      await initCreditInfo(headers);
-      await initAnnouncementInfo(headers);
-
-      dispatch(setUserInfo(resSession.userInfo));
-    } catch (err) {
-      console.log('err: ', err);
+    const resSession = await Bridge.checkSession('app init');
+    if (!resSession || !resSession.success) {
+      throw new Error(ERR_INVALID_SESSION);
     }
+
+    const AID = resSession.sessionInfo['AID'];
+    const BID = resSession.sessionInfo['BID'];
+    const SID = resSession.sessionInfo['SID'];
+
+    const session: any = {};
+    session['X-PO-AI-MayFlower-Auth-AID'] = AID;
+    session['X-PO-AI-MayFlower-Auth-BID'] = BID;
+    session['X-PO-AI-MayFlower-Auth-SID'] = SID;
+
+    const headers = {
+      ...session,
+      'User-Agent': navigator.userAgent,
+      'X-PO-AI-API-LANGUAGE': lang
+    };
+
+    await initUserInfo(headers);
+    await initNovaExpireTime(headers);
+    await initCreditInfo(headers);
+    await initAnnouncementInfo(headers);
+
+    dispatch(setUserInfo(resSession.userInfo));
   };
 }

@@ -187,9 +187,10 @@ export default function Nova() {
       <Wrapper {...getRootProps()} isScroll={selectedNovaTab != 'aiChat'}>
         {(usingAI || status === 'home') && isDragActive && <Uploading />}
         <NovaHeader />
-        {!usingAI && (status === 'home' || status === 'progress') && (
-          <Tabs tabs={tabValues} activeTab={selectedNovaTab} onChangeTab={handleChangeTab} />
-        )}
+        {(status === 'home' || status === 'progress') &&
+          (selectedNovaTab !== NOVA_TAB_TYPE.aiChat || !usingAI) && (
+            <Tabs tabs={tabValues} activeTab={selectedNovaTab} onChangeTab={handleChangeTab} />
+          )}
         <Body>{renderContent()}</Body>
         <Suspense fallback={<Overlay />}>
           <Modals />
