@@ -14,7 +14,6 @@ import useNovaAnnouncement from '../../components/hooks/nova/useNovaAnnouncement
 import usePrivacyConsent from '../../components/hooks/nova/usePrivacyConsent';
 import { useRemakeImage } from '../../components/hooks/nova/useRemakeImage';
 import { useRemoveBackground } from '../../components/hooks/nova/useRemoveBackground';
-import useUserInfoUtils from '../../components/hooks/useUserInfoUtils';
 import Expand from '../../components/nova/Expand';
 import { Guide } from '../../components/nova/Guide';
 import NovaHeader from '../../components/nova/Header';
@@ -86,7 +85,6 @@ export default function Nova() {
   const { goExpandPage } = useExpandImage();
   const { handleImprovedResolution } = useImprovedResolution();
   const { goThemePage } = useChangeStyle();
-  const { calcAvailableFileCnt } = useUserInfoUtils();
   const { usingAI, selectedNovaTab } = useAppSelector(selectTabSlice);
   const status = useAppSelector(selectPageStatus(selectedNovaTab));
   const { setAnnouncementInfo } = useNovaAnnouncement();

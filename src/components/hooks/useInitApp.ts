@@ -13,6 +13,7 @@ export default function useInitApp() {
 
   const initNovaExpireTime = useCallback(
     async (headers: HeadersInit) => {
+      console.log('get expired time');
       try {
         const res = await fetch(NOVA_GET_EXPIRED_TIME, {
           method: 'GET',
@@ -36,6 +37,7 @@ export default function useInitApp() {
 
   const initUserInfo = useCallback(
     async (headers: HeadersInit) => {
+      console.log('init user info agreement');
       try {
         const res = await fetch(NOVA_GET_USER_INFO_AGREEMENT, {
           method: 'POST',
@@ -59,6 +61,7 @@ export default function useInitApp() {
 
   const initCreditInfo = useCallback(
     async (headers: HeadersInit) => {
+      console.log('init credit info');
       try {
         const res = await fetch(AI_CREDIT_INFO, {
           method: 'POST',
@@ -79,10 +82,12 @@ export default function useInitApp() {
   );
 
   return async () => {
+    console.log('useInitApp');
     const resSession = await Bridge.checkSession('app init');
     if (!resSession || !resSession.success) {
       throw new Error(ERR_INVALID_SESSION);
     }
+    console.log('get res session');
 
     const AID = resSession.sessionInfo['AID'];
     const BID = resSession.sessionInfo['BID'];
