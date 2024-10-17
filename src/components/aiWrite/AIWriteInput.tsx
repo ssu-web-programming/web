@@ -30,7 +30,7 @@ const WriteInputPage = styled.div`
 `;
 
 const InputArea = styled.div`
-  display: flex
+  display: flex;
 
   width: 100%;
 `;
@@ -50,7 +50,7 @@ export const NewMark = styled.div`
 
 const TitleInputSet = styled.div`
   display: flex;
-  flex-direction: column
+  flex-direction: column;
   gap: 8px;
 `;
 

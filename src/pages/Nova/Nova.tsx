@@ -121,7 +121,7 @@ export default function Nova() {
   useEffect(() => {
     if (announceInfo.type != '' && !announceInfo.isShow) return;
 
-    setAnnouncementInfo(selectedNovaTab);
+    // setAnnouncementInfo(selectedNovaTab);
   }, [selectedNovaTab]);
 
   const renderContent = () => {

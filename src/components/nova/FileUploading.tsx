@@ -45,7 +45,6 @@ const Background = styled.div`
 `;
 
 interface FileUploadingProps extends FileUpladState {
-  onClickBack: () => void;
   progress: number;
 }
 

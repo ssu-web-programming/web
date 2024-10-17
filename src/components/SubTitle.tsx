@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 const SubTitleWrapper = styled.div`
   display: flex;
+  flex-direction: column;
 
   font-size: 13px;
   font-weight: 500;

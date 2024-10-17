@@ -5,7 +5,6 @@ import { useLocation } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import styled from 'styled-components';
 
-import { apiWrapper } from '../../api/apiWrapper';
 import IconButton from '../../components/buttons/IconButton';
 import { useConfirm } from '../../components/Confirm';
 import useSubmitHandler from '../../components/hooks/nova/useSubmitHandler';
@@ -82,7 +81,6 @@ export default function AIChat() {
   const dispatch = useAppDispatch();
   const location = useLocation();
   const { t } = useTranslation();
-  const requestor = useRef<ReturnType<typeof apiWrapper>>();
   const confirm = useConfirm();
   const chatNova = useChatNova();
   const { creating } = useAppSelector(selectTabSlice);
@@ -228,11 +226,7 @@ export default function AIChat() {
         onSubmit={createNovaSubmitHandler}
         contents={inputContents}
         setContents={setInputContents}></InputBar>
-      <FileUploading
-        {...fileUploadState}
-        onClickBack={() => {
-          requestor.current?.abort();
-        }}></FileUploading>
+      <FileUploading {...fileUploadState}></FileUploading>
       {imagePreview && (
         <ImagePreview {...imagePreview} onClose={() => setImagePreview(null)}></ImagePreview>
       )}

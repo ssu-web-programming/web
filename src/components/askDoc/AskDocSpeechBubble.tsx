@@ -49,8 +49,8 @@ const Profile = styled.div`
 const AskDocSpeechBubbleWrapper = styled.div<{
   isUser: boolean;
 }>`
-  display: flex
-  flex-direction: column
+  display: flex;
+  flex-direction: column;
   align-self: flex-start;
 
   width: 100%;
