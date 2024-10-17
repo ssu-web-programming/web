@@ -239,6 +239,8 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
           dispatch(removeChat(id));
           errorHandle(err);
         }
+
+        dispatch(setUsingAI(false));
       } finally {
         dispatch(setCreating('none'));
         setFileUploadState({ type: '', state: 'ready', progress: 0 });
