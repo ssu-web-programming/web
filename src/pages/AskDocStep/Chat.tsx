@@ -19,30 +19,21 @@ import { filesSelector } from '../../store/slices/askDocAnalyzeFiesSlice';
 import { summarySelector } from '../../store/slices/askDocSummary';
 import { recognizedVoiceSelector } from '../../store/slices/recognizedVoice';
 import { useAppSelector } from '../../store/store';
-import {
-  alignItemCenter,
-  flex,
-  flexColumn,
-  justiSpaceBetween,
-  TableCss
-} from '../../style/cssCommon';
 import Bridge from '../../util/bridge';
 
 const Wrapper = styled.div`
-  ${flex};
-  ${flexColumn};
-  ${justiSpaceBetween};
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 
   width: 100%;
   height: 100%;
   background-color: var(--ai-purple-99-bg-light);
-
-  ${TableCss};
 `;
 
 const WrapperPage = styled.div`
-  ${flex};
-  ${flexColumn};
+  display: flex;
+  flex-direction: column;
 
   width: 100%;
   height: 100%;
@@ -56,8 +47,8 @@ const Body = styled.div`
 `;
 
 const InfoArea = styled.div`
-  ${flex};
-  ${alignItemCenter};
+  display: flex;
+  align-items: center;
 
   color: var(--ai-purple-50-main);
   padding: 0px 16px;

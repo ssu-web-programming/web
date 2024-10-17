@@ -4,14 +4,6 @@ import styled, { css } from 'styled-components';
 import icon_credit from '../../img/ico_credit_purple.svg';
 import { summarySelector } from '../../store/slices/askDocSummary';
 import { useAppSelector } from '../../store/store';
-import {
-  alignItemCenter,
-  alignItemStart,
-  flex,
-  flexColumn,
-  justiCenter,
-  justiStart
-} from '../../style/cssCommon';
 import Button from '../buttons/Button';
 import Icon from '../Icon';
 
@@ -22,16 +14,16 @@ const Title = styled.div`
 `;
 
 const Summary = styled.div`
-  ${flex};
-  ${flexColumn};
+  display: flex;
+  flex-direction: column;
 
   gap: 12px;
 `;
 
 const SubTitle = styled.div`
-  ${flex};
-  ${alignItemCenter};
-  ${justiStart};
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 
   padding: 9px 0 8px 0;
   color: #72787f;
@@ -40,17 +32,17 @@ const SubTitle = styled.div`
 `;
 
 const KeywordWrap = styled.div`
-  ${flex};
-  ${alignItemStart};
+  display: flex;
+  align-items: flex-start;
 
   gap: 8px;
   flex-wrap: wrap;
 `;
 
 const Keyword = styled.div<{ disable: boolean }>`
-  ${flex};
-  ${alignItemCenter};
-  ${justiCenter};
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   padding: 4px 10px;
   border-radius: 4px;
@@ -62,8 +54,8 @@ const Keyword = styled.div<{ disable: boolean }>`
 `;
 
 const List = styled.div`
-  ${flex};
-  ${flexColumn};
+  display: flex;
+  flex-direction: column;
 
   gap: 6px;
   height: 100%;
@@ -122,7 +114,7 @@ export const QuestionList = ({
                 height={'full'}
                 variant="gray"
                 cssExt={css`
-                  ${justiStart}
+                  justify-content: flex-start;
                 `}
                 onClick={() => {
                   onClick('askDoc', q);

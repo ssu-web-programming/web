@@ -2,12 +2,11 @@ import styled from 'styled-components';
 
 import ico_clovax_primary from '../img/hyperClovaX_logotype_primary.svg';
 import ico_navercloud from '../img/naver_cloud_ci_green.svg';
-import { alignItemCenter, flex } from '../style/cssCommon';
 
 import LinkText from './LinkText';
 
 const Wrapper = styled.div`
-  ${flex}
+  display: flex;
 
   vertical-align: middle;
   font-family: Pretendard;
@@ -19,11 +18,11 @@ const Wrapper = styled.div`
   height: fit-content;
   width: fit-content;
   gap: 5px;
-  ${alignItemCenter}
+  align-items: center;
 `;
 
 const HCXLogo = styled.img`
-  ${flex}
+  display: flex
   align-self: center;
   height: 10px;
   width: 80px;

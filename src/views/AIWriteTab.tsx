@@ -25,12 +25,11 @@ import {
   WriteType
 } from '../store/slices/writeHistorySlice';
 import { useAppSelector } from '../store/store';
-import { flex, flexColumn } from '../style/cssCommon';
 import { calLeftCredit } from '../util/common';
 
 const TabWrapper = styled.div`
-  ${flex};
-  ${flexColumn};
+  display: flex;
+  flex-direction: column;
   height: 100%;
   overflow-x: hidden;
 `;

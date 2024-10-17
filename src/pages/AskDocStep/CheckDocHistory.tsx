@@ -10,7 +10,6 @@ import useLangParameterNavigate from '../../components/hooks/useLangParameterNav
 import { filesSelector, setFiles } from '../../store/slices/askDocAnalyzeFiesSlice';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { Footer, GuideMessage, Wrapper } from '../../style/askDoc';
-import { alignItemCenter, flex, flexColumn, justiStart } from '../../style/cssCommon';
 
 type File = {
   fileId: string;
@@ -114,9 +113,9 @@ export const CheckDocHistory = () => {
 export default CheckDocHistory;
 
 const List = styled.ul`
-  ${flex};
-  ${flexColumn};
-  ${justiStart};
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 
   width: 100%;
   height: 100%;
@@ -124,9 +123,9 @@ const List = styled.ul`
 `;
 
 const Item = styled.li<{ checked: boolean }>`
-  ${flex};
-  ${alignItemCenter};
-  ${justiStart};
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
   flex-direction: row;
   gap: 8px;
 

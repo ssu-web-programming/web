@@ -2,13 +2,12 @@ import { PropsWithChildren } from 'react';
 import styled, { css } from 'styled-components';
 
 import icon_credit from '../../img/ico_credit.svg';
-import { flex } from '../../style/cssCommon';
 import Icon from '../Icon';
 
 import Button, { ButtonProps } from './Button';
 
 const IconWrapper = styled.div`
-  ${flex};
+  display: flex;
   flex: none;
 `;
 

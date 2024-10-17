@@ -2,7 +2,6 @@ import React, { Suspense, useCallback, useEffect } from 'react';
 import { FileWithPath, useDropzone } from 'react-dropzone';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { CustomScrollbar } from 'style/cssCommon';
 import styled from 'styled-components';
 
 import { useConfirm } from '../../components/Confirm';
@@ -44,9 +43,26 @@ const Wrapper = styled.div<{ isScroll: boolean }>`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  ${CustomScrollbar};
   background: rgb(244, 246, 248);
   overflow: hidden;
+
+  scrollbar-color: #c9cdd2 #ffffff;
+  scrollbar-width: thin;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+    background: #ffffff;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: #c9cdd2;
+  }
+
+  &::-webkit-scrollbar-track {
+    border-radius: 4px;
+    background: #ffffff;
+  }
 `;
 
 const Body = styled.div`

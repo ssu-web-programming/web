@@ -7,37 +7,25 @@ import { RowWrapBox } from '../components/chat/RecommendBox/ChatRecommend';
 import Header from '../components/layout/Header';
 import TextArea from '../components/TextArea';
 import ico_askdoc_64 from '../img/askDoc/ico_askdoc_64.svg';
-import {
-  alignItemCenter,
-  flex,
-  flexColumn,
-  flexGrow,
-  flexShrink,
-  justiCenter,
-  justiSpaceBetween,
-  TableCss
-} from '../style/cssCommon';
 
 const TEXT_MAX_HEIGHT = 268;
 
 const Wrapper = styled.div`
-  ${flex};
-  ${flexColumn};
-  ${justiSpaceBetween};
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 
   width: 100%;
   height: 100%;
   background-color: var(--ai-purple-99-bg-light);
 
   position: relative;
-
-  ${TableCss}
 `;
 
 const ChatListWrapper = styled.div`
-  ${flex};
-  ${flexColumn};
-  ${flexGrow};
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
   position: relative;
 
   width: 100%;
@@ -49,10 +37,10 @@ const ChatListWrapper = styled.div`
 `;
 
 const InputBox = styled.div<{ activeInputWrap: boolean }>`
-  ${flex};
-  ${alignItemCenter};
-  ${flexColumn};
-  ${flexShrink};
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  flex-shrink: 1;
 
   height: fit-content;
   width: 100%;
@@ -71,8 +59,8 @@ export const RowBox = styled.div<{ cssExt?: FlattenSimpleInterpolation }>`
 `;
 
 const LengthWrapper = styled.div<{ isError?: boolean }>`
-  ${flex};
-  ${alignItemCenter};
+  display: flex;
+  align-items: center;
 
   font-size: 12px;
   color: var(--gray-gray-70);
@@ -86,9 +74,9 @@ const LengthWrapper = styled.div<{ isError?: boolean }>`
 
 const TextBox = styled(RowBox)`
   textarea {
-    ${flex};
-    ${justiCenter};
-    ${flexGrow};
+    display: flex;
+    justify-content: center;
+    flex-grow: 1;
 
     width: fit-content;
     border: 0;
@@ -110,8 +98,8 @@ const InputBottomArea = styled(RowWrapBox)`
 `;
 
 const WrapperPage = styled.div`
-  ${flex};
-  ${flexColumn};
+  display: flex;
+  flex-direction: column;
 
   width: 100%;
   height: 100%;

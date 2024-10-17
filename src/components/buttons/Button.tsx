@@ -6,8 +6,6 @@ import styled, {
   ThemedStyledProps
 } from 'styled-components';
 
-import { alignItemCenter, flex, justiCenter, userSelectCss } from '../../style/cssCommon';
-
 const Body = styled.button<{
   w: FlattenSimpleInterpolation;
   h?: FlattenSimpleInterpolation;
@@ -21,11 +19,11 @@ const Body = styled.button<{
   disabled: boolean;
   cssExt?: FlattenSimpleInterpolation;
 }>`
-  ${flex};
-  ${justiCenter};
-  ${alignItemCenter};
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-  ${userSelectCss};
+  user-select: none;
 
   border-radius: 4px;
   padding: 6px;

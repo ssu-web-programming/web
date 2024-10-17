@@ -2,16 +2,14 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { alignItemCenter, flex, flexColumn, justiSpaceBetween } from '../style/cssCommon';
-
 import ChangeExampleButton from './buttons/ChangeExampleButton';
 import SubTitle from './SubTitle';
 import TextArea from './TextArea';
 import TextLength from './TextLength';
 
 const InputArea = styled.div<{ activeBorder: boolean }>`
-  ${flex};
-  ${flexColumn};
+  display: flex;
+  flex-direction: column;
 
   /* margin: 10px 0px 10px; */
   border-radius: 4px;
@@ -26,9 +24,9 @@ const InputArea = styled.div<{ activeBorder: boolean }>`
 `;
 
 const TopBorer = styled.div`
-  ${flex};
-  ${justiSpaceBetween};
-  ${alignItemCenter};
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   width: 100%;
 
   border-top: 1px solid #e8ebed;

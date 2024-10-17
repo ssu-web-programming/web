@@ -3,15 +3,14 @@ import styled from 'styled-components';
 import spinner from '../img/spinner.webp';
 import { selectLoadingSpinner } from '../store/slices/loadingSpinner';
 import { useAppSelector } from '../store/store';
-import { alignItemCenter, flex, flexColumn, justiCenter } from '../style/cssCommon';
 
 import Blanket from './Blanket';
 
 const SpinnerWrapper = styled.div`
-  ${flex};
-  ${flexColumn};
-  ${justiCenter};
-  ${alignItemCenter};
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
   position: absolute;
   left: 50%;
@@ -31,7 +30,7 @@ const SpinnerWrapper = styled.div`
 `;
 
 const SpinnerImg = styled.img`
-  ${flex};
+  display: flex;
 
   background-color: white;
   border-radius: 50%;

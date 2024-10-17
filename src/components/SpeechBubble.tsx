@@ -1,31 +1,30 @@
-import { PropsWithChildren, useMemo } from "react";
-import ClaudeLinkText from "components/ClaudeLinkText";
-import icon_credit_purple from "img/ico_credit_purple.svg";
-import { useTranslation } from "react-i18next";
-import styled, { css, FlattenSimpleInterpolation } from "styled-components";
+import { PropsWithChildren, useMemo } from 'react';
+import ClaudeLinkText from 'components/ClaudeLinkText';
+import icon_credit_purple from 'img/ico_credit_purple.svg';
+import { useTranslation } from 'react-i18next';
+import styled, { css, FlattenSimpleInterpolation } from 'styled-components';
 
-import icon_ai from "../img/ico_ai.svg";
-import icon_ai_loading from "../img/loading_dot_2x.webp";
-import { Chat } from "../store/slices/chatHistorySlice";
-import { selectRecFuncSlice } from "../store/slices/recFuncSlice";
-import { selectTabSlice } from "../store/slices/tabSlice";
-import { activeToast } from "../store/slices/toastSlice";
-import { useAppDispatch, useAppSelector } from "../store/store";
-import { alignItemCenter, flex, flexColumn, justiSpaceBetween } from "../style/cssCommon";
-import { insertDoc } from "../util/common";
-import { ColumDivider, RowBox } from "../views/AIChatTab";
+import icon_ai from '../img/ico_ai.svg';
+import icon_ai_loading from '../img/loading_dot_2x.webp';
+import { Chat } from '../store/slices/chatHistorySlice';
+import { selectRecFuncSlice } from '../store/slices/recFuncSlice';
+import { selectTabSlice } from '../store/slices/tabSlice';
+import { activeToast } from '../store/slices/toastSlice';
+import { useAppDispatch, useAppSelector } from '../store/store';
+import { insertDoc } from '../util/common';
+import { ColumDivider, RowBox } from '../views/AIChatTab';
 
-import Button from "./buttons/Button";
-import IconTextButton from "./buttons/IconTextButton";
-import { RowWrapBox } from "./chat/RecommendBox/ChatRecommend";
-import { formRecList } from "./chat/RecommendBox/FormRec";
-import { REC_ID_LIST } from "./chat/RecommendBox/FunctionRec";
-import Grid from "./layout/Grid";
-import ClovaXLinkText from "./ClovaXLinkText";
-import Icon from "./Icon";
-import OpenAILinkText from "./OpenAILinkText";
-import PreMarkdown from "./PreMarkdown";
-import { BoldTextLength } from "./TextLength";
+import Button from './buttons/Button';
+import IconTextButton from './buttons/IconTextButton';
+import { RowWrapBox } from './chat/RecommendBox/ChatRecommend';
+import { formRecList } from './chat/RecommendBox/FormRec';
+import { REC_ID_LIST } from './chat/RecommendBox/FunctionRec';
+import Grid from './layout/Grid';
+import ClovaXLinkText from './ClovaXLinkText';
+import Icon from './Icon';
+import OpenAILinkText from './OpenAILinkText';
+import PreMarkdown from './PreMarkdown';
+import { BoldTextLength } from './TextLength';
 
 // clipboard
 // import { useCopyClipboard } from '../util/bridge';
@@ -33,8 +32,8 @@ import { BoldTextLength } from "./TextLength";
 // import { ReactComponent as IconCopy } from '../img/ico_copy.svg';
 
 const Wrapper = styled.div<{ isUser: boolean }>`
-  ${flex};
-  ${flexColumn};
+  display: flex;
+  flex-direction: column;
 
   min-height: fit-content;
 
@@ -61,8 +60,8 @@ const Profile = styled.div`
 `;
 
 const SpeechBubbleWrapper = styled.div<{ cssExt?: FlattenSimpleInterpolation; isUser: boolean }>`
-  ${flex};
-  ${flexColumn};
+  display: flex;
+  flex-direction: column;
   align-self: flex-start;
 
   width: 100%;
@@ -76,13 +75,13 @@ const SpeechBubbleWrapper = styled.div<{ cssExt?: FlattenSimpleInterpolation; is
 `;
 
 const MarkDownWrapper = styled.div`
-  ${flex};
+  display: flex;
 
   padding: 8px 12px;
 `;
 
 const LoadingMsg = styled.div`
-  ${flex};
+  display: flex;
 
   margin: 8px 12px;
   font-size: 13px;
@@ -91,17 +90,17 @@ const LoadingMsg = styled.div`
 `;
 
 const BubbleArea = styled.div`
-  ${flex};
-  ${justiSpaceBetween};
-  ${alignItemCenter};
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
   width: 100%;
   gap: 8px;
 `;
 
 const LisenceRight = styled.div`
-  ${flex};
-  ${alignItemCenter};
+  display: flex;
+  align-items: center;
 
   align-self: flex-end;
   margin-top: 9px;

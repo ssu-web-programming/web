@@ -3,12 +3,11 @@ import { useLocation } from 'react-router';
 import styled from 'styled-components';
 
 import Header from '../components/layout/Header';
-import { flex, flexColumn, flexGrow, flexShrink } from '../style/cssCommon';
 import ImageCreate from '../views/ImageCreate';
 
 const Wrapper = styled.div`
-  ${flex};
-  ${flexColumn};
+  display: flex;
+  flex-direction: column;
 
   width: 100%;
   height: 100%;
@@ -17,9 +16,9 @@ const Wrapper = styled.div`
 `;
 
 const Body = styled.div`
-  ${flex};
-  ${flexShrink};
-  ${flexGrow};
+  display: flex;
+  flex-shrink: 1;
+  flex-grow: 1;
 `;
 
 const TextToImage = () => {

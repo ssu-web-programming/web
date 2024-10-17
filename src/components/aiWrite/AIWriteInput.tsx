@@ -9,7 +9,6 @@ import icon_write from '../../img/ico_creating_text_white.svg';
 import icon_credit_outline from '../../img/ico_credit_outline.svg';
 import { setCurrentWrite, WriteType } from '../../store/slices/writeHistorySlice';
 import { useAppDispatch, useAppSelector } from '../../store/store';
-import { flex, flexColumn } from '../../style/cssCommon';
 import { exampleList, RowBox } from '../../views/AIChatTab';
 import Button from '../buttons/Button';
 import IconBoxTextButton from '../buttons/IconBoxTextButton';
@@ -22,8 +21,8 @@ import { filterCreditInfo } from '../nova/Header';
 import SubTitle from '../SubTitle';
 
 const WriteInputPage = styled.div`
-  ${flex};
-  ${flexColumn};
+  display: flex;
+  flex-direction: column;
   padding: 16px;
   width: 100%;
   height: 100%;
@@ -31,7 +30,7 @@ const WriteInputPage = styled.div`
 `;
 
 const InputArea = styled.div`
-  ${flex}
+  display: flex
 
   width: 100%;
 `;
@@ -50,8 +49,8 @@ export const NewMark = styled.div`
 `;
 
 const TitleInputSet = styled.div`
-  ${flex}
-  ${flexColumn}
+  display: flex;
+  flex-direction: column
   gap: 8px;
 `;
 

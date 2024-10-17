@@ -7,7 +7,6 @@ import icon_ai from '../../img/ico_ai.svg';
 import icon_credit_purple from '../../img/ico_credit_purple.svg';
 import icon_ai_loading from '../../img/loading_dot_2x.webp';
 import { AskDocChat } from '../../store/slices/askDoc';
-import { alignItemCenter, flex, flexColumn, justiSpaceBetween } from '../../style/cssCommon';
 import Bridge from '../../util/bridge';
 import Button from '../buttons/Button';
 import Icon from '../Icon';
@@ -15,8 +14,8 @@ import Grid from '../layout/Grid';
 import PreMarkdown from '../PreMarkdown';
 
 const Wrapper = styled.div<{ isUser: boolean }>`
-  ${flex};
-  ${flexColumn};
+  display: flex;
+  flex-direction: column;
 
   min-height: fit-content;
   width: fit-content;
@@ -50,8 +49,8 @@ const Profile = styled.div`
 const AskDocSpeechBubbleWrapper = styled.div<{
   isUser: boolean;
 }>`
-  ${flex}
-  ${flexColumn}
+  display: flex
+  flex-direction: column
   align-self: flex-start;
 
   width: 100%;
@@ -69,12 +68,12 @@ const AskDocSpeechBubbleWrapper = styled.div<{
 `;
 
 const MarkDownWrapper = styled.div`
-  ${flex}
+  display: flex;
 `;
 
 const LoadingMsg = styled.div`
-  ${flex}
-  ${alignItemCenter}
+  display: flex;
+  align-items: center
 
   font-size: 13px;
   font-weight: 500;
@@ -82,9 +81,9 @@ const LoadingMsg = styled.div`
 `;
 
 const BubbleArea = styled.div`
-  ${flex}
-  ${justiSpaceBetween}
-  ${alignItemCenter}
+  display: flex;
+  justify-content: space-between;
+  align-items: center
 
   width: 100%;
   gap: 8px;
@@ -97,8 +96,8 @@ const ColumDivider = styled.span`
 `;
 
 const BoldLengthWrapper = styled.div<{ isError?: boolean }>`
-  ${flex}
-  ${alignItemCenter}
+  display: flex;
+  align-items: center
 
   font-size: 12px;
   color: var(--gray-gray-70);

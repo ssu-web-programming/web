@@ -28,7 +28,6 @@ import {
   VersionType
 } from '../../store/slices/txt2imgHistory';
 import { useAppDispatch, useAppSelector } from '../../store/store';
-import { alignItemCenter, flex, flexColumn, justiCenter } from '../../style/cssCommon';
 import { RowContainer, SubTitleArea } from '../../views/ImageCreate';
 import IconBoxTextButton from '../buttons/IconBoxTextButton';
 import ShowResultButton from '../buttons/ShowResultButton';
@@ -38,8 +37,8 @@ import Grid from '../layout/Grid';
 import SubTitle from '../SubTitle';
 
 const MakingInputWrapper = styled.div`
-  ${flex};
-  ${flexColumn};
+  display: flex;
+  flex-direction: column;
   gap: 16px;
 `;
 
@@ -54,25 +53,25 @@ const GridContainer = styled.div<{
 `;
 
 const SelectOptionArea = styled.div`
-  ${flex};
-  ${flexColumn};
+  display: flex;
+  flex-direction: column;
 
   width: 100%;
   gap: 8px;
 `;
 
 const ContainerItem = styled.div`
-  ${flex};
-  ${flexColumn};
-  ${alignItemCenter};
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
   gap: 8px;
 `;
 
 const ItemTitle = styled.div<{ isSelected: boolean }>`
-  ${flex};
-  ${justiCenter};
-  ${alignItemCenter};
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   width: 100%;
   font-weight: bold;
@@ -103,9 +102,9 @@ const ItemIconBox = styled.div<{
   isSelected: boolean;
   cssExt?: FlattenSimpleInterpolation;
 }>`
-  ${flex};
-  ${justiCenter};
-  ${alignItemCenter};
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   width: 100%;
   height: 100%;

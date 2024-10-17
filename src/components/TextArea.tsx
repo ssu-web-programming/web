@@ -1,14 +1,12 @@
 import styled, { FlattenSimpleInterpolation } from 'styled-components';
 
-import { alignItemCenter, flex } from '../style/cssCommon';
-
 const Textarea = styled.textarea<{ cssExt?: FlattenSimpleInterpolation }>`
   resize: none;
   outline: none;
 
   ::placeholder {
-    ${flex};
-    ${alignItemCenter};
+    display: flex;
+    align-items: center;
     font-size: 13px;
     color: var(--gray-gray-60-03);
   }

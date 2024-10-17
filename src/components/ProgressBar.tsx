@@ -1,7 +1,5 @@
 import styled from 'styled-components';
 
-import { alignItemCenter, flex, justiCenter } from '../style/cssCommon';
-
 type ProgressBarProp = {
   progressPer: number;
 };
@@ -32,9 +30,9 @@ const Progress = styled.div<{ width?: number }>`
 
 const Text = styled.div<{ width?: number }>`
   &.back_num {
-    ${flex};
-    ${alignItemCenter};
-    ${justiCenter};
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     position: relative;
     height: 40px;
@@ -43,9 +41,9 @@ const Text = styled.div<{ width?: number }>`
   }
 
   &.front_num {
-    ${flex};
-    ${alignItemCenter};
-    ${justiCenter};
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     z-index: 2;
     position: absolute;

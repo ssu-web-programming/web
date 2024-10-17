@@ -20,13 +20,12 @@ import Header from '../components/layout/Header';
 // import { ReactComponent as IconChat } from '../img/ico_chat.svg';
 // import { ReactComponent as IconCreatingText } from '../img/ico_creating_text.svg';
 import { lang, LANG_KO_KR } from '../locale';
-import { flex, flexColumn } from '../style/cssCommon';
 // import AIChatTab, { ChatOptions } from '../views/AIChatTab';
 import AIWriteTab from '../views/AIWriteTab';
 
 const Wrapper = styled.div`
-  ${flex};
-  ${flexColumn};
+  display: flex;
+  flex-direction: column;
 
   width: 100%;
   height: 100%;

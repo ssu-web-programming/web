@@ -1,30 +1,22 @@
 import { ReactElement } from 'react';
 import styled, { css } from 'styled-components';
 
-import {
-  alignItemCenter,
-  flex,
-  flexGrow,
-  flexShrink,
-  justiCenter,
-  justiStart
-} from '../../style/cssCommon';
 import { MenuItemProps } from '../items/MenuItem';
 
 const Wrapper = styled.div`
-  ${flex};
-  ${justiStart};
+  display: flex;
+  justify-content: flex-start;
 
   height: 34px;
   border-bottom: 1px solid #c9cdd2;
 `;
 
 const TabItem = styled.div<{ selected: boolean }>`
-  ${flex};
-  ${flexGrow};
-  ${flexShrink};
-  ${alignItemCenter};
-  ${justiCenter};
+  display: flex;
+  flex-grow: 1;
+  flex-shrink: 1;
+  align-items: center;
+  justify-content: center;
 
   font-size: 13px;
   color: var(--gray-gray-90-01);

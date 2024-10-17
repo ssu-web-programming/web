@@ -1,9 +1,7 @@
 import styled from 'styled-components';
 
-import { flex } from '../style/cssCommon';
-
 const SubTitleWrapper = styled.div`
-  ${flex};
+  display: flex;
 
   font-size: 13px;
   font-weight: 500;

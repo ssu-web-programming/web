@@ -1,6 +1,5 @@
 import styled, { css } from 'styled-components';
 
-import { alignItemCenter, flex, justiCenter } from '../../style/cssCommon';
 import { IconSize, SIZES } from '../Icon';
 
 import Button from './Button';
@@ -21,9 +20,9 @@ const AskDocButton = (props: AskDocButtonProps) => {
       height={40}
       onClick={onClick}
       cssExt={css`
-        ${flex};
-        ${alignItemCenter};
-        ${justiCenter};
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
         width: 100%;
         position: relative;

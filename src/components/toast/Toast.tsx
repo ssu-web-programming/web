@@ -6,7 +6,6 @@ import styled, { css, FlattenSimpleInterpolation, keyframes } from 'styled-compo
 
 import { initToast, selectToast } from '../../store/slices/toastSlice';
 import { useAppDispatch, useAppSelector } from '../../store/store';
-import { alignItemStart, flex, flexGrow, flexShrink } from '../../style/cssCommon';
 import IconButton from '../buttons/IconButton';
 import Icon from '../Icon';
 
@@ -22,10 +21,10 @@ const Fade = keyframes`
 const TIME = 500;
 
 const ToastMsgWrapper = styled.div<{ variant: FlattenSimpleInterpolation }>`
-  ${flex};
-  ${alignItemStart};
-  ${flexShrink};
-  ${flexGrow};
+  display: flex;
+  align-items: flex-start;
+  flex-shrink: 1;
+  flex-grow: 1;
 
   position: absolute;
   left: 50%;

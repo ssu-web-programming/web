@@ -7,7 +7,6 @@ import { AskDocChat, selectAskDoc } from '../../store/slices/askDoc';
 import { setCreating } from '../../store/slices/tabSlice';
 import { activeToast } from '../../store/slices/toastSlice';
 import { useAppDispatch, useAppSelector } from '../../store/store';
-import { flex, flexColumn, flexGrow, justiCenter } from '../../style/cssCommon';
 import Bridge from '../../util/bridge';
 import Button from '../buttons/Button';
 import StopButton from '../buttons/StopButton';
@@ -18,9 +17,9 @@ import AskDocSpeechBubble from './AskDocSpeechBubble';
 import { QuestionList } from './QuestionList';
 
 const ChatListWrapper = styled.div<{ isLoading: boolean }>`
-  ${flex};
-  ${flexColumn};
-  ${flexGrow};
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
   position: relative;
 
   width: 100%;
@@ -32,8 +31,8 @@ const ChatListWrapper = styled.div<{ isLoading: boolean }>`
 `;
 
 const CenterBox = styled.div`
-  ${flex}
-  ${justiCenter};
+  display: flex
+  justify-content: center;
 
   width: 100%;
   margin: 16px 0px 50px 0px;

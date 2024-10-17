@@ -1,10 +1,8 @@
 import { PropsWithChildren } from 'react';
 import styled, { css } from 'styled-components';
 
-import { grid } from '../../style/cssCommon';
-
 const Wrapper = styled.div<{ col: number }>`
-  ${grid}
+  display: grid;
   ${({ col }) => css`
     -webkit-grid-columns: repeat(${col}, minmax(0, 1fr));
     grid-template-columns: repeat(${col}, minmax(0, 1fr));

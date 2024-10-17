@@ -16,14 +16,6 @@ import {
   selectSubRecFunc
 } from '../../../store/slices/recFuncSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
-import {
-  alignItemCenter,
-  flex,
-  flexColumn,
-  flexWrap,
-  justiCenter,
-  justiSpaceBetween
-} from '../../../style/cssCommon';
 import IconButton from '../../buttons/IconButton';
 import Icon from '../../Icon';
 
@@ -31,9 +23,9 @@ import FormRec, { DEFAULT_WRITE_OPTION_FORM_VALUE } from './FormRec';
 import FunctionRec from './FunctionRec';
 
 const Wrapper = styled.div`
-  ${flex};
-  ${flexColumn};
-  ${justiCenter};
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 
   width: 100%;
   background-color: rgba(245, 241, 253, 0.7);
@@ -51,10 +43,10 @@ const Wrapper = styled.div`
 `;
 
 export const RowWrapBox = styled.div<{ cssExt?: FlattenSimpleInterpolation }>`
-  ${flex};
-  ${flexWrap};
-  ${justiSpaceBetween};
-  ${alignItemCenter};
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
 
   width: 100%;
   ${(props) => props.cssExt || ''};
@@ -67,10 +59,10 @@ const OpenedBox = styled(RowWrapBox)`
 `;
 
 const CommentWrapper = styled.div`
-  ${flex};
-  ${justiCenter};
-  ${alignItemCenter};
-  ${justiCenter};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  justify-content: center;
   align-self: center;
 
   width: fit-content;

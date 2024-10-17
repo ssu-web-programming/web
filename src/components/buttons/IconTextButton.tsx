@@ -1,15 +1,14 @@
 import { PropsWithChildren } from 'react';
 import styled from 'styled-components';
 
-import { alignItemCenter, flex, justiCenter } from '../../style/cssCommon';
 import Icon, { IconSize } from '../Icon';
 
 import Button, { ButtonProps } from './Button';
 
 const Contents = styled.div`
-  ${flex};
-  ${justiCenter};
-  ${alignItemCenter};
+  display: flex;
+  justify-content: center;
+  align-items: center;
   gap: 6px;
 
   width: 100%;

@@ -2,13 +2,12 @@ import styled, { css } from 'styled-components';
 
 import icon_credit from '../../img/ico_credit.svg';
 import icon_sand from '../../img/ico_send.svg';
-import { alignItemCenter, flex, justiCenter } from '../../style/cssCommon';
 import Icon from '../Icon';
 
 import Button from './Button';
 
 const CoinIcon = styled.div`
-  ${flex};
+  display: flex;
   position: absolute;
   bottom: 3px;
   right: 4px;
@@ -30,9 +29,9 @@ const SendCoinButton = ({
         onClick();
       }}
       cssExt={css`
-        ${flex};
-        ${alignItemCenter};
-        ${justiCenter};
+        display: flex;
+        align-items: center;
+        justify-content: center;
         align-self: flex-end;
         position: relative;
 

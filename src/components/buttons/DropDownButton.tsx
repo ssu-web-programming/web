@@ -3,23 +3,14 @@ import styled, { css } from 'styled-components';
 
 import { ReactComponent as IconArrowDown } from '../../img/ico_arrow_down_small.svg';
 import { ReactComponent as IconArrowUp } from '../../img/ico_arrow_up_small.svg';
-import {
-  alignItemCenter,
-  flex,
-  flexColumn,
-  flexGrow,
-  flexShrink,
-  justiCenter,
-  justiStart
-} from '../../style/cssCommon';
 import IconComponent from '../IconComponent';
 
 import Button, { ButtonProps } from './Button';
 
 const DropDownWrapper = styled.div<{ hasSelectedOption?: boolean; width?: ButtonProps['width'] }>`
-  ${flex};
-  ${justiCenter};
-  ${alignItemCenter};
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   position: relative;
   box-sizing: border-box;
@@ -33,10 +24,10 @@ const DropDownWrapper = styled.div<{ hasSelectedOption?: boolean; width?: Button
 `;
 
 const FloatingListWrapper = styled.div`
-  ${flex}
-  ${flexColumn}
-  ${flexGrow}
-  ${flexShrink}
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  flex-shrink: 1;
 
   font-size: 12px;
   position: absolute;
@@ -51,9 +42,9 @@ const FloatingListWrapper = styled.div`
 `;
 
 const FloatingItem = styled.div<{ isSelected: boolean }>`
-  ${flex}
-  ${justiStart}
-  ${alignItemCenter}
+  display: flex;
+  justify-content: flex-start;
+  align-items: center
 
   width: 100%;
   height: 24px;

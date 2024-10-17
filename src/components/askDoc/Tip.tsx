@@ -3,13 +3,12 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import icon_ai from '../../img/ico_ai.svg';
-import { alignItemCenter, flex, flexGrow, flexShrink } from '../../style/cssCommon';
 import Icon from '../Icon';
 
 const FloatingBox = styled.div`
-  ${flex};
-  ${flexGrow};
-  ${flexShrink};
+  display: flex;
+  flex-grow: 1;
+  flex-shrink: 1;
 
   position: absolute;
   top: 0;
@@ -19,8 +18,8 @@ const FloatingBox = styled.div`
 `;
 
 const Info = styled.div`
-  ${flex};
-  ${alignItemCenter};
+  display: flex;
+  align-items: center;
 
   background-color: var(--ai-purple-99-bg-light);
   color: var(--ai-purple-50-main);

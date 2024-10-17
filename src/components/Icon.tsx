@@ -1,9 +1,7 @@
 import styled, { css, FlattenSimpleInterpolation } from 'styled-components';
 
-import { flex } from '../style/cssCommon';
-
 const IconImg = styled.img<{ size: FlattenSimpleInterpolation }>`
-  ${flex};
+  display: flex;
   ${(props) => props.size};
 `;
 
@@ -27,6 +25,7 @@ export type IconSize = 'sm' | 'md' | 'lg';
 export interface IconProps {
   size?: IconSize | number;
   iconSrc: string | React.ReactNode;
+
   [key: string]: any;
 }
 

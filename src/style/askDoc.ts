@@ -1,30 +1,26 @@
 import styled from 'styled-components';
 
-import { flex, flexColumn, justiSpaceBetween, TableCss } from './cssCommon';
-
 export const Body = styled.div`
   flex: 1;
   overflow: auto;
 `;
 
 export const WrapperPage = styled.div`
-  ${flex};
-  ${flexColumn};
+  display: flex;
+  flex-direction: column;
 
   width: 100%;
   height: 100%;
 `;
 
 export const Wrapper = styled.div<{ background: boolean }>`
-  ${flex};
-  ${flexColumn};
-  ${justiSpaceBetween};
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 
   width: 100%;
   height: 100%;
   background-color: ${(props) => (props.background ? 'var(--ai-purple-99-bg-light)' : 'none')};
-
-  ${TableCss}
 `;
 
 export const Footer = styled.div`

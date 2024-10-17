@@ -5,18 +5,10 @@ import styled from 'styled-components';
 import Header from '../components/layout/Header';
 import { selectNetwork, setOnlineStatus } from '../store/slices/network';
 import { useAppDispatch, useAppSelector } from '../store/store';
-import {
-  alignItemCenter,
-  flex,
-  flexColumn,
-  flexGrow,
-  flexShrink,
-  justiCenter
-} from '../style/cssCommon';
 
 const Wrapper = styled.div`
-  ${flex};
-  ${flexColumn};
+  display: flex;
+  flex-direction: column;
 
   position: absolute;
   left: 0;
@@ -26,12 +18,12 @@ const Wrapper = styled.div`
 `;
 
 const Contents = styled.div`
-  ${flex};
-  ${flexColumn};
-  ${justiCenter};
-  ${alignItemCenter};
-  ${flexShrink};
-  ${flexGrow};
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 1;
+  flex-grow: 1;
 
   background-color: white;
 `;

@@ -1,13 +1,11 @@
 import { PropsWithChildren } from 'react';
 import styled, { css } from 'styled-components';
 
-import { flex, flexColumn } from '../../style/cssCommon';
-
 import IconTextButton, { IconTextButtonProps } from './IconTextButton';
 
 const Wrapper = styled.div`
-  ${flex};
-  ${flexColumn};
+  display: flex;
+  flex-direction: column;
 
   gap: 8px;
 `;

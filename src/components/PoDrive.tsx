@@ -9,7 +9,6 @@ import { ReactComponent as IconUploadImg } from 'img/ico_upload_img.svg';
 import { useTranslation } from 'react-i18next';
 import { activeToast } from 'store/slices/toastSlice';
 import { useAppDispatch } from 'store/store';
-import { CustomScrollbar } from 'style/cssCommon';
 import styled from 'styled-components';
 
 import { DriveFileInfo } from '../store/slices/uploadFiles';
@@ -70,8 +69,23 @@ const FileList = styled.div`
   overflow: hidden auto;
   padding: 0px 24px;
   position: relative;
+  scrollbar-color: #c9cdd2 #ffffff;
+  scrollbar-width: thin;
 
-  ${CustomScrollbar}
+  &::-webkit-scrollbar {
+    width: 6px;
+    background: #ffffff;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: #c9cdd2;
+  }
+
+  &::-webkit-scrollbar-track {
+    border-radius: 4px;
+    background: #ffffff;
+  }
 `;
 
 const FileItem = styled.div`

@@ -14,15 +14,6 @@ import {
   updateT2ICurListId
 } from '../../store/slices/txt2imgHistory';
 import { useAppDispatch } from '../../store/store';
-import {
-  alignItemCenter,
-  flex,
-  flexColumn,
-  flexGrow,
-  flexShrink,
-  justiCenter,
-  justiSpaceBetween
-} from '../../style/cssCommon';
 import Bridge from '../../util/bridge';
 import { RowContainer, SubTitleArea } from '../../views/ImageCreate';
 import ArrowSwitcher from '../ArrowSwitcher';
@@ -43,7 +34,7 @@ const ImagePreview = styled.div`
 `;
 
 const InputDescKor = styled.p`
-  ${flex};
+  display: flex;
   width: 100%;
   max-height: 40px;
 
@@ -66,16 +57,16 @@ const InputDescEng = styled(InputDescKor)`
 `;
 
 const InputDescBox = styled.div`
-  ${flex}
-  ${justiSpaceBetween}
+  display: flex
+  justify-content: space-between
   margin-top: 5px;
 `;
 
 const InputDesc = styled.div`
-  ${flex}
-  ${flexColumn}
-  ${flexGrow}
-  ${flexShrink}
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  flex-shrink: 1;
   position: relative;
   width: 100%;
   gap: 5px;
@@ -83,9 +74,9 @@ const InputDesc = styled.div`
 
 const FloatOpenDesc = styled.div`
   position: absolute;
-  ${flex}
-  ${flexColumn}
-  ${flexGrow}
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
   width: 100%;
   height: 168px;
   border-radius: 4px;
@@ -102,10 +93,10 @@ const FloatOpenDesc = styled.div`
 `;
 
 const ImgListSwitcher = styled.div`
-  ${flex}
-  ${justiSpaceBetween}
-  ${alignItemCenter}
-  ${justiCenter}
+  display: flex;
+  justify-content: space-between;
+  align-items: center
+  justify-content: center;
 
   width: 100%;
   font-size: 13px;
@@ -115,8 +106,8 @@ const ImgListSwitcher = styled.div`
 `;
 
 const LicenseMark = styled.div`
-  ${flex}
-  ${alignItemCenter}
+  display: flex;
+  align-items: center
 
   align-self: flex-end;
   margin-top: 11px;

@@ -1,13 +1,12 @@
 import styled from 'styled-components';
 
 import { Footer, GuideMessage, Wrapper } from '../../style/askDoc';
-import { alignItemCenter, flex, flexColumn, justiStart } from '../../style/cssCommon';
 import Skeleton from '../Skeleton';
 
 const List = styled.ul`
-  ${flex};
-  ${flexColumn};
-  ${justiStart};
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 
   width: 100%;
   height: 100%;
@@ -15,9 +14,9 @@ const List = styled.ul`
 `;
 
 const Item = styled.li<{ checked: boolean }>`
-  ${flex};
-  ${alignItemCenter};
-  ${justiStart};
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
   flex-direction: row;
   gap: 8px;
 

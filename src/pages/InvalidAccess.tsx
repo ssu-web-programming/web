@@ -2,21 +2,20 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import Header from '../components/layout/Header';
-import { alignItemCenter, flex, flexColumn, justiCenter } from '../style/cssCommon';
 
 const Wrapper = styled.div`
-  ${flex};
-  ${flexColumn};
+  display: flex;
+  flex-direction: column;
 
   width: 100%;
   height: 100%;
 `;
 
 const Contents = styled.div`
-  ${flex};
-  ${flexColumn};
-  ${justiCenter};
-  ${alignItemCenter};
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
   flex: 1;
 `;

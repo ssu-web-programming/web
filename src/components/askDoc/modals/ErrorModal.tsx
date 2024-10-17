@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { alignItemCenter, flex, justiCenter } from '../../../style/cssCommon';
 type IErrorModalProps = {
   title: string;
   children: React.ReactNode;
@@ -26,6 +25,7 @@ const ErrorModalWrapper = styled.div`
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.1);
   background-color: #fff;
   border-radius: 10px;
+
   & h1 {
     font-size: 1.125rem;
     line-height: 1.5;
@@ -42,9 +42,9 @@ const ErrorModalWrapper = styled.div`
   & button {
     width: 100%;
     height: 2.5rem;
-    ${flex};
-    ${justiCenter};
-    ${alignItemCenter};
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border-radius: 4px;
   }
 
@@ -60,8 +60,8 @@ const ErrorModalWrapper = styled.div`
 
   & .imgWrapp {
     margin: 1.5rem 0;
-    ${flex};
-    ${justiCenter};
+    display: flex;
+    justify-content: center;
   }
 `;
 

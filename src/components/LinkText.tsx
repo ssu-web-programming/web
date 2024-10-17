@@ -1,14 +1,13 @@
 import styled from 'styled-components';
 
-import { flex, justiEnd } from '../style/cssCommon';
 import { openNewWindow } from '../util/common';
 
 const LinkTextWrapper = styled.div`
-  ${flex};
+  display: flex;
   color: black;
   cursor: pointer;
   width: fit-content;
-  ${justiEnd}
+  justify-content: flex-end;
 `;
 
 interface LinkTextProps {

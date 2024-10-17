@@ -2,7 +2,6 @@ import styled from 'styled-components';
 
 // import ai_loading from '../img/ai_motion_mid_56.webp';
 import ai_loading from '../img/ezgif.com-gif-maker.png';
-import { alignItemCenter, flex, flexColumn, justiCenter } from '../style/cssCommon';
 
 import Icon from './Icon';
 
@@ -12,10 +11,10 @@ const Wrapper = styled.div`
   font-size: 13px;
   font-weight: 500;
 
-  ${flex};
-  ${flexColumn};
-  ${justiCenter};
-  ${alignItemCenter};
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
   color: var(--ai-purple-50-main);
   word-break: keep-all;

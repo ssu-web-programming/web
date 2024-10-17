@@ -41,38 +41,25 @@ import {
 import { selectTabSlice, setCreating, setshowChatEOS } from '../store/slices/tabSlice';
 import { activeToast } from '../store/slices/toastSlice';
 import { useAppDispatch, useAppSelector } from '../store/store';
-import {
-  alignItemCenter,
-  flex,
-  flexColumn,
-  flexGrow,
-  flexShrink,
-  flexWrap,
-  justiCenter,
-  justiSpaceBetween,
-  TableCss
-} from '../style/cssCommon';
 import { ClientType, getPlatform } from '../util/bridge';
 import { calLeftCredit } from '../util/common';
 
 const TEXT_MAX_HEIGHT = 268;
 
 const Wrapper = styled.div`
-  ${flex};
-  ${flexColumn};
-  ${justiSpaceBetween};
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 
   width: 100%;
   height: 100%;
   background-color: var(--ai-purple-99-bg-light);
-
-  ${TableCss};
 `;
 
 const ChatListWrapper = styled.div<{ isLoading: boolean }>`
-  ${flex};
-  ${flexColumn};
-  ${flexGrow};
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
   position: relative;
 
   width: 100%;
@@ -84,9 +71,9 @@ const ChatListWrapper = styled.div<{ isLoading: boolean }>`
 `;
 
 const FloatingBox = styled.div`
-  ${flex};
-  ${flexGrow};
-  ${flexShrink};
+  display: flex;
+  flex-grow: 1;
+  flex-shrink: 1;
 
   position: absolute;
   top: 0px;
@@ -96,10 +83,10 @@ const FloatingBox = styled.div`
 `;
 
 const InputBox = styled.div<{ activeInputWrap: boolean }>`
-  ${flex};
-  ${alignItemCenter};
-  ${flexColumn};
-  ${flexShrink};
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  flex-shrink: 1;
 
   height: fit-content;
   width: 100%;
@@ -126,8 +113,8 @@ export const VersionWrapper = styled.div`
 `;
 
 const Info = styled.div`
-  ${flex};
-  ${alignItemCenter};
+  display: flex;
+  align-items: center;
 
   background-color: var(--ai-purple-99-bg-light);
   color: var(--ai-purple-50-main);
@@ -140,8 +127,8 @@ const Info = styled.div`
 `;
 
 const CenterBox = styled.div`
-  ${flex};
-  ${justiCenter};
+  display: flex;
+  justify-content: center;
 
   width: 100%;
   margin: 16px 0px 16px 0px;
@@ -155,9 +142,9 @@ export const ColumDivider = styled.div`
 
 const TextBox = styled(RowBox)`
   textarea {
-    ${flex};
-    ${justiCenter};
-    ${flexGrow};
+    display: flex;
+    justify-content: center;
+    flex-grow: 1;
 
     width: fit-content;
     border: 0;
@@ -174,11 +161,11 @@ const TextBox = styled(RowBox)`
 
 const InputBottomArea = styled.div`
   width: 100%;
-  ${flex};
-  ${flexWrap};
-  ${justiCenter};
-  ${justiSpaceBetween};
-  ${alignItemCenter};
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  justify-content: space-between;
+  align-items: center;
   height: 34px;
   padding: 0px 3px 0px 9px;
   border-top: 1px solid var(--ai-purple-99-bg-light);
@@ -400,8 +387,8 @@ const AIChatTab = (props: WriteTabProps) => {
     const input = chat
       ? chat.input
       : chatInput.length > 0
-      ? chatInput
-      : chatHistory[chatHistory.length - 1].result;
+        ? chatInput
+        : chatHistory[chatHistory.length - 1].result;
 
     const gptVer = chat ? chat.version : version.version;
 

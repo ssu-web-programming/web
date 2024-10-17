@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 
 import icon_check from '../img/ico_check.svg';
-import { alignItemCenter, flex, justiCenter } from '../style/cssCommon';
 
 export interface CheckBoxProps {
   isChecked: boolean;
@@ -22,9 +21,9 @@ const CheckBox = (props: CheckBoxProps) => {
 export default CheckBox;
 
 const Circle = styled.div<{ checked: boolean }>`
-  ${flex};
-  ${justiCenter};
-  ${alignItemCenter};
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   width: 20px;
   min-width: 20px;

@@ -7,14 +7,6 @@ import styled, { css, FlattenSimpleInterpolation } from 'styled-components';
 import AudioInit from '../../audio/init.mpga';
 import { Tip } from '../../components/askDoc/Tip';
 import { INPUT_MAX_LENGTH } from '../../store/slices/askDoc';
-import {
-  alignItemCenter,
-  flex,
-  flexColumn,
-  flexGrow,
-  flexShrink,
-  justiCenter
-} from '../../style/cssCommon';
 import { RowWrapBox } from '../chat/RecommendBox/ChatRecommend';
 import useLangParameterNavigate from '../hooks/useLangParameterNavigate';
 import useResizeHeight from '../hooks/useResizeHeight';
@@ -23,10 +15,10 @@ import TextArea from '../TextArea';
 const TEXT_MAX_HEIGHT = 268;
 
 const InputBox = styled.div<{ activeInputWrap: boolean; isTesla: boolean }>`
-  ${flex};
-  ${alignItemCenter};
-  ${flexColumn};
-  ${flexShrink};
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  flex-shrink: 1;
 
   height: fit-content;
   width: 100%;
@@ -53,9 +45,9 @@ export const RowBox = styled.div<{ cssExt?: FlattenSimpleInterpolation }>`
 
 const TextBox = styled(RowBox)`
   textarea {
-    ${flex};
-    ${justiCenter};
-    ${flexGrow};
+    display: flex;
+    justify-content: center;
+    flex-grow: 1;
 
     width: fit-content;
     border: 0;
@@ -77,8 +69,8 @@ const InputBottomArea = styled(RowWrapBox)`
 `;
 
 const LengthWrapper = styled.div<{ isError?: boolean }>`
-  ${flex};
-  ${alignItemCenter};
+  display: flex;
+  align-items: center;
 
   font-size: 12px;
   color: var(--gray-gray-70);

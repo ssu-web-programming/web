@@ -15,3 +15,29 @@ body,
 input:focus {
   outline: none;
 }
+
+table {
+  border-collapse: collapse;
+  border-radius: 6px;
+}
+
+th,
+td {
+  padding: 0.5em 1em;
+}
+
+table,
+tr,
+td,
+th {
+  border-radius: 6px;
+  border: 1px solid #555;
+}
+
+textarea:focus {
+  outline: none;
+}
+
+input:focus {
+  outline: none;
+}

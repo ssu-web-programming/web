@@ -1,7 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
 
-import { flex, flexColumn } from './cssCommon';
-
 const GlobalStyle = createGlobalStyle`
   html,
   body,
@@ -86,8 +84,8 @@ const GlobalStyle = createGlobalStyle`
   }
 
   ol, ul {
-    ${flex};
-    ${flexColumn};
+    display: flex;
+    flex-direction: column;
 
     margin: 0;
     padding-left: 20px;

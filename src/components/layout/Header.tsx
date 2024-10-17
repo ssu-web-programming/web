@@ -3,28 +3,27 @@ import { useLocation } from 'react-router';
 import styled from 'styled-components';
 
 import { ReactComponent as IconClose } from '../../img/ico_ai_close.svg';
-import { alignItemCenter, flex, justiSpaceBetween } from '../../style/cssCommon';
 import Bridge from '../../util/bridge';
 import IconButton from '../buttons/IconButton';
 import Icon from '../Icon';
 
 const Contents = styled.div`
-  ${flex};
-  ${justiSpaceBetween};
-  ${alignItemCenter};
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
   padding: 8px 5px 8px 10px;
   height: 48px;
 `;
 
 const TitleWrapper = styled.div`
-  ${flex};
-  ${alignItemCenter};
+  display: flex;
+  align-items: center;
   width: fit-content;
 `;
 
 const Title = styled.div`
-  ${flex};
+  display: flex;
 
   font-size: 16px;
   font-weight: bold;
@@ -35,7 +34,7 @@ const Title = styled.div`
 `;
 
 const SubTitle = styled.div`
-  ${flex};
+  display: flex;
 
   font-size: 14px;
   font-weight: normal;

@@ -1,36 +1,31 @@
-import React from "react";
-import { BoldTextLength } from "components/TextLength";
-import { useTranslation } from "react-i18next";
-import styled, { css } from "styled-components";
+import React from 'react';
+import { BoldTextLength } from 'components/TextLength';
+import { useTranslation } from 'react-i18next';
+import styled, { css } from 'styled-components';
 
-import icon_credit_purple from "../../img/ico_credit_purple.svg";
-import { selectTabSlice } from "../../store/slices/tabSlice";
-import { activeToast } from "../../store/slices/toastSlice";
-import { resetCurrentWrite, setCurrentWrite, WriteType } from "../../store/slices/writeHistorySlice";
-import { useAppDispatch, useAppSelector } from "../../store/store";
+import icon_credit_purple from '../../img/ico_credit_purple.svg';
+import { selectTabSlice } from '../../store/slices/tabSlice';
+import { activeToast } from '../../store/slices/toastSlice';
 import {
-  alignItemCenter,
-  flex,
-  flexColumn,
-  flexGrow,
-  flexShrink,
-  justiSpaceBetween,
-  TableCss
-} from "../../style/cssCommon";
-import { insertDoc } from "../../util/common";
-import { ColumDivider, RowBox } from "../../views/AIChatTab";
-import ArrowSwitcher from "../ArrowSwitcher";
-import Button from "../buttons/Button";
-import IconTextButton from "../buttons/IconTextButton";
-import ReturnButton from "../buttons/ReturnButton";
-import StopButton from "../buttons/StopButton";
-import ClaudeLinkText from "../ClaudeLinkText";
-import ClovaXLinkText from "../ClovaXLinkText";
-import Grid from "../layout/Grid";
-import Loading from "../Loading";
-import OpenAILinkText from "../OpenAILinkText";
-import PreMarkdown from "../PreMarkdown";
-import SubTitle from "../SubTitle";
+  resetCurrentWrite,
+  setCurrentWrite,
+  WriteType
+} from '../../store/slices/writeHistorySlice';
+import { useAppDispatch, useAppSelector } from '../../store/store';
+import { insertDoc } from '../../util/common';
+import { ColumDivider, RowBox } from '../../views/AIChatTab';
+import ArrowSwitcher from '../ArrowSwitcher';
+import Button from '../buttons/Button';
+import IconTextButton from '../buttons/IconTextButton';
+import ReturnButton from '../buttons/ReturnButton';
+import StopButton from '../buttons/StopButton';
+import ClaudeLinkText from '../ClaudeLinkText';
+import ClovaXLinkText from '../ClovaXLinkText';
+import Grid from '../layout/Grid';
+import Loading from '../Loading';
+import OpenAILinkText from '../OpenAILinkText';
+import PreMarkdown from '../PreMarkdown';
+import SubTitle from '../SubTitle';
 
 // clipboard
 // import { useCopyClipboard } from '../../util/bridge';
@@ -38,30 +33,28 @@ import SubTitle from "../SubTitle";
 // import { ReactComponent as IconCopy } from '../../img/ico_copy.svg';
 
 const Wrapper = styled.div`
-  ${flex};
-  ${flexColumn};
+  display: flex;
+  flex-direction: column;
   background-color: var(--ai-purple-99-bg-light);
   height: 100%;
 `;
 
 const ResultBox = styled.div`
-  ${flex};
-  ${flexColumn};
-  ${justiSpaceBetween};
-  ${flexShrink};
-  ${flexGrow};
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-shrink: 1;
+  flex-grow: 1;
 
   width: 100%;
   border-radius: 4px;
   background-color: #fff;
   margin-bottom: 8px;
   height: 60%;
-
-  ${TableCss}
 `;
 
 const ResultWrapper = styled.div`
-  ${flex};
+  display: flex;
   overflow: auto;
   white-space: break-spaces;
   width: 100%;
@@ -70,8 +63,8 @@ const ResultWrapper = styled.div`
 `;
 
 const ResWrapper = styled.div`
-  ${flex};
-  ${flexColumn};
+  display: flex;
+  flex-direction: column;
 
   padding: 16px;
   width: 100%;
@@ -82,21 +75,21 @@ const ResWrapper = styled.div`
 `;
 
 const ButtonBox = styled.div<{ creating: boolean }>`
-  ${flex};
-  ${flexColumn};
+  display: flex;
+  flex-direction: column;
 
   gap: 8px;
   visibility: ${({ creating }: { creating: boolean }) => (creating ? 'hidden' : 'visible')};
 `;
 
 const ResultInfo = styled.div`
-  ${flex};
-  ${flexColumn};
+  display: flex;
+  flex-direction: column;
 `;
 
 const RightBox = styled.div`
-  ${flex};
-  ${alignItemCenter};
+  display: flex;
+  align-items: center;
 
   align-self: flex-end;
   gap: 4px;

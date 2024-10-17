@@ -25,12 +25,11 @@ import {
   VersionType
 } from '../store/slices/txt2imgHistory';
 import { useAppDispatch, useAppSelector } from '../store/store';
-import { alignItemCenter, flex, flexColumn, flexWrap, justiSpaceBetween } from '../style/cssCommon';
 import { calLeftCredit } from '../util/common';
 
 const Body = styled.div`
-  ${flex};
-  ${flexColumn};
+  display: flex;
+  flex-direction: column;
 
   width: 100%;
   height: 100%;
@@ -40,9 +39,9 @@ const Body = styled.div`
 `;
 
 export const SubTitleArea = styled.div`
-  ${flex};
-  ${justiSpaceBetween};
-  ${alignItemCenter};
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
   width: 100%;
 `;
@@ -50,8 +49,8 @@ export const SubTitleArea = styled.div`
 export const RowContainer = styled.div<{
   cssExt?: FlattenSimpleInterpolation;
 }>`
-  ${flex};
-  ${flexWrap};
+  display: flex;
+  flex-wrap: wrap;
 
   width: 100%;
   gap: 8px;
