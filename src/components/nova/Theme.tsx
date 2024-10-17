@@ -88,7 +88,8 @@ const ThemeSelectionWrap = styled.div`
 
 const ThemeWrap = styled.div`
   width: 100%;
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(5, 60px);
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;

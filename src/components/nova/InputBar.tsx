@@ -47,8 +47,8 @@ export const flexCenter = css`
 `;
 
 const UploadBtn = styled.div`
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 8px;
 
   > button {
@@ -151,9 +151,9 @@ const TextArea = styled.textarea<{ value: string }>`
   background: white;
   outline: none;
   border-radius: 3px;
-  border: 10px solid white;
-  border-right: 6px solid white;
-  border-left: 16px solid white;
+  border-style: solid;
+  border-width: 10px 6px 10px 16px;
+  border-color: transparent;
   resize: none;
   word-break: break-all;
   font-size: 14px;

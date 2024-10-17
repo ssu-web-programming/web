@@ -143,10 +143,9 @@ const RemakeButton = styled.div`
 
 const DefaultButtonWrap = styled.div`
   width: 100%;
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   align-items: center;
-  justify-content: space-between;
   gap: 8px;
 `;
 

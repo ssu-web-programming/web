@@ -32,7 +32,6 @@ const Body = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: safe center;
-  gap: 30px;
   padding: 0 16px 16px 16px;
   overflow-y: auto;
 `;
@@ -73,15 +72,15 @@ const StyledStage = styled(Stage)<{ width: number; height: number }>`
 
 const ButtonWrap = styled.div`
   width: 100%;
-  display: flex;
-  flex-direction: column;
+  display: grid;
   align-items: center;
-  justify-content: center;
   gap: 8px;
+  margin-top: 30px;
 `;
 
 const CanvasSizeButtonGroup = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, 78px);
   align-items: center;
   justify-content: center;
   gap: 16px;

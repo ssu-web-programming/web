@@ -84,7 +84,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   ol, ul {
-    display: flex;
+    display: grid;
     flex-direction: column;
 
     margin: 0;

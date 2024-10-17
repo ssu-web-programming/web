@@ -65,8 +65,7 @@ const GuideTitle = styled.div`
 `;
 const Guidebody = styled.div`
   width: 100%;
-  display: flex;
-  flex-direction: column;
+  display: grid;
   gap: 8px;
   margin-bottom: 16px;
 `;

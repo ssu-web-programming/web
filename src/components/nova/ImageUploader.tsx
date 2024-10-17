@@ -150,8 +150,11 @@ export default function ImageUploader(props: ImageUploaderProps) {
         accept={SUPPORT_IMAGE_TYPE}
         inputRef={inputImgFileRef}
         tooltipStyle={{
-          inset: 'unset',
+          minWidth: '165px',
           top: '12px',
+          left: 'unset',
+          right: 'unset',
+          bottom: 'unset',
           padding: '12px 16px'
         }}>
         <ImageBox>
