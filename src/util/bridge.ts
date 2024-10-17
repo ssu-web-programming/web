@@ -355,6 +355,7 @@ export const useInitBridgeListener = () => {
                 if (body.openTab != NOVA_TAB_TYPE.aiChat && file) {
                   dispatch(resetPageData(body.openTab));
                   dispatch(resetPageResult(body.openTab));
+                  dispatch(setPageStatus({ tab: body.openTab, status: 'home' }));
                   await loadLocalFile([file]);
                 } else {
                   dispatch(setLocalFiles([]));
