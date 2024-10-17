@@ -523,6 +523,7 @@ const Bridge = {
       const callback = async (sessionInfo: CallbackMessage, id: BridgeItemID) => {
         try {
           const { body } = sessionInfo;
+          console.log('session info body: ', sessionInfo);
           const AID = body['AID'] || '';
           const BID = body['BID'] || '';
           const SID = body['SID'] || '';
@@ -544,6 +545,7 @@ const Bridge = {
             });
           } else {
             const { status, userId, level } = resJson.data.userInfo;
+            console.log('user info: ', resJson.data.userInfo);
             resolve({
               success: true,
               sessionInfo: { AID: AID, BID: BID, SID: SID },
@@ -555,6 +557,7 @@ const Bridge = {
             });
           }
         } catch (err) {
+          console.log('err: ', err);
           reject({ success: false, err });
         } finally {
           delete BridgeList[id];
@@ -565,9 +568,12 @@ const Bridge = {
           id: `${api}_${Date.now()}_${uuidv4()}`,
           callback
         };
+        console.log('item: ', item);
         BridgeList[item.id] = item;
 
+        console.log('before call api');
         callApi('getSessionInfo', item.id);
+        console.log('after call api');
       } catch (err) {
         reject({ success: false, err });
       }

@@ -84,6 +84,7 @@ export default function useInitApp() {
   return async () => {
     console.log('useInitApp');
     const resSession = await Bridge.checkSession('app init');
+    console.log('resSession: ', resSession);
     if (!resSession || !resSession.success) {
       throw new Error(ERR_INVALID_SESSION);
     }
