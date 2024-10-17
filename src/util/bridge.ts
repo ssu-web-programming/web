@@ -12,7 +12,11 @@ import { AskDocStatus, setSrouceId, setStatus } from '../store/slices/askDoc';
 import { setFiles } from '../store/slices/askDocAnalyzeFiesSlice';
 import { initConfirm } from '../store/slices/confirm';
 import { initComplete } from '../store/slices/initFlagSlice';
-import { setPageStatus } from '../store/slices/nova/pageStatusSlice';
+import {
+  resetPageData,
+  resetPageResult,
+  setPageStatus
+} from '../store/slices/nova/pageStatusSlice';
 import { setRecognizedVoice } from '../store/slices/recognizedVoice';
 import {
   NOVA_TAB_TYPE,
@@ -349,6 +353,8 @@ export const useInitBridgeListener = () => {
                 }
 
                 if (body.openTab != NOVA_TAB_TYPE.aiChat && file) {
+                  dispatch(resetPageData(body.openTab));
+                  dispatch(resetPageResult(body.openTab));
                   await loadLocalFile([file]);
                 } else {
                   dispatch(setLocalFiles([]));
