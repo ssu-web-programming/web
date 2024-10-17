@@ -82,34 +82,38 @@ export default function useInitApp() {
   );
 
   return async () => {
-    console.log('useInitApp');
-    const resSession = await Bridge.checkSession('app init');
-    console.log('resSession: ', resSession);
-    if (!resSession || !resSession.success) {
-      console.log('error: ', resSession);
-      throw new Error(ERR_INVALID_SESSION);
+    try {
+      console.log('useInitApp');
+      const resSession = await Bridge.checkSession('app init');
+      console.log('resSession: ', resSession);
+      if (!resSession || !resSession.success) {
+        console.log('error: ', resSession);
+        throw new Error(ERR_INVALID_SESSION);
+      }
+      console.log('get res session');
+
+      const AID = resSession.sessionInfo['AID'];
+      const BID = resSession.sessionInfo['BID'];
+      const SID = resSession.sessionInfo['SID'];
+
+      const session: any = {};
+      session['X-PO-AI-MayFlower-Auth-AID'] = AID;
+      session['X-PO-AI-MayFlower-Auth-BID'] = BID;
+      session['X-PO-AI-MayFlower-Auth-SID'] = SID;
+
+      const headers = {
+        ...session,
+        'User-Agent': navigator.userAgent,
+        'X-PO-AI-API-LANGUAGE': lang
+      };
+
+      await initUserInfo(headers);
+      await initNovaExpireTime(headers);
+      await initCreditInfo(headers);
+
+      dispatch(setUserInfo(resSession.userInfo));
+    } catch (err) {
+      console.log('err: ', err);
     }
-    console.log('get res session');
-
-    const AID = resSession.sessionInfo['AID'];
-    const BID = resSession.sessionInfo['BID'];
-    const SID = resSession.sessionInfo['SID'];
-
-    const session: any = {};
-    session['X-PO-AI-MayFlower-Auth-AID'] = AID;
-    session['X-PO-AI-MayFlower-Auth-BID'] = BID;
-    session['X-PO-AI-MayFlower-Auth-SID'] = SID;
-
-    const headers = {
-      ...session,
-      'User-Agent': navigator.userAgent,
-      'X-PO-AI-API-LANGUAGE': lang
-    };
-
-    initUserInfo(headers);
-    initNovaExpireTime(headers);
-    initCreditInfo(headers);
-
-    dispatch(setUserInfo(resSession.userInfo));
   };
 }

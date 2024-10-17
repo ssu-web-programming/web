@@ -27,9 +27,13 @@ function App() {
   const initApp = useInitApp();
 
   useEffect(() => {
-    console.log('init app');
-    initBridgeListener();
-    initApp(); // initBridgeListener 다음에 호출되어야 함
+    const init = async () => {
+      console.log('init app');
+      await initBridgeListener();
+      await initApp();
+    };
+
+    init();
   }, []);
 
   return (
