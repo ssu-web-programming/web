@@ -5,7 +5,6 @@ import { NOVA_REMOVE_BACKGROUND } from '../../../api/constant';
 import { isPixelLimitExceeded } from '../../../constants/fileTypes';
 import {
   resetPageData,
-  resetPageResult,
   selectPageData,
   setPageResult,
   setPageStatus
@@ -27,40 +26,52 @@ export const useRemoveBackground = () => {
   const dispatch = useAppDispatch();
   const currentFile = useAppSelector(selectPageData(NOVA_TAB_TYPE.removeBG));
 
+  const resetPageState = () => {
+    dispatch(resetPageData(NOVA_TAB_TYPE.removeBG));
+    dispatch(setLocalFiles([]));
+    dispatch(setDriveFiles([]));
+    dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.removeBG, status: 'home' }));
+  };
+
+  const handleRemoveBGError = (errCode: string, leftCredit: number) => {
+    if (errCode === 'Timeout') {
+      dispatch(
+        setPageResult({ tab: NOVA_TAB_TYPE.removeBG, result: { contentType: '', data: '' } })
+      );
+      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.removeBG, status: 'timeout' }));
+    } else {
+      resetPageState();
+    }
+    errorHandle({ code: errCode, credit: leftCredit });
+  };
+
   const handleRemoveBackground = async () => {
     if (!currentFile) return;
 
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.removeBG, status: 'loading' }));
-    const file = await convertDriveFileToFile(currentFile);
-    if (!file) return;
-
-    if (await isPixelLimitExceeded(file, NOVA_TAB_TYPE.removeBG)) {
-      await confirm({
-        title: '',
-        msg:
-          t('Nova.Confirm.OverMaxFilePixel') +
-          '\n\n' +
-          t(`Nova.${NOVA_TAB_TYPE.removeBG}.AllowImageSize`),
-        onOk: {
-          text: t('OK'),
-          callback: () => {}
-        }
-      });
-
-      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.removeBG, status: 'home' }));
-      dispatch(resetPageData(NOVA_TAB_TYPE.removeBG));
-      dispatch(setLocalFiles([]));
-      dispatch(setDriveFiles([]));
-
-      return;
-    }
-
     try {
+      const file = await convertDriveFileToFile(currentFile);
+      if (await isPixelLimitExceeded(file, NOVA_TAB_TYPE.removeBG)) {
+        await confirm({
+          title: '',
+          msg: `${t('Nova.Confirm.OverMaxFilePixel')}\n\n${t(
+            `Nova.${NOVA_TAB_TYPE.removeBG}.AllowImageSize`
+          )}`,
+          onOk: {
+            text: t('OK'),
+            callback: () => {}
+          }
+        });
+        resetPageState();
+        return;
+      }
+
       const formData = await createFormDataFromFiles([currentFile]);
       const { res, logger } = await apiWrapper().request(NOVA_REMOVE_BACKGROUND, {
         body: formData,
         method: 'POST'
       });
+
       const response = await res.json();
       if (response.success) {
         dispatch(setPageResult({ tab: NOVA_TAB_TYPE.removeBG, result: response.data.image[0] }));
@@ -79,32 +90,9 @@ export const useRemoveBackground = () => {
         handleRemoveBGError(response.error.code, Number(leftCredit));
       }
     } catch (err) {
-      resetPageData(NOVA_TAB_TYPE.removeBG);
-      resetPageResult(NOVA_TAB_TYPE.removeBG);
-      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.removeBG, status: 'home' }));
+      resetPageState();
       errorHandle(err);
     }
-  };
-
-  const handleRemoveBGError = (errCode: string, leftCredit: number) => {
-    if (errCode === 'Timeout') {
-      dispatch(
-        setPageResult({
-          tab: NOVA_TAB_TYPE.removeBG,
-          result: {
-            contentType: '',
-            data: ''
-          }
-        })
-      );
-      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.removeBG, status: 'timeout' }));
-    } else {
-      dispatch(setLocalFiles([]));
-      dispatch(setDriveFiles([]));
-      dispatch(resetPageData(NOVA_TAB_TYPE.removeBG));
-      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.removeBG, status: 'home' }));
-    }
-    errorHandle({ code: errCode, credit: leftCredit });
   };
 
   return { handleRemoveBackground };

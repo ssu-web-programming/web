@@ -27,40 +27,60 @@ export const useRemakeImage = () => {
   const dispatch = useAppDispatch();
   const currentFile = useAppSelector(selectPageData(NOVA_TAB_TYPE.remakeImg));
 
+  const resetPageState = () => {
+    dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.remakeImg, status: 'home' }));
+    dispatch(resetPageData(NOVA_TAB_TYPE.remakeImg));
+    dispatch(resetPageResult(NOVA_TAB_TYPE.remakeImg));
+    dispatch(setLocalFiles([]));
+    dispatch(setDriveFiles([]));
+  };
+
+  const handleRemakeImgError = (errCode: string, leftCredit: number) => {
+    if (errCode === 'Timeout') {
+      dispatch(
+        setPageResult({
+          tab: NOVA_TAB_TYPE.remakeImg,
+          result: {
+            contentType: '',
+            data: ''
+          }
+        })
+      );
+      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.remakeImg, status: 'timeout' }));
+    } else {
+      resetPageState();
+    }
+    errorHandle({ code: errCode, credit: leftCredit });
+  };
+
   const handleRemakeImage = async () => {
     if (!currentFile) return;
 
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.remakeImg, status: 'loading' }));
-    const file = await convertDriveFileToFile(currentFile);
-    if (!file) return;
-
-    if (await isPixelLimitExceeded(file, NOVA_TAB_TYPE.remakeImg)) {
-      await confirm({
-        title: '',
-        msg:
-          t('Nova.Confirm.OverMaxFilePixel') +
-          '\n\n' +
-          t(`Nova.${NOVA_TAB_TYPE.remakeImg}.AllowImageSize`),
-        onOk: {
-          text: t('OK'),
-          callback: () => {}
-        }
-      });
-
-      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.remakeImg, status: 'home' }));
-      dispatch(resetPageData(NOVA_TAB_TYPE.remakeImg));
-      dispatch(setLocalFiles([]));
-      dispatch(setDriveFiles([]));
-
-      return;
-    }
-
     try {
+      const file = await convertDriveFileToFile(currentFile);
+      if (await isPixelLimitExceeded(file, NOVA_TAB_TYPE.remakeImg)) {
+        await confirm({
+          title: '',
+          msg:
+            t('Nova.Confirm.OverMaxFilePixel') +
+            '\n\n' +
+            t(`Nova.${NOVA_TAB_TYPE.remakeImg}.AllowImageSize`),
+          onOk: {
+            text: t('OK'),
+            callback: () => {}
+          }
+        });
+        resetPageState();
+        return;
+      }
+
       const formData = await createFormDataFromFiles([currentFile]);
       const { res, logger } = await apiWrapper().request(NOVA_REMAKE_IMAGE, {
         body: formData,
         method: 'POST'
       });
+
       const response = await res.json();
       if (response.success) {
         dispatch(setPageResult({ tab: NOVA_TAB_TYPE.remakeImg, result: response.data.image[0] }));
@@ -79,32 +99,9 @@ export const useRemakeImage = () => {
         handleRemakeImgError(response.error.code, Number(leftCredit));
       }
     } catch (err) {
-      resetPageData(NOVA_TAB_TYPE.remakeImg);
-      resetPageResult(NOVA_TAB_TYPE.remakeImg);
-      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.remakeImg, status: 'home' }));
+      resetPageState();
       errorHandle(err);
     }
-  };
-
-  const handleRemakeImgError = (errCode: string, leftCredit: number) => {
-    if (errCode === 'Timeout') {
-      dispatch(
-        setPageResult({
-          tab: NOVA_TAB_TYPE.remakeImg,
-          result: {
-            contentType: '',
-            data: ''
-          }
-        })
-      );
-      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.remakeImg, status: 'timeout' }));
-    } else {
-      dispatch(setLocalFiles([]));
-      dispatch(setDriveFiles([]));
-      dispatch(resetPageData(NOVA_TAB_TYPE.remakeImg));
-      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.remakeImg, status: 'home' }));
-    }
-    errorHandle({ code: errCode, credit: leftCredit });
   };
 
   return { handleRemakeImage };

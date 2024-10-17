@@ -27,40 +27,60 @@ export const useImprovedResolution = () => {
   const dispatch = useAppDispatch();
   const currentFile = useAppSelector(selectPageData(NOVA_TAB_TYPE.improvedRes));
 
+  const resetPageState = () => {
+    dispatch(resetPageData(NOVA_TAB_TYPE.improvedRes));
+    dispatch(resetPageResult(NOVA_TAB_TYPE.improvedRes));
+    dispatch(setLocalFiles([]));
+    dispatch(setDriveFiles([]));
+    dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.improvedRes, status: 'home' }));
+  };
+
+  const handleImprovedResError = (errCode: string, leftCredit: number) => {
+    if (errCode === 'Timeout') {
+      dispatch(
+        setPageResult({
+          tab: NOVA_TAB_TYPE.improvedRes,
+          result: {
+            contentType: '',
+            data: ''
+          }
+        })
+      );
+      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.improvedRes, status: 'timeout' }));
+    } else {
+      resetPageState();
+    }
+    errorHandle({ code: errCode, credit: leftCredit });
+  };
+
   const handleImprovedResolution = async () => {
     if (!currentFile) return;
 
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.improvedRes, status: 'loading' }));
-    const file = await convertDriveFileToFile(currentFile);
-    if (!file) return;
-
-    if (await isPixelLimitExceeded(file, NOVA_TAB_TYPE.improvedRes)) {
-      await confirm({
-        title: '',
-        msg:
-          t('Nova.Confirm.OverMaxFilePixel') +
-          '\n\n' +
-          t(`Nova.${NOVA_TAB_TYPE.improvedRes}.AllowImageSize`),
-        onOk: {
-          text: t('OK'),
-          callback: () => {}
-        }
-      });
-
-      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.improvedRes, status: 'home' }));
-      dispatch(resetPageData(NOVA_TAB_TYPE.improvedRes));
-      dispatch(setLocalFiles([]));
-      dispatch(setDriveFiles([]));
-
-      return;
-    }
-
     try {
+      const file = await convertDriveFileToFile(currentFile);
+      if (await isPixelLimitExceeded(file, NOVA_TAB_TYPE.improvedRes)) {
+        await confirm({
+          title: '',
+          msg:
+            t('Nova.Confirm.OverMaxFilePixel') +
+            '\n\n' +
+            t(`Nova.${NOVA_TAB_TYPE.improvedRes}.AllowImageSize`),
+          onOk: {
+            text: t('OK'),
+            callback: () => {}
+          }
+        });
+        resetPageState();
+        return;
+      }
+
       const formData = await createFormDataFromFiles([currentFile]);
       const { res, logger } = await apiWrapper().request(NOVA_IMPROVED_RESOLUTION, {
         body: formData,
         method: 'POST'
       });
+
       const response = await res.json();
       if (response.success) {
         dispatch(setPageResult({ tab: NOVA_TAB_TYPE.improvedRes, result: response.data.image[0] }));
@@ -79,31 +99,9 @@ export const useImprovedResolution = () => {
         handleImprovedResError(response.error.code, Number(leftCredit));
       }
     } catch (err) {
-      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.improvedRes, status: 'home' }));
+      resetPageState();
       errorHandle(err);
     }
-  };
-
-  const handleImprovedResError = (errCode: string, leftCredit: number) => {
-    if (errCode === 'Timeout') {
-      dispatch(
-        setPageResult({
-          tab: NOVA_TAB_TYPE.improvedRes,
-          result: {
-            contentType: '',
-            data: ''
-          }
-        })
-      );
-      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.improvedRes, status: 'timeout' }));
-    } else {
-      dispatch(setLocalFiles([]));
-      dispatch(setDriveFiles([]));
-      dispatch(resetPageData(NOVA_TAB_TYPE.improvedRes));
-      resetPageResult(NOVA_TAB_TYPE.improvedRes);
-      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.improvedRes, status: 'home' }));
-    }
-    errorHandle({ code: errCode, credit: leftCredit });
   };
 
   return { handleImprovedResolution };

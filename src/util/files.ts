@@ -24,26 +24,31 @@ export type DownloadFileResult = {
 };
 
 export const downloadFileAsBlob = async (file: DriveFileInfo): Promise<Blob> => {
-  const requestor = apiWrapper();
-  const { res } = await requestor.request(PO_DRIVE_DOWNLOAD, {
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ fileId: file.fileId }),
-    method: 'POST'
-  });
-  return await res.blob();
+  const requester = apiWrapper();
+
+  try {
+    const { res } = await requester.request(PO_DRIVE_DOWNLOAD, {
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ fileId: file.fileId }),
+      method: 'POST'
+    });
+    return await res.blob();
+  } catch (err) {
+    throw err;
+  }
 };
 
 export const downloadFiles = async (files: DriveFileInfo[]): Promise<DownloadFileResult[]> => {
   const results: DownloadFileResult[] = [];
   for (const file of files) {
     try {
-      await apiWrapper().request(PO_DRIVE_DOWNLOAD, {
+      const { res } = await apiWrapper().request(PO_DRIVE_DOWNLOAD, {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ fileId: file.fileId }),
         method: 'POST'
       });
 
-      const blob = await downloadFileAsBlob(file);
+      const blob = await res.blob();
       results.push({
         success: true,
         file: new File([blob], file.fileName, { type: file.fileType }),
@@ -53,7 +58,7 @@ export const downloadFiles = async (files: DriveFileInfo[]): Promise<DownloadFil
       console.error('Error downloading file:', error);
       results.push({
         success: false,
-        file: new File([], file.fileName, { type: file.fileType }), // 빈 파일 생성
+        file: new File([], file.fileName, { type: file.fileType }),
         data: { fileId: file.fileId, fileRevision: file.fileRevision }
       });
     }
@@ -163,28 +168,29 @@ export const createFormDataFromFiles = async (
     if (file instanceof File) {
       formData.append('multipartFile', file);
     } else if ('fileId' in file) {
-      const blob = await downloadFileAsBlob(file);
-      const fileName = file.name;
-      const fileType = file.type;
-      formData.append('multipartFile', new File([blob], fileName, { type: fileType }));
+      try {
+        const blob = await downloadFileAsBlob(file);
+        const fileName = file.name;
+        const fileType = file.type;
+        formData.append('multipartFile', new File([blob], fileName, { type: fileType }));
+      } catch (err) {
+        throw err;
+      }
     }
   }
 
   return formData;
 };
 
-export const convertDriveFileToFile = async (file: File | DriveFileInfo) => {
+export const convertDriveFileToFile = async (file: File | DriveFileInfo): Promise<File> => {
   try {
-    if (file instanceof File) {
-      return file;
-    } else if ('fileId' in file) {
+    if ('fileId' in file) {
       const blob = await downloadFileAsBlob(file);
       return new File([blob], file.fileName, { type: file.fileType });
     }
-    return null;
+    return file;
   } catch (error) {
-    console.error('Error converting DriveFile to File:', error);
-    return null;
+    throw error;
   }
 };
 

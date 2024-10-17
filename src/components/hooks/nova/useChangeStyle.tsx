@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { apiWrapper } from '../../../api/apiWrapper';
@@ -28,47 +27,71 @@ export const useChangeStyle = () => {
   const dispatch = useAppDispatch();
   const currentFile = useAppSelector(selectPageData(NOVA_TAB_TYPE.changeStyle));
 
-  useEffect(() => {}, [currentFile]);
+  const resetPageState = () => {
+    dispatch(resetPageData(NOVA_TAB_TYPE.changeStyle));
+    dispatch(resetPageResult(NOVA_TAB_TYPE.changeStyle));
+    dispatch(setLocalFiles([]));
+    dispatch(setDriveFiles([]));
+    dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeStyle, status: 'home' }));
+  };
+
+  const handleChangeStyleError = (errCode: string, leftCredit: number, style: string) => {
+    if (errCode === 'Timeout') {
+      dispatch(
+        setPageResult({
+          tab: NOVA_TAB_TYPE.changeStyle,
+          result: {
+            contentType: '',
+            data: '',
+            info: style
+          }
+        })
+      );
+      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeStyle, status: 'timeout' }));
+    } else {
+      resetPageState();
+    }
+    errorHandle({ code: errCode, credit: leftCredit });
+  };
 
   const goThemePage = async () => {
     if (!currentFile) return;
 
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeStyle, status: 'progress' }));
-    const file = await convertDriveFileToFile(currentFile);
-    if (!file) return;
+    try {
+      const file = await convertDriveFileToFile(currentFile);
+      if (!file) return;
 
-    if (await isPixelLimitExceeded(file, NOVA_TAB_TYPE.changeStyle)) {
-      await confirm({
-        title: '',
-        msg: t('Nova.Confirm.OverMaxFilePixel'),
-        onOk: {
-          text: t('OK'),
-          callback: () => {}
-        }
-      });
+      if (await isPixelLimitExceeded(file, NOVA_TAB_TYPE.changeStyle)) {
+        await confirm({
+          title: '',
+          msg: t('Nova.Confirm.OverMaxFilePixel'),
+          onOk: {
+            text: t('OK'),
+            callback: () => {}
+          }
+        });
+        resetPageState();
+        return;
+      }
 
-      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeStyle, status: 'home' }));
-      dispatch(resetPageData(NOVA_TAB_TYPE.changeStyle));
-      dispatch(setLocalFiles([]));
-      dispatch(setDriveFiles([]));
-
-      return;
+      fileToBase64(file)
+        .then((data) => {
+          dispatch(setPageResult({ tab: NOVA_TAB_TYPE.changeStyle, result: data }));
+        })
+        .then(() => {
+          dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeStyle, status: 'theme' }));
+        });
+    } catch (err) {
+      resetPageState();
+      errorHandle(err);
     }
-
-    fileToBase64(file)
-      .then((data) => {
-        dispatch(setPageResult({ tab: NOVA_TAB_TYPE.changeStyle, result: data }));
-      })
-      .then(() => {
-        dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeStyle, status: 'theme' }));
-      });
   };
 
   const handleChangeStyle = async (style: string) => {
     if (!currentFile) return;
 
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeStyle, status: 'loading' }));
-
     try {
       const formData = await createFormDataFromFiles([currentFile]);
       formData.append('style', style);
@@ -96,7 +119,6 @@ export const useChangeStyle = () => {
           el: 'nova_style_change',
           gpt_ver: 'NOVA_PO_STYLE_TRANSFER'
         });
-
         const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
         showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');
       } else {
@@ -107,29 +129,6 @@ export const useChangeStyle = () => {
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeStyle, status: 'home' }));
       errorHandle(err);
     }
-  };
-
-  const handleChangeStyleError = (errCode: string, leftCredit: number, style: string) => {
-    if (errCode === 'Timeout') {
-      dispatch(
-        setPageResult({
-          tab: NOVA_TAB_TYPE.changeStyle,
-          result: {
-            contentType: '',
-            data: '',
-            info: style
-          }
-        })
-      );
-      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeStyle, status: 'timeout' }));
-    } else {
-      dispatch(setLocalFiles([]));
-      dispatch(setDriveFiles([]));
-      dispatch(resetPageData(NOVA_TAB_TYPE.changeStyle));
-      resetPageResult(NOVA_TAB_TYPE.changeStyle);
-      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeStyle, status: 'home' }));
-    }
-    errorHandle({ code: errCode, credit: leftCredit });
   };
 
   return { goThemePage, handleChangeStyle };

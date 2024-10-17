@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { apiWrapper } from '../../../api/apiWrapper';
@@ -30,50 +29,72 @@ export const useChangeBackground = () => {
   const currentFile = useAppSelector(selectPageData(NOVA_TAB_TYPE.changeBG));
   const status = useAppSelector(selectPageStatus(NOVA_TAB_TYPE.changeBG));
 
-  useEffect(() => {}, [currentFile]);
+  const resetPageState = () => {
+    dispatch(resetPageData(NOVA_TAB_TYPE.changeBG));
+    dispatch(resetPageResult(NOVA_TAB_TYPE.changeBG));
+    dispatch(setLocalFiles([]));
+    dispatch(setDriveFiles([]));
+    dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeBG, status: 'home' }));
+  };
+
+  const handleChangeBGError = (errCode: string, leftCredit: number, prompt: string) => {
+    if (errCode === 'Timeout') {
+      dispatch(
+        setPageResult({
+          tab: NOVA_TAB_TYPE.changeBG,
+          result: {
+            contentType: '',
+            data: '',
+            info: prompt
+          }
+        })
+      );
+      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeBG, status: 'timeout' }));
+    } else {
+      resetPageState();
+    }
+    errorHandle({ code: errCode, credit: leftCredit });
+  };
 
   const goPromptPage = async () => {
     if (!currentFile || status === 'progress') return;
 
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeBG, status: 'progress' }));
-    const file = await convertDriveFileToFile(currentFile);
-    if (!file) return;
+    try {
+      const file = await convertDriveFileToFile(currentFile);
+      if (await isPixelLimitExceeded(file, NOVA_TAB_TYPE.changeBG)) {
+        await confirm({
+          title: '',
+          msg:
+            t('Nova.Confirm.OverMaxFilePixel') +
+            '\n\n' +
+            t(`Nova.${NOVA_TAB_TYPE.changeBG}.AllowImageSize`),
+          onOk: {
+            text: t('OK'),
+            callback: () => {}
+          }
+        });
+        resetPageState();
+        return;
+      }
 
-    if (await isPixelLimitExceeded(file, NOVA_TAB_TYPE.changeBG)) {
-      await confirm({
-        title: '',
-        msg:
-          t('Nova.Confirm.OverMaxFilePixel') +
-          '\n\n' +
-          t(`Nova.${NOVA_TAB_TYPE.changeBG}.AllowImageSize`),
-        onOk: {
-          text: t('OK'),
-          callback: () => {}
-        }
-      });
-
-      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeBG, status: 'home' }));
-      dispatch(resetPageData(NOVA_TAB_TYPE.changeBG));
-      dispatch(setLocalFiles([]));
-      dispatch(setDriveFiles([]));
-
-      return;
+      fileToBase64(file)
+        .then((data) => {
+          dispatch(setPageResult({ tab: NOVA_TAB_TYPE.changeBG, result: data }));
+        })
+        .then(() => {
+          dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeBG, status: 'prompt' }));
+        });
+    } catch (err) {
+      resetPageState();
+      errorHandle(err);
     }
-
-    fileToBase64(file)
-      .then((data) => {
-        dispatch(setPageResult({ tab: NOVA_TAB_TYPE.changeBG, result: data }));
-      })
-      .then(() => {
-        dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeBG, status: 'prompt' }));
-      });
   };
 
   const handleChangeBackground = async (prompt: string) => {
     if (!currentFile) return;
 
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeBG, status: 'loading' }));
-
     try {
       const formData = await createFormDataFromFiles([currentFile]);
       formData.append('prompt', prompt);
@@ -108,32 +129,9 @@ export const useChangeBackground = () => {
         handleChangeBGError(response.error.code, Number(leftCredit), prompt);
       }
     } catch (err) {
-      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeBG, status: 'home' }));
+      resetPageState();
       errorHandle(err);
     }
-  };
-
-  const handleChangeBGError = (errCode: string, leftCredit: number, prompt: string) => {
-    if (errCode === 'Timeout') {
-      dispatch(
-        setPageResult({
-          tab: NOVA_TAB_TYPE.changeBG,
-          result: {
-            contentType: '',
-            data: '',
-            info: prompt
-          }
-        })
-      );
-      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeBG, status: 'timeout' }));
-    } else {
-      dispatch(setLocalFiles([]));
-      dispatch(setDriveFiles([]));
-      dispatch(resetPageData(NOVA_TAB_TYPE.changeBG));
-      resetPageResult(NOVA_TAB_TYPE.changeBG);
-      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeBG, status: 'home' }));
-    }
-    errorHandle({ code: errCode, credit: leftCredit });
   };
 
   return { goPromptPage, handleChangeBackground };
