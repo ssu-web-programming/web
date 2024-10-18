@@ -20,8 +20,7 @@ import Offline from './pages/Offline';
 import TextToImage from './pages/TextToImage';
 import Tools from './pages/Tools';
 import { setPageStatus } from './store/slices/nova/pageStatusSlice';
-import { selectTabSlice } from './store/slices/tabSlice';
-import { useAppDispatch, useAppSelector } from './store/store';
+import { useAppDispatch } from './store/store';
 import GlobalStyle from './style/globalStyle';
 import { useInitBridgeListener } from './util/bridge';
 
@@ -29,11 +28,10 @@ function App() {
   const initBridgeListener = useInitBridgeListener();
   const initApp = useInitApp();
   const dispatch = useAppDispatch();
-  const { selectedNovaTab } = useAppSelector(selectTabSlice);
 
   useEffect(() => {
     const init = async () => {
-      dispatch(setPageStatus({ tab: selectedNovaTab, status: 'loading' }));
+      dispatch(setPageStatus({ tab: 'aiChat', status: 'loading' }));
       await initBridgeListener();
       await initApp();
     };

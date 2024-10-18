@@ -42,7 +42,6 @@ export function apiWrapper() {
       const unsubscribe = store.subscribe(() => {
         const updatedIsInitComplete = store.getState().initFlagSlice.isInit;
 
-        console.log('updatedIsInitComplete: ', updatedIsInitComplete ? 'true' : 'false');
         if (updatedIsInitComplete) {
           unsubscribe();
           resolve();
