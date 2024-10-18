@@ -19,27 +19,17 @@ import InvalidAccess from './pages/InvalidAccess';
 import Offline from './pages/Offline';
 import TextToImage from './pages/TextToImage';
 import Tools from './pages/Tools';
-import { initComplete } from './store/slices/initFlagSlice';
-import { useAppDispatch } from './store/store';
 import GlobalStyle from './style/globalStyle';
-import Bridge, { useInitBridgeListener } from './util/bridge';
+import { useInitBridgeListener } from './util/bridge';
 
 function App() {
   const initBridgeListener = useInitBridgeListener();
   const initApp = useInitApp();
-  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const init = async () => {
       await initBridgeListener();
       await initApp();
-
-      Bridge.callBridgeApi('initComplete');
-      dispatch(
-        initComplete({
-          isInit: true
-        })
-      );
     };
 
     init();

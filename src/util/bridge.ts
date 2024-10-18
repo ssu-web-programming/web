@@ -554,7 +554,6 @@ const Bridge = {
             });
           }
         } catch (err) {
-          console.log('err: ', err);
           reject({ success: false, err });
         } finally {
           delete BridgeList[id];

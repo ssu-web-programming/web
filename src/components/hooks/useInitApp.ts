@@ -13,6 +13,7 @@ import { setNovaAgreement, setUserInfo } from 'store/slices/userInfo';
 import { useAppDispatch } from 'store/store';
 import Bridge from 'util/bridge';
 
+import { initComplete } from '../../store/slices/initFlagSlice';
 import { setAnnounceInfo, tabTypeMap } from '../../store/slices/nova/announceSlice';
 
 export default function useInitApp() {
@@ -134,6 +135,13 @@ export default function useInitApp() {
       'User-Agent': navigator.userAgent,
       'X-PO-AI-API-LANGUAGE': lang
     };
+
+    Bridge.callBridgeApi('initComplete');
+    dispatch(
+      initComplete({
+        isInit: true
+      })
+    );
 
     await initUserInfo(headers);
     await initNovaExpireTime(headers);
