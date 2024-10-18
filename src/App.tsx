@@ -22,7 +22,7 @@ import Tools from './pages/Tools';
 import { setPageStatus } from './store/slices/nova/pageStatusSlice';
 import { useAppDispatch } from './store/store';
 import GlobalStyle from './style/globalStyle';
-import { useInitBridgeListener } from './util/bridge';
+import { ClientType, getPlatform, useInitBridgeListener } from './util/bridge';
 
 function App() {
   const initBridgeListener = useInitBridgeListener();
@@ -30,9 +30,11 @@ function App() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(setPageStatus({ tab: 'aiChat', status: 'progress' }));
-    console.log('progress');
     const init = async () => {
+      if (getPlatform() === ClientType.windows || getPlatform() === ClientType.mac) {
+        dispatch(setPageStatus({ tab: 'aiChat', status: 'progress' }));
+      }
+
       await initBridgeListener();
       await initApp();
     };

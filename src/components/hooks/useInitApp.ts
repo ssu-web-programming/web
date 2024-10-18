@@ -15,6 +15,7 @@ import Bridge from 'util/bridge';
 
 import { initComplete } from '../../store/slices/initFlagSlice';
 import { setAnnounceInfo, tabTypeMap } from '../../store/slices/nova/announceSlice';
+import { setPageStatus } from '../../store/slices/nova/pageStatusSlice';
 
 export default function useInitApp() {
   const dispatch = useAppDispatch();
@@ -136,6 +137,7 @@ export default function useInitApp() {
       'X-PO-AI-API-LANGUAGE': lang
     };
 
+    dispatch(setPageStatus({ tab: 'aiChat', status: 'home' }));
     dispatch(
       initComplete({
         isInit: true
