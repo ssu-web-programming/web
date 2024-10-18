@@ -157,18 +157,18 @@ export async function compressImage(file: File, tab: NOVA_TAB_TYPE): Promise<Fil
       maxWidthOrHeight: widthOrHeight
     };
 
-    const compressedBlob = await imageCompression(convertFile, options);
-    console.log(
-      'compress: ',
-      new File([compressedBlob], convertFile.name, {
-        type: convertFile.type,
-        lastModified: Date.now()
+    imageCompression(convertFile, options)
+      .then(function (compressedFile) {
+        return new File([compressedFile], compressedFile.name, {
+          type: compressedFile.type,
+          lastModified: Date.now()
+        });
       })
-    );
-    return new File([compressedBlob], convertFile.name, {
-      type: convertFile.type,
-      lastModified: Date.now()
-    });
+      .catch(function (error) {
+        console.log(error.message);
+      });
+
+    return convertFile;
   }
 }
 
