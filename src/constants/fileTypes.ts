@@ -123,40 +123,44 @@ export const isValidFileSize = (size: number, tab: NOVA_TAB_TYPE) => {
 };
 
 export async function compressImage(file: File, tab: NOVA_TAB_TYPE): Promise<File> {
-  const options = {
-    maxSizeMB: getMaxFileSize(tab),
-    maxWidthOrHeight: 2048,
-    useWebWorker: true
-  };
-
   const { width, height } = await getImageDimensions(file);
+  let widthOrHeight = -1;
 
-  const setOptimizationOptions = (width: number, height: number) => {
-    const megapixels = (width * height) / 1_000_000;
+  const megapixels = (width * height) / 1_000_000;
+  if (tab === 'removeBG' && megapixels > 25) {
+    widthOrHeight = 5000;
+  } else if (tab === 'changeBG' && (width > 2048 || height > 2048)) {
+    widthOrHeight = 2048;
+  } else if (tab === 'remakeImg' && (width > 1024 || height > 1024)) {
+    widthOrHeight = 1024;
+  } else if (tab === 'expandImg' && megapixels > 10) {
+    widthOrHeight = 3000;
+  } else if (tab === 'improvedRes' && (width > 2000 || height > 2000)) {
+    widthOrHeight = 2000;
+  }
 
-    if (tab === 'removeBG' && megapixels > 25) {
-      options.maxWidthOrHeight = 5000;
-    } else if (tab === 'changeBG' && (width > 2048 || height > 2048)) {
-      options.maxWidthOrHeight = 2048;
-    } else if (tab === 'remakeImg' && (width > 1024 || height > 1024)) {
-      options.maxWidthOrHeight = 1024;
-    } else if (tab === 'expandImg' && megapixels > 10) {
-      options.maxWidthOrHeight = 3000;
-    } else if (tab === 'improvedRes' && (width > 2000 || height > 2000)) {
-      options.maxWidthOrHeight = 2000;
-    }
-  };
+  if (widthOrHeight < 0) {
+    console.log('no compress image');
+    return new File([file], file.name, {
+      type: file.type,
+      lastModified: file.lastModified
+    });
+  } else {
+    console.log('compress image');
+    const options = {
+      maxSizeMB: getMaxFileSize(tab),
+      useWebWorker: true,
+      maxWidthOrHeight: widthOrHeight
+    };
 
-  setOptimizationOptions(width, height);
-
-  const compressedBlob = await imageCompression(file, options);
-
-  const compressedFile = new File([compressedBlob], file.name, {
-    type: file.type,
-    lastModified: Date.now()
-  });
-
-  return compressedFile;
+    const compressedBlob = await imageCompression(file, options);
+    console.log('blob: ', compressedBlob);
+    console.log('file tyoe: ', file.type);
+    return new File([compressedBlob], file.name, {
+      type: file.type,
+      lastModified: Date.now()
+    });
+  }
 }
 
 async function getImageDimensions(file: File): Promise<{ width: number; height: number }> {
