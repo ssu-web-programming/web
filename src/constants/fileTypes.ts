@@ -128,6 +128,7 @@ export async function compressImage(file: File, tab: NOVA_TAB_TYPE): Promise<Fil
     lastModified: file.lastModified
   });
   console.log('conver file: ', convertFile);
+  console.log('window.devicePixelRatio: ', window.devicePixelRatio);
 
   const { width, height } = await getImageDimensions(convertFile);
   console.log('width: ', width);
