@@ -127,8 +127,11 @@ export async function compressImage(file: File, tab: NOVA_TAB_TYPE): Promise<Fil
     type: file.type,
     lastModified: file.lastModified
   });
+  console.log('conver file: ', convertFile);
 
-  const { width, height } = await getImageDimensions(file);
+  const { width, height } = await getImageDimensions(convertFile);
+  console.log('width: ', width);
+  console.log('height: ', height);
   let widthOrHeight = -1;
 
   const megapixels = (width * height) / 1_000_000;
@@ -145,6 +148,7 @@ export async function compressImage(file: File, tab: NOVA_TAB_TYPE): Promise<Fil
   }
 
   if (widthOrHeight < 0) {
+    console.log('no compress: ', convertFile);
     return convertFile;
   } else {
     const options = {
@@ -154,8 +158,15 @@ export async function compressImage(file: File, tab: NOVA_TAB_TYPE): Promise<Fil
     };
 
     const compressedBlob = await imageCompression(convertFile, options);
-    return new File([compressedBlob], file.name, {
-      type: file.type,
+    console.log(
+      'compress: ',
+      new File([compressedBlob], convertFile.name, {
+        type: convertFile.type,
+        lastModified: Date.now()
+      })
+    );
+    return new File([compressedBlob], convertFile.name, {
+      type: convertFile.type,
       lastModified: Date.now()
     });
   }
