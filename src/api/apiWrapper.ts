@@ -9,11 +9,9 @@ import {
   NovaNoCreditError
 } from '../error/error';
 import { lang } from '../locale';
-import { initFlagSelector } from '../store/slices/initFlagSlice';
-import store, { useAppSelector } from '../store/store';
+import store from '../store/store';
 import Bridge from '../util/bridge';
 import { calLeftCredit } from '../util/common';
-
 import {
   AI_WRITE_RESPONSE_STREAM_API,
   ALLI_RESPONSE_STREAM_API,
@@ -31,14 +29,15 @@ interface ApiInit extends RequestInit {
 
 export function apiWrapper() {
   const abortController = new AbortController();
-  const { isInit } = useAppSelector(initFlagSelector);
 
   const waitForInitComplete = () => {
-    if (isInit) {
-      return Promise.resolve();
-    }
-
     return new Promise<void>((resolve) => {
+      const isInitComplete = store.getState().initFlagSlice.isInit;
+      if (isInitComplete) {
+        resolve();
+        return;
+      }
+
       const unsubscribe = store.subscribe(() => {
         const updatedIsInitComplete = store.getState().initFlagSlice.isInit;
 
