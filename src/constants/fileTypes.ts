@@ -141,6 +141,8 @@ export async function compressImage(file: File, tab: NOVA_TAB_TYPE): Promise<Fil
     widthOrHeight = 3000;
   } else if (tab === 'improvedRes' && (width > 2000 || height > 2000)) {
     widthOrHeight = 2000;
+  } else {
+    widthOrHeight = 2048;
   }
 
   if (widthOrHeight < 0) {
@@ -154,6 +156,9 @@ export async function compressImage(file: File, tab: NOVA_TAB_TYPE): Promise<Fil
       useWebWorker: true,
       maxWidthOrHeight: widthOrHeight / window.devicePixelRatio
     };
+    console.log('widthOrHeight: ', widthOrHeight);
+    console.log('window.devicePixelRatio: ', window.devicePixelRatio);
+    console.log('window.maxWidthOrHeight: ', widthOrHeight / window.devicePixelRatio);
 
     const compressFile = await imageCompression(file, options);
     return new File([compressFile], compressFile.name, {
