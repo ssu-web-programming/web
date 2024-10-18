@@ -154,7 +154,7 @@ export async function compressImage(file: File, tab: NOVA_TAB_TYPE): Promise<Fil
     const options = {
       maxSizeMB: getMaxFileSize(tab),
       useWebWorker: true,
-      maxWidthOrHeight: widthOrHeight / window.devicePixelRatio
+      maxWidthOrHeight: 100
     };
     console.log('widthOrHeight: ', widthOrHeight);
     console.log('window.devicePixelRatio: ', window.devicePixelRatio);
