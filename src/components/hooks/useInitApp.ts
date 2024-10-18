@@ -136,7 +136,6 @@ export default function useInitApp() {
       'X-PO-AI-API-LANGUAGE': lang
     };
 
-    Bridge.callBridgeApi('initComplete');
     dispatch(
       initComplete({
         isInit: true

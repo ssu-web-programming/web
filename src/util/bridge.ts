@@ -455,6 +455,7 @@ export const useInitBridgeListener = () => {
         /*empty*/
       }
     };
+
     window.receiveMessage = (msg: ReceiveMessage) => {
       console.log(msg);
       procMsg(msg);
@@ -471,6 +472,8 @@ export const useInitBridgeListener = () => {
         /*empty*/
       }
     });
+
+    Bridge.callBridgeApi('initComplete');
   };
 };
 

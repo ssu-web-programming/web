@@ -9,6 +9,8 @@ import {
   NovaNoCreditError
 } from '../error/error';
 import { lang } from '../locale';
+import { initFlagSelector } from '../store/slices/initFlagSlice';
+import store, { useAppSelector } from '../store/store';
 import Bridge from '../util/bridge';
 import { calLeftCredit } from '../util/common';
 
@@ -29,8 +31,28 @@ interface ApiInit extends RequestInit {
 
 export function apiWrapper() {
   const abortController = new AbortController();
+  const { isInit } = useAppSelector(initFlagSelector);
+
+  const waitForInitComplete = () => {
+    if (isInit) {
+      return Promise.resolve();
+    }
+
+    return new Promise<void>((resolve) => {
+      const unsubscribe = store.subscribe(() => {
+        const updatedIsInitComplete = store.getState().initFlagSlice.isInit;
+
+        if (updatedIsInitComplete) {
+          unsubscribe();
+          resolve();
+        }
+      });
+    });
+  };
 
   const request = async function (api: string, init: ApiInit, logger = usePostSplunkLog) {
+    await waitForInitComplete();
+
     if (!navigator.onLine) {
       throw new Error(ERR_NOT_ONLINE);
     }
