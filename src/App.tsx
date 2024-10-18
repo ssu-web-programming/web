@@ -30,8 +30,8 @@ function App() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(setPageStatus({ tab: 'aiChat', status: 'loading' }));
-    console.log('loading');
+    dispatch(setPageStatus({ tab: 'aiChat', status: 'progress' }));
+    console.log('progress');
     const init = async () => {
       await initBridgeListener();
       await initApp();
