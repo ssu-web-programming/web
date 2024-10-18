@@ -12,6 +12,7 @@ import { lang } from '../locale';
 import store from '../store/store';
 import Bridge from '../util/bridge';
 import { calLeftCredit } from '../util/common';
+
 import {
   AI_WRITE_RESPONSE_STREAM_API,
   ALLI_RESPONSE_STREAM_API,
@@ -41,6 +42,7 @@ export function apiWrapper() {
       const unsubscribe = store.subscribe(() => {
         const updatedIsInitComplete = store.getState().initFlagSlice.isInit;
 
+        console.log('updatedIsInitComplete: ', updatedIsInitComplete ? 'true' : 'false');
         if (updatedIsInitComplete) {
           unsubscribe();
           resolve();

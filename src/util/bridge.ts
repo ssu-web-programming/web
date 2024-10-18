@@ -340,6 +340,7 @@ export const useInitBridgeListener = () => {
             dispatch(setDriveFiles([]));
             if (body.openTab in NOVA_TAB_TYPE) {
               dispatch(selectNovaTab(NOVA_TAB_TYPE[body.openTab as keyof typeof NOVA_TAB_TYPE]));
+              console.log('select tab: ', body.openTab);
               if (body.image) {
                 let file: File | null = null;
 
@@ -362,6 +363,8 @@ export const useInitBridgeListener = () => {
               } else {
                 dispatch(setLocalFiles([]));
               }
+            } else {
+              dispatch(setPageStatus({ tab: 'aiChat', status: 'home' }));
             }
             Bridge.callBridgeApi('analyzeCurFile');
             break;
@@ -474,6 +477,7 @@ export const useInitBridgeListener = () => {
     });
 
     Bridge.callBridgeApi('initComplete');
+    console.log('initComplete');
   };
 };
 

@@ -1,6 +1,6 @@
+import { useEffect } from 'react';
 import useInitApp from 'components/hooks/useInitApp';
 import Nova from 'pages/Nova/Nova';
-import { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import Confirm from './components/Confirm';
@@ -28,6 +28,7 @@ function App() {
 
   useEffect(() => {
     const init = async () => {
+      console.log('initBridgeListener');
       await initBridgeListener();
       await initApp();
     };
