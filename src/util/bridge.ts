@@ -11,7 +11,6 @@ import gI18n, { convertLangFromLangCode } from '../locale';
 import { AskDocStatus, setSrouceId, setStatus } from '../store/slices/askDoc';
 import { setFiles } from '../store/slices/askDocAnalyzeFiesSlice';
 import { initConfirm } from '../store/slices/confirm';
-import { initComplete } from '../store/slices/initFlagSlice';
 import {
   resetPageData,
   resetPageResult,
@@ -457,6 +456,7 @@ export const useInitBridgeListener = () => {
       }
     };
     window.receiveMessage = (msg: ReceiveMessage) => {
+      console.log(msg);
       procMsg(msg);
     };
 
@@ -471,13 +471,6 @@ export const useInitBridgeListener = () => {
         /*empty*/
       }
     });
-
-    Bridge.callBridgeApi('initComplete');
-    dispatch(
-      initComplete({
-        isInit: true
-      })
-    );
   };
 };
 
