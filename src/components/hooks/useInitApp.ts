@@ -116,7 +116,6 @@ export default function useInitApp() {
   );
 
   return async () => {
-    console.log('checkSession before');
     const resSession = await Bridge.checkSession('app init');
     if (!resSession || !resSession.success) {
       throw new Error(ERR_INVALID_SESSION);
@@ -137,13 +136,11 @@ export default function useInitApp() {
       'X-PO-AI-API-LANGUAGE': lang
     };
 
-    console.log('checkSession after');
     dispatch(
       initComplete({
         isInit: true
       })
     );
-    console.log('init complete');
 
     await initUserInfo(headers);
     await initNovaExpireTime(headers);
