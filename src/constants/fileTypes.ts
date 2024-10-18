@@ -123,14 +123,9 @@ export const isValidFileSize = (size: number, tab: NOVA_TAB_TYPE) => {
 };
 
 export async function compressImage(file: File, tab: NOVA_TAB_TYPE): Promise<File> {
-  const convertFile = new File([file], file.name, {
-    type: file.type,
-    lastModified: file.lastModified
-  });
-  console.log('conver file: ', convertFile);
   console.log('window.devicePixelRatio: ', window.devicePixelRatio);
 
-  const { width, height } = await getImageDimensions(convertFile);
+  const { width, height } = await getImageDimensions(file);
   console.log('width: ', width);
   console.log('height: ', height);
   let widthOrHeight = -1;
@@ -149,27 +144,22 @@ export async function compressImage(file: File, tab: NOVA_TAB_TYPE): Promise<Fil
   }
 
   if (widthOrHeight < 0) {
-    console.log('no compress: ', convertFile);
-    return convertFile;
+    return new File([file], file.name, {
+      type: file.type,
+      lastModified: file.lastModified
+    });
   } else {
     const options = {
       maxSizeMB: getMaxFileSize(tab),
       useWebWorker: true,
-      maxWidthOrHeight: widthOrHeight
+      maxWidthOrHeight: widthOrHeight / window.devicePixelRatio
     };
 
-    imageCompression(convertFile, options)
-      .then(function (compressedFile) {
-        return new File([compressedFile], compressedFile.name, {
-          type: compressedFile.type,
-          lastModified: Date.now()
-        });
-      })
-      .catch(function (error) {
-        console.log(error.message);
-      });
-
-    return convertFile;
+    const compressFile = await imageCompression(file, options);
+    return new File([compressFile], compressFile.name, {
+      type: compressFile.type,
+      lastModified: Date.now()
+    });
   }
 }
 
