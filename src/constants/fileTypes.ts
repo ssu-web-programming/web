@@ -1,4 +1,4 @@
-import imageCompression from 'browser-image-compression';
+import Resizer from 'react-image-file-resizer';
 
 import { NovaChatType } from '../store/slices/nova/novaHistorySlice';
 import { NOVA_TAB_TYPE } from '../store/slices/tabSlice';
@@ -123,11 +123,7 @@ export const isValidFileSize = (size: number, tab: NOVA_TAB_TYPE) => {
 };
 
 export async function compressImage(file: File, tab: NOVA_TAB_TYPE): Promise<File> {
-  console.log('window.devicePixelRatio: ', window.devicePixelRatio);
-
   const { width, height } = await getImageDimensions(file);
-  console.log('width: ', width);
-  console.log('height: ', height);
   let widthOrHeight = -1;
 
   const megapixels = (width * height) / 1_000_000;
@@ -145,26 +141,41 @@ export async function compressImage(file: File, tab: NOVA_TAB_TYPE): Promise<Fil
     widthOrHeight = 2048;
   }
 
+  const resizeFile = (file: File): Promise<File> =>
+    new Promise((resolve, reject) => {
+      Resizer.imageFileResizer(
+        file,
+        widthOrHeight,
+        widthOrHeight,
+        'JPEG',
+        100,
+        0,
+        (resizedValue: string | File | Blob | ProgressEvent<FileReader>) => {
+          if (resizedValue instanceof File) {
+            resolve(resizedValue);
+          } else if (resizedValue instanceof Blob) {
+            const newFile = new File([resizedValue], file.name, {
+              type: file.type,
+              lastModified: Date.now()
+            });
+            resolve(newFile);
+          } else {
+            reject(new Error('Unexpected result type from imageFileResizer'));
+          }
+        },
+        'file',
+        1,
+        1
+      );
+    });
+
   if (widthOrHeight < 0) {
     return new File([file], file.name, {
       type: file.type,
       lastModified: file.lastModified
     });
   } else {
-    const options = {
-      maxSizeMB: getMaxFileSize(tab),
-      useWebWorker: true,
-      maxWidthOrHeight: 100
-    };
-    console.log('widthOrHeight: ', widthOrHeight);
-    console.log('window.devicePixelRatio: ', window.devicePixelRatio);
-    console.log('window.maxWidthOrHeight: ', widthOrHeight / window.devicePixelRatio);
-
-    const compressFile = await imageCompression(file, options);
-    return new File([compressFile], compressFile.name, {
-      type: compressFile.type,
-      lastModified: Date.now()
-    });
+    return await resizeFile(file);
   }
 }
 
