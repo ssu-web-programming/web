@@ -117,6 +117,10 @@ export const getMaxFileSize = (tab: NOVA_TAB_TYPE): number => {
 
 export const isValidFileSize = (size: number, tab: NOVA_TAB_TYPE) => {
   const maxFileSize = getMaxFileSize(tab);
+  console.log('size: ', size);
+  console.log('min: ', MIN_FILE_UPLOAD_SIZE_KB * 1024);
+  console.log('max: ', getMaxFileSize(tab));
+  console.log('max (mb): ', getMaxFileSize(tab) * 1024 * 1024);
   return maxFileSize < 0
     ? true
     : size < getMaxFileSize(tab) * 1024 * 1024 && size > MIN_FILE_UPLOAD_SIZE_KB * 1024;

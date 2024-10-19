@@ -55,12 +55,12 @@ export const downloadFiles = async (files: DriveFileInfo[]): Promise<DownloadFil
         data: { fileId: file.fileId, fileRevision: file.fileRevision }
       });
     } catch (error) {
-      console.error('Error downloading file:', error);
       results.push({
         success: false,
         file: new File([], file.fileName, { type: file.fileType }),
         data: { fileId: file.fileId, fileRevision: file.fileRevision }
       });
+      throw error;
     }
   }
 
