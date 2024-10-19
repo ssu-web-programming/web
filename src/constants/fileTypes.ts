@@ -141,12 +141,12 @@ export async function compressImage(file: File, tab: NOVA_TAB_TYPE): Promise<Fil
     widthOrHeight = 2048;
   }
 
-  const resizeFile = (file: File): Promise<File> =>
+  const resizeFile = (file: File, isOriginal: boolean): Promise<File> =>
     new Promise((resolve, reject) => {
       Resizer.imageFileResizer(
         file,
-        widthOrHeight,
-        widthOrHeight,
+        isOriginal ? width : widthOrHeight,
+        isOriginal ? height : widthOrHeight,
         'JPEG',
         100,
         0,
@@ -169,14 +169,7 @@ export async function compressImage(file: File, tab: NOVA_TAB_TYPE): Promise<Fil
       );
     });
 
-  if (widthOrHeight < 0) {
-    return new File([file], file.name, {
-      type: file.type,
-      lastModified: file.lastModified
-    });
-  } else {
-    return await resizeFile(file);
-  }
+  return await resizeFile(file, widthOrHeight < 0);
 }
 
 async function getImageDimensions(file: File): Promise<{ width: number; height: number }> {
