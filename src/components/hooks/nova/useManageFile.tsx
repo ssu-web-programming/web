@@ -97,7 +97,8 @@ export function useManageFile() {
       return !supportedExtensions.includes(fileExtension);
     });
 
-    const support = supportedExtensions.join(', ');
+    const support = supportedExtensions.filter((ext) => ext !== '.jpeg').join(', ');
+
     if (invalidFiles.length > 0) {
       await confirm({
         title: '',
