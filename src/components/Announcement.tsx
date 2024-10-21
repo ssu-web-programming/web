@@ -62,9 +62,7 @@ export default function Announcement(props: AnnouncementProps) {
         <div dangerouslySetInnerHTML={{ __html: content }} />
         <CloseIcon
           onClick={() => {
-            dispatch(
-              setAnnounceInfo({ tab: selectedNovaTab, info: { ...announceInfo, isShow: false } })
-            );
+            dispatch(setAnnounceInfo({ tab: selectedNovaTab, info: { ...announceInfo } }));
           }}
         />
       </Content>

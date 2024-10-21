@@ -11,7 +11,7 @@ export const tabTypeMap = {
   [NOVA_TAB_TYPE.expandImg]: 'NOVA_UNCROP_CLIPDROP',
   [NOVA_TAB_TYPE.improvedRes]: 'NOVA_PO_RESOLUTION',
   [NOVA_TAB_TYPE.changeStyle]: 'NOVA_PO_STYLE_TRANSFER'
-};
+} as const;
 
 export type IAnnouceInfo = {
   id: string;
@@ -20,7 +20,6 @@ export type IAnnouceInfo = {
   endDate: string;
   status: boolean;
   content: string;
-  isShow: boolean;
 };
 
 export type AnnounceState = Record<string, IAnnouceInfo>;
@@ -31,8 +30,7 @@ const initialAnnounceInfo: IAnnouceInfo = {
   startDate: '',
   endDate: '',
   status: false,
-  content: '',
-  isShow: false
+  content: ''
 };
 
 const initialState: AnnounceState = {};

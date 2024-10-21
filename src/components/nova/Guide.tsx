@@ -94,7 +94,7 @@ export const Guide = (props: GuideProps) => {
   return (
     <Container>
       <GuideWrapper>
-        {announceInfo.isShow && <Announcement content={announceInfo.content} />}
+        {announceInfo.status && <Announcement content={announceInfo.content} />}
         <GuideTitle>
           <GuideImage src={iconMap[selectedNovaTab]} alt="aiChat" />
           <div className="title">

@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import {
   AI_CREDIT_INFO,
-  NOVA_GET_ANNOUNCEMENT,
+  NOVA_GET_ANNOUNCEMENT_LIST,
   NOVA_GET_EXPIRED_TIME,
   NOVA_GET_USER_INFO_AGREEMENT
 } from 'api/constant';
@@ -14,7 +14,7 @@ import { useAppDispatch } from 'store/store';
 import Bridge from 'util/bridge';
 
 import { initComplete } from '../../store/slices/initFlagSlice';
-import { setAnnounceInfo, tabTypeMap } from '../../store/slices/nova/announceSlice';
+import { IAnnouceInfo, setAnnounceInfo, tabTypeMap } from '../../store/slices/nova/announceSlice';
 import { setPageStatus } from '../../store/slices/nova/pageStatusSlice';
 
 export default function useInitApp() {
@@ -89,28 +89,35 @@ export default function useInitApp() {
 
   const initAnnouncementInfo = useCallback(
     async (headers: HeadersInit) => {
-      for (const [tab, value] of Object.entries(tabTypeMap)) {
-        try {
-          const res = await fetch(NOVA_GET_ANNOUNCEMENT, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              ...headers
-            },
-            body: JSON.stringify({ type: value, language: langCode })
-          });
-          const {
-            data: { announcementInfos }
-          } = await res.json();
-          dispatch(
-            setAnnounceInfo({
-              tab: tab,
-              info: { ...announcementInfos, isShow: announcementInfos.status }
-            })
+      try {
+        const res = await fetch(NOVA_GET_ANNOUNCEMENT_LIST, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...headers
+          },
+          body: JSON.stringify({ language: langCode })
+        });
+        const {
+          data: { announcementInfos }
+        } = await res.json();
+        console.log(announcementInfos);
+        announcementInfos.forEach((announcement: IAnnouceInfo) => {
+          const { type } = announcement;
+          const tab = Object.keys(tabTypeMap).find(
+            (key) => tabTypeMap[key as keyof typeof tabTypeMap] === type
           );
-        } catch (err) {
-          /* empty */
-        }
+          if (tab) {
+            dispatch(
+              setAnnounceInfo({
+                tab: tab,
+                info: { ...announcement }
+              })
+            );
+          }
+        });
+      } catch (err) {
+        /* empty */
       }
     },
     [dispatch]
@@ -145,9 +152,9 @@ export default function useInitApp() {
     );
 
     await initUserInfo(headers);
+    await initAnnouncementInfo(headers);
     await initNovaExpireTime(headers);
     await initCreditInfo(headers);
-    await initAnnouncementInfo(headers);
 
     dispatch(setUserInfo(resSession.userInfo));
   };
