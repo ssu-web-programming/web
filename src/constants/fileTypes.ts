@@ -59,6 +59,10 @@ export const SUPPORT_IMAGE_TYPE: SupportFileType[] = [
   {
     mimeType: 'image/webp',
     extensions: '.webp'
+  },
+  {
+    mimeType: 'image/heic',
+    extensions: '.heic'
   }
 ];
 
@@ -67,6 +71,10 @@ export const getValidExt = (tab: NOVA_TAB_TYPE) => {
     case 'aiChat':
       return SUPPORT_IMAGE_TYPE.filter(({ extensions }) =>
         ['.jpg', '.jpeg', '.png', '.gif'].includes(extensions)
+      );
+    case 'convert2DTo3D':
+      return SUPPORT_IMAGE_TYPE.filter(({ extensions }) =>
+        ['.jpg', 'jpeg', '.png', 'webp', '.heic'].includes(extensions)
       );
     case 'removeBG':
     case 'changeBG':
@@ -86,6 +94,7 @@ export const getValidExt = (tab: NOVA_TAB_TYPE) => {
 };
 
 export const MAX_FILE_UPLOAD_SIZE_MB_AI_CHAT = 20;
+export const MAX_FILE_UPLOAD_SIZE_MB_CONVERT_2DTO3D = 20;
 export const MAX_FILE_UPLOAD_SIZE_MB_REMOVE_BG = 30;
 export const MAX_FILE_UPLOAD_SIZE_MB_CHANGE_BG = 20;
 export const MAX_FILE_UPLOAD_SIZE_MB_REMAKE_IMG = 30;
@@ -98,6 +107,8 @@ export const getMaxFileSize = (tab: NOVA_TAB_TYPE): number => {
   switch (tab) {
     case NOVA_TAB_TYPE.aiChat:
       return MAX_FILE_UPLOAD_SIZE_MB_AI_CHAT;
+    case NOVA_TAB_TYPE.convert2DTo3D:
+      return MAX_FILE_UPLOAD_SIZE_MB_CONVERT_2DTO3D;
     case NOVA_TAB_TYPE.removeBG:
       return MAX_FILE_UPLOAD_SIZE_MB_REMOVE_BG;
     case NOVA_TAB_TYPE.changeBG:

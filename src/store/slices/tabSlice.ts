@@ -26,6 +26,7 @@ export type AI_WRITE_TAB_TYPE = 'write' | 'chat';
 
 export enum NOVA_TAB_TYPE {
   aiChat = 'aiChat',
+  convert2DTo3D = 'convert2DTo3D',
   removeBG = 'removeBG',
   changeBG = 'changeBG',
   remakeImg = 'remakeImg',

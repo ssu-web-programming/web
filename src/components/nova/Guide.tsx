@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import aiChatIcon from '../../img/nova/imgSample/ai_chat_sample.png';
 import changeBGIcon from '../../img/nova/imgSample/bg_change_sample.png';
 import removeBGIcon from '../../img/nova/imgSample/bg_delete_sample.png';
+import convert2DTo3DIcon from '../../img/nova/imgSample/convert_2dto3d_smaple.png';
 import expandImgIcon from '../../img/nova/imgSample/image_expand_sample.png';
 import remakeImgIcon from '../../img/nova/imgSample/image_remake_sample.png';
 import changeStyleIcon from '../../img/nova/imgSample/image_style_sample.png';
@@ -81,6 +82,7 @@ export const Guide = (props: GuideProps) => {
 
   const iconMap: Record<NOVA_TAB_TYPE, string> = {
     aiChat: aiChatIcon,
+    convert2DTo3D: convert2DTo3DIcon,
     removeBG: removeBGIcon,
     changeBG: changeBGIcon,
     remakeImg: remakeImgIcon,

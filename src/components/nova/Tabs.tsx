@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Swiper as SwiperClass } from 'swiper/types';
 
+import convert2DTo3DIcon from '../../img/nova/tab/tab_3d_n.svg';
+import convert2DTo3DSelectedIcon from '../../img/nova/tab/tab_3d_s.svg';
 import aiChatIcon from '../../img/nova/tab/tab_ai_chat_n.svg';
 import aiChatSelectedIcon from '../../img/nova/tab/tab_ai_chat_s.svg';
 import leftArrowIcon from '../../img/nova/tab/tab_arrow_left.svg';
@@ -30,6 +32,7 @@ import 'swiper/css/scrollbar';
 
 const iconMap: Record<NOVA_TAB_TYPE, { default: string; selected: string }> = {
   aiChat: { default: aiChatIcon, selected: aiChatSelectedIcon },
+  convert2DTo3D: { default: convert2DTo3DIcon, selected: convert2DTo3DSelectedIcon },
   removeBG: { default: removeBGIcon, selected: removeBGSelectedIcon },
   changeBG: { default: changeBGIcon, selected: changeBGSelectedIcon },
   remakeImg: { default: remakeImgIcon, selected: remakeImgSelectedIcon },

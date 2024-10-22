@@ -7,12 +7,14 @@ import styled from 'styled-components';
 import { useConfirm } from '../../components/Confirm';
 import { useChangeBackground } from '../../components/hooks/nova/useChangeBackground';
 import { useChangeStyle } from '../../components/hooks/nova/useChangeStyle';
+import { useConvert2DTo3D } from '../../components/hooks/nova/useConvert2DTo3D';
 import { useExpandImage } from '../../components/hooks/nova/useExpandImage';
 import { useImprovedResolution } from '../../components/hooks/nova/useImprovedResolution';
 import useManageFile from '../../components/hooks/nova/useManageFile';
 import usePrivacyConsent from '../../components/hooks/nova/usePrivacyConsent';
 import { useRemakeImage } from '../../components/hooks/nova/useRemakeImage';
 import { useRemoveBackground } from '../../components/hooks/nova/useRemoveBackground';
+import Convert from '../../components/nova/Convert';
 import Expand from '../../components/nova/Expand';
 import { Guide } from '../../components/nova/Guide';
 import NovaHeader from '../../components/nova/Header';
@@ -77,6 +79,7 @@ export default function Nova() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const confirm = useConfirm();
+  const { goConvertPage } = useConvert2DTo3D();
   const { goPromptPage } = useChangeBackground();
   const { handleRemoveBackground } = useRemoveBackground();
   const { handleRemakeImage } = useRemakeImage();
@@ -118,6 +121,9 @@ export default function Nova() {
   const renderContent = () => {
     const handleUploadComplete = async () => {
       switch (selectedNovaTab) {
+        case NOVA_TAB_TYPE.convert2DTo3D:
+          await goConvertPage();
+          break;
         case NOVA_TAB_TYPE.removeBG:
           await handleRemoveBackground();
           break;
@@ -164,6 +170,8 @@ export default function Nova() {
               </Guide>
             </>
           );
+        case 'convert':
+          return <Convert />;
         case 'prompt':
           return <Prompt />;
         case 'theme':

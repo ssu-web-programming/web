@@ -13,6 +13,7 @@ export type PageStatus =
   | 'home'
   | 'progress'
   | 'loading'
+  | 'convert'
   | 'prompt'
   | 'expand'
   | 'theme'
