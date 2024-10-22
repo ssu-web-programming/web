@@ -12,13 +12,14 @@ export default function useUserInfoUtils() {
   const getAvailableFileCnt = () => {
     if (selectedNovaTab === NOVA_TAB_TYPE.aiChat) {
       switch (userInfo.ul) {
+        case '1':
         case '8':
         case '9':
-          return 2;
+          return 5;
         case '4':
         case '12':
         case '13':
-          return 3;
+          return 10;
         case '14':
           return -1;
         default:

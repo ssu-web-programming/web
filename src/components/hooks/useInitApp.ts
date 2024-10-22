@@ -101,7 +101,6 @@ export default function useInitApp() {
         const {
           data: { announcementInfos }
         } = await res.json();
-        console.log(announcementInfos);
         announcementInfos.forEach((announcement: IAnnouceInfo) => {
           const { type } = announcement;
           const tab = Object.keys(tabTypeMap).find(
