@@ -75,7 +75,7 @@ export default function Convert() {
               {/*<img src={`data:${result?.contentType};base64,${result?.data}`} alt="result" />*/}
               <img
                 src={
-                  'https://vf-berlin.polarisoffice.com/nova/images/immersity/immersity_gen_72d841aa-c5d5-4d1a-b903-4f2f34d1a6de.gif'
+                  'https://vf-berlin.polarisoffice.com/nova/images/immersity/immersity_gen_97fed61e-6f41-42e6-ba8c-b7cdc7d841d1.gif'
                 }
                 alt="sample"
               />
