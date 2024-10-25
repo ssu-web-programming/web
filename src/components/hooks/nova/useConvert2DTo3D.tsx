@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
 import { apiWrapper } from '../../../api/apiWrapper';
-import { NOVA_EXPAND_IMAGE } from '../../../api/constant';
+import { NOVA_GENERATE_ANIMATION } from '../../../api/constant';
 import { isPixelLimitExceeded } from '../../../constants/fileTypes';
 import {
   resetPageData,
@@ -35,11 +35,7 @@ export const useConvert2DTo3D = () => {
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.convert2DTo3D, status: 'home' }));
   };
 
-  const handleExpandError = (
-    errCode: string,
-    leftCredit: number,
-    { extend_left, extend_right, extend_up, extend_down }: any
-  ) => {
+  const handleExpandError = (errCode: string, leftCredit: number, pattern: string) => {
     if (errCode === 'Timeout') {
       dispatch(
         setPageResult({
@@ -47,7 +43,7 @@ export const useConvert2DTo3D = () => {
           result: {
             contentType: '',
             data: '',
-            info: { extend_left, extend_right, extend_up, extend_down }
+            info: { pattern }
           }
         })
       );
@@ -91,38 +87,30 @@ export const useConvert2DTo3D = () => {
     }
   };
 
-  const handleExpandImage = async (
-    extend_left: number,
-    extend_right: number,
-    extend_up: number,
-    extend_down: number
-  ) => {
+  const handleConver2DTo3D = async (pattern: string) => {
     if (!currentFile) return;
 
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.convert2DTo3D, status: 'loading' }));
 
     try {
       const formData = await createFormDataFromFiles([currentFile]);
-      formData.append('extend_left', String(extend_left));
-      formData.append('extend_right', String(extend_right));
-      formData.append('extend_up', String(extend_up));
-      formData.append('extend_down', String(extend_down));
+      formData.append('pattern', pattern);
 
-      const { res, logger } = await apiWrapper().request(NOVA_EXPAND_IMAGE, {
+      const { res, logger } = await apiWrapper().request(NOVA_GENERATE_ANIMATION, {
         body: formData,
         method: 'POST'
       });
       const response = await res.json();
 
       if (response.success) {
-        const image = response.data.image[0];
         dispatch(
           setPageResult({
             tab: NOVA_TAB_TYPE.convert2DTo3D,
             result: {
-              contentType: image.contentType,
-              data: image.data,
-              info: { extend_left, extend_right, extend_up, extend_down }
+              contentType: '',
+              data: '',
+              link: response.data.getPresignedUrl,
+              info: { pattern }
             }
           })
         );
@@ -138,12 +126,7 @@ export const useConvert2DTo3D = () => {
         showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');
       } else {
         const { leftCredit } = calLeftCredit(res.headers);
-        handleExpandError(response.error.code, Number(leftCredit), {
-          extend_left,
-          extend_right,
-          extend_up,
-          extend_down
-        });
+        handleExpandError(response.error.code, Number(leftCredit), pattern);
       }
     } catch (err) {
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.convert2DTo3D, status: 'home' }));
@@ -151,5 +134,5 @@ export const useConvert2DTo3D = () => {
     }
   };
 
-  return { goConvertPage, handleExpandImage };
+  return { goConvertPage, handleConver2DTo3D };
 };

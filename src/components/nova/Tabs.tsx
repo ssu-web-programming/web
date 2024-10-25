@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Swiper as SwiperClass } from 'swiper/types';
 
+import { ReactComponent as NewBadge } from '../../img/nova/tab/newbadge.svg';
 import convert2DTo3DIcon from '../../img/nova/tab/tab_3d_n.svg';
 import convert2DTo3DSelectedIcon from '../../img/nova/tab/tab_3d_s.svg';
 import aiChatIcon from '../../img/nova/tab/tab_ai_chat_n.svg';
@@ -51,7 +52,6 @@ const Wrap = styled.div`
   justify-content: flex-start;
   gap: 8px;
   padding: 8px 16px;
-  overflow: hidden;
   z-index: 1;
 `;
 
@@ -64,6 +64,11 @@ const Tap = styled.div<{ isHighlighted: boolean }>`
   border-radius: 8px;
   background-color: ${(props) => (props.isHighlighted ? '#ede5fe' : 'white')};
   cursor: pointer;
+`;
+
+const Badge = styled(NewBadge)`
+  position: absolute;
+  top: -17px;
 `;
 
 const Text = styled.div<{ isHighlighted: boolean }>`
@@ -147,10 +152,11 @@ const Tabs = ({ tabs, activeTab, onChangeTab }: TabProps) => {
           swiperRef.current = swiper;
         }}
         pagination={{ clickable: true }}
-        style={{ height: '32px' }}>
+        style={{ height: '32px', overflow: 'visible' }}>
         {tabs.map((tab) => (
           <SwiperSlide key={tab} style={{ width: 'auto' }}>
             <Tap onClick={() => onChangeTab(tab)} isHighlighted={activeTab === tab}>
+              {tab === NOVA_TAB_TYPE.convert2DTo3D && <Badge />}
               <img src={getIcon(tab, activeTab === tab)} alt="logo" />
               <Text isHighlighted={activeTab === tab}>{t(getTabTranslationKey(tab))}</Text>
             </Tap>

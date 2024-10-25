@@ -304,6 +304,11 @@
         "Title": "2D -> 3D 변환",
         "SubTitle": "이미지를 생동감 있는\n3D 모션으로 바꿔보세요!",
         "ImgUploader": "최대 20MB 용량의\nJPG, PNG, WEBP, HEIC 형식을 지원합니다."
+      },
+      "Loading": "3D 모션을 적용하고 있어요",
+      "Done": {
+        "Title": "3D 적용 완료",
+        "SubTitle": "3D 모션이 성공적으로 적용되었어요.\n이미지를 저장하거나, 슬라이드 문서에 삽입해 보세요!"
       }
     },
     "removeBG": {
@@ -394,6 +399,19 @@
     "TimeOut": {
       "Title": "작업 시간이 초과되었습니다.\n다시 시도해 주세요.",
       "Retry": "재시도"
+    },
+    "Convert": {
+      "Example": "적용 예시",
+      "SelectExampleText": "적용하고 싶은 애니메이션 스타일을 선택해 주세요",
+      "Vertical": "세로 방향",
+      "Horizontal": "가로 방향",
+      "Circle": "원형",
+      "Perspective": "투시 효과",
+      "Zoom": "확대/축소",
+      "ZoomLeft": "왼쪽 확대",
+      "ZoomCenter": "상하이동",
+      "ZoomRight": "오른쪽 확대",
+      "Button": "3D 모션으로 변환하기"
     },
     "Prompt": {
       "Placeholder": "바꾸고 싶은 배경을 설명해 주세요.",

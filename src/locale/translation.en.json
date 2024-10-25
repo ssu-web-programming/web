@@ -298,11 +298,23 @@
       "Uploading": "Uploading..",
       "CreateImage": "The requested image has been created."
     },
+    "convert2DTo3D": {
+      "Guide": {
+        "Title": "2D to 3D",
+        "SubTitle": "Convert your images into immersive 3D motion!",
+        "ImgUploader": "Supports JPG, PNG, WEBP and HEIC formats up to 20MB in size."
+      },
+      "Loading": "Applying 3D motion",
+      "Done": {
+        "Title": "3D applied",
+        "SubTitle": "The 3D motion was successfully applied.\nSave the image or insert it into your slide!"
+      }
+    },
     "removeBG": {
       "Guide": {
         "Title": "Remove Background",
         "SubTitle": "You can remove the background to make the image cleaner.",
-        "ImgUploader": "Supports JPG, PNG, and WEBP formats up to 30MB in size."
+        "ImgUploader": "Supports JPG, PNG and WEBP formats up to 30MB in size."
       },
       "Loading": "Removing the background...",
       "Done": {
@@ -315,7 +327,7 @@
       "Guide": {
         "Title": "Change Background",
         "SubTitle": "Freely change the background of any object’s image using AI!",
-        "ImgUploader": "Supports JPG, PNG, and WEBP formats up to 20MB in size."
+        "ImgUploader": "Supports JPG, PNG and WEBP formats up to 20MB in size."
       },
       "Loading": "Changing the background...",
       "Done": {
@@ -328,7 +340,7 @@
       "Guide": {
         "Title": "Remake Image",
         "SubTitle": "Give the image a new life with a fresh style.",
-        "ImgUploader": "Supports JPG, PNG, and WEBP formats up to 30MB in size."
+        "ImgUploader": "Supports JPG, PNG and WEBP formats up to 30MB in size."
       },
       "Loading": "Changing the image...",
       "Done": {
@@ -341,7 +353,7 @@
       "Guide": {
         "Title": "Expand Image",
         "SubTitle": "Enlarge the image to your desired size and use it freely!",
-        "ImgUploader": "Supports JPG, PNG, and WEBP formats up to 30MB in size."
+        "ImgUploader": "Supports JPG, PNG and WEBP formats up to 30MB in size."
       },
       "Loading": "Expanding the image...",
       "Button": "Expand Image",
@@ -386,6 +398,18 @@
     "TimeOut": {
       "Title": "The operation has exceeded the time limit.\nPlease try again.",
       "Retry": "Retry"
+    },
+    "Convert": {
+      "Example": "Example",
+      "SelectExampleText": "Please select an animation style",
+      "Vertical": "Portrait",
+      "Horizontal": "Landscape",
+      "Circle": "Circular",
+      "Perspective": "Perspective Effect",
+      "Zoom": "Zoom In/Out",
+      "ZoomLeft": "Zoom Left",
+      "ZoomCenter": "Up/Down",
+      "ZoomRight": "Zoom Right"
     },
     "Prompt": {
       "Placeholder": "Please describe the background you would like to change.",

@@ -83,7 +83,7 @@ const SubTitle = styled.span`
 
 const ImageBox = styled.div<{ isBordered: boolean }>`
   width: 100%;
-  height: 100%;
+  aspect-ratio: 1 / 1;
   max-width: 480px;
   max-height: 480px;
   position: relative;
@@ -93,14 +93,13 @@ const ImageBox = styled.div<{ isBordered: boolean }>`
   margin-bottom: 24px;
   border: ${(props) => (props.isBordered ? '1px solid #c9cdd2' : 'none')};
   border-radius: 8px;
+  overflow: hidden;
 
   img {
-    width: 100%;
-    height: 100%;
-    max-width: 480px;
-    max-height: 480px;
+    max-width: 100%;
+    max-height: 100%;
     object-fit: contain;
-    border-radius: 8px;
+    border-radius: ${(props) => (props.isBordered ? 'none' : '8px')};
   }
 `;
 
@@ -208,9 +207,14 @@ export default function Result() {
 
   const OnSave = async () => {
     if (result) {
-      const blob = base64ToBlob(result.data, result.contentType);
-      Bridge.callBridgeApi('downloadImage', blob);
-      dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.SaveCompleted`) }));
+      if (result.link) {
+        // 구현 예정
+        dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.SaveCompleted`) }));
+      } else {
+        const blob = base64ToBlob(result.data, result.contentType);
+        Bridge.callBridgeApi('downloadImage', blob);
+        dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.SaveCompleted`) }));
+      }
     } else {
       dispatch(activeToast({ type: 'error', msg: 'ToastMsg.SaveFailed' }));
     }
@@ -238,10 +242,16 @@ export default function Result() {
             </Title>
             <SubTitle>{t(`Nova.${selectedNovaTab}.Done.SubTitle`)}</SubTitle>
           </Guide>
-          <ImageBox isBordered={selectedNovaTab === NOVA_TAB_TYPE.removeBG}>
-            <div>
+          <ImageBox
+            isBordered={
+              selectedNovaTab === NOVA_TAB_TYPE.removeBG ||
+              selectedNovaTab === NOVA_TAB_TYPE.convert2DTo3D
+            }>
+            {result?.link ? (
+              <img src={result.link} alt="result" />
+            ) : (
               <img src={`data:${result?.contentType};base64,${result?.data}`} alt="result" />
-            </div>
+            )}
           </ImageBox>
           <ButtonWrap>
             {(selectedNovaTab === NOVA_TAB_TYPE.changeBG ||

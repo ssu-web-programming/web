@@ -6,6 +6,7 @@ import { DriveFileInfo } from '../uploadFiles';
 export interface ResultImage {
   contentType: string;
   data: string;
+  link?: string;
   info?: any;
 }
 

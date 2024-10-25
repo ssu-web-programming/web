@@ -298,6 +298,18 @@
       "Uploading": "アップロード中..",
       "CreateImage": "リクエストされた画像が生成されました。"
     },
+    "convert2DTo3D": {
+      "Guide": {
+        "Title": "2Dから3Dへ",
+        "SubTitle": "画像を臨場感あふれる3Dモーションに変換します。",
+        "ImgUploader": "最大20MBのサイズまでのJPG、PNG、WEBP、HEIC形式をサポートします。"
+      },
+      "Loading": "3Dモーションの適用",
+      "Done": {
+        "Title": "3Dが適用されました",
+        "SubTitle": "3Dモーションが正常に適用されました。\n画像を保存するか、スライドに挿入してください。"
+      }
+    },
     "removeBG": {
       "Guide": {
         "Title": "背景を消す",
@@ -386,6 +398,18 @@
     "TimeOut": {
       "Title": "操作が時間制限を超えました。\nもう一度やり直してください。",
       "Retry": "再試行"
+    },
+    "Convert": {
+      "Example": "適用例",
+      "SelectExampleText": "アニメーションスタイルを選択してください。",
+      "Vertical": "縦",
+      "Horizontal": "横",
+      "Circle": "循環",
+      "Perspective": "遠近効果",
+      "Zoom": "ズームイン",
+      "ZoomLeft": "ズーム左",
+      "ZoomCenter": "上下移動",
+      "ZoomRight": "ズーム右"
     },
     "Prompt": {
       "Placeholder": "変更したい背景を説明してください。",
