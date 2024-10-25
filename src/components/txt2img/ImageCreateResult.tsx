@@ -28,7 +28,7 @@ import { versionItemList } from './ImageCreateInput';
 
 const ImagePreview = styled.div`
   width: 100%;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 1;
   max-height: 348px;
   margin: 16px 0 12px;
 `;

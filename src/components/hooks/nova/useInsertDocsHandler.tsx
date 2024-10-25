@@ -67,7 +67,7 @@ export const useInsertDocsHandler = () => {
                 }
               } else {
                 if (!result) break;
-                const blob = base64ToBlob(result?.data, result?.contentType);
+                const blob = base64ToBlob(result.data, result.contentType);
                 Bridge.callBridgeApi('insertImage', blob);
                 dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.CompleteInsert`) }));
               }

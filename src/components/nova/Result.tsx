@@ -83,7 +83,7 @@ const SubTitle = styled.span`
 
 const ImageBox = styled.div<{ isBordered: boolean }>`
   width: 100%;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 1;
   max-width: 480px;
   max-height: 480px;
   position: relative;
