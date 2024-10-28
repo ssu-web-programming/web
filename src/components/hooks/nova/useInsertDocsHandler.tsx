@@ -68,7 +68,7 @@ export const useInsertDocsHandler = () => {
               } else {
                 if (!result) break;
                 if (result.link) {
-                  dispatch(setPageStatus({ tab: selectedNovaTab, status: 'progress' }));
+                  dispatch(setPageStatus({ tab: selectedNovaTab, status: 'saving' }));
                   Bridge.callBridgeApi('insertAnimation', result.link);
                 } else {
                   const blob = base64ToBlob(result.data, result.contentType);

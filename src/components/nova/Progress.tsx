@@ -11,7 +11,7 @@ const Dim = styled.div`
   align-items: center;
   justify-content: center;
   background: rgba(255, 255, 255, 0.7);
-  z-index: 1;
+  z-index: 2;
 
   img {
     width: 48px;

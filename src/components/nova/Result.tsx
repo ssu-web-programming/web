@@ -213,7 +213,7 @@ export default function Result() {
   const OnSave = async () => {
     if (result) {
       if (result.link) {
-        dispatch(setPageStatus({ tab: selectedNovaTab, status: 'progress' }));
+        dispatch(setPageStatus({ tab: selectedNovaTab, status: 'saving' }));
         Bridge.callBridgeApi('downloadAnimation', result.link);
       } else {
         const blob = base64ToBlob(result.data, result.contentType);

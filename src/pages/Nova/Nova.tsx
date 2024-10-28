@@ -120,6 +120,8 @@ export default function Nova() {
 
   const renderContent = () => {
     const handleUploadComplete = async () => {
+      if (status === 'saving') return;
+
       switch (selectedNovaTab) {
         case NOVA_TAB_TYPE.convert2DTo3D:
           await goConvertPage();
@@ -181,7 +183,13 @@ export default function Nova() {
         case 'loading':
           return <Loading />;
         case 'done':
-          return <Result />;
+        case 'saving':
+          return (
+            <>
+              {status === 'saving' && <Progress />}
+              <Result />
+            </>
+          );
         case 'timeout':
           return <TimeOut />;
         default:

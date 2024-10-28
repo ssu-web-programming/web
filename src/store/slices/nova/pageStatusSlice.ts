@@ -13,6 +13,7 @@ export interface ResultImage {
 export type PageStatus =
   | 'home'
   | 'progress'
+  | 'saving'
   | 'loading'
   | 'convert'
   | 'prompt'
