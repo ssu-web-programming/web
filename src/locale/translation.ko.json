@@ -308,7 +308,8 @@
       "Loading": "3D 모션을 적용하고 있어요",
       "Done": {
         "Title": "3D 적용 완료",
-        "SubTitle": "3D 모션이 성공적으로 적용되었어요.\n이미지를 저장하거나, 슬라이드 문서에 삽입해 보세요!"
+        "SubTitle": "3D 모션이 성공적으로 적용되었어요.\n이미지를 저장해 다양하게 활용해 보세요!",
+        "SubTitle2": "3D 모션이 성공적으로 적용되었어요.\n이미지를 저장하거나, 슬라이드 문서에 삽입해 보세요!"
       }
     },
     "removeBG": {
@@ -407,11 +408,17 @@
       "Horizontal": "가로 방향",
       "Circle": "원형",
       "Perspective": "투시 효과",
-      "Zoom": "확대/축소",
+      "Zoom": "확대",
       "ZoomLeft": "왼쪽 확대",
       "ZoomCenter": "상하이동",
       "ZoomRight": "오른쪽 확대",
-      "Button": "3D 모션으로 변환하기"
+      "Button": "3D 모션으로 변환하기",
+      "SelectFileFormat": "파일 형식 선택",
+      "MP4": "MP4",
+      "MP4Guide": "용량이 작고,\n품질이 우수해요",
+      "GIF": "GIF",
+      "GIFGuide": "용량은 크지만,\n반복 재생이 돼요",
+      "MobileGuide": "모바일에서는 3D모션이 <span class='highlight'>MP4</span> 파일로 제공됩니다."
     },
     "Prompt": {
       "Placeholder": "바꾸고 싶은 배경을 설명해 주세요.",

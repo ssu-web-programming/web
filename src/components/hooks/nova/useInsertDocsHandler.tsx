@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ClientStatusType } from '../../../pages/Nova/Nova';
 import { NovaChatType } from '../../../store/slices/nova/novaHistorySlice';
-import { selectPageResult } from '../../../store/slices/nova/pageStatusSlice';
+import { selectPageResult, setPageStatus } from '../../../store/slices/nova/pageStatusSlice';
 import { NOVA_TAB_TYPE, selectTabSlice } from '../../../store/slices/tabSlice';
 import { activeToast } from '../../../store/slices/toastSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
@@ -67,9 +67,15 @@ export const useInsertDocsHandler = () => {
                 }
               } else {
                 if (!result) break;
-                const blob = base64ToBlob(result.data, result.contentType);
-                Bridge.callBridgeApi('insertImage', blob);
-                dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.CompleteInsert`) }));
+                if (result.link) {
+                  dispatch(setPageStatus({ tab: selectedNovaTab, status: 'progress' }));
+                  Bridge.callBridgeApi('insertAnimation', result.link);
+                } else {
+                  const blob = base64ToBlob(result.data, result.contentType);
+                  dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.CompleteInsert`) }));
+                  Bridge.callBridgeApi('insertImage', blob);
+                  dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.CompleteInsert`) }));
+                }
               }
               break;
           }

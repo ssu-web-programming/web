@@ -118,8 +118,16 @@ const callApi = (api: ApiType, arg?: string | number) => {
             window.webkit.messageHandlers.downloadImage.postMessage(arg);
             break;
           }
+          case 'downloadAnimation': {
+            window.webkit.messageHandlers.downloadImage.postMessage(arg);
+            break;
+          }
           case 'insertImage': {
             window.webkit.messageHandlers.insertImage.postMessage(arg);
+            break;
+          }
+          case 'insertAnimation': {
+            window.webkit.messageHandlers.insertAnimation.postMessage(arg);
             break;
           }
           case 'openWindow': {
@@ -392,6 +400,16 @@ export const useInitBridgeListener = () => {
             dispatch(setCreating('none'));
             break;
           }
+          case 'finishDownloadAnimation': {
+            dispatch(setPageStatus({ tab: selectedNovaTab, status: 'done' }));
+            dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.SaveCompleted`) }));
+            break;
+          }
+          case 'finishInsertAnimation': {
+            dispatch(setPageStatus({ tab: selectedNovaTab, status: 'done' }));
+            dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.CompleteInsert`) }));
+            break;
+          }
           case 'showToast': {
             const msg = i18n.t(body);
             dispatch(activeToast({ type: 'error', msg }));
@@ -497,7 +515,9 @@ type ApiType =
   | 'insertText'
   | 'insertHtml'
   | 'downloadImage'
+  | 'downloadAnimation'
   | 'insertImage'
+  | 'insertAnimation'
   | 'openWindow'
   | 'openDoc'
   | 'closePanel'

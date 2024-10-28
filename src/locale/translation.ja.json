@@ -307,7 +307,8 @@
       "Loading": "3Dモーションの適用",
       "Done": {
         "Title": "3Dが適用されました",
-        "SubTitle": "3Dモーションが正常に適用されました。\n画像を保存するか、スライドに挿入してください。"
+        "SubTitle": "3Dモーションが正常に適用されました。\n画像を保存して、さまざまに活用してください！",
+        "SubTitle2": "3Dモーションが正常に適用されました。\n画像を保存するか、スライドに挿入してください。"
       }
     },
     "removeBG": {
@@ -406,10 +407,17 @@
       "Horizontal": "横",
       "Circle": "循環",
       "Perspective": "遠近効果",
-      "Zoom": "ズームイン",
+      "Zoom ": "ズームイン",
       "ZoomLeft": "ズーム左",
       "ZoomCenter": "上下移動",
-      "ZoomRight": "ズーム右"
+      "ZoomRight": "ズーム右",
+      "Button": "3Dモーションに変換",
+      "SelectFileFormat": "ファイル形式の選択",
+      "MP4": "MP4",
+      "MP4Guide": "容量が小さく、高品質",
+      "GIF": "GIF",
+      "GIFGuide": "容量は大きいが、ループ再生が可能",
+      "MobileGuide": "モバイルでは3Dモーションは <span class='highlight'>MP4</span> 形式で提供されます。"
     },
     "Prompt": {
       "Placeholder": "変更したい背景を説明してください。",

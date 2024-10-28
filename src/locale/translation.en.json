@@ -307,7 +307,8 @@
       "Loading": "Applying 3D motion",
       "Done": {
         "Title": "3D applied",
-        "SubTitle": "The 3D motion was successfully applied.\nSave the image or insert it into your slide!"
+        "SubTitle": "The 3D motion was successfully applied.\nSave the image and use it in various ways!",
+        "SubTitle2": "The 3D motion was successfully applied.\nSave the image or insert it into your slide!"
       }
     },
     "removeBG": {
@@ -406,10 +407,17 @@
       "Horizontal": "Landscape",
       "Circle": "Circular",
       "Perspective": "Perspective Effect",
-      "Zoom": "Zoom In/Out",
+      "Zoom": "Zoom In",
       "ZoomLeft": "Zoom Left",
       "ZoomCenter": "Up/Down",
-      "ZoomRight": "Zoom Right"
+      "ZoomRight": "Zoom Right",
+      "Button": "Convert to 3D motion",
+      "SelectFileFormat": "File Format Selection",
+      "MP4": "MP4",
+      "MP4Guide": "Smaller file size and high quality",
+      "GIF": "GIF",
+      "GIFGuide": "Larger file size but enables looping",
+      "MobileGuide": "On mobile, 3D motion is provided as an <span class='highlight'>MP4</span> file."
     },
     "Prompt": {
       "Placeholder": "Please describe the background you would like to change.",

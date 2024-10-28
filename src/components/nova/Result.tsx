@@ -8,9 +8,10 @@ import styled from 'styled-components';
 import CreditColorIcon from '../../img/ico_credit_color_outline.svg';
 import CheckIcon from '../../img/nova/check_purple.png';
 import { ClientStatusType } from '../../pages/Nova/Nova';
-import { selectPageResult } from '../../store/slices/nova/pageStatusSlice';
+import { selectPageResult, setPageStatus } from '../../store/slices/nova/pageStatusSlice';
 import { NOVA_TAB_TYPE, selectTabSlice } from '../../store/slices/tabSlice';
 import { activeToast } from '../../store/slices/toastSlice';
+import { getCurrentFile } from '../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import Bridge, { ClientType, getPlatform } from '../../util/bridge';
 import { base64ToBlob } from '../../util/files';
@@ -95,7 +96,8 @@ const ImageBox = styled.div<{ isBordered: boolean }>`
   border-radius: 8px;
   overflow: hidden;
 
-  img {
+  img,
+  video {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
@@ -183,9 +185,12 @@ const SaveButton = styled.div`
 
 export default function Result() {
   const platform = getPlatform();
+  const isMobile = platform == ClientType.ios || platform == ClientType.android;
+  const isPC = platform === ClientType.windows || platform === ClientType.mac;
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
+  const currentFile = useAppSelector(getCurrentFile);
   const result = useAppSelector(selectPageResult(selectedNovaTab));
   const { insertDocsHandler } = useInsertDocsHandler();
   const { handleChangeBackground } = useChangeBackground();
@@ -196,10 +201,10 @@ export default function Result() {
     Bridge.callSyncBridgeApiWithCallback({
       api: 'getClientStatus',
       callback: async (status: ClientStatusType) => {
-        if (status === 'home' && platform !== ClientType.android && platform !== ClientType.ios) {
-          setShowInsertDocBtn(false);
+        if (selectedNovaTab === NOVA_TAB_TYPE.convert2DTo3D) {
+          setShowInsertDocBtn(isPC && currentFile.ext === 'pptx');
         } else {
-          setShowInsertDocBtn(true);
+          setShowInsertDocBtn(status !== 'home' || isMobile);
         }
       }
     });
@@ -208,8 +213,8 @@ export default function Result() {
   const OnSave = async () => {
     if (result) {
       if (result.link) {
-        // 구현 예정
-        dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.SaveCompleted`) }));
+        dispatch(setPageStatus({ tab: selectedNovaTab, status: 'progress' }));
+        Bridge.callBridgeApi('downloadAnimation', result.link);
       } else {
         const blob = base64ToBlob(result.data, result.contentType);
         Bridge.callBridgeApi('downloadImage', blob);
@@ -240,7 +245,13 @@ export default function Result() {
               <img src={CheckIcon} alt="check" />
               <span>{t(`Nova.${selectedNovaTab}.Done.Title`)}</span>
             </Title>
-            <SubTitle>{t(`Nova.${selectedNovaTab}.Done.SubTitle`)}</SubTitle>
+            {selectedNovaTab === NOVA_TAB_TYPE.convert2DTo3D &&
+            isPC &&
+            currentFile.ext === 'pptx' ? (
+              <SubTitle>{t(`Nova.${selectedNovaTab}.Done.SubTitle2`)}</SubTitle>
+            ) : (
+              <SubTitle>{t(`Nova.${selectedNovaTab}.Done.SubTitle`)}</SubTitle>
+            )}
           </Guide>
           <ImageBox
             isBordered={
@@ -248,7 +259,11 @@ export default function Result() {
               selectedNovaTab === NOVA_TAB_TYPE.convert2DTo3D
             }>
             {result?.link ? (
-              <img src={result.link} alt="result" />
+              result.link.endsWith('.mp4') ? (
+                <video src={result.link} loop autoPlay muted />
+              ) : (
+                <img src={result.link} alt="result" />
+              )
             ) : (
               <img src={`data:${result?.contentType};base64,${result?.data}`} alt="result" />
             )}

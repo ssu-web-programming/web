@@ -1,18 +1,24 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { ReactComponent as Circular } from '../../img/nova/convert2DTo3D/circular.svg';
-import { ReactComponent as ZoomInOut } from '../../img/nova/convert2DTo3D/expand.svg';
+import CircularExam from '../../img/nova/convert2DTo3D/example/Circle.mp4';
+import HorizontalExam from '../../img/nova/convert2DTo3D/example/Horizontal.mp4';
+import PerspectiveExam from '../../img/nova/convert2DTo3D/example/Perspective.mp4';
+import VerticalExam from '../../img/nova/convert2DTo3D/example/Vertical.mp4';
+import ZoomExam from '../../img/nova/convert2DTo3D/example/Zoom.mp4';
+import ZoomCenterExam from '../../img/nova/convert2DTo3D/example/ZoomCenter.mp4';
+import ZoomLeftExam from '../../img/nova/convert2DTo3D/example/ZoomLeft.mp4';
+import ZoomRightExam from '../../img/nova/convert2DTo3D/example/ZoomRight.mp4';
+import { ReactComponent as Zoom } from '../../img/nova/convert2DTo3D/expand.svg';
 import { ReactComponent as Horizontal } from '../../img/nova/convert2DTo3D/horizontal.svg';
 import { ReactComponent as Perspective } from '../../img/nova/convert2DTo3D/perspective.svg';
 import { ReactComponent as UpAndDown } from '../../img/nova/convert2DTo3D/updown.svg';
 import { ReactComponent as Vertical } from '../../img/nova/convert2DTo3D/vertical.svg';
 import { ReactComponent as ZoomLeft } from '../../img/nova/convert2DTo3D/zoomleft.svg';
 import { ReactComponent as ZoomRight } from '../../img/nova/convert2DTo3D/zoomright.svg';
-import { selectPageResult } from '../../store/slices/nova/pageStatusSlice';
-import { selectTabSlice } from '../../store/slices/tabSlice';
-import { useAppSelector } from '../../store/store';
+import { ClientType, getPlatform } from '../../util/bridge';
 import { useConvert2DTo3D } from '../hooks/nova/useConvert2DTo3D';
 
 import GoBackHeader from './GoBackHeader';
@@ -30,7 +36,7 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 16px;
+  padding: 16px;
   flex: 1 1 0;
   overflow-y: auto;
   background-color: #f4f6f8;
@@ -64,7 +70,7 @@ const ImageBox = styled.div`
   background: #e8ebed;
   overflow: hidden;
 
-  img {
+  video {
     width: 100%;
     height: 100%;
     max-width: 480px;
@@ -129,6 +135,48 @@ const GridItem = styled.div<{ isSelected: boolean }>`
   }
 `;
 
+const FileFormatGuideText = styled.p`
+  margin-top: 16px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  text-align: center;
+  color: #454c53;
+`;
+
+const SelectFileFormatBox = styled.div`
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  grid-template-columns: repeat(2, 1fr);
+  margin-top: 8px;
+`;
+
+const FileFormatBox = styled.div<{ isSelected: boolean }>`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 80px;
+  border: ${(props) => (props.isSelected ? '1px solid #c6a9ff' : 'none')};
+  border-radius: 8px;
+  box-sizing: border-box;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+  text-align: center;
+  white-space: break-spaces;
+  background: ${(props) => (props.isSelected ? '#ede5fe' : 'white')};
+  color: ${(props) => (props.isSelected ? '#6f3ad0' : '#72787f')};
+
+  .title {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 24px;
+  }
+`;
+
 const ConvertButton = styled.div<{ isActive: boolean }>`
   width: 100%;
   max-width: 480px;
@@ -137,7 +185,7 @@ const ConvertButton = styled.div<{ isActive: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 16px auto;
+  margin: 16px 0 auto;
   background: ${(props) => (props.isActive ? '#6f3ad0' : '#f2f4f6')};
   border-radius: 8px;
   cursor: ${(props) => (props.isActive ? 'pointer' : 'default')};
@@ -151,27 +199,65 @@ const ConvertButton = styled.div<{ isActive: boolean }>`
   }
 `;
 
-const options = [
-  { src: Vertical, option: 'Vertical' },
-  { src: Horizontal, option: 'Horizontal' },
-  { src: Circular, option: 'Circle' },
-  { src: Perspective, option: 'Perspective' },
-  { src: ZoomInOut, option: 'Zoom' },
-  { src: ZoomLeft, option: 'ZoomLeft' },
-  { src: UpAndDown, option: 'ZoomCenter' },
-  { src: ZoomRight, option: 'ZoomRight' }
+const MobileGuideText = styled.p`
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  text-align: center;
+  color: #9ea4aa;
+  margin-top: 8px;
+
+  .highlight {
+    color: #454c53;
+  }
+`;
+
+interface ConvertOption {
+  src: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+  option: string;
+  example: string;
+}
+
+const options: ConvertOption[] = [
+  { src: Vertical, option: 'Vertical', example: VerticalExam },
+  { src: Horizontal, option: 'Horizontal', example: HorizontalExam },
+  { src: Circular, option: 'Circle', example: CircularExam },
+  { src: Perspective, option: 'Perspective', example: PerspectiveExam },
+  { src: Zoom, option: 'Zoom', example: ZoomExam },
+  { src: ZoomLeft, option: 'ZoomLeft', example: ZoomLeftExam },
+  { src: UpAndDown, option: 'ZoomCenter', example: ZoomCenterExam },
+  { src: ZoomRight, option: 'ZoomRight', example: ZoomRightExam }
 ];
+
+type FileFormat = 'mp4' | 'gif';
 
 export default function Convert() {
   const { t } = useTranslation();
-  const { selectedNovaTab } = useAppSelector(selectTabSlice);
-  const result = useAppSelector(selectPageResult(selectedNovaTab));
   const { handleConver2DTo3D } = useConvert2DTo3D();
+  const platform = getPlatform();
+  const isMobile = platform === ClientType.ios || platform === ClientType.android;
 
-  const [selectedOption, setSelectedOption] = useState<{ option: string } | null>(null);
-  const handleOptionClick = (option: string) => {
-    setSelectedOption({ option });
+  const verticalOption = options.find((option) => option.option === 'Vertical') || null;
+  const [selectedOption, setSelectedOption] = useState<ConvertOption | null>(verticalOption);
+  const [fileFormat, setFileFormat] = useState<FileFormat>('mp4');
+
+  const text = t('Nova.Convert.MobileGuide');
+
+  const handleOptionClick = (option: ConvertOption) => {
+    setSelectedOption(option);
   };
+
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  useEffect(() => {
+    if (videoRef.current && selectedOption) {
+      videoRef.current.pause();
+      videoRef.current.load();
+
+      videoRef.current.onloadeddata = () => {
+        videoRef.current?.play();
+      };
+    }
+  }, [selectedOption]);
 
   return (
     <Wrap>
@@ -180,7 +266,11 @@ export default function Convert() {
         <Body>
           <ExampleText>{t(`Nova.Convert.Example`)}</ExampleText>
           <ImageBox>
-            <img src={`data:${result?.contentType};base64,${result?.data}`} alt="result" />
+            {selectedOption && (
+              <video ref={videoRef} loop>
+                <source src={selectedOption.example} type="video/mp4" />
+              </video>
+            )}
           </ImageBox>
           <SelectionBox>
             <p>{t(`Nova.Convert.SelectExampleText`)}</p>
@@ -189,18 +279,42 @@ export default function Convert() {
                 <GridItem
                   key={option.option}
                   isSelected={selectedOption?.option === option.option}
-                  onClick={() => handleOptionClick(option.option)}>
+                  onClick={() => handleOptionClick(option)}>
                   <option.src />
                   <p>{t(`Nova.Convert.${option.option}`)}</p>
                 </GridItem>
               ))}
             </GridBox>
           </SelectionBox>
+          {!isMobile && (
+            <>
+              <FileFormatGuideText>{t(`Nova.Convert.SelectFileFormat`)}</FileFormatGuideText>
+              <SelectFileFormatBox>
+                <FileFormatBox
+                  isSelected={fileFormat === 'mp4'}
+                  onClick={() => setFileFormat('mp4')}>
+                  <p className="title">{t(`Nova.Convert.MP4`)}</p>
+                  <p>{t(`Nova.Convert.MP4Guide`)}</p>
+                </FileFormatBox>
+                <FileFormatBox
+                  isSelected={fileFormat === 'gif'}
+                  onClick={() => setFileFormat('gif')}>
+                  <p className="title">{t(`Nova.Convert.GIF`)}</p>
+                  <p>{t(`Nova.Convert.GIFGuide`)}</p>
+                </FileFormatBox>
+              </SelectFileFormatBox>
+            </>
+          )}
           <ConvertButton
             isActive={!!selectedOption}
-            onClick={selectedOption ? () => handleConver2DTo3D(selectedOption?.option) : undefined}>
+            onClick={
+              selectedOption
+                ? () => handleConver2DTo3D(selectedOption?.option, fileFormat)
+                : undefined
+            }>
             <span>{t(`Nova.Convert.Button`)}</span>
           </ConvertButton>
+          {isMobile && <MobileGuideText dangerouslySetInnerHTML={{ __html: text }} />}
         </Body>
       </Container>
     </Wrap>

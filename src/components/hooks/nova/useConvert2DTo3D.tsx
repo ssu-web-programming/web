@@ -35,7 +35,12 @@ export const useConvert2DTo3D = () => {
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.convert2DTo3D, status: 'home' }));
   };
 
-  const handleExpandError = (errCode: string, leftCredit: number, pattern: string) => {
+  const handleExpandError = (
+    errCode: string,
+    leftCredit: number,
+    pattern: string,
+    animationType: string
+  ) => {
     if (errCode === 'Timeout') {
       dispatch(
         setPageResult({
@@ -43,7 +48,7 @@ export const useConvert2DTo3D = () => {
           result: {
             contentType: '',
             data: '',
-            info: { pattern }
+            info: { pattern, animationType }
           }
         })
       );
@@ -87,7 +92,7 @@ export const useConvert2DTo3D = () => {
     }
   };
 
-  const handleConver2DTo3D = async (pattern: string) => {
+  const handleConver2DTo3D = async (pattern: string, animationType: string) => {
     if (!currentFile) return;
 
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.convert2DTo3D, status: 'loading' }));
@@ -95,6 +100,7 @@ export const useConvert2DTo3D = () => {
     try {
       const formData = await createFormDataFromFiles([currentFile]);
       formData.append('pattern', pattern);
+      formData.append('animationType', animationType);
 
       const { res, logger } = await apiWrapper().request(NOVA_GENERATE_ANIMATION, {
         body: formData,
@@ -110,7 +116,7 @@ export const useConvert2DTo3D = () => {
               contentType: '',
               data: '',
               link: response.data.getPresignedUrl,
-              info: { pattern }
+              info: { pattern, animationType }
             }
           })
         );
@@ -126,7 +132,7 @@ export const useConvert2DTo3D = () => {
         showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');
       } else {
         const { leftCredit } = calLeftCredit(res.headers);
-        handleExpandError(response.error.code, Number(leftCredit), pattern);
+        handleExpandError(response.error.code, Number(leftCredit), pattern, animationType);
       }
     } catch (err) {
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.convert2DTo3D, status: 'home' }));
