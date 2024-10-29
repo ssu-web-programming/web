@@ -397,15 +397,16 @@ export const useInitBridgeListener = () => {
             dispatch(setCreating('none'));
             break;
           }
+          case 'finishDownloadImage': {
+            if (body.isSaved) activeToast({ type: 'info', msg: t(`ToastMsg.SaveCompleted`) });
+            break;
+          }
           case 'finishDownloadAnimation': {
-            console.log('finishDownloadAnimation');
-            console.log('selectedNovaTab: ', selectedNovaTab);
             dispatch(setPageStatus({ tab: selectedNovaTab, status: 'done' }));
-            dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.SaveCompleted`) }));
+            if (body.isSaved) activeToast({ type: 'info', msg: t(`ToastMsg.SaveCompleted`) });
             break;
           }
           case 'finishInsertAnimation': {
-            console.log('finishInsertAnimation');
             dispatch(setPageStatus({ tab: selectedNovaTab, status: 'done' }));
             dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.CompleteInsert`) }));
             break;
