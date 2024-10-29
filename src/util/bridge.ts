@@ -119,7 +119,7 @@ const callApi = (api: ApiType, arg?: string | number) => {
             break;
           }
           case 'downloadAnimation': {
-            window.webkit.messageHandlers.downloadImage.postMessage(arg);
+            window.webkit.messageHandlers.downloadAnimation.postMessage(arg);
             break;
           }
           case 'insertImage': {
@@ -260,7 +260,6 @@ export const useInitBridgeListener = () => {
   const location = useLocation();
 
   const { getFileInfo, loadLocalFile } = useManageFile();
-  const { selectedNovaTab } = useAppSelector(selectTabSlice);
 
   // const movePage = useMoveChatTab();
   const getPath = useCallback((cmd: PanelOpenCmd) => {
@@ -332,6 +331,8 @@ export const useInitBridgeListener = () => {
   });
 
   const procMsg = async (msg: any) => {
+    const { selectedNovaTab } = useAppSelector(selectTabSlice);
+
     try {
       const { cmd, body } = msg;
       if (cmd && cmd !== '') {
