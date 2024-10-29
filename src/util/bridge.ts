@@ -398,12 +398,18 @@ export const useInitBridgeListener = () => {
             break;
           }
           case 'finishDownloadImage': {
-            if (body.isSaved) activeToast({ type: 'info', msg: t(`ToastMsg.SaveCompleted`) });
+            console.log('body: ', body);
+            if (body.isSaved) {
+              activeToast({ type: 'info', msg: t(`ToastMsg.SaveCompleted`) });
+            }
             break;
           }
           case 'finishDownloadAnimation': {
+            console.log('body: ', body);
             dispatch(setPageStatus({ tab: selectedNovaTab, status: 'done' }));
-            if (body.isSaved) activeToast({ type: 'info', msg: t(`ToastMsg.SaveCompleted`) });
+            if (body.isSaved) {
+              activeToast({ type: 'info', msg: t(`ToastMsg.SaveCompleted`) });
+            }
             break;
           }
           case 'finishInsertAnimation': {
