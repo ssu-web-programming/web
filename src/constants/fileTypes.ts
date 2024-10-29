@@ -158,7 +158,7 @@ export async function compressImage(file: File, tab: NOVA_TAB_TYPE): Promise<Fil
         file,
         isOriginal ? width : widthOrHeight,
         isOriginal ? height : widthOrHeight,
-        'JPEG',
+        'PNG',
         100,
         0,
         (resizedValue: string | File | Blob | ProgressEvent<FileReader>) => {
