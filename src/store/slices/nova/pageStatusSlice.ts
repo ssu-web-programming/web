@@ -46,6 +46,7 @@ const pageSlice = createSlice({
   reducers: {
     setStatus: (state, action: PayloadAction<{ tab: string; status: PageStatus }>) => {
       const { tab, status } = action.payload;
+      console.log('tab: ', tab, ', status: ', status);
       state.status[tab] = status;
     },
     resetStatus: (state, action: PayloadAction<string>) => {

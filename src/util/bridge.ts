@@ -402,6 +402,7 @@ export const useInitBridgeListener = () => {
           }
           case 'finishDownloadAnimation': {
             console.log('finishDownloadAnimation');
+            console.log('selectedNovaTab: ', selectedNovaTab);
             dispatch(setPageStatus({ tab: selectedNovaTab, status: 'done' }));
             dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.SaveCompleted`) }));
             break;
