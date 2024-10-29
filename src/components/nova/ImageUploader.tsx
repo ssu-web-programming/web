@@ -10,7 +10,9 @@ import { NOVA_TAB_TYPE } from '../../store/slices/tabSlice';
 import { getDriveFiles, getLocalFiles } from '../../store/slices/uploadFiles';
 import { userInfoSelector } from '../../store/slices/userInfo';
 import { useAppDispatch, useAppSelector } from '../../store/store';
-import { ClientType, getPlatform } from '../../util/bridge';
+import { ClientType, getPlatform, getVersion } from '../../util/bridge';
+import { isHigherVersion } from '../../util/common';
+import { useConfirm } from '../Confirm';
 
 import { FileUploader } from './FileUploader';
 
@@ -106,6 +108,9 @@ interface ImageUploaderProps {
 
 export default function ImageUploader(props: ImageUploaderProps) {
   const { t } = useTranslation();
+  const platform = getPlatform();
+  const version = getVersion();
+  const confirm = useConfirm();
   const inputImgFileRef = useRef<HTMLInputElement | null>(null);
   const dispatch = useAppDispatch();
   const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
@@ -115,12 +120,39 @@ export default function ImageUploader(props: ImageUploaderProps) {
   const target = 'nova-image';
 
   useEffect(() => {
+    const confirmUpload = async () => {
+      await confirm({
+        title: '',
+        msg: t('Nova.Confirm.UpdateVersion.Msg'),
+        onOk: {
+          text: t('Nova.Confirm.UpdateVersion.Ok'),
+          callback: () => {}
+        },
+        onCancel: {
+          text: t('Nova.Confirm.UpdateVersion.Cancel'),
+          callback: () => {}
+        }
+      });
+    };
+
     const selectedFile = localFiles[0] || driveFiles[0];
     const isMobile = getPlatform() === ClientType.ios || getPlatform() === ClientType.android;
     const isLocalFile = !!localFiles[0];
 
     const handleFileProcessing = async () => {
       if (!selectedFile) return;
+
+      if (props.curTab === NOVA_TAB_TYPE.convert2DTo3D) {
+        if (
+          (platform === ClientType.android && isHigherVersion('9.9.5', version)) ||
+          (platform === ClientType.ios && isHigherVersion('9.8.5', version)) ||
+          (platform === ClientType.windows && isHigherVersion('10.105.250.54113', version)) ||
+          (platform === ClientType.mac && isHigherVersion('9.0.62', version))
+        ) {
+          confirmUpload();
+          return;
+        }
+      }
 
       const fileData =
         isMobile && isLocalFile ? await compressImage(selectedFile, props.curTab) : selectedFile;

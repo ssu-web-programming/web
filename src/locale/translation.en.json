@@ -579,6 +579,11 @@
         "Msg": "To proceed without changes and analyze the document, it must be saved on Polaris Drive. Would you like to save now?",
         "Ok": "Save now",
         "Cancel": "Cancel"
+      },
+      "UpdateVersion": {
+        "Msg": "2D to 3D conversion is available only in the latest version. Update now to explore this new feature!",
+        "Ok": "Update now",
+        "Cancel": "Later"
       }
     },
     "PoDrive": {
