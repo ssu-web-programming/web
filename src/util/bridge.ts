@@ -17,12 +17,7 @@ import {
   setPageStatus
 } from '../store/slices/nova/pageStatusSlice';
 import { setRecognizedVoice } from '../store/slices/recognizedVoice';
-import {
-  NOVA_TAB_TYPE,
-  selectNovaTab,
-  selectTabSlice,
-  setCreating
-} from '../store/slices/tabSlice';
+import { NOVA_TAB_TYPE, selectNovaTab, setCreating } from '../store/slices/tabSlice';
 import { activeToast } from '../store/slices/toastSlice';
 import { updateT2ICurItemIndex, updateT2ICurListId } from '../store/slices/txt2imgHistory';
 import {
@@ -32,7 +27,7 @@ import {
   setLoadingFile,
   setLocalFiles
 } from '../store/slices/uploadFiles';
-import { AppDispatch, RootState, useAppDispatch, useAppSelector } from '../store/store';
+import store, { AppDispatch, RootState, useAppDispatch } from '../store/store';
 
 import { isHigherVersion, makeClipboardData } from './common';
 import { base64ToFile, blobToFile } from './files';
@@ -331,7 +326,8 @@ export const useInitBridgeListener = () => {
   });
 
   const procMsg = async (msg: any) => {
-    const { selectedNovaTab } = useAppSelector(selectTabSlice);
+    const state = store.getState();
+    const selectedNovaTab = state.tab.selectedNovaTab;
 
     try {
       const { cmd, body } = msg;
@@ -390,7 +386,7 @@ export const useInitBridgeListener = () => {
             break;
           }
           case 'finishUploadFile': {
-            dispatch(setPageStatus({ tab: selectedNovaTab, status: 'home' }));
+            dispatch(setPageStatus({ tab: 'aiChat', status: 'home' }));
             dispatch(setLocalFiles([]));
             dispatch(setDriveFiles([]));
             dispatch(setLoadingFile({ id: body.fileId }));
