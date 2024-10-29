@@ -218,7 +218,6 @@ export default function Result() {
       } else {
         const blob = base64ToBlob(result.data, result.contentType);
         Bridge.callBridgeApi('downloadImage', blob);
-        dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.SaveCompleted`) }));
       }
     } else {
       dispatch(activeToast({ type: 'error', msg: 'ToastMsg.SaveFailed' }));
