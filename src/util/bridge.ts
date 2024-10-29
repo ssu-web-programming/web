@@ -401,11 +401,13 @@ export const useInitBridgeListener = () => {
             break;
           }
           case 'finishDownloadAnimation': {
+            console.log('finishDownloadAnimation');
             dispatch(setPageStatus({ tab: selectedNovaTab, status: 'done' }));
             dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.SaveCompleted`) }));
             break;
           }
           case 'finishInsertAnimation': {
+            console.log('finishInsertAnimation');
             dispatch(setPageStatus({ tab: selectedNovaTab, status: 'done' }));
             dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.CompleteInsert`) }));
             break;

@@ -116,7 +116,9 @@ export default function Nova() {
     Bridge.callBridgeApi('curNovaTab', selectTab);
   };
 
-  useEffect(() => {}, [usingAI, status]);
+  useEffect(() => {
+    console.log(status);
+  }, [usingAI, status]);
 
   const renderContent = () => {
     const handleUploadComplete = async () => {
