@@ -167,7 +167,7 @@ export default function ImageUploader(props: ImageUploaderProps) {
     const selectedFile = localFiles[0] || driveFiles[0];
     if (!selectedFile) return;
 
-    if (props.curTab === NOVA_TAB_TYPE.convert2DTo3D && isUpdateRequired()) {
+    if (props.curTab === NOVA_TAB_TYPE.convert2DTo3D && !isUpdateRequired()) {
       const url = getDownloadUrlByPlatform();
       await confirmUpload(url);
       return;
