@@ -145,7 +145,7 @@ export default function ImageUploader(props: ImageUploaderProps) {
       mac: '9.0.62'
     };
 
-    return isHigherVersion(versionMap[platform as keyof typeof versionMap], version);
+    return !isHigherVersion(versionMap[platform as keyof typeof versionMap], version);
   };
 
   const confirmUpload = async (url: string) => {
@@ -169,8 +169,7 @@ export default function ImageUploader(props: ImageUploaderProps) {
     const selectedFile = localFiles[0] || driveFiles[0];
     if (!selectedFile) return;
 
-    console.log(isUpdateRequired() ? 'update' : 'no update');
-    if (props.curTab === NOVA_TAB_TYPE.convert2DTo3D && !isUpdateRequired()) {
+    if (props.curTab === NOVA_TAB_TYPE.convert2DTo3D && isUpdateRequired()) {
       const url = getDownloadUrlByPlatform();
       await confirmUpload(url);
       return;
