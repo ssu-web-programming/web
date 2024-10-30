@@ -128,7 +128,7 @@ export default function ImageUploader(props: ImageUploaderProps) {
       case ClientType.windows:
         return 'https://polarisoffice.com/ko/download';
       case ClientType.mac:
-        return 'https://apps.apple.com/kr/app/polaris-office-hwp-pdf/id1098211970?mt=12';
+        return 'itms-apps://itunes.apple.com/app/id1098211970?mt=12';
       default:
         return '';
     }
@@ -137,7 +137,7 @@ export default function ImageUploader(props: ImageUploaderProps) {
   const isUpdateRequired = () => {
     console.log('platform: ', platform);
     console.log('version: ', version);
-    if (platform === ClientType.web || platform === ClientType.unknown) return true;
+    if (platform === ClientType.web || platform === ClientType.unknown) return false;
 
     type ClientType = 'android' | 'ios' | 'windows' | 'mac';
     const versionMap: Record<ClientType, string> = {
