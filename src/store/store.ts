@@ -18,6 +18,7 @@ import announceInfoSlice from './slices/nova/announceSlice';
 import novaHistory from './slices/nova/novaHistorySlice';
 import novaModal from './slices/nova/novaModalsSlice';
 import pageStatusSlice from './slices/nova/pageStatusSlice';
+import platformInfo from './slices/platformInfo';
 import recFunction from './slices/recFuncSlice';
 import recognizedVoice from './slices/recognizedVoice';
 import tab, { shareAnswerState } from './slices/tabSlice';
@@ -52,7 +53,8 @@ const store = configureStore({
     creditInfo,
     uploadFiles,
     pageStatusSlice,
-    announceInfoSlice
+    announceInfoSlice,
+    platformInfo
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }).concat(shareAnswerState),

@@ -16,6 +16,7 @@ import {
   resetPageResult,
   setPageStatus
 } from '../store/slices/nova/pageStatusSlice';
+import { setPlatformInfo } from '../store/slices/platformInfo';
 import { setRecognizedVoice } from '../store/slices/recognizedVoice';
 import { NOVA_TAB_TYPE, selectNovaTab, setCreating } from '../store/slices/tabSlice';
 import { activeToast } from '../store/slices/toastSlice';
@@ -372,6 +373,14 @@ export const useInitBridgeListener = () => {
             }
 
             Bridge.callBridgeApi('analyzeCurFile');
+
+            const platform = getPlatform();
+            const version = getVersion();
+            if (platform != ClientType.unknown && version) {
+              dispatch(setPlatformInfo({ platform: platform, version: version }));
+            } else {
+              dispatch(setPlatformInfo({ platform: body.platform, version: body.version }));
+            }
             break;
           }
           case 'getFileInfo': {

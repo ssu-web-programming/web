@@ -6,11 +6,12 @@ import { compressImage, SUPPORT_IMAGE_TYPE } from '../../constants/fileTypes';
 import CreditIcon from '../../img/ico_credit_gray.svg';
 import { ReactComponent as UploadIcon } from '../../img/ico_upload_img_plus.svg';
 import { selectPageData, setPageData } from '../../store/slices/nova/pageStatusSlice';
+import { platformInfoSelector } from '../../store/slices/platformInfo';
 import { NOVA_TAB_TYPE } from '../../store/slices/tabSlice';
 import { getDriveFiles, getLocalFiles } from '../../store/slices/uploadFiles';
 import { userInfoSelector } from '../../store/slices/userInfo';
 import { useAppDispatch, useAppSelector } from '../../store/store';
-import Bridge, { ClientType, getPlatform, getVersion } from '../../util/bridge';
+import Bridge, { ClientType } from '../../util/bridge';
 import { isHigherVersion } from '../../util/common';
 import { useConfirm } from '../Confirm';
 
@@ -108,8 +109,7 @@ interface ImageUploaderProps {
 
 export default function ImageUploader(props: ImageUploaderProps) {
   const { t } = useTranslation();
-  const platform = getPlatform();
-  const version = getVersion();
+  const { platform, version } = useAppSelector(platformInfoSelector);
   const confirm = useConfirm();
   const inputImgFileRef = useRef<HTMLInputElement | null>(null);
   const dispatch = useAppDispatch();
