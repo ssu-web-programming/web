@@ -10,7 +10,7 @@ import { NOVA_TAB_TYPE } from '../../store/slices/tabSlice';
 import { getDriveFiles, getLocalFiles } from '../../store/slices/uploadFiles';
 import { userInfoSelector } from '../../store/slices/userInfo';
 import { useAppDispatch, useAppSelector } from '../../store/store';
-import { ClientType, getPlatform, getVersion } from '../../util/bridge';
+import Bridge, { ClientType, getPlatform, getVersion } from '../../util/bridge';
 import { isHigherVersion } from '../../util/common';
 import { useConfirm } from '../Confirm';
 
@@ -119,57 +119,73 @@ export default function ImageUploader(props: ImageUploaderProps) {
   const currentFile = useAppSelector(selectPageData(props.curTab));
   const target = 'nova-image';
 
-  useEffect(() => {
-    const confirmUpload = async () => {
-      await confirm({
-        title: '',
-        msg: t('Nova.Confirm.UpdateVersion.Msg'),
-        onOk: {
-          text: t('Nova.Confirm.UpdateVersion.Ok'),
-          callback: () => {}
-        },
-        onCancel: {
-          text: t('Nova.Confirm.UpdateVersion.Cancel'),
-          callback: () => {}
-        }
-      });
+  const getDownloadUrlByPlatform = () => {
+    switch (platform) {
+      case ClientType.android:
+        return 'market://details?id=com.infraware.office.link';
+      case ClientType.ios:
+        return 'https://itunes.apple.com/app/polaris-office-pdf-docs/id698070860';
+      case ClientType.windows:
+        return 'https://polarisoffice.com/ko/download';
+      case ClientType.mac:
+        return 'https://apps.apple.com/kr/app/polaris-office-hwp-pdf/id1098211970?mt=12';
+      default:
+        return '';
+    }
+  };
+
+  const isUpdateRequired = () => {
+    type ClientType = 'android' | 'ios' | 'windows' | 'mac';
+    const versionMap: Record<ClientType, string> = {
+      android: '9.9.4',
+      ios: '9.8.5',
+      windows: '10.105.250.54113',
+      mac: '9.0.62'
     };
 
-    const selectedFile = localFiles[0] || driveFiles[0];
-    const isMobile = getPlatform() === ClientType.ios || getPlatform() === ClientType.android;
-    const isLocalFile = !!localFiles[0];
+    return isHigherVersion(versionMap[platform as keyof typeof versionMap], version);
+  };
 
-    const handleFileProcessing = async () => {
-      if (!selectedFile) return;
-
-      if (props.curTab === NOVA_TAB_TYPE.convert2DTo3D) {
-        if (
-          (platform === ClientType.android && isHigherVersion('9.9.5', version)) ||
-          (platform === ClientType.ios && isHigherVersion('9.8.5', version)) ||
-          (platform === ClientType.windows && isHigherVersion('10.105.250.54113', version)) ||
-          (platform === ClientType.mac && isHigherVersion('9.0.62', version))
-        ) {
-          confirmUpload();
-          return;
+  const confirmUpload = async (url: string) => {
+    await confirm({
+      title: '',
+      msg: t('Nova.Confirm.UpdateVersion.Msg'),
+      onOk: {
+        text: t('Nova.Confirm.UpdateVersion.Ok'),
+        callback: () => {
+          Bridge.callBridgeApi('openWindow', url);
         }
+      },
+      onCancel: {
+        text: t('Nova.Confirm.UpdateVersion.Cancel'),
+        callback: () => {}
       }
+    });
+  };
 
-      const fileData =
-        isMobile && isLocalFile ? await compressImage(selectedFile, props.curTab) : selectedFile;
+  const handleFileProcessing = async () => {
+    const selectedFile = localFiles[0] || driveFiles[0];
+    if (!selectedFile) return;
 
-      dispatch(
-        setPageData({
-          tab: props.curTab,
-          data: fileData
-        })
-      );
-    };
-
-    if (currentFile) {
-      props.handleUploadComplete();
+    if (props.curTab === NOVA_TAB_TYPE.convert2DTo3D && isUpdateRequired()) {
+      const url = getDownloadUrlByPlatform();
+      await confirmUpload(url);
+      return;
     }
 
-    if (!currentFile) {
+    const fileData = await compressImage(selectedFile, props.curTab);
+    dispatch(
+      setPageData({
+        tab: props.curTab,
+        data: fileData
+      })
+    );
+  };
+
+  useEffect(() => {
+    if (currentFile) {
+      props.handleUploadComplete();
+    } else {
       handleFileProcessing();
     }
   }, [localFiles, driveFiles, currentFile, props.curTab]);
