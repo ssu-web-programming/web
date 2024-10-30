@@ -115,7 +115,7 @@ export const useConvert2DTo3D = () => {
             result: {
               contentType: '',
               data: '',
-              link: response.data.getPresignedUrl,
+              link: response.data.animationUrl,
               info: { pattern, animationType }
             }
           })

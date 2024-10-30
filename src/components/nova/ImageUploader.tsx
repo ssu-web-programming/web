@@ -135,6 +135,8 @@ export default function ImageUploader(props: ImageUploaderProps) {
   };
 
   const isUpdateRequired = () => {
+    if (platform === ClientType.web || platform === ClientType.unknown) return true;
+
     type ClientType = 'android' | 'ios' | 'windows' | 'mac';
     const versionMap: Record<ClientType, string> = {
       android: '9.9.4',
