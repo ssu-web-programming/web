@@ -1,11 +1,14 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import styled, { css } from 'styled-components';
 
 import { activeConfirm, ConfirmType, initConfirm, selectConfirm } from '../store/slices/confirm';
 import { useAppDispatch, useAppSelector } from '../store/store';
+import { getCookie, setCookie } from '../util/common';
 
 import Button from './buttons/Button';
 import Blanket from './Blanket';
+import CheckBox from './CheckBox';
 
 export const ConfirmBox = styled.div`
   display: flex;
@@ -77,6 +80,15 @@ export const ContentArea = styled.div`
   }
 `;
 
+export const CheckWrap = styled.div`
+  display: flex;
+  margin-top: 15px;
+
+  span {
+    margin-left: 10px;
+  }
+`;
+
 export const Footer = styled.div<{ direction?: 'column' | 'row' }>`
   width: 100%;
   padding-top: 36px;
@@ -91,10 +103,26 @@ export const Footer = styled.div<{ direction?: 'column' | 'row' }>`
 `;
 
 const Confirm = () => {
-  const { title, msg, onOk, onCancel, direction = 'row' } = useAppSelector(selectConfirm);
+  const {
+    title,
+    msg,
+    onOk,
+    onCancel,
+    direction = 'row',
+    neverShowAgain = false
+  } = useAppSelector(selectConfirm);
+  const { t } = useTranslation();
   const headerRef = useRef<HTMLDivElement>(null);
   const footerRef = useRef<HTMLDivElement>(null);
   const contentsRef = useRef<HTMLDivElement>(null);
+  const [isChecked, setIsChecked] = useState<boolean>(false);
+  const [showCheckbox, setShowCheckbox] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (neverShowAgain && !getCookie('creditGuide')) {
+      setShowCheckbox(true);
+    }
+  }, [neverShowAgain]);
 
   useEffect(() => {
     if (headerRef.current && footerRef.current) {
@@ -107,6 +135,17 @@ const Confirm = () => {
       }
     }
   }, [headerRef, footerRef]);
+
+  const handleCheck = () => {
+    setIsChecked(!isChecked);
+  };
+
+  const handleOk = () => {
+    if (isChecked) {
+      setCookie('creditGuide', String(isChecked));
+    }
+    onOk.callback();
+  };
 
   // 필요시 사용
   // const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -128,13 +167,21 @@ const Confirm = () => {
             <Title>{title}</Title>
           </Header>
         )}
-        <ContentArea ref={contentsRef}>{msg}</ContentArea>
+        <ContentArea ref={contentsRef}>
+          {msg}
+          {showCheckbox && (
+            <CheckWrap onClick={handleCheck}>
+              <CheckBox isChecked={isChecked} setIsChecked={setIsChecked} onClick={() => {}} />
+              <span>{t(`DontShowAgain`)}</span>
+            </CheckWrap>
+          )}
+        </ContentArea>
         <Footer direction={direction} ref={footerRef}>
           <Button
             variant="purple"
             width={'full'}
             height={HEIGHT_BY_DIRECTION}
-            onClick={onOk.callback}
+            onClick={handleOk}
             cssExt={css`
               order: ${direction === 'row' ? 2 : undefined};
               min-width: 92px;

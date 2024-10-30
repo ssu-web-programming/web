@@ -13,6 +13,7 @@
   "Result": "結果",
   "Generate": "生成",
   "Regenerate": "再生成",
+  "Execute": "実行する",
   "Back": "戻る",
   "StopGenerate": "生成を停止",
   "TextToImage": "テキストを画像に",
@@ -20,6 +21,7 @@
   "document": "ドキュメント",
   "Purchase": "購入する",
   "Subscribe": "購読する",
+  "DontShowAgain": "再表示しない",
   "FormList": {
     "paragraph": "文",
     "list": "目次",
@@ -521,7 +523,8 @@
       "Unopenable": "確認用ドキュメント",
       "Password": "暗号ドキュメント",
       "NoFileInDrive": "ドキュメントが見つかりません。ファイルが削除されたかどうか確認してください。",
-      "MoveImageInBox": "画像をガイドボックスの範囲内に移動してください。"
+      "MoveImageInBox": "画像をガイドボックスの範囲内に移動してください。",
+      "ExecuteFunction": "この機能を実行するには{{creditAmount}}クレジットを使用しますか？"
     },
     "Confirm": {
       "NewChat": {

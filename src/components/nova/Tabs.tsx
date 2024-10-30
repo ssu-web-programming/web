@@ -130,8 +130,6 @@ const Tabs = ({ tabs, activeTab, onChangeTab }: TabProps) => {
   const handleNextClick = () => {
     if (swiperRef.current) {
       swiperRef.current.slideNext(20);
-      setIsEnd(swiperRef.current.isEnd);
-      setIsBeginning(swiperRef.current.isBeginning);
     }
   };
 
@@ -140,6 +138,7 @@ const Tabs = ({ tabs, activeTab, onChangeTab }: TabProps) => {
       <Swiper
         spaceBetween={8}
         slidesPerView="auto"
+        watchOverflow={true}
         navigation={{
           prevEl: '.swiper-button-prev',
           nextEl: '.swiper-button-next'
@@ -152,7 +151,7 @@ const Tabs = ({ tabs, activeTab, onChangeTab }: TabProps) => {
           swiperRef.current = swiper;
         }}
         pagination={{ clickable: true }}
-        style={{ height: '32px', overflow: 'visible' }}>
+        style={{ height: '32px' }}>
         {tabs.map((tab) => (
           <SwiperSlide key={tab} style={{ width: 'auto' }}>
             <Tap onClick={() => onChangeTab(tab)} isHighlighted={activeTab === tab}>

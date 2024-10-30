@@ -8,6 +8,7 @@ export interface ConfirmType {
   onCancel?: { text: string; callback: () => void };
   onOk: { text: string; callback: () => void };
   direction?: 'row' | 'column';
+  neverShowAgain?: boolean;
 }
 
 const initialState: ConfirmType = {
@@ -21,7 +22,8 @@ const initialState: ConfirmType = {
     text: '',
     callback: () => {}
   },
-  direction: 'column'
+  direction: 'column',
+  neverShowAgain: false
 };
 
 const confirmSlice = createSlice({

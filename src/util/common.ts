@@ -157,12 +157,16 @@ export const removeRefPages = (contents: string) => {
   return contents.replaceAll(CHAT_PDF_PAGE_PARSE_REG, '');
 };
 
-export const setCookie = (cname: string, cvalue: string, exdays: number) => {
-  const d = new Date();
-  d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
-  const expires = 'expires=' + d.toUTCString();
-  const domain = 'polarisoffice.com';
-  document.cookie = cname + '=' + cvalue + ';' + expires + ';path=/;' + 'domain=' + domain + ';';
+export const setCookie = (name: string, value: string) => {
+  const maxAge = 60 * 60 * 24 * 365 * 10;
+  document.cookie = `${name}=${encodeURIComponent(value)}; max-age=${maxAge}; path=/`;
+};
+
+export const getCookie = (name: string) => {
+  return document.cookie
+    .split('; ')
+    .find((row) => row.startsWith(`${name}=`))
+    ?.split('=')[1];
 };
 
 export const isHigherVersion = (targetVersion: string, currentVersion: string | null) => {

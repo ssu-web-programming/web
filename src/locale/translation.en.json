@@ -13,6 +13,7 @@
   "Result": "Result",
   "Generate": "Generate",
   "Regenerate": "Regenerate",
+  "Execute": "Execute",
   "Back": "Back",
   "StopGenerate": "Stop Generating",
   "TextToImage": "Text to Image",
@@ -20,6 +21,7 @@
   "document": "document",
   "Purchase": "Purchase",
   "Subscribe": "Subscribe",
+  "DontShowAgain": "Don't show again",
   "FormList": {
     "paragraph": "Sentence",
     "list": "Table of Contents",
@@ -530,7 +532,8 @@
       "Unopenable": "Document to verify",
       "Password": "Encrypted document",
       "NoFileInDrive": "The document cannot be found. Please check if the file has been deleted.",
-      "MoveImageInBox": "Please move the image within the guide box range."
+      "MoveImageInBox": "Please move the image within the guide box range.",
+      "ExecuteFunction": "Will {{creditAmount}} credits be used to execute this feature?"
     },
     "Confirm": {
       "NewChat": {

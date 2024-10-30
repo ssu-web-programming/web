@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
+import { useConfirm } from '../components/Confirm';
 import useManageFile from '../components/hooks/nova/useManageFile';
 import gI18n, { convertLangFromLangCode } from '../locale';
 import { AskDocStatus, setSrouceId, setStatus } from '../store/slices/askDoc';
@@ -255,6 +256,7 @@ export const useInitBridgeListener = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
+  const confirm = useConfirm();
 
   const { getFileInfo, loadLocalFile } = useManageFile();
 
@@ -349,24 +351,39 @@ export const useInitBridgeListener = () => {
             if (body.openTab in NOVA_TAB_TYPE) {
               dispatch(selectNovaTab(NOVA_TAB_TYPE[body.openTab as keyof typeof NOVA_TAB_TYPE]));
               if (body.image) {
-                let file: File | null = null;
+                confirm({
+                  title: '',
+                  msg: t('Nova.Alert.ExecuteFunction', {
+                    creditAmount: 10
+                  })!,
+                  onOk: {
+                    text: t('Execute'),
+                    callback: () => {
+                      let file: File | null = null;
 
-                if (body.image.size > 0 && body.image.type) {
-                  file = blobToFile(body.image);
-                } else if (typeof body.image === 'string' && body.image.startsWith('data:')) {
-                  const base64Data = body.image.split(',')[1];
-                  const mimeType = body.image.match(/data:(.*);base64/)?.[1] || 'image/png';
-                  file = base64ToFile(base64Data, mimeType);
-                }
+                      if (body.image.size > 0 && body.image.type) {
+                        file = blobToFile(body.image);
+                      } else if (typeof body.image === 'string' && body.image.startsWith('data:')) {
+                        const base64Data = body.image.split(',')[1];
+                        const mimeType = body.image.match(/data:(.*);base64/)?.[1] || 'image/png';
+                        file = base64ToFile(base64Data, mimeType);
+                      }
 
-                if (body.openTab != NOVA_TAB_TYPE.aiChat && file) {
-                  dispatch(resetPageData(body.openTab));
-                  dispatch(resetPageResult(body.openTab));
-                  dispatch(setPageStatus({ tab: body.openTab, status: 'home' }));
-                  await loadLocalFile([file]);
-                } else {
-                  dispatch(setLocalFiles([]));
-                }
+                      if (body.openTab != NOVA_TAB_TYPE.aiChat && file) {
+                        dispatch(resetPageData(body.openTab));
+                        dispatch(resetPageResult(body.openTab));
+                        dispatch(setPageStatus({ tab: body.openTab, status: 'home' }));
+                        loadLocalFile([file]);
+                      } else {
+                        dispatch(setLocalFiles([]));
+                      }
+                    }
+                  },
+                  onCancel: {
+                    text: t('Cancel'),
+                    callback: () => {}
+                  }
+                });
               } else {
                 dispatch(setLocalFiles([]));
               }
