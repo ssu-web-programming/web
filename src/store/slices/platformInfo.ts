@@ -1,7 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { ClientType } from '../../util/bridge';
 import { RootState } from '../store';
+
+export enum ClientType {
+  unknown = 'unknown',
+  android = 'android',
+  ios = 'ios',
+  mac = 'mac',
+  windows = 'windows',
+  web = 'web'
+}
 
 type InitialState = {
   platform: ClientType;
@@ -17,7 +25,7 @@ const platformInfo = createSlice({
   name: 'platformInfo',
   initialState,
   reducers: {
-    setPlatformInfo: (state, action: PayloadAction<InitialState['userInfo']>) => {
+    setPlatformInfo: (state, action: PayloadAction<InitialState>) => {
       const { platform, version } = action.payload;
       state.platform = platform;
       state.version = version;
