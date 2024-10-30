@@ -57,17 +57,10 @@ function getAgentPlatform(userAgent: string) {
 }
 
 function getAgentVersion(userAgent: string) {
-  const platform = getPlatform();
-  let versionPattern;
-
-  if (platform === ClientType.mac || platform === ClientType.windows) {
-    versionPattern = /PolarisPCOffice\/(\d+(\.\d+)*)/;
-  } else {
-    versionPattern = /Version\/(\d+(\.\d+)*)/;
-  }
-
+  const versionPattern = /PolarisPCOffice\/(\d+(\.\d+)*)|Version\/(\d+(\.\d+)*)/;
   const match = userAgent.match(versionPattern);
-  return match ? match[1] : null;
+
+  return match ? match[1] || match[3] : null;
 }
 
 export const getPlatform = () => getAgentPlatform(navigator.userAgent);
