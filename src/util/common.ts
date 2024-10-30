@@ -168,6 +168,8 @@ export const setCookie = (cname: string, cvalue: string, exdays: number) => {
 export const isHigherVersion = (targetVersion: string, currentVersion: string | null) => {
   if (currentVersion === null) return false;
 
+  console.log('targetVersion: ', targetVersion);
+  console.log('currentVersion: ', currentVersion);
   const [targetMajor, targetMinor, targetPatch] = targetVersion.split('.').map(Number);
   const [currentMajor, currentMinor, currentPatch] = currentVersion.split('.').map(Number);
   if (targetMajor < currentMajor) return true;

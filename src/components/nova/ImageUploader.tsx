@@ -139,9 +139,9 @@ export default function ImageUploader(props: ImageUploaderProps) {
 
     type ClientType = 'android' | 'ios' | 'windows' | 'mac';
     const versionMap: Record<ClientType, string> = {
-      android: '9.9.4',
-      ios: '9.8.5',
-      windows: '10.105.250.54113',
+      android: '9.9.5',
+      ios: '9.8.6',
+      windows: '10.105.250.54114',
       mac: '9.0.62'
     };
 
@@ -169,6 +169,7 @@ export default function ImageUploader(props: ImageUploaderProps) {
     const selectedFile = localFiles[0] || driveFiles[0];
     if (!selectedFile) return;
 
+    console.log(isUpdateRequired() ? 'update' : 'no update');
     if (props.curTab === NOVA_TAB_TYPE.convert2DTo3D && !isUpdateRequired()) {
       const url = getDownloadUrlByPlatform();
       await confirmUpload(url);
