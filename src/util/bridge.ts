@@ -376,9 +376,14 @@ export const useInitBridgeListener = () => {
 
             const platform = getPlatform();
             const version = getVersion();
+            console.log('bridge platform: ', platform);
+            console.log('bridge version: ', version);
             if (platform != ClientType.unknown && version) {
               dispatch(setPlatformInfo({ platform: platform, version: version }));
             } else {
+              console.log('body platform: ', body.platform);
+              console.log('body version: ', body.version);
+              if (!body.platform) return;
               dispatch(
                 setPlatformInfo({
                   platform: body.platform as ClientType,
