@@ -343,7 +343,6 @@ export const useInitBridgeListener = () => {
             break;
           }
           case 'openNOVA': {
-            console.log('body: ', body);
             dispatch(changePanel({ cmd, body: body.inputText || '' }));
             dispatch(setDriveFiles([]));
             dispatch(setPageStatus({ tab: 'aiChat', status: 'home' }));
@@ -375,13 +374,9 @@ export const useInitBridgeListener = () => {
 
             const platform = getPlatform();
             const version = getVersion();
-            console.log('bridge platform: ', platform);
-            console.log('bridge version: ', version);
             if (platform != ClientType.unknown && version) {
               dispatch(setPlatformInfo({ platform: platform, version: version }));
             } else {
-              console.log('body platform: ', body.platform);
-              console.log('body version: ', body.version);
               if (!body.platform) return;
               dispatch(
                 setPlatformInfo({
@@ -390,7 +385,6 @@ export const useInitBridgeListener = () => {
                 })
               );
             }
-
             Bridge.callBridgeApi('analyzeCurFile');
 
             break;

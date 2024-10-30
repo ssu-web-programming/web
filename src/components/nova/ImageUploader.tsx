@@ -135,8 +135,6 @@ export default function ImageUploader(props: ImageUploaderProps) {
   };
 
   const isUpdateRequired = () => {
-    console.log('platform: ', platform);
-    console.log('version: ', version);
     if (platform === ClientType.web || platform === ClientType.unknown) return false;
 
     type ClientType = 'android' | 'ios' | 'windows' | 'mac';
@@ -144,7 +142,7 @@ export default function ImageUploader(props: ImageUploaderProps) {
       android: '9.9.5',
       ios: '9.8.6',
       windows: '10.105.250.54114',
-      mac: '9.0.62'
+      mac: '9.0.63'
     };
 
     return !isHigherVersion(versionMap[platform as keyof typeof versionMap], version);
