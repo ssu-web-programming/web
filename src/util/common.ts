@@ -186,7 +186,7 @@ export const isHigherVersion = (targetVersion: string, currentVersion: string | 
     }
   }
 
-  return false;
+  return true;
 };
 
 export const getFileExtension = (filename: string) => {
