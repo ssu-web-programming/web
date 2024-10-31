@@ -147,6 +147,9 @@ export default function useInitApp() {
       'X-PO-AI-API-LANGUAGE': lang
     };
 
+    if (platform != ClientType.unknown && version) {
+      dispatch(setPlatformInfo({ platform: platform, version: version }));
+    }
     dispatch(setPageStatus({ tab: 'aiChat', status: 'home' }));
     dispatch(
       initComplete({
@@ -160,9 +163,5 @@ export default function useInitApp() {
     await initCreditInfo(headers);
 
     dispatch(setUserInfo(resSession.userInfo));
-
-    if (platform != ClientType.unknown && version) {
-      dispatch(setPlatformInfo({ platform: platform, version: version }));
-    }
   };
 }
