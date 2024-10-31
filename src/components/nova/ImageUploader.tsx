@@ -135,6 +135,8 @@ export default function ImageUploader(props: ImageUploaderProps) {
   };
 
   const isUpdateRequired = () => {
+    console.log('platform: ', platform);
+    console.log('version: ', version);
     if (platform === ClientType.web || platform === ClientType.unknown) return false;
 
     type ClientType = 'android' | 'ios' | 'windows' | 'mac';
