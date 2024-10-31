@@ -5,7 +5,11 @@ import styled from 'styled-components';
 import { compressImage, SUPPORT_IMAGE_TYPE } from '../../constants/fileTypes';
 import CreditIcon from '../../img/ico_credit_gray.svg';
 import { ReactComponent as UploadIcon } from '../../img/ico_upload_img_plus.svg';
-import { selectPageData, setPageData } from '../../store/slices/nova/pageStatusSlice';
+import {
+  selectPageData,
+  setPageData,
+  setPageStatus
+} from '../../store/slices/nova/pageStatusSlice';
 import { platformInfoSelector } from '../../store/slices/platformInfo';
 import { NOVA_TAB_TYPE } from '../../store/slices/tabSlice';
 import { getDriveFiles, getLocalFiles } from '../../store/slices/uploadFiles';
@@ -178,7 +182,7 @@ export default function ImageUploader(props: ImageUploaderProps) {
       return;
     }
 
-    console.log('selectedFile: ', selectedFile);
+    dispatch(setPageStatus({ tab: props.curTab, status: 'progress' }));
     const fileData = await compressImage(await convertDriveFileToFile(selectedFile), props.curTab);
     dispatch(
       setPageData({
@@ -186,6 +190,7 @@ export default function ImageUploader(props: ImageUploaderProps) {
         data: fileData
       })
     );
+    dispatch(setPageStatus({ tab: props.curTab, status: 'home' }));
   };
 
   useEffect(() => {

@@ -186,7 +186,7 @@ export const convertDriveFileToFile = async (file: File | DriveFileInfo): Promis
   try {
     if ('fileId' in file) {
       const blob = await downloadFileAsBlob(file);
-      return new File([blob], file.fileName, { type: file.fileType });
+      return new File([blob], file.fileName, { type: file.type });
     }
     return file;
   } catch (error) {

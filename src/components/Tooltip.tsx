@@ -179,7 +179,7 @@ const Tooltip = (props: TooltipProps) => {
   const toggleTooltip = () => {
     Bridge.callBridgeApi('analyzeCurFile');
 
-    if (condition === false && selectedNovaTab === 'aiChat') return;
+    if (condition === false) return;
     setIsOpen(!isOpen);
   };
 
