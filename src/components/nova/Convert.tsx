@@ -266,7 +266,7 @@ export default function Convert() {
           <ExampleText>{t(`Nova.Convert.Example`)}</ExampleText>
           <ImageBox>
             {selectedOption && (
-              <video ref={videoRef} loop>
+              <video ref={videoRef} loop playsInline>
                 <source src={selectedOption.example} type="video/mp4" />
               </video>
             )}

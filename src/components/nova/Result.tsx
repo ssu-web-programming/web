@@ -259,7 +259,7 @@ export default function Result() {
             }>
             {result?.link ? (
               result.link.endsWith('.mp4') ? (
-                <video src={result.link} loop autoPlay muted />
+                <video src={result.link} loop autoPlay playsInline muted />
               ) : (
                 <img src={result.link} alt="result" />
               )
