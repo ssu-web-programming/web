@@ -13,6 +13,7 @@ import { userInfoSelector } from '../../store/slices/userInfo';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import Bridge, { ClientType } from '../../util/bridge';
 import { isHigherVersion } from '../../util/common';
+import { convertDriveFileToFile } from '../../util/files';
 import { useConfirm } from '../Confirm';
 
 import { FileUploader } from './FileUploader';
@@ -177,7 +178,7 @@ export default function ImageUploader(props: ImageUploaderProps) {
       return;
     }
 
-    const fileData = await compressImage(selectedFile, props.curTab);
+    const fileData = await compressImage(await convertDriveFileToFile(selectedFile), props.curTab);
     dispatch(
       setPageData({
         tab: props.curTab,
