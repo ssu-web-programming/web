@@ -172,14 +172,21 @@ export const getCookie = (name: string) => {
 export const isHigherVersion = (targetVersion: string, currentVersion: string | null) => {
   if (currentVersion === null) return false;
 
-  const [targetMajor, targetMinor, targetPatch] = targetVersion.split('.').map(Number);
-  const [currentMajor, currentMinor, currentPatch] = currentVersion.split('.').map(Number);
-  if (targetMajor < currentMajor) return true;
-  if (targetMinor < currentMinor) return true;
-  if (targetPatch < currentPatch) return true;
-  if (targetMajor === currentMajor && targetMinor === currentMinor && targetPatch === currentPatch)
-    return true;
-  return false;
+  const targetParts = targetVersion.split('.').map(Number);
+  const currentParts = currentVersion.split('.').map(Number);
+
+  while (targetParts.length < 4) targetParts.push(0);
+  while (currentParts.length < 4) currentParts.push(0);
+
+  for (let i = 0; i < 4; i++) {
+    if (targetParts[i] > currentParts[i]) {
+      return true;
+    } else if (targetParts[i] < currentParts[i]) {
+      return false;
+    }
+  }
+
+  return false; // 버전이 동일한 경우
 };
 
 export const getFileExtension = (filename: string) => {

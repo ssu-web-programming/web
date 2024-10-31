@@ -11,14 +11,18 @@ import { setNovaExpireTime } from 'store/slices/appState';
 import { setCreditInfo } from 'store/slices/creditInfo';
 import { setNovaAgreement, setUserInfo } from 'store/slices/userInfo';
 import { useAppDispatch } from 'store/store';
-import Bridge from 'util/bridge';
+import Bridge, { ClientType, getPlatform, getVersion } from 'util/bridge';
 
 import { initComplete } from '../../store/slices/initFlagSlice';
 import { IAnnouceInfo, setAnnounceInfo, tabTypeMap } from '../../store/slices/nova/announceSlice';
 import { setPageStatus } from '../../store/slices/nova/pageStatusSlice';
+import { setPlatformInfo } from '../../store/slices/platformInfo';
 
 export default function useInitApp() {
   const dispatch = useAppDispatch();
+
+  const platform = getPlatform();
+  const version = getVersion();
 
   const initNovaExpireTime = useCallback(
     async (headers: HeadersInit) => {
@@ -156,5 +160,9 @@ export default function useInitApp() {
     await initCreditInfo(headers);
 
     dispatch(setUserInfo(resSession.userInfo));
+
+    if (platform != ClientType.unknown && version) {
+      dispatch(setPlatformInfo({ platform: platform, version: version }));
+    }
   };
 }
