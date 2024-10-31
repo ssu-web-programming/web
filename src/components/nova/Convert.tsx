@@ -57,7 +57,6 @@ const ExampleText = styled.p`
 
 const ImageBox = styled.div`
   width: 100%;
-  aspect-ratio: 1;
   max-width: 480px;
   max-height: 480px;
   position: relative;

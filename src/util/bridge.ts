@@ -345,7 +345,6 @@ export const useInitBridgeListener = () => {
             break;
           }
           case 'openNOVA': {
-            console.log(body);
             dispatch(changePanel({ cmd, body: body.inputText || '' }));
             dispatch(setDriveFiles([]));
             dispatch(setPageStatus({ tab: 'aiChat', status: 'home' }));

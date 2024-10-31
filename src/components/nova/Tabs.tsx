@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Swiper as SwiperClass } from 'swiper/types';
 
-import { ReactComponent as NewBadge } from '../../img/nova/tab/newbadge.svg';
 import convert2DTo3DIcon from '../../img/nova/tab/tab_3d_n.svg';
 import convert2DTo3DSelectedIcon from '../../img/nova/tab/tab_3d_s.svg';
 import aiChatIcon from '../../img/nova/tab/tab_ai_chat_n.svg';
@@ -66,9 +65,21 @@ const Tap = styled.div<{ isHighlighted: boolean }>`
   cursor: pointer;
 `;
 
-const Badge = styled(NewBadge)`
-  position: absolute;
-  top: -17px;
+const Badge = styled.div`
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fb4949;
+  border-radius: 4px;
+
+  span {
+    font-size: 10px;
+    font-weight: 300;
+    line-height: 10px;
+    color: white;
+  }
 `;
 
 const Text = styled.div<{ isHighlighted: boolean }>`
@@ -155,7 +166,11 @@ const Tabs = ({ tabs, activeTab, onChangeTab }: TabProps) => {
         {tabs.map((tab) => (
           <SwiperSlide key={tab} style={{ width: 'auto' }}>
             <Tap onClick={() => onChangeTab(tab)} isHighlighted={activeTab === tab}>
-              {tab === NOVA_TAB_TYPE.convert2DTo3D && <Badge />}
+              {tab === NOVA_TAB_TYPE.convert2DTo3D && (
+                <Badge>
+                  <span>N</span>
+                </Badge>
+              )}
               <img src={getIcon(tab, activeTab === tab)} alt="logo" />
               <Text isHighlighted={activeTab === tab}>{t(getTabTranslationKey(tab))}</Text>
             </Tap>
