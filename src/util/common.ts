@@ -180,13 +180,13 @@ export const isHigherVersion = (targetVersion: string, currentVersion: string | 
 
   for (let i = 0; i < 4; i++) {
     if (targetParts[i] > currentParts[i]) {
-      return true;
-    } else if (targetParts[i] < currentParts[i]) {
       return false;
+    } else if (targetParts[i] < currentParts[i]) {
+      return true;
     }
   }
 
-  return false; // 버전이 동일한 경우
+  return false;
 };
 
 export const getFileExtension = (filename: string) => {
