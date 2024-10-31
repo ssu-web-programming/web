@@ -178,6 +178,7 @@ export default function ImageUploader(props: ImageUploaderProps) {
       return;
     }
 
+    console.log('selectedFile: ', selectedFile);
     const fileData = await compressImage(await convertDriveFileToFile(selectedFile), props.curTab);
     dispatch(
       setPageData({

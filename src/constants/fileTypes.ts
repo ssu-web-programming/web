@@ -180,6 +180,7 @@ export async function compressImage(file: File, tab: NOVA_TAB_TYPE): Promise<Fil
       );
     });
 
+  console.log('file: ', file);
   return await resizeFile(file, widthOrHeight < 0);
 }
 
