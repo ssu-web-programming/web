@@ -352,7 +352,7 @@ export const useInitBridgeListener = () => {
               dispatch(selectNovaTab(NOVA_TAB_TYPE[body.openTab as keyof typeof NOVA_TAB_TYPE]));
               const isBlob = body.image instanceof Blob && body.image.size > 0;
               const isBase64 = typeof body.image === 'string' && body.image.startsWith('data:');
-              if (isBlob || isBase64) {
+              if (body.image && (isBlob || isBase64)) {
                 confirm({
                   title: '',
                   msg: t('Nova.Alert.ExecuteFunction', {
@@ -393,11 +393,11 @@ export const useInitBridgeListener = () => {
 
             const platform = getPlatform();
             const version = getVersion();
-            console.log('platform: ', platform);
-            console.log('version: ', version);
-            console.log('user agent: ', navigator.userAgent);
+            console.log('bridge platform: ', platform);
+            console.log('bridge version: ', version);
+            console.log('bridge user agent: ', navigator.userAgent);
             if (platform != ClientType.unknown && version) {
-              console.log('set ua');
+              console.log('bridge set ua');
               dispatch(setPlatformInfo({ platform: platform, version: version }));
             } else {
               if (!body.platform) return;
