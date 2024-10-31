@@ -393,7 +393,11 @@ export const useInitBridgeListener = () => {
 
             const platform = getPlatform();
             const version = getVersion();
+            console.log('platform: ', platform);
+            console.log('version: ', version);
+            console.log('user agent: ', navigator.userAgent);
             if (platform != ClientType.unknown && version) {
+              console.log('set ua');
               dispatch(setPlatformInfo({ platform: platform, version: version }));
             } else {
               if (!body.platform) return;
