@@ -345,13 +345,14 @@ export const useInitBridgeListener = () => {
             break;
           }
           case 'openNOVA': {
-            console.log('body: ', body);
             dispatch(changePanel({ cmd, body: body.inputText || '' }));
             dispatch(setDriveFiles([]));
             dispatch(setPageStatus({ tab: 'aiChat', status: 'home' }));
             if (body.openTab in NOVA_TAB_TYPE) {
               dispatch(selectNovaTab(NOVA_TAB_TYPE[body.openTab as keyof typeof NOVA_TAB_TYPE]));
-              if (body.image) {
+              const isBlob = body.image instanceof Blob && body.image.size > 0;
+              const isBase64 = typeof body.image === 'string' && body.image.startsWith('data:');
+              if (isBlob || isBase64) {
                 confirm({
                   title: '',
                   msg: t('Nova.Alert.ExecuteFunction', {
@@ -362,9 +363,9 @@ export const useInitBridgeListener = () => {
                     callback: () => {
                       let file: File | null = null;
 
-                      if (body.image.size > 0 && body.image.type) {
+                      if (isBlob) {
                         file = blobToFile(body.image);
-                      } else if (typeof body.image === 'string' && body.image.startsWith('data:')) {
+                      } else if (isBase64) {
                         const base64Data = body.image.split(',')[1];
                         const mimeType = body.image.match(/data:(.*);base64/)?.[1] || 'image/png';
                         file = base64ToFile(base64Data, mimeType);
