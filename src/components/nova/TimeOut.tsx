@@ -16,14 +16,20 @@ import { useRemoveBackground } from '../hooks/nova/useRemoveBackground';
 
 import GoBackHeader from './GoBackHeader';
 
+const Container = styled.div`
+  height: 100%;
+  display: flex;
+  flex: 1 1 0;
+  margin-bottom: 16px;
+  overflow-y: auto;
+  background-color: rgb(244, 246, 248);
+`;
+
 const Wrap = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 24px;
   padding: 0 16px;
 `;
 
@@ -33,10 +39,10 @@ const ContentWrap = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 21.5px;
 `;
 
 const Title = styled.div`
+  margin-top: 8px;
   font-size: 16px;
   font-weight: 500;
   line-height: 24px;
@@ -48,10 +54,12 @@ const Title = styled.div`
 const ButtonWrap = styled.div`
   width: 100%;
   height: 48px;
+  min-height: 48px;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 24px 0;
   background: #6f3ad0;
   border-radius: 8px;
   cursor: pointer;
@@ -113,16 +121,18 @@ export default function TimeOut() {
   return (
     <>
       <GoBackHeader />
-      <Wrap>
-        <ContentWrap>
-          <BangIcon />
-          <Title>{t(`Nova.TimeOut.Title`)}</Title>
-        </ContentWrap>
-        <ButtonWrap onClick={handleRetry}>
-          <span>{t(`Nova.TimeOut.Retry`)}</span>
-          <img src={CreditColorIcon} alt="credit" />
-        </ButtonWrap>
-      </Wrap>
+      <Container>
+        <Wrap>
+          <ContentWrap>
+            <BangIcon />
+            <Title>{t(`Nova.TimeOut.Title`)}</Title>
+          </ContentWrap>
+          <ButtonWrap onClick={handleRetry}>
+            <span>{t(`Nova.TimeOut.Retry`)}</span>
+            <img src={CreditColorIcon} alt="credit" />
+          </ButtonWrap>
+        </Wrap>
+      </Container>
     </>
   );
 }
