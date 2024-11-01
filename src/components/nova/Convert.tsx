@@ -178,7 +178,6 @@ const FileFormatBox = styled.div<{ isSelected: boolean }>`
 
 const ConvertButton = styled.div<{ isActive: boolean }>`
   width: 100%;
-  max-width: 480px;
   height: 48px;
   min-height: 48px;
   display: flex;

@@ -9,6 +9,7 @@ import { NOVA_TAB_TYPE, selectTabSlice } from '../../store/slices/tabSlice';
 import { useAppSelector } from '../../store/store';
 import { useChangeBackground } from '../hooks/nova/useChangeBackground';
 import { useChangeStyle } from '../hooks/nova/useChangeStyle';
+import { useConvert2DTo3D } from '../hooks/nova/useConvert2DTo3D';
 import { useExpandImage } from '../hooks/nova/useExpandImage';
 import { useImprovedResolution } from '../hooks/nova/useImprovedResolution';
 import { useRemakeImage } from '../hooks/nova/useRemakeImage';
@@ -82,6 +83,7 @@ export default function TimeOut() {
   const { t } = useTranslation();
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
   const result = useAppSelector(selectPageResult(selectedNovaTab));
+  const { goConvertPage } = useConvert2DTo3D();
   const { handleRemoveBackground } = useRemoveBackground();
   const { handleChangeBackground } = useChangeBackground();
   const { handleRemakeImage } = useRemakeImage();
@@ -90,6 +92,9 @@ export default function TimeOut() {
   const { handleChangeStyle } = useChangeStyle();
   const handleRetry = async () => {
     switch (selectedNovaTab) {
+      case NOVA_TAB_TYPE.convert2DTo3D:
+        await goConvertPage();
+        break;
       case NOVA_TAB_TYPE.removeBG:
         await handleRemoveBackground();
         break;
