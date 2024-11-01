@@ -184,7 +184,7 @@ const ConvertButton = styled.div<{ isActive: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 16px 0 auto;
+  margin: 16px auto;
   background: ${(props) => (props.isActive ? '#6f3ad0' : '#f2f4f6')};
   border-radius: 8px;
   cursor: ${(props) => (props.isActive ? 'pointer' : 'default')};

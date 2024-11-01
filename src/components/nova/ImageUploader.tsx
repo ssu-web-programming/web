@@ -10,13 +10,10 @@ import {
   setPageData,
   setPageStatus
 } from '../../store/slices/nova/pageStatusSlice';
-import { platformInfoSelector } from '../../store/slices/platformInfo';
 import { NOVA_TAB_TYPE } from '../../store/slices/tabSlice';
 import { getDriveFiles, getLocalFiles } from '../../store/slices/uploadFiles';
 import { userInfoSelector } from '../../store/slices/userInfo';
 import { useAppDispatch, useAppSelector } from '../../store/store';
-import Bridge, { ClientType } from '../../util/bridge';
-import { isHigherVersion } from '../../util/common';
 import { convertDriveFileToFile } from '../../util/files';
 import { useConfirm } from '../Confirm';
 
@@ -114,7 +111,6 @@ interface ImageUploaderProps {
 
 export default function ImageUploader(props: ImageUploaderProps) {
   const { t } = useTranslation();
-  const { platform, version } = useAppSelector(platformInfoSelector);
   const confirm = useConfirm();
   const inputImgFileRef = useRef<HTMLInputElement | null>(null);
   const dispatch = useAppDispatch();
@@ -124,61 +120,9 @@ export default function ImageUploader(props: ImageUploaderProps) {
   const currentFile = useAppSelector(selectPageData(props.curTab));
   const target = 'nova-image';
 
-  const getDownloadUrlByPlatform = () => {
-    switch (platform) {
-      case ClientType.android:
-        return 'market://details?id=com.infraware.office.link';
-      case ClientType.ios:
-        return 'https://itunes.apple.com/app/polaris-office-pdf-docs/id698070860';
-      case ClientType.windows:
-        return 'https://polarisoffice.com/ko/download';
-      case ClientType.mac:
-        return 'itms-apps://itunes.apple.com/app/id1098211970?mt=12';
-      default:
-        return '';
-    }
-  };
-
-  const isUpdateRequired = () => {
-    if (platform === ClientType.web || platform === ClientType.unknown) return false;
-
-    type ClientType = 'android' | 'ios' | 'windows' | 'mac';
-    const versionMap: Record<ClientType, string> = {
-      android: '9.9.5',
-      ios: '9.8.6',
-      windows: '10.105.250.54114',
-      mac: '9.0.63'
-    };
-
-    return !isHigherVersion(versionMap[platform as keyof typeof versionMap], version);
-  };
-
-  const confirmUpload = async (url: string) => {
-    await confirm({
-      title: '',
-      msg: t('Nova.Confirm.UpdateVersion.Msg'),
-      onOk: {
-        text: t('Nova.Confirm.UpdateVersion.Ok'),
-        callback: () => {
-          Bridge.callBridgeApi('openWindow', url);
-        }
-      },
-      onCancel: {
-        text: t('Nova.Confirm.UpdateVersion.Cancel'),
-        callback: () => {}
-      }
-    });
-  };
-
   const handleFileProcessing = async () => {
     const selectedFile = localFiles[0] || driveFiles[0];
     if (!selectedFile) return;
-
-    if (props.curTab === NOVA_TAB_TYPE.convert2DTo3D && isUpdateRequired()) {
-      const url = getDownloadUrlByPlatform();
-      await confirmUpload(url);
-      return;
-    }
 
     dispatch(setPageStatus({ tab: props.curTab, status: 'progress' }));
     const fileData = await compressImage(await convertDriveFileToFile(selectedFile), props.curTab);
