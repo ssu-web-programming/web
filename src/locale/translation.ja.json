@@ -453,6 +453,7 @@
         "DocImgQuery": "ドキュメント/画像クエリ",
         "ImgGen": "画像生成"
       },
+      "Convert2DTo3D": "2Dから3Dへ",
       "RemoveBG": "背景を消す",
       "ChangeBG": "背景を変更",
       "RemakeImg": "画像を再編集",

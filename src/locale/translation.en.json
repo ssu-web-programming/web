@@ -453,6 +453,7 @@
         "DocImgQuery": "Document/Image query",
         "ImgGen": "Generate Image"
       },
+      "Convert2DTo3D": "2D to 3D",
       "RemoveBG": "Remove Background",
       "ChangeBG": "Change Background",
       "RemakeImg": "Remake Image",

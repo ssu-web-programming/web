@@ -70,6 +70,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
       NOVA_ASK_DOC_GPT4O: t(`Nova.CreditInfo.AIChat.DocImgQuery`),
       NOVA_IMG_GPT4O: t(`Nova.CreditInfo.AIChat.ImgGen`)
     },
+    NOVA_ANIMATION_3D_IMMERSITY: t(`Nova.CreditInfo.Convert2DTo3D`) || '',
     NOVA_REMOVE_BG: t(`Nova.CreditInfo.RemoveBG`) || '',
     NOVA_REPLACE_BG_CLIPDROP: t(`Nova.CreditInfo.ChangeBG`) || '',
     NOVA_REIMAGE_CLIPDROP: t(`Nova.CreditInfo.RemakeImg`) || '',
@@ -98,31 +99,32 @@ export default function NovaHeader(props: NovaHeaderProps) {
 
   const credit = filterCreditInfo(creditInfo, CREDIT_NAME_MAP);
 
-  const TOOLTIP_CREDIT_OPTIONS = credit.flatMap((item) => {
-    const category = Object.keys(CREDIT_NAME_MAP).find((cat) => {
-      const subMap = CREDIT_NAME_MAP[cat];
-      return typeof subMap === 'object' && subMap[item.serviceType];
-    });
-
-    let serviceName: string | undefined;
-    let categoryName = '';
-
-    if (category) {
-      const subMap = CREDIT_NAME_MAP[category];
-      if (typeof subMap === 'object') {
-        serviceName = subMap[item.serviceType];
-        categoryName = category;
+  const TOOLTIP_CREDIT_OPTIONS = Object.entries(CREDIT_NAME_MAP).flatMap(
+    ([category, serviceMap]) => {
+      if (typeof serviceMap === 'string') {
+        const creditItem = credit.find((item) => item.serviceType === category);
+        return creditItem
+          ? [
+              {
+                name: serviceMap, // 서비스 이름
+                icon: { src: ico_credit, txt: String(creditItem.deductCredit) }
+              }
+            ]
+          : [];
       }
-    } else {
-      serviceName = CREDIT_NAME_MAP[item.serviceType] as string;
-    }
 
-    return {
-      name: serviceName || 'Unknown',
-      icon: { src: ico_credit, txt: String(item.deductCredit) },
-      category: categoryName || ''
-    };
-  });
+      return Object.entries(serviceMap).flatMap(([serviceType, serviceName]) => {
+        const creditItem = credit.find((item) => item.serviceType === serviceType);
+        return creditItem
+          ? {
+              name: serviceName,
+              icon: { src: ico_credit, txt: String(creditItem.deductCredit) },
+              category: category
+            }
+          : [];
+      });
+    }
+  );
 
   const newChat = async () => {
     const ret = await confirm({
