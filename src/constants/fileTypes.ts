@@ -63,6 +63,10 @@ export const SUPPORT_IMAGE_TYPE: SupportFileType[] = [
   {
     mimeType: 'image/heic',
     extensions: '.heic'
+  },
+  {
+    mimeType: 'image/heif',
+    extensions: '.heif'
   }
 ];
 
@@ -74,7 +78,7 @@ export const getValidExt = (tab: NOVA_TAB_TYPE) => {
       );
     case 'convert2DTo3D':
       return SUPPORT_IMAGE_TYPE.filter(({ extensions }) =>
-        ['.jpg', 'jpeg', '.png', '.webp', '.heic'].includes(extensions)
+        ['.jpg', 'jpeg', '.png', '.webp', '.heic', '.heif'].includes(extensions)
       );
     case 'removeBG':
     case 'changeBG':
@@ -180,7 +184,6 @@ export async function compressImage(file: File, tab: NOVA_TAB_TYPE): Promise<Fil
       );
     });
 
-  console.log('file: ', file);
   return await resizeFile(file, widthOrHeight < 0);
 }
 
