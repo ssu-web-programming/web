@@ -305,7 +305,7 @@
       "Guide": {
         "Title": "2D -> 3D 변환",
         "SubTitle": "이미지를 생동감 있는\n3D 모션으로 바꿔보세요!",
-        "ImgUploader": "최대 20MB 용량의\nJPG, PNG, WEBP, HEIC 형식을 지원합니다."
+        "ImgUploader": "최대 20MB 용량의\nJPG, PNG, WEBP 형식을 지원합니다."
       },
       "Loading": "3D 모션을 적용하고 있어요",
       "Done": {

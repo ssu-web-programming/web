@@ -304,7 +304,7 @@
       "Guide": {
         "Title": "2Dから3Dへ",
         "SubTitle": "画像を臨場感あふれる3Dモーションに変換します。",
-        "ImgUploader": "最大20MBのサイズまでのJPG、PNG、WEBP、HEIC形式をサポートします。"
+        "ImgUploader": "最大20MBのサイズまでのJPG、PNG、WEBP形式をサポートします。"
       },
       "Loading": "3Dモーションの適用",
       "Done": {

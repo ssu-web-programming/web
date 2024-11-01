@@ -304,7 +304,7 @@
       "Guide": {
         "Title": "2D to 3D",
         "SubTitle": "Convert your images into immersive 3D motion!",
-        "ImgUploader": "Supports JPG, PNG, WEBP and HEIC formats up to 20MB in size."
+        "ImgUploader": "Supports JPG, PNG and WEBP formats up to 20MB in size."
       },
       "Loading": "Applying 3D motion",
       "Done": {
