@@ -22,12 +22,6 @@ const Label = styled.label<{ disable: boolean }>`
   -webkit-tap-highlight-color: transparent;
 `;
 
-const PersonalInfoContents = styled.div`
-  text-align: left;
-  font-size: 15px;
-  letter-spacing: -0.3px;
-`;
-
 interface FileButtonProps extends React.ComponentPropsWithoutRef<'input'> {
   target: string;
   handleOnChange?: (files: File[]) => void;

@@ -8,7 +8,7 @@ import ico_logo_po from '../../img/ico_logo_po.svg';
 import ico_mobile from '../../img/ico_mobile.svg';
 import ico_pc from '../../img/ico_pc.svg';
 import { setPageStatus } from '../../store/slices/nova/pageStatusSlice';
-import { selectTabSlice, setCreating } from '../../store/slices/tabSlice';
+import { NOVA_TAB_TYPE, selectTabSlice, setCreating } from '../../store/slices/tabSlice';
 import {
   getCurrentFile,
   removeLoadingFile,
@@ -103,6 +103,7 @@ export const FileUploader = (props: FileUploaderProps) => {
             const targetType =
               target === 'nova-image' ? getValidExt(selectedNovaTab) : SUPPORT_DOCUMENT_TYPE;
             element.accept = getAccept(targetType);
+            element.multiple = selectedNovaTab === NOVA_TAB_TYPE.aiChat;
             element.click();
           }
         }
@@ -117,6 +118,7 @@ export const FileUploader = (props: FileUploaderProps) => {
           const element = getCurrentFileInput()?.current;
           if (element) {
             element.accept = 'camera';
+            element.multiple = selectedNovaTab === NOVA_TAB_TYPE.aiChat;
             element.click();
           }
         }
