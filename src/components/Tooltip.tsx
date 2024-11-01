@@ -1,10 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import styled, { css } from 'styled-components';
 
+import { platformInfoSelector } from '../store/slices/platformInfo';
 import { getLocalFiles } from '../store/slices/uploadFiles';
 import { useAppSelector } from '../store/store';
-import Bridge from '../util/bridge';
+import Bridge, { ClientType } from '../util/bridge';
+import { isHigherVersion } from '../util/common';
 
+import { useConfirm } from './Confirm';
 import Icon from './Icon';
 
 export type TooltipType = 'selectable' | 'normal';
@@ -146,6 +150,8 @@ const ChipWrapper = styled.div`
 `;
 
 const Tooltip = (props: TooltipProps) => {
+  const { t } = useTranslation();
+  const confirm = useConfirm();
   const [isOpen, setIsOpen] = useState(false);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const {
@@ -159,6 +165,7 @@ const Tooltip = (props: TooltipProps) => {
     initPos = false
   } = props;
   const localFiles = useAppSelector(getLocalFiles);
+  const { platform, version } = useAppSelector(platformInfoSelector);
 
   const handleClickOutside = (event: MouseEvent) => {
     if (localFiles.length > 0) setIsOpen(false);
@@ -174,10 +181,62 @@ const Tooltip = (props: TooltipProps) => {
     };
   }, []);
 
+  const getDownloadUrlByPlatform = () => {
+    switch (platform) {
+      case ClientType.android:
+        return 'market://details?id=com.infraware.office.link';
+      case ClientType.ios:
+        return 'https://itunes.apple.com/app/polaris-office-pdf-docs/id698070860';
+      case ClientType.windows:
+        return 'https://polarisoffice.com/ko/download';
+      case ClientType.mac:
+        return 'itms-apps://itunes.apple.com/app/id1098211970?mt=12';
+      default:
+        return '';
+    }
+  };
+
+  const isUpdateRequired = () => {
+    if (platform === ClientType.web || platform === ClientType.unknown) return false;
+
+    type ClientType = 'android' | 'ios' | 'windows' | 'mac';
+    const versionMap: Record<ClientType, string> = {
+      android: '9.9.5',
+      ios: '9.8.6',
+      windows: '10.105.250.54114',
+      mac: '9.0.63'
+    };
+
+    return !isHigherVersion(versionMap[platform as keyof typeof versionMap], version);
+  };
+
+  const confirmUpload = async (url: string) => {
+    await confirm({
+      title: '',
+      msg: t('Nova.Confirm.UpdateVersion.Msg'),
+      onOk: {
+        text: t('Nova.Confirm.UpdateVersion.Ok'),
+        callback: () => {
+          Bridge.callBridgeApi('openWindow', url);
+        }
+      },
+      onCancel: {
+        text: t('Nova.Confirm.UpdateVersion.Cancel'),
+        callback: () => {}
+      }
+    });
+  };
+
   const toggleTooltip = () => {
     Bridge.callBridgeApi('analyzeCurFile');
 
     if (condition === false) return;
+    if (isUpdateRequired()) {
+      const url = getDownloadUrlByPlatform();
+      confirmUpload(url);
+      return;
+    }
+
     setIsOpen(!isOpen);
   };
 
