@@ -209,6 +209,8 @@ const Tooltip = (props: TooltipProps) => {
       windows: '10.105.250.54114',
       mac: '9.0.63'
     };
+    console.log('platform: ', platform);
+    console.log('version: ', version);
 
     return !isHigherVersion(versionMap[platform as keyof typeof versionMap], version);
   };

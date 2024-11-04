@@ -15,7 +15,6 @@ import { getDriveFiles, getLocalFiles } from '../../store/slices/uploadFiles';
 import { userInfoSelector } from '../../store/slices/userInfo';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { convertDriveFileToFile } from '../../util/files';
-import { useConfirm } from '../Confirm';
 
 import { FileUploader } from './FileUploader';
 
@@ -111,7 +110,6 @@ interface ImageUploaderProps {
 
 export default function ImageUploader(props: ImageUploaderProps) {
   const { t } = useTranslation();
-  const confirm = useConfirm();
   const inputImgFileRef = useRef<HTMLInputElement | null>(null);
   const dispatch = useAppDispatch();
   const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
