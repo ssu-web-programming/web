@@ -282,6 +282,7 @@
   "Nova": {
     "Tabs": {
       "aiChat": "AI Chat",
+      "convert2DTo3D": "2D to 3D",
       "removeBG": "Remove Background",
       "changeBG": "Change Background",
       "remakeImg": "Remake Image",
