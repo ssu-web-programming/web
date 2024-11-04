@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import styled, { css } from 'styled-components';
 
 import { platformInfoSelector } from '../store/slices/platformInfo';
+import { NOVA_TAB_TYPE, selectTabSlice } from '../store/slices/tabSlice';
 import { getLocalFiles } from '../store/slices/uploadFiles';
 import { useAppSelector } from '../store/store';
 import Bridge, { ClientType } from '../util/bridge';
@@ -166,6 +167,7 @@ const Tooltip = (props: TooltipProps) => {
   } = props;
   const localFiles = useAppSelector(getLocalFiles);
   const { platform, version } = useAppSelector(platformInfoSelector);
+  const { selectedNovaTab } = useAppSelector(selectTabSlice);
 
   const handleClickOutside = (event: MouseEvent) => {
     if (localFiles.length > 0) setIsOpen(false);
@@ -198,6 +200,7 @@ const Tooltip = (props: TooltipProps) => {
 
   const isUpdateRequired = () => {
     if (platform === ClientType.web || platform === ClientType.unknown) return false;
+    if (selectedNovaTab != NOVA_TAB_TYPE.convert2DTo3D) return false;
 
     type ClientType = 'android' | 'ios' | 'windows' | 'mac';
     const versionMap: Record<ClientType, string> = {

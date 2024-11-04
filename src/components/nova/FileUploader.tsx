@@ -255,7 +255,6 @@ export const FileUploader = (props: FileUploaderProps) => {
             target={target}
             accept={getAccept(accept)}
             handleOnChange={(files) => loadLocalFile(files)}
-            multiple
             ref={inputRef}>
             {children}
           </FileButton>
