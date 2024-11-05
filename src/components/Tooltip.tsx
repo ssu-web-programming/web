@@ -5,6 +5,7 @@ import styled, { css } from 'styled-components';
 import { platformInfoSelector } from '../store/slices/platformInfo';
 import { NOVA_TAB_TYPE, selectTabSlice } from '../store/slices/tabSlice';
 import { getLocalFiles } from '../store/slices/uploadFiles';
+import { userInfoSelector } from '../store/slices/userInfo';
 import { useAppSelector } from '../store/store';
 import Bridge, { ClientType } from '../util/bridge';
 import { isHigherVersion } from '../util/common';
@@ -38,7 +39,6 @@ type TooltipProps = {
   children: React.ReactNode;
   distance?: number; // distance between tooltip and children
   initPos?: boolean; // if true, tooltip will be positioned as initial
-  condition?: boolean; // if false, tooltip will not be opened
   style?: React.CSSProperties;
 };
 
@@ -162,9 +162,9 @@ const Tooltip = (props: TooltipProps) => {
     title,
     type = 'normal',
     distance = 4,
-    condition,
     initPos = false
   } = props;
+  const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
   const localFiles = useAppSelector(getLocalFiles);
   const { platform, version } = useAppSelector(platformInfoSelector);
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
@@ -235,7 +235,9 @@ const Tooltip = (props: TooltipProps) => {
   const toggleTooltip = () => {
     Bridge.callBridgeApi('analyzeCurFile');
 
-    if (condition === false && selectedNovaTab === NOVA_TAB_TYPE.aiChat) return;
+    if (isAgreed === undefined) return;
+    if (isAgreed === false && selectedNovaTab === NOVA_TAB_TYPE.aiChat) return;
+
     if (isUpdateRequired()) {
       const url = getDownloadUrlByPlatform();
       confirmUpload(url);

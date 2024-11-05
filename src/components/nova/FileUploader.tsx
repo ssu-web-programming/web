@@ -248,7 +248,6 @@ export const FileUploader = (props: FileUploaderProps) => {
           type="selectable"
           options={TOOLTIP_UPLOAD_OPTION(target)}
           distance={10}
-          condition={!!isAgreed}
           initPos
           style={tooltipStyle}>
           <FileButton
