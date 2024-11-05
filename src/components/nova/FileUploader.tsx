@@ -92,10 +92,7 @@ export const FileUploader = (props: FileUploaderProps) => {
       {
         name: t(`Nova.UploadTooltip.Local`),
         icon: {
-          src:
-            getPlatform() === ClientType.android || getPlatform() === ClientType.ios
-              ? ico_mobile
-              : ico_pc
+          src: platform === ClientType.android || platform === ClientType.ios ? ico_mobile : ico_pc
         },
         onClick: () => {
           const element = inputRef?.current;
@@ -103,14 +100,16 @@ export const FileUploader = (props: FileUploaderProps) => {
             const targetType =
               target === 'nova-image' ? getValidExt(selectedNovaTab) : SUPPORT_DOCUMENT_TYPE;
             element.accept = getAccept(targetType);
-            element.multiple = selectedNovaTab === NOVA_TAB_TYPE.aiChat;
+            // #IOS-5525 ios webp 파일 단일 선택 시 특정 버전에서 error가 발생하므로, 무조건 multiple로 지원하도록 수정함
+            element.multiple =
+              selectedNovaTab === NOVA_TAB_TYPE.aiChat || platform === ClientType.ios;
             element.click();
           }
         }
       }
     ];
 
-    if (target === 'nova-image' && getPlatform() === ClientType.android) {
+    if (target === 'nova-image' && platform === ClientType.android) {
       options.push({
         name: t(`Nova.UploadTooltip.Camera`),
         icon: { src: ico_camera },

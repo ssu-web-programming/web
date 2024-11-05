@@ -54,7 +54,7 @@ export const useInsertDocsHandler = () => {
                       Bridge.callBridgeApi('insertImage', blob);
                       dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.CompleteInsert`) }));
                     } catch (err) {
-                      // Handle the error appropriately here
+                      throw err;
                     }
                     break;
                   }
@@ -67,9 +67,7 @@ export const useInsertDocsHandler = () => {
                 }
               } else {
                 if (!result) break;
-                console.log('result: ', result);
                 if (result.link) {
-                  console.log(result.link);
                   dispatch(setPageStatus({ tab: selectedNovaTab, status: 'saving' }));
                   Bridge.callBridgeApi('insertAnimation', result.link);
                 } else {
