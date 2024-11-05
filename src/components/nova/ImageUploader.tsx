@@ -15,6 +15,7 @@ import { getDriveFiles, getLocalFiles } from '../../store/slices/uploadFiles';
 import { userInfoSelector } from '../../store/slices/userInfo';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { convertDriveFileToFile } from '../../util/files';
+import useErrorHandle from '../hooks/useErrorHandle';
 
 import { FileUploader } from './FileUploader';
 
@@ -112,6 +113,7 @@ export default function ImageUploader(props: ImageUploaderProps) {
   const { t } = useTranslation();
   const inputImgFileRef = useRef<HTMLInputElement | null>(null);
   const dispatch = useAppDispatch();
+  const errorHandle = useErrorHandle();
   const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
   const localFiles = useAppSelector(getLocalFiles);
   const driveFiles = useAppSelector(getDriveFiles);
@@ -122,15 +124,23 @@ export default function ImageUploader(props: ImageUploaderProps) {
     const selectedFile = localFiles[0] || driveFiles[0];
     if (!selectedFile) return;
 
-    dispatch(setPageStatus({ tab: props.curTab, status: 'progress' }));
-    const fileData = await compressImage(await convertDriveFileToFile(selectedFile), props.curTab);
-    dispatch(
-      setPageData({
-        tab: props.curTab,
-        data: fileData
-      })
-    );
-    dispatch(setPageStatus({ tab: props.curTab, status: 'home' }));
+    try {
+      dispatch(setPageStatus({ tab: props.curTab, status: 'progress' }));
+      const fileData = await compressImage(
+        await convertDriveFileToFile(selectedFile),
+        props.curTab
+      );
+      dispatch(
+        setPageData({
+          tab: props.curTab,
+          data: fileData
+        })
+      );
+      dispatch(setPageStatus({ tab: props.curTab, status: 'home' }));
+    } catch (err) {
+      dispatch(setPageStatus({ tab: props.curTab, status: 'home' }));
+      errorHandle(err);
+    }
   };
 
   useEffect(() => {

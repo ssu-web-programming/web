@@ -70,7 +70,7 @@ export const getValidExt = (tab: NOVA_TAB_TYPE) => {
       );
     case 'convert2DTo3D':
       return SUPPORT_IMAGE_TYPE.filter(({ extensions }) =>
-        ['.jpg', 'jpeg', '.png', '.webp'].includes(extensions)
+        ['.jpg', '.jpeg', '.png', '.webp'].includes(extensions)
       );
     case 'removeBG':
     case 'changeBG':
