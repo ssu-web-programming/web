@@ -69,10 +69,10 @@ export function useManageFile() {
           else return acc;
         }, 0);
 
-        if (uploadCnt + files.length > 3) {
+        if (uploadCnt + files.length > uploadLimit) {
           await confirm({
             title: '',
-            msg: t('Nova.Confirm.OverMaxFileUploadCnt', { max: 3 })!,
+            msg: t('Nova.Confirm.OverMaxFileUploadCnt', { max: uploadLimit })!,
             onOk: { text: t('Nova.Confirm.NewChat.StartNewChat'), callback: chatNova.newChat },
             onCancel: {
               text: t('Cancel'),
