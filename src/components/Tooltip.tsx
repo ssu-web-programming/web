@@ -235,7 +235,7 @@ const Tooltip = (props: TooltipProps) => {
   const toggleTooltip = () => {
     Bridge.callBridgeApi('analyzeCurFile');
 
-    if (condition === false) return;
+    if (condition === false && selectedNovaTab === NOVA_TAB_TYPE.aiChat) return;
     if (isUpdateRequired()) {
       const url = getDownloadUrlByPlatform();
       confirmUpload(url);
