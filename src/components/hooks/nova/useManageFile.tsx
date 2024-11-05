@@ -96,6 +96,8 @@ export function useManageFile() {
       const fileExtension = `.${file.name.split('.').pop()?.toLowerCase()}`;
       return !supportedExtensions.includes(fileExtension);
     });
+    console.log('supportedExtensions: ', supportedExtensions);
+    console.log('invalidFiles: ', invalidFiles);
 
     const support = supportedExtensions.filter((ext) => ext !== '.jpeg').join(', ');
 
