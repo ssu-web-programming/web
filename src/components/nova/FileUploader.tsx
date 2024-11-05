@@ -74,7 +74,7 @@ export const FileUploader = (props: FileUploaderProps) => {
             toggleDriveConfirm();
           }
           const uploadLimit = calcAvailableFileCnt();
-          if (uploadLimit === 0) {
+          if (uploadLimit === 0 && selectedNovaTab === NOVA_TAB_TYPE.aiChat) {
             setIsOpen(false);
             await confirm({
               title: '',
