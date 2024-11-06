@@ -230,10 +230,10 @@ export default function Result() {
           const res = await fetch(result.link, { method: 'HEAD' });
           const contentType = res.headers.get('Content-Type');
           if (contentType && contentType.includes('text/html')) {
+            ShowExpireLinkPopup();
+          } else {
             dispatch(setPageStatus({ tab: selectedNovaTab, status: 'saving' }));
             Bridge.callBridgeApi('downloadAnimation', result.link);
-          } else {
-            ShowExpireLinkPopup();
           }
         } catch (err) {
           ShowExpireLinkPopup();
