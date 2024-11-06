@@ -223,7 +223,8 @@ export function useConfirm() {
     msg,
     onOk,
     onCancel,
-    direction = 'row'
+    direction = 'row',
+    neverShowAgain = false
   }: ConfirmType): Promise<boolean> {
     return new Promise((resolve) => {
       const handleOk = () => {
@@ -243,6 +244,7 @@ export function useConfirm() {
           title,
           msg,
           direction,
+          neverShowAgain,
           onOk: {
             text: onOk.text,
             callback: handleOk
