@@ -25,12 +25,6 @@ export type TooltipOption = {
   onClick?: () => void;
 };
 
-interface GroupedTooltipOption {
-  options: TooltipOption[];
-  handleOptionSelect: (option: TooltipOption) => void;
-  type: string;
-}
-
 type TooltipProps = {
   title?: string;
   options: TooltipOption[];
@@ -171,14 +165,17 @@ const Tooltip = (props: TooltipProps) => {
 
   const handleClickOutside = (event: MouseEvent) => {
     if (localFiles.length > 0) setIsOpen(false);
+
     if (tooltipRef.current && !tooltipRef.current.contains(event.target as Node)) {
       setIsOpen(false);
     }
   };
 
   useEffect(() => {
+    document.addEventListener('click', handleClickOutside);
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
+      document.removeEventListener('click', handleClickOutside);
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);

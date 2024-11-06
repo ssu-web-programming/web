@@ -12,7 +12,7 @@ import { novaHistorySelector } from '../../store/slices/nova/novaHistorySlice';
 import { NOVA_TAB_TYPE, selectTabSlice } from '../../store/slices/tabSlice';
 import { setDriveFiles, setLocalFiles } from '../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../store/store';
-import Bridge, { ClientType, getPlatform } from '../../util/bridge';
+import Bridge, { isDesktop } from '../../util/bridge';
 import IconButton from '../buttons/IconButton';
 import { useConfirm } from '../Confirm';
 import { useChatNova } from '../hooks/useChatNova';
@@ -171,7 +171,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
           options={TOOLTIP_CREDIT_OPTIONS}>
           <Icon iconSrc={ico_credit_info} size={32} />
         </Tooltip>
-        {getPlatform() !== ClientType.android && getPlatform() !== ClientType.ios && (
+        {isDesktop && (
           <>
             <ScreenChangeButton></ScreenChangeButton>
             <IconButton
