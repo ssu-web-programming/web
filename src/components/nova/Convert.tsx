@@ -114,6 +114,7 @@ const GridItem = styled.div<{ isSelected: boolean }>`
   box-sizing: border-box;
   border-radius: 8px;
   cursor: pointer;
+  white-space: nowrap;
 
   svg {
     path {
