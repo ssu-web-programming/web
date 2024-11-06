@@ -32,6 +32,8 @@ const Wrap = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0 16px;
+  align-items: center;
+  justify-content: center;
 `;
 
 const ContentWrap = styled.div`
