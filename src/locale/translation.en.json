@@ -589,6 +589,9 @@
         "Msg": "2D to 3D conversion is available only in the latest version. Update now to explore this new feature!",
         "Ok": "Update now",
         "Cancel": "Later"
+      },
+      "ExpireImageLink": {
+        "Msg": "The image link has expired. Please start the function again."
       }
     },
     "PoDrive": {

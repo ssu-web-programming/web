@@ -15,6 +15,7 @@ import { getCurrentFile } from '../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import Bridge, { ClientType, getPlatform } from '../../util/bridge';
 import { base64ToBlob } from '../../util/files';
+import { useConfirm } from '../Confirm';
 import { useChangeBackground } from '../hooks/nova/useChangeBackground';
 import { useInsertDocsHandler } from '../hooks/nova/useInsertDocsHandler';
 import { useRemakeImage } from '../hooks/nova/useRemakeImage';
@@ -188,6 +189,7 @@ export default function Result() {
   const isMobile = platform == ClientType.ios || platform == ClientType.android;
   const isPC = platform === ClientType.windows || platform === ClientType.mac;
   const { t } = useTranslation();
+  const confirm = useConfirm();
   const dispatch = useAppDispatch();
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
   const currentFile = useAppSelector(getCurrentFile);
@@ -213,8 +215,20 @@ export default function Result() {
   const OnSave = async () => {
     if (result) {
       if (result.link) {
-        dispatch(setPageStatus({ tab: selectedNovaTab, status: 'saving' }));
-        Bridge.callBridgeApi('downloadAnimation', result.link);
+        try {
+          await fetch(result.link);
+          dispatch(setPageStatus({ tab: selectedNovaTab, status: 'saving' }));
+          Bridge.callBridgeApi('downloadAnimation', result.link);
+        } catch (err) {
+          await confirm({
+            title: '',
+            msg: t('Nova.Confirm.ExpireImageLink.Msg'),
+            onOk: {
+              text: t('OK'),
+              callback: () => {}
+            }
+          });
+        }
       } else {
         const blob = base64ToBlob(result.data, result.contentType);
         Bridge.callBridgeApi('downloadImage', blob);
