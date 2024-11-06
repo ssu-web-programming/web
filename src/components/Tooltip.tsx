@@ -204,7 +204,7 @@ const Tooltip = (props: TooltipProps) => {
       android: '9.9.5',
       ios: '9.8.6',
       windows: '10.105.250.54114',
-      mac: '9.0.63'
+      mac: '9.0.64'
     };
     console.log('platform: ', platform);
     console.log('version: ', version);
