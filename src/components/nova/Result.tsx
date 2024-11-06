@@ -216,9 +216,12 @@ export default function Result() {
     if (result) {
       if (result.link) {
         try {
-          await fetch(result.link);
-          dispatch(setPageStatus({ tab: selectedNovaTab, status: 'saving' }));
-          Bridge.callBridgeApi('downloadAnimation', result.link);
+          await fetch(result.link).then((res) => {
+            if (!res.ok) throw new Error('Link expired or inaccessible');
+
+            dispatch(setPageStatus({ tab: selectedNovaTab, status: 'saving' }));
+            Bridge.callBridgeApi('downloadAnimation', result.link);
+          });
         } catch (err) {
           await confirm({
             title: '',
