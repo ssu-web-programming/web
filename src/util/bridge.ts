@@ -358,6 +358,7 @@ export const useInitBridgeListener = () => {
                   msg: t('Nova.Alert.ExecuteFunction', {
                     creditAmount: 10
                   })!,
+                  neverShowAgain: true,
                   onOk: {
                     text: t('Execute'),
                     callback: () => {
