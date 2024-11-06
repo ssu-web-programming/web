@@ -351,44 +351,53 @@ export const useInitBridgeListener = () => {
             dispatch(setDriveFiles([]));
             dispatch(setPageStatus({ tab: 'aiChat', status: 'home' }));
             if (body.openTab in NOVA_TAB_TYPE) {
+              const tab = body.openTab;
               dispatch(selectNovaTab(NOVA_TAB_TYPE[body.openTab as keyof typeof NOVA_TAB_TYPE]));
               const isBlob = body.image instanceof Blob && body.image.size > 0;
               const isBase64 = typeof body.image === 'string' && body.image.startsWith('data:');
+              const showCreditGuide =
+                tab === NOVA_TAB_TYPE.removeBG ||
+                tab === NOVA_TAB_TYPE.remakeImg ||
+                tab === NOVA_TAB_TYPE.improvedRes;
+
+              const loadFile = () => {
+                let file: File | null = null;
+                if (isBlob) {
+                  file = blobToFile(body.image);
+                } else if (isBase64) {
+                  const base64Data = body.image.split(',')[1];
+                  const mimeType = body.image.match(/data:(.*);base64/)?.[1] || 'image/png';
+                  file = base64ToFile(base64Data, mimeType);
+                }
+
+                dispatch(resetPageData(body.openTab));
+                dispatch(resetPageResult(body.openTab));
+                dispatch(setPageStatus({ tab: body.openTab, status: 'home' }));
+                if (file) loadLocalFile([file]);
+              };
+
               if (body.image && (isBlob || isBase64)) {
-                confirm({
-                  title: '',
-                  msg: t('Nova.Alert.ExecuteFunction', {
-                    creditAmount: 10
-                  })!,
-                  neverShowAgain: true,
-                  onOk: {
-                    text: t('Execute'),
-                    callback: () => {
-                      let file: File | null = null;
-
-                      if (isBlob) {
-                        file = blobToFile(body.image);
-                      } else if (isBase64) {
-                        const base64Data = body.image.split(',')[1];
-                        const mimeType = body.image.match(/data:(.*);base64/)?.[1] || 'image/png';
-                        file = base64ToFile(base64Data, mimeType);
+                if (showCreditGuide) {
+                  confirm({
+                    title: '',
+                    msg: t('Nova.Alert.ExecuteFunction', {
+                      creditAmount: 10
+                    })!,
+                    neverShowAgain: true,
+                    onOk: {
+                      text: t('Execute'),
+                      callback: () => {
+                        loadFile();
                       }
-
-                      if (body.openTab != NOVA_TAB_TYPE.aiChat && file) {
-                        dispatch(resetPageData(body.openTab));
-                        dispatch(resetPageResult(body.openTab));
-                        dispatch(setPageStatus({ tab: body.openTab, status: 'home' }));
-                        loadLocalFile([file]);
-                      } else {
-                        dispatch(setLocalFiles([]));
-                      }
+                    },
+                    onCancel: {
+                      text: t('Cancel'),
+                      callback: () => {}
                     }
-                  },
-                  onCancel: {
-                    text: t('Cancel'),
-                    callback: () => {}
-                  }
-                });
+                  });
+                } else {
+                  loadFile();
+                }
               } else {
                 dispatch(setLocalFiles([]));
               }
