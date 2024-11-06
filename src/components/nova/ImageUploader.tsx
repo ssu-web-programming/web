@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { compressImage, SUPPORT_IMAGE_TYPE } from '../../constants/fileTypes';
+import { compressImage, isPixelLimitExceeded, SUPPORT_IMAGE_TYPE } from '../../constants/fileTypes';
 import CreditIcon from '../../img/ico_credit_gray.svg';
 import { ReactComponent as UploadIcon } from '../../img/ico_upload_img_plus.svg';
 import {
@@ -15,6 +15,7 @@ import { getDriveFiles, getLocalFiles } from '../../store/slices/uploadFiles';
 import { userInfoSelector } from '../../store/slices/userInfo';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { convertDriveFileToFile } from '../../util/files';
+import { useConfirm } from '../Confirm';
 import useErrorHandle from '../hooks/useErrorHandle';
 
 import { FileUploader } from './FileUploader';
@@ -111,6 +112,7 @@ interface ImageUploaderProps {
 
 export default function ImageUploader(props: ImageUploaderProps) {
   const { t } = useTranslation();
+  const confirm = useConfirm();
   const inputImgFileRef = useRef<HTMLInputElement | null>(null);
   const dispatch = useAppDispatch();
   const errorHandle = useErrorHandle();
@@ -120,16 +122,43 @@ export default function ImageUploader(props: ImageUploaderProps) {
   const currentFile = useAppSelector(selectPageData(props.curTab));
   const target = 'nova-image';
 
+  const isSpecificFormat = (file: File) => {
+    const extension = file?.name?.split('.').pop()?.toLowerCase();
+    return extension === 'mp4' || extension === 'gif' || extension === 'bmp';
+  };
+
+  const getSelectedFile = async () => {
+    if (localFiles[0]) return localFiles[0];
+    if (driveFiles[0]) return await convertDriveFileToFile(driveFiles[0]);
+    return null;
+  };
+
   const handleFileProcessing = async () => {
-    const selectedFile = localFiles[0] || driveFiles[0];
+    const selectedFile = await getSelectedFile();
     if (!selectedFile) return;
 
     try {
       dispatch(setPageStatus({ tab: props.curTab, status: 'progress' }));
-      const fileData = await compressImage(
-        await convertDriveFileToFile(selectedFile),
-        props.curTab
-      );
+
+      let fileData: File = selectedFile;
+
+      if (await isPixelLimitExceeded(selectedFile, props.curTab)) {
+        if (isSpecificFormat(selectedFile)) {
+          await confirm({
+            title: '',
+            msg: `${t('Nova.Confirm.OverMaxFilePixel')}\n\n${t(
+              `Nova.${NOVA_TAB_TYPE.removeBG}.AllowImageSize`
+            )}`,
+            onOk: {
+              text: t('OK'),
+              callback: () => {}
+            }
+          });
+        } else {
+          fileData = await compressImage(selectedFile, props.curTab);
+        }
+      }
+
       dispatch(
         setPageData({
           tab: props.curTab,

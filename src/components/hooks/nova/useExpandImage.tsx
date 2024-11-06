@@ -1,9 +1,5 @@
-import { Simulate } from 'react-dom/test-utils';
-import { useTranslation } from 'react-i18next';
-
 import { apiWrapper } from '../../../api/apiWrapper';
 import { NOVA_EXPAND_IMAGE } from '../../../api/constant';
-import { isPixelLimitExceeded } from '../../../constants/fileTypes';
 import {
   resetPageData,
   resetPageResult,
@@ -16,13 +12,10 @@ import { setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles'
 import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { calLeftCredit } from '../../../util/common';
 import { convertDriveFileToFile, createFormDataFromFiles, fileToBase64 } from '../../../util/files';
-import { useConfirm } from '../../Confirm';
 import useErrorHandle from '../useErrorHandle';
 import { useShowCreditToast } from '../useShowCreditToast';
 
 export const useExpandImage = () => {
-  const { t } = useTranslation();
-  const confirm = useConfirm();
   const showCreditToast = useShowCreditToast();
   const errorHandle = useErrorHandle();
   const dispatch = useAppDispatch();
@@ -66,22 +59,6 @@ export const useExpandImage = () => {
     try {
       const file = await convertDriveFileToFile(currentFile);
       if (!file) return;
-
-      if (await isPixelLimitExceeded(file, NOVA_TAB_TYPE.expandImg)) {
-        await confirm({
-          title: '',
-          msg:
-            t('Nova.Confirm.OverMaxFilePixel') +
-            '\n\n' +
-            t(`Nova.${NOVA_TAB_TYPE.expandImg}.AllowImageSize`),
-          onOk: {
-            text: t('OK'),
-            callback: () => {}
-          }
-        });
-        resetPageState();
-        return;
-      }
 
       const base64Data = await fileToBase64(file);
       dispatch(setPageResult({ tab: NOVA_TAB_TYPE.expandImg, result: base64Data }));

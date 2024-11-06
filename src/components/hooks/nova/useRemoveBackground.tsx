@@ -1,8 +1,5 @@
-import { useTranslation } from 'react-i18next';
-
 import { apiWrapper } from '../../../api/apiWrapper';
 import { NOVA_REMOVE_BACKGROUND } from '../../../api/constant';
-import { isPixelLimitExceeded } from '../../../constants/fileTypes';
 import {
   resetPageData,
   selectPageData,
@@ -13,14 +10,11 @@ import { NOVA_TAB_TYPE } from '../../../store/slices/tabSlice';
 import { setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { calLeftCredit } from '../../../util/common';
-import { convertDriveFileToFile, createFormDataFromFiles } from '../../../util/files';
-import { useConfirm } from '../../Confirm';
+import { createFormDataFromFiles } from '../../../util/files';
 import useErrorHandle from '../useErrorHandle';
 import { useShowCreditToast } from '../useShowCreditToast';
 
 export const useRemoveBackground = () => {
-  const { t } = useTranslation();
-  const confirm = useConfirm();
   const showCreditToast = useShowCreditToast();
   const errorHandle = useErrorHandle();
   const dispatch = useAppDispatch();
@@ -50,22 +44,6 @@ export const useRemoveBackground = () => {
 
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.removeBG, status: 'loading' }));
     try {
-      const file = await convertDriveFileToFile(currentFile);
-      if (await isPixelLimitExceeded(file, NOVA_TAB_TYPE.removeBG)) {
-        await confirm({
-          title: '',
-          msg: `${t('Nova.Confirm.OverMaxFilePixel')}\n\n${t(
-            `Nova.${NOVA_TAB_TYPE.removeBG}.AllowImageSize`
-          )}`,
-          onOk: {
-            text: t('OK'),
-            callback: () => {}
-          }
-        });
-        resetPageState();
-        return;
-      }
-
       const formData = await createFormDataFromFiles([currentFile]);
       const { res, logger } = await apiWrapper().request(NOVA_REMOVE_BACKGROUND, {
         body: formData,

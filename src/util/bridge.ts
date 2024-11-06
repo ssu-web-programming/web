@@ -405,9 +405,9 @@ export const useInitBridgeListener = () => {
 
             const platform = getPlatform();
             const version = getVersion();
-            console.log('bridge platform: ', platform);
-            console.log('bridge version: ', version);
-            console.log('body: ', body);
+            console.log('luna bridge platform: ', platform);
+            console.log('luna bridge version: ', version);
+            console.log('luna body: ', body);
             if (platform == ClientType.unknown || !version || version === '') {
               if (!body.platform) return;
               dispatch(

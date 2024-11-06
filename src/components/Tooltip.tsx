@@ -196,8 +196,8 @@ const Tooltip = (props: TooltipProps) => {
   };
 
   const isUpdateRequired = () => {
-    console.log('platform: ', platform);
-    console.log('version: ', version);
+    console.log('luna platform: ', platform);
+    console.log('luna version: ', version);
 
     if (platform === ClientType.web || platform === ClientType.unknown) return false;
     if (selectedNovaTab != NOVA_TAB_TYPE.convert2DTo3D) return false;
