@@ -67,6 +67,8 @@ function getAgentVersion(userAgent: string) {
 
 export const getPlatform = () => getAgentPlatform(navigator.userAgent);
 export const getVersion = () => getAgentVersion(navigator.userAgent);
+export const isMobile = getPlatform() === ClientType.android || getPlatform() === ClientType.ios;
+export const isDesktop = getPlatform() !== ClientType.android && getPlatform() !== ClientType.ios;
 
 export async function fileToString(file: Blob) {
   return new Promise<string>((resolve) => {
