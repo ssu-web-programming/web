@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -23,7 +23,7 @@ import remakeImgSelectedIcon from '../../img/nova/tab/tab_remake_s.svg';
 import changeStyleIcon from '../../img/nova/tab/tab_style_n.svg';
 import changeStyleSelectedIcon from '../../img/nova/tab/tab_style_s.svg';
 import { NOVA_TAB_TYPE } from '../../store/slices/tabSlice';
-import { ClientType, getPlatform } from '../../util/bridge';
+import { isMobile } from '../../util/bridge';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -122,25 +122,49 @@ const Tabs = ({ tabs, activeTab, onChangeTab }: TabProps) => {
   const { t } = useTranslation();
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
-  const swiperRef = useRef<any>(null);
+  const swiperRef = useRef<SwiperClass | null>(null);
 
-  const getTabTranslationKey = (tab: NOVA_TAB_TYPE): string => {
+  const getTabTranslationKey = (tab: NOVA_TAB_TYPE) => {
     return `Nova.Tabs.${tab}`;
   };
 
-  const getIcon = (tab: NOVA_TAB_TYPE, isSelected: boolean): string => {
+  const getIcon = (tab: NOVA_TAB_TYPE, isSelected: boolean) => {
     return isSelected ? iconMap[tab].selected : iconMap[tab].default;
   };
+
+  // Swiper 상태를 업데이트하는 함수
+  const updateSwiperState = () => {
+    if (swiperRef.current) {
+      setIsBeginning(swiperRef.current.isBeginning);
+      setIsEnd(swiperRef.current.isEnd);
+    }
+  };
+
+  useEffect(() => {
+    const swiper = swiperRef.current;
+    if (swiper) {
+      swiper.on('touchEnd', updateSwiperState);
+      updateSwiperState();
+    }
+
+    return () => {
+      if (swiper) {
+        swiper.off('touchEnd', updateSwiperState);
+      }
+    };
+  }, [swiperRef]);
 
   const handlePrevClick = () => {
     if (swiperRef.current) {
       swiperRef.current.slidePrev(20);
+      updateSwiperState();
     }
   };
 
   const handleNextClick = () => {
     if (swiperRef.current) {
       swiperRef.current.slideNext(20);
+      updateSwiperState();
     }
   };
 
@@ -149,36 +173,36 @@ const Tabs = ({ tabs, activeTab, onChangeTab }: TabProps) => {
       <Swiper
         spaceBetween={8}
         slidesPerView="auto"
-        watchOverflow={true}
+        watchOverflow
         navigation={{
           prevEl: '.swiper-button-prev',
           nextEl: '.swiper-button-next'
-        }}
-        onSlideChange={(swiper: SwiperClass) => {
-          setIsBeginning(swiper.isBeginning);
-          setIsEnd(swiper.isEnd);
         }}
         onSwiper={(swiper: SwiperClass) => {
           swiperRef.current = swiper;
         }}
         pagination={{ clickable: true }}
         style={{ height: '32px' }}>
-        {tabs.map((tab) => (
-          <SwiperSlide key={tab} style={{ width: 'auto' }}>
-            <Tap onClick={() => onChangeTab(tab)} isHighlighted={activeTab === tab}>
-              {tab === NOVA_TAB_TYPE.convert2DTo3D && (
-                <Badge>
-                  <span>N</span>
-                </Badge>
-              )}
-              <img src={getIcon(tab, activeTab === tab)} alt="logo" />
-              <Text isHighlighted={activeTab === tab}>{t(getTabTranslationKey(tab))}</Text>
-            </Tap>
-          </SwiperSlide>
-        ))}
+        {tabs.map((tab) => {
+          const isActive = activeTab === tab;
+
+          return (
+            <SwiperSlide key={tab} style={{ width: 'auto' }}>
+              <Tap onClick={() => onChangeTab(tab)} isHighlighted={isActive}>
+                {tab === NOVA_TAB_TYPE.convert2DTo3D && (
+                  <Badge>
+                    <span>N</span>
+                  </Badge>
+                )}
+                <img src={getIcon(tab, isActive)} alt="logo" />
+                <Text isHighlighted={isActive}>{t(getTabTranslationKey(tab))}</Text>
+              </Tap>
+            </SwiperSlide>
+          );
+        })}
       </Swiper>
 
-      {!(getPlatform() === ClientType.android || getPlatform() === ClientType.ios) && (
+      {!isMobile && (
         <>
           <CustomNavButton
             className="swiper-button-prev left"
