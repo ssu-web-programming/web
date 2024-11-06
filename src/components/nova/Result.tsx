@@ -212,25 +212,31 @@ export default function Result() {
     });
   }, []);
 
+  const ShowExpireLinkPopup = async () => {
+    confirm({
+      title: '',
+      msg: t('Nova.Confirm.ExpireImageLink.Msg'),
+      onOk: {
+        text: t('OK'),
+        callback: () => {}
+      }
+    });
+  };
+
   const OnSave = async () => {
     if (result) {
       if (result.link) {
         try {
-          await fetch(result.link).then((res) => {
-            if (!res.ok) throw new Error('Link expired or inaccessible');
-
+          const res = await fetch(result.link, { method: 'HEAD' });
+          const contentType = res.headers.get('Content-Type');
+          if (contentType && contentType.includes('text/html')) {
             dispatch(setPageStatus({ tab: selectedNovaTab, status: 'saving' }));
             Bridge.callBridgeApi('downloadAnimation', result.link);
-          });
+          } else {
+            ShowExpireLinkPopup();
+          }
         } catch (err) {
-          await confirm({
-            title: '',
-            msg: t('Nova.Confirm.ExpireImageLink.Msg'),
-            onOk: {
-              text: t('OK'),
-              callback: () => {}
-            }
-          });
+          ShowExpireLinkPopup();
         }
       } else {
         const blob = base64ToBlob(result.data, result.contentType);
