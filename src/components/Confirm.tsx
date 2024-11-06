@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components';
 
 import { activeConfirm, ConfirmType, initConfirm, selectConfirm } from '../store/slices/confirm';
 import { useAppDispatch, useAppSelector } from '../store/store';
-import { getCookie, setCookie } from '../util/common';
+import { setCookie } from '../util/common';
 
 import Button from './buttons/Button';
 import Blanket from './Blanket';
@@ -119,7 +119,7 @@ const Confirm = () => {
   const [showCheckbox, setShowCheckbox] = useState<boolean>(false);
 
   useEffect(() => {
-    if (neverShowAgain && !getCookie('creditGuide')) {
+    if (neverShowAgain) {
       setShowCheckbox(true);
     }
   }, [neverShowAgain]);

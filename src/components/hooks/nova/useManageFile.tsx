@@ -38,7 +38,6 @@ export function useManageFile() {
       if (invalidSize.length > 0) {
         confirm({
           title: '',
-          neverShowAgain: true,
           msg: t('Nova.Alert.OverFileUploadSize', {
             max: getMaxFileSize(selectedNovaTab),
             min: MIN_FILE_UPLOAD_SIZE_KB

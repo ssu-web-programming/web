@@ -31,7 +31,7 @@ import {
 } from '../store/slices/uploadFiles';
 import store, { AppDispatch, RootState, useAppDispatch } from '../store/store';
 
-import { isHigherVersion, makeClipboardData } from './common';
+import { getCookie, isHigherVersion, makeClipboardData } from './common';
 import { base64ToFile, blobToFile } from './files';
 
 const UA_PREFIX = `__polaris_office_ai_`;
@@ -377,7 +377,7 @@ export const useInitBridgeListener = () => {
               };
 
               if (body.image && (isBlob || isBase64)) {
-                if (showCreditGuide) {
+                if (showCreditGuide && !getCookie('creditGuide')) {
                   confirm({
                     title: '',
                     msg: t('Nova.Alert.ExecuteFunction', {
