@@ -32,24 +32,40 @@ export function useManageFile() {
   const loadLocalFile = async (files: File[]) => {
     dispatch(setDriveFiles([]));
 
+    const supportedExtensions =
+      selectedNovaTab === 'aiChat'
+        ? [
+            ...SUPPORT_DOCUMENT_TYPE.flatMap((type) => type.extensions),
+            ...getValidExt(selectedNovaTab).flatMap((type) => type.extensions)
+          ]
+        : [...getValidExt(selectedNovaTab).flatMap((type) => type.extensions)];
+
+    const invalidFiles = files.filter((file) => {
+      const fileExtension = `.${file.name.split('.').pop()?.toLowerCase()}`;
+      return !supportedExtensions.includes(fileExtension);
+    });
+
+    const support = supportedExtensions.filter((ext) => ext !== '.jpeg').join(', ');
+
+    if (invalidFiles.length > 0) {
+      await confirm({
+        title: '',
+        msg:
+          selectedNovaTab === 'aiChat'
+            ? t('Nova.Alert.CommonUnsupportFile')
+            : t(`Nova.Alert.CommonUnsupportImage`, { support }),
+        onOk: {
+          text: t('Confirm'),
+          callback: () => {
+            return;
+          }
+        }
+      });
+      return;
+    }
+
     const uploadLimit = getAvailableFileCnt();
     if (uploadLimit !== -1) {
-      const invalidSize = files.filter((file) => !isValidFileSize(file.size, selectedNovaTab));
-      if (invalidSize.length > 0) {
-        confirm({
-          title: '',
-          msg: t('Nova.Alert.OverFileUploadSize', {
-            max: getMaxFileSize(selectedNovaTab),
-            min: MIN_FILE_UPLOAD_SIZE_KB
-          })!,
-          onOk: {
-            text: t('Confirm'),
-            callback: () => {}
-          }
-        });
-        return;
-      }
-
       if (selectedNovaTab === NOVA_TAB_TYPE.aiChat) {
         if (files.length > uploadLimit) {
           await confirm({
@@ -82,38 +98,22 @@ export function useManageFile() {
           return;
         }
       }
-    }
 
-    const supportedExtensions =
-      selectedNovaTab === 'aiChat'
-        ? [
-            ...SUPPORT_DOCUMENT_TYPE.flatMap((type) => type.extensions),
-            ...getValidExt(selectedNovaTab).flatMap((type) => type.extensions)
-          ]
-        : [...getValidExt(selectedNovaTab).flatMap((type) => type.extensions)];
-
-    const invalidFiles = files.filter((file) => {
-      const fileExtension = `.${file.name.split('.').pop()?.toLowerCase()}`;
-      return !supportedExtensions.includes(fileExtension);
-    });
-
-    const support = supportedExtensions.filter((ext) => ext !== '.jpeg').join(', ');
-
-    if (invalidFiles.length > 0) {
-      await confirm({
-        title: '',
-        msg:
-          selectedNovaTab === 'aiChat'
-            ? t('Nova.Alert.CommonUnsupportFile')
-            : t(`Nova.Alert.CommonUnsupportImage`, { support }),
-        onOk: {
-          text: t('Confirm'),
-          callback: () => {
-            return;
+      const invalidSize = files.filter((file) => !isValidFileSize(file.size, selectedNovaTab));
+      if (invalidSize.length > 0) {
+        confirm({
+          title: '',
+          msg: t('Nova.Alert.OverFileUploadSize', {
+            max: getMaxFileSize(selectedNovaTab),
+            min: MIN_FILE_UPLOAD_SIZE_KB
+          })!,
+          onOk: {
+            text: t('Confirm'),
+            callback: () => {}
           }
-        }
-      });
-      return;
+        });
+        return;
+      }
     }
 
     dispatch(setLocalFiles(files));
