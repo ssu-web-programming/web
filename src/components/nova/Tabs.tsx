@@ -122,7 +122,10 @@ const Tabs = ({ tabs, activeTab, onChangeTab }: TabProps) => {
   const { t } = useTranslation();
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
+  const isTrigger = useRef(false);
+
   const swiperRef = useRef<SwiperClass | null>(null);
+  const BREAKPOINT = 688;
 
   const getTabTranslationKey = (tab: NOVA_TAB_TYPE) => {
     return `Nova.Tabs.${tab}`;
@@ -168,10 +171,43 @@ const Tabs = ({ tabs, activeTab, onChangeTab }: TabProps) => {
     }
   };
 
-  const handleMoveToActiveIndex = (tab: NOVA_TAB_TYPE, idx: number) => {
+  // 슬라이드 위치 체크 로직 분리
+  const getSlidePositions = (currentIndex: number, totalSlides: number) => {
+    const isDesktop = window.innerWidth >= BREAKPOINT;
+
+    return {
+      forwardSlide: isDesktop ? currentIndex === 0 || currentIndex === 1 : currentIndex === 0,
+      backwardSlide: isDesktop
+        ? currentIndex === totalSlides - 1 || currentIndex === totalSlides - 2
+        : currentIndex === totalSlides - 1,
+      updatedIndex: isDesktop ? (currentIndex === 1 ? 0 : currentIndex) : currentIndex
+    };
+  };
+
+  // Swiper 업데이트 로직 분리
+  const updateSwiperPosition = async (swiper: SwiperClass, index: number) => {
+    const { forwardSlide, backwardSlide, updatedIndex } = getSlidePositions(
+      index,
+      swiper.slides.length
+    );
+
+    isTrigger.current = true;
+    swiper.params.centeredSlides = !forwardSlide && !backwardSlide;
+
+    // handleMoveToActiveIndex가 동작하고서 onSlideChange 함수가 동작하게 되는데 isTrigger value의 변경된 상태가 바로 전달되지 않아서 생긴 로직!
+    await Promise.resolve();
+
+    swiper.slideTo(updatedIndex);
+    swiper.update();
+  };
+
+  const handleMoveToActiveIndex = async (tab: NOVA_TAB_TYPE, idx: number) => {
     onChangeTab(tab);
-    swiperRef.current?.slideTo(idx);
-    updateSwiperState();
+
+    if (swiperRef.current) {
+      await updateSwiperPosition(swiperRef.current, idx);
+      updateSwiperState();
+    }
   };
 
   return (
@@ -180,6 +216,17 @@ const Tabs = ({ tabs, activeTab, onChangeTab }: TabProps) => {
         spaceBetween={8}
         slidesPerView="auto"
         watchOverflow
+        watchSlidesProgress={true}
+        onSlideChange={() => {
+          if (swiperRef.current) {
+            if (!isTrigger.current) {
+              swiperRef.current.params.centeredSlides = false;
+            }
+
+            swiperRef.current.update();
+            isTrigger.current = false;
+          }
+        }}
         navigation={{
           prevEl: '.swiper-button-prev',
           nextEl: '.swiper-button-next'
