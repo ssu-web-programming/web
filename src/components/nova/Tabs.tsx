@@ -41,7 +41,7 @@ const iconMap: Record<NOVA_TAB_TYPE, { default: string; selected: string }> = {
   changeStyle: { default: changeStyleIcon, selected: changeStyleSelectedIcon }
 };
 
-const Wrap = styled.div`
+const Wrap = styled.div<{ isEnd: boolean; isBeginning: boolean }>`
   width: 100%;
   height: 52px;
   min-height: 52px;
@@ -156,20 +156,26 @@ const Tabs = ({ tabs, activeTab, onChangeTab }: TabProps) => {
 
   const handlePrevClick = () => {
     if (swiperRef.current) {
-      swiperRef.current.slidePrev(20);
+      swiperRef.current.slidePrev();
       updateSwiperState();
     }
   };
 
   const handleNextClick = () => {
     if (swiperRef.current) {
-      swiperRef.current.slideNext(20);
+      swiperRef.current.slideNext();
       updateSwiperState();
     }
   };
 
+  const handleMoveToActiveIndex = (tab: NOVA_TAB_TYPE, idx: number) => {
+    onChangeTab(tab);
+    swiperRef.current?.slideTo(idx);
+    updateSwiperState();
+  };
+
   return (
-    <Wrap>
+    <Wrap isBeginning={isBeginning} isEnd={isEnd}>
       <Swiper
         spaceBetween={8}
         slidesPerView="auto"
@@ -183,12 +189,12 @@ const Tabs = ({ tabs, activeTab, onChangeTab }: TabProps) => {
         }}
         pagination={{ clickable: true }}
         style={{ height: '32px' }}>
-        {tabs.map((tab) => {
+        {tabs.map((tab, idx) => {
           const isActive = activeTab === tab;
 
           return (
             <SwiperSlide key={tab} style={{ width: 'auto' }}>
-              <Tap onClick={() => onChangeTab(tab)} isHighlighted={isActive}>
+              <Tap onClick={() => handleMoveToActiveIndex(tab, idx)} isHighlighted={isActive}>
                 {tab === NOVA_TAB_TYPE.convert2DTo3D && (
                   <Badge>
                     <span>N</span>
