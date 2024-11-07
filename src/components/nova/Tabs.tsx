@@ -184,12 +184,18 @@ const Tabs = ({ tabs, activeTab, onChangeTab }: TabProps) => {
     onChangeTab(tab);
 
     if (swiperRef.current) {
-      swiperRef.current.slideTo(idx);
+      // 마지막 요소인 경우
+      if (idx === tabs.length - 1) {
+        swiperRef.current.slideTo(tabs.length - 1);
+        // centeredSlides를 false로 변경하여 end로 이동
+        setIsCentered(false);
+      } else {
+        swiperRef.current.slideTo(idx);
+      }
       swiperRef.current.update();
     }
     updateSwiperState();
   };
-
   return (
     <Wrap>
       <Swiper
