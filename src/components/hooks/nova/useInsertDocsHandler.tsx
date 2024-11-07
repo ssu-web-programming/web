@@ -18,6 +18,17 @@ export const useInsertDocsHandler = () => {
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
   const result = useAppSelector(selectPageResult(selectedNovaTab));
 
+  const ShowExpireLinkPopup = async () => {
+    confirm({
+      title: '',
+      msg: t('Nova.Confirm.ExpireImageLink.Msg'),
+      onOk: {
+        text: t('OK'),
+        callback: () => {}
+      }
+    });
+  };
+
   const insertDocsHandler = useCallback(
     async (history?: NovaChatType) => {
       Bridge.callSyncBridgeApiWithCallback({
@@ -68,11 +79,20 @@ export const useInsertDocsHandler = () => {
               } else {
                 if (!result) break;
                 if (result.link) {
-                  dispatch(setPageStatus({ tab: selectedNovaTab, status: 'saving' }));
-                  Bridge.callBridgeApi('insertAnimation', result.link);
+                  try {
+                    const res = await fetch(result.link, { method: 'HEAD' });
+                    const contentType = res.headers.get('Content-Type');
+                    if (contentType && contentType.includes('text/html')) {
+                      ShowExpireLinkPopup();
+                    } else {
+                      dispatch(setPageStatus({ tab: selectedNovaTab, status: 'saving' }));
+                      Bridge.callBridgeApi('insertAnimation', result.link);
+                    }
+                  } catch (err) {
+                    ShowExpireLinkPopup();
+                  }
                 } else {
                   const blob = base64ToBlob(result.data, result.contentType);
-                  dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.CompleteInsert`) }));
                   Bridge.callBridgeApi('insertImage', blob);
                   dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.CompleteInsert`) }));
                 }
