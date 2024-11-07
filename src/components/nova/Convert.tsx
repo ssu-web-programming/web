@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { lang } from 'locale';
 import { useTranslation } from 'react-i18next';
 import ReactPlayer from 'react-player';
 import styled from 'styled-components';
@@ -98,16 +99,16 @@ const SelectionBox = styled.div`
 const GridBox = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 76px);
-  grid-template-rows: repeat(2, 73px);
+  grid-template-rows: repeat(2, 1fr);
   gap: 8px;
   align-items: center;
   justify-content: center;
   margin-top: 8px;
 `;
 
-const GridItem = styled.div<{ isSelected: boolean }>`
+const GridItem = styled.div<{ lang: string; isSelected: boolean }>`
   width: 76px;
-  height: 73px;
+  height: ${(props) => (props.lang != 'en' ? '73px' : '94px')};
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -130,10 +131,12 @@ const GridItem = styled.div<{ isSelected: boolean }>`
   }
 
   p {
+    width: 100%;
     margin-top: 4px;
     font-size: 14px;
     font-weight: 500;
     line-height: 21px;
+    white-space: break-spaces;
     color: ${(props) => (props.isSelected ? '#6f3ad0' : '#72787f')};
   }
 `;
@@ -266,6 +269,7 @@ export default function Convert() {
               {options.map((option) => (
                 <GridItem
                   key={option.option}
+                  lang={lang}
                   isSelected={selectedOption?.option === option.option}
                   onClick={() => handleOptionClick(option)}>
                   <option.src />
