@@ -17,7 +17,7 @@ import {
 } from '../../store/slices/nova/pageStatusSlice';
 import { NOVA_TAB_TYPE, selectTabSlice } from '../../store/slices/tabSlice';
 import { activeToast } from '../../store/slices/toastSlice';
-import { getCurrentFile } from '../../store/slices/uploadFiles';
+import { getCurrentFile, setDriveFiles, setLocalFiles } from '../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import Bridge, { ClientType, getPlatform } from '../../util/bridge';
 import { base64ToBlob } from '../../util/files';
@@ -229,6 +229,8 @@ export default function Result() {
       onOk: {
         text: t('OK'),
         callback: () => {
+          dispatch(setLocalFiles([]));
+          dispatch(setDriveFiles([]));
           dispatch(resetPageData(selectedNovaTab));
           dispatch(resetPageResult(selectedNovaTab));
           dispatch(setPageStatus({ tab: selectedNovaTab, status: 'home' }));

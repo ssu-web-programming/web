@@ -11,6 +11,7 @@ import {
 } from '../../../store/slices/nova/pageStatusSlice';
 import { NOVA_TAB_TYPE, selectTabSlice } from '../../../store/slices/tabSlice';
 import { activeToast } from '../../../store/slices/toastSlice';
+import { setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
 import Bridge from '../../../util/bridge';
 import { base64ToBlob, insertDoc } from '../../../util/common';
@@ -30,6 +31,8 @@ export const useInsertDocsHandler = () => {
       onOk: {
         text: t('OK'),
         callback: () => {
+          dispatch(setLocalFiles([]));
+          dispatch(setDriveFiles([]));
           dispatch(resetPageData(selectedNovaTab));
           dispatch(resetPageResult(selectedNovaTab));
           dispatch(setPageStatus({ tab: selectedNovaTab, status: 'home' }));
