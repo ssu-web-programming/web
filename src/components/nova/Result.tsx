@@ -3,6 +3,7 @@ import DownloadIcon from 'img/ico_download_white.svg';
 import InsertDocsIcon from 'img/ico_insert_docs.svg';
 import { lang } from 'locale';
 import { useTranslation } from 'react-i18next';
+import ReactPlayer from 'react-player';
 import styled from 'styled-components';
 
 import CreditColorIcon from '../../img/ico_credit_color_outline.svg';
@@ -286,7 +287,7 @@ export default function Result() {
             }>
             {result?.link ? (
               result.link.endsWith('.mp4') ? (
-                <video src={result.link} loop autoPlay playsInline muted />
+                <ReactPlayer url={result.link} loop playing playsinline muted />
               ) : (
                 <img src={result.link} alt="result" />
               )

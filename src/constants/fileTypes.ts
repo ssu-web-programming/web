@@ -134,8 +134,8 @@ export async function compressImage(file: File, tab: NOVA_TAB_TYPE): Promise<Fil
   let widthOrHeight = -1;
 
   const megapixels = (width * height) / 1_000_000;
-  if (tab === 'convert2DTo3D' && megapixels > 10) {
-    widthOrHeight = 1000;
+  if (tab === 'convert2DTo3D' && (width > 2048 || height > 2048)) {
+    widthOrHeight = 2048;
   } else if (tab === 'removeBG' && megapixels > 25) {
     widthOrHeight = 5000;
   } else if (tab === 'changeBG' && (width > 2048 || height > 2048)) {
@@ -218,7 +218,7 @@ export const isPixelLimitExceeded = async (file: File, tab: NOVA_TAB_TYPE) => {
       const megapixels = (width * height) / 1000000;
 
       return (
-        (tab === 'convert2DTo3D' && megapixels > 10) ||
+        (tab === 'convert2DTo3D' && (width > 2048 || height > 2048)) ||
         (tab === 'removeBG' && megapixels > 25) ||
         (tab === 'changeBG' && (width > 2048 || height > 2048)) ||
         (tab === 'remakeImg' && (width > 1024 || height > 1024)) ||

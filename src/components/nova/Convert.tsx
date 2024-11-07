@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import ReactPlayer from 'react-player';
 import styled from 'styled-components';
 
 import { ReactComponent as Circular } from '../../img/nova/convert2DTo3D/circular.svg';
@@ -58,23 +59,25 @@ const ExampleText = styled.p`
 const ImageBox = styled.div`
   width: 100%;
   max-width: 480px;
-  max-height: 480px;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 8px auto 16px;
-  border: 1px solid #c9cdd2;
-  border-radius: 8px;
-  background: #e8ebed;
   overflow: hidden;
+  border-radius: 8px;
+
+  div {
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 8px;
+  }
 
   video {
     width: 100%;
-    height: 100%;
     max-width: 480px;
-    max-height: 480px;
     object-fit: contain;
+    border: 1px solid #c9cdd2;
     border-radius: 8px;
   }
 `;
@@ -246,18 +249,6 @@ export default function Convert() {
     setSelectedOption(option);
   };
 
-  const videoRef = useRef<HTMLVideoElement | null>(null);
-  useEffect(() => {
-    if (videoRef.current && selectedOption) {
-      videoRef.current.pause();
-      videoRef.current.load();
-
-      videoRef.current.onloadeddata = () => {
-        videoRef.current?.play();
-      };
-    }
-  }, [selectedOption]);
-
   return (
     <Wrap>
       <GoBackHeader />
@@ -266,9 +257,7 @@ export default function Convert() {
           <ExampleText>{t(`Nova.Convert.Example`)}</ExampleText>
           <ImageBox>
             {selectedOption && (
-              <video ref={videoRef} loop playsInline>
-                <source src={selectedOption.example} type="video/mp4" />
-              </video>
+              <ReactPlayer url={selectedOption.example} loop playing playsinline muted />
             )}
           </ImageBox>
           <SelectionBox>
