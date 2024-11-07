@@ -3,7 +3,12 @@ import { useTranslation } from 'react-i18next';
 
 import { ClientStatusType } from '../../../pages/Nova/Nova';
 import { NovaChatType } from '../../../store/slices/nova/novaHistorySlice';
-import { selectPageResult, setPageStatus } from '../../../store/slices/nova/pageStatusSlice';
+import {
+  resetPageData,
+  resetPageResult,
+  selectPageResult,
+  setPageStatus
+} from '../../../store/slices/nova/pageStatusSlice';
 import { NOVA_TAB_TYPE, selectTabSlice } from '../../../store/slices/tabSlice';
 import { activeToast } from '../../../store/slices/toastSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
@@ -24,7 +29,11 @@ export const useInsertDocsHandler = () => {
       msg: t('Nova.Confirm.ExpireImageLink.Msg'),
       onOk: {
         text: t('OK'),
-        callback: () => {}
+        callback: () => {
+          dispatch(resetPageData(selectedNovaTab));
+          dispatch(resetPageResult(selectedNovaTab));
+          dispatch(setPageStatus({ tab: selectedNovaTab, status: 'home' }));
+        }
       }
     });
   };

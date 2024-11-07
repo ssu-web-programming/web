@@ -9,7 +9,12 @@ import styled from 'styled-components';
 import CreditColorIcon from '../../img/ico_credit_color_outline.svg';
 import CheckIcon from '../../img/nova/check_purple.png';
 import { ClientStatusType } from '../../pages/Nova/Nova';
-import { selectPageResult, setPageStatus } from '../../store/slices/nova/pageStatusSlice';
+import {
+  resetPageData,
+  resetPageResult,
+  selectPageResult,
+  setPageStatus
+} from '../../store/slices/nova/pageStatusSlice';
 import { NOVA_TAB_TYPE, selectTabSlice } from '../../store/slices/tabSlice';
 import { activeToast } from '../../store/slices/toastSlice';
 import { getCurrentFile } from '../../store/slices/uploadFiles';
@@ -223,7 +228,11 @@ export default function Result() {
       msg: t('Nova.Confirm.ExpireImageLink.Msg'),
       onOk: {
         text: t('OK'),
-        callback: () => {}
+        callback: () => {
+          dispatch(resetPageData(selectedNovaTab));
+          dispatch(resetPageResult(selectedNovaTab));
+          dispatch(setPageStatus({ tab: selectedNovaTab, status: 'home' }));
+        }
       }
     });
   };

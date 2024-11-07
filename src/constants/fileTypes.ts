@@ -140,7 +140,7 @@ export async function compressImage(file: File, tab: NOVA_TAB_TYPE): Promise<Fil
     widthOrHeight = 5000;
   } else if (tab === 'changeBG' && (width > 2048 || height > 2048)) {
     widthOrHeight = 2048;
-  } else if (tab === 'remakeImg' && (width > 1024 || height > 1024)) {
+  } else if (tab === 'remakeImg' && (wiㅇdth > 1024 || height > 1024)) {
     widthOrHeight = 1024;
   } else if (tab === 'expandImg' && megapixels > 10) {
     widthOrHeight = 3000;
