@@ -590,6 +590,9 @@
         "Ok": "Update now",
         "Cancel": "Later"
       },
+      "UpdateVersionWindows": {
+        "Msg": "The 2D to 3D conversion feature is only available in the latest version. Update to the latest version under [Document > Options > About Program] to experience the new features!"
+      },
       "ExpireImageLink": {
         "Msg": "The image link has expired. Please start the function again."
       }

@@ -213,20 +213,31 @@ const Tooltip = (props: TooltipProps) => {
   };
 
   const confirmUpload = async (url: string) => {
-    await confirm({
-      title: '',
-      msg: t('Nova.Confirm.UpdateVersion.Msg'),
-      onOk: {
-        text: t('Nova.Confirm.UpdateVersion.Ok'),
-        callback: () => {
-          Bridge.callBridgeApi('openWindow', url);
+    if (platform === ClientType.windows) {
+      await confirm({
+        title: '',
+        msg: t('Nova.Confirm.UpdateVersionWindows.Msg'),
+        onOk: {
+          text: t('Ok'),
+          callback: () => {}
         }
-      },
-      onCancel: {
-        text: t('Nova.Confirm.UpdateVersion.Cancel'),
-        callback: () => {}
-      }
-    });
+      });
+    } else {
+      await confirm({
+        title: '',
+        msg: t('Nova.Confirm.UpdateVersion.Msg'),
+        onOk: {
+          text: t('Nova.Confirm.UpdateVersion.Ok'),
+          callback: () => {
+            Bridge.callBridgeApi('openWindow', url);
+          }
+        },
+        onCancel: {
+          text: t('Nova.Confirm.UpdateVersion.Cancel'),
+          callback: () => {}
+        }
+      });
+    }
   };
 
   const toggleTooltip = () => {
