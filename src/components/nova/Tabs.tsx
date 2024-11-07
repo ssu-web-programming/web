@@ -41,7 +41,7 @@ const iconMap: Record<NOVA_TAB_TYPE, { default: string; selected: string }> = {
   changeStyle: { default: changeStyleIcon, selected: changeStyleSelectedIcon }
 };
 
-const Wrap = styled.div<{ isEnd: boolean; isBeginning: boolean }>`
+const Wrap = styled.div`
   width: 100%;
   height: 52px;
   min-height: 52px;
@@ -122,10 +122,8 @@ const Tabs = ({ tabs, activeTab, onChangeTab }: TabProps) => {
   const { t } = useTranslation();
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
-  const isTrigger = useRef(false);
-
+  const [isCentered, setIsCentered] = useState(false);
   const swiperRef = useRef<SwiperClass | null>(null);
-  const BREAKPOINT = 688;
 
   const getTabTranslationKey = (tab: NOVA_TAB_TYPE) => {
     return `Nova.Tabs.${tab}`;
@@ -135,30 +133,39 @@ const Tabs = ({ tabs, activeTab, onChangeTab }: TabProps) => {
     return isSelected ? iconMap[tab].selected : iconMap[tab].default;
   };
 
-  // Swiper 상태를 업데이트하는 함수
   const updateSwiperState = () => {
     if (swiperRef.current) {
       setIsBeginning(swiperRef.current.isBeginning);
       setIsEnd(swiperRef.current.isEnd);
     }
   };
-
   useEffect(() => {
     const swiper = swiperRef.current;
-    if (swiper) {
-      swiper.on('touchEnd', updateSwiperState);
-      updateSwiperState();
-    }
+    if (!swiper) return;
 
-    return () => {
-      if (swiper) {
-        swiper.off('touchEnd', updateSwiperState);
+    const handleSlideChange = () => {
+      if (!isCentered) {
+        setIsCentered(true);
+        // 다음 tick에서 swiper 업데이트 실행
+        requestAnimationFrame(() => {
+          swiper.update();
+        });
       }
     };
-  }, [swiperRef]);
+
+    swiper.on('slideChange', handleSlideChange);
+    swiper.on('touchEnd', updateSwiperState);
+    updateSwiperState();
+
+    return () => {
+      swiper.off('slideChange', handleSlideChange);
+      swiper.off('touchEnd', updateSwiperState);
+    };
+  }, [swiperRef, isCentered]);
 
   const handlePrevClick = () => {
     if (swiperRef.current) {
+      if (!isCentered) setIsCentered(true);
       swiperRef.current.slidePrev();
       updateSwiperState();
     }
@@ -166,67 +173,30 @@ const Tabs = ({ tabs, activeTab, onChangeTab }: TabProps) => {
 
   const handleNextClick = () => {
     if (swiperRef.current) {
+      if (!isCentered) setIsCentered(true);
       swiperRef.current.slideNext();
       updateSwiperState();
     }
   };
 
-  // 슬라이드 위치 체크 로직 분리
-  const getSlidePositions = (currentIndex: number, totalSlides: number) => {
-    const isDesktop = window.innerWidth >= BREAKPOINT;
-
-    return {
-      forwardSlide: isDesktop ? currentIndex === 0 || currentIndex === 1 : currentIndex === 0,
-      backwardSlide: isDesktop
-        ? currentIndex === totalSlides - 1 || currentIndex === totalSlides - 2
-        : currentIndex === totalSlides - 1,
-      updatedIndex: isDesktop ? (currentIndex === 1 ? 0 : currentIndex) : currentIndex
-    };
-  };
-
-  // Swiper 업데이트 로직 분리
-  const updateSwiperPosition = async (swiper: SwiperClass, index: number) => {
-    const { forwardSlide, backwardSlide, updatedIndex } = getSlidePositions(
-      index,
-      swiper.slides.length
-    );
-
-    isTrigger.current = true;
-    swiper.params.centeredSlides = !forwardSlide && !backwardSlide;
-
-    // handleMoveToActiveIndex가 동작하고서 onSlideChange 함수가 동작하게 되는데 isTrigger value의 변경된 상태가 바로 전달되지 않아서 생긴 로직!
-    await Promise.resolve();
-
-    swiper.slideTo(updatedIndex);
-    swiper.update();
-  };
-
   const handleMoveToActiveIndex = async (tab: NOVA_TAB_TYPE, idx: number) => {
+    if (!isCentered) setIsCentered(true);
     onChangeTab(tab);
 
     if (swiperRef.current) {
-      await updateSwiperPosition(swiperRef.current, idx);
-      updateSwiperState();
+      swiperRef.current.slideTo(idx);
+      swiperRef.current.update();
     }
+    updateSwiperState();
   };
 
   return (
-    <Wrap isBeginning={isBeginning} isEnd={isEnd}>
+    <Wrap>
       <Swiper
         spaceBetween={8}
         slidesPerView="auto"
-        watchOverflow
-        watchSlidesProgress={true}
-        onSlideChange={() => {
-          if (swiperRef.current) {
-            if (!isTrigger.current) {
-              swiperRef.current.params.centeredSlides = false;
-            }
-
-            swiperRef.current.update();
-            isTrigger.current = false;
-          }
-        }}
+        centeredSlides={isCentered}
+        centeredSlidesBounds={isCentered}
         navigation={{
           prevEl: '.swiper-button-prev',
           nextEl: '.swiper-button-next'
