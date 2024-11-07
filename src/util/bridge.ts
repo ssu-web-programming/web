@@ -452,9 +452,6 @@ export const useInitBridgeListener = () => {
             break;
           }
           case 'finishDownloadAnimation': {
-            console.log('body: ', body);
-            console.log('finish download animation');
-            console.log('selectedNovaTab: ', selectedNovaTab);
             dispatch(setPageStatus({ tab: selectedNovaTab, status: 'done' }));
             if (body.isSaved) {
               dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.SaveCompleted`) }));

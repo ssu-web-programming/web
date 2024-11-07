@@ -153,7 +153,6 @@ export default function AIChat() {
     try {
       if (imageURL) {
         await downloadImage(imageURL);
-        dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.SaveCompleted`) }));
       }
     } catch {
       dispatch(activeToast({ type: 'error', msg: 'ToastMsg.SaveFailed' }));
