@@ -204,7 +204,7 @@ export default function Result() {
       api: 'getClientStatus',
       callback: async (status: ClientStatusType) => {
         if (selectedNovaTab === NOVA_TAB_TYPE.convert2DTo3D) {
-          setShowInsertDocBtn(isPC && currentFile.ext === 'pptx');
+          setShowInsertDocBtn(status !== 'home' && isPC && currentFile.ext === 'pptx');
         } else {
           setShowInsertDocBtn(status !== 'home' || isMobile);
         }
