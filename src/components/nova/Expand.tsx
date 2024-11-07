@@ -383,10 +383,10 @@ export default function Expand() {
             onClick={async () => {
               if (!checkImageOutOfBounds()) {
                 handleExpandImage(
-                  Math.round(canvasDiff.left * scaleRatio.widthRatio),
-                  Math.round(canvasDiff.right * scaleRatio.widthRatio),
-                  Math.round(canvasDiff.top * scaleRatio.heightRatio),
-                  Math.round(canvasDiff.bottom * scaleRatio.heightRatio)
+                  Math.floor(canvasDiff.left * scaleRatio.widthRatio),
+                  Math.floor(canvasDiff.right * scaleRatio.widthRatio),
+                  Math.floor(canvasDiff.top * scaleRatio.heightRatio),
+                  Math.floor(canvasDiff.bottom * scaleRatio.heightRatio)
                 );
               } else {
                 await confirm({
