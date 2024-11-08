@@ -226,7 +226,7 @@ export default function AIChat() {
         contents={inputContents}
         setContents={setInputContents}></InputBar>
       <FileUploading {...fileUploadState}></FileUploading>
-      {imagePreview && (
+      {imagePreview && novaHistory.length > 0 && (
         <ImagePreview {...imagePreview} onClose={() => setImagePreview(null)}></ImagePreview>
       )}
     </Wrap>
