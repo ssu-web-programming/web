@@ -76,7 +76,7 @@ const Badge = styled.div`
 
   span {
     font-size: 10px;
-    font-weight: 300;
+    font-weight: bold;
     line-height: 10px;
     color: white;
   }
