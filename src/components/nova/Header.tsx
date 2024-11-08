@@ -2,11 +2,12 @@ import React from 'react';
 import { ReactComponent as IconLogoNova } from 'img/ico_logo_nova.svg';
 import { ReactComponent as IconMessagePlus } from 'img/ico_message_plus.svg';
 import { ReactComponent as IconClose } from 'img/ico_nova_close.svg';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import styled, { css } from 'styled-components';
 
 import ico_credit from '../../img/ico_credit_gray.svg';
 import ico_credit_info from '../../img/ico_credit_line.svg';
+import { ReactComponent as IconConvert } from '../../img/nova/tab/convert_Img.svg';
 import { creditInfoSelector, InitialState } from '../../store/slices/creditInfo';
 import { novaHistorySelector } from '../../store/slices/nova/novaHistorySlice';
 import { NOVA_TAB_TYPE, selectTabSlice } from '../../store/slices/tabSlice';
@@ -64,33 +65,87 @@ export default function NovaHeader(props: NovaHeaderProps) {
   const chatNova = useChatNova();
   const creditInfo = useAppSelector(creditInfoSelector);
 
-  const CREDIT_NAME_MAP: { [category: string]: { [serviceType: string]: string } | string } = {
+  const CREDIT_NAME_MAP: {
+    [category: string]:
+      | {
+          [serviceType: string]: {
+            text: string;
+            textIcon?: any;
+          };
+        }
+      | {
+          text: string;
+          textIcon?: any;
+        };
+  } = {
     [t('Nova.CreditInfo.AIChat.Title')]: {
-      NOVA_CHAT_GPT4O: t(`Nova.CreditInfo.AIChat.Chat`),
-      NOVA_ASK_DOC_GPT4O: t(`Nova.CreditInfo.AIChat.DocImgQuery`),
-      NOVA_IMG_GPT4O: t(`Nova.CreditInfo.AIChat.ImgGen`)
+      NOVA_CHAT_GPT4O: {
+        text: t(`Nova.CreditInfo.AIChat.Chat`)
+      },
+      NOVA_ASK_DOC_GPT4O: {
+        text: t(`Nova.CreditInfo.AIChat.DocImgQuery`)
+      },
+      NOVA_IMG_GPT4O: {
+        text: t(`Nova.CreditInfo.AIChat.ImgGen`)
+      }
     },
-    NOVA_ANIMATION_3D_IMMERSITY: t(`Nova.CreditInfo.Convert2DTo3D`) || '',
-    NOVA_REMOVE_BG: t(`Nova.CreditInfo.RemoveBG`) || '',
-    NOVA_REPLACE_BG_CLIPDROP: t(`Nova.CreditInfo.ChangeBG`) || '',
-    NOVA_REIMAGE_CLIPDROP: t(`Nova.CreditInfo.RemakeImg`) || '',
-    NOVA_UNCROP_CLIPDROP: t(`Nova.CreditInfo.ExpandImg`) || '',
-    NOVA_PO_RESOLUTION: t(`Nova.CreditInfo.ImprovedRes`) || '',
-    NOVA_PO_STYLE_TRANSFER: t(`Nova.CreditInfo.ChangeStyle`) || ''
+    NOVA_ANIMATION_3D_IMMERSITY: {
+      text: t(`Nova.CreditInfo.Convert2DTo3D`) || '',
+      textIcon: (
+        <Trans
+          i18nKey={`Nova.CreditInfo.Convert2DTo3D`}
+          components={{
+            img: <IconConvert height={11} />
+          }}
+        />
+      )
+    },
+    NOVA_REMOVE_BG: {
+      text: t(`Nova.CreditInfo.RemoveBG`) || ''
+    },
+    NOVA_REPLACE_BG_CLIPDROP: {
+      text: t(`Nova.CreditInfo.ChangeBG`) || ''
+    },
+    NOVA_REIMAGE_CLIPDROP: {
+      text: t(`Nova.CreditInfo.RemakeImg`) || ''
+    },
+    NOVA_UNCROP_CLIPDROP: {
+      text: t(`Nova.CreditInfo.ExpandImg`) || ''
+    },
+    NOVA_PO_RESOLUTION: {
+      text: t(`Nova.CreditInfo.ImprovedRes`) || ''
+    },
+    NOVA_PO_STYLE_TRANSFER: {
+      text: t(`Nova.CreditInfo.ChangeStyle`) || ''
+    }
   };
 
   const filterCreditInfo = (
     creditInfo: InitialState[],
-    nameMap: { [category: string]: { [serviceType: string]: string } | string }
+    nameMap: {
+      [category: string]:
+        | {
+            [serviceType: string]: {
+              text: string;
+            };
+          }
+        | {
+            text: string;
+          };
+    }
   ) => {
     return creditInfo.filter((item) => {
-      if (typeof nameMap[item.serviceType] === 'string') {
-        return !!nameMap[item.serviceType];
+      const categoryMap = nameMap[item.serviceType];
+
+      // 단일 서비스 타입인 경우
+      if (categoryMap && 'text' in categoryMap) {
+        return !!categoryMap.text;
       }
 
-      return Object.values(nameMap).some((subMap) => {
-        if (typeof subMap === 'object' && subMap[item.serviceType]) {
-          return true;
+      // 서브 서비스 타입이 있는 경우
+      return Object.entries(nameMap).some(([_, value]) => {
+        if (typeof value === 'object' && !('text' in value)) {
+          return !!value[item.serviceType]?.text;
         }
         return false;
       });
@@ -101,23 +156,27 @@ export default function NovaHeader(props: NovaHeaderProps) {
 
   const TOOLTIP_CREDIT_OPTIONS = Object.entries(CREDIT_NAME_MAP).flatMap(
     ([category, serviceMap]) => {
-      if (typeof serviceMap === 'string') {
+      // 단일 서비스인 경우 (text 프로퍼티가 있는 경우)
+      if ('text' in serviceMap) {
         const creditItem = credit.find((item) => item.serviceType === category);
         return creditItem
           ? [
               {
-                name: serviceMap, // 서비스 이름
+                name: serviceMap.text,
+                nameIcon: serviceMap.textIcon,
                 icon: { src: ico_credit, txt: String(creditItem.deductCredit) }
               }
             ]
           : [];
       }
 
-      return Object.entries(serviceMap).flatMap(([serviceType, serviceName]) => {
+      // 서브 서비스가 있는 경우
+      return Object.entries(serviceMap).flatMap(([serviceType, service]) => {
         const creditItem = credit.find((item) => item.serviceType === serviceType);
         return creditItem
           ? {
-              name: serviceName,
+              name: service.text,
+              nameIcon: serviceMap.textIcon,
               icon: { src: ico_credit, txt: String(creditItem.deductCredit) },
               category: category
             }

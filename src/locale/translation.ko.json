@@ -454,7 +454,7 @@
         "DocImgQuery": "문서/이미지 질의",
         "ImgGen": "이미지 생성"
       },
-      "Convert2DTo3D": "2D->3D 변환",
+      "Convert2DTo3D": "2D <img/> 3D 변환",
       "RemoveBG": "배경 제거",
       "ChangeBG": "배경 변경",
       "RemakeImg": "이미지 리메이크",
