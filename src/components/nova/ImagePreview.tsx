@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { ReactComponent as xMarkIcon } from 'img/ico_xmark.svg';
 import styled, { css } from 'styled-components';
 
@@ -39,6 +40,17 @@ interface ImagePreviewProps extends NovaFileInfo {
 }
 
 export const ImagePreview = (props: ImagePreviewProps) => {
+  const [imageURL, setImageURL] = useState('');
+
+  useEffect(() => {
+    if (props.file) {
+      const newURL = URL.createObjectURL(props.file);
+      setImageURL(newURL);
+
+      return () => URL.revokeObjectURL(newURL);
+    }
+  }, [props.file]);
+
   return (
     <ImagePreviewWrapper>
       <div className="btns">
@@ -55,7 +67,7 @@ export const ImagePreview = (props: ImagePreviewProps) => {
           onClick={() => props.onClose()}
         />
       </div>
-      <img src={URL.createObjectURL(props.file)} alt="preview" />
+      <img src={imageURL} alt="preview" />
     </ImagePreviewWrapper>
   );
 };
