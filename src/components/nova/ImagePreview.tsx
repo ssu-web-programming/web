@@ -40,14 +40,17 @@ interface ImagePreviewProps extends NovaFileInfo {
 }
 
 export const ImagePreview = (props: ImagePreviewProps) => {
-  const [imageURL, setImageURL] = useState('');
+  const [imageSrc, setImageSrc] = useState<string | null>(null);
 
   useEffect(() => {
     if (props.file) {
-      const newURL = URL.createObjectURL(props.file);
-      setImageURL(newURL);
-
-      return () => URL.revokeObjectURL(newURL);
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setImageSrc(event.target?.result as string);
+      };
+      reader.readAsDataURL(props.file);
+    } else {
+      setImageSrc(null);
     }
   }, [props.file]);
 
@@ -67,7 +70,7 @@ export const ImagePreview = (props: ImagePreviewProps) => {
           onClick={() => props.onClose()}
         />
       </div>
-      <img src={imageURL} alt="preview" />
+      {imageSrc && <img src={imageSrc} alt="preview" />}
     </ImagePreviewWrapper>
   );
 };
