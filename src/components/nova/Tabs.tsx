@@ -183,6 +183,25 @@ const Tabs = ({ tabs, activeTab, onChangeTab }: TabProps) => {
     };
   }, [swiperRef, isCentered]);
 
+  useEffect(() => {
+    const swiper = swiperRef.current;
+    if (!swiper) return;
+
+    const activeTabIndex = tabs.findIndex((tab) => tab === activeTab);
+
+    // 마지막 요소인 경우
+    if (activeTabIndex === tabs.length - 1) {
+      swiper.slideTo(tabs.length - 1);
+      setIsCentered(false);
+    } else {
+      setIsCentered(true);
+      swiper.slideTo(activeTabIndex);
+    }
+
+    swiper.update();
+    updateSwiperState();
+  }, [activeTab, tabs, swiperRef.current]);
+
   const handlePrevClick = () => {
     if (swiperRef.current) {
       if (!isCentered) setIsCentered(true);
