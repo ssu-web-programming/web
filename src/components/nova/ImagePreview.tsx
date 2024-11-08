@@ -16,6 +16,7 @@ const ImagePreviewWrapper = styled.div`
   align-items: center;
   background: #fff linear-gradient(0deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3));
   padding: 10px;
+  z-index: 10;
 
   .btns {
     position: absolute;
