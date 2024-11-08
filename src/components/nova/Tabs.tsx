@@ -55,7 +55,7 @@ const Wrap = styled.div`
 `;
 
 const CustomSwiper = styled(Swiper)`
-  .swiper-backface-hidden .swiper-slide {
+  &.swiper-backface-hidden.swiper-slide {
     transform: none !important;
   }
 `;
@@ -217,6 +217,7 @@ const Tabs = ({ tabs, activeTab, onChangeTab }: TabProps) => {
           swiperRef.current = swiper;
         }}
         pagination={{ clickable: true }}
+        virtualTranslate={true}
         style={{ height: '32px' }}>
         {tabs.map((tab, idx) => {
           const isActive = activeTab === tab;
