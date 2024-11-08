@@ -21,7 +21,7 @@ export type TooltipOption = {
     | {
         text: string;
       };
-  nameIcon?: ReactElement;
+  nameWithIcon?: ReactElement;
   icon?: {
     src: string;
     txt?: string;
@@ -164,7 +164,6 @@ const Tooltip = (props: TooltipProps) => {
     initPos = false
   } = props;
 
-  console.log('options', options);
   const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
   const localFiles = useAppSelector(getLocalFiles);
   const { platform, version } = useAppSelector(platformInfoSelector);
@@ -358,8 +357,8 @@ const OptionItem = (props: {
               <Icon iconSrc={option.icon?.src} size={24} />
             </div>
             <span>
-              {option.nameIcon
-                ? option.nameIcon
+              {option.nameWithIcon
+                ? option.nameWithIcon
                 : typeof option.name === 'string'
                   ? option.name
                   : option.name.text}
@@ -375,8 +374,8 @@ const OptionItem = (props: {
     <li style={{ listStyle: isBullet ? 'disc' : 'none' }}>
       <OptionItemWrapper type={type}>
         <p>
-          {option.nameIcon
-            ? option.nameIcon
+          {option.nameWithIcon
+            ? option.nameWithIcon
             : typeof option.name === 'string'
               ? option.name
               : option.name.text}
@@ -389,8 +388,6 @@ const OptionItem = (props: {
 
 const Chip = (props: { option: TooltipOption }) => {
   const { icon } = props.option;
-
-  console.log('icon', icon);
 
   return (
     <ChipWrapper>

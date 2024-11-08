@@ -163,7 +163,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
           ? [
               {
                 name: serviceMap.text,
-                nameIcon: serviceMap.textIcon,
+                nameWithIcon: serviceMap.textIcon,
                 icon: { src: ico_credit, txt: String(creditItem.deductCredit) }
               }
             ]
@@ -176,7 +176,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
         return creditItem
           ? {
               name: service.text,
-              nameIcon: serviceMap.textIcon,
+              nameWithIcon: serviceMap.textIcon,
               icon: { src: ico_credit, txt: String(creditItem.deductCredit) },
               category: category
             }
