@@ -122,6 +122,7 @@ const Tabs = ({ tabs, activeTab, onChangeTab }: TabProps) => {
   const { t } = useTranslation();
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
+  const [isCentered, setIsCentered] = useState(false);
   const swiperRef = useRef<SwiperClass | null>(null);
 
   const getTabTranslationKey = (tab: NOVA_TAB_TYPE) => {
@@ -132,48 +133,76 @@ const Tabs = ({ tabs, activeTab, onChangeTab }: TabProps) => {
     return isSelected ? iconMap[tab].selected : iconMap[tab].default;
   };
 
-  // Swiper 상태를 업데이트하는 함수
   const updateSwiperState = () => {
     if (swiperRef.current) {
       setIsBeginning(swiperRef.current.isBeginning);
       setIsEnd(swiperRef.current.isEnd);
     }
   };
-
   useEffect(() => {
     const swiper = swiperRef.current;
-    if (swiper) {
-      swiper.on('touchEnd', updateSwiperState);
-      updateSwiperState();
-    }
+    if (!swiper) return;
 
-    return () => {
-      if (swiper) {
-        swiper.off('touchEnd', updateSwiperState);
+    const handleSlideChange = () => {
+      if (!isCentered) {
+        setIsCentered(true);
+        // 다음 tick에서 swiper 업데이트 실행
+        requestAnimationFrame(() => {
+          swiper.update();
+        });
       }
     };
-  }, [swiperRef]);
+
+    swiper.on('slideChange', handleSlideChange);
+    swiper.on('touchEnd', updateSwiperState);
+    updateSwiperState();
+
+    return () => {
+      swiper.off('slideChange', handleSlideChange);
+      swiper.off('touchEnd', updateSwiperState);
+    };
+  }, [swiperRef, isCentered]);
 
   const handlePrevClick = () => {
     if (swiperRef.current) {
-      swiperRef.current.slidePrev(20);
+      if (!isCentered) setIsCentered(true);
+      swiperRef.current.slidePrev();
       updateSwiperState();
     }
   };
 
   const handleNextClick = () => {
     if (swiperRef.current) {
-      swiperRef.current.slideNext(20);
+      if (!isCentered) setIsCentered(true);
+      swiperRef.current.slideNext();
       updateSwiperState();
     }
   };
 
+  const handleMoveToActiveIndex = async (tab: NOVA_TAB_TYPE, idx: number) => {
+    if (!isCentered) setIsCentered(true);
+    onChangeTab(tab);
+
+    if (swiperRef.current) {
+      // 마지막 요소인 경우
+      if (idx === tabs.length - 1) {
+        swiperRef.current.slideTo(tabs.length - 1);
+        // centeredSlides를 false로 변경하여 end로 이동
+        setIsCentered(false);
+      } else {
+        swiperRef.current.slideTo(idx);
+      }
+      swiperRef.current.update();
+    }
+    updateSwiperState();
+  };
   return (
     <Wrap>
       <Swiper
         spaceBetween={8}
         slidesPerView="auto"
-        watchOverflow
+        centeredSlides={isCentered}
+        centeredSlidesBounds={isCentered}
         navigation={{
           prevEl: '.swiper-button-prev',
           nextEl: '.swiper-button-next'
@@ -183,12 +212,12 @@ const Tabs = ({ tabs, activeTab, onChangeTab }: TabProps) => {
         }}
         pagination={{ clickable: true }}
         style={{ height: '32px' }}>
-        {tabs.map((tab) => {
+        {tabs.map((tab, idx) => {
           const isActive = activeTab === tab;
 
           return (
             <SwiperSlide key={tab} style={{ width: 'auto' }}>
-              <Tap onClick={() => onChangeTab(tab)} isHighlighted={isActive}>
+              <Tap onClick={() => handleMoveToActiveIndex(tab, idx)} isHighlighted={isActive}>
                 {tab === NOVA_TAB_TYPE.convert2DTo3D && (
                   <Badge>
                     <span>N</span>
