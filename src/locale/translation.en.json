@@ -166,6 +166,7 @@
     "SuccessMsg": "Writing content completed. Select a job you want.",
     "CompleteCopy": "Copy completed.",
     "CompleteInsert": "Insert completed.",
+    "FailedToInsertIntoDoc": "Failed to insert into document.",
     "ErrorMsg": "An error has occurred. Please try again later. ({{code}} : {{msg}})",
     "ServiceErrorMsg": "Experiencing issues with the service. Please try again later.",
     "UnauthorizedMsg": "You need to be logged in to use this feature. Please check your login status again.",
@@ -522,7 +523,6 @@
       "LackOfStorage": "There is not enough storage space on the Polaris Drive. Please make sure you have enough storage space to upload files!",
       "LowResolution": "The image's resolution is low, making analysis difficult. Please upload a higher resolution image.",
       "DamagedFile": "The file is damaged and cannot be uploaded. Please check the file again.",
-      "FailedToInsertIntoDoc": "Failed to insert into document. Please try again",
       "Checking": {
         "Title": "Function under maintenance",
         "Msg": "The function is under maintenance. Please try again later."

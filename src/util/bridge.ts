@@ -446,6 +446,7 @@ export const useInitBridgeListener = () => {
             break;
           }
           case 'finishDownloadImage': {
+            dispatch(setPageStatus({ tab: selectedNovaTab, status: 'done' }));
             if (body.isSaved) {
               dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.SaveCompleted`) }));
             }
@@ -460,7 +461,11 @@ export const useInitBridgeListener = () => {
           }
           case 'finishInsertAnimation': {
             dispatch(setPageStatus({ tab: selectedNovaTab, status: 'done' }));
-            dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.CompleteInsert`) }));
+            if (body.isSaved) {
+              dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.CompleteInsert`) }));
+            } else {
+              dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.FailedToInsertIntoDoc`) }));
+            }
             break;
           }
           case 'showToast': {
