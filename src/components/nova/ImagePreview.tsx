@@ -43,6 +43,7 @@ export const ImagePreview = (props: ImagePreviewProps) => {
   const [imageSrc, setImageSrc] = useState<string | null>(null);
 
   useEffect(() => {
+    console.log(props.file);
     if (props.file) {
       const reader = new FileReader();
       reader.onload = (event) => {

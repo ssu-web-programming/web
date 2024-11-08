@@ -267,6 +267,7 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                         }
                       }
                     } else if (item.type === 'image') {
+                      console.log('file: ', file);
                       props.setImagePreview(file);
                     }
                   }}>

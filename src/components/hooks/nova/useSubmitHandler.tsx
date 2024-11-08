@@ -274,6 +274,7 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
           const $image = $('img');
           if ($image.length > 0) {
             const image = $image[0] as cheerio.TagElement;
+            console.log('image: ', image.attribs.src);
             dispatch(addChatOutputRes({ id, res: image.attribs.src }));
           }
         }
