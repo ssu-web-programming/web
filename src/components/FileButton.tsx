@@ -11,6 +11,7 @@ const FileButtonBase = styled.button`
   height: 100%;
   background-color: transparent;
   padding: 0;
+  -webkit-tap-highlight-color: transparent;
 `;
 
 const Label = styled.label<{ disable: boolean }>`
@@ -19,7 +20,6 @@ const Label = styled.label<{ disable: boolean }>`
   display: block;
   cursor: ${(props) => (props.disable ? 'initial' : 'pointer')};
   color: ${(props) => (props.disable ? '#454c5380' : 'var(--gray-gray-80-02)')};
-  -webkit-tap-highlight-color: transparent;
 `;
 
 interface FileButtonProps extends React.ComponentPropsWithoutRef<'input'> {
