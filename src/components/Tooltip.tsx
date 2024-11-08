@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { ReactElement, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled, { css } from 'styled-components';
 
@@ -16,7 +16,12 @@ import Icon from './Icon';
 export type TooltipType = 'selectable' | 'normal';
 export type TooltipPlacement = 'top-start' | 'top-end' | 'bottom-start' | 'bottom-end';
 export type TooltipOption = {
-  name: string;
+  name:
+    | string
+    | {
+        text: string;
+      };
+  nameWithIcon?: ReactElement;
   icon?: {
     src: string;
     txt?: string;
@@ -158,6 +163,7 @@ const Tooltip = (props: TooltipProps) => {
     distance = 4,
     initPos = false
   } = props;
+
   const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
   const localFiles = useAppSelector(getLocalFiles);
   const { platform, version } = useAppSelector(platformInfoSelector);
@@ -350,7 +356,13 @@ const OptionItem = (props: {
             <div style={{ marginRight: '6px' }}>
               <Icon iconSrc={option.icon?.src} size={24} />
             </div>
-            <span>{option.name}</span>
+            <span>
+              {option.nameWithIcon
+                ? option.nameWithIcon
+                : typeof option.name === 'string'
+                  ? option.name
+                  : option.name.text}
+            </span>
           </OptionItemWrapper>
         </li>
         <Divider />
@@ -361,7 +373,13 @@ const OptionItem = (props: {
   return (
     <li style={{ listStyle: isBullet ? 'disc' : 'none' }}>
       <OptionItemWrapper type={type}>
-        {option.name}
+        <p>
+          {option.nameWithIcon
+            ? option.nameWithIcon
+            : typeof option.name === 'string'
+              ? option.name
+              : option.name.text}
+        </p>
         <Tooltip.Chip option={option} />
       </OptionItemWrapper>
     </li>
@@ -370,6 +388,7 @@ const OptionItem = (props: {
 
 const Chip = (props: { option: TooltipOption }) => {
   const { icon } = props.option;
+
   return (
     <ChipWrapper>
       {icon?.txt && <span style={{ marginRight: '4px' }}>{icon.txt}</span>}

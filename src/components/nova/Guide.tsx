@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import aiChatIcon from '../../img/nova/imgSample/ai_chat_sample.png';
@@ -10,6 +10,7 @@ import expandImgIcon from '../../img/nova/imgSample/image_expand_sample.png';
 import remakeImgIcon from '../../img/nova/imgSample/image_remake_sample.png';
 import changeStyleIcon from '../../img/nova/imgSample/image_style_sample.png';
 import improvedResIcon from '../../img/nova/imgSample/image_upscaling_sample.png';
+import { ReactComponent as IconConvert } from '../../img/nova/tab/convert_Img.svg';
 import { announceInfoSelector } from '../../store/slices/nova/announceSlice';
 import { NOVA_TAB_TYPE, selectTabSlice } from '../../store/slices/tabSlice';
 import { useAppSelector } from '../../store/store';
@@ -72,6 +73,12 @@ const Guidebody = styled.div`
   margin-bottom: 16px;
 `;
 
+const StyledIconConvert = styled(IconConvert)`
+  path {
+    fill: #511bb2;
+  }
+`;
+
 interface GuideProps {
   children: React.ReactNode;
 }
@@ -92,6 +99,20 @@ export const Guide = (props: GuideProps) => {
     changeStyle: changeStyleIcon
   };
 
+  const getTranslationKey = () => {
+    if (selectedNovaTab === 'convert2DTo3D') {
+      return (
+        <Trans
+          i18nKey={`Nova.${selectedNovaTab}.Guide.Title`}
+          components={{
+            img: <StyledIconConvert height={18} width={19} />
+          }}
+        />
+      );
+    }
+    return t(`Nova.${selectedNovaTab}.Guide.Title`);
+  };
+
   useEffect(() => {}, [announceInfo]);
 
   return (
@@ -101,7 +122,7 @@ export const Guide = (props: GuideProps) => {
         <GuideTitle>
           <GuideImage src={iconMap[selectedNovaTab]} alt="aiChat" />
           <div className="title">
-            <p>{t(`Nova.${selectedNovaTab}.Guide.Title`)}</p>
+            <p>{getTranslationKey()}</p>
           </div>
           <p className="subTitle">{t(`Nova.${selectedNovaTab}.Guide.SubTitle`)}</p>
         </GuideTitle>
