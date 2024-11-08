@@ -54,6 +54,12 @@ const Wrap = styled.div`
   z-index: 1;
 `;
 
+const CustomSwiper = styled(Swiper)`
+  .swiper-backface-hidden .swiper-slide {
+    transform: none !important;
+  }
+`;
+
 const Tap = styled.div<{ isHighlighted: boolean }>`
   height: 32px;
   display: flex;
@@ -198,7 +204,7 @@ const Tabs = ({ tabs, activeTab, onChangeTab }: TabProps) => {
   };
   return (
     <Wrap>
-      <Swiper
+      <CustomSwiper
         spaceBetween={8}
         slidesPerView="auto"
         centeredSlides={isCentered}
@@ -229,7 +235,7 @@ const Tabs = ({ tabs, activeTab, onChangeTab }: TabProps) => {
             </SwiperSlide>
           );
         })}
-      </Swiper>
+      </CustomSwiper>
 
       {!isMobile && (
         <>
