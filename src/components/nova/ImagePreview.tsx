@@ -43,11 +43,14 @@ export const ImagePreview = (props: ImagePreviewProps) => {
   const [imageSrc, setImageSrc] = useState<string | null>(null);
 
   useEffect(() => {
-    console.log(props.file);
     if (props.file) {
+      console.log('luna preview: ', props.file);
       const reader = new FileReader();
       reader.onload = (event) => {
         setImageSrc(event.target?.result as string);
+      };
+      reader.onerror = (error) => {
+        console.error('파일을 읽는 중 오류가 발생했습니다:', error);
       };
       reader.readAsDataURL(props.file);
     } else {
