@@ -178,64 +178,76 @@ export const FileUploader = (props: FileUploaderProps) => {
       });
     } else if (currentFile.type === 'drive') {
       if (currentFile.isSaved) {
-        dispatch(setCreating('NOVA'));
-        dispatch(setLocalFiles([]));
-        dispatch(setDriveFiles([]));
+        if (Number(currentFile.id) === -1) {
+          await confirmSaveDoc();
+        } else {
+          dispatch(setCreating('NOVA'));
+          dispatch(setLocalFiles([]));
+          dispatch(setDriveFiles([]));
 
-        dispatch(setLoadingFile({ id: currentFile.id }));
-        const curFile = await getFileInfo(currentFile.id);
-        dispatch(removeLoadingFile());
+          dispatch(setLoadingFile({ id: currentFile.id }));
+          const curFile = await getFileInfo(currentFile.id);
+          dispatch(removeLoadingFile());
 
-        dispatch(setDriveFiles([curFile]));
-        dispatch(setCreating('none'));
+          dispatch(setDriveFiles([curFile]));
+          dispatch(setCreating('none'));
+        }
       } else {
-        await confirm({
-          title: '',
-          msg:
-            platform === ClientType.web || platform === 'unknown'
-              ? t('Nova.Confirm.NotSavedFileInWeb.Msg')
-              : t('Nova.Confirm.NotSavedFile.Msg'),
-          onOk: {
-            text: t('Nova.Confirm.NotSavedFile.Ok'),
-            callback: () => {
-              dispatch(setPageStatus({ tab: selectedNovaTab, status: 'progress' }));
-              Bridge.callBridgeApi('uploadFile');
-            }
-          },
-          onCancel: {
-            text: t('Nova.Confirm.NotSavedFile.Cancel'),
-            callback: async () => {
-              dispatch(setCreating('NOVA'));
-              dispatch(setLocalFiles([]));
-              dispatch(setDriveFiles([]));
-
-              dispatch(setLoadingFile({ id: currentFile.id }));
-              const curFile = await getFileInfo(currentFile.id);
-              dispatch(removeLoadingFile());
-
-              dispatch(setDriveFiles([curFile]));
-              dispatch(setCreating('none'));
-            }
-          }
-        });
+        await confirmSaveDoc();
       }
     } else if (currentFile.type === 'local') {
-      await confirm({
-        title: '',
-        msg: t('Nova.Confirm.UploadFile.Msg'),
-        onOk: {
-          text: t('Nova.Confirm.UploadFile.Ok'),
-          callback: () => {
-            dispatch(setPageStatus({ tab: selectedNovaTab, status: 'progress' }));
-            Bridge.callBridgeApi('uploadFile');
-          }
-        },
-        onCancel: {
-          text: t('Cancel'),
-          callback: () => {}
-        }
-      });
+      await confirmUploadFile();
     }
+  };
+
+  const confirmSaveDoc = async () => {
+    await confirm({
+      title: '',
+      msg:
+        platform === ClientType.web || platform === 'unknown'
+          ? t('Nova.Confirm.NotSavedFileInWeb.Msg')
+          : t('Nova.Confirm.NotSavedFile.Msg'),
+      onOk: {
+        text: t('Nova.Confirm.NotSavedFile.Ok'),
+        callback: () => {
+          dispatch(setPageStatus({ tab: selectedNovaTab, status: 'progress' }));
+          Bridge.callBridgeApi('uploadFile');
+        }
+      },
+      onCancel: {
+        text: t('Nova.Confirm.NotSavedFile.Cancel'),
+        callback: async () => {
+          dispatch(setCreating('NOVA'));
+          dispatch(setLocalFiles([]));
+          dispatch(setDriveFiles([]));
+
+          dispatch(setLoadingFile({ id: currentFile.id }));
+          const curFile = await getFileInfo(currentFile.id);
+          dispatch(removeLoadingFile());
+
+          dispatch(setDriveFiles([curFile]));
+          dispatch(setCreating('none'));
+        }
+      }
+    });
+  };
+
+  const confirmUploadFile = async () => {
+    await confirm({
+      title: '',
+      msg: t('Nova.Confirm.UploadFile.Msg'),
+      onOk: {
+        text: t('Nova.Confirm.UploadFile.Ok'),
+        callback: () => {
+          dispatch(setPageStatus({ tab: selectedNovaTab, status: 'progress' }));
+          Bridge.callBridgeApi('uploadFile');
+        }
+      },
+      onCancel: {
+        text: t('Cancel'),
+        callback: () => {}
+      }
+    });
   };
 
   return (
