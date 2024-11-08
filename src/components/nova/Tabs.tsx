@@ -54,12 +54,6 @@ const Wrap = styled.div`
   z-index: 1;
 `;
 
-const CustomSwiper = styled(Swiper)`
-  & .swiper-backface-hidden .swiper-slide {
-    transform: none !important;
-  }
-`;
-
 const Tap = styled.div<{ isHighlighted: boolean }>`
   height: 32px;
   display: flex;
@@ -145,6 +139,7 @@ const Tabs = ({ tabs, activeTab, onChangeTab }: TabProps) => {
       setIsEnd(swiperRef.current.isEnd);
     }
   };
+
   useEffect(() => {
     const swiper = swiperRef.current;
     if (!swiper) return;
@@ -202,9 +197,10 @@ const Tabs = ({ tabs, activeTab, onChangeTab }: TabProps) => {
     }
     updateSwiperState();
   };
+
   return (
     <Wrap>
-      <CustomSwiper
+      <Swiper
         spaceBetween={8}
         slidesPerView="auto"
         centeredSlides={isCentered}
@@ -217,6 +213,9 @@ const Tabs = ({ tabs, activeTab, onChangeTab }: TabProps) => {
           swiperRef.current = swiper;
         }}
         pagination={{ clickable: true }}
+        observer={true}
+        observeParents={true}
+        updateOnWindowResize={true}
         style={{ height: '32px' }}>
         {tabs.map((tab, idx) => {
           const isActive = activeTab === tab;
@@ -235,7 +234,7 @@ const Tabs = ({ tabs, activeTab, onChangeTab }: TabProps) => {
             </SwiperSlide>
           );
         })}
-      </CustomSwiper>
+      </Swiper>
 
       {!isMobile && (
         <>
