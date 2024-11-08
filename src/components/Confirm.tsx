@@ -147,6 +147,13 @@ const Confirm = () => {
     onOk.callback();
   };
 
+  const handleCancel = () => {
+    if (isChecked) {
+      setCookie('creditGuide', String(isChecked));
+    }
+    onCancel?.callback();
+  };
+
   // 필요시 사용
   // const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
   //   if (e.target === e.currentTarget) {
@@ -196,7 +203,7 @@ const Confirm = () => {
               variant="gray"
               width={'full'}
               height={HEIGHT_BY_DIRECTION}
-              onClick={onCancel.callback}
+              onClick={handleCancel}
               cssExt={css`
                 order: ${direction === 'row' ? 1 : undefined};
                 min-width: 92px;
