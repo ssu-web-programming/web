@@ -267,14 +267,6 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                         }
                       }
                     } else if (item.type === 'image') {
-                      const reader = new FileReader();
-                      reader.onload = (event) => {
-                        console.log('success');
-                      };
-                      reader.onerror = (error) => {
-                        console.error('파일을 읽는 중 오류가 발생했습니다:', error);
-                      };
-                      reader.readAsDataURL(file.file);
                       props.setImagePreview(file);
                     }
                   }}>

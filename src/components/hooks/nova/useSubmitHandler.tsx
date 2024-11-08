@@ -21,7 +21,7 @@ import { NOVA_CHAT_API, PO_DRIVE_DOC_OPEN_STATUS } from '../../../api/constant';
 import { appStateSelector } from '../../../store/slices/appState';
 import { DriveFileInfo } from '../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
-import { convertFiles, downloadFiles, uploadFiles } from '../../../util/files';
+import { convertFiles, downloadFiles, fileToBase64, uploadFiles } from '../../../util/files';
 import { useConfirm } from '../../Confirm';
 import { InputBarSubmitParam } from '../../nova/InputBar';
 import useErrorHandle from '../useErrorHandle';
@@ -92,26 +92,33 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
           } else if ('fileId' in files[0]) {
             targetFiles = await downloadFiles(files as DriveFileInfo[]);
           }
-          targetFiles
-            .filter((target) => target.success)
-            .forEach((target) => {
-              if (target.success) {
-                fileInfo.push({
-                  name: target.file.name,
-                  fileId: target.data.fileId,
-                  file: new File(
-                    [target.file],
-                    `${getFileName(target.file.name)}${getFileExtension(
-                      target.file.name
-                    ).toLowerCase()}`,
-                    {
-                      type: target.file.type
-                    }
-                  ),
-                  fileRevision: target.data.fileRevision
-                });
+
+          for (const target of targetFiles.filter((target) => target.success)) {
+            let base64Data: string | null = null;
+
+            if (target.success) {
+              console.log(target.file);
+
+              if (target.file.type.startsWith('image/')) {
+                const { contentType, data } = await fileToBase64(target.file);
+                base64Data = `data:${contentType};base64,${data}`;
               }
-            });
+
+              console.log(base64Data);
+
+              fileInfo.push({
+                name: target.file.name,
+                fileId: target.data.fileId,
+                file: new File(
+                  [target.file],
+                  `${getFileName(target.file.name)}${getFileExtension(target.file.name).toLowerCase()}`,
+                  { type: target.file.type }
+                ),
+                base64: base64Data, // 이미지 파일일 경우 Base64 데이터가 포함되고, 아닐 경우 null
+                fileRevision: target.data.fileRevision
+              });
+            }
+          }
 
           if (type === 'document') {
             const getDocStatus = await checkDocStatus(fileInfo);
@@ -274,7 +281,6 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
           const $image = $('img');
           if ($image.length > 0) {
             const image = $image[0] as cheerio.TagElement;
-            console.log('luna image: ', image.attribs.src);
             dispatch(addChatOutputRes({ id, res: image.attribs.src }));
           }
         }

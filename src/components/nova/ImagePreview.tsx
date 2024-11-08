@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { ReactComponent as xMarkIcon } from 'img/ico_xmark.svg';
 import styled, { css } from 'styled-components';
 
@@ -40,24 +39,6 @@ interface ImagePreviewProps extends NovaFileInfo {
 }
 
 export const ImagePreview = (props: ImagePreviewProps) => {
-  const [imageSrc, setImageSrc] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (props.file) {
-      console.log('luna preview: ', props.file);
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        setImageSrc(event.target?.result as string);
-      };
-      reader.onerror = (error) => {
-        console.error('파일을 읽는 중 오류가 발생했습니다:', error);
-      };
-      reader.readAsDataURL(props.file);
-    } else {
-      setImageSrc(null);
-    }
-  }, [props.file]);
-
   return (
     <ImagePreviewWrapper>
       <div className="btns">
@@ -74,7 +55,7 @@ export const ImagePreview = (props: ImagePreviewProps) => {
           onClick={() => props.onClose()}
         />
       </div>
-      {imageSrc && <img src={imageSrc} alt="preview" />}
+      {props.base64 && <img src={props.base64} alt="preview" />}
     </ImagePreviewWrapper>
   );
 };

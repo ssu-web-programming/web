@@ -7,6 +7,7 @@ export interface NovaFileInfo {
   fileId: string;
   file: File;
   fileRevision: number;
+  base64?: string | null;
 }
 
 export type NovaChatType = {
@@ -41,7 +42,6 @@ const novaHistorySlice = createSlice({
         Pick<NovaChatType, 'id' | 'output' | 'vsId' | 'threadId' | 'askType' | 'expiredTime'>
       >
     ) => {
-      console.log('luna append chat: ', action);
       return state.map((chat) =>
         chat.id === action.payload.id
           ? {
@@ -54,7 +54,6 @@ const novaHistorySlice = createSlice({
       );
     },
     addChatOutputRes: (state, action: PayloadAction<Pick<NovaChatType, 'id' | 'res'>>) => {
-      console.log('luna add chat: ', action);
       return state.map((chat) =>
         chat.id === action.payload.id
           ? {
@@ -65,7 +64,6 @@ const novaHistorySlice = createSlice({
       );
     },
     updateChatStatus: (state, action: PayloadAction<Pick<NovaChatType, 'id' | 'status'>>) => {
-      console.log('luna update chat: ', action);
       return state.map((chat) =>
         chat.id === action.payload.id
           ? {
@@ -76,7 +74,6 @@ const novaHistorySlice = createSlice({
       );
     },
     removeChat: (state, action: PayloadAction<NovaChatType['id']>) => {
-      console.log('luna remove chat: ', action);
       return state.filter((chat) => chat.id !== action.payload);
     }
   }
