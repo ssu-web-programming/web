@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import DownloadIcon from 'img/ico_download_white.svg';
 import InsertDocsIcon from 'img/ico_insert_docs.svg';
 import { lang } from 'locale';
@@ -7,7 +7,7 @@ import ReactPlayer from 'react-player';
 import styled from 'styled-components';
 
 import CreditColorIcon from '../../img/ico_credit_color_outline.svg';
-import CheckIcon from '../../img/nova/check_purple.png';
+import CheckIcon from '../../img/nova/check_purple.svg';
 import { ClientStatusType } from '../../pages/Nova/Nova';
 import {
   resetPageData,
@@ -102,6 +102,8 @@ const ImageBox = styled.div<{ isBordered: boolean }>`
   border: ${(props) => (props.isBordered ? '1px solid #c9cdd2' : 'none')};
   border-radius: 8px;
   overflow: hidden;
+  height: 100%;
+  background: #e8e8ed;
 
   img,
   video {

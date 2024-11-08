@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Swiper as SwiperClass } from 'swiper/types';
 
+import { ReactComponent as IconConvert } from '../../img/nova/tab/convert_Img.svg';
+import convertIcon from '../../img/nova/tab/convert_Img.svg';
 import convert2DTo3DIcon from '../../img/nova/tab/tab_3d_n.svg';
 import convert2DTo3DSelectedIcon from '../../img/nova/tab/tab_3d_s.svg';
 import aiChatIcon from '../../img/nova/tab/tab_ai_chat_n.svg';
@@ -112,6 +114,12 @@ const CustomNavButton = styled.button<{ isVisible: boolean }>`
   }
 `;
 
+const StyledIconConvert = styled(IconConvert)<{ isHighlighted: boolean }>`
+  path {
+    fill: ${(props) => (props.isHighlighted ? '#511bb2' : 'black')};
+  }
+`;
+
 interface TabProps {
   tabs: NOVA_TAB_TYPE[];
   activeTab: string;
@@ -124,8 +132,19 @@ const Tabs = ({ tabs, activeTab, onChangeTab }: TabProps) => {
   const [isEnd, setIsEnd] = useState(false);
   const swiperRef = useRef<SwiperClass | null>(null);
 
-  const getTabTranslationKey = (tab: NOVA_TAB_TYPE) => {
-    return `Nova.Tabs.${tab}`;
+  const getTabTranslationKey = (tab: NOVA_TAB_TYPE, isActive: boolean) => {
+    if (tab === 'convert2DTo3D') {
+      return (
+        <Trans
+          i18nKey={`Nova.Tabs.${tab}`}
+          components={{
+            img: <StyledIconConvert isHighlighted={isActive} height={11} />
+          }}
+        />
+      );
+    }
+
+    return t(`Nova.Tabs.${tab}`);
   };
 
   const getIcon = (tab: NOVA_TAB_TYPE, isSelected: boolean) => {
@@ -195,7 +214,7 @@ const Tabs = ({ tabs, activeTab, onChangeTab }: TabProps) => {
                   </Badge>
                 )}
                 <img src={getIcon(tab, isActive)} alt="logo" />
-                <Text isHighlighted={isActive}>{t(getTabTranslationKey(tab))}</Text>
+                <Text isHighlighted={isActive}>{getTabTranslationKey(tab, isActive)}</Text>
               </Tap>
             </SwiperSlide>
           );

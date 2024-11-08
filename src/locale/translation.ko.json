@@ -282,7 +282,7 @@
   "Nova": {
     "Tabs": {
       "aiChat": "AI 채팅",
-      "convert2DTo3D": "2D -> 3D 변환",
+      "convert2DTo3D": "2D <img/> 3D 변환",
       "removeBG": "배경 제거",
       "changeBG": "배경 변경",
       "remakeImg": "이미지 리메이크",

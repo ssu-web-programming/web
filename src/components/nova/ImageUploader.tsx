@@ -28,7 +28,7 @@ const Wrap = styled.div`
   position: relative;
   height: 206px;
   padding: 0 16px;
-  border: 1px dashed #c9cdd2;
+  border: 0.5px dashed #c9cdd2;
   border-radius: 8px;
   background-color: white;
 `;
