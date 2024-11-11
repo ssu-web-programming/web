@@ -66,19 +66,19 @@ export function useManageFile() {
 
     const uploadLimit = getAvailableFileCnt();
     if (uploadLimit !== -1) {
-      if (selectedNovaTab === NOVA_TAB_TYPE.aiChat) {
-        if (files.length > uploadLimit) {
-          await confirm({
-            title: '',
-            msg: t('Nova.Confirm.OverMaxFileUploadCntOnce', { max: uploadLimit })!,
-            onOk: {
-              text: t('Confirm'),
-              callback: () => {}
-            }
-          });
-          return;
-        }
+      if (files.length > uploadLimit) {
+        await confirm({
+          title: '',
+          msg: t('Nova.Confirm.OverMaxFileUploadCntOnce', { max: uploadLimit })!,
+          onOk: {
+            text: t('Confirm'),
+            callback: () => {}
+          }
+        });
+        return;
+      }
 
+      if (selectedNovaTab === NOVA_TAB_TYPE.aiChat) {
         const uploadCnt = novaHistory.reduce((acc, cur) => {
           const len = cur.files?.length;
           if (len) return acc + len;
