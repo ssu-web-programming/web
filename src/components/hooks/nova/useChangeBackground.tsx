@@ -102,7 +102,7 @@ export const useChangeBackground = () => {
           el: 'nova_background_change',
           gpt_ver: 'NOVA_REPLACE_BG_CLIPDROP'
         });
-        track('click_NOVA_IMAGE', { Image_name: 'NOVA_REPLACE_BG_CLIPDROP' });
+        track('click_nova_image', { image_name: 'NOVA_REPLACE_BG_CLIPDROP' });
 
         const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
         showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');

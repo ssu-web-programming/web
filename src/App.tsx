@@ -43,7 +43,7 @@ function App() {
 
     fetchInit();
     const apiKey = process.env.REACT_APP_AMPLITUDE_API_KEY;
-    if (apiKey) init(apiKey);
+    if (apiKey) init(apiKey, { autocapture: false });
   }, []);
 
   return (

@@ -105,6 +105,7 @@ module.exports = new Promise((resolve, reject) => {
     REACT_APP_AI_EVENT_URL_EN,
     REACT_APP_GTM_ID,
     REACT_APP_GA4_TRACKING_ID,
+    REACT_APP_AMPLITUDE_API_KEY,
     REACT_APP_ALLI_APPS
   });
 });

@@ -102,7 +102,7 @@ export const useChangeStyle = () => {
           el: 'nova_style_change',
           gpt_ver: 'NOVA_PO_STYLE_TRANSFER'
         });
-        track('click_NOVA_IMAGE', { Image_name: 'NOVA_PO_STYLE_TRANSFER' });
+        track('click_nova_image', { image_name: 'NOVA_PO_STYLE_TRANSFER' });
 
         const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
         showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');

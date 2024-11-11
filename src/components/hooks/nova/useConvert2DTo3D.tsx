@@ -107,7 +107,7 @@ export const useConvert2DTo3D = () => {
           el: 'nova_image_expansion',
           gpt_ver: 'NOVA_UNCROP_CLIPDROP'
         });
-        track('click_NOVA_IMAGE', { Image_name: 'Imersity' });
+        track('click_nova_image', { image_name: 'Imersity' });
 
         const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
         showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');

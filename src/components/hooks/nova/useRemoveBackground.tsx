@@ -62,7 +62,7 @@ export const useRemoveBackground = () => {
           el: 'nova_background_remove',
           gpt_ver: 'NOVA_REMOVE_BG'
         });
-        track('click_NOVA_IMAGE', { Image_name: 'NOVA_REMOVE_BG' });
+        track('click_nova_image', { image_name: 'NOVA_REMOVE_BG' });
 
         const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
         showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');

@@ -70,7 +70,7 @@ export const useRemakeImage = () => {
           el: 'nova_image_remake',
           gpt_ver: 'NOVA_REIMAGE_CLIPDROP'
         });
-        track('click_NOVA_IMAGE', { Image_name: 'NOVA_REIMAGE_CLIPDROP' });
+        track('click_nova_image', { image_name: 'NOVA_REIMAGE_CLIPDROP' });
 
         const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
         showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');
