@@ -1,3 +1,5 @@
+import { track } from '@amplitude/analytics-browser';
+
 import { apiWrapper } from '../../../api/apiWrapper';
 import { NOVA_IMPROVED_RESOLUTION } from '../../../api/constant';
 import {
@@ -68,6 +70,7 @@ export const useImprovedResolution = () => {
           el: 'nova_resolution_elevation',
           gpt_ver: 'NOVA_PO_RESOLUTION'
         });
+        track('click_NOVA_IMAGE', { Image_name: 'NOVA_PO_RESOLUTION' });
 
         const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
         showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');

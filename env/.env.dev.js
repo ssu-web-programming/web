@@ -4,6 +4,7 @@ const REACT_APP_SHARE_TECH_API = 'https://dev-was2.polarishare.com/api/v1/share/
 const REACT_APP_PO_API = 'https://vf-postatic.polarisoffice.com';
 const REACT_APP_GTM_ID = 'GTM-PZ8SVN4N';
 const REACT_APP_GA4_TRACKING_ID = 'G-XCY52XCGDQ';
+const REACT_APP_AMPLITUDE_API_KEY = '77aa4b85ff560f46f41515a95d4e06da';
 const REACT_APP_AI_EVENT_URL_KO =
   'https://vf-ca-cloud.polarisoffice.com/ko/promotion/firstmonth_202311_app';
 const REACT_APP_AI_EVENT_URL_EN =

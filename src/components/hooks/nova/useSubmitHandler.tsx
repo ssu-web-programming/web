@@ -17,6 +17,8 @@ import { setCreating, setUsingAI } from 'store/slices/tabSlice';
 import { getFileExtension, getFileName, markdownToHtml } from 'util/common';
 import { v4 } from 'uuid';
 
+import { track } from '@amplitude/analytics-browser';
+
 import { NOVA_CHAT_API, PO_DRIVE_DOC_OPEN_STATUS } from '../../../api/constant';
 import { appStateSelector } from '../../../store/slices/appState';
 import { DriveFileInfo } from '../../../store/slices/uploadFiles';
@@ -97,14 +99,10 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
             let base64Data: string | null = null;
 
             if (target.success) {
-              console.log(target.file);
-
               if (target.file.type.startsWith('image/')) {
                 const { contentType, data } = await fileToBase64(target.file);
                 base64Data = `data:${contentType};base64,${data}`;
               }
-
-              console.log(base64Data);
 
               fileInfo.push({
                 name: target.file.name,
@@ -267,6 +265,7 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
               });
             }
           }
+          track('click_NOVA_Chating', { is_document: files.length > 0 });
         } catch (err) {
           /*empty*/
         }

@@ -1,3 +1,5 @@
+import { track } from '@amplitude/analytics-browser';
+
 import { apiWrapper } from '../../../api/apiWrapper';
 import { NOVA_REMAKE_IMAGE } from '../../../api/constant';
 import {
@@ -68,6 +70,7 @@ export const useRemakeImage = () => {
           el: 'nova_image_remake',
           gpt_ver: 'NOVA_REIMAGE_CLIPDROP'
         });
+        track('click_NOVA_IMAGE', { Image_name: 'NOVA_REIMAGE_CLIPDROP' });
 
         const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
         showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');

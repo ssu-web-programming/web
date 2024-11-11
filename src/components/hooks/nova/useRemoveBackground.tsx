@@ -1,3 +1,5 @@
+import { track } from '@amplitude/analytics-browser';
+
 import { apiWrapper } from '../../../api/apiWrapper';
 import { NOVA_REMOVE_BACKGROUND } from '../../../api/constant';
 import {
@@ -60,6 +62,7 @@ export const useRemoveBackground = () => {
           el: 'nova_background_remove',
           gpt_ver: 'NOVA_REMOVE_BG'
         });
+        track('click_NOVA_IMAGE', { Image_name: 'NOVA_REMOVE_BG' });
 
         const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
         showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');

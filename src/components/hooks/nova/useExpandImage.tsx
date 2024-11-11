@@ -1,3 +1,5 @@
+import { track } from '@amplitude/analytics-browser';
+
 import { apiWrapper } from '../../../api/apiWrapper';
 import { NOVA_EXPAND_IMAGE } from '../../../api/constant';
 import {
@@ -111,6 +113,7 @@ export const useExpandImage = () => {
           el: 'nova_image_expansion',
           gpt_ver: 'NOVA_UNCROP_CLIPDROP'
         });
+        track('click_NOVA_IMAGE', { Image_name: 'NOVA_UNCROP_CLIPDROP' });
 
         const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
         showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');

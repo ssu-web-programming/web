@@ -1,3 +1,5 @@
+import { track } from '@amplitude/analytics-browser';
+
 import { apiWrapper } from '../../../api/apiWrapper';
 import { NOVA_CHANGE_BACKGROUND } from '../../../api/constant';
 import {
@@ -100,6 +102,8 @@ export const useChangeBackground = () => {
           el: 'nova_background_change',
           gpt_ver: 'NOVA_REPLACE_BG_CLIPDROP'
         });
+        track('click_NOVA_IMAGE', { Image_name: 'NOVA_REPLACE_BG_CLIPDROP' });
+
         const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
         showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');
       } else {
