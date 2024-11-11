@@ -85,7 +85,7 @@ export default function TimeOut() {
   const { t } = useTranslation();
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
   const result = useAppSelector(selectPageResult(selectedNovaTab));
-  const { goConvertPage } = useConvert2DTo3D();
+  const { handleConver2DTo3D } = useConvert2DTo3D();
   const { handleRemoveBackground } = useRemoveBackground();
   const { handleChangeBackground } = useChangeBackground();
   const { handleRemakeImage } = useRemakeImage();
@@ -95,7 +95,7 @@ export default function TimeOut() {
   const handleRetry = async () => {
     switch (selectedNovaTab) {
       case NOVA_TAB_TYPE.convert2DTo3D:
-        await goConvertPage();
+        await handleConver2DTo3D(result?.info.pattern, result?.info.animationType);
         break;
       case NOVA_TAB_TYPE.removeBG:
         await handleRemoveBackground();
