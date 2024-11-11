@@ -161,16 +161,13 @@ export default function Nova() {
         case 'home':
         case 'progress':
           return (
-            <>
-              {status === 'progress' && <Progress />}
-              <Guide>
-                <ImageUploader
-                  guideMsg={t(`Nova.${selectedNovaTab}.Guide.ImgUploader`)}
-                  handleUploadComplete={handleUploadComplete}
-                  curTab={selectedNovaTab}
-                />
-              </Guide>
-            </>
+            <Guide>
+              <ImageUploader
+                guideMsg={t(`Nova.${selectedNovaTab}.Guide.ImgUploader`)}
+                handleUploadComplete={handleUploadComplete}
+                curTab={selectedNovaTab}
+              />
+            </Guide>
           );
         case 'convert':
           return <Convert />;
@@ -184,12 +181,7 @@ export default function Nova() {
           return <Loading />;
         case 'done':
         case 'saving':
-          return (
-            <>
-              {status === 'saving' && <Progress />}
-              <Result />
-            </>
-          );
+          return <Result />;
         case 'timeout':
           return <TimeOut />;
         default:
@@ -203,6 +195,7 @@ export default function Nova() {
       <Wrapper {...getRootProps()} isScroll={selectedNovaTab != 'aiChat'}>
         {(usingAI || status === 'home') && isDragActive && <Uploading />}
         <NovaHeader />
+        {(status === 'progress' || status === 'saving') && <Progress />}
         {(status === 'home' || status === 'progress') &&
           (selectedNovaTab !== NOVA_TAB_TYPE.aiChat || !usingAI) && (
             <Tabs tabs={tabValues} activeTab={selectedNovaTab} onChangeTab={handleChangeTab} />

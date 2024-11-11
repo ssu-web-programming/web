@@ -5,8 +5,9 @@ import Spinner from '../../img/spinner.webp';
 
 const Dim = styled.div`
   width: 100%;
-  height: 100%;
+  height: calc(100% - 56px);
   position: absolute;
+  bottom: 0;
   display: flex;
   align-items: center;
   justify-content: center;

@@ -134,12 +134,15 @@ export default function ImageUploader(props: ImageUploaderProps) {
   };
 
   const handleFileProcessing = async () => {
+    dispatch(setPageStatus({ tab: props.curTab, status: 'progress' }));
+
     const selectedFile = await getSelectedFile();
-    if (!selectedFile) return;
+    if (!selectedFile) {
+      dispatch(setPageStatus({ tab: props.curTab, status: 'home' }));
+      return;
+    }
 
     try {
-      dispatch(setPageStatus({ tab: props.curTab, status: 'progress' }));
-
       let fileData: File = selectedFile;
 
       if (await isPixelLimitExceeded(selectedFile, props.curTab)) {

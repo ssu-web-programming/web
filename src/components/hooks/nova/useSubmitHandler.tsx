@@ -265,7 +265,7 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
               });
             }
           }
-          track('click_NOVA_Chating', { is_document: files.length > 0 });
+          track('click_nova_chating', { is_document: files.length > 0 });
         } catch (err) {
           /*empty*/
         }

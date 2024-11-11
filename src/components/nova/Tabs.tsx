@@ -93,7 +93,7 @@ const Text = styled.div<{ isHighlighted: boolean }>`
 const CustomNavButton = styled.button<{ isVisible: boolean }>`
   width: 52px;
   height: 52px;
-  top: var(--swiper-navigation-top-offset, 40%);
+  top: var(--swiper-navigation-top-offset, 42%);
   display: ${(props) => (props.isVisible ? 'block' : 'none')};
   padding: 0;
   background: none;
