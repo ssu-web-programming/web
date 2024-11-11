@@ -114,9 +114,9 @@ const CustomNavButton = styled.button<{ isVisible: boolean }>`
   }
 `;
 
-const StyledIconConvert = styled(IconConvert)<{ isHighlighted: boolean }>`
+const StyledIconConvert = styled(IconConvert)<{ $isHighlighted: boolean }>`
   path {
-    fill: ${(props) => (props.isHighlighted ? '#511bb2' : 'black')};
+    fill: ${(props) => (props.$isHighlighted ? '#511bb2' : 'black')};
   }
 `;
 
@@ -139,7 +139,7 @@ const Tabs = ({ tabs, activeTab, onChangeTab }: TabProps) => {
         <Trans
           i18nKey={`Nova.Tabs.${tab}`}
           components={{
-            img: <StyledIconConvert isHighlighted={isActive} height={11} />
+            img: <StyledIconConvert $isHighlighted={isActive} height={11} />
           }}
         />
       );
