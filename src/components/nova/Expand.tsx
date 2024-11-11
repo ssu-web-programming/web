@@ -97,6 +97,7 @@ const RatioButton = styled.div<{ selected: boolean }>`
   border: 1px solid ${({ selected }) => (selected ? '#6f3ad0' : 'none')};
   border-radius: 8px;
   box-sizing: border-box;
+  cursor: pointer;
 
   span {
     font-size: 14px;
@@ -127,6 +128,7 @@ const ExpandButton = styled.div`
   background-color: #6f3ad0;
   padding: 12px 0;
   border-radius: 8px;
+  cursor: pointer;
 
   span {
     font-size: 16px;
