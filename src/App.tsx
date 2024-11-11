@@ -3,8 +3,6 @@ import useInitApp from 'components/hooks/useInitApp';
 import Nova from 'pages/Nova/Nova';
 import { Route, Routes } from 'react-router-dom';
 
-import { init } from '@amplitude/analytics-browser';
-
 import Confirm from './components/Confirm';
 import Spinner from './components/Spinner';
 import Toast from './components/toast/Toast';
@@ -42,8 +40,6 @@ function App() {
     };
 
     fetchInit();
-    const apiKey = process.env.REACT_APP_AMPLITUDE_API_KEY;
-    if (apiKey) init(apiKey, { autocapture: false });
   }, []);
 
   return (

@@ -13,6 +13,8 @@ import { setNovaAgreement, setUserInfo } from 'store/slices/userInfo';
 import { useAppDispatch } from 'store/store';
 import Bridge, { ClientType, getPlatform, getVersion } from 'util/bridge';
 
+import { init } from '@amplitude/analytics-browser';
+
 import { initComplete } from '../../store/slices/initFlagSlice';
 import { IAnnouceInfo, setAnnounceInfo, tabTypeMap } from '../../store/slices/nova/announceSlice';
 import { setPageStatus } from '../../store/slices/nova/pageStatusSlice';
@@ -163,5 +165,13 @@ export default function useInitApp() {
     await initCreditInfo(headers);
 
     dispatch(setUserInfo(resSession.userInfo));
+
+    const apiKey = process.env.REACT_APP_AMPLITUDE_API_KEY;
+    if (apiKey) {
+      init(apiKey, {
+        autocapture: false,
+        userId: resSession.userInfo.uid
+      });
+    }
   };
 }
