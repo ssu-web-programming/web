@@ -218,7 +218,7 @@ export default function Result() {
         }
       }
     });
-  }, []);
+  }, [selectedNovaTab]);
 
   const ShowExpireLinkPopup = async () => {
     confirm({
