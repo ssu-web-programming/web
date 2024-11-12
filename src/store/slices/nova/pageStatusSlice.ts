@@ -21,7 +21,7 @@ export type PageStatus =
   | 'theme'
   | 'done'
   | 'timeout';
-export type PageData = File | DriveFileInfo | null;
+export type PageData = File | null;
 export type PageResult = ResultImage | null;
 
 interface PageState<T> {

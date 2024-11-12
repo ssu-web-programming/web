@@ -129,7 +129,14 @@ export default function ImageUploader(props: ImageUploaderProps) {
 
   const getSelectedFile = async () => {
     if (localFiles[0]) return localFiles[0];
-    if (driveFiles[0]) return await convertDriveFileToFile(driveFiles[0]);
+    if (driveFiles[0]) {
+      try {
+        return await convertDriveFileToFile(driveFiles[0]);
+      } catch (err) {
+        errorHandle(err);
+        return null;
+      }
+    }
     return null;
   };
 

@@ -13,7 +13,7 @@ import { NOVA_TAB_TYPE } from '../../../store/slices/tabSlice';
 import { setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { calLeftCredit } from '../../../util/common';
-import { convertDriveFileToFile, createFormDataFromFiles, fileToBase64 } from '../../../util/files';
+import { createFormDataFromFiles, fileToBase64 } from '../../../util/files';
 import useErrorHandle from '../useErrorHandle';
 import { useShowCreditToast } from '../useShowCreditToast';
 
@@ -55,10 +55,7 @@ export const useChangeStyle = () => {
 
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeStyle, status: 'progress' }));
     try {
-      const file = await convertDriveFileToFile(currentFile);
-      if (!file) return;
-
-      fileToBase64(file)
+      fileToBase64(currentFile)
         .then((data) => {
           dispatch(setPageResult({ tab: NOVA_TAB_TYPE.changeStyle, result: data }));
         })

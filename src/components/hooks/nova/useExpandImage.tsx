@@ -13,7 +13,7 @@ import { NOVA_TAB_TYPE } from '../../../store/slices/tabSlice';
 import { setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { calLeftCredit } from '../../../util/common';
-import { convertDriveFileToFile, createFormDataFromFiles, fileToBase64 } from '../../../util/files';
+import { createFormDataFromFiles, fileToBase64 } from '../../../util/files';
 import useErrorHandle from '../useErrorHandle';
 import { useShowCreditToast } from '../useShowCreditToast';
 
@@ -59,10 +59,7 @@ export const useExpandImage = () => {
 
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.expandImg, status: 'progress' }));
     try {
-      const file = await convertDriveFileToFile(currentFile);
-      if (!file) return;
-
-      const base64Data = await fileToBase64(file);
+      const base64Data = await fileToBase64(currentFile);
       dispatch(setPageResult({ tab: NOVA_TAB_TYPE.expandImg, result: base64Data }));
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.expandImg, status: 'expand' }));
     } catch (err) {

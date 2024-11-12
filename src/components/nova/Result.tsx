@@ -211,10 +211,6 @@ export default function Result() {
     Bridge.callSyncBridgeApiWithCallback({
       api: 'getClientStatus',
       callback: async (status: ClientStatusType) => {
-        console.log('luna selectedNovaTab: ', selectedNovaTab);
-        console.log('luna currentFile: ', currentFile);
-        console.log('luna status: ', status);
-        console.log('luna platform: ', platform);
         if (selectedNovaTab === NOVA_TAB_TYPE.convert2DTo3D) {
           setShowInsertDocBtn(status !== 'home' && isPC && currentFile.ext === 'pptx');
         } else {

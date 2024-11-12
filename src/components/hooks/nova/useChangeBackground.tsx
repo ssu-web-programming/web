@@ -14,7 +14,7 @@ import { NOVA_TAB_TYPE } from '../../../store/slices/tabSlice';
 import { setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { calLeftCredit } from '../../../util/common';
-import { convertDriveFileToFile, createFormDataFromFiles, fileToBase64 } from '../../../util/files';
+import { createFormDataFromFiles, fileToBase64 } from '../../../util/files';
 import useErrorHandle from '../useErrorHandle';
 import { useShowCreditToast } from '../useShowCreditToast';
 
@@ -57,8 +57,7 @@ export const useChangeBackground = () => {
 
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeBG, status: 'progress' }));
     try {
-      const file = await convertDriveFileToFile(currentFile);
-      fileToBase64(file)
+      fileToBase64(currentFile)
         .then((data) => {
           dispatch(setPageResult({ tab: NOVA_TAB_TYPE.changeBG, result: data }));
         })
