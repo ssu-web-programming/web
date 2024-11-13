@@ -1,6 +1,7 @@
 {
   "PageCount": "ページ数",
   "InsertFail": "ドキュメント内にカーソルを置いてください。",
+  "ProtectedSheet": "保護されたシートではAI機能を使用できません。保護を解除して再試行してください。",
   "Write": "記入",
   "Chatting": "チャット",
   "CreateImage": "画像を作成",

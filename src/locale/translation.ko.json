@@ -1,6 +1,7 @@
 {
   "PageCount": "페이지 수",
   "InsertFail": "문서 내 삽입 위치를 선택해주세요!",
+  "ProtectedSheet": "AI features cannot be used on a protected sheet. Please unprotect the sheet and try again.",
   "Write": "작성",
   "Chatting": "채팅",
   "CreateImage": "이미지 생성하기",
