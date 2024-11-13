@@ -241,14 +241,10 @@ export default function Result() {
   };
 
   const OnSave = async () => {
-    console.log('result', result);
     if (result) {
       if (result.link) {
         try {
-          // const res = await fetch(result.link, { method: 'HEAD' });
-          const res = (await apiWrapper().request(result.link, { method: 'HEAD' })) as any;
-          console.log('res', res);
-
+          const res = await fetch(result.link, { method: 'HEAD' });
           const contentType = res.headers.get('Content-Type');
           if (contentType && contentType.includes('text/html')) {
             ShowExpireLinkPopup();
@@ -257,11 +253,7 @@ export default function Result() {
             Bridge.callBridgeApi('downloadAnimation', result.link);
           }
         } catch (err) {
-          console.log('err', err);
-          console.log('window navigator', window.navigator.onLine);
-
           if (!navigator.onLine) {
-            // throw new Error(ERR_NOT_ONLINE);
             dispatch(setOnlineStatus(false));
           } else {
             ShowExpireLinkPopup();
