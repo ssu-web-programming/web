@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
+import { apiWrapper } from 'api/apiWrapper';
+import { ERR_NOT_ONLINE } from 'error/error';
 import DownloadIcon from 'img/ico_download_white.svg';
 import InsertDocsIcon from 'img/ico_insert_docs.svg';
 import { lang } from 'locale';
 import { useTranslation } from 'react-i18next';
 import ReactPlayer from 'react-player';
+import { setOnlineStatus } from 'store/slices/network';
 import styled from 'styled-components';
 
 import CreditColorIcon from '../../img/ico_credit_color_outline.svg';
@@ -238,10 +241,14 @@ export default function Result() {
   };
 
   const OnSave = async () => {
+    console.log('result', result);
     if (result) {
       if (result.link) {
         try {
-          const res = await fetch(result.link, { method: 'HEAD' });
+          // const res = await fetch(result.link, { method: 'HEAD' });
+          const res = (await apiWrapper().request(result.link, { method: 'HEAD' })) as any;
+          console.log('res', res);
+
           const contentType = res.headers.get('Content-Type');
           if (contentType && contentType.includes('text/html')) {
             ShowExpireLinkPopup();
@@ -250,7 +257,15 @@ export default function Result() {
             Bridge.callBridgeApi('downloadAnimation', result.link);
           }
         } catch (err) {
-          ShowExpireLinkPopup();
+          console.log('err', err);
+          console.log('window navigator', window.navigator.onLine);
+
+          if (!navigator.onLine) {
+            // throw new Error(ERR_NOT_ONLINE);
+            dispatch(setOnlineStatus(false));
+          } else {
+            ShowExpireLinkPopup();
+          }
         }
       } else {
         const blob = base64ToBlob(result.data, result.contentType);
