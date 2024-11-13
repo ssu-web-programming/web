@@ -2,14 +2,13 @@ import { novaHistorySelector } from 'store/slices/nova/novaHistorySlice';
 import { userInfoSelector } from 'store/slices/userInfo';
 import { useAppSelector } from 'store/store';
 
-import { NOVA_TAB_TYPE, selectTabSlice } from '../../store/slices/tabSlice';
+import { NOVA_TAB_TYPE } from '../../store/slices/tabSlice';
 
 export default function useUserInfoUtils() {
   const { userInfo } = useAppSelector(userInfoSelector);
   const novaHistory = useAppSelector(novaHistorySelector);
-  const { selectedNovaTab } = useAppSelector(selectTabSlice);
 
-  const getMaxFilesPerUpload = () => {
+  const getMaxFilesPerUpload = (selectedNovaTab: NOVA_TAB_TYPE) => {
     // CLT-4661 이미지를 한 번에 10개 이상 업로드 시 에러 나는 문제로
     // 한번에 첨부 가능한 파일 수를 5개로 제한
     if (selectedNovaTab === NOVA_TAB_TYPE.aiChat) {
@@ -19,7 +18,7 @@ export default function useUserInfoUtils() {
     }
   };
 
-  const getAvailableFileCnt = () => {
+  const getAvailableFileCnt = (selectedNovaTab: NOVA_TAB_TYPE) => {
     if (selectedNovaTab === NOVA_TAB_TYPE.aiChat) {
       switch (userInfo.ul) {
         case '1':
@@ -40,8 +39,8 @@ export default function useUserInfoUtils() {
     }
   };
 
-  const calcAvailableFileCnt = () => {
-    const uploadLimit = getAvailableFileCnt();
+  const calcAvailableFileCnt = (selectedNovaTab: NOVA_TAB_TYPE) => {
+    const uploadLimit = getAvailableFileCnt(selectedNovaTab);
     const uploadCnt = novaHistory.reduce((acc, cur) => {
       const len = cur.files?.length;
       if (len) return acc + len;

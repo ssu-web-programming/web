@@ -32,7 +32,7 @@ export function useManageFile() {
   const loadLocalFile = async (files: File[]) => {
     dispatch(setDriveFiles([]));
 
-    const maxFileUploadCntOnce = getMaxFilesPerUpload();
+    const maxFileUploadCntOnce = getMaxFilesPerUpload(selectedNovaTab);
     if (files.length > maxFileUploadCntOnce) {
       await confirm({
         title: '',
@@ -45,7 +45,7 @@ export function useManageFile() {
       return;
     }
 
-    const uploadLimit = getAvailableFileCnt();
+    const uploadLimit = getAvailableFileCnt(selectedNovaTab);
     if (uploadLimit !== -1 && selectedNovaTab === NOVA_TAB_TYPE.aiChat) {
       const uploadCnt = novaHistory.reduce((acc, cur) => {
         const len = cur.files?.length;
@@ -118,6 +118,28 @@ export function useManageFile() {
   };
 
   const loadDriveFile = async (files: DriveFileInfo[]) => {
+    const uploadLimit = getAvailableFileCnt(selectedNovaTab);
+    if (uploadLimit !== -1 && selectedNovaTab === NOVA_TAB_TYPE.aiChat) {
+      const uploadCnt = novaHistory.reduce((acc, cur) => {
+        const len = cur.files?.length;
+        if (len) return acc + len;
+        else return acc;
+      }, 0);
+
+      if (uploadCnt + files.length > uploadLimit) {
+        await confirm({
+          title: '',
+          msg: t('Nova.Confirm.OverMaxFileUploadCnt', { max: uploadLimit })!,
+          onOk: { text: t('Nova.Confirm.NewChat.StartNewChat'), callback: chatNova.newChat },
+          onCancel: {
+            text: t('Cancel'),
+            callback: () => {}
+          }
+        });
+        return;
+      }
+    }
+
     dispatch(setLocalFiles([]));
     dispatch(setDriveFiles(files));
   };
