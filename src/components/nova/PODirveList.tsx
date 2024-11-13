@@ -28,7 +28,7 @@ interface PODriveListProps {
 export default function PODriveList(props: PODriveListProps) {
   const { isOpen, setIsOpen, uploadTarget, setUploadTarget } = props;
   const { t } = useTranslation();
-  const { calcAvailableFileCnt } = useUserInfoUtils();
+  const { getMaxFilesPerUpload } = useUserInfoUtils();
   const { loadDriveFile } = useManageFile();
   const [selectedFiles, setSelectedFiles] = useState<DriveFileInfo[]>([]);
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
@@ -44,11 +44,7 @@ export default function PODriveList(props: PODriveListProps) {
 
   const getTranslationKey = (): string => {
     if (selectedNovaTab === NOVA_TAB_TYPE.aiChat) {
-      if (calcAvailableFileCnt() >= 0) {
-        return uploadTarget === 'nova-file' ? 'Nova.PoDrive.LimitDesc' : 'Nova.PoDrive.DescImg';
-      } else {
-        return 'Nova.PoDrive.Desc';
-      }
+      return 'Nova.PoDrive.LimitDesc';
     } else {
       return 'Nova.PoDrive.Desc';
     }
@@ -62,12 +58,12 @@ export default function PODriveList(props: PODriveListProps) {
           <SubTitle>
             {t(getTranslationKey(), {
               size: getMaxFileSize(selectedNovaTab),
-              count: calcAvailableFileCnt()
+              count: getMaxFilesPerUpload()
             })}
           </SubTitle>
 
           <PoDrive
-            max={calcAvailableFileCnt()}
+            max={getMaxFilesPerUpload()}
             target={uploadTarget}
             selectedFiles={selectedFiles}
             handleSelectedFiles={(files: DriveFileInfo[]) => {

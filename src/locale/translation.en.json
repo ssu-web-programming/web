@@ -568,7 +568,7 @@
         "Ok": "Move"
       },
       "OverMaxFileUploadCnt": "You can attach up to {{max}} files in one conversation. Start a new conversation to continue asking questions!",
-      "OverMaxFileUploadCntOnce": "You can attach up to {{max}} files only. Please reselect the files.",
+      "OverMaxFileUploadCntOnce": "You can only attach up to {{max}} files at once. Please reselect the files.",
       "OverMaxFilePixel": "The uploaded image exceeds the maximum allowed pixel size. Please reduce the image size to use this feature.",
       "NotSavedFile": {
         "Msg": "The changes have not been saved yet. If not saved, the changes will not be reflected in NOVA's response.",
@@ -599,8 +599,7 @@
     },
     "PoDrive": {
       "Desc": "Please select the desired file.",
-      "LimitDesc": "You can select up to {{count}} files under {{size}}MB.",
-      "DescImg": "You can select up to {{count}} jpg, jpeg, png, and gif files under {{size}} MB.",
+      "LimitDesc": "You can attach up to {{count}} files, each under {{size}}MB, at a time.",
       "NoFile": "There are no attachable {{type}}."
     },
     "Toast": {
