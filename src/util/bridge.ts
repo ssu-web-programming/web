@@ -352,19 +352,14 @@ export const useInitBridgeListener = () => {
             break;
           }
           case 'openNOVA': {
-            console.log('openNOVA event 호출!');
-            console.log('선택된 Tab 정보!', selectNovaTab);
-            console.log('openNOVA-currentFile', currentFile);
-
-            dispatch(resetPageData(selectedNovaTab));
-            dispatch(resetPageResult(selectedNovaTab));
-            dispatch(setLocalFiles([]));
-
             dispatch(changePanel({ cmd, body: body.inputText || '' }));
-            dispatch(setDriveFiles([]));
-            dispatch(setPageStatus({ tab: 'aiChat', status: 'home' }));
+
             if (body.openTab in NOVA_TAB_TYPE) {
               const tab = body.openTab;
+              dispatch(resetPageData(tab));
+              dispatch(setDriveFiles([]));
+              dispatch(setPageStatus({ tab: 'aiChat', status: 'home' }));
+              dispatch(setLocalFiles([]));
               dispatch(selectNovaTab(NOVA_TAB_TYPE[body.openTab as keyof typeof NOVA_TAB_TYPE]));
               const isBlob = body.image instanceof Blob && body.image.size > 0;
               const isBase64 = typeof body.image === 'string' && body.image.startsWith('data:');
