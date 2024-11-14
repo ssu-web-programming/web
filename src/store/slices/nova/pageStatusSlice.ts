@@ -88,10 +88,8 @@ export const selectPageStatus =
 
 export const selectPageData =
   (tab: string) =>
-  (state: RootState): PageData => {
-    console.log('state.pageStatusSlice', state.pageStatusSlice);
-    return state.pageStatusSlice.data[tab] || null;
-  };
+  (state: RootState): PageData =>
+    state.pageStatusSlice.data[tab] || null;
 
 export const selectPageResult =
   (tab: string) =>

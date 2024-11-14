@@ -136,7 +136,7 @@ const GridItem = styled.div<{ lang: string; isSelected: boolean }>`
     font-size: 14px;
     font-weight: 500;
     line-height: 21px;
-    white-space: break-spaces;
+
     color: ${(props) => (props.isSelected ? '#6f3ad0' : '#72787f')};
   }
 `;

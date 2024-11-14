@@ -28,7 +28,7 @@ const Wrap = styled.div`
   position: relative;
   height: 206px;
   padding: 0 16px;
-  border: 1.5px dashed #c9cdd2;
+  border: 2px dashed #c9cdd2;
   border-radius: 8px;
   background-color: white;
 `;
@@ -121,8 +121,6 @@ export default function ImageUploader(props: ImageUploaderProps) {
   const driveFiles = useAppSelector(getDriveFiles);
   const currentFile = useAppSelector(selectPageData(props.curTab));
 
-  console.log('currentFile 초기화되는지 확인', currentFile);
-
   const target = 'nova-image';
 
   const isSpecificFormat = (file: File) => {
@@ -187,7 +185,6 @@ export default function ImageUploader(props: ImageUploaderProps) {
 
   useEffect(() => {
     if (currentFile) {
-      console.log('currentFile', currentFile);
       props.handleUploadComplete();
     } else {
       handleFileProcessing();
