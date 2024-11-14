@@ -184,6 +184,7 @@ export default function ImageUploader(props: ImageUploaderProps) {
 
   useEffect(() => {
     if (currentFile) {
+      console.log('currentFile', currentFile);
       props.handleUploadComplete();
     } else {
       handleFileProcessing();
