@@ -28,7 +28,7 @@ const Wrap = styled.div`
   position: relative;
   height: 206px;
   padding: 0 16px;
-  border: 0.5px dashed #c9cdd2;
+  border: 1.5px dashed #c9cdd2;
   border-radius: 8px;
   background-color: white;
 `;
@@ -184,6 +184,7 @@ export default function ImageUploader(props: ImageUploaderProps) {
 
   useEffect(() => {
     if (currentFile) {
+      console.log('currentFile', currentFile);
       props.handleUploadComplete();
     } else {
       handleFileProcessing();

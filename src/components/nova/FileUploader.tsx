@@ -73,12 +73,14 @@ export const FileUploader = (props: FileUploaderProps) => {
             setUploadTarget(target);
             toggleDriveConfirm();
           }
-          const uploadLimit = calcAvailableFileCnt();
+          const uploadLimit = calcAvailableFileCnt(selectedNovaTab);
           if (uploadLimit === 0 && selectedNovaTab === NOVA_TAB_TYPE.aiChat) {
             setIsOpen(false);
             await confirm({
               title: '',
-              msg: t('Nova.Confirm.OverMaxFileUploadCnt', { max: getAvailableFileCnt() })!,
+              msg: t('Nova.Confirm.OverMaxFileUploadCnt', {
+                max: getAvailableFileCnt(selectedNovaTab)
+              })!,
               onOk: { text: t('Nova.Confirm.NewChat.StartNewChat'), callback: chatNova.newChat },
               onCancel: {
                 text: t('Cancel'),
@@ -148,12 +150,12 @@ export const FileUploader = (props: FileUploaderProps) => {
       setUploadTarget(target);
     }
 
-    const uploadLimit = calcAvailableFileCnt();
+    const uploadLimit = calcAvailableFileCnt(selectedNovaTab);
     if (uploadLimit === 0) {
       setIsOpen(false);
       await confirm({
         title: '',
-        msg: t('Nova.Confirm.OverMaxFileUploadCnt', { max: getAvailableFileCnt() })!,
+        msg: t('Nova.Confirm.OverMaxFileUploadCnt', { max: getAvailableFileCnt(selectedNovaTab) })!,
         onOk: { text: t('Nova.Confirm.NewChat.StartNewChat'), callback: chatNova.newChat },
         onCancel: {
           text: t('Cancel'),
@@ -168,7 +170,7 @@ export const FileUploader = (props: FileUploaderProps) => {
     if (currentFile.type === 'notSupported') {
       await confirm({
         title: '',
-        msg: t('Nova.Alert.UnopenableDocError', { max: getAvailableFileCnt() })!,
+        msg: t('Nova.Alert.UnopenableDocError', { max: getAvailableFileCnt(selectedNovaTab) })!,
         onOk: {
           text: t('Confirm'),
           callback: () => {

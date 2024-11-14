@@ -58,12 +58,12 @@ export default function PODriveList(props: PODriveListProps) {
           <SubTitle>
             {t(getTranslationKey(), {
               size: getMaxFileSize(selectedNovaTab),
-              count: getMaxFilesPerUpload()
+              count: getMaxFilesPerUpload(selectedNovaTab)
             })}
           </SubTitle>
 
           <PoDrive
-            max={getMaxFilesPerUpload()}
+            max={getMaxFilesPerUpload(selectedNovaTab)}
             target={uploadTarget}
             selectedFiles={selectedFiles}
             handleSelectedFiles={(files: DriveFileInfo[]) => {
