@@ -54,6 +54,7 @@ const pageSlice = createSlice({
     },
     setData: (state, action: PayloadAction<{ tab: string; data: PageData }>) => {
       const { tab, data } = action.payload;
+      console.log('data', data);
       state.data[tab] = data;
     },
     resetData: (state, action: PayloadAction<string>) => {
@@ -87,8 +88,10 @@ export const selectPageStatus =
 
 export const selectPageData =
   (tab: string) =>
-  (state: RootState): PageData =>
-    state.pageStatusSlice.data[tab] || null;
+  (state: RootState): PageData => {
+    console.log('state.pageStatusSlice', state.pageStatusSlice);
+    return state.pageStatusSlice.data[tab] || null;
+  };
 
 export const selectPageResult =
   (tab: string) =>

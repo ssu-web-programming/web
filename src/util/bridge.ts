@@ -15,6 +15,7 @@ import { initConfirm } from '../store/slices/confirm';
 import {
   resetPageData,
   resetPageResult,
+  selectPageData,
   setPageStatus
 } from '../store/slices/nova/pageStatusSlice';
 import { setPlatformInfo } from '../store/slices/platformInfo';
@@ -29,7 +30,7 @@ import {
   setLoadingFile,
   setLocalFiles
 } from '../store/slices/uploadFiles';
-import store, { AppDispatch, RootState, useAppDispatch } from '../store/store';
+import store, { AppDispatch, RootState, useAppDispatch, useAppSelector } from '../store/store';
 
 import { getCookie, isHigherVersion, makeClipboardData } from './common';
 import { base64ToFile, blobToFile } from './files';
@@ -260,6 +261,10 @@ export const useInitBridgeListener = () => {
   const location = useLocation();
   const confirm = useConfirm();
 
+  const state = store.getState();
+  const selectedNovaTab = state.tab.selectedNovaTab;
+  const currentFile = useAppSelector(selectPageData(selectedNovaTab));
+
   const { getFileInfo, loadLocalFile } = useManageFile();
 
   // const movePage = useMoveChatTab();
@@ -347,12 +352,14 @@ export const useInitBridgeListener = () => {
             break;
           }
           case 'openNOVA': {
-            dispatch(resetPageData(selectedNovaTab));
             dispatch(changePanel({ cmd, body: body.inputText || '' }));
-            dispatch(setDriveFiles([]));
-            dispatch(setPageStatus({ tab: 'aiChat', status: 'home' }));
+
             if (body.openTab in NOVA_TAB_TYPE) {
               const tab = body.openTab;
+              dispatch(resetPageData(tab));
+              dispatch(setDriveFiles([]));
+              dispatch(setPageStatus({ tab: 'aiChat', status: 'home' }));
+              dispatch(setLocalFiles([]));
               dispatch(selectNovaTab(NOVA_TAB_TYPE[body.openTab as keyof typeof NOVA_TAB_TYPE]));
               const isBlob = body.image instanceof Blob && body.image.size > 0;
               const isBase64 = typeof body.image === 'string' && body.image.startsWith('data:');

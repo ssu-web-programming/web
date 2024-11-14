@@ -120,6 +120,9 @@ export default function ImageUploader(props: ImageUploaderProps) {
   const localFiles = useAppSelector(getLocalFiles);
   const driveFiles = useAppSelector(getDriveFiles);
   const currentFile = useAppSelector(selectPageData(props.curTab));
+
+  console.log('currentFile 초기화되는지 확인', currentFile);
+
   const target = 'nova-image';
 
   const isSpecificFormat = (file: File) => {
