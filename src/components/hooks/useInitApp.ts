@@ -153,16 +153,17 @@ export default function useInitApp() {
       dispatch(setPlatformInfo({ platform: platform, version: version }));
     }
     dispatch(setPageStatus({ tab: 'aiChat', status: 'home' }));
+
+    await initCreditInfo(headers);
+    await initUserInfo(headers);
+    await initAnnouncementInfo(headers);
+    await initNovaExpireTime(headers);
+
     dispatch(
       initComplete({
         isInit: true
       })
     );
-
-    await initUserInfo(headers);
-    await initAnnouncementInfo(headers);
-    await initNovaExpireTime(headers);
-    await initCreditInfo(headers);
 
     dispatch(setUserInfo(resSession.userInfo));
 

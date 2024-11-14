@@ -1,5 +1,6 @@
 import React, { ReactElement, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { initFlagSelector } from 'store/slices/initFlagSlice';
 import styled, { css } from 'styled-components';
 
 import { platformInfoSelector } from '../store/slices/platformInfo';
@@ -62,11 +63,12 @@ const TooltipContainer = styled.div<{ initPos: boolean }>`
   justify-content: center;
 `;
 
-const TootipButton = styled.div`
+const TootipButton = styled.div<{ $isInit: boolean }>`
   width: 100%;
   height: 100%;
   cursor: pointer;
   background-color: transparent;
+  pointer-events: ${({ $isInit }) => ($isInit ? 'auto' : 'none')};
 `;
 
 const TooltipContent = styled.div<{
@@ -168,6 +170,7 @@ const Tooltip = (props: TooltipProps) => {
   const localFiles = useAppSelector(getLocalFiles);
   const { platform, version } = useAppSelector(platformInfoSelector);
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
+  const { isInit } = useAppSelector(initFlagSelector);
 
   const handleClickOutside = (event: MouseEvent) => {
     if (localFiles.length > 0) setIsOpen(false);
@@ -283,7 +286,9 @@ const Tooltip = (props: TooltipProps) => {
 
   return (
     <TooltipContainer ref={tooltipRef} initPos={initPos}>
-      <TootipButton onClick={toggleTooltip}>{children}</TootipButton>
+      <TootipButton $isInit={isInit} onClick={toggleTooltip}>
+        {children}
+      </TootipButton>
       <TooltipContent
         isOpen={isOpen}
         placement={placement}

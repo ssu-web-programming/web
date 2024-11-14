@@ -3,10 +3,11 @@ import { ReactComponent as IconLogoNova } from 'img/ico_logo_nova.svg';
 import { ReactComponent as IconMessagePlus } from 'img/ico_message_plus.svg';
 import { ReactComponent as IconClose } from 'img/ico_nova_close.svg';
 import { Trans, useTranslation } from 'react-i18next';
+import { initFlagSelector } from 'store/slices/initFlagSlice';
 import styled, { css } from 'styled-components';
 
 import ico_credit from '../../img/ico_credit_gray.svg';
-import ico_credit_info from '../../img/ico_credit_line.svg';
+import { ReactComponent as IconCreditLine } from '../../img/ico_credit_line.svg';
 import { ReactComponent as IconConvert } from '../../img/nova/tab/convert_Img.svg';
 import { creditInfoSelector, InitialState } from '../../store/slices/creditInfo';
 import { novaHistorySelector } from '../../store/slices/nova/novaHistorySlice';
@@ -17,7 +18,6 @@ import Bridge, { isDesktop } from '../../util/bridge';
 import IconButton from '../buttons/IconButton';
 import { useConfirm } from '../Confirm';
 import { useChatNova } from '../hooks/useChatNova';
-import Icon from '../Icon';
 import Header from '../layout/Header';
 import Tooltip from '../Tooltip';
 
@@ -52,6 +52,17 @@ const ButtonWrapper = styled.div`
   flex-direction: row;
 `;
 
+const CreditIcon = styled(IconCreditLine)<{
+  $isInit: boolean;
+}>`
+  path {
+    fill: ${({ $isInit }) => ($isInit ? '#454C53' : '#454c5380')};
+  }
+  circle {
+    stroke: ${({ $isInit }) => ($isInit ? '#454C53' : '#454c5380')};
+  }
+`;
+
 export interface NovaHeaderProps {
   setInputContents?: React.Dispatch<React.SetStateAction<string>>;
 }
@@ -64,6 +75,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
   const confirm = useConfirm();
   const chatNova = useChatNova();
   const creditInfo = useAppSelector(creditInfoSelector);
+  const { isInit } = useAppSelector(initFlagSelector);
 
   const CREDIT_NAME_MAP: {
     [category: string]:
@@ -228,7 +240,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
           placement="bottom-end"
           type="normal"
           options={TOOLTIP_CREDIT_OPTIONS}>
-          <Icon iconSrc={ico_credit_info} size={32} />
+          <CreditIcon $isInit={isInit} />
         </Tooltip>
         {isDesktop && (
           <>
