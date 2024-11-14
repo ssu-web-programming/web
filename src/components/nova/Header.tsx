@@ -2,12 +2,12 @@ import React from 'react';
 import { ReactComponent as IconLogoNova } from 'img/ico_logo_nova.svg';
 import { ReactComponent as IconMessagePlus } from 'img/ico_message_plus.svg';
 import { ReactComponent as IconClose } from 'img/ico_nova_close.svg';
-import CreditIconComponent from 'img/svg/credit';
 import { Trans, useTranslation } from 'react-i18next';
 import { initFlagSelector } from 'store/slices/initFlagSlice';
 import styled, { css } from 'styled-components';
 
 import ico_credit from '../../img/ico_credit_gray.svg';
+import { ReactComponent as IconCreditLine } from '../../img/ico_credit_line.svg';
 import { ReactComponent as IconConvert } from '../../img/nova/tab/convert_Img.svg';
 import { creditInfoSelector, InitialState } from '../../store/slices/creditInfo';
 import { novaHistorySelector } from '../../store/slices/nova/novaHistorySlice';
@@ -50,6 +50,17 @@ const ButtonWrapper = styled.div`
 
   ${flexCenter};
   flex-direction: row;
+`;
+
+const CreditIcon = styled(IconCreditLine)<{
+  $isInit: boolean;
+}>`
+  path {
+    fill: ${({ $isInit }) => ($isInit ? '#454C53' : '#454c5380')};
+  }
+  circle {
+    stroke: ${({ $isInit }) => ($isInit ? '#454C53' : '#454c5380')};
+  }
 `;
 
 export interface NovaHeaderProps {
@@ -229,7 +240,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
           placement="bottom-end"
           type="normal"
           options={TOOLTIP_CREDIT_OPTIONS}>
-          <CreditIconComponent width={32} height={32} color={isInit ? '#454C53' : '#454c5380'} />
+          <CreditIcon $isInit={isInit} />
         </Tooltip>
         {isDesktop && (
           <>
