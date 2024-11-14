@@ -15,6 +15,7 @@ import { initConfirm } from '../store/slices/confirm';
 import {
   resetPageData,
   resetPageResult,
+  selectPageData,
   setPageStatus
 } from '../store/slices/nova/pageStatusSlice';
 import { setPlatformInfo } from '../store/slices/platformInfo';
@@ -29,7 +30,7 @@ import {
   setLoadingFile,
   setLocalFiles
 } from '../store/slices/uploadFiles';
-import store, { AppDispatch, RootState, useAppDispatch } from '../store/store';
+import store, { AppDispatch, RootState, useAppDispatch, useAppSelector } from '../store/store';
 
 import { getCookie, isHigherVersion, makeClipboardData } from './common';
 import { base64ToFile, blobToFile } from './files';
@@ -260,6 +261,10 @@ export const useInitBridgeListener = () => {
   const location = useLocation();
   const confirm = useConfirm();
 
+  const state = store.getState();
+  const selectedNovaTab = state.tab.selectedNovaTab;
+  const currentFile = useAppSelector(selectPageData(selectedNovaTab));
+
   const { getFileInfo, loadLocalFile } = useManageFile();
 
   // const movePage = useMoveChatTab();
@@ -347,7 +352,14 @@ export const useInitBridgeListener = () => {
             break;
           }
           case 'openNOVA': {
+            console.log('openNOVA event 호출!');
+            console.log('선택된 Tab 정보!', selectNovaTab);
+            console.log('openNOVA-currentFile', currentFile);
+
             dispatch(resetPageData(selectedNovaTab));
+            dispatch(resetPageResult(selectedNovaTab));
+            dispatch(setLocalFiles([]));
+
             dispatch(changePanel({ cmd, body: body.inputText || '' }));
             dispatch(setDriveFiles([]));
             dispatch(setPageStatus({ tab: 'aiChat', status: 'home' }));
