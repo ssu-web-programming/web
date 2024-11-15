@@ -261,10 +261,6 @@ export const useInitBridgeListener = () => {
   const location = useLocation();
   const confirm = useConfirm();
 
-  const state = store.getState();
-  const selectedNovaTab = state.tab.selectedNovaTab;
-  const currentFile = useAppSelector(selectPageData(selectedNovaTab));
-
   const { getFileInfo, loadLocalFile } = useManageFile();
 
   // const movePage = useMoveChatTab();
