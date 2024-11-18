@@ -179,21 +179,19 @@ export const FileUploader = (props: FileUploaderProps) => {
         }
       });
     } else if (currentFile.type === 'drive') {
-      if (currentFile.isSaved) {
-        if (Number(currentFile.id) === -1) {
-          await confirmSaveDoc(true);
-        } else {
-          dispatch(setCreating('NOVA'));
-          dispatch(setLocalFiles([]));
-          dispatch(setDriveFiles([]));
+      if (Number(currentFile.id) === -1) {
+        await confirmSaveDoc(true);
+      } else if (currentFile.isSaved) {
+        dispatch(setCreating('NOVA'));
+        dispatch(setLocalFiles([]));
+        dispatch(setDriveFiles([]));
 
-          dispatch(setLoadingFile({ id: currentFile.id }));
-          const curFile = await getFileInfo(currentFile.id);
-          dispatch(removeLoadingFile());
+        dispatch(setLoadingFile({ id: currentFile.id }));
+        const curFile = await getFileInfo(currentFile.id);
+        dispatch(removeLoadingFile());
 
-          dispatch(setDriveFiles([curFile]));
-          dispatch(setCreating('none'));
-        }
+        dispatch(setDriveFiles([curFile]));
+        dispatch(setCreating('none'));
       } else {
         await confirmSaveDoc(false);
       }
