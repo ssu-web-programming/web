@@ -181,7 +181,7 @@ export const FileUploader = (props: FileUploaderProps) => {
     } else if (currentFile.type === 'drive') {
       if (currentFile.isSaved) {
         if (Number(currentFile.id) === -1) {
-          await confirmSaveDoc();
+          await confirmSaveDoc(true);
         } else {
           dispatch(setCreating('NOVA'));
           dispatch(setLocalFiles([]));
@@ -195,14 +195,14 @@ export const FileUploader = (props: FileUploaderProps) => {
           dispatch(setCreating('none'));
         }
       } else {
-        await confirmSaveDoc();
+        await confirmSaveDoc(false);
       }
     } else if (currentFile.type === 'local') {
       await confirmUploadFile();
     }
   };
 
-  const confirmSaveDoc = async () => {
+  const confirmSaveDoc = async (isCancel: boolean) => {
     await confirm({
       title: '',
       msg:
@@ -216,21 +216,30 @@ export const FileUploader = (props: FileUploaderProps) => {
           Bridge.callBridgeApi('uploadFile');
         }
       },
-      onCancel: {
-        text: t('Nova.Confirm.NotSavedFile.Cancel'),
-        callback: async () => {
-          dispatch(setCreating('NOVA'));
-          dispatch(setLocalFiles([]));
-          dispatch(setDriveFiles([]));
+      onCancel: isCancel
+        ? {
+            text: t('Cancel'),
+            callback: async () => {
+              dispatch(setCreating('none'));
+              dispatch(setLocalFiles([]));
+              dispatch(setDriveFiles([]));
+            }
+          }
+        : {
+            text: t('Nova.Confirm.NotSavedFile.Cancel'),
+            callback: async () => {
+              dispatch(setCreating('NOVA'));
+              dispatch(setLocalFiles([]));
+              dispatch(setDriveFiles([]));
 
-          dispatch(setLoadingFile({ id: currentFile.id }));
-          const curFile = await getFileInfo(currentFile.id);
-          dispatch(removeLoadingFile());
+              dispatch(setLoadingFile({ id: currentFile.id }));
+              const curFile = await getFileInfo(currentFile.id);
+              dispatch(removeLoadingFile());
 
-          dispatch(setDriveFiles([curFile]));
-          dispatch(setCreating('none'));
-        }
-      }
+              dispatch(setDriveFiles([curFile]));
+              dispatch(setCreating('none'));
+            }
+          }
     });
   };
 
