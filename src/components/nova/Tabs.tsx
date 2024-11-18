@@ -200,7 +200,7 @@ const Tabs = ({ tabs, activeTab, onChangeTab }: TabProps) => {
 
     swiper.update();
     updateSwiperState();
-  }, [activeTab, tabs, swiperRef.current]);
+  }, [activeTab, swiperRef.current]);
 
   const handlePrevClick = () => {
     if (swiperRef.current) {
