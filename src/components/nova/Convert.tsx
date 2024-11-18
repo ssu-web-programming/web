@@ -60,26 +60,30 @@ const ExampleText = styled.p`
 const ImageBox = styled.div`
   width: 100%;
   max-width: 480px;
+  aspect-ratio: 16 / 9;
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   margin: 8px auto 16px;
-  overflow: hidden;
   border-radius: 8px;
+  overflow: hidden;
 
-  div {
+  .react-player {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100% !important;
     height: 100% !important;
+  }
+
+  div {
     border-radius: 8px;
   }
 
   video {
-    width: 100%;
-    max-width: 480px;
-    object-fit: contain;
     border: 1px solid #c9cdd2;
     border-radius: 8px;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: fill;
   }
 `;
 
@@ -260,7 +264,23 @@ export default function Convert() {
           <ExampleText>{t(`Nova.Convert.Example`)}</ExampleText>
           <ImageBox>
             {selectedOption && (
-              <ReactPlayer url={selectedOption.example} loop playing playsinline muted />
+              <ReactPlayer
+                key={selectedOption.example}
+                url={selectedOption.example}
+                loop
+                playing
+                playsinline
+                muted
+                width="100%"
+                height="100%"
+                config={{
+                  file: {
+                    attributes: {
+                      preload: 'auto' // 비디오 미리 로딩
+                    }
+                  }
+                }}
+              />
             )}
           </ImageBox>
           <SelectionBox>
