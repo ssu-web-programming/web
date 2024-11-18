@@ -1,8 +1,10 @@
 import { apiWrapper } from 'api/apiWrapper';
 import { NOVA_DELETE_CONVERSATION } from 'api/constant';
 import { initNovaHistory, novaHistorySelector } from 'store/slices/nova/novaHistorySlice';
-import { setCreating, setUsingAI } from 'store/slices/tabSlice';
+import { NOVA_TAB_TYPE, setCreating, setUsingAI } from 'store/slices/tabSlice';
 import { useAppDispatch, useAppSelector } from 'store/store';
+
+import { setPageStatus } from '../../store/slices/nova/pageStatusSlice';
 
 export const useChatNova = () => {
   const dispatch = useAppDispatch();
@@ -20,6 +22,7 @@ export const useChatNova = () => {
       dispatch(initNovaHistory());
       dispatch(setCreating('none'));
       dispatch(setUsingAI(false));
+      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiChat, status: 'home' }));
     } catch (err) {
       console.log(err);
     }
