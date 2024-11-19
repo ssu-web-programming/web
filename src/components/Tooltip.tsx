@@ -1,17 +1,13 @@
 import React, { ReactElement, useEffect, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { initFlagSelector } from 'store/slices/initFlagSlice';
 import styled, { css } from 'styled-components';
 
-import { platformInfoSelector } from '../store/slices/platformInfo';
 import { NOVA_TAB_TYPE, selectTabSlice } from '../store/slices/tabSlice';
 import { getLocalFiles } from '../store/slices/uploadFiles';
 import { userInfoSelector } from '../store/slices/userInfo';
 import { useAppSelector } from '../store/store';
-import Bridge, { ClientType } from '../util/bridge';
-import { isHigherVersion } from '../util/common';
+import Bridge from '../util/bridge';
 
-import { useConfirm } from './Confirm';
 import Icon from './Icon';
 
 export type TooltipType = 'selectable' | 'normal';
@@ -40,6 +36,7 @@ type TooltipProps = {
   distance?: number; // distance between tooltip and children
   initPos?: boolean; // if true, tooltip will be positioned as initial
   style?: React.CSSProperties;
+  onClick?: () => void;
 };
 
 const STYLE_BY_TYPE = {
@@ -152,8 +149,6 @@ const ChipWrapper = styled.div`
 `;
 
 const Tooltip = (props: TooltipProps) => {
-  const { t } = useTranslation();
-  const confirm = useConfirm();
   const [isOpen, setIsOpen] = useState(false);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const {
@@ -168,7 +163,6 @@ const Tooltip = (props: TooltipProps) => {
 
   const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
   const localFiles = useAppSelector(getLocalFiles);
-  const { platform, version } = useAppSelector(platformInfoSelector);
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
   const { isInit } = useAppSelector(initFlagSelector);
 
@@ -189,77 +183,12 @@ const Tooltip = (props: TooltipProps) => {
     };
   }, []);
 
-  const getDownloadUrlByPlatform = () => {
-    switch (platform) {
-      case ClientType.android:
-        return 'market://details?id=com.infraware.office.link';
-      case ClientType.ios:
-        return 'https://itunes.apple.com/app/polaris-office-pdf-docs/id698070860';
-      case ClientType.windows:
-        return 'https://polarisoffice.com/ko/download';
-      case ClientType.mac:
-        return 'itms-apps://itunes.apple.com/app/id1098211970?mt=12';
-      default:
-        return '';
-    }
-  };
-
-  const isUpdateRequired = () => {
-    console.log('luna platform: ', platform);
-    console.log('luna version: ', version);
-
-    if (platform === ClientType.web || platform === ClientType.unknown) return false;
-    if (selectedNovaTab != NOVA_TAB_TYPE.convert2DTo3D) return false;
-
-    type ClientType = 'android' | 'ios' | 'windows' | 'mac';
-    const versionMap: Record<ClientType, string> = {
-      android: '9.9.5',
-      ios: '9.8.6',
-      windows: '10.105.250.54114',
-      mac: '9.0.64'
-    };
-    return !isHigherVersion(versionMap[platform as keyof typeof versionMap], version);
-  };
-
-  const confirmUpload = async (url: string) => {
-    if (platform === ClientType.windows) {
-      await confirm({
-        title: '',
-        msg: t('Nova.Confirm.UpdateVersionWindows.Msg'),
-        onOk: {
-          text: t('Ok'),
-          callback: () => {}
-        }
-      });
-    } else {
-      await confirm({
-        title: '',
-        msg: t('Nova.Confirm.UpdateVersion.Msg'),
-        onOk: {
-          text: t('Nova.Confirm.UpdateVersion.Ok'),
-          callback: () => {
-            Bridge.callBridgeApi('openWindow', url);
-          }
-        },
-        onCancel: {
-          text: t('Nova.Confirm.UpdateVersion.Cancel'),
-          callback: () => {}
-        }
-      });
-    }
-  };
-
   const toggleTooltip = () => {
     Bridge.callBridgeApi('analyzeCurFile');
 
     if (isAgreed === undefined) return;
     if (isAgreed === false && selectedNovaTab === NOVA_TAB_TYPE.aiChat) return;
-
-    if (isUpdateRequired()) {
-      const url = getDownloadUrlByPlatform();
-      confirmUpload(url);
-      return;
-    }
+    if (props.onClick) props.onClick();
 
     setIsOpen(!isOpen);
   };

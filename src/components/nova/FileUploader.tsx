@@ -8,6 +8,7 @@ import ico_logo_po from '../../img/ico_logo_po.svg';
 import ico_mobile from '../../img/ico_mobile.svg';
 import ico_pc from '../../img/ico_pc.svg';
 import { setPageStatus } from '../../store/slices/nova/pageStatusSlice';
+import { platformInfoSelector } from '../../store/slices/platformInfo';
 import { NOVA_TAB_TYPE, selectTabSlice, setCreating } from '../../store/slices/tabSlice';
 import {
   getCurrentFile,
@@ -19,7 +20,7 @@ import {
 import { userInfoSelector } from '../../store/slices/userInfo';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import Bridge, { ClientType, getPlatform } from '../../util/bridge';
-import { getFileExtension } from '../../util/common';
+import { getFileExtension, isHigherVersion } from '../../util/common';
 import { useConfirm } from '../Confirm';
 import FileButton from '../FileButton';
 import useManageFile from '../hooks/nova/useManageFile';
@@ -44,11 +45,11 @@ export const FileUploader = (props: FileUploaderProps) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const confirm = useConfirm();
-  const platform = getPlatform();
   const chatNova = useChatNova();
   const { getAvailableFileCnt, calcAvailableFileCnt } = useUserInfoUtils();
   const currentFile = useAppSelector(getCurrentFile);
   const { getFileInfo } = useManageFile();
+  const { platform, version } = useAppSelector(platformInfoSelector);
 
   const [isOpen, setIsOpen] = useState(false);
   const [uploadTarget, setUploadTarget] = useState<string>('');
@@ -259,6 +260,63 @@ export const FileUploader = (props: FileUploaderProps) => {
     });
   };
 
+  const confirmUpload = async (url: string) => {
+    if (platform === ClientType.windows) {
+      await confirm({
+        title: '',
+        msg: t('Nova.Confirm.UpdateVersionWindows.Msg'),
+        onOk: {
+          text: t('Ok'),
+          callback: () => {}
+        }
+      });
+    } else {
+      await confirm({
+        title: '',
+        msg: t('Nova.Confirm.UpdateVersion.Msg'),
+        onOk: {
+          text: t('Nova.Confirm.UpdateVersion.Ok'),
+          callback: () => {
+            Bridge.callBridgeApi('openWindow', url);
+          }
+        },
+        onCancel: {
+          text: t('Nova.Confirm.UpdateVersion.Cancel'),
+          callback: () => {}
+        }
+      });
+    }
+  };
+
+  const getDownloadUrlByPlatform = () => {
+    switch (platform) {
+      case ClientType.android:
+        return 'market://details?id=com.infraware.office.link';
+      case ClientType.ios:
+        return 'https://itunes.apple.com/app/polaris-office-pdf-docs/id698070860';
+      case ClientType.windows:
+        return 'https://polarisoffice.com/ko/download';
+      case ClientType.mac:
+        return 'itms-apps://itunes.apple.com/app/id1098211970?mt=12';
+      default:
+        return '';
+    }
+  };
+
+  const isUpdateRequired = () => {
+    if (platform === ClientType.web || platform === ClientType.unknown) return false;
+    if (selectedNovaTab != NOVA_TAB_TYPE.convert2DTo3D) return false;
+
+    type ClientType = 'android' | 'ios' | 'windows' | 'mac';
+    const versionMap: Record<ClientType, string> = {
+      android: '9.9.5',
+      ios: '9.8.6',
+      windows: '10.105.250.54114',
+      mac: '9.0.64'
+    };
+    return !isHigherVersion(versionMap[platform as keyof typeof versionMap], version);
+  };
+
   return (
     <>
       <React.Fragment key={target}>
@@ -269,7 +327,14 @@ export const FileUploader = (props: FileUploaderProps) => {
           options={TOOLTIP_UPLOAD_OPTION(target)}
           distance={10}
           initPos
-          style={tooltipStyle}>
+          style={tooltipStyle}
+          onClick={() => {
+            if (isUpdateRequired()) {
+              const url = getDownloadUrlByPlatform();
+              confirmUpload(url);
+              return;
+            }
+          }}>
           <FileButton
             target={target}
             accept={getAccept(accept)}
