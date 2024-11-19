@@ -11,7 +11,6 @@ import { ReactComponent as IconCreditLine } from '../../img/ico_credit_line.svg'
 import { ReactComponent as IconConvert } from '../../img/nova/tab/convert_Img.svg';
 import { creditInfoSelector, InitialState } from '../../store/slices/creditInfo';
 import { novaHistorySelector } from '../../store/slices/nova/novaHistorySlice';
-import { platformInfoSelector } from '../../store/slices/platformInfo';
 import { NOVA_TAB_TYPE, selectTabSlice } from '../../store/slices/tabSlice';
 import { setDriveFiles, setLocalFiles } from '../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../store/store';
@@ -78,7 +77,6 @@ export default function NovaHeader(props: NovaHeaderProps) {
   const chatNova = useChatNova();
   const creditInfo = useAppSelector(creditInfoSelector);
   const { isInit } = useAppSelector(initFlagSelector);
-  const { platform, version } = useAppSelector(platformInfoSelector);
 
   const CREDIT_NAME_MAP: {
     [category: string]:

@@ -188,7 +188,9 @@ const Tooltip = (props: TooltipProps) => {
 
     if (isAgreed === undefined) return;
     if (isAgreed === false && selectedNovaTab === NOVA_TAB_TYPE.aiChat) return;
-    if (props.onClick) props.onClick();
+    if (props.onClick) {
+      props.onClick();
+    }
 
     setIsOpen(!isOpen);
   };
