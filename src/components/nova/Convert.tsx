@@ -111,7 +111,7 @@ const GridBox = styled.div`
 `;
 
 const GridItem = styled.div<{ lang: string; isSelected: boolean }>`
-  width: 76px;
+  width: 78px;
   height: ${(props) => (props.lang != 'en' ? '73px' : '94px')};
   display: flex;
   flex-direction: column;
@@ -122,7 +122,7 @@ const GridItem = styled.div<{ lang: string; isSelected: boolean }>`
   box-sizing: border-box;
   border-radius: 8px;
   cursor: pointer;
-  white-space: nowrap;
+  white-space: pre-wrap;
 
   svg {
     path {
