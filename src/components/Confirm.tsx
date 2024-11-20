@@ -116,13 +116,6 @@ const Confirm = () => {
   const footerRef = useRef<HTMLDivElement>(null);
   const contentsRef = useRef<HTMLDivElement>(null);
   const [isChecked, setIsChecked] = useState<boolean>(false);
-  const [showCheckbox, setShowCheckbox] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (neverShowAgain) {
-      setShowCheckbox(true);
-    }
-  }, [neverShowAgain]);
 
   useEffect(() => {
     if (headerRef.current && footerRef.current) {
@@ -176,9 +169,9 @@ const Confirm = () => {
         )}
         <ContentArea ref={contentsRef}>
           {msg}
-          {showCheckbox && (
+          {neverShowAgain && (
             <CheckWrap onClick={handleCheck}>
-              <CheckBox isChecked={isChecked} setIsChecked={setIsChecked} onClick={() => {}} />
+              <CheckBox isChecked={isChecked} setIsChecked={setIsChecked} />
               <span>{t(`DontShowAgain`)}</span>
             </CheckWrap>
           )}

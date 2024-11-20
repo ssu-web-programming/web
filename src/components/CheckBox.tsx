@@ -5,7 +5,7 @@ import icon_check from '../img/ico_check.svg';
 export interface CheckBoxProps {
   isChecked: boolean;
   setIsChecked: (check: boolean) => void;
-  onClick: (e: React.MouseEvent<HTMLDivElement>) => void;
+  onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
 const CheckBox = (props: CheckBoxProps) => {
