@@ -49,7 +49,6 @@ export const flexCenter = css`
 const UploadBtn = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
 
   > button {
     width: 32px;
@@ -109,28 +108,35 @@ const FileItem = styled.div`
   }
 `;
 
-const InputBtnWrapper = styled.div`
-  width: 100%;
-  height: 46px;
-  padding: 0 16px;
-  ${flexCenter};
-  justify-content: space-between;
-  gap: 8px;
-`;
+// const InputBtnWrapper = styled.div`
+//   width: 100%;
+//   height: 46px;
+//   padding: 0 16px;
+//   ${flexCenter};
+//   justify-content: space-between;
+//   gap: 8px;
+// `;
 
-const IconBtnWrapper = styled.div`
-  width: 36px;
-  height: 36px;
-`;
+// const IconBtnWrapper = styled.div`
+//   width: 36px;
+//   height: 36px;
+// `;
 
 const InputTxtWrapper = styled.div<{ hasValue: boolean }>`
   width: 100%;
   min-height: 40px;
   height: auto;
-  padding: 8px 16px 4px;
+  padding: 6px 12px;
   box-sizing: border-box;
+  display: flex;
+  gap: 8px;
 
-  > div {
+  & > div:nth-child(1) {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
+  & > div:nth-child(2) {
     background: ${({ hasValue }) =>
       hasValue ? 'linear-gradient(180deg, #6f3ad0 0%, #a86cea 100%)' : 'var(--gray-gray-40)'};
 
@@ -138,6 +144,13 @@ const InputTxtWrapper = styled.div<{ hasValue: boolean }>`
     padding: 1px;
     border-radius: 4px;
     overflow: hidden;
+    flex-grow: 1;
+  }
+
+  & > div:nth-child(3) {
+    display: flex;
+    flex-direction: column-reverse;
+    margin-bottom: 5px;
   }
 `;
 
@@ -145,7 +158,7 @@ const TextArea = styled.textarea<{ value: string }>`
   display: flex;
   width: 100%;
   height: 40px;
-  max-height: 60px;
+  max-height: 140px;
   padding: 0;
   box-sizing: border-box;
   background: white;
@@ -224,7 +237,7 @@ export default function InputBar(props: InputBarProps) {
     const textarea = textAreaRef.current;
     if (textarea) {
       textarea.style.height = '1px';
-      textarea.style.height = `${textarea.scrollHeight > 20 ? 60 : 40}px`;
+      textarea.style.height = `${textarea.scrollHeight > 20 ? textarea.scrollHeight + 20 : 40}px`;
     }
   };
 
@@ -317,6 +330,20 @@ export default function InputBar(props: InputBarProps) {
       )}
       <InputTxtWrapper hasValue={!!contents}>
         <div>
+          <UploadBtn>
+            {UPLOAD_BTN_LIST.map((btn) => (
+              <FileUploader
+                key={btn.target}
+                target={btn.target}
+                accept={btn.accept}
+                inputRef={btn.ref}
+                tooltipStyle={{ padding: '12px 16px' }}>
+                {btn.children}
+              </FileUploader>
+            ))}
+          </UploadBtn>
+        </div>
+        <div>
           <TextArea
             placeholder={t(`Nova.ActionWindow.Placeholder`)!}
             value={contents}
@@ -334,22 +361,7 @@ export default function InputBar(props: InputBarProps) {
             }}
           />
         </div>
-      </InputTxtWrapper>
-      <InputBtnWrapper>
-        <UploadBtn>
-          {UPLOAD_BTN_LIST.map((btn) => (
-            <FileUploader
-              key={btn.target}
-              target={btn.target}
-              accept={btn.accept}
-              inputRef={btn.ref}
-              tooltipStyle={{ padding: '12px 16px' }}>
-              {btn.children}
-            </FileUploader>
-          ))}
-        </UploadBtn>
-
-        <IconBtnWrapper>
+        <div>
           <IconButton
             disable={contents.length < 1}
             onClick={handleOnClick}
@@ -360,8 +372,8 @@ export default function InputBar(props: InputBarProps) {
               padding: 0;
             `}
           />
-        </IconBtnWrapper>
-      </InputBtnWrapper>
+        </div>
+      </InputTxtWrapper>
     </InputBarBase>
   );
 }
