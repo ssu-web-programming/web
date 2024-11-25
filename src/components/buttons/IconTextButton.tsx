@@ -43,12 +43,13 @@ const ChipWrapper = styled.div`
   }
 `;
 
-type IconPos = 'left' | 'right' | 'end';
+type IconPos = 'left' | 'right' | 'end' | 'top';
 
 export interface IconTextButtonProps extends ButtonProps {
   iconSrc: string | React.ReactNode;
   iconPos?: IconPos;
   iconSize?: IconSize | number;
+  innerText?: boolean;
 }
 
 export default function IconTextButton(props: PropsWithChildren<IconTextButtonProps>) {
@@ -80,6 +81,21 @@ export default function IconTextButton(props: PropsWithChildren<IconTextButtonPr
               <Icon size={iconSize} iconSrc={iconSrc} />
             </div>
           </>
+        )}
+        {iconPos === 'top' && (
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column'
+            }}>
+            <div
+              style={{
+                margin: '0 auto'
+              }}>
+              <Icon size={iconSize} iconSrc={iconSrc} />
+            </div>
+            {children}
+          </div>
         )}
       </Contents>
     </Button>

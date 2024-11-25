@@ -50,7 +50,7 @@ const GridContainer = styled.div<{
   grid-template-columns: repeat(auto-fill, minmax(81px, 1fr));
 
   width: 100%;
-  gap: 16px 8px;
+  gap: 8px 0px;
 `;
 
 const SelectOptionArea = styled.div`
@@ -244,7 +244,6 @@ const ImageCreateInput = ({
   const { t } = useTranslation();
 
   const creditInfo = useAppSelector(creditInfoSelector);
-  console.log('creditInfo', creditInfo);
   const { input, style, ratio } = options;
 
   const versionList = useMemo(
@@ -255,8 +254,6 @@ const ImageCreateInput = ({
       })),
     [creditInfo]
   );
-
-  console.log('versionList', versionList);
 
   return (
     <MakingInputWrapper>
@@ -345,8 +342,8 @@ const ImageCreateInput = ({
                     item.id === style &&
                     'solid 1px var(--ai-purple-80-sub)'};
 
-                    width: 81px;
-                    height: 80px;
+                    width: 76px;
+                    height: 76px;
                   `}
                   isSelected={item.id === style}>
                   {item.id === 'none' ? (
@@ -381,18 +378,28 @@ const ImageCreateInput = ({
           <SubTitle subTitle={t('Txt2ImgTab.ChooseRatio')} />
         </SubTitleArea>
         <RowContainer>
-          <Grid col={4}>
+          <Grid col={3}>
             {ratioItemList.map((item) => (
               <IconBoxTextButton
                 key={item.id}
                 variant="gray"
                 width="full"
-                height={50}
                 iconSize="md"
                 iconSrc={<item.imgItem color={getIconColor(item.id, ratio)} />}
                 onClick={() => setOptions((prev) => ({ ...prev, ratio: item.id }))}
-                selected={item.id === ratio}>
-                {t(`Txt2ImgTab.RatioList.${item.title}`)}
+                selected={item.id === ratio}
+                iconPos="top"
+                cssExt={css`
+                  padding: 8px;
+                  height: 69px;
+                `}
+                innerText>
+                <p
+                  style={{
+                    paddingTop: 6
+                  }}>
+                  {t(`Txt2ImgTab.RatioList.${item.title}`)}
+                </p>
               </IconBoxTextButton>
             ))}
           </Grid>
@@ -401,17 +408,14 @@ const ImageCreateInput = ({
       <StyledCreditButton>
         <IconTextButton
           width="full"
-          variant="purpleGradient"
+          variant={input.length === 0 ? 'darkGray' : 'purple'}
           onClick={() => {
             createAiImage(options);
           }}
           disable={input.length === 0}
           iconSrc={icon_credit_outline}
           iconPos="end">
-          <div style={{ display: 'flex', gap: '5px' }}>
-            {/* <Icon size="sm" iconSrc={iconCreatingWhite}></Icon> */}
-            {t(`Txt2ImgTab.CreateImage`)}
-          </div>
+          <div style={{ display: 'flex', gap: '5px' }}>{t(`Txt2ImgTab.CreateImage`)}</div>
         </IconTextButton>
       </StyledCreditButton>
     </MakingInputWrapper>

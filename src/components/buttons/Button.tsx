@@ -88,7 +88,14 @@ const HEIGHT_SIZES = {
   `
 };
 
-export type ButtonVariant = 'none' | 'white' | 'purpleGradient' | 'gray' | 'transparent' | 'purple';
+export type ButtonVariant =
+  | 'none'
+  | 'white'
+  | 'purpleGradient'
+  | 'gray'
+  | 'darkGray'
+  | 'transparent'
+  | 'purple';
 const VARIANTS = {
   none: css`
     background-color: transparent;
@@ -111,6 +118,10 @@ const VARIANTS = {
   gray: css<{ selected: boolean }>`
     background-color: ${({ selected }) =>
       selected ? `var(--ai-purple-97-list-over)` : `var(--gray-gray-20)`};
+    color: var(--gray-gray-90-01);
+  `,
+  darkGray: css<{ selected: boolean }>`
+    background-color: ${({ selected }) => (selected ? `var(--ai-purple-97-list-over)` : `#D2D9E0`)};
     color: var(--gray-gray-90-01);
   `,
   transparent: css<{ selected: boolean }>`
