@@ -6,14 +6,16 @@ import { Chip } from '../IconTextButton';
 
 import * as S from './style';
 
+type Item = {
+  deductCredit?: number;
+  id: VersionType;
+  title: string;
+  desc: string;
+  creditValue: string;
+};
+
 type Props = {
-  item: {
-    deductCredit: number | undefined;
-    id: VersionType;
-    title: string;
-    desc: string;
-    creditValue: string;
-  };
+  item: Item;
   selected: boolean;
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 

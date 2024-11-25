@@ -1,5 +1,7 @@
 import { useMemo, useState } from 'react';
 import IconTextButton from 'components/buttons/IconTextButton';
+import DownloadIcon from 'img/ico_download_white.svg';
+import InsertDocsIcon from 'img/ico_insert_docs.svg';
 import { useTranslation } from 'react-i18next';
 import styled, { css } from 'styled-components';
 
@@ -133,6 +135,43 @@ const ImageCreateResult = ({
     [history, currentListId]
   );
   const curHistory = useMemo(() => history[curListIndex], [history, curListIndex]);
+  const handleDownloadFile = async () => {
+    try {
+      if (currentItemIdx === null) throw new Error('invalid currentItemIdx');
+      const selected = curHistory.list[currentItemIdx];
+
+      if (!selected) throw new Error('invalid target');
+
+      const res = await fetch(
+        `data:${curHistory.list[currentItemIdx].contentType};base64,${curHistory.list[currentItemIdx].data}`
+      );
+      const blob = await res.blob();
+      Bridge.callBridgeApi('downloadImage', blob);
+    } catch (err) {
+      // TODO : error handle
+      console.log('err', err);
+    }
+  };
+
+  const handleInsertDocument = async () => {
+    try {
+      if (currentItemIdx === null) throw new Error('invalid currentItemIdx');
+      const selected = curHistory.list[currentItemIdx];
+
+      if (!selected) throw new Error('invalid target');
+
+      const res = await fetch(
+        `data:${curHistory.list[currentItemIdx].contentType};base64,${curHistory.list[currentItemIdx].data}`
+      );
+      const blob = await res.blob();
+      Bridge.callBridgeApi('insertImage', blob);
+
+      dispatch(activeToast({ type: 'info', msg: t(`Txt2ImgTab.ToastMsg.CompleteInsertImage`) }));
+    } catch (err) {
+      // TODO : error handle
+      console.log('err', err);
+    }
+  };
 
   if (curListIndex === null || currentItemIdx === null) return <></>;
 
@@ -148,6 +187,7 @@ const ImageCreateResult = ({
           {t(`WriteTab.ReEnterTopic`)}
         </ReturnButton>
       </SubTitleArea>
+      {/* 호진FIXME: display : flex가 웹오피스내에서는 먹히지가 않음,, */}
       <InputDescBox>
         <InputDesc>
           <InputDescKor>{curHistory.input}</InputDescKor>
@@ -237,77 +277,66 @@ const ImageCreateResult = ({
         </ArrowSwitcher>
       </ImageList> */}
       <RowContainer>
+        <IconTextButton
+          width="full"
+          borderType="gray"
+          height={48}
+          onClick={() =>
+            createAiImage({
+              input: curHistory.input,
+              style: curHistory.style,
+              ratio: curHistory.ratio,
+              type: curHistory.type
+            })
+          }
+          iconSrc={icon_credit_purple}
+          iconPos="end"
+          iconSize={18}
+          cssExt={css`
+            border-radius: 8px;
+            font-size: 15px;
+          `}>
+          {t(`WriteTab.Recreating`)}
+        </IconTextButton>
+
         <Grid col={2}>
+          {/* 호진FIXME: 다국어 적용해야함! */}
           <IconTextButton
-            width="full"
+            width={'full'}
+            height={48}
             borderType="gray"
-            height={32}
-            onClick={() =>
-              createAiImage({
-                input: curHistory.input,
-                style: curHistory.style,
-                ratio: curHistory.ratio,
-                type: curHistory.type
-              })
-            }
-            iconSrc={icon_credit_purple}
-            iconPos="end">
-            {t(`WriteTab.Recreating`)}
+            onClick={handleInsertDocument}
+            iconSrc={InsertDocsIcon}
+            iconPos={'left'}
+            iconSize={24}
+            cssExt={css`
+              border-radius: 8px;
+              font-size: 15px;
+            `}>
+            {t(`WriteTab.InsertDoc`)}
           </IconTextButton>
 
-          <Button
-            width="full"
+          {/* 호진FIXME: 다국어 적용해야함! */}
+          <IconTextButton
+            width={'full'}
+            height={48}
             borderType="gray"
-            height={32}
-            onClick={async () => {
-              try {
-                if (currentItemIdx === null) throw new Error('invalid currentItemIdx');
-                const selected = curHistory.list[currentItemIdx];
-
-                if (!selected) throw new Error('invalid target');
-
-                const res = await fetch(
-                  `data:${curHistory.list[currentItemIdx].contentType};base64,${curHistory.list[currentItemIdx].data}`
-                );
-                const blob = await res.blob();
-                Bridge.callBridgeApi('downloadImage', blob);
-              } catch (err) {
-                // TODO : error handle
-              }
-            }}>
+            onClick={handleDownloadFile}
+            iconSrc={DownloadIcon}
+            iconPos={'left'}
+            iconSize={24}
+            variant="purple"
+            cssExt={css`
+              border-radius: 8px;
+              font-size: 15px;
+            `}>
             {t(`Download`)}
-          </Button>
+          </IconTextButton>
         </Grid>
-        <Button
-          width={'full'}
-          height={40}
-          variant={'purpleGradient'}
-          onClick={async () => {
-            try {
-              if (currentItemIdx === null) throw new Error('invalid currentItemIdx');
-              const selected = curHistory.list[currentItemIdx];
-
-              if (!selected) throw new Error('invalid target');
-
-              const res = await fetch(
-                `data:${curHistory.list[currentItemIdx].contentType};base64,${curHistory.list[currentItemIdx].data}`
-              );
-              const blob = await res.blob();
-              Bridge.callBridgeApi('insertImage', blob);
-
-              dispatch(
-                activeToast({ type: 'info', msg: t(`Txt2ImgTab.ToastMsg.CompleteInsertImage`) })
-              );
-            } catch (err) {
-              // TODO : error handle
-            }
-          }}>
-          {t(`WriteTab.InsertDoc`)}
-        </Button>
       </RowContainer>
       <LicenseMark>
         <LinkText url={t(`MoveToLimitInfo`)}>
-          <div style={{ color: '#8769ba', fontSize: '11px' }}>
+          <div style={{ color: '#72787F', fontSize: '11px' }}>
             Powered By <b>{versionItemList.find((item) => item.id === curHistory.type)?.title}</b>
           </div>
         </LinkText>

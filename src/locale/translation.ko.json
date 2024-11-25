@@ -47,7 +47,7 @@
     "LengthInfo": "공백포함 {{length}}자",
     "ReEnterTopic": "주제 다시 입력하기",
     "Recreating": "다시 만들기",
-    "InsertDoc": "문서에 삽입하기",
+    "InsertDoc": "문서에 삽입",
     "MoveToChating": "채팅으로 더 많은 작업하기",
     "ToSameTopic": "작성했던 주제로 다시 고민해서 작성할게요 !"
   },
@@ -180,7 +180,7 @@
     "UnstableConnection": "서비스 접속이 원활하지 않습니다.",
     "CheckNetwork": "사용중인 네트워크 상태를 확인해주세요."
   },
-  "Download": "다운로드",
+  "Download": "저장",
   "AITools": "AI 도구",
   "AIWrite": "AI 작성",
   "AIMarket": "AI 마켓",

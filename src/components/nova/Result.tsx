@@ -174,10 +174,6 @@ const InsertDocButton = styled.div`
   cursor: pointer;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   background: white;
-
-  span {
-    max-width: 80px;
-  }
 `;
 
 const SaveButton = styled.div`

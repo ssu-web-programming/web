@@ -1,8 +1,6 @@
 import { useMemo } from 'react';
-import { NewMark, VersionInner } from 'components/aiWrite/AIWriteInput';
-import IconTextButton, { Chip } from 'components/buttons/IconTextButton';
+import IconTextButton from 'components/buttons/IconTextButton';
 import SelectModelButton from 'components/buttons/select-model-button';
-import icon_credit_gray from 'img/ico_credit_gray.svg';
 import icon_credit_outline from 'img/ico_credit_outline.svg';
 import { ReactComponent as IconStyleNone } from 'img/text2Img/non_select.svg';
 import { useTranslation } from 'react-i18next';
@@ -10,7 +8,6 @@ import { creditInfoSelector } from 'store/slices/creditInfo';
 import styled, { css, FlattenSimpleInterpolation } from 'styled-components';
 import { getIconColor } from 'util/getColor';
 
-import iconCreatingWhite from '../../img/ico_creating_text_white.svg';
 import iconStyle3d from '../../img/text2Img/3d@2x.png';
 import iconStyleAni from '../../img/text2Img/ani@2x.png';
 import iconStyleConcept from '../../img/text2Img/concept@2x.png';
@@ -33,7 +30,6 @@ import { RowContainer, SubTitleArea } from '../../views/ImageCreate';
 import IconBoxTextButton from '../buttons/IconBoxTextButton';
 import ShowResultButton from '../buttons/ShowResultButton';
 import ExTextbox from '../ExTextbox';
-import Icon from '../Icon';
 import Grid from '../layout/Grid';
 import SubTitle from '../SubTitle';
 
@@ -286,35 +282,6 @@ const ImageCreateInput = ({
           <SubTitle subTitle={t('Txt2ImgTab.SelectType')} />
         </SubTitleArea>
         <RowContainer>
-          {/* <Grid col={1}>
-            {versionList.map((item) => (
-              <IconTextButton
-                iconSrc={
-                  <Chip iconSrc={icon_credit_gray}>
-                    <span>{item.deductCredit}</span>
-                  </Chip>
-                }
-                key={item.id}
-                width="full"
-                variant="gray"
-                cssExt={css`
-                  padding: 8px 16px;
-                  height: 100%;
-                `}
-                onClick={() => setOptions((prev) => ({ ...prev, type: item.id }))}
-                selected={item.id === options.type}>
-                <VersionInner>
-                  <div>
-                    <div>
-                      <p>{item.title}</p>
-                      <p>{item.desc}</p>
-                    </div>
-                    <div>{item.id === 'dalle3' && <NewMark />}</div>
-                  </div>
-                </VersionInner>
-              </IconTextButton>
-            ))}
-          </Grid> */}
           {versionList.map((item) => (
             <SelectModelButton
               key={item.id}
@@ -341,7 +308,6 @@ const ImageCreateInput = ({
                     border: ${item.id === 'none' &&
                     item.id === style &&
                     'solid 1px var(--ai-purple-80-sub)'};
-
                     width: 76px;
                     height: 76px;
                   `}
@@ -414,6 +380,7 @@ const ImageCreateInput = ({
           }}
           disable={input.length === 0}
           iconSrc={icon_credit_outline}
+          iconSize={18}
           iconPos="end">
           <div style={{ display: 'flex', gap: '5px' }}>{t(`Txt2ImgTab.CreateImage`)}</div>
         </IconTextButton>
