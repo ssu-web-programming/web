@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { NewMark, VersionInner } from 'components/aiWrite/AIWriteInput';
 import IconTextButton, { Chip } from 'components/buttons/IconTextButton';
+import SelectModelButton from 'components/buttons/select-model-button';
 import icon_credit_gray from 'img/ico_credit_gray.svg';
 import icon_credit_outline from 'img/ico_credit_outline.svg';
 import { ReactComponent as IconStyleNone } from 'img/text2Img/non_select.svg';
@@ -217,11 +218,13 @@ export const versionItemList = [
   {
     id: VersionType.dalle3,
     title: 'DALL-E-3',
+    desc: '창의적이고 디테일한 이미지를 잘 생성해요',
     creditValue: 'DREAM_STUDIO'
   },
   {
     id: VersionType.sd3,
     title: 'Stable Diffusion 3',
+    desc: '폭넓은 스타일의 이미지를 빠르게 생성해요',
     creditValue: 'TEXTTOIMAGE_DALLE3'
   }
 ];
@@ -241,7 +244,7 @@ const ImageCreateInput = ({
   const { t } = useTranslation();
 
   const creditInfo = useAppSelector(creditInfoSelector);
-
+  console.log('creditInfo', creditInfo);
   const { input, style, ratio } = options;
 
   const versionList = useMemo(
@@ -252,6 +255,8 @@ const ImageCreateInput = ({
       })),
     [creditInfo]
   );
+
+  console.log('versionList', versionList);
 
   return (
     <MakingInputWrapper>
@@ -284,7 +289,7 @@ const ImageCreateInput = ({
           <SubTitle subTitle={t('Txt2ImgTab.SelectType')} />
         </SubTitleArea>
         <RowContainer>
-          <Grid col={2}>
+          {/* <Grid col={1}>
             {versionList.map((item) => (
               <IconTextButton
                 iconSrc={
@@ -296,21 +301,36 @@ const ImageCreateInput = ({
                 width="full"
                 variant="gray"
                 cssExt={css`
-                  padding: 4px 14px;
+                  padding: 8px 16px;
+                  height: 100%;
                 `}
                 onClick={() => setOptions((prev) => ({ ...prev, type: item.id }))}
                 selected={item.id === options.type}>
                 <VersionInner>
-                  {item.title}
-                  {item.id === 'dalle3' && <NewMark />}
+                  <div>
+                    <div>
+                      <p>{item.title}</p>
+                      <p>{item.desc}</p>
+                    </div>
+                    <div>{item.id === 'dalle3' && <NewMark />}</div>
+                  </div>
                 </VersionInner>
               </IconTextButton>
             ))}
-          </Grid>
+          </Grid> */}
+          {versionList.map((item) => (
+            <SelectModelButton
+              key={item.id}
+              item={item}
+              selected={item.id === options.type}
+              onClick={() => setOptions((prev) => ({ ...prev, type: item.id }))}
+            />
+          ))}
         </RowContainer>
       </SelectOptionArea>
       <SelectOptionArea>
         <SubTitleArea>
+          {/* 호진FIXME: 다국어 적용 진행해야함! */}
           <SubTitle subTitle={t('Txt2ImgTab.ChooseStyle')} />
         </SubTitleArea>
         <GridContainer>
@@ -357,6 +377,7 @@ const ImageCreateInput = ({
       </SelectOptionArea>
       <SelectOptionArea>
         <SubTitleArea>
+          {/* 호진FIXME: 다국어 적용 진행해야함! */}
           <SubTitle subTitle={t('Txt2ImgTab.ChooseRatio')} />
         </SubTitleArea>
         <RowContainer>
@@ -388,7 +409,7 @@ const ImageCreateInput = ({
           iconSrc={icon_credit_outline}
           iconPos="end">
           <div style={{ display: 'flex', gap: '5px' }}>
-            <Icon size="sm" iconSrc={iconCreatingWhite}></Icon>
+            {/* <Icon size="sm" iconSrc={iconCreatingWhite}></Icon> */}
             {t(`Txt2ImgTab.CreateImage`)}
           </div>
         </IconTextButton>

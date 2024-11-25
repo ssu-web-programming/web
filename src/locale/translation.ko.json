@@ -107,7 +107,7 @@
     "WritingImageDesc": "이미지 설명 작성하기",
     "WriteImageDesc": "생성할 이미지의 설명을 입력해주세요.",
     "SelectType": "모델 선택",
-    "ChooseStyle": "스타일 선택하기",
+    "ChooseStyle": "스타일 선택",
     "StyleList": {
       "None": "없음",
       "Picture": "사진",
@@ -118,7 +118,7 @@
       "WaterPainting": "수채화",
       "OilPainting": "유채화"
     },
-    "ChooseRatio": "이미지 비율 선택하기",
+    "ChooseRatio": "이미지 비율 선택",
     "RatioList": {
       "Squre": "정사각형",
       "Horizontal": "가로",

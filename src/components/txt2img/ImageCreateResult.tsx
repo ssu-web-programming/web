@@ -57,8 +57,8 @@ const InputDescEng = styled(InputDescKor)`
 `;
 
 const InputDescBox = styled.div`
-  display: flex
-  justify-content: space-between
+  display: flex;
+  justify-content: space-between;
   margin-top: 5px;
 `;
 
@@ -95,7 +95,7 @@ const FloatOpenDesc = styled.div`
 const ImgListSwitcher = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: center
+  align-items: center;
   justify-content: center;
 
   width: 100%;
@@ -107,7 +107,7 @@ const ImgListSwitcher = styled.div`
 
 const LicenseMark = styled.div`
   display: flex;
-  align-items: center
+  align-items: center;
 
   align-self: flex-end;
   margin-top: 11px;

@@ -31,6 +31,16 @@ const ChipWrapper = styled.div`
 
     color: var(--gray-gray-70);
   }
+
+  p {
+    margin: 0 0 0 2px;
+
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 13.13px;
+
+    color: var(--gray-gray-90-01);
+  }
 `;
 
 type IconPos = 'left' | 'right' | 'end';
@@ -76,10 +86,14 @@ export default function IconTextButton(props: PropsWithChildren<IconTextButtonPr
   );
 }
 
-export const Chip = ({ iconSrc, children }: PropsWithChildren<{ iconSrc: string }>) => {
+export const Chip = ({
+  iconSrc,
+  children,
+  size = 12
+}: PropsWithChildren<{ iconSrc: string; size?: number }>) => {
   return (
     <ChipWrapper>
-      <Icon iconSrc={iconSrc} size={12} />
+      <Icon iconSrc={iconSrc} size={size} />
       {children}
     </ChipWrapper>
   );
