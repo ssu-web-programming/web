@@ -152,8 +152,8 @@ export default function useInitApp() {
       'X-PO-AI-API-LANGUAGE': lang
     };
 
-    console.log('ua: ', navigator.userAgent);
     if (platform != ClientType.unknown && version) {
+      console.log('set platform info');
       dispatch(setPlatformInfo({ platform: platform, device: device, version: version }));
     }
     dispatch(setPageStatus({ tab: 'aiChat', status: 'home' }));
