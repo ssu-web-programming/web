@@ -14,7 +14,7 @@ import { novaHistorySelector } from '../../store/slices/nova/novaHistorySlice';
 import { NOVA_TAB_TYPE, selectTabSlice } from '../../store/slices/tabSlice';
 import { setDriveFiles, setLocalFiles } from '../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../store/store';
-import Bridge, { isDesktop } from '../../util/bridge';
+import Bridge from '../../util/bridge';
 import IconButton from '../buttons/IconButton';
 import { useConfirm } from '../Confirm';
 import { useChatNova } from '../hooks/useChatNova';
@@ -243,20 +243,16 @@ export default function NovaHeader(props: NovaHeaderProps) {
           options={TOOLTIP_CREDIT_OPTIONS}>
           <CreditIcon $isInit={isInit} />
         </Tooltip>
-        {isDesktop && (
-          <>
-            <ScreenChangeButton></ScreenChangeButton>
-            <IconButton
-              iconComponent={IconClose}
-              onClick={() => {
-                Bridge.callBridgeApi('closePanel', selectedNovaTab as string);
-              }}
-              iconSize="lg"
-              width={32}
-              height={32}
-            />
-          </>
-        )}
+        <ScreenChangeButton></ScreenChangeButton>
+        <IconButton
+          iconComponent={IconClose}
+          onClick={() => {
+            Bridge.callBridgeApi('closePanel', selectedNovaTab as string);
+          }}
+          iconSize="lg"
+          width={32}
+          height={32}
+        />
       </ButtonWrapper>
     </StyledHeader>
   );
