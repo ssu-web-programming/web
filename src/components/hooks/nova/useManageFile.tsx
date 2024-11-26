@@ -168,6 +168,7 @@ export function useManageFile() {
         data: { list }
       } = await res.json();
       if (!success) throw new Error('failed to get file list');
+
       return list
         .filter(
           (item: DriveFileInfo) =>

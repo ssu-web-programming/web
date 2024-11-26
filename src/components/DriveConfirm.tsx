@@ -2,8 +2,11 @@ import { useEffect, useRef } from 'react';
 import { ConfirmBox, ContentArea, Footer, Header } from 'components/Confirm';
 import styled, { css } from 'styled-components';
 
+import icClose from '../img/ico_ai_close.svg';
+
 import Button from './buttons/Button';
 import Blanket from './Blanket';
+import Icon from './Icon';
 
 const Wrapper = styled(ConfirmBox)`
   position: fixed;
@@ -11,10 +14,20 @@ const Wrapper = styled(ConfirmBox)`
   height: 506px;
 `;
 
-const Title = styled.h2`
+const Title = styled.p`
   margin: 0;
-  font-size: 20px;
-  line-height: 30px;
+  font-size: 16px;
+  line-height: 24px;
+`;
+
+const HeaderContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  & > img {
+    cursor: pointer;
+  }
 `;
 
 type DriveConfirmType = {
@@ -52,7 +65,10 @@ const DriveConfirm = (props: DriveConfirmType) => {
       <Blanket />
       <Wrapper>
         <Header ref={headerRef}>
-          <Title>{title}</Title>
+          <HeaderContainer>
+            <Title>{title}</Title>
+            <Icon size={32} iconSrc={icClose} onClick={onCancel?.callback} />
+          </HeaderContainer>
         </Header>
         <ContentArea ref={contentsRef}>{msg}</ContentArea>
         <Footer direction={direction} ref={footerRef}>
@@ -70,7 +86,7 @@ const DriveConfirm = (props: DriveConfirmType) => {
             disable={onOk.disable}>
             {onOk.text}
           </Button>
-          {onCancel && (
+          {/* {onCancel && (
             <Button
               variant="gray"
               width={'full'}
@@ -84,7 +100,7 @@ const DriveConfirm = (props: DriveConfirmType) => {
               `}>
               {onCancel.text}
             </Button>
-          )}
+          )} */}
         </Footer>
       </Wrapper>
     </>

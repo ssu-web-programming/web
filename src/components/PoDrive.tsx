@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { getMaxFileSize } from 'constants/fileTypes';
 import { ReactComponent as IconRight } from 'img/angle_right.svg';
 import file_loading from 'img/file_loading.svg';
 import ico_file_folder from 'img/ico_file_folder.svg';
@@ -7,13 +8,15 @@ import ico_file_poDrive from 'img/ico_file_po_drive.svg';
 import { ReactComponent as IconUploadDocs } from 'img/ico_upload_docs.svg';
 import { ReactComponent as IconUploadImg } from 'img/ico_upload_img.svg';
 import { useTranslation } from 'react-i18next';
+import { NOVA_TAB_TYPE, selectTabSlice } from 'store/slices/tabSlice';
 import { activeToast } from 'store/slices/toastSlice';
-import { useAppDispatch } from 'store/store';
+import { useAppDispatch, useAppSelector } from 'store/store';
 import styled from 'styled-components';
 
 import { DriveFileInfo } from '../store/slices/uploadFiles';
 
 import useManageFile from './hooks/nova/useManageFile';
+import useUserInfoUtils from './hooks/useUserInfoUtils';
 import { getFileIcon } from './nova/InputBar';
 import CheckBox from './CheckBox';
 import Icon from './Icon';
@@ -21,15 +24,15 @@ import Icon from './Icon';
 const Wrapper = styled.div`
   width: 100%;
   min-width: 295px;
-  height: 270px;
+  /* height: 270px; */
+  height: 100%;
   box-sizing: border-box;
   background-color: white;
 
   display: flex;
   flex-direction: column;
 
-  border: 1px solid #c9cdd2;
-  border-radius: 8px;
+  border-top: 1px solid #c9cdd2;
   overflow: hidden;
 `;
 
@@ -67,7 +70,7 @@ const FileList = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden auto;
-  padding: 0px 24px;
+  /* padding: 0px 24px; */
   position: relative;
   scrollbar-color: #c9cdd2 #ffffff;
   scrollbar-width: thin;
@@ -155,6 +158,24 @@ const NoFile = styled.div`
   }
 `;
 
+const SubTitle = styled.div`
+  font-size: 14px;
+  line-height: 16px;
+  color: #6f3ad0;
+  text-align: center;
+  background-color: #f5f1fd;
+  padding: 6px 0px;
+`;
+
+const ItemWrapper = styled.div`
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  padding: 22px 24px;
+  cursor: pointer;
+`;
+
 interface PoDriveProps {
   max: number;
   target: string;
@@ -181,6 +202,8 @@ export default function PoDrive(props: PoDriveProps) {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const { getFileList } = useManageFile();
+  const { selectedNovaTab } = useAppSelector(selectTabSlice);
+  const { getMaxFilesPerUpload } = useUserInfoUtils();
 
   const getDirIcon = (dir: DriveFileInfo) => {
     const name = dir.fileName;
@@ -228,6 +251,14 @@ export default function PoDrive(props: PoDriveProps) {
     moveFolder(navi[index - 1].fileId);
   };
 
+  const getTranslationKey = (): string => {
+    if (selectedNovaTab === NOVA_TAB_TYPE.aiChat) {
+      return 'Nova.PoDrive.LimitDesc';
+    } else {
+      return 'Nova.PoDrive.Desc';
+    }
+  };
+
   return (
     <Wrapper>
       <Navi>
@@ -250,6 +281,12 @@ export default function PoDrive(props: PoDriveProps) {
             : navi[navi.length - 1].fileName}
         </div>
       </Navi>
+      <SubTitle>
+        {t(getTranslationKey(), {
+          size: getMaxFileSize(selectedNovaTab),
+          count: getMaxFilesPerUpload(selectedNovaTab)
+        })}
+      </SubTitle>
       <FileList>
         {state === 'none' &&
           filelist.map((item) => {
@@ -277,17 +314,19 @@ export default function PoDrive(props: PoDriveProps) {
                     }
                   }
                 }}>
-                <div className="icon">{getIcons(item)}</div>
-                <div className="info">
-                  <div className="name">{item.fileName}</div>
-                  <div className="createdAt">{`${date.toLocaleString()}`}</div>
-                </div>
-                {item.fileType === 'FILE' && (
-                  <CheckBox
-                    isChecked={props.selectedFiles.includes(item)}
-                    setIsChecked={() => {}}
-                    onClick={() => {}}></CheckBox>
-                )}
+                <ItemWrapper>
+                  <div className="icon">{getIcons(item)}</div>
+                  <div className="info">
+                    <div className="name">{item.fileName}</div>
+                    <div className="createdAt">{`${date.toLocaleString()}`}</div>
+                  </div>
+                  {item.fileType === 'FILE' && (
+                    <CheckBox
+                      isChecked={props.selectedFiles.includes(item)}
+                      setIsChecked={() => {}}
+                      onClick={() => {}}></CheckBox>
+                  )}
+                </ItemWrapper>
               </FileItem>
             );
           })}
@@ -311,7 +350,7 @@ export default function PoDrive(props: PoDriveProps) {
           <img
             src={file_loading}
             alt="loading"
-            style={{ display: 'block', position: 'absolute', top: 0, left: 0 }}
+            style={{ display: 'block', position: 'absolute', top: 0, left: 0, height: '100%' }}
           />
         )}
       </FileList>

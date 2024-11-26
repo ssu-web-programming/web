@@ -1,8 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
 
-import { getMaxFileSize } from '../../constants/fileTypes';
 import { NOVA_TAB_TYPE, selectTabSlice } from '../../store/slices/tabSlice';
 import { DriveFileInfo } from '../../store/slices/uploadFiles';
 import { useAppSelector } from '../../store/store';
@@ -10,13 +8,6 @@ import DriveConfirm from '../DriveConfirm';
 import useManageFile from '../hooks/nova/useManageFile';
 import useUserInfoUtils from '../hooks/useUserInfoUtils';
 import PoDrive from '../PoDrive';
-
-const SubTitle = styled.div`
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 24px;
-  margin-bottom: 24px;
-`;
 
 interface PODriveListProps {
   isOpen: boolean;
@@ -42,26 +33,11 @@ export default function PODriveList(props: PODriveListProps) {
     setUploadTarget('');
   };
 
-  const getTranslationKey = (): string => {
-    if (selectedNovaTab === NOVA_TAB_TYPE.aiChat) {
-      return 'Nova.PoDrive.LimitDesc';
-    } else {
-      return 'Nova.PoDrive.Desc';
-    }
-  };
-
   return (
     <DriveConfirm
       title={t('Nova.UploadTooltip.PolarisDrive')}
       msg={
         <>
-          <SubTitle>
-            {t(getTranslationKey(), {
-              size: getMaxFileSize(selectedNovaTab),
-              count: getMaxFilesPerUpload(selectedNovaTab)
-            })}
-          </SubTitle>
-
           <PoDrive
             max={getMaxFilesPerUpload(selectedNovaTab)}
             target={uploadTarget}
