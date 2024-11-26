@@ -11,13 +11,21 @@ export enum ClientType {
   web = 'web'
 }
 
+export enum DeviceType {
+  unknown = 'unknown',
+  phone = 'phone',
+  pad = 'pad'
+}
+
 type InitialState = {
   platform: ClientType;
+  device: DeviceType;
   version: string;
 };
 
 const initialState: InitialState = {
   platform: ClientType.unknown,
+  device: DeviceType.unknown,
   version: ''
 };
 
@@ -26,8 +34,9 @@ const platformInfo = createSlice({
   initialState,
   reducers: {
     setPlatformInfo: (state, action: PayloadAction<InitialState>) => {
-      const { platform, version } = action.payload;
+      const { platform, version, device } = action.payload;
       state.platform = platform;
+      state.device = device;
       state.version = version;
       return state;
     }

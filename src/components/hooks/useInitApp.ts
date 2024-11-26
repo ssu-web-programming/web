@@ -11,7 +11,7 @@ import { setNovaExpireTime } from 'store/slices/appState';
 import { setCreditInfo } from 'store/slices/creditInfo';
 import { setNovaAgreement, setUserInfo } from 'store/slices/userInfo';
 import { useAppDispatch } from 'store/store';
-import Bridge, { ClientType, getPlatform, getVersion } from 'util/bridge';
+import Bridge, { ClientType, getDevice, getPlatform, getVersion } from 'util/bridge';
 
 import { init } from '@amplitude/analytics-browser';
 
@@ -27,6 +27,7 @@ export default function useInitApp() {
 
   const platform = getPlatform();
   const version = getVersion();
+  const device = getDevice();
 
   const initNovaExpireTime = useCallback(
     async (headers: HeadersInit) => {
@@ -152,7 +153,7 @@ export default function useInitApp() {
     };
 
     if (platform != ClientType.unknown && version) {
-      dispatch(setPlatformInfo({ platform: platform, version: version }));
+      dispatch(setPlatformInfo({ platform: platform, device: device, version: version }));
     }
     dispatch(setPageStatus({ tab: 'aiChat', status: 'home' }));
 

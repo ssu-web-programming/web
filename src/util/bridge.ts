@@ -17,7 +17,7 @@ import {
   resetPageResult,
   setPageStatus
 } from '../store/slices/nova/pageStatusSlice';
-import { setPlatformInfo } from '../store/slices/platformInfo';
+import { DeviceType, setPlatformInfo } from '../store/slices/platformInfo';
 import { setRecognizedVoice } from '../store/slices/recognizedVoice';
 import { NOVA_TAB_TYPE, selectNovaTab, setCreating } from '../store/slices/tabSlice';
 import { activeToast } from '../store/slices/toastSlice';
@@ -58,6 +58,19 @@ function getAgentPlatform(userAgent: string) {
   return ClientType.unknown;
 }
 
+function getAgentDevice(userAgent: string) {
+  if (userAgent) {
+    const ua = userAgent.toLowerCase();
+    if (ua.includes('androidphone')) {
+      return DeviceType.phone;
+    } else if (ua.includes('androidpad')) {
+      return DeviceType.pad;
+    }
+  }
+
+  return DeviceType.unknown;
+}
+
 function getAgentVersion(userAgent: string) {
   const versionPattern = /PolarisPCOffice\/(\d+(\.\d+)*)|Version\/(\d+(\.\d+)*)/;
   const match = userAgent.match(versionPattern);
@@ -67,6 +80,7 @@ function getAgentVersion(userAgent: string) {
 
 export const getPlatform = () => getAgentPlatform(navigator.userAgent);
 export const getVersion = () => getAgentVersion(navigator.userAgent);
+export const getDevice = () => getAgentDevice(navigator.userAgent);
 export const isMobile = getPlatform() === ClientType.android || getPlatform() === ClientType.ios;
 export const isDesktop = getPlatform() !== ClientType.android && getPlatform() !== ClientType.ios;
 
@@ -408,11 +422,14 @@ export const useInitBridgeListener = () => {
 
             const platform = getPlatform();
             const version = getVersion();
+            const device = getDevice();
+
             if (platform == ClientType.unknown || !version || version === '') {
               if (!body.platform) return;
               dispatch(
                 setPlatformInfo({
                   platform: body.platform as ClientType,
+                  device: device,
                   version: body.version
                 })
               );
