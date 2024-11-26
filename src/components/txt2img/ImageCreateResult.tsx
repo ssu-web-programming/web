@@ -187,8 +187,13 @@ const ImageCreateResult = ({
           {t(`WriteTab.ReEnterTopic`)}
         </ReturnButton>
       </SubTitleArea>
-      {/* 호진FIXME: display : flex가 웹오피스내에서는 먹히지가 않음,, */}
-      <InputDescBox>
+      {/* 호진FIXME: styled-component display : flex가 웹오피스내에서는 먹히지가 않음,, */}
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          marginTop: '5px'
+        }}>
         <InputDesc>
           <InputDescKor>{curHistory.input}</InputDescKor>
           <InputDescEng>{curHistory.translatedPrompts}</InputDescEng>
@@ -214,7 +219,7 @@ const ImageCreateResult = ({
           `}
           onClick={() => setShowInput((prev) => !prev)}
         />
-      </InputDescBox>
+      </div>
       <ImgListSwitcher>
         <ArrowSwitcher
           size="sm"
