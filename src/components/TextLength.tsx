@@ -2,8 +2,8 @@ import styled, { css } from 'styled-components';
 
 export const LengthWrapper = styled.div<{ isError?: boolean }>`
   display: flex;
-  align-items: center;
-
+  height: 100%;
+  align-items: end;
   font-size: 12px;
   color: var(--gray-gray-70);
 

@@ -638,7 +638,7 @@ const AIChatTab = (props: WriteTabProps) => {
                   ))}
                 </VersionWrapper>
               </div>
-              <ChangeExampleButton disable={chatInput.length > 0} onClick={refreshExampleText} />
+              <ChangeExampleButton disabled={chatInput.length > 0} onClick={refreshExampleText} />
             </InputBottomArea>
           )}
         </InputBox>

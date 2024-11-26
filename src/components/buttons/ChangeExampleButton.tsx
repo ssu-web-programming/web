@@ -1,29 +1,26 @@
+import { ButtonHTMLAttributes } from 'react';
 import { useTranslation } from 'react-i18next';
-import { css } from 'styled-components';
+import styled from 'styled-components';
 
-import icon_ai_change from '../../img/ico_ai_change.svg';
+const StyledButton = styled.button<{ disabled?: boolean }>`
+  padding: 7px 12px;
+  border-radius: 6px;
+  color: ${({ disabled }) => (disabled ? '#9EA4AA' : '#26282b')};
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 18px;
+  background-color: #f2f4f6;
+`;
 
-import IconTextButton from './IconTextButton';
+type Props = ButtonHTMLAttributes<HTMLButtonElement>;
 
-interface ExButtonProps {
-  onClick: React.MouseEventHandler<HTMLButtonElement>;
-  disable: boolean;
-}
-
-export default function ChangeExampleButton({ onClick, disable }: ExButtonProps) {
+export default function ChangeExampleButton({ onClick, disabled }: Props) {
   const { t } = useTranslation();
 
   return (
-    <IconTextButton
-      width="fit"
-      iconSrc={icon_ai_change}
-      cssExt={css`
-        font-size: 12px;
-        color: var(--gray-gray-80-02);
-      `}
-      disable={disable}
-      onClick={onClick}>
+    <StyledButton onClick={onClick} disabled={disabled}>
+      {/* 호진FIXME: 다국어 텍스트 변경작업 필요함 */}
       {t(`ShowExam`)}
-    </IconTextButton>
+    </StyledButton>
   );
 }

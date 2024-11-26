@@ -12,6 +12,7 @@ const GlobalStyle = createGlobalStyle`
 
     scrollbar-color: #ebebeb #ffffff;
     scrollbar-width: thin;
+    font-weight: 500;
   }
 
   html, body, #root, div, textarea {

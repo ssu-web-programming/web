@@ -31,14 +31,25 @@ const ChipWrapper = styled.div`
 
     color: var(--gray-gray-70);
   }
+
+  p {
+    margin: 0 0 0 2px;
+
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 13.13px;
+
+    color: var(--gray-gray-90-01);
+  }
 `;
 
-type IconPos = 'left' | 'right' | 'end';
+type IconPos = 'left' | 'right' | 'end' | 'top';
 
 export interface IconTextButtonProps extends ButtonProps {
   iconSrc: string | React.ReactNode;
   iconPos?: IconPos;
   iconSize?: IconSize | number;
+  innerText?: boolean;
 }
 
 export default function IconTextButton(props: PropsWithChildren<IconTextButtonProps>) {
@@ -71,15 +82,34 @@ export default function IconTextButton(props: PropsWithChildren<IconTextButtonPr
             </div>
           </>
         )}
+        {iconPos === 'top' && (
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column'
+            }}>
+            <div
+              style={{
+                margin: '0 auto'
+              }}>
+              <Icon size={iconSize} iconSrc={iconSrc} />
+            </div>
+            {children}
+          </div>
+        )}
       </Contents>
     </Button>
   );
 }
 
-export const Chip = ({ iconSrc, children }: PropsWithChildren<{ iconSrc: string }>) => {
+export const Chip = ({
+  iconSrc,
+  children,
+  size = 12
+}: PropsWithChildren<{ iconSrc: string; size?: number }>) => {
   return (
     <ChipWrapper>
-      <Icon iconSrc={iconSrc} size={12} />
+      <Icon iconSrc={iconSrc} size={size} />
       {children}
     </ChipWrapper>
   );

@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
-import { NewMark, VersionInner } from 'components/aiWrite/AIWriteInput';
-import IconTextButton, { Chip } from 'components/buttons/IconTextButton';
-import icon_credit_gray from 'img/ico_credit_gray.svg';
+import IconTextButton from 'components/buttons/IconTextButton';
+import SelectModelButton from 'components/buttons/select-model-button';
 import icon_credit_outline from 'img/ico_credit_outline.svg';
 import { ReactComponent as IconStyleNone } from 'img/text2Img/non_select.svg';
 import { useTranslation } from 'react-i18next';
@@ -9,7 +8,6 @@ import { creditInfoSelector } from 'store/slices/creditInfo';
 import styled, { css, FlattenSimpleInterpolation } from 'styled-components';
 import { getIconColor } from 'util/getColor';
 
-import iconCreatingWhite from '../../img/ico_creating_text_white.svg';
 import iconStyle3d from '../../img/text2Img/3d@2x.png';
 import iconStyleAni from '../../img/text2Img/ani@2x.png';
 import iconStyleConcept from '../../img/text2Img/concept@2x.png';
@@ -32,7 +30,6 @@ import { RowContainer, SubTitleArea } from '../../views/ImageCreate';
 import IconBoxTextButton from '../buttons/IconBoxTextButton';
 import ShowResultButton from '../buttons/ShowResultButton';
 import ExTextbox from '../ExTextbox';
-import Icon from '../Icon';
 import Grid from '../layout/Grid';
 import SubTitle from '../SubTitle';
 
@@ -49,7 +46,7 @@ const GridContainer = styled.div<{
   grid-template-columns: repeat(auto-fill, minmax(81px, 1fr));
 
   width: 100%;
-  gap: 16px 8px;
+  gap: 8px 0px;
 `;
 
 const SelectOptionArea = styled.div`
@@ -217,11 +214,13 @@ export const versionItemList = [
   {
     id: VersionType.dalle3,
     title: 'DALL-E-3',
+    desc: '창의적이고 디테일한 이미지를 잘 생성해요',
     creditValue: 'DREAM_STUDIO'
   },
   {
     id: VersionType.sd3,
     title: 'Stable Diffusion 3',
+    desc: '폭넓은 스타일의 이미지를 빠르게 생성해요',
     creditValue: 'TEXTTOIMAGE_DALLE3'
   }
 ];
@@ -241,7 +240,6 @@ const ImageCreateInput = ({
   const { t } = useTranslation();
 
   const creditInfo = useAppSelector(creditInfoSelector);
-
   const { input, style, ratio } = options;
 
   const versionList = useMemo(
@@ -284,33 +282,19 @@ const ImageCreateInput = ({
           <SubTitle subTitle={t('Txt2ImgTab.SelectType')} />
         </SubTitleArea>
         <RowContainer>
-          <Grid col={2}>
-            {versionList.map((item) => (
-              <IconTextButton
-                iconSrc={
-                  <Chip iconSrc={icon_credit_gray}>
-                    <span>{item.deductCredit}</span>
-                  </Chip>
-                }
-                key={item.id}
-                width="full"
-                variant="gray"
-                cssExt={css`
-                  padding: 4px 14px;
-                `}
-                onClick={() => setOptions((prev) => ({ ...prev, type: item.id }))}
-                selected={item.id === options.type}>
-                <VersionInner>
-                  {item.title}
-                  {item.id === 'dalle3' && <NewMark />}
-                </VersionInner>
-              </IconTextButton>
-            ))}
-          </Grid>
+          {versionList.map((item) => (
+            <SelectModelButton
+              key={item.id}
+              item={item}
+              selected={item.id === options.type}
+              onClick={() => setOptions((prev) => ({ ...prev, type: item.id }))}
+            />
+          ))}
         </RowContainer>
       </SelectOptionArea>
       <SelectOptionArea>
         <SubTitleArea>
+          {/* 호진FIXME: 다국어 적용 진행해야함! */}
           <SubTitle subTitle={t('Txt2ImgTab.ChooseStyle')} />
         </SubTitleArea>
         <GridContainer>
@@ -324,9 +308,8 @@ const ImageCreateInput = ({
                     border: ${item.id === 'none' &&
                     item.id === style &&
                     'solid 1px var(--ai-purple-80-sub)'};
-
-                    width: 81px;
-                    height: 80px;
+                    width: 76px;
+                    height: 76px;
                   `}
                   isSelected={item.id === style}>
                   {item.id === 'none' ? (
@@ -357,21 +340,32 @@ const ImageCreateInput = ({
       </SelectOptionArea>
       <SelectOptionArea>
         <SubTitleArea>
+          {/* 호진FIXME: 다국어 적용 진행해야함! */}
           <SubTitle subTitle={t('Txt2ImgTab.ChooseRatio')} />
         </SubTitleArea>
         <RowContainer>
-          <Grid col={4}>
+          <Grid col={3}>
             {ratioItemList.map((item) => (
               <IconBoxTextButton
                 key={item.id}
                 variant="gray"
                 width="full"
-                height={50}
                 iconSize="md"
                 iconSrc={<item.imgItem color={getIconColor(item.id, ratio)} />}
                 onClick={() => setOptions((prev) => ({ ...prev, ratio: item.id }))}
-                selected={item.id === ratio}>
-                {t(`Txt2ImgTab.RatioList.${item.title}`)}
+                selected={item.id === ratio}
+                iconPos="top"
+                cssExt={css`
+                  padding: 8px;
+                  height: 69px;
+                `}
+                innerText>
+                <p
+                  style={{
+                    paddingTop: 6
+                  }}>
+                  {t(`Txt2ImgTab.RatioList.${item.title}`)}
+                </p>
               </IconBoxTextButton>
             ))}
           </Grid>
@@ -380,17 +374,15 @@ const ImageCreateInput = ({
       <StyledCreditButton>
         <IconTextButton
           width="full"
-          variant="purpleGradient"
+          variant={input.length === 0 ? 'darkGray' : 'purple'}
           onClick={() => {
             createAiImage(options);
           }}
           disable={input.length === 0}
           iconSrc={icon_credit_outline}
+          iconSize={18}
           iconPos="end">
-          <div style={{ display: 'flex', gap: '5px' }}>
-            <Icon size="sm" iconSrc={iconCreatingWhite}></Icon>
-            {t(`Txt2ImgTab.CreateImage`)}
-          </div>
+          <div style={{ display: 'flex', gap: '5px' }}>{t(`Txt2ImgTab.CreateImage`)}</div>
         </IconTextButton>
       </StyledCreditButton>
     </MakingInputWrapper>

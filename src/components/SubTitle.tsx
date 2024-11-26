@@ -7,7 +7,7 @@ const SubTitleWrapper = styled.div`
   font-size: 13px;
   font-weight: 500;
   line-height: 1.54;
-  color: var(--gray-gray-90-01);
+  color: var(--gray-gray-80-02);
 `;
 
 interface SubTitleProps {

@@ -28,11 +28,7 @@ const TopBorer = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-
-  border-top: 1px solid #e8ebed;
-  width: 100%;
-
-  padding: 0px 6px 0px 11px;
+  padding: 0px 12px;
   height: 34px;
 `;
 
@@ -83,7 +79,7 @@ const ExTextbox = ({
         />
         <TopBorer>
           <TextLength length={value.length} max={maxTextLen}></TextLength>
-          <ChangeExampleButton disable={value.length > 0} onClick={refreshExampleText} />
+          <ChangeExampleButton disabled={value.length > 0} onClick={refreshExampleText} />
         </TopBorer>
       </InputArea>
     </>

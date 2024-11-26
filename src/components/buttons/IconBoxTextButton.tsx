@@ -27,11 +27,14 @@ const Title = styled.div<{ selected: boolean }>`
 `;
 
 export default function IconBoxTextButton(props: PropsWithChildren<IconTextButtonProps>) {
-  const { children, selected = false, ...rest } = props;
+  const { children, selected = false, innerText = false, ...rest } = props;
+
   return (
     <Wrapper>
-      <IconTextButton {...rest} selected={selected}></IconTextButton>
-      <Title selected={selected}>{children}</Title>
+      <IconTextButton {...rest} selected={selected}>
+        {innerText && <Title selected={selected}>{children}</Title>}
+      </IconTextButton>
+      {!innerText && <Title selected={selected}>{children}</Title>}
     </Wrapper>
   );
 }

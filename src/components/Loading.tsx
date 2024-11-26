@@ -26,6 +26,8 @@ const Contents = styled.div`
   width: 196px;
   display: flex;
   justify-content: center;
+  line-height: 24px;
+  font-size: 16px;
 `;
 
 const Loading = ({ children }: { children?: React.ReactNode }) => {
