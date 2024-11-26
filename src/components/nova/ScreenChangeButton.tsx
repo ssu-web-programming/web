@@ -4,7 +4,7 @@ import { ReactComponent as IconMin } from 'img/ico_nova_min.svg';
 
 import { DeviceType, platformInfoSelector } from '../../store/slices/platformInfo';
 import { useAppSelector } from '../../store/store';
-import Bridge from '../../util/bridge';
+import Bridge, { isDesktop } from '../../util/bridge';
 import IconButton from '../buttons/IconButton';
 import useLangParameterNavigate from '../hooks/useLangParameterNavigate';
 
@@ -17,7 +17,7 @@ export const ScreenChangeButton = () => {
   console.log('device: ', device);
   console.log('from: ', from);
   if (
-    ((platform === 'unknown' || platform === 'web') && from === 'home') ||
+    ((platform === 'unknown' || platform === 'web' || isDesktop) && from === 'home') ||
     (platform === 'android' && device === DeviceType.phone)
   ) {
     return (
