@@ -108,7 +108,7 @@ export const useExpandImage = () => {
         await logger({
           dp: 'ai.nova',
           el: 'nova_image_expansion',
-          gpt_ver: 'NOVA_UNCROP_CLIPDROP'
+          gpt_ver: 'clipdrop'
         });
         track('click_nova_image', { image_name: 'NOVA_UNCROP_CLIPDROP' });
 

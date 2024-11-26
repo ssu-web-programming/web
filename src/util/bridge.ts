@@ -15,7 +15,6 @@ import { initConfirm } from '../store/slices/confirm';
 import {
   resetPageData,
   resetPageResult,
-  selectPageData,
   setPageStatus
 } from '../store/slices/nova/pageStatusSlice';
 import { setPlatformInfo } from '../store/slices/platformInfo';
@@ -30,7 +29,7 @@ import {
   setLoadingFile,
   setLocalFiles
 } from '../store/slices/uploadFiles';
-import store, { AppDispatch, RootState, useAppDispatch, useAppSelector } from '../store/store';
+import store, { AppDispatch, RootState, useAppDispatch } from '../store/store';
 
 import { getCookie, isHigherVersion, makeClipboardData } from './common';
 import { base64ToFile, blobToFile } from './files';
@@ -409,9 +408,6 @@ export const useInitBridgeListener = () => {
 
             const platform = getPlatform();
             const version = getVersion();
-            console.log('luna bridge platform: ', platform);
-            console.log('luna bridge version: ', version);
-            console.log('luna body: ', body);
             if (platform == ClientType.unknown || !version || version === '') {
               if (!body.platform) return;
               dispatch(

@@ -101,10 +101,10 @@ export const useConvert2DTo3D = () => {
 
         await logger({
           dp: 'ai.nova',
-          el: 'nova_image_expansion',
-          gpt_ver: 'NOVA_UNCROP_CLIPDROP'
+          el: 'transform_3d',
+          gpt_ver: 'immersity'
         });
-        track('click_nova_image', { image_name: 'Imersity' });
+        track('click_nova_image', { image_name: 'Immersity' });
 
         const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
         showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');

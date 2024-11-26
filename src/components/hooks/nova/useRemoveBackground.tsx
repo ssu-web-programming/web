@@ -60,7 +60,7 @@ export const useRemoveBackground = () => {
         await logger({
           dp: 'ai.nova',
           el: 'nova_background_remove',
-          gpt_ver: 'NOVA_REMOVE_BG'
+          gpt_ver: 'remove_bg'
         });
         track('click_nova_image', { image_name: 'NOVA_REMOVE_BG' });
 

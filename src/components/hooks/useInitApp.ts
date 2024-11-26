@@ -15,6 +15,8 @@ import Bridge, { ClientType, getPlatform, getVersion } from 'util/bridge';
 
 import { init } from '@amplitude/analytics-browser';
 
+import usePostSplunkLog from '../../api/usePostSplunkLog';
+import { ClientStatusType } from '../../pages/Nova/Nova';
 import { initComplete } from '../../store/slices/initFlagSlice';
 import { IAnnouceInfo, setAnnounceInfo, tabTypeMap } from '../../store/slices/nova/announceSlice';
 import { setPageStatus } from '../../store/slices/nova/pageStatusSlice';
@@ -166,6 +168,17 @@ export default function useInitApp() {
     );
 
     dispatch(setUserInfo(resSession.userInfo));
+
+    Bridge.callSyncBridgeApiWithCallback({
+      api: 'getClientStatus',
+      callback: async (status: ClientStatusType) => {
+        const logger = usePostSplunkLog({ bid: BID, sid: SID, ...resSession.userInfo });
+        await logger({
+          dp: 'ai.nova',
+          el: status === 'home' ? 'home_intobox' : 'document_intobox'
+        });
+      }
+    });
 
     const apiKey = process.env.REACT_APP_AMPLITUDE_API_KEY;
     if (apiKey) {

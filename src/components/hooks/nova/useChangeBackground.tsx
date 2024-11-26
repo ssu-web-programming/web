@@ -99,7 +99,7 @@ export const useChangeBackground = () => {
         await logger({
           dp: 'ai.nova',
           el: 'nova_background_change',
-          gpt_ver: 'NOVA_REPLACE_BG_CLIPDROP'
+          gpt_ver: 'clipdrop'
         });
         track('click_nova_image', { image_name: 'NOVA_REPLACE_BG_CLIPDROP' });
 

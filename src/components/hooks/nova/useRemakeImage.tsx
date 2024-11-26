@@ -68,7 +68,7 @@ export const useRemakeImage = () => {
         await logger({
           dp: 'ai.nova',
           el: 'nova_image_remake',
-          gpt_ver: 'NOVA_REIMAGE_CLIPDROP'
+          gpt_ver: 'clipdrop'
         });
         track('click_nova_image', { image_name: 'NOVA_REIMAGE_CLIPDROP' });
 
