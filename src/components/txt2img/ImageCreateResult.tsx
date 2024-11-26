@@ -165,8 +165,6 @@ const ImageCreateResult = ({
       );
       const blob = await res.blob();
       Bridge.callBridgeApi('insertImage', blob);
-
-      dispatch(activeToast({ type: 'info', msg: t(`Txt2ImgTab.ToastMsg.CompleteInsertImage`) }));
     } catch (err) {
       // TODO : error handle
       console.log('err', err);
