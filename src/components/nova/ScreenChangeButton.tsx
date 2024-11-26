@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { ReactComponent as IconMax } from 'img/ico_nova_max.svg';
 import { ReactComponent as IconMin } from 'img/ico_nova_min.svg';
 
-import { platformInfoSelector } from '../../store/slices/platformInfo';
+import { DeviceType, platformInfoSelector } from '../../store/slices/platformInfo';
 import { useAppSelector } from '../../store/store';
 import Bridge from '../../util/bridge';
 import IconButton from '../buttons/IconButton';
@@ -18,7 +18,7 @@ export const ScreenChangeButton = () => {
   console.log('from: ', from);
   if (
     ((platform === 'unknown' || platform === 'web') && from === 'home') ||
-    (platform === 'android' && device === 'phone')
+    (platform === 'android' && device === DeviceType.phone)
   ) {
     return (
       <IconButton
