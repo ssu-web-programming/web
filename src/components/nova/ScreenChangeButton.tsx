@@ -13,12 +13,9 @@ export const ScreenChangeButton = () => {
   const { platform, device } = useAppSelector(platformInfoSelector);
   const { from } = useLangParameterNavigate();
 
-  console.log('platform: ', platform);
-  console.log('device: ', device);
-  console.log('from: ', from);
   if (
     ((platform === 'unknown' || platform === 'web' || isDesktop) && from === 'home') ||
-    (platform === 'android' && device === DeviceType.phone)
+    ((platform === 'android' || platform === 'ios') && device === DeviceType.phone)
   ) {
     return (
       <IconButton

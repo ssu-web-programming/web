@@ -61,10 +61,9 @@ function getAgentPlatform(userAgent: string) {
 function getAgentDevice(userAgent: string) {
   if (userAgent) {
     const ua = userAgent.toLowerCase();
-    console.log('ua: ', navigator.userAgent);
-    if (ua.includes('androidphone')) {
+    if (ua.includes('androidphone') || ua.includes('iphone')) {
       return DeviceType.phone;
-    } else if (ua.includes('androidpad')) {
+    } else if (ua.includes('androidpad') || ua.includes('ipad')) {
       return DeviceType.pad;
     }
   }
