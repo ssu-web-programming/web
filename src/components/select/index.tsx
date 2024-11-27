@@ -1,94 +1,37 @@
 import { useEffect, useRef, useState } from 'react';
 import Icon from 'components/Icon';
 import icArrowDown from 'img/ico_arrow_down_normal.svg';
-import styled from 'styled-components';
 
-const SelectContainer = styled.div<{ width?: string }>`
-  position: relative;
-  width: ${({ width }) => width || '256px'};
-`;
+import * as S from './style';
 
-const SelectButton = styled.button<{ isOpen: boolean }>`
-  position: relative;
-  width: 100%;
-  text-align: left;
-  background: white;
-  border-radius: 8px;
-  cursor: pointer;
-  outline: none;
-  padding: 0px;
-`;
-
-const SelectText = styled.span`
-  display: block;
-  white-space: nowrap;
-  overflow: hidden;
-  text-align: right;
-  padding-right: 25px;
-  font-weight: 400;
-  font-size: 14px;
-`;
-
-const IconWrapper = styled.span<{ isOpen: boolean }>`
-  position: absolute;
-  right: 0px;
-  top: 50%;
-  transform: translateY(-50%) ${({ isOpen }) => (isOpen ? 'rotate(180deg)' : 'rotate(0)')};
-  transition: transform 0.2s ease;
-`;
-
-const OptionsContainer = styled.div`
-  position: absolute;
-  top: calc(100% + 4px);
-  left: 0;
-  right: 0;
-  z-index: 10;
-  max-height: 240px;
-  overflow-y: auto;
-  background: white;
-  border: 1px solid #c9cdd2;
-  border-radius: 8px;
-  box-shadow:
-    0 4px 6px -1px rgba(0, 0, 0, 0.1),
-    0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  width: max-content;
-  padding: 8px 16px;
-`;
-
-const Option = styled.div`
-  padding: 8px 0px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  color: #26282b;
-
-  &:not(:last-child) {
-    border-bottom: 1px solid #e8ebed;
-  }
-`;
-
-const OptionText = styled.span`
-  display: block;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
-
-interface SelectOption {
-  value: string;
+interface SelectOption<T extends string> {
+  value: T;
   label: string;
 }
 
-interface SelectProps {
-  options: SelectOption[];
-  value: string;
-  onChange: (value: string) => void;
+interface SelectProps<T extends string> {
+  options: SelectOption<T>[];
+  value: T;
+  onChange: (value: T) => void;
   placeholder?: string;
   width?: string;
 }
 
-const Select = ({ options = [], value = '', onChange, placeholder, width }: SelectProps) => {
+/**
+ * @param options - Select 옵션 배열
+ * @param value - 현재 선택된 값
+ * @param onChange - 값 변경 시 호출되는 콜백 함수
+ * @param placeholder - 선택된 값이 없을 때 표시될 텍스트
+ * @param width - Select 컴포넌트의 너비 (선택적)
+ * @returns Select 컴포넌트
+ */
+export default function Select<T extends string>({
+  options,
+  value,
+  onChange,
+  placeholder,
+  width
+}: SelectProps<T>) {
   const [isOpen, setIsOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
   const selectRef = useRef<HTMLDivElement>(null);
@@ -148,24 +91,24 @@ const Select = ({ options = [], value = '', onChange, placeholder, width }: Sele
   const selectedOption = options.find((opt) => opt.value === value);
 
   return (
-    <SelectContainer ref={selectRef} onKeyDown={handleKeyDown} width={width}>
-      <SelectButton
+    <S.SelectContainer ref={selectRef} onKeyDown={handleKeyDown} width={width}>
+      <S.SelectButton
         type="button"
         isOpen={isOpen}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
         aria-labelledby="select-label"
         onClick={() => setIsOpen(!isOpen)}>
-        <SelectText>{selectedOption ? selectedOption.label : placeholder}</SelectText>
-        <IconWrapper isOpen={isOpen}>
+        <S.SelectText>{selectedOption ? selectedOption.label : placeholder}</S.SelectText>
+        <S.IconWrapper isOpen={isOpen}>
           <Icon iconSrc={icArrowDown} />
-        </IconWrapper>
-      </SelectButton>
+        </S.IconWrapper>
+      </S.SelectButton>
 
       {isOpen && (
-        <OptionsContainer ref={listboxRef} role="listbox" tabIndex={-1}>
+        <S.OptionsContainer ref={listboxRef} role="listbox" tabIndex={-1}>
           {options.map((option, index) => (
-            <Option
+            <S.Option
               key={option.value}
               data-index={index}
               role="option"
@@ -174,13 +117,11 @@ const Select = ({ options = [], value = '', onChange, placeholder, width }: Sele
                 onChange(option.value);
                 setIsOpen(false);
               }}>
-              <OptionText>{option.label}</OptionText>
-            </Option>
+              <S.OptionText>{option.label}</S.OptionText>
+            </S.Option>
           ))}
-        </OptionsContainer>
+        </S.OptionsContainer>
       )}
-    </SelectContainer>
+    </S.SelectContainer>
   );
-};
-
-export default Select;
+}

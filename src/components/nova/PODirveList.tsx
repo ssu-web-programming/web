@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import PoDrive from 'components/po-drive';
 import { useTranslation } from 'react-i18next';
 
 import { NOVA_TAB_TYPE, selectTabSlice } from '../../store/slices/tabSlice';
@@ -7,7 +8,6 @@ import { useAppSelector } from '../../store/store';
 import DriveConfirm from '../DriveConfirm';
 import useManageFile from '../hooks/nova/useManageFile';
 import useUserInfoUtils from '../hooks/useUserInfoUtils';
-import PoDrive from '../PoDrive';
 
 interface PODriveListProps {
   isOpen: boolean;

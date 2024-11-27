@@ -1,4 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
+import CheckBox from 'components/CheckBox';
+import useManageFile from 'components/hooks/nova/useManageFile';
+import useUserInfoUtils from 'components/hooks/useUserInfoUtils';
+import Icon from 'components/Icon';
+import { getFileIcon } from 'components/nova/InputBar';
+import Select from 'components/select';
 import { getMaxFileSize } from 'constants/fileTypes';
 import { ReactComponent as IconRight } from 'img/angle_right.svg';
 import file_loading from 'img/file_loading.svg';
@@ -10,172 +16,26 @@ import { ReactComponent as IconUploadImg } from 'img/ico_upload_img.svg';
 import { useTranslation } from 'react-i18next';
 import { NOVA_TAB_TYPE, selectTabSlice } from 'store/slices/tabSlice';
 import { activeToast } from 'store/slices/toastSlice';
+import { DriveFileInfo } from 'store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from 'store/store';
-import styled from 'styled-components';
 
-import { DriveFileInfo } from '../store/slices/uploadFiles';
+import * as S from './style';
 
-import useManageFile from './hooks/nova/useManageFile';
-import useUserInfoUtils from './hooks/useUserInfoUtils';
-import { getFileIcon } from './nova/InputBar';
-import CheckBox from './CheckBox';
-import Icon from './Icon';
-import Select from './select';
+type OptionValues = 'latest' | 'oldest' | 'name_asc' | 'name_desc' | 'size_desc' | 'size_asc';
 
-const Wrapper = styled.div`
-  width: 100%;
-  min-width: 295px;
-  /* height: 270px; */
-  height: 100%;
-  box-sizing: border-box;
-  background-color: white;
+type Option = {
+  value: OptionValues;
+  label: string;
+};
 
-  display: flex;
-  flex-direction: column;
-
-  border-top: 1px solid #c9cdd2;
-  overflow: hidden;
-`;
-
-const Navi = styled.div`
-  width: 100%;
-  height: 56px;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 4px;
-
-  border-bottom: 1px solid #c9cdd2;
-  padding: 16px;
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 21px;
-
-  svg {
-    width: 16px;
-    height: 16px;
-  }
-
-  .currentDir {
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-  }
-`;
-
-const FileList = styled.div`
-  width: 100%;
-
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden auto;
-  /* padding: 0px 24px; */
-  position: relative;
-  scrollbar-color: #c9cdd2 #ffffff;
-  scrollbar-width: thin;
-
-  &::-webkit-scrollbar {
-    width: 6px;
-    background: #ffffff;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    background-color: #c9cdd2;
-  }
-
-  &::-webkit-scrollbar-track {
-    border-radius: 4px;
-    background: #ffffff;
-  }
-`;
-
-const FileItem = styled.div`
-  width: 100%;
-  min-width: 247px;
-  height: 68px;
-  min-height: 68px;
-
-  display: flex;
-  flex-direction: row;
-
-  justify-content: flex-start;
-  align-items: center;
-
-  & + & {
-    border-top: 1px solid #e8ebed;
-  }
-
-  .icon {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .info {
-    width: 100%;
-    overflow: hidden;
-    margin-left: 10px;
-
-    .name {
-      font-weight: 400;
-      font-size: 16px;
-      letter-spacing: -0.02em;
-
-      margin-bottom: 4px;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      overflow: hidden;
-    }
-
-    .createdAt {
-      font-weight: 400;
-      font-size: 12px;
-      color: var(--gray-gray-60-03);
-
-      svg {
-        margin-left: 8px;
-      }
-    }
-  }
-`;
-
-const NoFile = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  gap: 12px;
-
-  span {
-    color: var(--gray-gray-60-03);
-    font-size: 14px;
-    line-height: 21px;
-    text-align: center;
-  }
-`;
-
-const SubTitle = styled.div`
-  font-size: 14px;
-  line-height: 16px;
-  color: #6f3ad0;
-  text-align: center;
-  background-color: #f5f1fd;
-  padding: 6px 0px;
-`;
-
-const ItemWrapper = styled.div`
-  display: flex;
-  width: 100%;
-  height: 100%;
-  align-items: center;
-  padding: 22px 24px;
-  cursor: pointer;
-`;
+const options: Option[] = [
+  { value: 'latest', label: '최신순' },
+  { value: 'oldest', label: '오래된 순' },
+  { value: 'name_asc', label: '이름 오름차순' },
+  { value: 'name_desc', label: '이름 내림차순' },
+  { value: 'size_desc', label: '파일 크기 큰 순' },
+  { value: 'size_asc', label: '파일 크기 작은 순' }
+];
 
 interface PoDriveProps {
   max: number;
@@ -205,6 +65,7 @@ export default function PoDrive(props: PoDriveProps) {
   const { getFileList } = useManageFile();
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
   const { getMaxFilesPerUpload } = useUserInfoUtils();
+  const [selectedOption, setSelectedOption] = useState<OptionValues>('latest');
 
   const getDirIcon = (dir: DriveFileInfo) => {
     const name = dir.fileName;
@@ -232,18 +93,9 @@ export default function PoDrive(props: PoDriveProps) {
 
   const initFileList = async () => {
     const list = await getFileList({ target: props.target, setState: setState });
-    setFilelist(list);
+    // 초기에는 항상 최신상태를 유지해야한다.
+    setFilelist(sortedLatestOrOldestFileList('latest', list));
   };
-
-  useEffect(() => {
-    initFileList();
-    dispatch(
-      activeToast({
-        type: 'info',
-        msg: t(props.target === 'nova-file' ? 'Nova.Toast.SelectDoc' : 'Nova.Toast.SelectImg')
-      })
-    );
-  }, []);
 
   const onBack = () => {
     const index = navi.length - 1;
@@ -259,20 +111,84 @@ export default function PoDrive(props: PoDriveProps) {
       return 'Nova.PoDrive.Desc';
     }
   };
-  const [value, setValue] = useState('latest');
 
-  const options = [
-    { value: 'latest', label: '최신순' },
-    { value: 'oldest', label: '오래된 순' },
-    { value: 'name_asc', label: '이름 오름차순' },
-    { value: 'name_desc', label: '이름 내림차순' },
-    { value: 'size_desc', label: '파일 크기 큰 순' },
-    { value: 'size_asc', label: '파일 크기 작은 순' }
-  ];
+  const sortedLatestOrOldestFileList = (type: 'latest' | 'oldest', files?: DriveFileInfo[]) => {
+    const targetFileList = files || filelist;
+
+    return targetFileList.sort((a, b) => {
+      if (a.fileName === 'Inbox') return -1;
+      if (b.fileName === 'Inbox') return 1;
+
+      if (a.fileType !== b.fileType) return a.fileType === 'DIR' ? -1 : 1;
+
+      const sortOrder = type === 'oldest' ? 1 : -1;
+      return (a.lastModified - b.lastModified) * sortOrder;
+    });
+  };
+
+  const sortedNameAscOrDescFileList = (type: 'name_asc' | 'name_desc') => {
+    return filelist.sort((a, b) => {
+      if (a.fileName === 'Inbox') return -1;
+      if (b.fileName === 'Inbox') return 1;
+
+      if (a.fileType !== b.fileType) return a.fileType === 'DIR' ? -1 : 1;
+
+      const sortOrder = type === 'name_desc' ? 1 : -1;
+      return a.fileName.localeCompare(b.fileName, 'ko') * sortOrder;
+    });
+  };
+
+  const sortedSizeAscOrDescFileList = (type: 'size_asc' | 'size_desc') => {
+    return filelist.sort((a, b) => {
+      if (a.fileName === 'Inbox') return -1;
+      if (b.fileName === 'Inbox') return 1;
+
+      if (a.fileType !== b.fileType) return a.fileType === 'DIR' ? -1 : 1;
+
+      const sortOrder = type === 'size_asc' ? 1 : -1;
+      return (a.size - b.size) * sortOrder;
+    });
+  };
+
+  const sortedFileList = (value: OptionValues) => {
+    if (value === 'latest' || value === 'oldest') {
+      sortedLatestOrOldestFileList(value);
+      return;
+    }
+
+    if (value === 'name_asc' || value === 'name_desc') {
+      sortedNameAscOrDescFileList(value);
+      return;
+    }
+
+    if (value === 'size_asc' || value === 'size_desc') {
+      sortedSizeAscOrDescFileList(value);
+      return;
+    }
+  };
+
+  const handleChangeOption = (value: OptionValues) => {
+    // 최신 오래된 순 정렬은 lastModified
+    // 이름 오름차순은 fileName
+    // 파일 크기순 size
+    sortedFileList(value);
+    setSelectedOption(value);
+  };
+
+  useEffect(() => {
+    console.log('useEffect!!');
+    initFileList();
+    dispatch(
+      activeToast({
+        type: 'info',
+        msg: t(props.target === 'nova-file' ? 'Nova.Toast.SelectDoc' : 'Nova.Toast.SelectImg')
+      })
+    );
+  }, []);
 
   return (
-    <Wrapper>
-      <Navi>
+    <S.Wrapper>
+      <S.Navi>
         {navi.length > 1 && (
           <IconRight
             style={{
@@ -307,22 +223,27 @@ export default function PoDrive(props: PoDriveProps) {
             </div>
           </div>
           <div>
-            <Select options={options} value={value} onChange={setValue} width="120px" />
+            <Select<OptionValues>
+              options={options}
+              value={selectedOption}
+              onChange={handleChangeOption}
+              width="120px"
+            />
           </div>
         </div>
-      </Navi>
-      <SubTitle>
+      </S.Navi>
+      <S.SubTitle>
         {t(getTranslationKey(), {
           size: getMaxFileSize(selectedNovaTab),
           count: getMaxFilesPerUpload(selectedNovaTab)
         })}
-      </SubTitle>
-      <FileList>
+      </S.SubTitle>
+      <S.FileList>
         {state === 'none' &&
           filelist.map((item) => {
             const date = new Date(item.lastModified * 1000);
             return (
-              <FileItem
+              <S.FileItem
                 key={item.fileId}
                 onClick={async () => {
                   if (item.fileType === 'DIR') {
@@ -344,7 +265,7 @@ export default function PoDrive(props: PoDriveProps) {
                     }
                   }
                 }}>
-                <ItemWrapper>
+                <S.ItemWrapper>
                   <div className="icon">{getIcons(item)}</div>
                   <div className="info">
                     <div className="name">{item.fileName}</div>
@@ -356,13 +277,13 @@ export default function PoDrive(props: PoDriveProps) {
                       setIsChecked={() => {}}
                       onClick={() => {}}></CheckBox>
                   )}
-                </ItemWrapper>
-              </FileItem>
+                </S.ItemWrapper>
+              </S.FileItem>
             );
           })}
 
         {state === 'none' && filelist.length === 0 && (
-          <NoFile>
+          <S.NoFile>
             {props.target === 'nova-file' ? (
               <IconUploadDocs width={56} height={56} color="var(--gray-gray-40)" />
             ) : (
@@ -373,7 +294,7 @@ export default function PoDrive(props: PoDriveProps) {
                 type: t(`${props.target === 'nova-file' ? 'document' : 'image'}`)
               })}
             </span>
-          </NoFile>
+          </S.NoFile>
         )}
 
         {state === 'request' && (
@@ -383,7 +304,7 @@ export default function PoDrive(props: PoDriveProps) {
             style={{ display: 'block', position: 'absolute', top: 0, left: 0, height: '100%' }}
           />
         )}
-      </FileList>
-    </Wrapper>
+      </S.FileList>
+    </S.Wrapper>
   );
 }
