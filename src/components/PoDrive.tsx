@@ -20,6 +20,7 @@ import useUserInfoUtils from './hooks/useUserInfoUtils';
 import { getFileIcon } from './nova/InputBar';
 import CheckBox from './CheckBox';
 import Icon from './Icon';
+import Select from './select';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -258,6 +259,16 @@ export default function PoDrive(props: PoDriveProps) {
       return 'Nova.PoDrive.Desc';
     }
   };
+  const [value, setValue] = useState('latest');
+
+  const options = [
+    { value: 'latest', label: '최신순' },
+    { value: 'oldest', label: '오래된 순' },
+    { value: 'name_asc', label: '이름 오름차순' },
+    { value: 'name_desc', label: '이름 내림차순' },
+    { value: 'size_desc', label: '파일 크기 큰 순' },
+    { value: 'size_asc', label: '파일 크기 작은 순' }
+  ];
 
   return (
     <Wrapper>
@@ -274,11 +285,30 @@ export default function PoDrive(props: PoDriveProps) {
             onClick={onBack}
           />
         )}
-        <Icon size={24} iconSrc={getDirIcon(navi[navi.length - 1])} />
-        <div className="currentDir">
-          {navi[navi.length - 1].fileName === 'drive'
-            ? t('Nova.UploadTooltip.PolarisDrive')
-            : navi[navi.length - 1].fileName}
+
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            width: '100%'
+          }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 8
+            }}>
+            <Icon size={24} iconSrc={getDirIcon(navi[navi.length - 1])} />
+            <div className="currentDir">
+              {navi[navi.length - 1].fileName === 'drive'
+                ? t('Nova.UploadTooltip.PolarisDrive')
+                : navi[navi.length - 1].fileName}
+            </div>
+          </div>
+          <div>
+            <Select options={options} value={value} onChange={setValue} width="120px" />
+          </div>
         </div>
       </Navi>
       <SubTitle>

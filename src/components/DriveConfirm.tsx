@@ -86,21 +86,6 @@ const DriveConfirm = (props: DriveConfirmType) => {
             disable={onOk.disable}>
             {onOk.text}
           </Button>
-          {/* {onCancel && (
-            <Button
-              variant="gray"
-              width={'full'}
-              height={HEIGHT_BY_DIRECTION}
-              onClick={onCancel.callback}
-              cssExt={css`
-                order: ${direction === 'row' ? 1 : undefined};
-                min-width: 92px;
-                width: 100%;
-                line-height: 19px;
-              `}>
-              {onCancel.text}
-            </Button>
-          )} */}
         </Footer>
       </Wrapper>
     </>

@@ -44,7 +44,7 @@ const FloatingListWrapper = styled.div`
 const FloatingItem = styled.div<{ isSelected: boolean }>`
   display: flex;
   justify-content: flex-start;
-  align-items: center
+  align-items: center;
 
   width: 100%;
   height: 24px;
