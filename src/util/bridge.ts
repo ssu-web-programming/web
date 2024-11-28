@@ -364,7 +364,15 @@ export const useInitBridgeListener = () => {
             break;
           }
           case 'openNOVA': {
-            dispatch(changePanel({ cmd, body: body.inputText || '' }));
+            dispatch(
+              changePanel({
+                cmd,
+                body: {
+                  inputText: body.inputText || '',
+                  screenMode: body.screenMode || 'min'
+                }
+              })
+            );
 
             if (body.openTab in NOVA_TAB_TYPE) {
               const tab = body.openTab;
