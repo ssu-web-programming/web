@@ -604,7 +604,7 @@
       "NoFile": "There are no attachable {{type}}."
     },
     "Toast": {
-      "ConsumeCredit": "{{deductionCredit}} credits were used. Remaining Credits: {{leftCredit}}",
+      "ConsumeCredit": "{{deductionCredit}} credits were used. \nRemaining Credits: {{leftCredit}}",
       "SelectDoc": "Select the document you want to analyze.",
       "SelectImg": "Please select an image to analyze."
     }
