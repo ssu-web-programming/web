@@ -1,20 +1,65 @@
 import { useEffect, useRef } from 'react';
-import { ConfirmBox, ContentArea, Footer, Header } from 'components/Confirm';
+import { ContentArea, Footer, Header } from 'components/Confirm';
 import styled, { css } from 'styled-components';
+import { isMobile } from 'util/bridge';
+
+// import icBack from '../img/ico_back.svg';
+import icBack from '../img/ico_arrow_left.svg';
+import icClose from '../img/ico_nova_close.svg';
 
 import Button from './buttons/Button';
 import Blanket from './Blanket';
+import Icon from './Icon';
 
-const Wrapper = styled(ConfirmBox)`
-  position: fixed;
+const ConfirmBox = styled.div<{
+  $isMobile: boolean;
+}>`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   margin: auto;
-  height: 506px;
+  min-width: 328px;
+  max-width: ${({ $isMobile }) => ($isMobile ? '100%' : '343px')};
+  box-shadow: 0px 8px 16px 0px #0000001a;
+  background-color: #fff;
+  border-radius: ${({ $isMobile }) => ($isMobile ? '0px' : '10px')};
+  z-index: 100;
+  max-height: 100vh;
+  height: fit-content;
 `;
 
-const Title = styled.h2`
+const Wrapper = styled(ConfirmBox)<{
+  $isMobile: boolean;
+}>`
+  position: fixed;
+  margin: auto;
+  height: ${({ $isMobile }) => ($isMobile ? '100%' : '506px')};
+`;
+
+const Title = styled.p`
   margin: 0;
-  font-size: 20px;
-  line-height: 30px;
+  font-size: 16px;
+  line-height: 24px;
+`;
+const MobileHeaderContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`;
+
+const HeaderContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  & > img {
+    cursor: pointer;
+  }
 `;
 
 type DriveConfirmType = {
@@ -50,9 +95,20 @@ const DriveConfirm = (props: DriveConfirmType) => {
   return (
     <>
       <Blanket />
-      <Wrapper>
+      <Wrapper $isMobile={isMobile}>
         <Header ref={headerRef}>
-          <Title>{title}</Title>
+          {/* 모바일에서는 뒤로가기 버튼 , 웹에서는 X버튼을 만족시켜야함! */}
+          {isMobile ? (
+            <MobileHeaderContainer>
+              <Icon size={16} iconSrc={icBack} onClick={onCancel?.callback} />
+              <Title>{title}</Title>
+            </MobileHeaderContainer>
+          ) : (
+            <HeaderContainer>
+              <Title>{title}</Title>
+              <Icon size={32} iconSrc={icClose} onClick={onCancel?.callback} />
+            </HeaderContainer>
+          )}
         </Header>
         <ContentArea ref={contentsRef}>{msg}</ContentArea>
         <Footer direction={direction} ref={footerRef}>
@@ -70,21 +126,6 @@ const DriveConfirm = (props: DriveConfirmType) => {
             disable={onOk.disable}>
             {onOk.text}
           </Button>
-          {onCancel && (
-            <Button
-              variant="gray"
-              width={'full'}
-              height={HEIGHT_BY_DIRECTION}
-              onClick={onCancel.callback}
-              cssExt={css`
-                order: ${direction === 'row' ? 1 : undefined};
-                min-width: 92px;
-                width: 100%;
-                line-height: 19px;
-              `}>
-              {onCancel.text}
-            </Button>
-          )}
         </Footer>
       </Wrapper>
     </>

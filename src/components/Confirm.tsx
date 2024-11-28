@@ -22,7 +22,6 @@ export const ConfirmBox = styled.div`
   margin: auto;
   min-width: 328px;
   max-width: 343px;
-  padding: 24px;
   box-shadow: 0px 8px 16px 0px #0000001a;
   background-color: #fff;
   border-radius: 10px;
@@ -33,14 +32,14 @@ export const ConfirmBox = styled.div`
 
 export const Header = styled.div`
   width: 100%;
-  padding-bottom: 12px;
+  padding: 16px 24px;
 `;
 
 const Title = styled.h2`
   margin: 0;
-  font-size: 20px;
-  line-height: 30px;
-  pading-bottom: 12px;
+  font-size: 16px;
+  line-height: 24px;
+  padding-bottom: 12px;
   box-sizing: border-box;
 `;
 
@@ -91,7 +90,7 @@ export const CheckWrap = styled.div`
 
 export const Footer = styled.div<{ direction?: 'column' | 'row' }>`
   width: 100%;
-  padding-top: 36px;
+  padding: 16px;
   display: flex;
   flex-direction: ${(props) => props.direction};
   gap: 8px;
