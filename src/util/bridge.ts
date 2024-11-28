@@ -72,7 +72,7 @@ export const isMobile = getPlatform() === ClientType.android || getPlatform() ==
 export const isDesktop =
   getPlatform() === ClientType.windows ||
   getPlatform() === ClientType.web ||
-  getPlatform() === ClientType.web;
+  getPlatform() === ClientType.mac;
 
 export async function fileToString(file: Blob) {
   return new Promise<string>((resolve) => {
