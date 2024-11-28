@@ -33,9 +33,7 @@ export default function Select<T extends string>({
   width
 }: SelectProps<T>) {
   const [isOpen, setIsOpen] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(-1);
   const selectRef = useRef<HTMLDivElement>(null);
-  const listboxRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -48,50 +46,10 @@ export default function Select<T extends string>({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleKeyDown = (event: React.KeyboardEvent) => {
-    if (!isOpen && (event.key === 'ArrowDown' || event.key === 'Enter' || event.key === ' ')) {
-      event.preventDefault();
-      setIsOpen(true);
-      setActiveIndex(0);
-      return;
-    }
-
-    if (isOpen) {
-      switch (event.key) {
-        case 'ArrowUp':
-          event.preventDefault();
-          setActiveIndex((prev) => Math.max(0, prev - 1));
-          break;
-        case 'ArrowDown':
-          event.preventDefault();
-          setActiveIndex((prev) => Math.min(options.length - 1, prev + 1));
-          break;
-        case 'Enter':
-          event.preventDefault();
-          if (activeIndex >= 0) {
-            onChange(options[activeIndex].value);
-            setIsOpen(false);
-          }
-          break;
-        case 'Escape':
-          event.preventDefault();
-          setIsOpen(false);
-          break;
-      }
-    }
-  };
-
-  useEffect(() => {
-    if (isOpen && listboxRef.current) {
-      const activeElement = listboxRef.current.querySelector(`[data-index="${activeIndex}"]`);
-      activeElement?.scrollIntoView({ block: 'nearest' });
-    }
-  }, [activeIndex, isOpen]);
-
   const selectedOption = options.find((opt) => opt.value === value);
 
   return (
-    <S.SelectContainer ref={selectRef} onKeyDown={handleKeyDown} width={width}>
+    <S.SelectContainer ref={selectRef} width={width}>
       <S.SelectButton
         type="button"
         isOpen={isOpen}
@@ -106,7 +64,7 @@ export default function Select<T extends string>({
       </S.SelectButton>
 
       {isOpen && (
-        <S.OptionsContainer ref={listboxRef} role="listbox" tabIndex={-1}>
+        <S.OptionsContainer role="listbox">
           {options.map((option, index) => (
             <S.Option
               key={option.value}
