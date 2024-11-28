@@ -19,6 +19,7 @@ import {
 } from '../store/slices/nova/pageStatusSlice';
 import { DeviceType, setPlatformInfo } from '../store/slices/platformInfo';
 import { setRecognizedVoice } from '../store/slices/recognizedVoice';
+import { setScreenMode } from '../store/slices/screenMode';
 import { NOVA_TAB_TYPE, selectNovaTab, setCreating } from '../store/slices/tabSlice';
 import { activeToast } from '../store/slices/toastSlice';
 import { updateT2ICurItemIndex, updateT2ICurListId } from '../store/slices/txt2imgHistory';
@@ -375,8 +376,7 @@ export const useInitBridgeListener = () => {
               changePanel({
                 cmd,
                 body: {
-                  inputText: body.inputText || '',
-                  screenMode: body.screenMode || 'min'
+                  inputText: body.inputText || ''
                 }
               })
             );
@@ -454,6 +454,10 @@ export const useInitBridgeListener = () => {
             }
             Bridge.callBridgeApi('analyzeCurFile');
 
+            break;
+          }
+          case 'changeScreenSize': {
+            dispatch(setScreenMode(body));
             break;
           }
           case 'getFileInfo': {
