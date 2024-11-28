@@ -21,6 +21,7 @@ import pageStatusSlice from './slices/nova/pageStatusSlice';
 import platformInfo from './slices/platformInfo';
 import recFunction from './slices/recFuncSlice';
 import recognizedVoice from './slices/recognizedVoice';
+import screenMode from './slices/screenMode';
 import tab, { shareAnswerState } from './slices/tabSlice';
 import toast from './slices/toastSlice';
 import txtimgHistory from './slices/txt2imgHistory';
@@ -54,7 +55,8 @@ const store = configureStore({
     uploadFiles,
     pageStatusSlice,
     announceInfoSlice,
-    platformInfo
+    platformInfo,
+    screenMode
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }).concat(shareAnswerState),
