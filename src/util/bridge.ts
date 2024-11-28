@@ -85,6 +85,7 @@ export const isMobile = getPlatform() === ClientType.android || getPlatform() ==
 export const isDesktop =
   getPlatform() === ClientType.windows ||
   getPlatform() === ClientType.web ||
+  getPlatform() === ClientType.unknown ||
   getPlatform() === ClientType.mac;
 
 export async function fileToString(file: Blob) {
@@ -214,6 +215,12 @@ const callApi = (api: ApiType, arg?: string | number) => {
           case 'uploadFile': {
             if (window.webkit.messageHandlers.uploadFile) {
               window.webkit.messageHandlers.uploadFile.postMessage(arg);
+            }
+            break;
+          }
+          case 'changeScreenSize': {
+            if (window.webkit.messageHandlers.changeScreenSize) {
+              window.webkit.messageHandlers.changeScreenSize.postMessage(arg);
             }
             break;
           }
