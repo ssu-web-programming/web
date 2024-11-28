@@ -8,13 +8,21 @@ import styled, { css } from 'styled-components';
 
 import ico_credit from '../../img/ico_credit_gray.svg';
 import { ReactComponent as IconCreditLine } from '../../img/ico_credit_line.svg';
+import { ReactComponent as ArrowLeftIcon } from '../../img/nova/arrow_left.svg';
 import { ReactComponent as IconConvert } from '../../img/nova/tab/convert_Img.svg';
 import { creditInfoSelector, InitialState } from '../../store/slices/creditInfo';
-import { novaHistorySelector } from '../../store/slices/nova/novaHistorySlice';
+import {
+  deselectAllItems,
+  isShareModeSelector,
+  novaHistorySelector,
+  selectAllItems,
+  selectedItemsSelector,
+  setIsShareMode
+} from '../../store/slices/nova/novaHistorySlice';
 import { NOVA_TAB_TYPE, selectTabSlice } from '../../store/slices/tabSlice';
 import { setDriveFiles, setLocalFiles } from '../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../store/store';
-import Bridge from '../../util/bridge';
+import Bridge, { isDesktop } from '../../util/bridge';
 import IconButton from '../buttons/IconButton';
 import { useConfirm } from '../Confirm';
 import { useChatNova } from '../hooks/useChatNova';
@@ -64,6 +72,13 @@ const CreditIcon = styled(IconCreditLine)<{
   }
 `;
 
+const SelectionText = styled.span`
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 19px;
+  color: var(--ai-purple-50-main);
+`;
+
 export interface NovaHeaderProps {
   setInputContents?: React.Dispatch<React.SetStateAction<string>>;
 }
@@ -71,6 +86,8 @@ export interface NovaHeaderProps {
 export default function NovaHeader(props: NovaHeaderProps) {
   const { t } = useTranslation();
   const novaHistory = useAppSelector(novaHistorySelector);
+  const isShareMode = useAppSelector(isShareModeSelector);
+  const selectedItems = useAppSelector(selectedItemsSelector);
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
   const dispatch = useAppDispatch();
   const confirm = useConfirm();
@@ -221,39 +238,60 @@ export default function NovaHeader(props: NovaHeaderProps) {
     }
   };
 
+  const handleChangeSelection = () => {
+    if (selectedItems.length > 0) {
+      dispatch(deselectAllItems());
+    } else {
+      dispatch(selectAllItems());
+    }
+  };
+
   return (
     <StyledHeader title="" subTitle="">
-      <TitleWrapper>
-        <IconLogoNova width={107} height={32} />
-      </TitleWrapper>
-      <ButtonWrapper>
-        {novaHistory.length > 0 && selectedNovaTab === NOVA_TAB_TYPE.aiChat && (
-          <IconButton
-            iconComponent={IconMessagePlus}
-            onClick={newChat}
-            iconSize="lg"
-            width={32}
-            height={32}
-          />
-        )}
-        <Tooltip
-          title={t(`Nova.CreditInfo.Title`) as string}
-          placement="bottom-end"
-          type="normal"
-          options={TOOLTIP_CREDIT_OPTIONS}>
-          <CreditIcon $isInit={isInit} />
-        </Tooltip>
-        <ScreenChangeButton></ScreenChangeButton>
-        <IconButton
-          iconComponent={IconClose}
-          onClick={() => {
-            Bridge.callBridgeApi('closePanel', selectedNovaTab as string);
-          }}
-          iconSize="lg"
-          width={32}
-          height={32}
-        />
-      </ButtonWrapper>
+      {isShareMode ? (
+        <>
+          <ArrowLeftIcon width={32} height={32} onClick={() => dispatch(setIsShareMode(false))} />
+          <SelectionText onClick={handleChangeSelection}>
+            {selectedItems.length > 0 ? '선택 해제' : '모두 선택'}
+          </SelectionText>
+        </>
+      ) : (
+        <>
+          <TitleWrapper>
+            <IconLogoNova width={107} height={32} />
+          </TitleWrapper>
+          <ButtonWrapper>
+            {novaHistory.length > 0 && selectedNovaTab === NOVA_TAB_TYPE.aiChat && (
+              <IconButton
+                iconComponent={IconMessagePlus}
+                onClick={newChat}
+                iconSize="lg"
+                width={32}
+                height={32}
+              />
+            )}
+            <Tooltip
+              title={t(`Nova.CreditInfo.Title`) as string}
+              placement="bottom-end"
+              type="normal"
+              options={TOOLTIP_CREDIT_OPTIONS}>
+              <CreditIcon $isInit={isInit} />
+            </Tooltip>
+            <ScreenChangeButton></ScreenChangeButton>
+            {isDesktop && (
+              <IconButton
+                iconComponent={IconClose}
+                onClick={() => {
+                  Bridge.callBridgeApi('closePanel', selectedNovaTab as string);
+                }}
+                iconSize="lg"
+                width={32}
+                height={32}
+              />
+            )}
+          </ButtonWrapper>
+        </>
+      )}
     </StyledHeader>
   );
 }

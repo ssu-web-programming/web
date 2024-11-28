@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { RootState } from '../../store';
-import { DriveFileInfo } from '../uploadFiles';
 
 export interface ResultImage {
   contentType: string;
@@ -54,7 +53,6 @@ const pageSlice = createSlice({
     },
     setData: (state, action: PayloadAction<{ tab: string; data: PageData }>) => {
       const { tab, data } = action.payload;
-      console.log('data', data);
       state.data[tab] = data;
     },
     resetData: (state, action: PayloadAction<string>) => {

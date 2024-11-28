@@ -8,18 +8,28 @@ import PreMarkdown from 'components/PreMarkdown';
 import Loading from 'img/agent_loading.gif';
 import ico_ai from 'img/ico_ai.svg';
 import { ReactComponent as CopyChatIcon } from 'img/ico_copy_chat.svg';
-import { ReactComponent as CreditColorIcon } from 'img/ico_credit_color.svg';
 import { ReactComponent as InsertDocsIcon } from 'img/ico_insert_docs.svg';
+import { ReactComponent as RetryChatIcon } from 'img/ico_retry_chat.svg';
+import { ReactComponent as ShareChatIcon } from 'img/ico_share_chat.svg';
 import ico_user from 'img/ico_user.svg';
 import { ClientStatusType } from 'pages/Nova/Nova';
 import { useTranslation } from 'react-i18next';
-import { NovaChatType, NovaFileInfo } from 'store/slices/nova/novaHistorySlice';
+import {
+  deselectAllItems,
+  isShareModeSelector,
+  NovaChatType,
+  NovaFileInfo,
+  selectedItemsSelector,
+  setIsShareMode,
+  toggleItemSelection
+} from 'store/slices/nova/novaHistorySlice';
 import { selectTabSlice } from 'store/slices/tabSlice';
-import { useAppSelector } from 'store/store';
+import { useAppDispatch, useAppSelector } from 'store/store';
 import styled, { css } from 'styled-components';
 import Bridge, { ClientType, getPlatform } from 'util/bridge';
 import { getFileExtension, sliceFileName } from 'util/common';
 
+import CheckBox from '../CheckBox';
 import useCopyText from '../hooks/copyText';
 import { useInsertDocsHandler } from '../hooks/nova/useInsertDocsHandler';
 
@@ -117,13 +127,6 @@ const FileItem = styled.div`
   }
 `;
 
-const ButtonText = styled.div`
-  font-size: 14px;
-  line-height: 14px;
-  font-weight: 500;
-  text-align: left;
-`;
-
 interface ChatListProps {
   novaHistory: NovaChatType[];
   onSubmit: (submitParam: InputBarSubmitParam) => void;
@@ -136,7 +139,6 @@ interface ChatListProps {
 type ChatButtonType = {
   name: string;
   status: NovaChatType['status'][];
-  text: string;
   iconSrc: React.ReactNode;
   clickHandler: (arg: NovaChatType | any) => void;
 };
@@ -144,34 +146,47 @@ type ChatButtonType = {
 const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
   const { novaHistory, onSubmit, onSave, scrollHandler, expiredNOVA } = props;
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
   const confirm = useConfirm();
   const { insertDocsHandler } = useInsertDocsHandler();
   const { creating } = useAppSelector(selectTabSlice);
+  const selectedItems = useAppSelector(selectedItemsSelector);
+  const isShareMode = useAppSelector(isShareModeSelector);
   const { from } = useLangParameterNavigate();
   const { onCopy } = useCopyText();
   const scrollRef = useRef<HTMLDivElement | null>(null);
+
+  const handleToggleItemSelection = (id: string) => {
+    dispatch(toggleItemSelection(id));
+  };
 
   const CHAT_BUTTON_LIST: ChatButtonType[] = [
     {
       name: 'recreating',
       status: ['done', 'cancel'],
-      iconSrc: <CreditColorIcon />,
-      text: t(`Nova.Chat.Recreating`),
+      iconSrc: <RetryChatIcon />,
       clickHandler: (history: NovaChatType) => onSubmit({ input: history.input, type: '' })
     },
     {
       name: 'copy',
       status: ['done'],
       iconSrc: <CopyChatIcon />,
-      text: t(`Nova.Chat.Copy`),
       clickHandler: (history: NovaChatType) => onCopy(history.output)
     },
     {
       name: 'insert',
       status: ['done'],
       iconSrc: <InsertDocsIcon />,
-      text: t(`Nova.Chat.InsertDoc.Title`),
       clickHandler: (history: NovaChatType) => insertDocsHandler(history)
+    },
+    {
+      name: 'share',
+      status: ['done'],
+      iconSrc: <ShareChatIcon />,
+      clickHandler: () => {
+        dispatch(deselectAllItems());
+        dispatch(setIsShareMode(true));
+      }
     }
   ];
   const chatButtonList =
@@ -197,6 +212,16 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
       {novaHistory.map((item) => (
         <ChatItem key={item.id}>
           <Question>
+            {isShareMode && (
+              <CheckBox
+                isChecked={selectedItems.includes('q:' + item.id)}
+                setIsChecked={() => {}}
+                onClick={() => handleToggleItemSelection('q:' + item.id)}
+                cssExt={css`
+                  margin: 6px;
+                `}
+              />
+            )}
             <Icon size={32} iconSrc={ico_user}></Icon>
             <QuestionContents>
               <p>{item.input}</p>
@@ -277,6 +302,16 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
             </QuestionContents>
           </Question>
           <Answer>
+            {isShareMode && (
+              <CheckBox
+                isChecked={selectedItems.includes('a:' + item.id)}
+                setIsChecked={() => {}}
+                onClick={() => handleToggleItemSelection('a:' + item.id)}
+                cssExt={css`
+                  margin: 6px;
+                `}
+              />
+            )}
             <Icon size={32} iconSrc={ico_ai}></Icon>
             {item.status === 'request' ? (
               <img src={Loading} alt="loading" style={{ paddingTop: '4px' }} />
@@ -285,26 +320,27 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                 <PreMarkdown text={item.output}>
                   <Overlay onSave={() => onSave(item)} />
                 </PreMarkdown>
-                <ChatButtonWrapper>
-                  {chatButtonList
-                    .filter((btn) => btn.status.includes(item.status))
-                    .map((btn) => (
-                      <IconTextButton
-                        disable={creating == 'NOVA' || expiredNOVA}
-                        key={btn.text}
-                        width={'fit'}
-                        iconSize={24}
-                        iconSrc={btn.iconSrc}
-                        iconPos="left"
-                        onClick={() => btn.clickHandler(item)}
-                        cssExt={css`
-                          background: transparent;
-                          padding: 0;
-                        `}>
-                        <ButtonText>{btn.text}</ButtonText>
-                      </IconTextButton>
-                    ))}
-                </ChatButtonWrapper>
+                {!isShareMode && (
+                  <ChatButtonWrapper>
+                    {chatButtonList
+                      .filter((btn) => btn.status.includes(item.status))
+                      .map((btn) => (
+                        <IconTextButton
+                          disable={creating == 'NOVA' || expiredNOVA}
+                          key={btn.name}
+                          width={'fit'}
+                          iconSize={24}
+                          iconSrc={btn.iconSrc}
+                          iconPos="left"
+                          onClick={() => btn.clickHandler(item)}
+                          cssExt={css`
+                            background: transparent;
+                            padding: 0;
+                          `}
+                        />
+                      ))}
+                  </ChatButtonWrapper>
+                )}
               </div>
             )}
           </Answer>

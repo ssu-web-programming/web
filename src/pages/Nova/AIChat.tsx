@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ReactComponent as IconArrowLeft } from 'img/ico_arrow_left.svg';
 import { useTranslation } from 'react-i18next';
+import Lottie from 'react-lottie-player';
 import { useLocation } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import styled from 'styled-components';
@@ -18,10 +19,17 @@ import InputBar, { flexCenter } from '../../components/nova/InputBar';
 import { FileUpladState } from '../../constants/fileTypes';
 import ico_documents from '../../img/ico_documents.svg';
 import ico_image from '../../img/ico_image.svg';
+import Spinner from '../../img/spiner_white.json';
 import {
+  deselectAllItems,
+  isExportingSelector,
+  isShareModeSelector,
   NovaChatType,
   NovaFileInfo,
-  novaHistorySelector
+  novaHistorySelector,
+  selectedItemsSelector,
+  setIsExporting,
+  setIsShareMode
 } from '../../store/slices/nova/novaHistorySlice';
 import { selectTabSlice } from '../../store/slices/tabSlice';
 import { activeToast } from '../../store/slices/toastSlice';
@@ -77,6 +85,33 @@ const ScrollDownButton = styled.div`
   }
 `;
 
+const ShareButton = styled.button<{ disabled?: boolean }>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 48px;
+  padding: 12px;
+  border-radius: 8px;
+  color: ${({ disabled }) => (disabled ? 'var(--gray-gray-60-03)' : 'white')};
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  background-color: ${({ disabled }) => (disabled ? 'f2f4f6' : 'var(--ai-purple-50-main)')};
+  cursor: ${({ disabled }) => (disabled ? 'auto' : 'pointer')};
+`;
+
+const ShareGuide = styled.div`
+  width: 100%;
+  padding: 6px;
+  background: #f5f1fd;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 16px;
+  text-align: center;
+  color: var(--ai-purple-50-main);
+`;
+
 export default function AIChat() {
   const dispatch = useAppDispatch();
   const location = useLocation();
@@ -85,6 +120,9 @@ export default function AIChat() {
   const chatNova = useChatNova();
   const { creating } = useAppSelector(selectTabSlice);
   const novaHistory = useAppSelector(novaHistorySelector);
+  const selectedItems = useAppSelector(selectedItemsSelector);
+  const isShareMode = useAppSelector(isShareModeSelector);
+  const isExporting = useAppSelector(isExportingSelector);
   const [expiredNOVA, setExpiredNOVA] = useState<boolean>(false);
   const [inputContents, setInputContents] = useState<string>('');
   const [imagePreview, setImagePreview] = useState<NovaFileInfo | null>(null);
@@ -163,6 +201,55 @@ export default function AIChat() {
     ShowScrollButton(e.currentTarget);
   };
 
+  const handleShareChat = () => {
+    dispatch(setIsExporting(true));
+    const jsonResult = selectedItems.map((item) => {
+      const threadItems = item.split(':');
+      const type = threadItems[0];
+      const id = threadItems[1];
+
+      const matchedItem = novaHistory.find((historyItem) => historyItem.id === id);
+      if (!matchedItem) {
+        console.error(`No matching item found for id: ${id}`);
+        return null;
+      }
+
+      const resultType = type === 'q' ? 'question' : 'answer';
+      const contentType =
+        resultType === 'question' ? matchedItem.type || 'text' : matchedItem.res ? 'image' : 'text';
+      const content = type === 'q' ? matchedItem.input : matchedItem.output;
+      const files = matchedItem.files ? matchedItem.files.map((file) => file.name) : [];
+
+      return {
+        type: resultType,
+        contentType: contentType,
+        content: content,
+        files: resultType === 'question' ? files : []
+      };
+    });
+
+    console.log(novaHistory);
+    console.log('jsonResult: ', jsonResult);
+    setTimeout(() => {
+      dispatch(setIsExporting(false));
+      dispatch(setIsShareMode(false));
+      dispatch(deselectAllItems());
+      dispatch(activeToast({ type: 'info', msg: '링크 복사가 완료되었습니다.' }));
+    }, 1000);
+
+    // const blob = new Blob([JSON.stringify(jsonResult, null, 2)], {
+    //   type: 'application/json'
+    // });
+    // const url = URL.createObjectURL(blob);
+    //
+    // const link = document.createElement('a');
+    // link.href = url;
+    // link.download = 'chat_history.json';
+    // link.click();
+    //
+    // URL.revokeObjectURL(url);
+  };
+
   const PROMPT_EXAMPLE = [
     {
       src: ico_documents,
@@ -193,6 +280,9 @@ export default function AIChat() {
         </>
       ) : (
         <>
+          {isShareMode && (
+            <ShareGuide>{`${selectedItems.length}개의 항목을 선택했습니다.`}</ShareGuide>
+          )}
           <ChatList
             expiredNOVA={expiredNOVA}
             novaHistory={novaHistory}
@@ -218,14 +308,29 @@ export default function AIChat() {
           )}
         </>
       )}
-      <InputBar
-        novaHistory={novaHistory}
-        disabled={creating == 'NOVA'}
-        expiredNOVA={expiredNOVA}
-        onSubmit={createNovaSubmitHandler}
-        contents={inputContents}
-        setContents={setInputContents}></InputBar>
-      <FileUploading {...fileUploadState}></FileUploading>
+      {isShareMode ? (
+        <div style={{ padding: '16px' }}>
+          <ShareButton disabled={selectedItems.length <= 0} onClick={handleShareChat}>
+            {isExporting ? (
+              <Lottie animationData={Spinner} loop play style={{ width: 27, height: 27 }} />
+            ) : (
+              <span>{'링크 생성 및 복사'}</span>
+            )}
+          </ShareButton>
+        </div>
+      ) : (
+        <>
+          <InputBar
+            novaHistory={novaHistory}
+            disabled={creating == 'NOVA'}
+            expiredNOVA={expiredNOVA}
+            onSubmit={createNovaSubmitHandler}
+            contents={inputContents}
+            setContents={setInputContents}></InputBar>
+          <FileUploading {...fileUploadState}></FileUploading>
+        </>
+      )}
+
       {imagePreview && novaHistory.length > 0 && (
         <ImagePreview {...imagePreview} onClose={() => setImagePreview(null)}></ImagePreview>
       )}

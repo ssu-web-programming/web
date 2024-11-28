@@ -40,6 +40,7 @@
     "react-i18next": "^12.2.0",
     "react-image-file-resizer": "^0.4.8",
     "react-konva": "^18.2.10",
+    "react-lottie-player": "^2.1.0",
     "react-player": "^2.16.0",
     "react-redux": "^8.0.5",
     "react-resizable": "^3.0.5",

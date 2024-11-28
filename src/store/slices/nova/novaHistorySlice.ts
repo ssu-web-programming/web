@@ -28,13 +28,30 @@ export type NovaChatType = {
   files?: NovaFileInfo[];
 };
 
+export type NovaHistoryState = {
+  chatHistory: NovaChatType[];
+  selectedItems: string[];
+  isShareMode: boolean;
+  isExporting: boolean;
+};
+
+const initialState: NovaHistoryState = {
+  chatHistory: [],
+  selectedItems: [],
+  isShareMode: false,
+  isExporting: false
+};
+
 const novaHistorySlice = createSlice({
   name: 'novaHistory',
-  initialState: [] as NovaChatType[],
+  initialState,
   reducers: {
-    initNovaHistory: () => [],
+    initNovaHistory: (state) => {
+      state.chatHistory = [];
+      state.selectedItems = [];
+    },
     pushChat: (state, action: PayloadAction<Omit<NovaChatType, 'status' | 'askType'>>) => {
-      state.push({ ...action.payload, status: 'request', askType: '' });
+      state.chatHistory.push({ ...action.payload, status: 'request', askType: '' });
     },
     appendChatOutput: (
       state,
@@ -42,39 +59,55 @@ const novaHistorySlice = createSlice({
         Pick<NovaChatType, 'id' | 'output' | 'vsId' | 'threadId' | 'askType' | 'expiredTime'>
       >
     ) => {
-      return state.map((chat) =>
-        chat.id === action.payload.id
-          ? {
-              ...chat,
-              ...action.payload,
-              output: chat.output + action.payload.output,
-              status: 'stream'
-            }
-          : chat
-      );
+      const chat = state.chatHistory.find((chat) => chat.id === action.payload.id);
+      if (chat) {
+        chat.output += action.payload.output;
+        chat.vsId = action.payload.vsId;
+        chat.threadId = action.payload.threadId;
+        chat.askType = action.payload.askType;
+        chat.expiredTime = action.payload.expiredTime;
+        chat.status = 'stream';
+      }
     },
     addChatOutputRes: (state, action: PayloadAction<Pick<NovaChatType, 'id' | 'res'>>) => {
-      return state.map((chat) =>
-        chat.id === action.payload.id
-          ? {
-              ...chat,
-              res: action.payload.res
-            }
-          : chat
-      );
+      const chat = state.chatHistory.find((chat) => chat.id === action.payload.id);
+      if (chat) {
+        chat.res = action.payload.res;
+      }
     },
     updateChatStatus: (state, action: PayloadAction<Pick<NovaChatType, 'id' | 'status'>>) => {
-      return state.map((chat) =>
-        chat.id === action.payload.id
-          ? {
-              ...chat,
-              status: action.payload.status
-            }
-          : chat
-      );
+      const chat = state.chatHistory.find((chat) => chat.id === action.payload.id);
+      if (chat) {
+        chat.status = action.payload.status;
+      }
     },
     removeChat: (state, action: PayloadAction<NovaChatType['id']>) => {
-      return state.filter((chat) => chat.id !== action.payload);
+      state.chatHistory = state.chatHistory.filter((chat) => chat.id !== action.payload);
+    },
+    toggleItemSelection: (state, action: PayloadAction<string>) => {
+      const itemId = action.payload;
+      if (state.selectedItems.includes(itemId)) {
+        state.selectedItems = state.selectedItems.filter((id) => id !== itemId);
+      } else {
+        state.selectedItems.push(itemId);
+      }
+    },
+    selectAllItems: (state) => {
+      state.selectedItems = state.chatHistory.flatMap((chat) => {
+        const threadId = chat.id;
+        if (!threadId) return [];
+
+        return [`q:${threadId}`, `a:${threadId}`];
+      });
+    },
+    deselectAllItems: (state) => {
+      state.selectedItems = [];
+    },
+    setIsShareMode: (state, action: PayloadAction<boolean>) => {
+      state.isShareMode = action.payload;
+    },
+    setIsExporting: (state, action: PayloadAction<boolean>) => {
+      state.isExporting = action.payload;
     }
   }
 });
@@ -82,10 +115,20 @@ const novaHistorySlice = createSlice({
 export const {
   initNovaHistory,
   pushChat,
-  appendChatOutput,
   addChatOutputRes,
+  appendChatOutput,
   updateChatStatus,
-  removeChat
+  removeChat,
+  toggleItemSelection,
+  selectAllItems,
+  deselectAllItems,
+  setIsShareMode,
+  setIsExporting
 } = novaHistorySlice.actions;
-export const novaHistorySelector = (state: RootState) => state.novaHistory;
+
+export const novaHistorySelector = (state: RootState) => state.novaHistory.chatHistory;
+export const selectedItemsSelector = (state: RootState) => state.novaHistory.selectedItems;
+export const isShareModeSelector = (state: RootState) => state.novaHistory.isShareMode;
+export const isExportingSelector = (state: RootState) => state.novaHistory.isExporting;
+
 export default novaHistorySlice.reducer;
