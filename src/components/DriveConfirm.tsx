@@ -1,23 +1,55 @@
 import { useEffect, useRef } from 'react';
-import { ConfirmBox, ContentArea, Footer, Header } from 'components/Confirm';
+import { ContentArea, Footer, Header } from 'components/Confirm';
 import styled, { css } from 'styled-components';
+import { isMobile } from 'util/bridge';
 
-import icClose from '../img/ico_ai_close.svg';
+// import icBack from '../img/ico_back.svg';
+import icBack from '../img/ico_arrow_left.svg';
+import icClose from '../img/ico_nova_close.svg';
 
 import Button from './buttons/Button';
 import Blanket from './Blanket';
 import Icon from './Icon';
 
-const Wrapper = styled(ConfirmBox)`
+const ConfirmBox = styled.div<{
+  $isMobile: boolean;
+}>`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  min-width: 328px;
+  max-width: ${({ $isMobile }) => ($isMobile ? '100%' : '343px')};
+  box-shadow: 0px 8px 16px 0px #0000001a;
+  background-color: #fff;
+  border-radius: ${({ $isMobile }) => ($isMobile ? '0px' : '10px')};
+  z-index: 100;
+  max-height: 100vh;
+  height: fit-content;
+`;
+
+const Wrapper = styled(ConfirmBox)<{
+  $isMobile: boolean;
+}>`
   position: fixed;
   margin: auto;
-  height: 506px;
+  height: ${({ $isMobile }) => ($isMobile ? '100%' : '506px')};
 `;
 
 const Title = styled.p`
   margin: 0;
   font-size: 16px;
   line-height: 24px;
+`;
+const MobileHeaderContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
 `;
 
 const HeaderContainer = styled.div`
@@ -63,12 +95,20 @@ const DriveConfirm = (props: DriveConfirmType) => {
   return (
     <>
       <Blanket />
-      <Wrapper>
+      <Wrapper $isMobile={isMobile}>
         <Header ref={headerRef}>
-          <HeaderContainer>
-            <Title>{title}</Title>
-            <Icon size={32} iconSrc={icClose} onClick={onCancel?.callback} />
-          </HeaderContainer>
+          {/* 모바일에서는 뒤로가기 버튼 , 웹에서는 X버튼을 만족시켜야함! */}
+          {isMobile ? (
+            <MobileHeaderContainer>
+              <Icon size={16} iconSrc={icBack} onClick={onCancel?.callback} />
+              <Title>{title}</Title>
+            </MobileHeaderContainer>
+          ) : (
+            <HeaderContainer>
+              <Title>{title}</Title>
+              <Icon size={32} iconSrc={icClose} onClick={onCancel?.callback} />
+            </HeaderContainer>
+          )}
         </Header>
         <ContentArea ref={contentsRef}>{msg}</ContentArea>
         <Footer direction={direction} ref={footerRef}>

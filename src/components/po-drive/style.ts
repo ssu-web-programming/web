@@ -151,4 +151,11 @@ const ItemWrapper = styled.div`
   cursor: pointer;
 `;
 
-export { FileItem, FileList, ItemWrapper, Navi, NoFile, SubTitle, Wrapper };
+const SpinnerWrapper = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
+
+export { FileItem, FileList, ItemWrapper, Navi, NoFile, SpinnerWrapper, SubTitle, Wrapper };

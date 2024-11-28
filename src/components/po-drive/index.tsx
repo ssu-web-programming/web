@@ -7,7 +7,6 @@ import { getFileIcon } from 'components/nova/InputBar';
 import Select from 'components/select';
 import { getMaxFileSize } from 'constants/fileTypes';
 import { ReactComponent as IconRight } from 'img/angle_right.svg';
-import file_loading from 'img/file_loading.svg';
 import ico_file_folder from 'img/ico_file_folder.svg';
 import ico_file_inbox from 'img/ico_file_inbox.svg';
 import ico_file_poDrive from 'img/ico_file_po_drive.svg';
@@ -18,6 +17,8 @@ import { NOVA_TAB_TYPE, selectTabSlice } from 'store/slices/tabSlice';
 import { activeToast } from 'store/slices/toastSlice';
 import { DriveFileInfo } from 'store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from 'store/store';
+
+import LoadingSpinner from '../../img/spinner.webp';
 
 import * as S from './style';
 
@@ -88,12 +89,13 @@ export default function PoDrive(props: PoDriveProps) {
 
   const moveFolder = async (fileId: DriveFileInfo['fileId']) => {
     const list = await getFileList({ target: props.target, setState: setState, fileId: fileId });
-    setFilelist(list);
+    const sortedResult = sortedFileList(selectedOption, list);
+
+    setFilelist(sortedResult!);
   };
 
   const initFileList = async () => {
     const list = await getFileList({ target: props.target, setState: setState });
-    // 초기에는 항상 최신상태를 유지해야한다.
     setFilelist(sortedLatestOrOldestFileList('latest', list));
   };
 
@@ -126,8 +128,10 @@ export default function PoDrive(props: PoDriveProps) {
     });
   };
 
-  const sortedNameAscOrDescFileList = (type: 'name_asc' | 'name_desc') => {
-    return filelist.sort((a, b) => {
+  const sortedNameAscOrDescFileList = (type: 'name_asc' | 'name_desc', files?: DriveFileInfo[]) => {
+    const targetFileList = files || filelist;
+
+    return targetFileList.sort((a, b) => {
       if (a.fileName === 'Inbox') return -1;
       if (b.fileName === 'Inbox') return 1;
 
@@ -138,8 +142,10 @@ export default function PoDrive(props: PoDriveProps) {
     });
   };
 
-  const sortedSizeAscOrDescFileList = (type: 'size_asc' | 'size_desc') => {
-    return filelist.sort((a, b) => {
+  const sortedSizeAscOrDescFileList = (type: 'size_asc' | 'size_desc', files?: DriveFileInfo[]) => {
+    const targetFileList = files || filelist;
+
+    return targetFileList.sort((a, b) => {
       if (a.fileName === 'Inbox') return -1;
       if (b.fileName === 'Inbox') return 1;
 
@@ -150,20 +156,17 @@ export default function PoDrive(props: PoDriveProps) {
     });
   };
 
-  const sortedFileList = (value: OptionValues) => {
+  const sortedFileList = (value: OptionValues, files?: DriveFileInfo[]) => {
     if (value === 'latest' || value === 'oldest') {
-      sortedLatestOrOldestFileList(value);
-      return;
+      return sortedLatestOrOldestFileList(value, files);
     }
 
     if (value === 'name_asc' || value === 'name_desc') {
-      sortedNameAscOrDescFileList(value);
-      return;
+      return sortedNameAscOrDescFileList(value, files);
     }
 
     if (value === 'size_asc' || value === 'size_desc') {
-      sortedSizeAscOrDescFileList(value);
-      return;
+      return sortedSizeAscOrDescFileList(value, files);
     }
   };
 
@@ -176,7 +179,6 @@ export default function PoDrive(props: PoDriveProps) {
   };
 
   useEffect(() => {
-    console.log('useEffect!!');
     initFileList();
     dispatch(
       activeToast({
@@ -240,7 +242,7 @@ export default function PoDrive(props: PoDriveProps) {
       </S.SubTitle>
       <S.FileList>
         {state === 'none' &&
-          filelist.map((item) => {
+          filelist?.map((item) => {
             const date = new Date(item.lastModified * 1000);
             return (
               <S.FileItem
@@ -282,7 +284,7 @@ export default function PoDrive(props: PoDriveProps) {
             );
           })}
 
-        {state === 'none' && filelist.length === 0 && (
+        {state === 'none' && filelist?.length === 0 && (
           <S.NoFile>
             {props.target === 'nova-file' ? (
               <IconUploadDocs width={56} height={56} color="var(--gray-gray-40)" />
@@ -298,11 +300,9 @@ export default function PoDrive(props: PoDriveProps) {
         )}
 
         {state === 'request' && (
-          <img
-            src={file_loading}
-            alt="loading"
-            style={{ display: 'block', position: 'absolute', top: 0, left: 0, height: '100%' }}
-          />
+          <S.SpinnerWrapper>
+            <Icon iconSrc={LoadingSpinner} size={50} />
+          </S.SpinnerWrapper>
         )}
       </S.FileList>
     </S.Wrapper>
