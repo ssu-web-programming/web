@@ -153,7 +153,8 @@ export default function AIChat() {
 
   useEffect(() => {
     if (location.state) {
-      setInputContents(location.state.body);
+      const { inputText } = location.state.body;
+      setInputContents(inputText);
     }
   }, [location.state]);
 
