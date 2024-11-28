@@ -8,7 +8,7 @@ export const useShowCreditToast = () => {
   const dispatch = useAppDispatch();
 
   return function (consumed: string, left: string, type = 'common') {
-    const leftCredit = left === '-1' ? t('Unlimited') : left;
+    const leftCredit = left === '-1' ? t('Unlimited') : Number(left).toLocaleString();
     dispatch(
       activeToast({
         type: 'info',
