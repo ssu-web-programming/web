@@ -36,19 +36,19 @@ type FileUploaderProps = {
   children: React.ReactNode;
   inputRef: RefObject<HTMLInputElement>;
   tooltipStyle?: React.CSSProperties;
+  onFinish?: () => void;
 };
 
 export const FileUploader = (props: FileUploaderProps) => {
-  const { target, accept, children, inputRef, tooltipStyle } = props;
+  const { target, accept, children, inputRef, tooltipStyle, onFinish } = props;
 
-  const { loadLocalFile } = useManageFile();
+  const { loadLocalFile, getFileInfo } = useManageFile(onFinish);
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const confirm = useConfirm();
   const chatNova = useChatNova();
   const { getAvailableFileCnt, calcAvailableFileCnt } = useUserInfoUtils();
   const currentFile = useAppSelector(getCurrentFile);
-  const { getFileInfo } = useManageFile();
   const { platform, version } = useAppSelector(platformInfoSelector);
 
   const [isOpen, setIsOpen] = useState(false);
@@ -71,6 +71,8 @@ export const FileUploader = (props: FileUploaderProps) => {
         icon: { src: ico_logo_po },
         onClick: async () => {
           if (isAgreed || selectedNovaTab !== 'aiChat') {
+            console.log('onClick!!!');
+
             setUploadTarget(target);
             toggleDriveConfirm();
           }
@@ -106,6 +108,7 @@ export const FileUploader = (props: FileUploaderProps) => {
             // #IOS-5525 ios webp 파일 단일 선택 시 특정 버전에서 error가 발생하므로, 무조건 multiple로 지원하도록 수정함
             element.multiple =
               selectedNovaTab === NOVA_TAB_TYPE.aiChat || platform === ClientType.ios;
+
             element.click();
           }
         }
@@ -338,7 +341,9 @@ export const FileUploader = (props: FileUploaderProps) => {
           <FileButton
             target={target}
             accept={getAccept(accept)}
-            handleOnChange={(files) => loadLocalFile(files)}
+            handleOnChange={(files) => {
+              loadLocalFile(files);
+            }}
             ref={inputRef}>
             {children}
           </FileButton>

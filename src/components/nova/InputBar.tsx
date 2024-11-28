@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import IconButton from 'components/buttons/IconButton';
 import Icon from 'components/Icon';
 import { ReactComponent as DeleteIcon } from 'img/ico_delete.svg';
@@ -24,6 +24,7 @@ import styled, { css } from 'styled-components';
 import { sliceFileName } from 'util/common';
 
 import { getValidExt, SUPPORT_DOCUMENT_TYPE } from '../../constants/fileTypes';
+import ico_plus_circle from '../../img/ico_plus_circle.svg';
 import { ReactComponent as DocsPlusIcon } from '../../img/ico_upload_docs_plus.svg';
 import { ReactComponent as ImagePlusIcon } from '../../img/ico_upload_img_plus.svg';
 import LoadingSpinner from '../../img/spinner.webp';
@@ -108,20 +109,6 @@ const FileItem = styled.div`
   }
 `;
 
-// const InputBtnWrapper = styled.div`
-//   width: 100%;
-//   height: 46px;
-//   padding: 0 16px;
-//   ${flexCenter};
-//   justify-content: space-between;
-//   gap: 8px;
-// `;
-
-// const IconBtnWrapper = styled.div`
-//   width: 36px;
-//   height: 36px;
-// `;
-
 const InputTxtWrapper = styled.div<{ hasValue: boolean }>`
   width: 100%;
   min-height: 40px;
@@ -190,6 +177,10 @@ const TextArea = styled.textarea<{ value: string }>`
   }
 `;
 
+const PlusIconWrapper = styled.div`
+  margin-bottom: 6px;
+`;
+
 export interface InputBarSubmitParam extends Pick<NovaChatType, 'input' | 'type'> {
   files?: File[] | DriveFileInfo[];
 }
@@ -216,6 +207,16 @@ export default function InputBar(props: InputBarProps) {
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const inputDocsFileRef = useRef<HTMLInputElement | null>(null);
   const inputImgFileRef = useRef<HTMLInputElement | null>(null);
+
+  const [activatedUploadBtn, setActivatedUploadBtn] = useState(false);
+
+  const handleActiveUploadBtn = () => {
+    setActivatedUploadBtn(true);
+  };
+
+  const handleInActiveUploadBtn = () => {
+    setActivatedUploadBtn(false);
+  };
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const inputText = event.target.value;
@@ -339,18 +340,25 @@ export default function InputBar(props: InputBarProps) {
       )}
       <InputTxtWrapper hasValue={!!contents}>
         <div>
-          <UploadBtn>
-            {UPLOAD_BTN_LIST.map((btn) => (
-              <FileUploader
-                key={btn.target}
-                target={btn.target}
-                accept={btn.accept}
-                inputRef={btn.ref}
-                tooltipStyle={{ padding: '12px 16px' }}>
-                {btn.children}
-              </FileUploader>
-            ))}
-          </UploadBtn>
+          {activatedUploadBtn ? (
+            <UploadBtn>
+              {UPLOAD_BTN_LIST.map((btn) => (
+                <FileUploader
+                  key={btn.target}
+                  target={btn.target}
+                  accept={btn.accept}
+                  inputRef={btn.ref}
+                  tooltipStyle={{ padding: '12px 16px' }}
+                  onFinish={handleInActiveUploadBtn}>
+                  {btn.children}
+                </FileUploader>
+              ))}
+            </UploadBtn>
+          ) : (
+            <PlusIconWrapper onClick={handleActiveUploadBtn}>
+              <Icon iconSrc={ico_plus_circle} size={30} />
+            </PlusIconWrapper>
+          )}
         </div>
         <div>
           <TextArea
@@ -367,6 +375,9 @@ export default function InputBar(props: InputBarProps) {
                   e.preventDefault();
                 }
               }
+            }}
+            onFocus={() => {
+              handleInActiveUploadBtn();
             }}
           />
         </div>
