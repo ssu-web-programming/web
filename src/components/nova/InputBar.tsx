@@ -158,7 +158,6 @@ const TextArea = styled.textarea<{ value: string }>`
   display: flex;
   width: 100%;
   height: 40px;
-  max-height: 140px;
   padding: 0;
   box-sizing: border-box;
   background: white;
@@ -178,6 +177,16 @@ const TextArea = styled.textarea<{ value: string }>`
 
   &::placeholder {
     color: ${({ value }) => (value ? 'transparent' : '#aaa')};
+  }
+
+  @media screen and (orientation: portrait) {
+    /* 세로 모드 스타일 */
+    max-height: 140px;
+  }
+
+  @media screen and (orientation: landscape) {
+    /* 가로 모드 스타일 */
+    max-height: 60px;
   }
 `;
 
