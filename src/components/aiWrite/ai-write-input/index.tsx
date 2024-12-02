@@ -1,26 +1,25 @@
-import { ReactNode, useState } from 'react';
+import { useState } from 'react';
 import Button from 'components/buttons/Button';
 import IconBoxTextButton from 'components/buttons/IconBoxTextButton';
-import IconTextButton, { Chip } from 'components/buttons/IconTextButton';
+import IconTextButton from 'components/buttons/IconTextButton';
 import ShowResultButton from 'components/buttons/ShowResultButton';
-import { formRecList, lengthList, WriteOptions } from 'components/chat/RecommendBox/FormRec';
+import {
+  EngineVersion,
+  formRecList,
+  lengthList,
+  WriteOptions
+} from 'components/chat/RecommendBox/FormRec';
 import ExTextbox from 'components/ExTextbox';
-import Icon from 'components/Icon';
 import Grid from 'components/layout/Grid';
-import { filterCreditInfo } from 'components/nova/Header';
-import Select, { SelectOption } from 'components/select';
 import SubTitle from 'components/SubTitle';
-import { CREDIT_DESCRITION_MAP, CREDIT_NAME_MAP } from 'constants/credit';
-import icon_credit_gray from 'img/ico_credit_gray.svg';
+import { VERSION_MAP } from 'constants/credit';
 import { useTranslation } from 'react-i18next';
-import { creditInfoSelector } from 'store/slices/creditInfo';
 import { setCurrentWrite, WriteType } from 'store/slices/writeHistorySlice';
-import { useAppDispatch, useAppSelector } from 'store/store';
+import { useAppDispatch } from 'store/store';
 import { css } from 'styled-components';
 import { getIconColor } from 'util/getColor';
 import { exampleList, RowBox } from 'views/AIChatTab';
 
-import icon_write from '../../../img/ico_creating_text_white.svg';
 import icon_credit_outline from '../../../img/ico_credit_outline.svg';
 
 import ModelSelect from './model-select';
@@ -43,34 +42,20 @@ const AIWriteInput = ({
 }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const {
-    input,
-    version: selectedVersion,
-    form: selectedForm,
-    length: selectedLength
-  } = selectedOptions;
-  const [selectedOption, setSelectedOption] = useState<SelectedOption>('WRITE_GPT4O');
-  const creditInfo = useAppSelector(creditInfoSelector);
+  const { input, form: selectedForm, length: selectedLength } = selectedOptions;
+  const [modelSelectedOption, setModelSelectedOption] = useState<SelectedOption>('WRITE_GPT4O');
 
-  const credit = filterCreditInfo(creditInfo, CREDIT_NAME_MAP).reduce(
-    (acc, cur) => {
-      acc[CREDIT_NAME_MAP[cur.serviceType]] = cur;
-      return acc;
-    },
-    {} as { [key: string]: any }
-  );
-
-  const convertedCredit = filterCreditInfo(creditInfo, CREDIT_NAME_MAP).map((el) => ({
-    ...el,
-    title: CREDIT_NAME_MAP[el.serviceType],
-    desc: CREDIT_DESCRITION_MAP[el.serviceType]
-  }));
-
-  const handleChangeOption = (value: any) => {
-    setSelectedOption(value);
+  const handleChangeOption = (value: SelectedOption) => {
+    setSelectedOptions({
+      ...selectedOptions,
+      version: {
+        ...selectedOptions.version,
+        version: VERSION_MAP[value] as EngineVersion,
+        id: VERSION_MAP[value] as EngineVersion
+      }
+    });
+    setModelSelectedOption(value);
   };
-
-  console.log('convertedCredit', convertedCredit);
 
   return (
     <S.WriteInputPage>
@@ -100,64 +85,7 @@ const AIWriteInput = ({
         {/* 호진FIXME: 다국어 관련 작업 진행 예정 */}
         <SubTitle subTitle={t(`WriteTab.SelectVersion`)} />
 
-        <ModelSelect selectedOption={selectedOption} onChangeOption={handleChangeOption} />
-        {/* <Grid col={3}>
-          {versionList.slice(0, 3).map((cur) => (
-            <IconTextButton
-              width="full"
-              variant="gray"
-              key={cur.version}
-              cssExt={css`
-                padding: 4px 12px;
-
-                > div {
-                  justify-content: space-between;
-                }
-              `}
-              onClick={() => setSelectedOptions((prev) => ({ ...prev, version: cur }))}
-              selected={selectedVersion.version === cur.version}
-              iconSrc={
-                <Chip iconSrc={icon_credit_gray}>
-                  <span>{credit[cur.id]?.deductCredit}</span>
-                </Chip>
-              }
-              iconPos="end">
-              <VersionInner>
-                {cur.id}
-                {cur.id === 'GPT 4o' && <NewMark></NewMark>}
-              </VersionInner>
-            </IconTextButton>
-          ))}
-        </Grid> */}
-        {/* <Grid col={3}>
-          {versionList.slice(3, 5).map((cur) => (
-            <IconTextButton
-              width="full"
-              variant="gray"
-              key={cur.version}
-              cssExt={css`
-                padding: 4px 12px;
-                grid-column: ${cur.id === 'Claude 3.5 Sonnet' ? '2 / 4' : '1 / 2'};
-
-                > div {
-                  justify-content: space-between;
-                }
-              `}
-              onClick={() => setSelectedOptions((prev) => ({ ...prev, version: cur }))}
-              selected={selectedVersion.version === cur.version}
-              iconSrc={
-                <Chip iconSrc={icon_credit_gray}>
-                  <span>{credit[cur.id]?.deductCredit}</span>
-                </Chip>
-              }
-              iconPos="end">
-              <VersionInner>
-                {cur.id}
-                {cur.id === 'Claude 3.5 Sonnet' && <NewMark></NewMark>}
-              </VersionInner>
-            </IconTextButton>
-          ))}
-        </Grid> */}
+        <ModelSelect selectedOption={modelSelectedOption} onChangeOption={handleChangeOption} />
       </S.TitleInputSet>
       <S.TitleInputSet>
         {/* 호진FIXME: 다국어 관련 작업 진행 예정 */}
@@ -172,8 +100,21 @@ const AIWriteInput = ({
               iconSize="md"
               onClick={() => setSelectedOptions((prev) => ({ ...prev, form: form }))}
               selected={selectedForm ? (selectedForm.id === form.id ? true : false) : false}
-              iconSrc={<form.icon color={getIconColor(form.id, selectedForm.id)} />}>
-              {t(`FormList.${form.id}`)}
+              iconSrc={<form.icon color={getIconColor(form.id, selectedForm.id)} />}
+              iconPos="top"
+              innerText
+              cssExt={css`
+                height: 69px;
+                border-radius: 8px;
+              `}>
+              <p
+                style={{
+                  lineHeight: '21px',
+                  fontSize: 14,
+                  paddingTop: '4px'
+                }}>
+                {t(`FormList.${form.id}`)}
+              </p>
             </IconBoxTextButton>
           ))}
         </Grid>
@@ -190,7 +131,14 @@ const AIWriteInput = ({
               onClick={() => setSelectedOptions((prev) => ({ ...prev, length: length }))}
               selected={
                 selectedLength ? (selectedLength.length === length.length ? true : false) : false
-              }>
+              }
+              cssExt={css`
+                padding: 8px;
+                line-height: 24px;
+                font-size: 16px;
+                height: 40px;
+                border-radius: 8px;
+              `}>
               {t(`WriteTab.Length.${length.id}`)}
             </Button>
           ))}
@@ -200,17 +148,17 @@ const AIWriteInput = ({
       <IconTextButton
         width="full"
         disable={input.length === 0}
-        variant="purpleGradient"
+        variant={input.length === 0 ? 'darkGray' : 'purple'}
         cssExt={css`
           padding-top: 4px;
           height: 40px;
+          border-radius: 8px;
         `}
         onClick={() => submitSubject()}
         iconSrc={icon_credit_outline}
         iconPos="end"
         iconSize={18}>
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-          <Icon size="sm" iconSrc={icon_write}></Icon>
           {t(`WriteTab.WritingArticle`)}
         </div>
       </IconTextButton>

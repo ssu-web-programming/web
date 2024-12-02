@@ -1,20 +1,20 @@
-import styled, { FlattenSimpleInterpolation } from 'styled-components';
+import styled, { css, FlattenSimpleInterpolation } from 'styled-components';
 
 const SelectContainer = styled.div<{
   width?: string;
-  containerStyle?: FlattenSimpleInterpolation;
-  selected?: boolean;
+  $containerStyle?: FlattenSimpleInterpolation;
+  $stylesSelectedOption?: boolean;
 }>`
   position: relative;
   width: ${({ width }) => width || '100%'};
 
-  ${({ containerStyle }) => containerStyle && containerStyle}
+  ${({ $containerStyle }) => $containerStyle && $containerStyle}
 `;
 
 const SelectButton = styled.button<{
   isOpen: boolean;
-  selected?: boolean;
-  selectButtonStyle?: FlattenSimpleInterpolation;
+  $selectButtonStyle?: FlattenSimpleInterpolation;
+  $stylesSelectedOption?: boolean;
 }>`
   position: relative;
   width: 100%;
@@ -25,23 +25,28 @@ const SelectButton = styled.button<{
   outline: none;
   padding: 0px;
 
-  background: ${({ selected }) => (selected ? '#EDE5FE' : '#F2F4F6')};
-  border: 1px solid ${({ selected }) => (selected ? '#EDE5FE' : '#EDE5FE')};
-  box-shadow: ${({ selected }) =>
-    selected ? `0 0 0 1px var(--ai-purple-80-sub) inset` : `0 0 0 1px transparent inset`};
+  ${({ $stylesSelectedOption }) =>
+    $stylesSelectedOption &&
+    css`
+      background: #ede5fe;
+      border: 1px solid #ede5fe;
+      box-shadow: 0 0 0 1px var(--ai-purple-80-sub) inset;
+    `}
 
   & p:nth-child(1) {
     font-size: 16px !important;
-    font-weight: ${({ selected }) => (selected ? 700 : 500)} !important;
-    color: ${({ selected }) => (selected ? '#6F3AD0' : '#454c53')} !important;
+    font-weight: ${({ $stylesSelectedOption }) => ($stylesSelectedOption ? 700 : 500)} !important;
+    color: ${({ $stylesSelectedOption }) =>
+      $stylesSelectedOption ? '#6F3AD0' : '#454c53'} !important;
   }
 
   & p:nth-child(2) {
     font-size: 12px !important;
-    color: ${({ selected }) => (selected ? '#6F3AD0' : '#72787f')} !important;
+    color: ${({ $stylesSelectedOption }) =>
+      $stylesSelectedOption ? '#6F3AD0' : '#72787f'} !important;
   }
 
-  ${({ selectButtonStyle }) => selectButtonStyle && selectButtonStyle}
+  ${({ $selectButtonStyle }) => $selectButtonStyle && $selectButtonStyle}
 `;
 
 const SelectText = styled.span`
@@ -64,7 +69,7 @@ const IconWrapper = styled.span<{ isOpen: boolean; $iconStyles?: FlattenSimpleIn
   ${({ $iconStyles }) => $iconStyles && $iconStyles}
 `;
 
-const OptionsContainer = styled.div<{ optionContainerStyle?: FlattenSimpleInterpolation }>`
+const OptionsContainer = styled.div<{ $optionContainerStyle?: FlattenSimpleInterpolation }>`
   position: absolute;
   top: calc(100% + 4px);
   left: 0;
@@ -79,10 +84,13 @@ const OptionsContainer = styled.div<{ optionContainerStyle?: FlattenSimpleInterp
   width: max-content;
   padding: 8px 16px;
 
-  ${({ optionContainerStyle }) => optionContainerStyle && optionContainerStyle}
+  ${({ $optionContainerStyle }) => $optionContainerStyle && $optionContainerStyle}
 `;
 
-const Option = styled.div<{ optionStyle?: FlattenSimpleInterpolation }>`
+const Option = styled.div<{
+  $optionStyle?: FlattenSimpleInterpolation;
+  $stylesSelectedOption?: boolean;
+}>`
   padding: 8px 0px;
   cursor: pointer;
   display: flex;
@@ -94,14 +102,19 @@ const Option = styled.div<{ optionStyle?: FlattenSimpleInterpolation }>`
     border-bottom: 1px solid #e8ebed;
   }
 
+  ${({ $stylesSelectedOption }) =>
+    $stylesSelectedOption &&
+    css`
+      &:hover {
+        background: #f2f4f6;
+        border-radius: 8px;
+        padding: 8px 16px;
+      }
+    `}
   /* 호진TODO: Mobile에서도 hover가 적용되는지 확인 필요 */
-  &:hover {
-    background: #f2f4f6;
-    border-radius: 8px;
-    padding: 8px 16px;
-  }
 
-  ${({ optionStyle }) => optionStyle && optionStyle}
+
+  ${({ $optionStyle }) => $optionStyle && $optionStyle}
 `;
 
 const OptionText = styled.span`

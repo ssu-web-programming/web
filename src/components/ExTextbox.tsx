@@ -10,9 +10,7 @@ import TextLength from './TextLength';
 const InputArea = styled.div<{ activeBorder: boolean }>`
   display: flex;
   flex-direction: column;
-
-  /* margin: 10px 0px 10px; */
-  border-radius: 4px;
+  border-radius: 8px;
   height: 153px;
   border: ${({ activeBorder }: { activeBorder: boolean }) =>
     activeBorder ? 'solid 1px var(--ai-purple-50-main)' : 'solid 1px var(--gray-gray-50)'};

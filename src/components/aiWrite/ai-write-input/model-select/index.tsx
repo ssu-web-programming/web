@@ -114,30 +114,28 @@ export default function ModelSelect({ selectedOption, onChangeOption }: Props) {
     }
   }, [creditInfo, selectedOption]);
 
-  console.log('options', options);
-
   return (
     <Select
       options={options}
       onChange={onChangeOption}
       value={selectedOption}
-      iconStyles={css`
+      $iconStyles={css`
         right: 12px;
       `}
-      selectButtonStyle={css`
+      $selectButtonStyle={css`
         padding: 8px 36px 8px 16px;
       `}
-      optionContainerStyle={css`
+      $optionContainerStyle={css`
         width: 100%;
         max-height: 100vh;
         padding: 0px;
       `}
-      optionStyle={css`
+      $optionStyle={css`
         border-bottom: none !important;
         padding: 8px 16px;
         margin: 8px;
       `}
-      containerStylesSelectedOption={true}
+      $stylesSelectedOption={true}
     />
   );
 }

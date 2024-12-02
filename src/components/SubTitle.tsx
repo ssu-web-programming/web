@@ -4,7 +4,7 @@ const SubTitleWrapper = styled.div`
   display: flex;
   flex-direction: column;
 
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   line-height: 1.54;
   color: var(--gray-gray-80-02);
