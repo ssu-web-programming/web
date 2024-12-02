@@ -1,12 +1,17 @@
-import { useEffect, useState } from 'react';
-import SelectModelButton from 'components/buttons/select-model-button';
-import Select from 'components/select';
+import { ReactElement, useEffect, useState } from 'react';
+import SelectModelButton, { SelectModelButtonProps } from 'components/buttons/select-model-button';
+import Select, { SelectOption } from 'components/select';
 import { CREDIT_DESCRITION_MAP, CREDIT_NAME_MAP } from 'constants/credit';
 import { creditInfoSelector } from 'store/slices/creditInfo';
 import { useAppSelector } from 'store/store';
 import { css } from 'styled-components';
 
-const defaultOptions = [
+interface ModelSelectOption extends Omit<SelectOption<SelectedOptions>, 'component'> {
+  selected: boolean;
+  component: ReactElement<SelectModelButtonProps>;
+}
+
+const defaultOptions: ModelSelectOption[] = [
   {
     value: 'WRITE_GPT4O',
     component: (
@@ -79,9 +84,11 @@ const defaultOptions = [
   }
 ];
 
+type SelectedOptions = 'WRITE_GPT4O' | 'WRITE_GPT4' | 'GPT3' | 'WRITE_CLOVA' | 'WRITE_CLADE3';
+
 interface Props {
-  selectedOption: 'WRITE_GPT4O' | 'WRITE_GPT4' | 'GPT3' | 'WRITE_CLOVA' | 'WRITE_CLADE3';
-  onChangeOption: any;
+  selectedOption: SelectedOptions;
+  onChangeOption: (value: SelectedOptions) => void;
 }
 
 export default function ModelSelect({ selectedOption, onChangeOption }: Props) {
@@ -115,7 +122,7 @@ export default function ModelSelect({ selectedOption, onChangeOption }: Props) {
   }, [creditInfo, selectedOption]);
 
   return (
-    <Select
+    <Select<SelectedOptions>
       options={options}
       onChange={onChangeOption}
       value={selectedOption}

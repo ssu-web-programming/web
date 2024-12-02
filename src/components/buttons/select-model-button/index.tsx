@@ -18,7 +18,7 @@ type Item = {
   creditValue?: string;
 };
 
-type Props = {
+export type SelectModelButtonProps = {
   item: Item;
   selected?: boolean;
   hideSelectedStyles?: boolean;
@@ -31,7 +31,7 @@ export default function SelectModelButton({
   onClick,
   buttonStyle,
   hideSelectedStyles = false
-}: Props) {
+}: SelectModelButtonProps) {
   return (
     <S.StyledButton
       selected={selected}
