@@ -33,9 +33,9 @@
   "WriteTab": {
     "WriteTopic": "주제 작성하기",
     "WriteTextboxPlacehold": "작성할 글의 주제를 입력하세요",
-    "SelectVersion": "버전 선택",
-    "SelectForm": "글 형식 정하기",
-    "SelectResultLength": "작성 될 글자 수 선택하기 (공백포함)",
+    "SelectVersion": "모델 선택",
+    "SelectForm": "글 형식 선택",
+    "SelectResultLength": "작성 길이 선택(공백 포함)",
     "Length": {
       "Short": "짧게",
       "Medium": "보통",

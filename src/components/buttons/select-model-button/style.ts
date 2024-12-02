@@ -1,13 +1,28 @@
-import styled from 'styled-components';
+import styled, { css, FlattenSimpleInterpolation } from 'styled-components';
 
-const StyledButton = styled.button<{ selected: boolean }>`
+const StyledButton = styled.button<{
+  selected: boolean;
+  buttonStyle?: FlattenSimpleInterpolation;
+  hideSelectedStyles?: boolean;
+}>`
   width: 100%;
   padding: 8px 16px;
   border-radius: 8px;
-  background: ${({ selected }) => (selected ? '#EDE5FE' : '#F2F4F6')};
-  border: 1px solid ${({ selected }) => (selected ? '#EDE5FE' : '#EDE5FE')};
-  box-shadow: ${({ selected }) =>
-    selected ? `0 0 0 1px var(--ai-purple-80-sub) inset` : `0 0 0 1px transparent inset`};
+
+  ${({ selected, hideSelectedStyles }) =>
+    hideSelectedStyles
+      ? css`
+          background: transparent;
+        `
+      : css`
+          background: ${selected ? '#EDE5FE' : '#F2F4F6'};
+          border: 1px solid ${selected ? '#EDE5FE' : '#EDE5FE'};
+          box-shadow: ${selected
+            ? `0 0 0 1px var(--ai-purple-80-sub) inset`
+            : `0 0 0 1px transparent inset`};
+        `}
+
+  ${({ buttonStyle }) => buttonStyle && buttonStyle}
 `;
 
 const InnerWrapper = styled.div`
@@ -35,6 +50,13 @@ const ItemWrapper = styled.div<{ selected: boolean }>`
 const IconWrapper = styled.div`
   display: flex;
   align-items: center;
+
+  & span {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 21px;
+    color: #26282b;
+  }
 `;
 
 export { IconWrapper, InnerWrapper, ItemWrapper, StyledButton };
