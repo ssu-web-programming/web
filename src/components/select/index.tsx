@@ -7,11 +7,11 @@ import * as S from './style';
 
 // 스타일 주입을 위한 인터페이스
 interface StyledProps {
-  containerStyle?: FlattenSimpleInterpolation;
-  selectButtonStyle?: FlattenSimpleInterpolation;
-  optionContainerStyle?: FlattenSimpleInterpolation;
-  optionStyle?: FlattenSimpleInterpolation;
-  iconStyles?: FlattenSimpleInterpolation;
+  $containerStyle?: FlattenSimpleInterpolation;
+  $selectButtonStyle?: FlattenSimpleInterpolation;
+  $optionContainerStyle?: FlattenSimpleInterpolation;
+  $optionStyle?: FlattenSimpleInterpolation;
+  $iconStyles?: FlattenSimpleInterpolation;
 }
 
 export interface SelectOption<T extends string> {
@@ -29,7 +29,7 @@ interface SelectProps<T extends string> extends StyledProps {
   component?: ReactNode;
 
   // 스타일 관련 옵션
-  containerStylesSelectedOption?: boolean;
+  $stylesSelectedOption?: boolean;
 }
 
 /**
@@ -46,12 +46,12 @@ export default function Select<T extends string>({
   onChange,
   placeholder,
   width,
-  containerStyle,
-  selectButtonStyle,
-  containerStylesSelectedOption,
-  optionContainerStyle,
-  optionStyle,
-  iconStyles
+  $containerStyle,
+  $selectButtonStyle,
+  $stylesSelectedOption = false,
+  $optionContainerStyle,
+  $optionStyle,
+  $iconStyles
 }: SelectProps<T>) {
   const [isOpen, setIsOpen] = useState(false);
   const selectRef = useRef<HTMLDivElement>(null);
@@ -90,8 +90,8 @@ export default function Select<T extends string>({
     <S.SelectContainer
       ref={selectRef}
       width={width}
-      containerStyle={containerStyle}
-      selected={containerStylesSelectedOption}>
+      $containerStyle={$containerStyle}
+      $stylesSelectedOption={$stylesSelectedOption}>
       <S.SelectButton
         type="button"
         isOpen={isOpen}
@@ -99,16 +99,16 @@ export default function Select<T extends string>({
         aria-expanded={isOpen}
         aria-labelledby="select-label"
         onClick={() => setIsOpen(!isOpen)}
-        selected={true}
-        selectButtonStyle={selectButtonStyle}>
+        $stylesSelectedOption={$stylesSelectedOption}
+        $selectButtonStyle={$selectButtonStyle}>
         {defaultRenderSelectedValue(selectedOption)}
-        <S.IconWrapper isOpen={isOpen} $iconStyles={iconStyles}>
+        <S.IconWrapper isOpen={isOpen} $iconStyles={$iconStyles}>
           <Icon iconSrc={icArrowDown} />
         </S.IconWrapper>
       </S.SelectButton>
 
       {isOpen && (
-        <S.OptionsContainer role="listbox" optionContainerStyle={optionContainerStyle}>
+        <S.OptionsContainer role="listbox" $optionContainerStyle={$optionContainerStyle}>
           {options.map((option, index) => (
             <S.Option
               key={option.value}
@@ -119,7 +119,8 @@ export default function Select<T extends string>({
                 onChange(option.value);
                 setIsOpen(false);
               }}
-              optionStyle={optionStyle}>
+              $optionStyle={$optionStyle}
+              $stylesSelectedOption={$stylesSelectedOption}>
               {defaultRenderOption(option)}
             </S.Option>
           ))}

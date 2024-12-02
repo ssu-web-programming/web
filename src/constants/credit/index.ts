@@ -14,4 +14,12 @@ const CREDIT_DESCRITION_MAP: { [key: string]: string } = {
   WRITE_CLADE3: '창의적인 글을 잘 쓰고 문학적 표현을 잘해요'
 };
 
-export { CREDIT_DESCRITION_MAP, CREDIT_NAME_MAP };
+const VERSION_MAP: { [key: string]: string } = {
+  WRITE_GPT4O: 'gpt4o',
+  WRITE_GPT4: 'gpt4',
+  GPT3: 'gpt3.5',
+  WRITE_CLOVA: 'clovax',
+  WRITE_CLADE3: 'claude'
+};
+
+export { CREDIT_DESCRITION_MAP, CREDIT_NAME_MAP, VERSION_MAP };
