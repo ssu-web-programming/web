@@ -151,8 +151,10 @@ const AIWriteInput = ({
         variant={input.length === 0 ? 'darkGray' : 'purple'}
         cssExt={css`
           padding-top: 4px;
-          height: 40px;
+          height: 48px;
           border-radius: 8px;
+          font-size: 16px;
+          line-height: 24px;
         `}
         onClick={() => submitSubject()}
         iconSrc={icon_credit_outline}

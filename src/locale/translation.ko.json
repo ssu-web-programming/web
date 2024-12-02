@@ -32,7 +32,7 @@
   "Select": "선택하기",
   "WriteTab": {
     "WriteTopic": "주제 작성하기",
-    "WriteTextboxPlacehold": "작성할 글의 주제를 입력하세요",
+    "WriteTextboxPlacehold": "작성할 글의 주제를 입력하세요.",
     "SelectVersion": "모델 선택",
     "SelectForm": "글 형식 선택",
     "SelectResultLength": "작성 길이 선택(공백 포함)",
