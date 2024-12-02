@@ -1,4 +1,5 @@
 import { useRef } from 'react';
+import AIWriteInput from 'components/aiWrite/ai-write-input';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
@@ -7,7 +8,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { apiWrapper, streaming } from '../api/apiWrapper';
 import { AI_WRITE_RESPONSE_STREAM_API } from '../api/constant';
 import { calcToken, parseGptVer } from '../api/usePostSplunkLog';
-import AIWriteInput from '../components/aiWrite/AIWriteInput';
 import AiWriteResult from '../components/aiWrite/AiWriteResult';
 import { EngineVersion, WriteOptions } from '../components/chat/RecommendBox/FormRec';
 import useErrorHandle from '../components/hooks/useErrorHandle';

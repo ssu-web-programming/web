@@ -1,27 +1,43 @@
 import { ButtonHTMLAttributes } from 'react';
 import icon_credit_gray from 'img/ico_credit_gray.svg';
-import { VersionType } from 'store/slices/txt2imgHistory';
+import { FlattenSimpleInterpolation } from 'styled-components';
 
 import { Chip } from '../IconTextButton';
 
 import * as S from './style';
 
+type StyledProps = {
+  buttonStyle?: FlattenSimpleInterpolation;
+};
+
 type Item = {
-  deductCredit?: number;
-  id: VersionType;
+  deductCredit?: number | string;
+  id: string;
   title: string;
   desc: string;
-  creditValue: string;
+  creditValue?: string;
 };
 
 type Props = {
   item: Item;
-  selected: boolean;
-} & ButtonHTMLAttributes<HTMLButtonElement>;
+  selected?: boolean;
+  hideSelectedStyles?: boolean;
+} & ButtonHTMLAttributes<HTMLButtonElement> &
+  StyledProps;
 
-export default function SelectModelButton({ item, selected, onClick }: Props) {
+export default function SelectModelButton({
+  item,
+  selected = false,
+  onClick,
+  buttonStyle,
+  hideSelectedStyles = false
+}: Props) {
   return (
-    <S.StyledButton selected={selected} onClick={onClick}>
+    <S.StyledButton
+      selected={selected}
+      onClick={onClick}
+      buttonStyle={buttonStyle}
+      hideSelectedStyles={hideSelectedStyles}>
       <S.InnerWrapper>
         <S.ItemWrapper selected={selected}>
           <p>{item.title}</p>
@@ -29,7 +45,7 @@ export default function SelectModelButton({ item, selected, onClick }: Props) {
         </S.ItemWrapper>
         <S.IconWrapper>
           <Chip iconSrc={icon_credit_gray} size={20}>
-            <p>{item.deductCredit}</p>
+            <span>{item.deductCredit}</span>
           </Chip>
         </S.IconWrapper>
       </S.InnerWrapper>

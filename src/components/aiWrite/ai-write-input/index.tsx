@@ -1,58 +1,32 @@
+import { ReactNode, useState } from 'react';
+import Button from 'components/buttons/Button';
+import IconBoxTextButton from 'components/buttons/IconBoxTextButton';
 import IconTextButton, { Chip } from 'components/buttons/IconTextButton';
+import ShowResultButton from 'components/buttons/ShowResultButton';
+import { formRecList, lengthList, WriteOptions } from 'components/chat/RecommendBox/FormRec';
+import ExTextbox from 'components/ExTextbox';
+import Icon from 'components/Icon';
+import Grid from 'components/layout/Grid';
+import { filterCreditInfo } from 'components/nova/Header';
+import Select, { SelectOption } from 'components/select';
+import SubTitle from 'components/SubTitle';
+import { CREDIT_DESCRITION_MAP, CREDIT_NAME_MAP } from 'constants/credit';
 import icon_credit_gray from 'img/ico_credit_gray.svg';
 import { useTranslation } from 'react-i18next';
 import { creditInfoSelector } from 'store/slices/creditInfo';
-import styled, { css } from 'styled-components';
+import { setCurrentWrite, WriteType } from 'store/slices/writeHistorySlice';
+import { useAppDispatch, useAppSelector } from 'store/store';
+import { css } from 'styled-components';
 import { getIconColor } from 'util/getColor';
+import { exampleList, RowBox } from 'views/AIChatTab';
 
-import icon_write from '../../img/ico_creating_text_white.svg';
-import icon_credit_outline from '../../img/ico_credit_outline.svg';
-import { setCurrentWrite, WriteType } from '../../store/slices/writeHistorySlice';
-import { useAppDispatch, useAppSelector } from '../../store/store';
-import { exampleList, RowBox } from '../../views/AIChatTab';
-import Button from '../buttons/Button';
-import IconBoxTextButton from '../buttons/IconBoxTextButton';
-import ShowResultButton from '../buttons/ShowResultButton';
-import { formRecList, lengthList, versionList, WriteOptions } from '../chat/RecommendBox/FormRec';
-import ExTextbox from '../ExTextbox';
-import Icon from '../Icon';
-import Grid from '../layout/Grid';
-import { filterCreditInfo } from '../nova/Header';
-import SubTitle from '../SubTitle';
+import icon_write from '../../../img/ico_creating_text_white.svg';
+import icon_credit_outline from '../../../img/ico_credit_outline.svg';
 
-const WriteInputPage = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 16px;
-  width: 100%;
-  height: 100%;
-  gap: 16px;
-`;
+import ModelSelect from './model-select';
+import * as S from './style';
 
-const InputArea = styled.div`
-  display: flex;
-
-  width: 100%;
-`;
-
-export const VersionInner = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
-
-export const NewMark = styled.div`
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  margin: 2px;
-  background-color: #fb4949;
-`;
-
-const TitleInputSet = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-`;
+type SelectedOption = 'WRITE_GPT4O' | 'WRITE_GPT4' | 'GPT3' | 'WRITE_CLOVA' | 'WRITE_CLADE3';
 
 const subjectMaxLength = 1000;
 
@@ -75,15 +49,8 @@ const AIWriteInput = ({
     form: selectedForm,
     length: selectedLength
   } = selectedOptions;
+  const [selectedOption, setSelectedOption] = useState<SelectedOption>('WRITE_GPT4O');
   const creditInfo = useAppSelector(creditInfoSelector);
-
-  const CREDIT_NAME_MAP: { [key: string]: string } = {
-    WRITE_GPT4O: 'GPT 4o',
-    WRITE_GPT4: 'GPT 4',
-    GPT3: 'GPT 3.5',
-    WRITE_CLOVA: 'CLOVA X',
-    WRITE_CLADE3: 'Claude 3.5 Sonnet'
-  };
 
   const credit = filterCreditInfo(creditInfo, CREDIT_NAME_MAP).reduce(
     (acc, cur) => {
@@ -93,9 +60,21 @@ const AIWriteInput = ({
     {} as { [key: string]: any }
   );
 
+  const convertedCredit = filterCreditInfo(creditInfo, CREDIT_NAME_MAP).map((el) => ({
+    ...el,
+    title: CREDIT_NAME_MAP[el.serviceType],
+    desc: CREDIT_DESCRITION_MAP[el.serviceType]
+  }));
+
+  const handleChangeOption = (value: any) => {
+    setSelectedOption(value);
+  };
+
+  console.log('convertedCredit', convertedCredit);
+
   return (
-    <WriteInputPage>
-      <TitleInputSet>
+    <S.WriteInputPage>
+      <S.TitleInputSet>
         <RowBox>
           <SubTitle subTitle={t(`WriteTab.WriteTopic`)} />
           <ShowResultButton
@@ -106,7 +85,7 @@ const AIWriteInput = ({
             }}
           />
         </RowBox>
-        <InputArea>
+        <S.InputArea>
           <ExTextbox
             exampleList={exampleList}
             maxTextLen={subjectMaxLength}
@@ -115,11 +94,14 @@ const AIWriteInput = ({
             setValue={(val: string) => {
               setSelectedOptions((prev) => ({ ...prev, input: val }));
             }}></ExTextbox>
-        </InputArea>
-      </TitleInputSet>
-      <TitleInputSet>
+        </S.InputArea>
+      </S.TitleInputSet>
+      <S.TitleInputSet>
+        {/* 호진FIXME: 다국어 관련 작업 진행 예정 */}
         <SubTitle subTitle={t(`WriteTab.SelectVersion`)} />
-        <Grid col={3}>
+
+        <ModelSelect selectedOption={selectedOption} onChangeOption={handleChangeOption} />
+        {/* <Grid col={3}>
           {versionList.slice(0, 3).map((cur) => (
             <IconTextButton
               width="full"
@@ -146,8 +128,8 @@ const AIWriteInput = ({
               </VersionInner>
             </IconTextButton>
           ))}
-        </Grid>
-        <Grid col={3}>
+        </Grid> */}
+        {/* <Grid col={3}>
           {versionList.slice(3, 5).map((cur) => (
             <IconTextButton
               width="full"
@@ -175,9 +157,10 @@ const AIWriteInput = ({
               </VersionInner>
             </IconTextButton>
           ))}
-        </Grid>
-      </TitleInputSet>
-      <TitleInputSet>
+        </Grid> */}
+      </S.TitleInputSet>
+      <S.TitleInputSet>
+        {/* 호진FIXME: 다국어 관련 작업 진행 예정 */}
         <SubTitle subTitle={t(`WriteTab.SelectForm`)} />
         <Grid col={formRecList.length}>
           {formRecList.map((form) => (
@@ -194,8 +177,9 @@ const AIWriteInput = ({
             </IconBoxTextButton>
           ))}
         </Grid>
-      </TitleInputSet>
-      <TitleInputSet>
+      </S.TitleInputSet>
+      <S.TitleInputSet>
+        {/* 호진FIXME: 다국어 관련 작업 진행 예정 */}
         <SubTitle subTitle={t(`WriteTab.SelectResultLength`)} />
         <Grid col={3}>
           {lengthList.map((length, index) => (
@@ -211,7 +195,7 @@ const AIWriteInput = ({
             </Button>
           ))}
         </Grid>
-      </TitleInputSet>
+      </S.TitleInputSet>
 
       <IconTextButton
         width="full"
@@ -230,7 +214,7 @@ const AIWriteInput = ({
           {t(`WriteTab.WritingArticle`)}
         </div>
       </IconTextButton>
-    </WriteInputPage>
+    </S.WriteInputPage>
   );
 };
 
