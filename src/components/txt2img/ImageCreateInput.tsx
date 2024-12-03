@@ -123,7 +123,7 @@ const ItemIconBox = styled.div<{
   ${({ isSelected }) =>
     isSelected &&
     css`
-      border: solid 2px var(--ai-purple-80-sub);
+      border: solid 2px var(--ai-purple-50-main);
       background-color: var(--ai-purple-97-list-over);
       padding: 2px;
     `}
@@ -309,7 +309,7 @@ const ImageCreateInput = ({
                   cssExt={css`
                     border: ${item.id === 'none' &&
                     item.id === style &&
-                    'solid 1px var(--ai-purple-80-sub)'};
+                    'solid 1px var(--ai-purple-90)'};
                     width: 76px;
                     height: 76px;
                   `}

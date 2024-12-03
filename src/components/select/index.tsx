@@ -18,6 +18,7 @@ export interface SelectOption<T extends string> {
   value: T;
   label?: string;
   component?: ReactNode;
+  selected?: boolean;
 }
 
 interface SelectProps<T extends string> extends StyledProps {
@@ -120,7 +121,8 @@ export default function Select<T extends string>({
                 setIsOpen(false);
               }}
               $optionStyle={$optionStyle}
-              $stylesSelectedOption={$stylesSelectedOption}>
+              $stylesSelectedOption={$stylesSelectedOption}
+              $selected={option.selected}>
               {defaultRenderOption(option)}
             </S.Option>
           ))}
