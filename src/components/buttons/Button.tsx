@@ -134,11 +134,11 @@ export type ButtonBorderType = 'none' | 'gray';
 const BORDER_TYPES = {
   none: css<{ selected: boolean }>`
     box-shadow: ${({ selected }) =>
-      selected ? `0 0 0 1px var(--ai-purple-80-sub) inset` : `0 0 0 1px transparent inset`};
+      selected ? `0 0 0 1px var(--ai-purple-90) inset` : `0 0 0 1px transparent inset`};
   `,
   gray: css<{ selected: boolean }>`
     box-shadow: ${({ selected }) =>
-      selected ? `0 0 0 1px var(--ai-purple-80-sub) inset` : `0 0 0 1px var(--gray-gray-50) inset`};
+      selected ? `0 0 0 1px var(--ai-purple-90) inset` : `0 0 0 1px var(--gray-gray-50) inset`};
   `
 };
 

@@ -1,11 +1,21 @@
-import styled from 'styled-components';
+import styled, { css, FlattenSimpleInterpolation } from 'styled-components';
 
-const SelectContainer = styled.div<{ width?: string }>`
+const SelectContainer = styled.div<{
+  width?: string;
+  $containerStyle?: FlattenSimpleInterpolation;
+  $stylesSelectedOption?: boolean;
+}>`
   position: relative;
-  width: ${({ width }) => width || '256px'};
+  width: ${({ width }) => width || '100%'};
+
+  ${({ $containerStyle }) => $containerStyle && $containerStyle}
 `;
 
-const SelectButton = styled.button<{ isOpen: boolean }>`
+const SelectButton = styled.button<{
+  isOpen: boolean;
+  $selectButtonStyle?: FlattenSimpleInterpolation;
+  $stylesSelectedOption?: boolean;
+}>`
   position: relative;
   width: 100%;
   text-align: left;
@@ -14,6 +24,28 @@ const SelectButton = styled.button<{ isOpen: boolean }>`
   cursor: pointer;
   outline: none;
   padding: 0px;
+
+  ${({ $stylesSelectedOption }) =>
+    $stylesSelectedOption &&
+    css`
+      background: #ede5fe;
+      box-shadow: 0 0 0 1px var(--ai-purple-90) inset;
+    `}
+
+  & p:nth-child(1) {
+    font-size: 16px !important;
+    font-weight: ${({ $stylesSelectedOption }) => ($stylesSelectedOption ? 700 : 500)} !important;
+    color: ${({ $stylesSelectedOption }) =>
+      $stylesSelectedOption ? '#6F3AD0' : '#454c53'} !important;
+  }
+
+  & p:nth-child(2) {
+    font-size: 12px !important;
+    color: ${({ $stylesSelectedOption }) =>
+      $stylesSelectedOption ? '#6F3AD0' : '#72787f'} !important;
+  }
+
+  ${({ $selectButtonStyle }) => $selectButtonStyle && $selectButtonStyle}
 `;
 
 const SelectText = styled.span`
@@ -26,15 +58,17 @@ const SelectText = styled.span`
   font-size: 14px;
 `;
 
-const IconWrapper = styled.span<{ isOpen: boolean }>`
+const IconWrapper = styled.span<{ isOpen: boolean; $iconStyles?: FlattenSimpleInterpolation }>`
   position: absolute;
   right: 0px;
   top: 50%;
   transform: translateY(-50%) rotate(0);
   transition: transform 0.2s ease;
+
+  ${({ $iconStyles }) => $iconStyles && $iconStyles}
 `;
 
-const OptionsContainer = styled.div`
+const OptionsContainer = styled.div<{ $optionContainerStyle?: FlattenSimpleInterpolation }>`
   position: absolute;
   top: calc(100% + 4px);
   left: 0;
@@ -48,9 +82,15 @@ const OptionsContainer = styled.div`
   box-shadow: 0px 2px 8px 0px #0000001a;
   width: max-content;
   padding: 8px 16px;
+
+  ${({ $optionContainerStyle }) => $optionContainerStyle && $optionContainerStyle}
 `;
 
-const Option = styled.div`
+const Option = styled.div<{
+  $optionStyle?: FlattenSimpleInterpolation;
+  $stylesSelectedOption?: boolean;
+  $selected?: boolean;
+}>`
   padding: 8px 0px;
   cursor: pointer;
   display: flex;
@@ -61,6 +101,25 @@ const Option = styled.div`
   &:not(:last-child) {
     border-bottom: 1px solid #e8ebed;
   }
+
+  /* 호진TODO: Mobile에서도 hover가 적용되는지 확인 필요 */
+  ${({ $stylesSelectedOption }) =>
+    $stylesSelectedOption &&
+    css`
+      &:hover {
+        background: #f2f4f6;
+        border-radius: 8px;
+      }
+    `}
+
+  ${({ $selected }) =>
+    $selected &&
+    css`
+      background: #e8ebed;
+      border-radius: 8px;
+    `}
+
+  ${({ $optionStyle }) => $optionStyle && $optionStyle}
 `;
 
 const OptionText = styled.span`
