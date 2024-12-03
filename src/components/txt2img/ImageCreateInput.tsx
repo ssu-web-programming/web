@@ -214,13 +214,13 @@ export const versionItemList = [
   {
     id: VersionType.dalle3,
     title: 'DALL-E-3',
-    desc: '창의적이고 디테일한 이미지를 잘 생성해요',
+    desc: 'Txt2ImgTab.ModelSelect.dalle3',
     creditValue: 'DREAM_STUDIO'
   },
   {
     id: VersionType.sd3,
     title: 'Stable Diffusion 3',
-    desc: '폭넓은 스타일의 이미지를 빠르게 생성해요',
+    desc: 'Txt2ImgTab.ModelSelect.sd3',
     creditValue: 'TEXTTOIMAGE_DALLE3'
   }
 ];
@@ -250,8 +250,6 @@ const ImageCreateInput = ({
       })),
     [creditInfo]
   );
-
-  console.log('versionList', versionList);
 
   return (
     <MakingInputWrapper>

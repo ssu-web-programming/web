@@ -30,10 +30,18 @@
   },
   "SelectionComplete": "Selection complete",
   "Select": "Select",
+  "Option": {
+    "newest": "Newest First",
+    "oldest": "Oldest First",
+    "nameAsc": "Name Ascending",
+    "nameDesc": "Name Descending",
+    "largest": "Largest First",
+    "smallest": "Smallest First"
+  },
   "WriteTab": {
     "WriteTopic": "Draft a topic",
     "WriteTextboxPlacehold": "Enter a topic of your article to write.",
-    "SelectVersion": "Select version",
+    "SelectVersion": "Select model",
     "SelectForm": "Set article type",
     "SelectResultLength": "Select number of characters (including blanks)",
     "Length": {
@@ -49,7 +57,14 @@
     "Recreating": "Create again",
     "InsertDoc": "Insert in doc",
     "MoveToChating": "More with chat",
-    "ToSameTopic": "I will work on it again with the same topic!"
+    "ToSameTopic": "I will work on it again with the same topic!",
+    "ModelSelect": {
+      "gpt4o": "Excellent at language comprehension and creativity.",
+      "gpt4": "Excels in generating diverse texts.",
+      "gpt3.5": "Processes tasks quickly and efficiently.",
+      "clovax": "Effective for Korean language tasks.",
+      "claude": "Writes creative content skillfully."
+    }
   },
   "ChatingTab": {
     "AIGreeting": "Hello, I am Polaris AI Chat. I'm here to help you create a document easy and fast.",
@@ -132,6 +147,10 @@
       "CompleteInsertImage": "Inserting image in document is completed.",
       "ForbiddenWord": "The image description contains inappropriate words.",
       "GPTExceededLimit": "An error occurred because the number of characters chatted exceeded the limit. Please try again."
+    },
+    "ModelSelect": {
+      "dalle3": "Creates detailed and unique images well.",
+      "sd3": "Quickly generates diverse image styles."
     }
   },
   "ExampleList": {

@@ -30,10 +30,18 @@
   },
   "SelectionComplete": "選択完了",
   "Select": "選択",
+  "Option": {
+    "newest": "新しい順",
+    "oldest": "古い順 ",
+    "nameAsc": "名前昇順 ",
+    "nameDesc": "名前降順",
+    "largest": "大きい順",
+    "smallest": "小さい順"
+  },
   "WriteTab": {
     "WriteTopic": "トピックを下書きする",
     "WriteTextboxPlacehold": "作成する記事のトピックを入力してください。",
-    "SelectVersion": "バージョンを選択",
+    "SelectVersion": "モデルを選択",
     "SelectForm": "記事の種類を設定",
     "SelectResultLength": "文字数 (スペースを含む) を選択",
     "Length": {
@@ -49,7 +57,14 @@
     "Recreating": "もう一度作成",
     "InsertDoc": "ドキュメントに挿入",
     "MoveToChating": "チャットでさらに詳しく",
-    "ToSameTopic": "もう一度同じトピックに取り組みます。"
+    "ToSameTopic": "もう一度同じトピックに取り組みます。",
+    "ModelSelect": {
+      "gpt4o": "言語理解力が高く、創造的です。",
+      "gpt4": "多様なテキスト生成が得意です。",
+      "gpt3.5": "作業を迅速かつ効率的に処理します。",
+      "clovax": "韓国語の作業に適しています。",
+      "claude": "創造的な文章を書くのが得意です。"
+    }
   },
   "ChatingTab": {
     "AIGreeting": "こんにちは、Polaris AI Chatです。 ドキュメントを簡単かつ迅速に作成できるようお手伝いします。",
@@ -132,6 +147,10 @@
       "CompleteInsertImage": "ドキュメントへの画像の挿入が完了しました。",
       "ForbiddenWord": "画像の説明に不適切な説明が含まれています。",
       "GPTExceededLimit": "チャットの文字数が制限を超えたため、エラーが発生しました。 もう一度やり直してください。"
+    },
+    "ModelSelect": {
+      "dalle3": "詳細で独自性のある画像を生成します。",
+      "sd3": "多様なスタイルの画像を迅速に生成します。"
     }
   },
   "ExampleList": {

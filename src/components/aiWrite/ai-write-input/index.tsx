@@ -82,7 +82,6 @@ const AIWriteInput = ({
         </S.InputArea>
       </S.TitleInputSet>
       <S.TitleInputSet>
-        {/* 호진FIXME: 다국어 관련 작업 진행 예정 */}
         <SubTitle subTitle={t(`WriteTab.SelectVersion`)} />
 
         <ModelSelect selectedOption={modelSelectedOption} onChangeOption={handleChangeOption} />
