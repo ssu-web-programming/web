@@ -251,8 +251,6 @@ const ImageCreateInput = ({
     [creditInfo]
   );
 
-  console.log('versionList', versionList);
-
   return (
     <MakingInputWrapper>
       <SelectOptionArea>

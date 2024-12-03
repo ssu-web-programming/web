@@ -26,7 +26,6 @@ export default function PODriveList(props: PODriveListProps) {
 
   const toggleDriveConfirm = () => {
     setIsOpen(!isOpen);
-    console.log('toggle - isOpen', isOpen);
   };
 
   const handleDriveCancel = () => {

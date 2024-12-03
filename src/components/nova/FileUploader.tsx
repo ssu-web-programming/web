@@ -71,8 +71,6 @@ export const FileUploader = (props: FileUploaderProps) => {
         icon: { src: ico_logo_po },
         onClick: async () => {
           if (isAgreed || selectedNovaTab !== 'aiChat') {
-            console.log('onClick!!!');
-
             setUploadTarget(target);
             toggleDriveConfirm();
           }
