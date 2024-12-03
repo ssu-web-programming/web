@@ -16,9 +16,8 @@ const StyledButton = styled.button<{
         `
       : css`
           background: ${selected ? '#EDE5FE' : '#F2F4F6'};
-          border: 1px solid ${selected ? '#EDE5FE' : '#EDE5FE'};
           box-shadow: ${selected
-            ? `0 0 0 1px var(--ai-purple-80-sub) inset`
+            ? `0 0 0 1px var(--ai-purple-90) inset`
             : `0 0 0 1px transparent inset`};
         `}
 
@@ -43,7 +42,6 @@ const ItemWrapper = styled.div<{ selected: boolean }>`
   & > p:nth-child(2) {
     font-size: 12px;
     color: ${({ selected }) => (selected ? '#6F3AD0' : '#72787f')};
-    font-weight: ${({ selected }) => (selected ? 700 : 500)};
   }
 `;
 

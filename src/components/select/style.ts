@@ -29,8 +29,7 @@ const SelectButton = styled.button<{
     $stylesSelectedOption &&
     css`
       background: #ede5fe;
-      border: 1px solid #ede5fe;
-      box-shadow: 0 0 0 1px var(--ai-purple-80-sub) inset;
+      box-shadow: 0 0 0 1px var(--ai-purple-90) inset;
     `}
 
   & p:nth-child(1) {
@@ -90,6 +89,7 @@ const OptionsContainer = styled.div<{ $optionContainerStyle?: FlattenSimpleInter
 const Option = styled.div<{
   $optionStyle?: FlattenSimpleInterpolation;
   $stylesSelectedOption?: boolean;
+  $selected?: boolean;
 }>`
   padding: 8px 0px;
   cursor: pointer;
@@ -102,17 +102,22 @@ const Option = styled.div<{
     border-bottom: 1px solid #e8ebed;
   }
 
+  /* 호진TODO: Mobile에서도 hover가 적용되는지 확인 필요 */
   ${({ $stylesSelectedOption }) =>
     $stylesSelectedOption &&
     css`
       &:hover {
         background: #f2f4f6;
         border-radius: 8px;
-        padding: 8px 16px;
       }
     `}
-  /* 호진TODO: Mobile에서도 hover가 적용되는지 확인 필요 */
 
+  ${({ $selected }) =>
+    $selected &&
+    css`
+      background: #e8ebed;
+      border-radius: 8px;
+    `}
 
   ${({ $optionStyle }) => $optionStyle && $optionStyle}
 `;
