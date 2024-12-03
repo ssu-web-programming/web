@@ -55,6 +55,7 @@ const ToastText = styled.div`
   flex: 1;
   height: fit-content;
   padding: 8px 0;
+  white-space: pre-wrap;
 `;
 
 const CloseWrapper = styled.div<{ type: ToastType }>`
