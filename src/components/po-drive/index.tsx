@@ -229,7 +229,6 @@ export default function PoDrive(props: PoDriveProps) {
               options={options}
               value={selectedOption}
               onChange={handleChangeOption}
-              width="120px"
             />
           </div>
         </div>

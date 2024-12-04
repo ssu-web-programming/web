@@ -294,7 +294,6 @@ const ImageCreateInput = ({
       </SelectOptionArea>
       <SelectOptionArea>
         <SubTitleArea>
-          {/* 호진FIXME: 다국어 적용 진행해야함! */}
           <SubTitle subTitle={t('Txt2ImgTab.ChooseStyle')} />
         </SubTitleArea>
         <GridContainer>
@@ -340,7 +339,6 @@ const ImageCreateInput = ({
       </SelectOptionArea>
       <SelectOptionArea>
         <SubTitleArea>
-          {/* 호진FIXME: 다국어 적용 진행해야함! */}
           <SubTitle subTitle={t('Txt2ImgTab.ChooseRatio')} />
         </SubTitleArea>
         <RowContainer>

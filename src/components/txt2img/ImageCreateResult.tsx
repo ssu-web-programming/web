@@ -303,7 +303,6 @@ const ImageCreateResult = ({
         </IconTextButton>
 
         <Grid col={2}>
-          {/* 호진FIXME: 다국어 적용해야함! */}
           <IconTextButton
             width={'full'}
             height={48}
@@ -319,7 +318,6 @@ const ImageCreateResult = ({
             {t(`WriteTab.InsertDoc`)}
           </IconTextButton>
 
-          {/* 호진FIXME: 다국어 적용해야함! */}
           <IconTextButton
             width={'full'}
             height={48}
@@ -333,7 +331,7 @@ const ImageCreateResult = ({
               border-radius: 8px;
               font-size: 15px;
             `}>
-            {t(`Download`)}
+            {t(`Save`)}
           </IconTextButton>
         </Grid>
       </RowContainer>

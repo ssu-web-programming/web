@@ -71,7 +71,6 @@ const IconWrapper = styled.span<{ isOpen: boolean; $iconStyles?: FlattenSimpleIn
 const OptionsContainer = styled.div<{ $optionContainerStyle?: FlattenSimpleInterpolation }>`
   position: absolute;
   top: calc(100% + 4px);
-  left: 0;
   right: 0;
   z-index: 10;
   max-height: 240px;
