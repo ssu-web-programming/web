@@ -3,9 +3,12 @@ import { ContentArea, Footer, Header } from 'components/Confirm';
 import styled, { css } from 'styled-components';
 import { isMobile } from 'util/bridge';
 
-// import icBack from '../img/ico_back.svg';
-import icBack from '../img/ico_arrow_left.svg';
-import icClose from '../img/ico_nova_close.svg';
+import BackDarkIcon from '../img/dark/ico_arrow_left.svg';
+import CloseDarkIcon from '../img/dark/ico_nova_close.svg';
+import BackLightIcon from '../img/light/ico_arrow_left.svg';
+import CloseLightIcon from '../img/light/ico_nova_close.svg';
+import { themeInfoSelector } from '../store/slices/theme';
+import { useAppSelector } from '../store/store';
 
 import Button from './buttons/Button';
 import Blanket from './Blanket';
@@ -26,7 +29,6 @@ const ConfirmBox = styled.div<{
   min-width: 328px;
   max-width: ${({ $isMobile }) => ($isMobile ? '100%' : '343px')};
   box-shadow: 0px 8px 16px 0px #0000001a;
-  background-color: #fff;
   border-radius: ${({ $isMobile }) => ($isMobile ? '0px' : '10px')};
   z-index: 100;
   max-height: 100vh;
@@ -39,12 +41,14 @@ const Wrapper = styled(ConfirmBox)<{
   position: fixed;
   margin: auto;
   height: ${({ $isMobile }) => ($isMobile ? '100%' : '506px')};
+  background-color: ${({ theme }) => theme.color.subBgGray01};
 `;
 
 const Title = styled.p`
   margin: 0;
   font-size: 16px;
   line-height: 24px;
+  color: ${({ theme }) => theme.color.text.subGray04};
 `;
 const MobileHeaderContainer = styled.div`
   display: flex;
@@ -71,6 +75,7 @@ type DriveConfirmType = {
 };
 
 const DriveConfirm = (props: DriveConfirmType) => {
+  const { isLightMode } = useAppSelector(themeInfoSelector);
   const { title, msg, onOk, onCancel, direction = 'row' } = props;
   const headerRef = useRef<HTMLDivElement>(null);
   const footerRef = useRef<HTMLDivElement>(null);
@@ -100,13 +105,21 @@ const DriveConfirm = (props: DriveConfirmType) => {
           {/* 모바일에서는 뒤로가기 버튼 , 웹에서는 X버튼을 만족시켜야함! */}
           {isMobile ? (
             <MobileHeaderContainer>
-              <Icon size={16} iconSrc={icBack} onClick={onCancel?.callback} />
+              <Icon
+                size={16}
+                iconSrc={isLightMode ? BackLightIcon : BackDarkIcon}
+                onClick={onCancel?.callback}
+              />
               <Title>{title}</Title>
             </MobileHeaderContainer>
           ) : (
             <HeaderContainer>
               <Title>{title}</Title>
-              <Icon size={32} iconSrc={icClose} onClick={onCancel?.callback} />
+              <Icon
+                size={32}
+                iconSrc={isLightMode ? CloseLightIcon : CloseDarkIcon}
+                onClick={onCancel?.callback}
+              />
             </HeaderContainer>
           )}
         </Header>

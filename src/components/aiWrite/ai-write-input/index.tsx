@@ -20,7 +20,7 @@ import { css } from 'styled-components';
 import { getIconColor } from 'util/getColor';
 import { exampleList, RowBox } from 'views/AIChatTab';
 
-import icon_credit_outline from '../../../img/ico_credit_outline.svg';
+import icon_credit_outline from '../../../img/light/ico_credit_outline.svg';
 
 import ModelSelect from './model-select';
 import * as S from './style';

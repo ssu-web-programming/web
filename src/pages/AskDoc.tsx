@@ -6,7 +6,7 @@ import Button from '../components/buttons/Button';
 import { RowWrapBox } from '../components/chat/RecommendBox/ChatRecommend';
 import Header from '../components/layout/Header';
 import TextArea from '../components/TextArea';
-import ico_askdoc_64 from '../img/askDoc/ico_askdoc_64.svg';
+import ico_askdoc_64 from '../img/light/askDoc/ico_askdoc_64.svg';
 
 const TEXT_MAX_HEIGHT = 268;
 

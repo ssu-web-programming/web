@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
-import { ReactComponent as CloseIcon } from '../img/ico_nova_close.svg';
+import { ReactComponent as CloseIcon } from '../img/light/ico_nova_close.svg';
 import { announceInfoSelector, setAnnounceInfo } from '../store/slices/nova/announceSlice';
 import { selectTabSlice } from '../store/slices/tabSlice';
 import { useAppSelector } from '../store/store';

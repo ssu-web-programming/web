@@ -1,25 +1,112 @@
-const lightTheme = {
-  button: {
-    bgColor: 'white',
-    color: 'black'
+import DarkLogo from '../img/dark/nova/ico_logo_nova.svg';
+import LightLogo from '../img/light/nova/ico_logo_nova.svg';
+import { ThemeType } from '../store/slices/theme';
+
+export const lightTheme = {
+  mode: 'light',
+  color: {
+    bg: 'var(--gray-gray-10)',
+    subBgGray01: 'var(--white)',
+    subBgGray02: 'var(--gray-gray-20)',
+    subBgGray03: 'var(--white)',
+    subBgGray04: 'var(--gray-gray-10)',
+    subBgGray05: 'var(--white)',
+    mainBg: 'var(--ai-purple-99-bg-light)',
+    borderGray01: 'var(--gray-gray-40)',
+    borderGray02: 'var(--gray-gray-30)',
+    main: 'var(--ai-purple-50-main)',
+    tab: {
+      border: 'var(--gray-gray-40)',
+      highlightBorder: 'var(--ai-purple-90)',
+      bg: 'var(--white)',
+      highlightBg: 'var(--ai-purple-97-list-over)',
+      text: 'var(--gray-gray-90-01)',
+      highlightText: 'var(--ai-purple-45)'
+    },
+    text: {
+      main: 'var(--ai-purple-50-main)',
+      main02: 'var(--ai-purple-50-main)',
+      subGray01: 'var(--gray-gray-60-03)',
+      subGray02: 'var(--gray-gray-60-03)',
+      subGray03: 'var(--gray-gray-80-02)',
+      subGray04: 'var(--gray-gray-90-01)',
+      highlightText: 'var(--ai-purple-45)'
+    },
+    toast: {
+      success: {
+        bg: 'var(--primary-po-green-10)',
+        border: 'var(--primary-po-green-40)',
+        text: 'var(--primary-po-green-60)'
+      },
+      error: {
+        bg: 'var(--primary-po-red-30)',
+        border: 'var(--primary-po-red-40)',
+        text: 'var(--primary-po-red-60)'
+      }
+    }
+  },
+  img: {
+    logo: LightLogo
   }
 };
 
-const darkTheme = {
-  button: {
-    bgColor: 'black',
-    color: 'white'
+export const darkTheme = {
+  mode: 'dark',
+  color: {
+    bg: 'var(--gray-gray-85)',
+    subBgGray01: 'var(--gray-gray-90)',
+    subBgGray02: 'var(--gray-gray-87)',
+    subBgGray03: 'var(--gray-gray-87)',
+    subBgGray04: 'var(--gray-gray-90)',
+    subBgGray05: 'var(--gray-gray-85)',
+    mainBg: 'var(--ai-purple-50-main-alpha)',
+    borderGray01: 'var(--gray-gray-35)',
+    borderGray02: 'var(--gray-gray-87)',
+    main: 'var(--ai-purple-50-main)',
+    tab: {
+      border: 'var(--gray-gray-35)',
+      highlightBorder: 'var(--ai-purple-40)',
+      bg: 'var(--gray-gray-90)',
+      highlightBg: 'var(--ai-purple-50-main-alpha)',
+      text: 'var(--gray-gray-25)',
+      highlightText: 'var(--ai-purple-90)'
+    },
+    text: {
+      main: 'var(--ai-purple-90)',
+      main02: 'var(--gray-gray-25)',
+      subGray01: 'var(--gray-gray-65)',
+      subGray02: 'var(--gray-gray-25)',
+      subGray03: 'var(--gray-gray-25)',
+      subGray04: 'var(--gray-gray-25)',
+      highlightText: 'var(--ai-purple-90)'
+    },
+    toast: {
+      success: {
+        bg: 'var(--primary-po-green-90)',
+        border: 'var(--primary-po-green-80)',
+        text: 'var(--white-alpha)'
+      },
+      error: {
+        bg: 'var(--primary-po-red-80)',
+        border: 'var(--primary-po-red-80)',
+        text: 'var(--white-alpha)'
+      }
+    }
+  },
+  img: {
+    logo: DarkLogo
   }
 };
 
-export const selectTheme = () => {
-  const params = new URLSearchParams(window.location.search);
-  const platform = params.get('platform');
-
-  switch (platform) {
-    case 'android':
-      return darkTheme;
-    default:
-      return lightTheme;
-  }
+export const selectTheme = (theme: ThemeType) => {
+  // const params = new URLSearchParams(window.location.search);
+  // const platform = params.get('platform');
+  //
+  // switch (platform) {
+  //   case 'android':
+  //     return darkTheme;
+  //   default:
+  //     return lightTheme;
+  // }
+  return theme == ThemeType.light ? lightTheme : darkTheme;
 };

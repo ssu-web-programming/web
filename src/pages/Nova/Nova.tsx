@@ -42,7 +42,6 @@ const Wrapper = styled.div<{ isScroll: boolean }>`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  background: rgb(244, 246, 248);
   overflow: hidden;
 
   scrollbar-color: #c9cdd2 #ffffff;
@@ -71,6 +70,7 @@ const Body = styled.div`
   display: flex;
   position: relative;
   flex-direction: column;
+  background-color: ${({ theme }) => theme.color.bg};
 `;
 
 export type ClientStatusType = 'home' | 'doc_edit_mode' | 'doc_view_mode';

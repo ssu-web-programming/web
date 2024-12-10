@@ -1,7 +1,7 @@
 import { PropsWithChildren, ReactElement } from 'react';
 
-import { ReactComponent as IconNext } from '../img/ico_arrow_next.svg';
-import { ReactComponent as IconPrev } from '../img/ico_arrow_prev.svg';
+import { ReactComponent as IconNext } from '../img/light/ico_arrow_next.svg';
+import { ReactComponent as IconPrev } from '../img/light/ico_arrow_prev.svg';
 
 import { ButtonProps } from './buttons/Button';
 import IconButton from './buttons/IconButton';

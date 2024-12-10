@@ -5,13 +5,18 @@ import useLangParameterNavigate from 'components/hooks/useLangParameterNavigate'
 import Icon from 'components/Icon';
 import Overlay from 'components/Overlay';
 import PreMarkdown from 'components/PreMarkdown';
-import Loading from 'img/agent_loading.gif';
-import ico_ai from 'img/ico_ai.svg';
-import { ReactComponent as CopyChatIcon } from 'img/ico_copy_chat.svg';
-import { ReactComponent as InsertDocsIcon } from 'img/ico_insert_docs.svg';
-import { ReactComponent as RetryChatIcon } from 'img/ico_retry_chat.svg';
-import { ReactComponent as ShareChatIcon } from 'img/ico_share_chat.svg';
-import ico_user from 'img/ico_user.svg';
+import { ReactComponent as CopyChatDarkIcon } from 'img/dark/ico_copy_chat.svg';
+import { ReactComponent as InsertDocsDarkIcon } from 'img/dark/ico_insert_docs.svg';
+import { ReactComponent as RetryChatDarkIcon } from 'img/dark/ico_retry_chat.svg';
+import { ReactComponent as ShareChatDarkIcon } from 'img/dark/ico_share_chat.svg';
+import UserDarkIcon from 'img/dark/ico_user.svg';
+import Loading from 'img/light/agent_loading.gif';
+import ico_ai from 'img/light/ico_ai.svg';
+import { ReactComponent as CopyChatLightIcon } from 'img/light/ico_copy_chat.svg';
+import { ReactComponent as InsertDocsLightIcon } from 'img/light/ico_insert_docs.svg';
+import { ReactComponent as RetryChatLightIcon } from 'img/light/ico_retry_chat.svg';
+import { ReactComponent as ShareChatLightIcon } from 'img/light/ico_share_chat.svg';
+import UserLightIcon from 'img/light/ico_user.svg';
 import { ClientStatusType } from 'pages/Nova/Nova';
 import { useTranslation } from 'react-i18next';
 import {
@@ -29,6 +34,7 @@ import styled, { css } from 'styled-components';
 import Bridge, { ClientType, getPlatform } from 'util/bridge';
 import { getFileExtension, sliceFileName } from 'util/common';
 
+import { themeInfoSelector } from '../../store/slices/theme';
 import CheckBox from '../CheckBox';
 import useCopyText from '../hooks/copyText';
 import { useInsertDocsHandler } from '../hooks/nova/useInsertDocsHandler';
@@ -41,11 +47,8 @@ const Wrapper = styled.div`
   display: flex;
   flex: 1 1 0;
   gap: 12px;
-
   flex-direction: column;
   padding: 24px 16px;
-
-  background-color: var(--gray-gray-10);
   overflow-y: auto;
 `;
 
@@ -55,6 +58,7 @@ const ChatItem = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;
+  color: ${({ theme }) => theme.color.text.subGray04};
 `;
 
 const Chat = styled.div`
@@ -115,7 +119,7 @@ const FileItem = styled.div`
   padding: 8px;
   border: 1px solid var(--gray-gray-40);
   border-radius: 8px;
-  background: var(--gray-gray-20);
+  background: ${({ theme }) => theme.color.subBgGray04};
 
   font-size: 14px;
   line-height: 21px;
@@ -149,6 +153,7 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
   const dispatch = useAppDispatch();
   const confirm = useConfirm();
   const { insertDocsHandler } = useInsertDocsHandler();
+  const { isLightMode } = useAppSelector(themeInfoSelector);
   const { creating } = useAppSelector(selectTabSlice);
   const selectedItems = useAppSelector(selectedItemsSelector);
   const isShareMode = useAppSelector(isShareModeSelector);
@@ -164,25 +169,25 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
     {
       name: 'recreating',
       status: ['done', 'cancel'],
-      iconSrc: <RetryChatIcon />,
+      iconSrc: isLightMode ? <RetryChatLightIcon /> : <RetryChatDarkIcon />,
       clickHandler: (history: NovaChatType) => onSubmit({ input: history.input, type: '' })
     },
     {
       name: 'copy',
       status: ['done'],
-      iconSrc: <CopyChatIcon />,
+      iconSrc: isLightMode ? <CopyChatLightIcon /> : <CopyChatDarkIcon />,
       clickHandler: (history: NovaChatType) => onCopy(history.output)
     },
     {
       name: 'insert',
       status: ['done'],
-      iconSrc: <InsertDocsIcon />,
+      iconSrc: isLightMode ? <InsertDocsLightIcon /> : <InsertDocsDarkIcon />,
       clickHandler: (history: NovaChatType) => insertDocsHandler(history)
     },
     {
       name: 'share',
       status: ['done'],
-      iconSrc: <ShareChatIcon />,
+      iconSrc: isLightMode ? <ShareChatLightIcon /> : <ShareChatDarkIcon />,
       clickHandler: () => {
         dispatch(deselectAllItems());
         dispatch(setIsShareMode(true));
@@ -222,7 +227,7 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                 `}
               />
             )}
-            <Icon size={32} iconSrc={ico_user}></Icon>
+            <Icon size={32} iconSrc={isLightMode ? UserLightIcon : UserDarkIcon}></Icon>
             <QuestionContents>
               <p>{item.input}</p>
               {item.files?.map((file) => (

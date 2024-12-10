@@ -9,7 +9,7 @@ import usePollingExtractText from '../../components/hooks/usePollingExtractText'
 import Icon from '../../components/Icon';
 import Loading from '../../components/Loading';
 import ProgressBar from '../../components/ProgressBar';
-import Logo from '../../img/askDoc/ico_polaris_logo.svg';
+import Logo from '../../img/light/askDoc/ico_polaris_logo.svg';
 import { Footer, GuideMessage, Wrapper } from '../../style/askDoc';
 
 export const ConfirmDoc = () => {

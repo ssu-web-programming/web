@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import styled, { css } from 'styled-components';
 
-import { ReactComponent as IconArrowDown } from '../../img/ico_arrow_down_small.svg';
-import { ReactComponent as IconArrowUp } from '../../img/ico_arrow_up_small.svg';
+import { ReactComponent as IconArrowDown } from '../../img/light/ico_arrow_down_small.svg';
+import { ReactComponent as IconArrowUp } from '../../img/light/ico_arrow_up_small.svg';
 import IconComponent from '../IconComponent';
 
 import Button, { ButtonProps } from './Button';

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
-import ico_clovax_primary from '../img/hyperClovaX_logotype_primary.svg';
-import ico_navercloud from '../img/naver_cloud_ci_green.svg';
+import ico_clovax_primary from '../img/light/hyperClovaX_logotype_primary.svg';
+import ico_navercloud from '../img/light/naver_cloud_ci_green.svg';
 
 import LinkText from './LinkText';
 

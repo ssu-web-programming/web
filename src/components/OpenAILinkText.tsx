@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import icon_openai from '../img/logo_open_ai.svg';
+import icon_openai from '../img/light/logo_open_ai.svg';
 
 import LinkText from './LinkText';
 

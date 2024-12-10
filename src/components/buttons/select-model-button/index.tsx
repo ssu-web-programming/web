@@ -1,5 +1,5 @@
 import { ButtonHTMLAttributes } from 'react';
-import icon_credit_gray from 'img/ico_credit_gray.svg';
+import icon_credit_gray from 'img/light/ico_credit_gray.svg';
 import { FlattenSimpleInterpolation } from 'styled-components';
 
 import { Chip } from '../IconTextButton';

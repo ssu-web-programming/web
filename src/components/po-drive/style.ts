@@ -5,10 +5,9 @@ const Wrapper = styled.div`
   min-width: 295px;
   height: 100%;
   box-sizing: border-box;
-  background-color: white;
   display: flex;
   flex-direction: column;
-  border-top: 1px solid #c9cdd2;
+  border-top: 1px solid ${({ theme }) => theme.color.borderGray01};
   overflow: hidden;
 `;
 
@@ -21,7 +20,7 @@ const Navi = styled.div`
   align-items: center;
   gap: 4px;
 
-  border-bottom: 1px solid #c9cdd2;
+  border-bottom: 1px solid ${({ theme }) => theme.color.borderGray01};
   padding: 16px;
   font-weight: 600;
   font-size: 14px;
@@ -79,7 +78,7 @@ const FileItem = styled.div`
   align-items: center;
 
   & + & {
-    border-top: 1px solid #e8ebed;
+    border-top: 1px solid ${({ theme }) => theme.color.borderGray02};
   }
 
   .icon {
@@ -136,10 +135,10 @@ const NoFile = styled.div`
 const SubTitle = styled.div`
   font-size: 14px;
   line-height: 16px;
-  color: #6f3ad0;
+  color: ${({ theme }) => theme.color.text.highlightText};
   text-align: center;
-  background-color: #f5f1fd;
-  padding: 6px 0px;
+  background-color: ${({ theme }) => theme.color.mainBg};
+  padding: 6px 0;
 `;
 
 const ItemWrapper = styled.div`

@@ -4,12 +4,12 @@ import { useTranslation } from 'react-i18next';
 import { Group, Image, Layer, Stage, Transformer } from 'react-konva';
 import styled from 'styled-components';
 
-import { ReactComponent as HorizontalIcon } from '../../img/nova/expandImg/horizontal_n.svg';
-import { ReactComponent as HorizontalIconSelected } from '../../img/nova/expandImg/horizontal_s.svg';
-import { ReactComponent as SquareIcon } from '../../img/nova/expandImg/square_n.svg';
-import { ReactComponent as SquareIconSelected } from '../../img/nova/expandImg/square_s.svg';
-import { ReactComponent as VerticalIcon } from '../../img/nova/expandImg/vertical_n.svg';
-import { ReactComponent as VerticalIconSelected } from '../../img/nova/expandImg/vertical_s.svg';
+import { ReactComponent as HorizontalIcon } from '../../img/light/nova/expandImg/horizontal_n.svg';
+import { ReactComponent as HorizontalIconSelected } from '../../img/light/nova/expandImg/horizontal_s.svg';
+import { ReactComponent as SquareIcon } from '../../img/light/nova/expandImg/square_n.svg';
+import { ReactComponent as SquareIconSelected } from '../../img/light/nova/expandImg/square_s.svg';
+import { ReactComponent as VerticalIcon } from '../../img/light/nova/expandImg/vertical_n.svg';
+import { ReactComponent as VerticalIconSelected } from '../../img/light/nova/expandImg/vertical_s.svg';
 import { selectPageResult } from '../../store/slices/nova/pageStatusSlice';
 import { selectTabSlice } from '../../store/slices/tabSlice';
 import { useAppSelector } from '../../store/store';

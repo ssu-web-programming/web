@@ -84,11 +84,10 @@ const TooltipContent = styled.div<{
   right: ${({ placement }) => (placement.endsWith('end') ? '0' : 'auto')};
   width: max-content;
   padding: ${({ type }) => (type === 'selectable' ? '0 16px' : '12px 16px')};
-  border: 1px solid var(--gray-gray-40);
+  border: 1px solid ${({ theme }) => theme.color.borderGray01};
   border-radius: 8px;
-  background-color: white;
-  box-shadow: 0px 2px 8px 0px #0000001a;
-
+  box-shadow: 0 2px 8px 0 #0000001a;
+  background-color: ${({ theme }) => (theme.mode === 'light' ? 'white' : 'var(--gray-gray-87)')};
   z-index: 10;
   margin-left: ${({ distance }) => distance}px;
 
@@ -102,7 +101,7 @@ const OptionList = styled.ul`
   padding: 0;
   font-size: 14px;
   font-weight: 400;
-  color: #26282b;
+  color: ${({ theme }) => theme.color.text.subGray04};
 `;
 
 const CategoryItem = styled.li`
@@ -121,7 +120,7 @@ const Title = styled.div`
   line-height: 24px;
   font-weight: 500;
   font-size: 16px;
-  color: var(--gray-gray-90-01);
+  color: ${({ theme }) => theme.color.text.subGray04};
 `;
 
 const OptionItemWrapper = styled.div<{ type: TooltipType }>`
@@ -129,13 +128,12 @@ const OptionItemWrapper = styled.div<{ type: TooltipType }>`
   display: flex;
   align-items: center;
   font-size: 14px;
-
-  color: var(--gray-gray-90-01);
+  color: ${({ theme }) => theme.color.text.subGray04};
 `;
 
 const Divider = styled.div`
   height: 1px;
-  background-color: var(--gray-gray-30);
+  background-color: ${({ theme }) => theme.color.borderGray01};
 
   &:last-child {
     display: none;

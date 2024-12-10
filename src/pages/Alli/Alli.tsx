@@ -3,7 +3,7 @@ import { Divider } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import IconTextButton from 'components/buttons/IconTextButton';
 import ReturnButton from 'components/buttons/ReturnButton';
-import ico_credit_purple from 'img/ico_credit_purple.svg';
+import ico_credit_purple from 'img/light/ico_credit_purple.svg';
 import { useTranslation } from 'react-i18next';
 import styled, { css } from 'styled-components';
 
@@ -16,7 +16,7 @@ import { useShowCreditToast } from '../../components/hooks/useShowCreditToast';
 import Header from '../../components/layout/Header';
 import Loading from '../../components/Loading';
 import PreMarkdown from '../../components/PreMarkdown';
-import { ReactComponent as IconDocument } from '../../img/askDoc/ico_document_64.svg';
+import { ReactComponent as IconDocument } from '../../img/light/askDoc/ico_document_64.svg';
 import { lang } from '../../locale';
 import {
   resetCreateResult,

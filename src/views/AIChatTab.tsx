@@ -2,8 +2,8 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import IconButton from 'components/buttons/IconButton';
 import { useConfirm } from 'components/Confirm';
 import TextLength from 'components/TextLength';
-import { ReactComponent as SendActiveIcon } from 'img/ico_send_active.svg';
-import { ReactComponent as SendDisabledIcon } from 'img/ico_send_disabled.svg';
+import { ReactComponent as SendActiveIcon } from 'img/light/ico_send_active.svg';
+import { ReactComponent as SendDisabledIcon } from 'img/light/ico_send_disabled.svg';
 import { useTranslation } from 'react-i18next';
 import styled, { css, FlattenSimpleInterpolation } from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
@@ -22,7 +22,7 @@ import { useShowCreditToast } from '../components/hooks/useShowCreditToast';
 import Icon from '../components/Icon';
 import SpeechBubble from '../components/SpeechBubble';
 import TextArea from '../components/TextArea';
-import icon_ai from '../img/ico_ai.svg';
+import icon_ai from '../img/light/ico_ai.svg';
 import {
   appendChat,
   Chat,

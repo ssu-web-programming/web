@@ -1,7 +1,8 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import useInitApp from 'components/hooks/useInitApp';
 import Nova from 'pages/Nova/Nova';
 import { Route, Routes } from 'react-router-dom';
+import { ThemeProvider } from 'styled-components';
 
 import Confirm from './components/Confirm';
 import Spinner from './components/Spinner';
@@ -21,14 +22,22 @@ import Offline from './pages/Offline';
 import TextToImage from './pages/TextToImage';
 import Tools from './pages/Tools';
 import { setPageStatus } from './store/slices/nova/pageStatusSlice';
-import { useAppDispatch } from './store/store';
+import { setThemeInfo, themeInfoSelector, ThemeType } from './store/slices/theme';
+import { useAppDispatch, useAppSelector } from './store/store';
 import GlobalStyle from './style/globalStyle';
+import { selectTheme } from './theme/theme';
 import { ClientType, getPlatform, useInitBridgeListener } from './util/bridge';
 
 function App() {
   const initBridgeListener = useInitBridgeListener();
   const initApp = useInitApp();
   const dispatch = useAppDispatch();
+  const { isLightMode, curTheme } = useAppSelector(themeInfoSelector);
+
+  const toggleTheme = () => {
+    const newTheme = isLightMode ? ThemeType.dark : ThemeType.light;
+    dispatch(setThemeInfo(newTheme));
+  };
 
   useEffect(() => {
     const fetchInit = async () => {
@@ -44,15 +53,27 @@ function App() {
   }, []);
 
   return (
-    <>
-      <GlobalStyle></GlobalStyle>
+    <ThemeProvider theme={selectTheme(curTheme)}>
+      <GlobalStyle />
       <>
         <Routes>
           <Route path="/aiWrite" element={<Tools></Tools>}></Route>
           <Route path="/txt2img" element={<TextToImage></TextToImage>}></Route>
           <Route path="/askdoc" element={<AskDoc />} />
           <Route path="/alli" element={<Alli />} />
-          <Route path="/NOVA" element={<Nova />} />
+          <Route
+            path="/NOVA"
+            element={
+              <>
+                <button
+                  onClick={toggleTheme}
+                  style={{ position: 'absolute', top: 10, right: 100, zIndex: 100 }}>
+                  Switch Theme
+                </button>
+                <Nova />
+              </>
+            }
+          />
           <Route path="/NOVA/share/:id" element={<ShareChat />} />
           <Route path="/AskDocStep" element={<AskDocHome />}>
             <Route index element={<AskDocLoading />} />
@@ -69,7 +90,7 @@ function App() {
         <Spinner />
         <Confirm />
       </>
-    </>
+    </ThemeProvider>
   );
 }
 

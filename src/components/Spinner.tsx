@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import spinner from '../img/spinner.webp';
+import spinner from '../img/light/spinner.webp';
 import { selectLoadingSpinner } from '../store/slices/loadingSpinner';
 import { useAppSelector } from '../store/store';
 

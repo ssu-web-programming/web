@@ -1,15 +1,16 @@
 import React from 'react';
-import { ReactComponent as IconLogoNova } from 'img/ico_logo_nova.svg';
-import { ReactComponent as IconMessagePlus } from 'img/ico_message_plus.svg';
-import { ReactComponent as IconClose } from 'img/ico_nova_close.svg';
+import { ReactComponent as MessagePlusDarkIcon } from 'img/dark/ico_message_plus.svg';
+import { ReactComponent as CloseDarkIcon } from 'img/dark/ico_nova_close.svg';
+import { ReactComponent as MessagePlusLightIcon } from 'img/light/ico_message_plus.svg';
+import { ReactComponent as CloseLightIcon } from 'img/light/ico_nova_close.svg';
 import { Trans, useTranslation } from 'react-i18next';
 import { initFlagSelector } from 'store/slices/initFlagSlice';
 import styled, { css } from 'styled-components';
 
-import ico_credit from '../../img/ico_credit_gray.svg';
-import { ReactComponent as IconCreditLine } from '../../img/ico_credit_line.svg';
-import { ReactComponent as ArrowLeftIcon } from '../../img/nova/arrow_left.svg';
-import { ReactComponent as IconConvert } from '../../img/nova/tab/convert_Img.svg';
+import ico_credit from '../../img/light/ico_credit_gray.svg';
+import { ReactComponent as CreditLineIcon } from '../../img/light/ico_credit_line.svg';
+import { ReactComponent as ArrowLeftIcon } from '../../img/light/nova/arrow_left.svg';
+import { ReactComponent as IconConvert } from '../../img/light/nova/tab/convert_Img.svg';
 import { creditInfoSelector, InitialState } from '../../store/slices/creditInfo';
 import {
   deselectAllItems,
@@ -20,6 +21,7 @@ import {
   setIsShareMode
 } from '../../store/slices/nova/novaHistorySlice';
 import { NOVA_TAB_TYPE, selectTabSlice } from '../../store/slices/tabSlice';
+import { themeInfoSelector } from '../../store/slices/theme';
 import { setDriveFiles, setLocalFiles } from '../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import Bridge, { isDesktop } from '../../util/bridge';
@@ -53,22 +55,37 @@ const TitleWrapper = styled.div`
   flex-direction: row;
 `;
 
+const Logo = styled.img`
+  content: url(${({ theme }) => theme.img.logo});
+`;
+
 const ButtonWrapper = styled.div`
+  height: 32px;
   gap: 8px;
 
   ${flexCenter};
   flex-direction: row;
 `;
 
-const CreditIcon = styled(IconCreditLine)<{
+const CreditIcon = styled(CreditLineIcon)<{
   $isInit: boolean;
 }>`
   path {
-    fill: ${({ $isInit }) => ($isInit ? '#454C53' : '#454c5380')};
+    fill: ${({ $isInit, theme }) =>
+      $isInit
+        ? theme.mode === 'light'
+          ? 'var(--gray-gray-80-02)'
+          : 'var(--gray-gray-25)'
+        : '#454c5380'};
   }
 
   circle {
-    stroke: ${({ $isInit }) => ($isInit ? '#454C53' : '#454c5380')};
+    stroke: ${({ $isInit, theme }) =>
+      $isInit
+        ? theme.mode === 'light'
+          ? 'var(--gray-gray-80-02)'
+          : 'var(--gray-gray-25)'
+        : '#454c5380'};
   }
 `;
 
@@ -85,6 +102,7 @@ export interface NovaHeaderProps {
 
 export default function NovaHeader(props: NovaHeaderProps) {
   const { t } = useTranslation();
+  const { isLightMode } = useAppSelector(themeInfoSelector);
   const novaHistory = useAppSelector(novaHistorySelector);
   const isShareMode = useAppSelector(isShareModeSelector);
   const selectedItems = useAppSelector(selectedItemsSelector);
@@ -258,12 +276,12 @@ export default function NovaHeader(props: NovaHeaderProps) {
       ) : (
         <>
           <TitleWrapper>
-            <IconLogoNova width={107} height={32} />
+            <Logo />
           </TitleWrapper>
           <ButtonWrapper>
             {novaHistory.length > 0 && selectedNovaTab === NOVA_TAB_TYPE.aiChat && (
               <IconButton
-                iconComponent={IconMessagePlus}
+                iconComponent={isLightMode ? MessagePlusLightIcon : MessagePlusDarkIcon}
                 onClick={newChat}
                 iconSize="lg"
                 width={32}
@@ -280,7 +298,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
             <ScreenChangeButton></ScreenChangeButton>
             {isDesktop && (
               <IconButton
-                iconComponent={IconClose}
+                iconComponent={isLightMode ? CloseLightIcon : CloseDarkIcon}
                 onClick={() => {
                   Bridge.callBridgeApi('closePanel', selectedNovaTab as string);
                 }}

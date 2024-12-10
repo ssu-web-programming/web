@@ -116,9 +116,9 @@ const VARIANTS = {
     color: white;
   `,
   gray: css<{ selected: boolean }>`
-    background-color: ${({ selected }) =>
-      selected ? `var(--ai-purple-97-list-over)` : `var(--gray-gray-20)`};
-    color: var(--gray-gray-90-01);
+    background-color: ${({ selected, theme }) =>
+      selected ? `var(--ai-purple-97-list-over)` : theme.color.subBgGray02};
+    color: ${({ theme }) => theme.color.text.subGray04};
   `,
   darkGray: css<{ selected: boolean }>`
     background-color: ${({ selected }) => (selected ? `var(--ai-purple-97-list-over)` : `#D2D9E0`)};

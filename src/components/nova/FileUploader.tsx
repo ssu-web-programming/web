@@ -2,14 +2,18 @@ import React, { RefObject, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { getValidExt, SUPPORT_DOCUMENT_TYPE, SupportFileType } from '../../constants/fileTypes';
-import ico_camera from '../../img/ico_camera.svg';
-import ico_insert_docs from '../../img/ico_insert_docs.svg';
-import ico_logo_po from '../../img/ico_logo_po.svg';
-import ico_mobile from '../../img/ico_mobile.svg';
-import ico_pc from '../../img/ico_pc.svg';
+import InsertDocsDarkIcon from '../../img/dark/ico_insert_docs.svg';
+import MobileDarkIcon from '../../img/dark/ico_mobile.svg';
+import PCDarkIcon from '../../img/dark/ico_pc.svg';
+import CameraLightIcon from '../../img/light/ico_camera.svg';
+import InsertDocsLightIcon from '../../img/light/ico_insert_docs.svg';
+import LogoPOIcon from '../../img/light/ico_logo_po.svg';
+import MobileLightIcon from '../../img/light/ico_mobile.svg';
+import PCLightIcon from '../../img/light/ico_pc.svg';
 import { setPageStatus } from '../../store/slices/nova/pageStatusSlice';
 import { platformInfoSelector } from '../../store/slices/platformInfo';
 import { NOVA_TAB_TYPE, selectTabSlice, setCreating } from '../../store/slices/tabSlice';
+import { themeInfoSelector } from '../../store/slices/theme';
 import {
   getCurrentFile,
   removeLoadingFile,
@@ -45,6 +49,7 @@ export const FileUploader = (props: FileUploaderProps) => {
   const { loadLocalFile, getFileInfo } = useManageFile(onFinish);
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const { isLightMode } = useAppSelector(themeInfoSelector);
   const confirm = useConfirm();
   const chatNova = useChatNova();
   const { getAvailableFileCnt, calcAvailableFileCnt } = useUserInfoUtils();
@@ -68,7 +73,7 @@ export const FileUploader = (props: FileUploaderProps) => {
     const options = [
       {
         name: t(`Nova.UploadTooltip.PolarisDrive`),
-        icon: { src: ico_logo_po },
+        icon: { src: LogoPOIcon },
         onClick: async () => {
           if (isAgreed || selectedNovaTab !== 'aiChat') {
             setUploadTarget(target);
@@ -95,7 +100,14 @@ export const FileUploader = (props: FileUploaderProps) => {
       {
         name: t(`Nova.UploadTooltip.Local`),
         icon: {
-          src: platform === ClientType.android || platform === ClientType.ios ? ico_mobile : ico_pc
+          src:
+            platform === ClientType.android || platform === ClientType.ios
+              ? isLightMode
+                ? MobileLightIcon
+                : MobileDarkIcon
+              : isLightMode
+                ? PCLightIcon
+                : PCDarkIcon
         },
         onClick: () => {
           const element = inputRef?.current;
@@ -116,7 +128,7 @@ export const FileUploader = (props: FileUploaderProps) => {
     if (target === 'nova-image' && platform === ClientType.android) {
       options.push({
         name: t(`Nova.UploadTooltip.Camera`),
-        icon: { src: ico_camera },
+        icon: { src: CameraLightIcon },
         onClick: () => {
           const element = getCurrentFileInput()?.current;
           if (element) {
@@ -137,7 +149,7 @@ export const FileUploader = (props: FileUploaderProps) => {
     ) {
       options.push({
         name: t(`Nova.UploadTooltip.CurrentFile`),
-        icon: { src: ico_insert_docs },
+        icon: { src: isLightMode ? InsertDocsLightIcon : InsertDocsDarkIcon },
         onClick: async () => {
           await analysisCurDoc();
         }

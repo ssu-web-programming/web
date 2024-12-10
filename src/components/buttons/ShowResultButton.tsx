@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { css } from 'styled-components';
 
-import icon_arrow_right from '../../img/ico_front.svg';
+import icon_arrow_right from '../../img/light/ico_front.svg';
 
 import IconTextButton from './IconTextButton';
 

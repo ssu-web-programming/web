@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 
-import icon_credit from '../../img/ico_credit.svg';
-import icon_sand from '../../img/ico_send.svg';
+import icon_credit from '../../img/light/ico_credit.svg';
+import icon_sand from '../../img/light/ico_send.svg';
 import Icon from '../Icon';
 
 import Button from './Button';

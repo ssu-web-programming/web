@@ -1,14 +1,14 @@
-import { ReactComponent as IconResume } from 'img/aiChat/ico_ai_resume.svg';
-import { ReactComponent as IconSpelingcheck } from 'img/aiChat/ico_ai_spellingcheck.svg';
-import { ReactComponent as IconSummary } from 'img/aiChat/ico_ai_summary.svg';
-import { ReactComponent as IconTranslation } from 'img/aiChat/ico_ai_translation.svg';
-import { ReactComponent as IconStyle } from 'img/aiChat/ico_changing_style.svg';
-import { ReactComponent as IconNewChat } from 'img/ico_newchat.svg';
+import { ReactComponent as IconResume } from 'img/light/aiChat/ico_ai_resume.svg';
+import { ReactComponent as IconSpelingcheck } from 'img/light/aiChat/ico_ai_spellingcheck.svg';
+import { ReactComponent as IconSummary } from 'img/light/aiChat/ico_ai_summary.svg';
+import { ReactComponent as IconTranslation } from 'img/light/aiChat/ico_ai_translation.svg';
+import { ReactComponent as IconStyle } from 'img/light/aiChat/ico_changing_style.svg';
+import { ReactComponent as IconNewChat } from 'img/light/ico_newchat.svg';
 import { useTranslation } from 'react-i18next';
 import styled, { css } from 'styled-components';
 import { getIconColor } from 'util/getColor';
 
-import icon_prev from '../../../img/ico_arrow_prev.svg';
+import icon_prev from '../../../img/light/ico_arrow_prev.svg';
 import { recType, selectRecFuncSlice } from '../../../store/slices/recFuncSlice';
 import { useAppSelector } from '../../../store/store';
 import { RowBox } from '../../../views/AIChatTab';

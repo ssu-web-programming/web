@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import icon_claude from '../img/logo_anthropic.svg';
+import icon_claude from '../img/light/logo_anthropic.svg';
 
 import LinkText from './LinkText';
 

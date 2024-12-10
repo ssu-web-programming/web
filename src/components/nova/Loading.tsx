@@ -2,8 +2,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import BlurIcon from '../../img/nova/bg_blur_loading.png';
-import Spinner from '../../img/nova/nova_spinner_2x.webp';
+import BlurIcon from '../../img/light/nova/bg_blur_loading.png';
+import Spinner from '../../img/light/nova/nova_spinner_2x.webp';
 import { selectTabSlice } from '../../store/slices/tabSlice';
 import { useAppSelector } from '../../store/store';
 

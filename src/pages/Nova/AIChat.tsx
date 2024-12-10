@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ReactComponent as IconArrowLeft } from 'img/ico_arrow_left.svg';
+import { ReactComponent as IconArrowLeft } from 'img/light/ico_arrow_left.svg';
 import { useTranslation } from 'react-i18next';
 import Lottie from 'react-lottie-player';
 import { useLocation } from 'react-router-dom';
@@ -17,9 +17,11 @@ import { Guide } from '../../components/nova/Guide';
 import { ImagePreview } from '../../components/nova/ImagePreview';
 import InputBar, { flexCenter } from '../../components/nova/InputBar';
 import { FileUpladState } from '../../constants/fileTypes';
-import ico_documents from '../../img/ico_documents.svg';
-import ico_image from '../../img/ico_image.svg';
-import Spinner from '../../img/spiner_white.json';
+import ico_documents_dark from '../../img/dark/ico_documents.svg';
+import ico_image_dark from '../../img/dark/ico_image.svg';
+import ico_documents_light from '../../img/light/ico_documents.svg';
+import ico_image_light from '../../img/light/ico_image.svg';
+import Spinner from '../../img/light/spinner.json';
 import {
   deselectAllItems,
   isExportingSelector,
@@ -32,6 +34,7 @@ import {
   setIsShareMode
 } from '../../store/slices/nova/novaHistorySlice';
 import { selectTabSlice } from '../../store/slices/tabSlice';
+import { themeInfoSelector } from '../../store/slices/theme';
 import { activeToast } from '../../store/slices/toastSlice';
 import { downloadImage } from '../../util/downloadImage';
 
@@ -50,11 +53,11 @@ const GuideExample = styled.div`
   justify-content: flex-start;
   gap: 8px;
   padding: 12px;
-  border: 1px solid #c9cdd2;
+  border: 1px solid ${({ theme }) => theme.color.borderGray01};
   border-radius: 8px;
-  background: #fff;
   font-size: 14px;
-  color: var(--gray-gray-80-02);
+  color: ${({ theme }) => theme.color.text.subGray03};
+  background-color: ${({ theme }) => theme.color.subBgGray01};
 
   &:hover {
     cursor: pointer;
@@ -73,7 +76,6 @@ const ScrollDownButton = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: white;
   box-shadow: 0 2px 8px 0 #0000001a;
   z-index: 1;
 
@@ -116,6 +118,7 @@ export default function AIChat() {
   const dispatch = useAppDispatch();
   const location = useLocation();
   const { t } = useTranslation();
+  const { isLightMode } = useAppSelector(themeInfoSelector);
   const confirm = useConfirm();
   const chatNova = useChatNova();
   const { creating } = useAppSelector(selectTabSlice);
@@ -229,8 +232,6 @@ export default function AIChat() {
       };
     });
 
-    console.log(novaHistory);
-    console.log('jsonResult: ', jsonResult);
     setTimeout(() => {
       dispatch(setIsExporting(false));
       dispatch(setIsShareMode(false));
@@ -253,15 +254,15 @@ export default function AIChat() {
 
   const PROMPT_EXAMPLE = [
     {
-      src: ico_documents,
+      src: isLightMode ? ico_documents_light : ico_documents_dark,
       txt: t(`Nova.aiChat.Guide.Example1`)
     },
     {
-      src: ico_image,
+      src: isLightMode ? ico_image_light : ico_image_dark,
       txt: t(`Nova.aiChat.Guide.Example2`)
     },
     {
-      src: ico_documents,
+      src: isLightMode ? ico_documents_light : ico_documents_dark,
       txt: t(`Nova.aiChat.Guide.Example3`)
     }
   ];

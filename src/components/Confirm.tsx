@@ -15,15 +15,17 @@ export const ConfirmBox = styled.div`
   flex-direction: column;
   align-items: center;
   position: absolute;
+  gap: 12px;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   margin: auto;
+  padding: 24px;
   min-width: 328px;
   max-width: 343px;
-  box-shadow: 0px 8px 16px 0px #0000001a;
-  background-color: #fff;
+  box-shadow: 0 8px 16px 0 #0000001a;
+  background: ${({ theme }) => theme.color.subBgGray05};
   border-radius: 10px;
   z-index: 100;
   max-height: 100vh;
@@ -32,26 +34,27 @@ export const ConfirmBox = styled.div`
 
 export const Header = styled.div`
   width: 100%;
-  padding: 16px 24px;
+  padding: 14.5px 16px;
 `;
 
 const Title = styled.h2`
   margin: 0;
   font-size: 16px;
+  font-weight: 700;
   line-height: 24px;
-  padding-bottom: 12px;
   box-sizing: border-box;
+  color: ${({ theme }) => theme.color.text.subGray04};
 `;
 
 export const ContentArea = styled.div`
   width: 100%;
+  height: fit-content;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
   white-space: break-spaces;
-
-  height: fit-content;
+  padding-bottom: 24px;
   overflow-y: auto;
 
   & .important {
@@ -59,7 +62,10 @@ export const ContentArea = styled.div`
     font-weight: 700;
   }
 
-  color: var(--gray-gray-80-02);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  color: ${({ theme }) => theme.color.text.subGray03};
   scrollbar-color: #c9cdd2 #ffffff;
   scrollbar-width: thin;
 
@@ -90,7 +96,6 @@ export const CheckWrap = styled.div`
 
 export const Footer = styled.div<{ direction?: 'column' | 'row' }>`
   width: 100%;
-  padding: 16px;
   display: flex;
   flex-direction: ${(props) => props.direction};
   gap: 8px;
@@ -187,6 +192,8 @@ const Confirm = () => {
               width: 100%;
               border-radius: 8px;
               line-height: 19px;
+              font-weight: 500;
+              flex: 2;
             `}>
             {onOk.text}
           </Button>
@@ -202,6 +209,8 @@ const Confirm = () => {
                 width: 100%;
                 border-radius: 8px;
                 line-height: 19px;
+                font-weight: 500;
+                flex: 1;
               `}>
               {onCancel.text}
             </Button>

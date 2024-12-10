@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import icon_ai from '../../img/ico_ai.svg';
+import icon_ai from '../../img/light/ico_ai.svg';
 import Icon from '../Icon';
 
 const FloatingBox = styled.div`

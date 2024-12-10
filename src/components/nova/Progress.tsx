@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import Spinner from '../../img/spinner.webp';
+import Spinner from '../../img/light/spinner.webp';
 
 const Dim = styled.div`
   width: 100%;

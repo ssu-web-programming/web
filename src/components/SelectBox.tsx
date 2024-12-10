@@ -5,8 +5,8 @@ import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import styled from 'styled-components';
 
-import { ReactComponent as ArrowIcon } from '../img/ico_arrow_down_normal.svg';
-import CheckIcon from '../img/ico_check_purple.svg';
+import { ReactComponent as ArrowIcon } from '../img/light/ico_arrow_down_normal.svg';
+import CheckIcon from '../img/light/ico_check_purple.svg';
 
 const Form = styled(FormControl)`
   min-width: 136px;
