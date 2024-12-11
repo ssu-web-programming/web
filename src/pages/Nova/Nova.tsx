@@ -1,4 +1,5 @@
-import React, { Suspense, useCallback, useEffect } from 'react';
+import { Suspense, useCallback, useEffect } from 'react';
+import Tabs from 'components/nova/tabs';
 import { FileWithPath, useDropzone } from 'react-dropzone';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
@@ -24,7 +25,6 @@ import Modals, { Overlay } from '../../components/nova/modals/Modals';
 import Progress from '../../components/nova/Progress';
 import Prompt from '../../components/nova/Prompt';
 import Result from '../../components/nova/Result';
-import Tabs from '../../components/nova/Tabs';
 import Theme from '../../components/nova/Theme';
 import TimeOut from '../../components/nova/TimeOut';
 import Uploading from '../../components/nova/Uploading';
