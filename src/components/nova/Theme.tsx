@@ -19,7 +19,7 @@ const Container = styled.div`
   height: 100%;
   display: flex;
   flex: 1 1 0;
-  background-color: rgb(244, 246, 248);
+  background: ${({ theme }) => theme.color.bg};
   overflow-y: auto;
 `;
 

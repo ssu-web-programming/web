@@ -73,7 +73,7 @@ const GuideBody = styled.div`
 
 const StyledIconConvert = styled(IconConvert)`
   path {
-    fill: #511bb2;
+    fill: ${({ theme }) => theme.color.text.main};
   }
 `;
 

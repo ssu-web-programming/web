@@ -13,16 +13,12 @@ const Pre = styled.div`
   font-size: 13px;
   margin: 0;
   padding: 0;
-
-  margin: 0;
-  padding: 0;
   word-break: break-all;
 
   img {
     width: 160px !important;
     height: 160px !important;
     border-radius: 4px;
-    border: 1px solid #c9cdd2;
     display: block;
     cursor: pointer;
   }

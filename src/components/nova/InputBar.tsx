@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import IconButton from 'components/buttons/IconButton';
 import Icon from 'components/Icon';
 import { ReactComponent as DeleteDarkIcon } from 'img/dark/ico_input_delete.svg';
+import PlusCircleDarkIcon from 'img/dark/ico_plus_circle.svg';
 import { ReactComponent as SendDisabledDarkIcon } from 'img/dark/ico_send_disabled.svg';
 import ico_file_csv from 'img/light/ico_file_csv.svg';
 import ico_file_doc from 'img/light/ico_file_doc.svg';
@@ -17,6 +18,7 @@ import ico_file_txt from 'img/light/ico_file_txt.svg';
 import ico_file_word from 'img/light/ico_file_word.svg';
 import ico_file_xls from 'img/light/ico_file_xls.svg';
 import { ReactComponent as DeleteLightIcon } from 'img/light/ico_input_delete.svg';
+import PlusCircleLightIcon from 'img/light/ico_plus_circle.svg';
 import { ReactComponent as SendActiveIcon } from 'img/light/ico_send_active.svg';
 import { ReactComponent as SendDisabledLightIcon } from 'img/light/ico_send_disabled.svg';
 import { useTranslation } from 'react-i18next';
@@ -194,10 +196,6 @@ const TextArea = styled.textarea<{ value: string }>`
   }
 `;
 
-const PlusIconWrapper = styled.div`
-  margin-bottom: 6px;
-`;
-
 export interface InputBarSubmitParam extends Pick<NovaChatType, 'input' | 'type'> {
   files?: File[] | DriveFileInfo[];
 }
@@ -373,9 +371,11 @@ export default function InputBar(props: InputBarProps) {
               ))}
             </UploadBtn>
           ) : (
-            <PlusIconWrapper onClick={handleActiveUploadBtn}>
-              <Icon iconSrc={ico_plus_circle} size={30} />
-            </PlusIconWrapper>
+            <Icon
+              iconSrc={isLightMode ? PlusCircleLightIcon : PlusCircleDarkIcon}
+              size={24}
+              onClick={handleActiveUploadBtn}
+            />
           )}
         </div>
         <div>
