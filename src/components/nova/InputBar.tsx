@@ -1,22 +1,24 @@
 import React, { useEffect, useRef, useState } from 'react';
 import IconButton from 'components/buttons/IconButton';
 import Icon from 'components/Icon';
-import { ReactComponent as DeleteIcon } from 'img/ico_delete.svg';
-import ico_file_csv from 'img/ico_file_csv.svg';
-import ico_file_doc from 'img/ico_file_doc.svg';
-import ico_file_hwp from 'img/ico_file_hwp.svg';
-import ico_file_img from 'img/ico_file_img.svg';
-import ico_file_odt from 'img/ico_file_odt.svg';
-import ico_file_pdf from 'img/ico_file_pdf.svg';
-import ico_file_pps from 'img/ico_file_pps.svg';
-import ico_file_ppt from 'img/ico_file_ppt.svg';
-import ico_file_sheet from 'img/ico_file_sheet.svg';
-import ico_file_slide from 'img/ico_file_slide.svg';
-import ico_file_txt from 'img/ico_file_txt.svg';
-import ico_file_word from 'img/ico_file_word.svg';
-import ico_file_xls from 'img/ico_file_xls.svg';
-import { ReactComponent as SendActiveIcon } from 'img/ico_send_active.svg';
-import { ReactComponent as SendDisabledIcon } from 'img/ico_send_disabled.svg';
+import { ReactComponent as DeleteDarkIcon } from 'img/dark/ico_input_delete.svg';
+import { ReactComponent as SendDisabledDarkIcon } from 'img/dark/ico_send_disabled.svg';
+import ico_file_csv from 'img/light/ico_file_csv.svg';
+import ico_file_doc from 'img/light/ico_file_doc.svg';
+import ico_file_hwp from 'img/light/ico_file_hwp.svg';
+import ico_file_img from 'img/light/ico_file_img.svg';
+import ico_file_odt from 'img/light/ico_file_odt.svg';
+import ico_file_pdf from 'img/light/ico_file_pdf.svg';
+import ico_file_pps from 'img/light/ico_file_pps.svg';
+import ico_file_ppt from 'img/light/ico_file_ppt.svg';
+import ico_file_sheet from 'img/light/ico_file_sheet.svg';
+import ico_file_slide from 'img/light/ico_file_slide.svg';
+import ico_file_txt from 'img/light/ico_file_txt.svg';
+import ico_file_word from 'img/light/ico_file_word.svg';
+import ico_file_xls from 'img/light/ico_file_xls.svg';
+import { ReactComponent as DeleteLightIcon } from 'img/light/ico_input_delete.svg';
+import { ReactComponent as SendActiveIcon } from 'img/light/ico_send_active.svg';
+import { ReactComponent as SendDisabledLightIcon } from 'img/light/ico_send_disabled.svg';
 import { useTranslation } from 'react-i18next';
 import { NovaChatType } from 'store/slices/nova/novaHistorySlice';
 import { useAppDispatch, useAppSelector } from 'store/store';
@@ -24,11 +26,13 @@ import styled, { css } from 'styled-components';
 import { sliceFileName } from 'util/common';
 
 import { getValidExt, SUPPORT_DOCUMENT_TYPE } from '../../constants/fileTypes';
-import ico_plus_circle from '../../img/ico_plus_circle.svg';
-import { ReactComponent as DocsPlusIcon } from '../../img/ico_upload_docs_plus.svg';
-import { ReactComponent as ImagePlusIcon } from '../../img/ico_upload_img_plus.svg';
-import LoadingSpinner from '../../img/spinner.webp';
+import { ReactComponent as DocsPlusIconDark } from '../../img/dark/ico_upload_docs_plus.svg';
+import { ReactComponent as ImagePlusIconDark } from '../../img/dark/ico_upload_img_plus.svg';
+import { ReactComponent as DocsPlusIconLight } from '../../img/light/ico_upload_docs_plus.svg';
+import { ReactComponent as ImagePlusIconLight } from '../../img/light/ico_upload_img_plus.svg';
+import LoadingSpinner from '../../img/light/spinner.webp';
 import { selectTabSlice } from '../../store/slices/tabSlice';
+import { themeInfoSelector } from '../../store/slices/theme';
 import {
   DriveFileInfo,
   getDriveFiles,
@@ -50,6 +54,7 @@ export const flexCenter = css`
 const UploadBtn = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
 
   > button {
     width: 32px;
@@ -65,8 +70,11 @@ const InputBarBase = styled.div<{ disabled: boolean }>`
   ${flexCenter};
   flex-direction: column;
   justify-content: center;
-  border-top: 2px solid var(--ai-purple-50-main);
-  background-color: white;
+  border-top: ${({ theme }) => (theme.mode === 'dark' ? '1px solid var(--gray-gray-87)' : 'none')};
+  box-shadow: ${({ theme }) =>
+    theme.mode === 'light' ? '0px -4px 8px 0px var(--gray-shadow-light)' : 'none'};
+  background-color: ${({ theme }) =>
+    theme.mode === 'light' ? theme.color.subBgGray01 : 'transparent'};
 
   ${({ disabled }) =>
     disabled &&
@@ -92,20 +100,28 @@ const FileListViewer = styled.div`
 
 const FileItem = styled.div`
   width: fit-content;
-  height: 40px;
+  height: 48px;
+  position: relative;
   ${flexCenter};
   gap: 8px;
   padding: 8px;
   border-radius: 8px;
-  background: var(--gray-gray-10);
+  background: ${({ theme }) => theme.color.subBgGray04};
+  color: ${({ theme }) => theme.color.text.subGray04};
 
-  font-size: 14px;
+  font-size: 16px;
   line-height: 21px;
   text-align: left;
 
   .uploading {
     font-weight: 700;
     color: #6f3ad0;
+  }
+
+  svg {
+    position: absolute;
+    top: -4px;
+    right: -4px;
   }
 `;
 
@@ -120,16 +136,16 @@ const InputTxtWrapper = styled.div<{ hasValue: boolean }>`
 
   & > div:nth-child(1) {
     display: flex;
-    flex-direction: column-reverse;
+    align-items: center;
+    justify-content: center;
   }
 
   & > div:nth-child(2) {
-    background: ${({ hasValue }) =>
-      hasValue ? 'linear-gradient(180deg, #6f3ad0 0%, #a86cea 100%)' : 'var(--gray-gray-40)'};
-
     z-index: 1;
     padding: 1px;
     border-radius: 4px;
+    border: 1px solid
+      ${({ theme, hasValue }) => (hasValue ? 'var(--ai-purple-50-main)' : theme.color.borderGray01)};
     overflow: hidden;
     flex-grow: 1;
   }
@@ -147,7 +163,6 @@ const TextArea = styled.textarea<{ value: string }>`
   height: 40px;
   padding: 0;
   box-sizing: border-box;
-  background: white;
   outline: none;
   border-radius: 3px;
   border-style: solid;
@@ -158,6 +173,8 @@ const TextArea = styled.textarea<{ value: string }>`
   font-size: 14px;
   line-height: 20px;
   z-index: 2;
+  color: ${({ theme }) => theme.color.text.subGray04};
+  background-color: transparent;
 
   scrollbar-width: thin;
   scrollbar-color: #c9cdd2 transparent;
@@ -199,6 +216,7 @@ export default function InputBar(props: InputBarProps) {
   const dispatch = useAppDispatch();
   const { disabled = false, expiredNOVA = false, contents = '', setContents } = props;
 
+  const { isLightMode } = useAppSelector(themeInfoSelector);
   const localFiles = useAppSelector(getLocalFiles);
   const driveFiles = useAppSelector(getDriveFiles);
   const loadingFile = useAppSelector(getLoadingFile);
@@ -287,13 +305,13 @@ export default function InputBar(props: InputBarProps) {
     {
       target: 'nova-file',
       accept: SUPPORT_DOCUMENT_TYPE,
-      children: <DocsPlusIcon />,
+      children: isLightMode ? <DocsPlusIconLight /> : <DocsPlusIconDark />,
       ref: inputDocsFileRef
     },
     {
       target: 'nova-image',
       accept: getValidExt(selectedNovaTab),
-      children: <ImagePlusIcon />,
+      children: isLightMode ? <ImagePlusIconLight /> : <ImagePlusIconDark />,
       ref: inputImgFileRef
     }
   ];
@@ -306,11 +324,11 @@ export default function InputBar(props: InputBarProps) {
             <FileItem key={file.name}>
               <Icon size={28} iconSrc={getFileIcon(file.name)} />
               <span>{sliceFileName(file.name)}</span>
-              <IconButton
-                iconSize="lg"
-                iconComponent={DeleteIcon}
-                onClick={() => handleRemoveLocalFile(file)}
-              />
+              {isLightMode ? (
+                <DeleteLightIcon onClick={() => handleRemoveLocalFile(file)} />
+              ) : (
+                <DeleteDarkIcon onClick={() => handleRemoveLocalFile(file)} />
+              )}
             </FileItem>
           ))}
         </FileListViewer>
@@ -321,11 +339,11 @@ export default function InputBar(props: InputBarProps) {
             <FileItem key={file.name}>
               <Icon size={28} iconSrc={getFileIcon(file.name)} />
               <span>{sliceFileName(file.name)}</span>
-              <IconButton
-                iconSize="lg"
-                iconComponent={DeleteIcon}
-                onClick={() => handleRemoveDriveFile(file)}
-              />
+              {isLightMode ? (
+                <DeleteLightIcon onClick={() => handleRemoveDriveFile(file)} />
+              ) : (
+                <DeleteDarkIcon onClick={() => handleRemoveDriveFile(file)} />
+              )}
             </FileItem>
           ))}
         </FileListViewer>
@@ -386,7 +404,13 @@ export default function InputBar(props: InputBarProps) {
             disable={contents.length < 1}
             onClick={handleOnClick}
             iconSize="lg"
-            iconComponent={contents.length < 1 ? SendDisabledIcon : SendActiveIcon}
+            iconComponent={
+              contents.length < 1
+                ? isLightMode
+                  ? SendDisabledLightIcon
+                  : SendDisabledDarkIcon
+                : SendActiveIcon
+            }
             cssExt={css`
               opacity: 1;
               padding: 0;

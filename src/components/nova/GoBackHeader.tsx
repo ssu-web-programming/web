@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { ReactComponent as ArrowLeftIcon } from '../../img/nova/arrow_left.svg';
+import { ReactComponent as ArrowLeftIcon } from '../../img/light/nova/arrow_left.svg';
 import { setPageData, setPageResult, setPageStatus } from '../../store/slices/nova/pageStatusSlice';
 import { selectTabSlice } from '../../store/slices/tabSlice';
 import { setDriveFiles, setLocalFiles } from '../../store/slices/uploadFiles';

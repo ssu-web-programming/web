@@ -1,11 +1,11 @@
 import { PropsWithChildren, useMemo } from 'react';
 import ClaudeLinkText from 'components/ClaudeLinkText';
-import icon_credit_purple from 'img/ico_credit_purple.svg';
+import icon_credit_purple from 'img/light/ico_credit_purple.svg';
 import { useTranslation } from 'react-i18next';
 import styled, { css, FlattenSimpleInterpolation } from 'styled-components';
 
-import icon_ai from '../img/ico_ai.svg';
-import icon_ai_loading from '../img/loading_dot_2x.webp';
+import icon_ai from '../img/light/ico_ai.svg';
+import icon_ai_loading from '../img/light/loading_dot_2x.webp';
 import { Chat } from '../store/slices/chatHistorySlice';
 import { selectRecFuncSlice } from '../store/slices/recFuncSlice';
 import { selectTabSlice } from '../store/slices/tabSlice';

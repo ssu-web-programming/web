@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-import { ReactComponent as Icon } from '../../../img/askDoc/ico_crown_64.svg';
+import { ReactComponent as Icon } from '../../../img/light/askDoc/ico_crown_64.svg';
 
 import ErrorModal from './ErrorModal';
 

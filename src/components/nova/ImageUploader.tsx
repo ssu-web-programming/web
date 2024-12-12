@@ -3,14 +3,16 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { compressImage, isPixelLimitExceeded, SUPPORT_IMAGE_TYPE } from '../../constants/fileTypes';
-import CreditIcon from '../../img/ico_credit_gray.svg';
-import { ReactComponent as UploadIcon } from '../../img/ico_upload_img_plus.svg';
+import { ReactComponent as UploadDarkIcon } from '../../img/dark/ico_upload_img_plus.svg';
+import CreditIcon from '../../img/light/ico_credit_gray.svg';
+import { ReactComponent as UploadLightIcon } from '../../img/light/ico_upload_img_plus.svg';
 import {
   selectPageData,
   setPageData,
   setPageStatus
 } from '../../store/slices/nova/pageStatusSlice';
 import { NOVA_TAB_TYPE } from '../../store/slices/tabSlice';
+import { themeInfoSelector } from '../../store/slices/theme';
 import { getDriveFiles, getLocalFiles } from '../../store/slices/uploadFiles';
 import { userInfoSelector } from '../../store/slices/userInfo';
 import { useAppDispatch, useAppSelector } from '../../store/store';
@@ -28,9 +30,9 @@ const Wrap = styled.div`
   position: relative;
   height: 206px;
   padding: 0 16px;
-  border: 2px dashed #c9cdd2;
+  border: 1px dashed ${({ theme }) => theme.color.borderGray01};
   border-radius: 8px;
-  background-color: white;
+  background-color: ${({ theme }) => theme.color.subBgGray01};
 `;
 
 const ImageBox = styled.div`
@@ -61,7 +63,7 @@ const Icon = styled.div<{ disable: boolean }>`
     font-size: 16px;
     font-weight: 700;
     line-height: 24px;
-    color: #454c53;
+    color: ${({ theme }) => theme.color.text.subGray03};
   }
 `;
 
@@ -72,7 +74,7 @@ const Credit = styled.div`
   justify-content: center;
   gap: 4px;
   padding: 2px 2px 2px 12px;
-  background: #f2f4f6;
+  background: ${({ theme }) => theme.color.subBgGray02};
   border-radius: 999px;
 
   .img {
@@ -91,7 +93,7 @@ const Credit = styled.div`
     font-size: 16px;
     font-weight: 700;
     padding-bottom: 2px;
-    color: #454c53;
+    color: ${({ theme }) => theme.color.text.subGray03};
   }
 `;
 
@@ -116,6 +118,7 @@ export default function ImageUploader(props: ImageUploaderProps) {
   const inputImgFileRef = useRef<HTMLInputElement | null>(null);
   const dispatch = useAppDispatch();
   const errorHandle = useErrorHandle();
+  const { isLightMode } = useAppSelector(themeInfoSelector);
   const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
   const localFiles = useAppSelector(getLocalFiles);
   const driveFiles = useAppSelector(getDriveFiles);
@@ -208,7 +211,7 @@ export default function ImageUploader(props: ImageUploaderProps) {
         }}>
         <ImageBox>
           <Icon disable={isAgreed === undefined}>
-            <UploadIcon />
+            {isLightMode ? <UploadLightIcon /> : <UploadDarkIcon />}
             <span>{t(`Nova.UploadTooltip.UploadImage`)}</span>
           </Icon>
           <Credit>

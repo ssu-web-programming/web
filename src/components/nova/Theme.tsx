@@ -2,12 +2,12 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { ReactComponent as CheckIcon } from '../../img/ico_check.svg';
-import Composition from '../../img/nova/changeStyle/change_style_composition.png';
-import Mosaic from '../../img/nova/changeStyle/change_style_mosaic.png';
-import Scream from '../../img/nova/changeStyle/change_style_scream.png';
-import Starry from '../../img/nova/changeStyle/change_style_starry.png';
-import Wave from '../../img/nova/changeStyle/change_style_wave.png';
+import { ReactComponent as CheckIcon } from '../../img/light/ico_check.svg';
+import Composition from '../../img/light/nova/changeStyle/change_style_composition.png';
+import Mosaic from '../../img/light/nova/changeStyle/change_style_mosaic.png';
+import Scream from '../../img/light/nova/changeStyle/change_style_scream.png';
+import Starry from '../../img/light/nova/changeStyle/change_style_starry.png';
+import Wave from '../../img/light/nova/changeStyle/change_style_wave.png';
 import { selectPageResult } from '../../store/slices/nova/pageStatusSlice';
 import { NOVA_TAB_TYPE, selectTabSlice } from '../../store/slices/tabSlice';
 import { useAppSelector } from '../../store/store';

@@ -1,19 +1,21 @@
-import icon_ai_tools from 'img/ico_ai_tools.svg';
+import icon_ai_tools from 'img/light/ico_ai_tools.svg';
 import { useLocation } from 'react-router';
 import styled from 'styled-components';
 
-import { ReactComponent as IconClose } from '../../img/ico_ai_close.svg';
+import { ReactComponent as IconClose } from '../../img/light/ico_ai_close.svg';
 import Bridge from '../../util/bridge';
 import IconButton from '../buttons/IconButton';
 import Icon from '../Icon';
 
-const Contents = styled.div`
+const Contents = styled.div<{ isBorder: boolean }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
 
   padding: 8px 5px 8px 10px;
   height: 48px;
+  background-color: ${({ theme }) => theme.color.subBgGray01};
+  border-bottom: 1px solid ${(props) => (props.isBorder ? props.theme.color.borderGray01 : 'none')};
 `;
 
 const TitleWrapper = styled.div`
@@ -66,12 +68,11 @@ export default function Header(props: HeaderProps) {
   if (location.pathname.toLowerCase() === '/nova') {
     return (
       <Contents
+        isBorder={true}
         style={{
           height: '56px',
           minHeight: '56px',
-          padding: '0px 16px',
-          borderBottom: '1px solid #c9cdd2',
-          backgroundColor: 'white'
+          padding: '0px 16px'
         }}>
         {children}
       </Contents>
@@ -79,7 +80,7 @@ export default function Header(props: HeaderProps) {
   }
 
   return (
-    <Contents>
+    <Contents isBorder={false}>
       <TitleWrapper>
         <Icon iconSrc={icon_ai_tools} size="lg" />
         <Title>{title}</Title>

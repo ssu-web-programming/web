@@ -5,8 +5,7 @@ import styled from 'styled-components';
 import AskDocButton from '../../components/buttons/AskDocButton';
 import useLangParameterNavigate from '../../components/hooks/useLangParameterNavigate';
 import Icon from '../../components/Icon';
-import { ReactComponent as IconCredit } from '../../img/ico_credit.svg';
-import Credit from '../../img/ico_credit.svg';
+import Credit, { ReactComponent as IconCredit } from '../../img/light/ico_credit.svg';
 import { Footer, GuideMessage, Wrapper } from '../../style/askDoc';
 
 export const StartAnalysisDoc = () => {

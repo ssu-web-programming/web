@@ -1,4 +1,5 @@
-import React, { Suspense, useCallback, useEffect } from 'react';
+import { Suspense, useCallback, useEffect } from 'react';
+import Tabs from 'components/nova/tabs';
 import { FileWithPath, useDropzone } from 'react-dropzone';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
@@ -24,7 +25,6 @@ import Modals, { Overlay } from '../../components/nova/modals/Modals';
 import Progress from '../../components/nova/Progress';
 import Prompt from '../../components/nova/Prompt';
 import Result from '../../components/nova/Result';
-import Tabs from '../../components/nova/Tabs';
 import Theme from '../../components/nova/Theme';
 import TimeOut from '../../components/nova/TimeOut';
 import Uploading from '../../components/nova/Uploading';
@@ -42,7 +42,6 @@ const Wrapper = styled.div<{ isScroll: boolean }>`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  background: rgb(244, 246, 248);
   overflow: hidden;
 
   scrollbar-color: #c9cdd2 #ffffff;
@@ -71,6 +70,7 @@ const Body = styled.div`
   display: flex;
   position: relative;
   flex-direction: column;
+  background-color: ${({ theme }) => theme.color.bg};
 `;
 
 export type ClientStatusType = 'home' | 'doc_edit_mode' | 'doc_view_mode';

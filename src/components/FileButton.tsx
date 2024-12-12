@@ -17,9 +17,11 @@ const FileButtonBase = styled.button`
 const Label = styled.label<{ disable: boolean }>`
   width: 100%;
   height: 100%;
-  display: block;
+  display: flex;
   cursor: ${(props) => (props.disable ? 'initial' : 'pointer')};
   color: ${(props) => (props.disable ? '#454c5380' : 'var(--gray-gray-80-02)')};
+  align-items: center;
+  justify-content: center;
 `;
 
 interface FileButtonProps extends React.ComponentPropsWithoutRef<'input'> {

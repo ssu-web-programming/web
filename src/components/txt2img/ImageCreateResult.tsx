@@ -1,14 +1,13 @@
 import { useMemo, useState } from 'react';
 import IconTextButton from 'components/buttons/IconTextButton';
-import DownloadIcon from 'img/ico_download_white.svg';
-import InsertDocsIcon from 'img/ico_insert_docs.svg';
+import DownloadIcon from 'img/light/ico_download_white.svg';
+import InsertDocsIcon from 'img/light/ico_insert_docs.svg';
 import { useTranslation } from 'react-i18next';
 import styled, { css } from 'styled-components';
 
-import { ReactComponent as IconArrowDown } from '../../img/ico_arrow_down_small.svg';
-import { ReactComponent as IconArrowUp } from '../../img/ico_arrow_up_small.svg';
-import icon_credit_purple from '../../img/ico_credit_purple.svg';
-import { activeToast } from '../../store/slices/toastSlice';
+import { ReactComponent as IconArrowDown } from '../../img/light/ico_arrow_down_small.svg';
+import { ReactComponent as IconArrowUp } from '../../img/light/ico_arrow_up_small.svg';
+import icon_credit_purple from '../../img/light/ico_credit_purple.svg';
 import {
   T2IOptionType,
   T2IType,
@@ -19,7 +18,6 @@ import { useAppDispatch } from '../../store/store';
 import Bridge from '../../util/bridge';
 import { RowContainer, SubTitleArea } from '../../views/ImageCreate';
 import ArrowSwitcher from '../ArrowSwitcher';
-import Button from '../buttons/Button';
 import IconButton from '../buttons/IconButton';
 import ReturnButton from '../buttons/ReturnButton';
 import Grid from '../layout/Grid';

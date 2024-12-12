@@ -1,23 +1,23 @@
 import { useMemo } from 'react';
 import IconTextButton from 'components/buttons/IconTextButton';
 import SelectModelButton from 'components/buttons/select-model-button';
-import icon_credit_outline from 'img/ico_credit_outline.svg';
-import { ReactComponent as IconStyleNone } from 'img/text2Img/non_select.svg';
+import icon_credit_outline from 'img/light/ico_credit_outline.svg';
+import { ReactComponent as IconStyleNone } from 'img/light/text2Img/non_select.svg';
 import { useTranslation } from 'react-i18next';
 import { creditInfoSelector } from 'store/slices/creditInfo';
 import styled, { css, FlattenSimpleInterpolation } from 'styled-components';
 import { getIconColor } from 'util/getColor';
 
-import iconStyle3d from '../../img/text2Img/3d@2x.png';
-import iconStyleAni from '../../img/text2Img/ani@2x.png';
-import iconStyleConcept from '../../img/text2Img/concept@2x.png';
-import { ReactComponent as RatioHorizontal } from '../../img/text2Img/horizontal.svg';
-import iconStyleOil from '../../img/text2Img/oil@2x.png';
-import iconStylePhoto from '../../img/text2Img/photo@2x.png';
-import iconStyleRet from '../../img/text2Img/ret@2x.png';
-import { ReactComponent as RatioSqure } from '../../img/text2Img/square.svg';
-import { ReactComponent as RatioVertical } from '../../img/text2Img/vertical.svg';
-import iconStyleWater from '../../img/text2Img/water@2x.png';
+import iconStyle3d from '../../img/light/text2Img/3d@2x.png';
+import iconStyleAni from '../../img/light/text2Img/ani@2x.png';
+import iconStyleConcept from '../../img/light/text2Img/concept@2x.png';
+import { ReactComponent as RatioHorizontal } from '../../img/light/text2Img/horizontal.svg';
+import iconStyleOil from '../../img/light/text2Img/oil@2x.png';
+import iconStylePhoto from '../../img/light/text2Img/photo@2x.png';
+import iconStyleRet from '../../img/light/text2Img/ret@2x.png';
+import { ReactComponent as RatioSqure } from '../../img/light/text2Img/square.svg';
+import { ReactComponent as RatioVertical } from '../../img/light/text2Img/vertical.svg';
+import iconStyleWater from '../../img/light/text2Img/water@2x.png';
 import {
   T2IOptionType,
   T2IType,

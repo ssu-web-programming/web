@@ -1,9 +1,9 @@
 import React from 'react';
-import CreditColorIcon from 'img/ico_credit_color_outline.svg';
+import CreditColorIcon from 'img/light/ico_credit_color_outline.svg';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { ReactComponent as BangIcon } from '../../img/bang_circle.svg';
+import { ReactComponent as BangIcon } from '../../img/light/bang_circle.svg';
 import { selectPageResult } from '../../store/slices/nova/pageStatusSlice';
 import { NOVA_TAB_TYPE, selectTabSlice } from '../../store/slices/tabSlice';
 import { useAppSelector } from '../../store/store';

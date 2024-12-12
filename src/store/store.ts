@@ -23,6 +23,7 @@ import recFunction from './slices/recFuncSlice';
 import recognizedVoice from './slices/recognizedVoice';
 import screenMode from './slices/screenMode';
 import tab, { shareAnswerState } from './slices/tabSlice';
+import theme from './slices/theme';
 import toast from './slices/toastSlice';
 import txtimgHistory from './slices/txt2imgHistory';
 import uploadFiles from './slices/uploadFiles';
@@ -56,7 +57,8 @@ const store = configureStore({
     pageStatusSlice,
     announceInfoSlice,
     platformInfo,
-    screenMode
+    screenMode,
+    theme
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }).concat(shareAnswerState),

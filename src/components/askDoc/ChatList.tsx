@@ -2,7 +2,7 @@ import { Dispatch, MutableRefObject, SetStateAction, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import icon_retry from '../../img/ico_reanalyze.svg';
+import icon_retry from '../../img/light/ico_reanalyze.svg';
 import { AskDocChat, selectAskDoc } from '../../store/slices/askDoc';
 import { setCreating } from '../../store/slices/tabSlice';
 import { activeToast } from '../../store/slices/toastSlice';

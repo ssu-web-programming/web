@@ -1,6 +1,6 @@
 import styled, { FlattenSimpleInterpolation } from 'styled-components';
 
-import icon_check from '../img/ico_check.svg';
+import icon_check from '../img/light/ico_check.svg';
 
 export interface CheckBoxProps {
   isChecked: boolean;

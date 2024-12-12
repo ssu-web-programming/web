@@ -3,7 +3,7 @@ import { BoldTextLength } from 'components/TextLength';
 import { useTranslation } from 'react-i18next';
 import styled, { css } from 'styled-components';
 
-import icon_credit_purple from '../../img/ico_credit_purple.svg';
+import icon_credit_purple from '../../img/light/ico_credit_purple.svg';
 import { selectTabSlice } from '../../store/slices/tabSlice';
 import { activeToast } from '../../store/slices/toastSlice';
 import {

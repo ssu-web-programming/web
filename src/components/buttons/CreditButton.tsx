@@ -1,7 +1,7 @@
 import { PropsWithChildren } from 'react';
 import styled, { css } from 'styled-components';
 
-import icon_credit from '../../img/ico_credit.svg';
+import icon_credit from '../../img/light/ico_credit.svg';
 import Icon from '../Icon';
 
 import Button, { ButtonProps } from './Button';

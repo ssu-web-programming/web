@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import styled, { css } from 'styled-components';
 
-import icon_credit from '../../img/ico_credit_purple.svg';
+import icon_credit from '../../img/light/ico_credit_purple.svg';
 import { summarySelector } from '../../store/slices/askDocSummary';
 import { useAppSelector } from '../../store/store';
 import Button from '../buttons/Button';

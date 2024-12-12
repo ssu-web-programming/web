@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useMemo, useRef } from 'react';
 import IconButton from 'components/buttons/IconButton';
-import { ReactComponent as SendActiveIcon } from 'img/ico_send_active.svg';
+import { ReactComponent as SendActiveIcon } from 'img/light/ico_send_active.svg';
 import { useTranslation } from 'react-i18next';
 import styled, { css, FlattenSimpleInterpolation } from 'styled-components';
 

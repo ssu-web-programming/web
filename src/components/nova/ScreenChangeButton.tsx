@@ -1,5 +1,5 @@
-import { ReactComponent as IconMax } from 'img/ico_nova_max.svg';
-import { ReactComponent as IconMin } from 'img/ico_nova_min.svg';
+import { ReactComponent as IconMax } from 'img/light/ico_nova_max.svg';
+import { ReactComponent as IconMin } from 'img/light/ico_nova_min.svg';
 
 import { DeviceType, platformInfoSelector } from '../../store/slices/platformInfo';
 import { screenModeSelector, setScreenMode } from '../../store/slices/screenMode';

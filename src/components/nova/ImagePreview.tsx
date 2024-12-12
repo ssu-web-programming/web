@@ -1,4 +1,4 @@
-import { ReactComponent as xMarkIcon } from 'img/ico_xmark.svg';
+import { ReactComponent as xMarkIcon } from 'img/light/ico_xmark.svg';
 import styled, { css } from 'styled-components';
 
 import { NovaFileInfo } from '../../store/slices/nova/novaHistorySlice';

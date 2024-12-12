@@ -6,19 +6,21 @@ import Icon from 'components/Icon';
 import { getFileIcon } from 'components/nova/InputBar';
 import Select from 'components/select';
 import { getMaxFileSize } from 'constants/fileTypes';
-import { ReactComponent as IconRight } from 'img/angle_right.svg';
-import ico_file_folder from 'img/ico_file_folder.svg';
-import ico_file_inbox from 'img/ico_file_inbox.svg';
-import ico_file_poDrive from 'img/ico_file_po_drive.svg';
-import { ReactComponent as IconUploadDocs } from 'img/ico_upload_docs.svg';
-import { ReactComponent as IconUploadImg } from 'img/ico_upload_img.svg';
+import { ReactComponent as RightDarkIcon } from 'img/dark/ico_angle_right.svg';
+import { ReactComponent as RightLightIcon } from 'img/light/ico_angle_right.svg';
+import ico_file_folder from 'img/light/ico_file_folder.svg';
+import ico_file_inbox from 'img/light/ico_file_inbox.svg';
+import ico_file_poDrive from 'img/light/ico_file_po_drive.svg';
+import { ReactComponent as IconUploadDocs } from 'img/light/ico_upload_docs.svg';
+import { ReactComponent as IconUploadImg } from 'img/light/ico_upload_img.svg';
 import { useTranslation } from 'react-i18next';
 import { NOVA_TAB_TYPE, selectTabSlice } from 'store/slices/tabSlice';
 import { activeToast } from 'store/slices/toastSlice';
 import { DriveFileInfo } from 'store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from 'store/store';
 
-import LoadingSpinner from '../../img/spinner.webp';
+import LoadingSpinner from '../../img/light/spinner.webp';
+import { themeInfoSelector } from '../../store/slices/theme';
 
 import * as S from './style';
 
@@ -64,6 +66,7 @@ export default function PoDrive(props: PoDriveProps) {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const { getFileList } = useManageFile();
+  const { isLightMode } = useAppSelector(themeInfoSelector);
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
   const { getMaxFilesPerUpload } = useUserInfoUtils();
   const [selectedOption, setSelectedOption] = useState<OptionValues>('latest');
@@ -191,18 +194,30 @@ export default function PoDrive(props: PoDriveProps) {
   return (
     <S.Wrapper>
       <S.Navi>
-        {navi.length > 1 && (
-          <IconRight
-            style={{
-              width: '12px',
-              minWidth: '12px',
-              height: '24px',
-              transform: 'rotate(180deg)',
-              cursor: 'pointer'
-            }}
-            onClick={onBack}
-          />
-        )}
+        {navi.length > 1 &&
+          (isLightMode ? (
+            <RightLightIcon
+              style={{
+                width: '12px',
+                minWidth: '12px',
+                height: '24px',
+                transform: 'rotate(180deg)',
+                cursor: 'pointer'
+              }}
+              onClick={onBack}
+            />
+          ) : (
+            <RightDarkIcon
+              style={{
+                width: '12px',
+                minWidth: '12px',
+                height: '24px',
+                transform: 'rotate(180deg)',
+                cursor: 'pointer'
+              }}
+              onClick={onBack}
+            />
+          ))}
 
         <div
           style={{

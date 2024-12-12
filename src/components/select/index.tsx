@@ -1,8 +1,12 @@
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import Icon from 'components/Icon';
-import icArrowDown from 'img/ico_arrow_down_normal.svg';
+import ArrowDownDarkIcon from 'img/dark/ico_arrow_down_normal.svg';
+import ArrowDownLightIcon from 'img/light/ico_arrow_down_normal.svg';
 import { useTranslation } from 'react-i18next';
 import { FlattenSimpleInterpolation } from 'styled-components';
+
+import { themeInfoSelector } from '../../store/slices/theme';
+import { useAppSelector } from '../../store/store';
 
 import * as S from './style';
 
@@ -55,6 +59,7 @@ export default function Select<T extends string>({
   $optionStyle,
   $iconStyles
 }: SelectProps<T>) {
+  const { isLightMode } = useAppSelector(themeInfoSelector);
   const [isOpen, setIsOpen] = useState(false);
   const selectRef = useRef<HTMLDivElement>(null);
   const { t } = useTranslation();
@@ -106,7 +111,7 @@ export default function Select<T extends string>({
         $selectButtonStyle={$selectButtonStyle}>
         {defaultRenderSelectedValue(selectedOption)}
         <S.IconWrapper isOpen={isOpen} $iconStyles={$iconStyles}>
-          <Icon iconSrc={icArrowDown} />
+          <Icon iconSrc={isLightMode ? ArrowDownLightIcon : ArrowDownDarkIcon} />
         </S.IconWrapper>
       </S.SelectButton>
 

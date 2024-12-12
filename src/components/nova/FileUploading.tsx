@@ -1,10 +1,15 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import Lottie from 'react-lottie-player';
 import styled from 'styled-components';
 
 import { FileUpladState } from '../../constants/fileTypes';
-import BlurIcon from '../../img/nova/bg_blur_loading.png';
-import Spinner from '../../img/nova/nova_spinner_2x.webp';
+import BlurDarkIcon from '../../img/dark/nova/bg_blur_loading.svg';
+import SpinnerDark from '../../img/dark/nova/nova_spinner.json';
+import BlurLightIcon from '../../img/light/nova/bg_blur_loading.png';
+import SpinnerLight from '../../img/light/nova/nova_spinner.json';
+import { themeInfoSelector } from '../../store/slices/theme';
+import { useAppSelector } from '../../store/store';
 
 const FileUploadWrapper = styled.div`
   width: 100%;
@@ -15,7 +20,7 @@ const FileUploadWrapper = styled.div`
   position: absolute;
   left: 0;
   top: 0;
-  background-color: white;
+  background: ${({ theme }) => theme.color.bg};
 `;
 
 const Background = styled.div`
@@ -25,20 +30,18 @@ const Background = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-image: url(${BlurIcon});
+  background-image: ${({ theme }) =>
+    theme.mode === 'light' ? `url(${BlurLightIcon})` : `url(${BlurDarkIcon})`};
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
-
-  img {
-    transform: scale(0.5);
-  }
+  gap: 8px;
 
   span {
     font-size: 16px;
     font-weight: 500;
     line-height: 24px;
-    color: #6f3ad0;
+    color: ${({ theme }) => theme.color.text.main02};
     white-space: break-spaces;
     text-align: center;
   }
@@ -51,12 +54,19 @@ interface FileUploadingProps extends FileUpladState {
 export const FileUploading = (props: FileUploadingProps) => {
   const { type, state } = props;
   const { t } = useTranslation();
+  const { isLightMode } = useAppSelector(themeInfoSelector);
+
   if (state === 'ready') return null;
 
   return (
     <FileUploadWrapper>
       <Background>
-        <img src={Spinner} alt="spinner" />
+        <Lottie
+          animationData={isLightMode ? SpinnerLight : SpinnerDark}
+          loop
+          play
+          style={{ width: 56, height: 56 }}
+        />
         <span>
           {state === 'upload'
             ? t(`Nova.UploadState.${state}_${type}`)

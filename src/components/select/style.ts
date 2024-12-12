@@ -19,11 +19,12 @@ const SelectButton = styled.button<{
   position: relative;
   width: 100%;
   text-align: left;
-  background: white;
+  background: transparent;
+  color: ${({ theme }) => theme.color.text.subGray04};
   border-radius: 8px;
   cursor: pointer;
   outline: none;
-  padding: 0px;
+  padding: 0;
 
   ${({ $stylesSelectedOption }) =>
     $stylesSelectedOption &&
@@ -31,7 +32,6 @@ const SelectButton = styled.button<{
       background: #ede5fe;
       box-shadow: 0 0 0 1px var(--ai-purple-90) inset;
     `}
-
   & p:nth-child(1) {
     font-size: 16px !important;
     font-weight: ${({ $stylesSelectedOption }) => ($stylesSelectedOption ? 700 : 500)} !important;
@@ -60,7 +60,7 @@ const SelectText = styled.span`
 
 const IconWrapper = styled.span<{ isOpen: boolean; $iconStyles?: FlattenSimpleInterpolation }>`
   position: absolute;
-  right: 0px;
+  right: 0;
   top: 50%;
   transform: translateY(-50%) rotate(0);
   transition: transform 0.2s ease;
@@ -75,10 +75,10 @@ const OptionsContainer = styled.div<{ $optionContainerStyle?: FlattenSimpleInter
   z-index: 10;
   max-height: 240px;
   overflow-y: auto;
-  background: white;
-  border: 1px solid #c9cdd2;
+  background: ${({ theme }) => theme.color.subBgGray03};
+  border: 1px solid ${({ theme }) => theme.color.borderGray01};
   border-radius: 8px;
-  box-shadow: 0px 2px 8px 0px #0000001a;
+  box-shadow: 0 2px 8px 0 #0000001a;
   width: max-content;
   padding: 8px 16px;
 
@@ -90,15 +90,17 @@ const Option = styled.div<{
   $stylesSelectedOption?: boolean;
   $selected?: boolean;
 }>`
-  padding: 8px 0px;
+  padding: 8px 0;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: #26282b;
+  font-size: 14px;
+  font-weight: 500;
+  color: ${({ theme }) => theme.color.text.subGray04};
 
   &:not(:last-child) {
-    border-bottom: 1px solid #e8ebed;
+    border-bottom: 1px solid ${({ theme }) => theme.color.borderGray01};
   }
 
   /* 호진TODO: Mobile에서도 hover가 적용되는지 확인 필요 */

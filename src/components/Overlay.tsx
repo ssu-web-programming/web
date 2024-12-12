@@ -1,8 +1,8 @@
 import React from 'react';
 import IconButton from 'components/buttons/IconButton';
 import IconTextButton from 'components/buttons/IconTextButton';
-import { ReactComponent as closeIcon } from 'img/ico_ai_close.svg';
-import ico_download from 'img/ico_download.svg';
+import { ReactComponent as closeIcon } from 'img/light/ico_ai_close.svg';
+import ico_download from 'img/light/ico_download.svg';
 import { useTranslation } from 'react-i18next';
 import styled, { css } from 'styled-components';
 
@@ -37,7 +37,7 @@ const ImageModal = styled.div`
   height: auto;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0px 4px 12px 0px #00000026; 
+  box-shadow: 0px 4px 12px 0px #00000026;
 
   > img {
     width: 100%;

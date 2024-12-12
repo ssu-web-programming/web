@@ -1,16 +1,14 @@
 import { useEffect, useState } from 'react';
-import { apiWrapper } from 'api/apiWrapper';
-import { ERR_NOT_ONLINE } from 'error/error';
-import DownloadIcon from 'img/ico_download_white.svg';
-import InsertDocsIcon from 'img/ico_insert_docs.svg';
+import DownloadIcon from 'img/light/ico_download_white.svg';
+import InsertDocsIcon from 'img/light/ico_insert_docs.svg';
 import { lang } from 'locale';
 import { useTranslation } from 'react-i18next';
 import ReactPlayer from 'react-player';
 import { setOnlineStatus } from 'store/slices/network';
 import styled from 'styled-components';
 
-import CreditColorIcon from '../../img/ico_credit_color_outline.svg';
-import CheckIcon from '../../img/nova/check_purple.svg';
+import CreditColorIcon from '../../img/light/ico_credit_color_outline.svg';
+import CheckIcon from '../../img/light/nova/check_purple.svg';
 import { ClientStatusType } from '../../pages/Nova/Nova';
 import {
   resetPageData,

@@ -1,6 +1,6 @@
-import { ReactComponent as IconSentence } from 'img/aiChat/ico_sentence.svg';
-import { ReactComponent as IconTable } from 'img/aiChat/ico_table.svg';
-import { ReactComponent as IconList } from 'img/aiChat/ico_table_of_contents.svg';
+import { ReactComponent as IconSentence } from 'img/light/aiChat/ico_sentence.svg';
+import { ReactComponent as IconTable } from 'img/light/aiChat/ico_table.svg';
+import { ReactComponent as IconList } from 'img/light/aiChat/ico_table_of_contents.svg';
 import { useTranslation } from 'react-i18next';
 import { getIconColor } from 'util/getColor';
 
