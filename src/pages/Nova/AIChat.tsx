@@ -205,7 +205,7 @@ export default function AIChat() {
     ShowScrollButton(e.currentTarget);
   };
 
-  const handleShareChat = () => {
+  const handleShareChat = async () => {
     dispatch(setIsExporting(true));
     const jsonResult = selectedItems.map((item) => {
       const threadItems = item.split(':');
@@ -238,6 +238,16 @@ export default function AIChat() {
       dispatch(deselectAllItems());
       dispatch(activeToast({ type: 'info', msg: '링크 복사가 완료되었습니다.' }));
     }, 1000);
+
+    // const { res, logger } = await apiWrapper().request(NOVA_SHARE_CHAT, {
+    //   body: {
+    //     threadId: novaHistory[novaHistory.length - 1].threadId,
+    //     list: jsonResult
+    //   },
+    //   method: 'POST'
+    // });
+    // const response = await res.json();
+    // console.log(response);
 
     // const blob = new Blob([JSON.stringify(jsonResult, null, 2)], {
     //   type: 'application/json'

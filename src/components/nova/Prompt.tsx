@@ -137,7 +137,7 @@ const CreatingButton = styled.div<{ isActive: boolean }>`
     font-size: 16px;
     font-weight: 500;
     line-height: 24px;
-    color: ${(props) => (props.isActive ? '#ffffff' : '#c9cdd2')};
+    color: ${({ theme, isActive }) => (isActive ? 'var(--white)' : theme.color.text.subGray08)};
   }
 `;
 

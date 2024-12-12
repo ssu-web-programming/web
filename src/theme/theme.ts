@@ -12,9 +12,11 @@ export const lightTheme = {
     subBgGray04: 'var(--gray-gray-10)',
     subBgGray05: 'var(--white)',
     subBgGray06: 'var(--gray-gray-20)',
+    subBgGray07: 'var(--gray-gray-30)',
     mainBg: 'var(--ai-purple-99-bg-light)',
     borderGray01: 'var(--gray-gray-40)',
     borderGray02: 'var(--gray-gray-30)',
+    borderGray03: 'var(--gray-gray-40)',
     borderPurple01: 'var(--ai-purple-90)',
     main: 'var(--ai-purple-50-main)',
     tab: {
@@ -66,9 +68,11 @@ export const darkTheme = {
     subBgGray04: 'var(--gray-gray-90)',
     subBgGray05: 'var(--gray-gray-85)',
     subBgGray06: 'var(--gray-gray-90)',
+    subBgGray07: 'var(--gray-gray-90)',
     mainBg: 'var(--ai-purple-50-main-alpha)',
     borderGray01: 'var(--gray-gray-35)',
     borderGray02: 'var(--gray-gray-87)',
+    borderGray03: 'var(--gray-gray-87)',
     borderPurple01: 'var(--ai-purple-80-sub)',
     main: 'var(--ai-purple-50-main)',
     tab: {
