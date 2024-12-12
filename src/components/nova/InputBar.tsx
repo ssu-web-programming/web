@@ -3,6 +3,7 @@ import IconButton from 'components/buttons/IconButton';
 import Icon from 'components/Icon';
 import { ReactComponent as DeleteDarkIcon } from 'img/dark/ico_input_delete.svg';
 import { ReactComponent as SendDisabledDarkIcon } from 'img/dark/ico_send_disabled.svg';
+import ico_plus_circle from 'img/ico_plus_circle.svg';
 import ico_file_csv from 'img/light/ico_file_csv.svg';
 import ico_file_doc from 'img/light/ico_file_doc.svg';
 import ico_file_hwp from 'img/light/ico_file_hwp.svg';
@@ -196,6 +197,7 @@ const TextArea = styled.textarea<{ value: string }>`
 
 const PlusIconWrapper = styled.div`
   margin-bottom: 6px;
+  cursor: pointer;
 `;
 
 export interface InputBarSubmitParam extends Pick<NovaChatType, 'input' | 'type'> {

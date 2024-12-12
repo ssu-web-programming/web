@@ -3,9 +3,7 @@ import { ContentArea, Footer, Header } from 'components/Confirm';
 import styled, { css } from 'styled-components';
 import { isMobile } from 'util/bridge';
 
-import BackDarkIcon from '../img/dark/ico_arrow_left.svg';
 import CloseDarkIcon from '../img/dark/ico_nova_close.svg';
-import BackLightIcon from '../img/light/ico_arrow_left.svg';
 import CloseLightIcon from '../img/light/ico_nova_close.svg';
 import { themeInfoSelector } from '../store/slices/theme';
 import { useAppSelector } from '../store/store';
@@ -102,26 +100,14 @@ const DriveConfirm = (props: DriveConfirmType) => {
       <Blanket />
       <Wrapper $isMobile={isMobile}>
         <Header ref={headerRef}>
-          {/* 모바일에서는 뒤로가기 버튼 , 웹에서는 X버튼을 만족시켜야함! */}
-          {isMobile ? (
-            <MobileHeaderContainer>
-              <Icon
-                size={16}
-                iconSrc={isLightMode ? BackLightIcon : BackDarkIcon}
-                onClick={onCancel?.callback}
-              />
-              <Title>{title}</Title>
-            </MobileHeaderContainer>
-          ) : (
-            <HeaderContainer>
-              <Title>{title}</Title>
-              <Icon
-                size={32}
-                iconSrc={isLightMode ? CloseLightIcon : CloseDarkIcon}
-                onClick={onCancel?.callback}
-              />
-            </HeaderContainer>
-          )}
+          <HeaderContainer>
+            <Title>{title}</Title>
+            <Icon
+              size={32}
+              iconSrc={isLightMode ? CloseLightIcon : CloseDarkIcon}
+              onClick={onCancel?.callback}
+            />
+          </HeaderContainer>
         </Header>
         <ContentArea ref={contentsRef}>{msg}</ContentArea>
         <Footer direction={direction} ref={footerRef}>

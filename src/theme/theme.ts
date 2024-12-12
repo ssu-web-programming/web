@@ -61,7 +61,7 @@ export const darkTheme = {
     subBgGray05: 'var(--gray-gray-85)',
     mainBg: 'var(--ai-purple-50-main-alpha)',
     borderGray01: 'var(--gray-gray-35)',
-    borderGray02: 'var(--gray-gray-87)',
+    borderGray02: 'var(--gray-gray-35)',
     main: 'var(--ai-purple-50-main)',
     tab: {
       border: 'var(--gray-gray-35)',

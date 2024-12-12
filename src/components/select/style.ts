@@ -100,7 +100,7 @@ const Option = styled.div<{
   color: ${({ theme }) => theme.color.text.subGray04};
 
   &:not(:last-child) {
-    border-bottom: 1px solid ${({ theme }) => theme.color.borderGray01};
+    border-bottom: 1px solid ${({ theme }) => theme.color.borderGray02};
   }
 
   /* 호진TODO: Mobile에서도 hover가 적용되는지 확인 필요 */
