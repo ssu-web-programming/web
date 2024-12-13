@@ -1,8 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
+import { NOVA_TAB_TYPE } from 'store/slices/tabSlice';
+import { themeInfoSelector } from 'store/slices/theme';
+import { useAppSelector } from 'store/store';
 import styled, { FlattenSimpleInterpolation } from 'styled-components';
+import { FreeMode } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Swiper as SwiperClass } from 'swiper/types';
+import { isMobile } from 'util/bridge';
 
 import { ReactComponent as IconConvertDark } from '../../../img/dark/nova/tab/convert_Img.svg';
 import convert2DTo3DDarkIcon from '../../../img/dark/nova/tab/tab_3d_dark_n.svg';
@@ -42,10 +47,6 @@ import remakeImgLightIcon from '../../../img/light/nova/tab/tab_remake_n.svg';
 import remakeImgLightSelectedIcon from '../../../img/light/nova/tab/tab_remake_s.svg';
 import changeStyleLightIcon from '../../../img/light/nova/tab/tab_style_n.svg';
 import changeStyleLightSelectedIcon from '../../../img/light/nova/tab/tab_style_s.svg';
-import { NOVA_TAB_TYPE } from '../../../store/slices/tabSlice';
-import { themeInfoSelector } from '../../../store/slices/theme';
-import { useAppSelector } from '../../../store/store';
-import { isMobile } from '../../../util/bridge';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -309,6 +310,8 @@ const Tabs = ({ tabs, activeTab, onChangeTab, showArrowBtn = true, cssExt }: Tab
   return (
     <Wrap cssExt={cssExt}>
       <Swiper
+        freeMode
+        modules={[FreeMode]}
         spaceBetween={8}
         slidesPerView="auto"
         centeredSlides={isCentered && showArrowBtn}

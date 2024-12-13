@@ -5,6 +5,7 @@ import Icon from 'components/Icon';
 import { ReactComponent as DeleteDarkIcon } from 'img/dark/ico_input_delete.svg';
 import PlusCircleDarkIcon from 'img/dark/ico_plus_circle.svg';
 import { ReactComponent as SendDisabledDarkIcon } from 'img/dark/ico_send_disabled.svg';
+import ico_plus_circle from 'img/ico_plus_circle.svg';
 import ico_file_csv from 'img/light/ico_file_csv.svg';
 import ico_file_doc from 'img/light/ico_file_doc.svg';
 import ico_file_hwp from 'img/light/ico_file_hwp.svg';

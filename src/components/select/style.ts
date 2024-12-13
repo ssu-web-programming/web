@@ -71,7 +71,6 @@ const IconWrapper = styled.span<{ isOpen: boolean; $iconStyles?: FlattenSimpleIn
 const OptionsContainer = styled.div<{ $optionContainerStyle?: FlattenSimpleInterpolation }>`
   position: absolute;
   top: calc(100% + 4px);
-  left: 0;
   right: 0;
   z-index: 10;
   max-height: 240px;
@@ -101,7 +100,7 @@ const Option = styled.div<{
   color: ${({ theme }) => theme.color.text.subGray04};
 
   &:not(:last-child) {
-    border-bottom: 1px solid ${({ theme }) => theme.color.borderGray01};
+    border-bottom: 1px solid ${({ theme }) => theme.color.borderGray02};
   }
 
   /* 호진TODO: Mobile에서도 hover가 적용되는지 확인 필요 */

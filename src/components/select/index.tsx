@@ -2,6 +2,7 @@ import { ReactNode, useEffect, useRef, useState } from 'react';
 import Icon from 'components/Icon';
 import ArrowDownDarkIcon from 'img/dark/ico_arrow_down_normal.svg';
 import ArrowDownLightIcon from 'img/light/ico_arrow_down_normal.svg';
+import { useTranslation } from 'react-i18next';
 import { FlattenSimpleInterpolation } from 'styled-components';
 
 import { themeInfoSelector } from '../../store/slices/theme';
@@ -61,6 +62,7 @@ export default function Select<T extends string>({
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const [isOpen, setIsOpen] = useState(false);
   const selectRef = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation();
 
   const selectedOption = options.find((opt) => opt.value === value) as SelectOption<T>;
 
@@ -71,14 +73,14 @@ export default function Select<T extends string>({
     if (option.component) {
       return option.component;
     }
-    return <S.SelectText>{option.label}</S.SelectText>;
+    return <S.SelectText>{t(option.label as string)}</S.SelectText>;
   };
 
   const defaultRenderOption = (option: SelectOption<T>) => {
     if (option.component) {
       return option.component;
     }
-    return <S.OptionText>{option.label}</S.OptionText>;
+    return <S.OptionText>{t(option.label as string)}</S.OptionText>;
   };
 
   useEffect(() => {

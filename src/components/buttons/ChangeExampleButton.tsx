@@ -19,7 +19,6 @@ export default function ChangeExampleButton({ onClick, disabled }: Props) {
 
   return (
     <StyledButton onClick={onClick} disabled={disabled}>
-      {/* 호진FIXME: 다국어 텍스트 변경작업 필요함 */}
       {t(`ShowExam`)}
     </StyledButton>
   );

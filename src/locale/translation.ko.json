@@ -30,6 +30,14 @@
   },
   "SelectionComplete": "선택 완료",
   "Select": "선택하기",
+  "Option": {
+    "newest": "최신순",
+    "oldest": "오래된 순",
+    "nameAsc": "이름 오름차순",
+    "nameDesc": "이름 내림차순",
+    "largest": "파일 크기 큰 순",
+    "smallest": "파일 크기 작은 순"
+  },
   "WriteTab": {
     "WriteTopic": "주제 작성하기",
     "WriteTextboxPlacehold": "작성할 글의 주제를 입력하세요.",
@@ -49,7 +57,14 @@
     "Recreating": "다시 만들기",
     "InsertDoc": "문서에 삽입",
     "MoveToChating": "채팅으로 더 많은 작업하기",
-    "ToSameTopic": "작성했던 주제로 다시 고민해서 작성할게요 !"
+    "ToSameTopic": "작성했던 주제로 다시 고민해서 작성할게요 !",
+    "ModelSelect": {
+      "gpt4o": "언어 이해력이 뛰어나고 창의적이에요",
+      "gpt4": "다양한 텍스트를 생성하는데 탁월해요",
+      "gpt3.5": "속도가 빨라 단순 작업을 잘 처리해요",
+      "clovax": "한국어 작업에 효과적이에요",
+      "claude": "창의적인 글을 잘 써요"
+    }
   },
   "ChatingTab": {
     "AIGreeting": "안녕하세요. 쉽고, 빠르게 문서 작성을 도와주는 폴라리스오피스 AI Chat 입니다.",
@@ -132,6 +147,10 @@
       "CompleteInsertImage": "이미지가 문서에 삽입이 완료 되었습니다.",
       "ForbiddenWord": "이미지 설명에 부적절한 단어가 포함되어 있습니다. ",
       "GPTExceededLimit": "채팅한 글자 수가 제한을 초과하여 오류가 발생했습니다. 다시 시도해 주세요."
+    },
+    "ModelSelect": {
+      "dalle3": "창의적이고 디테일한 이미지를 잘 생성해요",
+      "sd3": "폭넓은 스타일의 이미지를 빠르게 생성해요"
     }
   },
   "ExampleList": {

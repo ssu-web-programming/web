@@ -32,12 +32,12 @@ type Option = {
 };
 
 const options: Option[] = [
-  { value: 'latest', label: '최신순' },
-  { value: 'oldest', label: '오래된 순' },
-  { value: 'name_asc', label: '이름 오름차순' },
-  { value: 'name_desc', label: '이름 내림차순' },
-  { value: 'size_desc', label: '파일 크기 큰 순' },
-  { value: 'size_asc', label: '파일 크기 작은 순' }
+  { value: 'latest', label: 'Option.newest' },
+  { value: 'oldest', label: 'Option.oldest' },
+  { value: 'name_asc', label: 'Option.nameAsc' },
+  { value: 'name_desc', label: 'Option.nameDesc' },
+  { value: 'size_desc', label: 'Option.largest' },
+  { value: 'size_asc', label: 'Option.smallest' }
 ];
 
 interface PoDriveProps {
@@ -244,7 +244,6 @@ export default function PoDrive(props: PoDriveProps) {
               options={options}
               value={selectedOption}
               onChange={handleChangeOption}
-              width="120px"
             />
           </div>
         </div>

@@ -1,5 +1,6 @@
 import { ButtonHTMLAttributes } from 'react';
 import icon_credit_gray from 'img/light/ico_credit_gray.svg';
+import { useTranslation } from 'react-i18next';
 import { FlattenSimpleInterpolation } from 'styled-components';
 
 import { Chip } from '../IconTextButton';
@@ -32,6 +33,8 @@ export default function SelectModelButton({
   buttonStyle,
   hideSelectedStyles = false
 }: SelectModelButtonProps) {
+  const { t } = useTranslation();
+
   return (
     <S.StyledButton
       selected={selected}
@@ -41,7 +44,7 @@ export default function SelectModelButton({
       <S.InnerWrapper>
         <S.ItemWrapper selected={selected}>
           <p>{item.title}</p>
-          <p>{item.desc}</p>
+          <p>{t(item.desc)}</p>
         </S.ItemWrapper>
         <S.IconWrapper>
           <Chip iconSrc={icon_credit_gray} size={20}>
