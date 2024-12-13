@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import IconButton from 'components/buttons/IconButton';
+import useClipboard from 'components/hooks/nova/use-clipboard';
 import Icon from 'components/Icon';
 import { ReactComponent as DeleteDarkIcon } from 'img/dark/ico_input_delete.svg';
 import PlusCircleDarkIcon from 'img/dark/ico_plus_circle.svg';
@@ -97,6 +98,35 @@ const FileListViewer = styled.div`
 
   &::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera */
+  }
+`;
+
+const ClipboardItem = styled.div`
+  width: fit-content;
+  position: relative;
+  ${flexCenter};
+  border-radius: 8px;
+  background: ${({ theme }) => theme.color.subBgGray04};
+  color: ${({ theme }) => theme.color.text.subGray04};
+
+  font-size: 16px;
+  line-height: 21px;
+  text-align: left;
+
+  .uploading {
+    font-weight: 700;
+    color: #6f3ad0;
+  }
+
+  svg {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+  }
+
+  & > img {
+    border-radius: 12px;
+    border: 1px solid #c9cdd2;
   }
 `;
 
@@ -220,6 +250,13 @@ export default function InputBar(props: InputBarProps) {
   const loadingFile = useAppSelector(getLoadingFile);
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
 
+  const {
+    pastedImages,
+    handleRemovePastedImages,
+    pastedImagesAsFileType,
+    handleClearPastedImages
+  } = useClipboard();
+
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const inputDocsFileRef = useRef<HTMLInputElement | null>(null);
   const inputImgFileRef = useRef<HTMLInputElement | null>(null);
@@ -280,20 +317,38 @@ export default function InputBar(props: InputBarProps) {
   }, [expiredNOVA]);
 
   const handleOnClick = async () => {
+    const hasLocalFiles = localFiles.length > 0;
+    const hasDriveFiles = driveFiles.length > 0;
+    const hasPasteImages = pastedImagesAsFileType.length > 0;
+
     (document.activeElement as HTMLElement)?.blur();
     setContents('');
     dispatch(setLocalFiles([]));
     dispatch(setDriveFiles([]));
-    const targetFiles = localFiles.length > 0 ? localFiles : driveFiles;
+    handleClearPastedImages();
+
+    const targetFiles = hasLocalFiles
+      ? localFiles
+      : hasDriveFiles
+        ? driveFiles
+        : pastedImagesAsFileType;
+
     const fileType =
       targetFiles.length < 1
         ? ''
         : targetFiles[0].type.split('/')[0].includes('image')
           ? 'image'
           : 'document';
+
     await props.onSubmit({
       input: contents,
-      files: localFiles.length > 0 ? localFiles : driveFiles.length > 0 ? driveFiles : [],
+      files: hasLocalFiles
+        ? localFiles
+        : hasDriveFiles
+          ? driveFiles
+          : hasPasteImages
+            ? pastedImagesAsFileType
+            : [],
       type: fileType
     });
     textAreaRef.current?.focus();
@@ -316,6 +371,20 @@ export default function InputBar(props: InputBarProps) {
 
   return (
     <InputBarBase disabled={disabled || expiredNOVA}>
+      {pastedImages.length > 0 && (
+        <FileListViewer onWheel={handleWheel}>
+          {pastedImages.map((file) => (
+            <ClipboardItem key={file.id}>
+              <Icon size={64} iconSrc={file.url} />
+              {isLightMode ? (
+                <DeleteLightIcon onClick={() => handleRemovePastedImages(file)} />
+              ) : (
+                <DeleteDarkIcon onClick={() => handleRemovePastedImages(file)} />
+              )}
+            </ClipboardItem>
+          ))}
+        </FileListViewer>
+      )}
       {localFiles.length > 0 && (
         <FileListViewer onWheel={handleWheel}>
           {localFiles.map((file: File) => (

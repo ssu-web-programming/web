@@ -1,5 +1,5 @@
 import { Suspense, useCallback, useEffect } from 'react';
-import Tabs from 'components/nova/tabs';
+import Tabs from 'components/nova/tabs/index';
 import { FileWithPath, useDropzone } from 'react-dropzone';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
