@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 interface PasteImage {
   id: string;
   url: string;
+  name: string;
 }
 
 interface Props {
@@ -26,12 +27,14 @@ export default function useClipboard({
   const confirm = useConfirm();
   const { t } = useTranslation();
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
+
+  // 서버에 보내기 위한 File 객체
+  const [pastedImagesAsFileType, setPastedImagesAsFileType] = useState<File[]>([]);
+  // preview를 보여주기 위한 image
   const [pastedImages, setPastedImages] = useState<PasteImage[]>([]);
 
   // 이미지 유효성 검사
   const validateImage = async (file: File): Promise<boolean> => {
-    console.log('file-size', file.size > maxFileSize);
-
     // 파일 크기 체크
     if (file.size > maxFileSize) {
       console.error('파일 크기는 20MB 이하여야 합니다.');
@@ -71,10 +74,11 @@ export default function useClipboard({
     return true;
   };
 
-  const addImage = (imageUrl: string) => {
+  const addImage = (imageUrl: string, name: string) => {
     const newImage: PasteImage = {
       id: uuidv4(),
-      url: imageUrl
+      url: imageUrl,
+      name
     };
 
     setPastedImages((prev) => {
@@ -83,9 +87,31 @@ export default function useClipboard({
     });
   };
 
+  const addImageAsFile = (file: File) => {
+    setPastedImagesAsFileType((prev) => {
+      const updated = [...prev, file];
+      return updated;
+    });
+  };
+
+  const handleClearPastedImages = () => {
+    setPastedImagesAsFileType([]);
+    setPastedImages([]);
+  };
+
   const handleRemoveClipboardFile = (file: PasteImage) => {
     const removeTargetFile = pastedImages.filter((image) => image.id !== file.id);
     setPastedImages(removeTargetFile);
+  };
+
+  const handleRemoveClipboardAsFileType = (file: PasteImage) => {
+    const removeTargetFile = pastedImagesAsFileType.filter((image) => image.name !== file.name);
+    setPastedImagesAsFileType(removeTargetFile);
+  };
+
+  const handleRemovePastedImages = (file: PasteImage) => {
+    handleRemoveClipboardFile(file);
+    handleRemoveClipboardAsFileType(file);
   };
 
   const handlePaste = async (e: ClipboardEvent) => {
@@ -105,28 +131,16 @@ export default function useClipboard({
 
           // 모든 파일이 유효한 경우에만 처리 진행
           for (const file of imageFiles) {
+            const fileName = file.name;
             const imageUrl = URL.createObjectURL(file);
-            addImage(imageUrl);
+
+            addImageAsFile(file);
+            addImage(imageUrl, fileName);
           }
 
           return;
         }
       }
-
-      // 2. Clipboard API 사용
-      const items = await navigator.clipboard.read();
-      console.log('items', items);
-      //   for (const item of items) {
-      //     for (const type of item.types) {
-      //       if (type.startsWith('image/')) {
-      //         const blob = await item.getType(type);
-      //         // if (!validateImage(new File([blob], 'pasted-image', { type }))) continue;
-      //         const imageUrl = URL.createObjectURL(blob);
-      //         addImage(imageUrl);
-      //         // setError('');
-      //       }
-      //     }
-      //   }
     } catch (err) {
       console.error('붙여넣기 실패:', err);
     }
@@ -136,8 +150,6 @@ export default function useClipboard({
   const handleGlobalPaste = (e: ClipboardEvent) => {
     handlePaste(e);
   };
-
-  console.log('pastedImages', pastedImages);
 
   // 컴포넌트 마운트/언마운트 시 이벤트 리스너 관리
   useEffect(() => {
@@ -155,5 +167,10 @@ export default function useClipboard({
     };
   }, [pastedImages]);
 
-  return { pastedImages, handleRemoveClipboardFile };
+  return {
+    pastedImages,
+    pastedImagesAsFileType,
+    handleRemovePastedImages,
+    handleClearPastedImages
+  };
 }

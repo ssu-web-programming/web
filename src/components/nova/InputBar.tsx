@@ -250,7 +250,12 @@ export default function InputBar(props: InputBarProps) {
   const loadingFile = useAppSelector(getLoadingFile);
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
 
-  const { pastedImages, handleRemoveClipboardFile } = useClipboard();
+  const {
+    pastedImages,
+    handleRemovePastedImages,
+    pastedImagesAsFileType,
+    handleClearPastedImages
+  } = useClipboard();
 
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const inputDocsFileRef = useRef<HTMLInputElement | null>(null);
@@ -312,20 +317,38 @@ export default function InputBar(props: InputBarProps) {
   }, [expiredNOVA]);
 
   const handleOnClick = async () => {
+    const hasLocalFiles = localFiles.length > 0;
+    const hasDriveFiles = driveFiles.length > 0;
+    const hasPasteImages = pastedImagesAsFileType.length > 0;
+
     (document.activeElement as HTMLElement)?.blur();
     setContents('');
     dispatch(setLocalFiles([]));
     dispatch(setDriveFiles([]));
-    const targetFiles = localFiles.length > 0 ? localFiles : driveFiles;
+    handleClearPastedImages();
+
+    const targetFiles = hasLocalFiles
+      ? localFiles
+      : hasDriveFiles
+        ? driveFiles
+        : pastedImagesAsFileType;
+
     const fileType =
       targetFiles.length < 1
         ? ''
         : targetFiles[0].type.split('/')[0].includes('image')
           ? 'image'
           : 'document';
+
     await props.onSubmit({
       input: contents,
-      files: localFiles.length > 0 ? localFiles : driveFiles.length > 0 ? driveFiles : [],
+      files: hasLocalFiles
+        ? localFiles
+        : hasDriveFiles
+          ? driveFiles
+          : hasPasteImages
+            ? pastedImagesAsFileType
+            : [],
       type: fileType
     });
     textAreaRef.current?.focus();
@@ -354,9 +377,9 @@ export default function InputBar(props: InputBarProps) {
             <ClipboardItem key={file.id}>
               <Icon size={64} iconSrc={file.url} />
               {isLightMode ? (
-                <DeleteLightIcon onClick={() => handleRemoveClipboardFile(file)} />
+                <DeleteLightIcon onClick={() => handleRemovePastedImages(file)} />
               ) : (
-                <DeleteDarkIcon onClick={() => handleRemoveClipboardFile(file)} />
+                <DeleteDarkIcon onClick={() => handleRemovePastedImages(file)} />
               )}
             </ClipboardItem>
           ))}
