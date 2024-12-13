@@ -19,7 +19,7 @@ const Container = styled.div`
   height: 100%;
   display: flex;
   flex: 1 1 0;
-  background-color: rgb(244, 246, 248);
+  background: ${({ theme }) => theme.color.bg};
   overflow-y: auto;
 `;
 
@@ -82,7 +82,7 @@ const ThemeSelectionWrap = styled.div`
     font-weight: 500;
     line-height: 24px;
     text-align: center;
-    color: #454c53;
+    color: ${({ theme }) => theme.color.text.subGray03};
   }
 `;
 
@@ -160,9 +160,11 @@ const Button = styled.div<{ isActive: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: ${(props) => (props.isActive ? '#6f3ad0' : '#f7f8f9')};
+
+  background: ${({ isActive, theme }) =>
+    isActive ? 'var(--ai-purple-50-main)' : theme.color.subBgGray06};
   border-radius: 8px;
-  cursor: pointer;
+  cursor: ${(props) => (props.isActive ? 'pointer' : 'default')};
   -webkit-tap-highlight-color: transparent;
   margin-bottom: 16px;
 
@@ -170,7 +172,7 @@ const Button = styled.div<{ isActive: boolean }>`
     font-size: 16px;
     font-weight: 500;
     line-height: 24px;
-    color: ${(props) => (props.isActive ? '#ffffff' : '#c9cdd2')};
+    color: ${({ theme, isActive }) => (isActive ? 'var(--white)' : theme.color.text.subGray08)};
   }
 `;
 

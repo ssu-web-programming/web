@@ -6,6 +6,8 @@ import { useLocation } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import styled from 'styled-components';
 
+import { apiWrapper } from '../../api/apiWrapper';
+import { NOVA_SHARE_CHAT } from '../../api/constant';
 import IconButton from '../../components/buttons/IconButton';
 import { useConfirm } from '../../components/Confirm';
 import useSubmitHandler from '../../components/hooks/nova/useSubmitHandler';
@@ -205,7 +207,7 @@ export default function AIChat() {
     ShowScrollButton(e.currentTarget);
   };
 
-  const handleShareChat = () => {
+  const handleShareChat = async () => {
     dispatch(setIsExporting(true));
     const jsonResult = selectedItems.map((item) => {
       const threadItems = item.split(':');
@@ -226,7 +228,6 @@ export default function AIChat() {
 
       return {
         type: resultType,
-        contentType: contentType,
         content: content,
         files: resultType === 'question' ? files : []
       };
@@ -238,6 +239,19 @@ export default function AIChat() {
       dispatch(deselectAllItems());
       dispatch(activeToast({ type: 'info', msg: '링크 복사가 완료되었습니다.' }));
     }, 1000);
+
+    console.log('nova history: ', novaHistory);
+    console.log(jsonResult);
+    console.log('thread id: ', novaHistory[novaHistory.length - 1].threadId);
+    const { res, logger } = await apiWrapper().request(NOVA_SHARE_CHAT, {
+      body: JSON.stringify({
+        threadId: novaHistory[novaHistory.length - 1].threadId,
+        list: jsonResult
+      }),
+      method: 'POST'
+    });
+    const response = await res.json();
+    console.log(response);
 
     // const blob = new Blob([JSON.stringify(jsonResult, null, 2)], {
     //   type: 'application/json'

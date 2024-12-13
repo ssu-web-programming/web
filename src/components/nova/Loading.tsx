@@ -1,10 +1,14 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import Lottie from 'react-lottie-player';
 import styled from 'styled-components';
 
-import BlurIcon from '../../img/light/nova/bg_blur_loading.png';
-import Spinner from '../../img/light/nova/nova_spinner_2x.webp';
+import BlurDarkIcon from '../../img/dark/nova/ico_bg_blur_loading.svg';
+import SpinnerDark from '../../img/dark/nova/nova_spinner.json';
+import BlurLightIcon from '../../img/light/nova/ico_bg_blur_loading.png';
+import SpinnerLight from '../../img/light/nova/nova_spinner.json';
 import { selectTabSlice } from '../../store/slices/tabSlice';
+import { themeInfoSelector } from '../../store/slices/theme';
 import { useAppSelector } from '../../store/store';
 
 const Background = styled.div`
@@ -14,7 +18,8 @@ const Background = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-image: url(${BlurIcon});
+  background-image: ${({ theme }) =>
+    `url(${theme.mode === 'light' ? BlurLightIcon : BlurDarkIcon})`};
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
@@ -27,17 +32,23 @@ const Background = styled.div`
     font-size: 16px;
     font-weight: 500;
     line-height: 24px;
-    color: #6f3ad0;
+    color: ${({ theme }) => theme.color.text.main02};
   }
 `;
 
 export default function Loading() {
   const { t } = useTranslation();
+  const { isLightMode } = useAppSelector(themeInfoSelector);
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
 
   return (
     <Background>
-      <img src={Spinner} alt="spinner" />
+      <Lottie
+        animationData={isLightMode ? SpinnerLight : SpinnerDark}
+        loop
+        play
+        style={{ width: 56, height: 56 }}
+      />
       <span>{t(`Nova.${selectedNovaTab}.Loading`)}</span>
     </Background>
   );

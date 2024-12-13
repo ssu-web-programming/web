@@ -13,7 +13,7 @@ import { useChatAskdoc } from '../../components/hooks/useChatAskdoc';
 import useLangParameterNavigate from '../../components/hooks/useLangParameterNavigate';
 import Icon from '../../components/Icon';
 import IconMic from '../../img/light/aiChat/mic.png';
-import icon_ai from '../../img/light/ico_ai.svg';
+import icon_ai from '../../img/light/nova/ico_ai_nova.svg';
 import { AskDocChat } from '../../store/slices/askDoc';
 import { filesSelector } from '../../store/slices/askDocAnalyzeFiesSlice';
 import { summarySelector } from '../../store/slices/askDocSummary';

@@ -27,6 +27,7 @@ export const PO_DRIVE_CONVERT_STATUS = '/api/v2/nova/podrive/convert/status';
 export const PO_DRIVE_CONVERT_DOWNLOAD = '/api/v2/nova/podrive/convert/download';
 export const PO_DRIVE_DOC_OPEN_STATUS = '/api/v2/nova/podrive/document-openstatus';
 
+export const NOVA_SHARE_CHAT = '/api/v2/nova/createShare';
 export const NOVA_GENERATE_ANIMATION = '/api/v2/nova/image/generate-animation';
 export const NOVA_REMOVE_BACKGROUND = '/api/v2/nova/image/remove-background';
 export const NOVA_CHANGE_BACKGROUND = '/api/v2/nova/image/replace-background';

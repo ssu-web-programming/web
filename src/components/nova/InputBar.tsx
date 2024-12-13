@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import IconButton from 'components/buttons/IconButton';
+import useClipboard from 'components/hooks/nova/use-clipboard';
 import Icon from 'components/Icon';
 import { ReactComponent as DeleteDarkIcon } from 'img/dark/ico_input_delete.svg';
+import PlusCircleDarkIcon from 'img/dark/ico_plus_circle.svg';
 import { ReactComponent as SendDisabledDarkIcon } from 'img/dark/ico_send_disabled.svg';
 import ico_plus_circle from 'img/ico_plus_circle.svg';
 import ico_file_csv from 'img/light/ico_file_csv.svg';
@@ -18,6 +20,7 @@ import ico_file_txt from 'img/light/ico_file_txt.svg';
 import ico_file_word from 'img/light/ico_file_word.svg';
 import ico_file_xls from 'img/light/ico_file_xls.svg';
 import { ReactComponent as DeleteLightIcon } from 'img/light/ico_input_delete.svg';
+import PlusCircleLightIcon from 'img/light/ico_plus_circle.svg';
 import { ReactComponent as SendActiveIcon } from 'img/light/ico_send_active.svg';
 import { ReactComponent as SendDisabledLightIcon } from 'img/light/ico_send_disabled.svg';
 import { useTranslation } from 'react-i18next';
@@ -96,6 +99,35 @@ const FileListViewer = styled.div`
 
   &::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera */
+  }
+`;
+
+const ClipboardItem = styled.div`
+  width: fit-content;
+  position: relative;
+  ${flexCenter};
+  border-radius: 8px;
+  background: ${({ theme }) => theme.color.subBgGray04};
+  color: ${({ theme }) => theme.color.text.subGray04};
+
+  font-size: 16px;
+  line-height: 21px;
+  text-align: left;
+
+  .uploading {
+    font-weight: 700;
+    color: #6f3ad0;
+  }
+
+  svg {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+  }
+
+  & > img {
+    border-radius: 12px;
+    border: 1px solid #c9cdd2;
   }
 `;
 
@@ -195,11 +227,6 @@ const TextArea = styled.textarea<{ value: string }>`
   }
 `;
 
-const PlusIconWrapper = styled.div`
-  margin-bottom: 6px;
-  cursor: pointer;
-`;
-
 export interface InputBarSubmitParam extends Pick<NovaChatType, 'input' | 'type'> {
   files?: File[] | DriveFileInfo[];
 }
@@ -223,6 +250,13 @@ export default function InputBar(props: InputBarProps) {
   const driveFiles = useAppSelector(getDriveFiles);
   const loadingFile = useAppSelector(getLoadingFile);
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
+
+  const {
+    pastedImages,
+    handleRemovePastedImages,
+    pastedImagesAsFileType,
+    handleClearPastedImages
+  } = useClipboard();
 
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const inputDocsFileRef = useRef<HTMLInputElement | null>(null);
@@ -284,20 +318,38 @@ export default function InputBar(props: InputBarProps) {
   }, [expiredNOVA]);
 
   const handleOnClick = async () => {
+    const hasLocalFiles = localFiles.length > 0;
+    const hasDriveFiles = driveFiles.length > 0;
+    const hasPasteImages = pastedImagesAsFileType.length > 0;
+
     (document.activeElement as HTMLElement)?.blur();
     setContents('');
     dispatch(setLocalFiles([]));
     dispatch(setDriveFiles([]));
-    const targetFiles = localFiles.length > 0 ? localFiles : driveFiles;
+    handleClearPastedImages();
+
+    const targetFiles = hasLocalFiles
+      ? localFiles
+      : hasDriveFiles
+        ? driveFiles
+        : pastedImagesAsFileType;
+
     const fileType =
       targetFiles.length < 1
         ? ''
         : targetFiles[0].type.split('/')[0].includes('image')
           ? 'image'
           : 'document';
+
     await props.onSubmit({
       input: contents,
-      files: localFiles.length > 0 ? localFiles : driveFiles.length > 0 ? driveFiles : [],
+      files: hasLocalFiles
+        ? localFiles
+        : hasDriveFiles
+          ? driveFiles
+          : hasPasteImages
+            ? pastedImagesAsFileType
+            : [],
       type: fileType
     });
     textAreaRef.current?.focus();
@@ -320,6 +372,20 @@ export default function InputBar(props: InputBarProps) {
 
   return (
     <InputBarBase disabled={disabled || expiredNOVA}>
+      {pastedImages.length > 0 && (
+        <FileListViewer onWheel={handleWheel}>
+          {pastedImages.map((file) => (
+            <ClipboardItem key={file.id}>
+              <Icon size={64} iconSrc={file.url} />
+              {isLightMode ? (
+                <DeleteLightIcon onClick={() => handleRemovePastedImages(file)} />
+              ) : (
+                <DeleteDarkIcon onClick={() => handleRemovePastedImages(file)} />
+              )}
+            </ClipboardItem>
+          ))}
+        </FileListViewer>
+      )}
       {localFiles.length > 0 && (
         <FileListViewer onWheel={handleWheel}>
           {localFiles.map((file: File) => (
@@ -375,9 +441,11 @@ export default function InputBar(props: InputBarProps) {
               ))}
             </UploadBtn>
           ) : (
-            <PlusIconWrapper onClick={handleActiveUploadBtn}>
-              <Icon iconSrc={ico_plus_circle} size={30} />
-            </PlusIconWrapper>
+            <Icon
+              iconSrc={isLightMode ? PlusCircleLightIcon : PlusCircleDarkIcon}
+              size={24}
+              onClick={handleActiveUploadBtn}
+            />
           )}
         </div>
         <div>

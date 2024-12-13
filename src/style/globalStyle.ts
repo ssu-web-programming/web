@@ -55,6 +55,7 @@ const GlobalStyle = createGlobalStyle`
     --ai-purple-99-bg-light: #f5f1fd;
 
     --black: #000000;
+    --black-alpha: rgba(0, 0, 0, 0.3);
     --gray-gray-90-01: #26282b;
     --gray-gray-90: #2d2d2d;
     --gray-gray-87: #3b3b3b;

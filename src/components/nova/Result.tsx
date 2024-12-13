@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react';
+import InsertDocsDarkIcon from 'img/dark/ico_insert_docs.svg';
 import DownloadIcon from 'img/light/ico_download_white.svg';
-import InsertDocsIcon from 'img/light/ico_insert_docs.svg';
+import InsertDocsLightIcon from 'img/light/ico_insert_docs.svg';
 import { lang } from 'locale';
 import { useTranslation } from 'react-i18next';
 import ReactPlayer from 'react-player';
 import { setOnlineStatus } from 'store/slices/network';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-import CreditColorIcon from '../../img/light/ico_credit_color_outline.svg';
-import CheckIcon from '../../img/light/nova/check_purple.svg';
+import CheckDarkIcon from '../../img/dark/nova/check_purple.svg';
+import CreditColorIcon from '../../img/light/ico_credit_color.svg';
+import CheckLightIcon from '../../img/light/nova/check_purple.svg';
 import { ClientStatusType } from '../../pages/Nova/Nova';
 import {
   resetPageData,
@@ -17,11 +19,13 @@ import {
   setPageStatus
 } from '../../store/slices/nova/pageStatusSlice';
 import { NOVA_TAB_TYPE, selectTabSlice } from '../../store/slices/tabSlice';
+import { themeInfoSelector } from '../../store/slices/theme';
 import { activeToast } from '../../store/slices/toastSlice';
 import { getCurrentFile, setDriveFiles, setLocalFiles } from '../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import Bridge, { ClientType, getPlatform } from '../../util/bridge';
 import { base64ToBlob } from '../../util/files';
+import Button from '../buttons/Button';
 import { useConfirm } from '../Confirm';
 import { useChangeBackground } from '../hooks/nova/useChangeBackground';
 import { useInsertDocsHandler } from '../hooks/nova/useInsertDocsHandler';
@@ -33,7 +37,7 @@ const Container = styled.div`
   height: 100%;
   display: flex;
   flex: 1 1 0;
-  background-color: rgb(244, 246, 248);
+  background: ${({ theme }) => theme.color.bg};
   overflow-y: auto;
 `;
 
@@ -75,7 +79,7 @@ const Title = styled.div<{ lang: string }>`
     font-size: 24px;
     font-weight: 700;
     line-height: 36px;
-    color: #26282b;
+    color: ${({ theme }) => theme.color.text.subGray04};
     text-align: center;
     white-space: break-spaces;
   }
@@ -85,7 +89,7 @@ const SubTitle = styled.span`
   font-size: 16px;
   font-weight: 500;
   line-height: 24px;
-  color: #454c53;
+  color: ${({ theme }) => theme.color.text.subGray05};
   text-align: center;
   white-space: break-spaces;
 `;
@@ -100,11 +104,10 @@ const ImageBox = styled.div<{ isBordered: boolean }>`
   align-items: center;
   justify-content: center;
   margin-bottom: 24px;
-  border: ${(props) => (props.isBordered ? '1px solid #c9cdd2' : 'none')};
+  border: ${({ theme, isBordered }) => (isBordered ? theme.color.borderGray02 : 'none')};
   border-radius: 8px;
   overflow: hidden;
   height: 100%;
-  background: #e8e8ed;
 
   img,
   video {
@@ -159,36 +162,6 @@ const DefaultButtonWrap = styled.div`
   gap: 8px;
 `;
 
-const InsertDocButton = styled.div`
-  width: 100%;
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  padding: 12px 0;
-  border: 1px solid #c9cdd2;
-  border-radius: 8px;
-  cursor: pointer;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  background: white;
-`;
-
-const SaveButton = styled.div`
-  width: 100%;
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  padding: 12px 0;
-  background: #6f3ad0;
-  border-radius: 8px;
-  color: white;
-  cursor: pointer;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-`;
-
 export default function Result() {
   const platform = getPlatform();
   const isMobile = platform == ClientType.ios || platform == ClientType.android;
@@ -196,6 +169,7 @@ export default function Result() {
   const { t } = useTranslation();
   const confirm = useConfirm();
   const dispatch = useAppDispatch();
+  const { isLightMode } = useAppSelector(themeInfoSelector);
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
   const currentFile = useAppSelector(getCurrentFile);
   const result = useAppSelector(selectPageResult(selectedNovaTab));
@@ -279,7 +253,7 @@ export default function Result() {
         <Body>
           <Guide>
             <Title lang={lang}>
-              <img src={CheckIcon} alt="check" />
+              <img src={isLightMode ? CheckLightIcon : CheckDarkIcon} alt="check" />
               <span>{t(`Nova.${selectedNovaTab}.Done.Title`)}</span>
             </Title>
             {selectedNovaTab === NOVA_TAB_TYPE.convert2DTo3D &&
@@ -308,22 +282,64 @@ export default function Result() {
           <ButtonWrap>
             {(selectedNovaTab === NOVA_TAB_TYPE.changeBG ||
               selectedNovaTab === NOVA_TAB_TYPE.remakeImg) && (
-              <RemakeButton onClick={handleRemake}>
+              <Button
+                variant="gray"
+                width={'full'}
+                height={48}
+                cssExt={css`
+                  position: relative;
+                  display: flex;
+                  gap: 4px;
+                  font-size: 16px;
+                  font-weight: 500;
+                  border: 1px solid ${isLightMode ? 'var(--gray-gray-40)' : 'var(--gray-gray-35)'};
+                  border-radius: 8px;
+                  background: ${isLightMode ? 'var(--white)' : 'none'};
+                `}
+                onClick={handleRemake}>
                 <span>{t(`Nova.Result.Remake`)}</span>
-                <img src={CreditColorIcon} alt="credit" />
-              </RemakeButton>
+                <img
+                  src={CreditColorIcon}
+                  alt="credit"
+                  style={{ position: 'absolute', right: '12px' }}
+                />
+              </Button>
             )}
             <DefaultButtonWrap>
               {showInsertDocBtn && (
-                <InsertDocButton onClick={() => insertDocsHandler()}>
-                  <img src={InsertDocsIcon} alt="docs" />
+                <Button
+                  variant="gray"
+                  width={'full'}
+                  height={48}
+                  cssExt={css`
+                    display: flex;
+                    gap: 4px;
+                    font-size: 16px;
+                    font-weight: 500;
+                    border: 1px solid ${isLightMode ? 'var(--gray-gray-40)' : 'var(--gray-gray-35)'};
+                    border-radius: 8px;
+                    background: ${isLightMode ? 'var(--white)' : 'none'};
+                  `}
+                  onClick={() => insertDocsHandler()}>
+                  <img src={isLightMode ? InsertDocsLightIcon : InsertDocsDarkIcon} alt="docs" />
                   <span>{t(`Nova.Result.InsertDoc`)}</span>
-                </InsertDocButton>
+                </Button>
               )}
-              <SaveButton onClick={OnSave}>
+              <Button
+                variant="purple"
+                width={'full'}
+                height={48}
+                cssExt={css`
+                  display: flex;
+                  gap: 4px;
+                  font-size: 16px;
+                  font-weight: 500;
+                  border-radius: 8px;
+                `}
+                onClick={OnSave}>
                 <img src={DownloadIcon} alt="download" />
                 <span>{t(`Nova.Result.Save`)}</span>
-              </SaveButton>
+              </Button>
             </DefaultButtonWrap>
           </ButtonWrap>
         </Body>

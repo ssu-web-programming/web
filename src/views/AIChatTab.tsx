@@ -22,7 +22,7 @@ import { useShowCreditToast } from '../components/hooks/useShowCreditToast';
 import Icon from '../components/Icon';
 import SpeechBubble from '../components/SpeechBubble';
 import TextArea from '../components/TextArea';
-import icon_ai from '../img/light/ico_ai.svg';
+import icon_ai from '../img/light/nova/ico_ai_nova.svg';
 import {
   appendChat,
   Chat,

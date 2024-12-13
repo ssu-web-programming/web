@@ -25,7 +25,7 @@ const Container = styled.div`
   padding: 0 16px;
   flex: 1 1 0;
   overflow-y: auto;
-  background-color: #f4f6f8;
+  background: ${({ theme }) => theme.color.bg};
 `;
 
 const Body = styled.div`
@@ -71,9 +71,10 @@ const TextWrap = styled.div<{ isActive: boolean }>`
   justify-content: space-between;
   padding: 12px;
   gap: 10px;
-  border: ${(props) => (props.isActive ? '1px solid #6f3ad0' : '1px solid #e8ebed')};
+  border: 1px solid
+    ${({ isActive, theme }) => (isActive ? 'var(--ai-purple-50-main)' : theme.color.borderGray01)};
   border-radius: 8px;
-  background: white;
+  background: ${({ theme }) => (theme.mode === 'light' ? 'var(--white)' : 'none')};
 `;
 
 const TextArea = styled.textarea`
@@ -83,6 +84,8 @@ const TextArea = styled.textarea`
   outline: none;
   resize: none;
   font-size: 14px;
+  background: transparent;
+  color: ${({ theme }) => theme.color.text.subGray04};
 `;
 
 const ButtonWrap = styled.div`
@@ -102,18 +105,16 @@ const ExamButton = styled.button<{ isActive: boolean }>`
   justify-content: center;
   padding: 0 12px;
   border-radius: 4px;
-  background-color: ${(props) => (props.isActive ? '#f2f4f6' : '#f2f4f6')};
+  background: ${({ isActive, theme }) =>
+    isActive ? theme.color.subBgGray02 : theme.color.subBgGray06};
   cursor: ${(props) => (props.isActive ? 'pointer' : 'default')};
-
-  :hover {
-    background-color: ${(props) => (props.isActive ? '#c9cdd2' : '#f2f4f6')};
-  }
 
   span {
     font-size: 12px;
     font-weight: 500;
     line-height: 18px;
-    color: ${(props) => (props.isActive ? '#26282b' : '#c9cdd2')};
+    color: ${({ isActive, theme }) =>
+      isActive ? theme.color.text.subGray04 : theme.color.text.subGray08};
   }
 `;
 
@@ -126,20 +127,17 @@ const CreatingButton = styled.div<{ isActive: boolean }>`
   justify-content: center;
   margin-top: 16px;
   margin-bottom: 16px;
-  background: ${(props) => (props.isActive ? '#6f3ad0' : '#f2f4f6')};
+  background: ${({ isActive, theme }) =>
+    isActive ? 'var(--ai-purple-50-main)' : theme.color.subBgGray06};
   border-radius: 8px;
   cursor: ${(props) => (props.isActive ? 'pointer' : 'default')};
   -webkit-tap-highlight-color: transparent;
-
-  :hover {
-    background-color: ${(props) => (props.isActive ? '#511bb2' : '#f2f4f6')};
-  }
 
   span {
     font-size: 16px;
     font-weight: 500;
     line-height: 24px;
-    color: ${(props) => (props.isActive ? '#ffffff' : '#c9cdd2')};
+    color: ${({ theme, isActive }) => (isActive ? 'var(--white)' : theme.color.text.subGray08)};
   }
 `;
 

@@ -5,8 +5,8 @@ import { isMobile } from 'util/bridge';
 
 import Icon from '../../../components/Icon';
 import { getFileIcon } from '../../../components/nova/InputBar';
-import ico_ai from '../../../img/light/ico_ai.svg';
 import ico_user from '../../../img/light/ico_user.svg';
+import ico_ai from '../../../img/light/nova/ico_ai_nova.svg';
 
 import data from './chat_history.json';
 import * as S from './style';

@@ -3,7 +3,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { NOVA_TAB_TYPE } from 'store/slices/tabSlice';
 import { themeInfoSelector } from 'store/slices/theme';
 import { useAppSelector } from 'store/store';
-import styled from 'styled-components';
+import styled, { FlattenSimpleInterpolation } from 'styled-components';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Swiper as SwiperClass } from 'swiper/types';
 import { isMobile } from 'util/bridge';
@@ -93,7 +93,7 @@ const iconMap: Record<
   }
 };
 
-const Wrap = styled.div`
+const Wrap = styled.div<{ cssExt?: FlattenSimpleInterpolation }>`
   width: 100%;
   height: 52px;
   min-height: 52px;
@@ -105,6 +105,8 @@ const Wrap = styled.div`
   padding: 8px 16px;
   z-index: 1;
   background-color: ${({ theme }) => theme.color.bg};
+
+  ${(props) => props.cssExt || ''};
 `;
 
 const Tap = styled.div<{ isHighlighted: boolean }>`
@@ -183,11 +185,13 @@ const StyledIconConvertDark = styled(IconConvertDark)<{ $isHighlighted: boolean 
 
 interface TabProps {
   tabs: NOVA_TAB_TYPE[];
-  activeTab: string;
+  activeTab?: string;
   onChangeTab: (tab: NOVA_TAB_TYPE) => void;
+  showArrowBtn?: boolean;
+  cssExt?: FlattenSimpleInterpolation;
 }
 
-const Tabs = ({ tabs, activeTab, onChangeTab }: TabProps) => {
+const Tabs = ({ tabs, activeTab, onChangeTab, showArrowBtn = true, cssExt }: TabProps) => {
   const { t } = useTranslation();
   const { isLightMode, curTheme } = useAppSelector(themeInfoSelector);
   const [isBeginning, setIsBeginning] = useState(true);
@@ -303,11 +307,11 @@ const Tabs = ({ tabs, activeTab, onChangeTab }: TabProps) => {
   };
 
   return (
-    <Wrap>
+    <Wrap cssExt={cssExt}>
       <Swiper
         spaceBetween={8}
         slidesPerView="auto"
-        centeredSlides={isCentered}
+        centeredSlides={isCentered && showArrowBtn}
         centeredSlidesBounds={isCentered}
         navigation={{
           prevEl: '.swiper-button-prev',
@@ -340,7 +344,7 @@ const Tabs = ({ tabs, activeTab, onChangeTab }: TabProps) => {
         })}
       </Swiper>
 
-      {!isMobile && (
+      {!isMobile && showArrowBtn && (
         <>
           <CustomNavButton
             className="swiper-button-prev left"

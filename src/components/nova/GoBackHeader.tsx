@@ -1,9 +1,11 @@
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { ReactComponent as ArrowLeftIcon } from '../../img/light/nova/arrow_left.svg';
+import { ReactComponent as ArrowLeftDarkIcon } from '../../img/dark/ico_arrow_left.svg';
+import { ReactComponent as ArrowLeftLightIcon } from '../../img/light/ico_arrow_left.svg';
 import { setPageData, setPageResult, setPageStatus } from '../../store/slices/nova/pageStatusSlice';
 import { selectTabSlice } from '../../store/slices/tabSlice';
+import { themeInfoSelector } from '../../store/slices/theme';
 import { setDriveFiles, setLocalFiles } from '../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 
@@ -26,7 +28,7 @@ const Wrap = styled.div`
     font-size: 14px;
     font-weight: 500;
     line-height: 21px;
-    color: #454c53;
+    color: ${({ theme }) => theme.color.text.subGray04};
   }
 
   svg {
@@ -38,6 +40,7 @@ const Wrap = styled.div`
 export default function GoBackHeader() {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const { isLightMode } = useAppSelector(themeInfoSelector);
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
 
   const handleGoBack = () => {
@@ -51,7 +54,7 @@ export default function GoBackHeader() {
   return (
     <Header>
       <Wrap onClick={handleGoBack}>
-        <ArrowLeftIcon />
+        {isLightMode ? <ArrowLeftLightIcon /> : <ArrowLeftDarkIcon />}
         <span>{t(`Nova.GoBackHeader`)}</span>
       </Wrap>
     </Header>

@@ -12,6 +12,7 @@ import { ReactComponent as VerticalIcon } from '../../img/light/nova/expandImg/v
 import { ReactComponent as VerticalIconSelected } from '../../img/light/nova/expandImg/vertical_s.svg';
 import { selectPageResult } from '../../store/slices/nova/pageStatusSlice';
 import { selectTabSlice } from '../../store/slices/tabSlice';
+import { themeInfoSelector } from '../../store/slices/theme';
 import { useAppSelector } from '../../store/store';
 import { useConfirm } from '../Confirm';
 import { useExpandImage } from '../hooks/nova/useExpandImage';
@@ -57,8 +58,8 @@ const ImageBox = styled.div<{ height: number; width: number }>`
   align-items: center;
   justify-content: center;
   touch-action: none;
-  background: #e8ebed;
-  border: 1px solid #c9cdd2;
+  background: ${({ theme }) => theme.color.subBgGray07};
+  border: 1px solid ${({ theme }) => theme.color.borderGray03};
 `;
 
 const StyledStage = styled(Stage)<{ width: number; height: number }>`
@@ -92,9 +93,11 @@ const RatioButton = styled.div<{ selected: boolean }>`
   align-items: center;
   justify-content: center;
   padding: 5.5px 22px;
-  background-color: ${({ selected }) => (selected ? '#ede5fe' : '#ffffff')};
-  color: ${({ selected }) => (selected ? '#ffffff' : '#6f3ad0')};
-  border: 1px solid ${({ selected }) => (selected ? '#6f3ad0' : 'none')};
+  background-color: ${(props) =>
+    props.selected ? props.theme.color.tab.highlightBg : props.theme.color.tab.bg};
+  border: 1px solid
+    ${(props) =>
+      props.selected ? props.theme.color.tab.highlightBorder : props.theme.color.tab.border};
   border-radius: 8px;
   box-sizing: border-box;
   cursor: pointer;
@@ -103,7 +106,13 @@ const RatioButton = styled.div<{ selected: boolean }>`
     font-size: 14px;
     font-weight: 500;
     line-height: 21px;
-    color: ${({ selected }) => (selected ? '#6f3ad0' : '#454c53')};
+    color: ${(props) =>
+      props.selected ? props.theme.color.tab.highlightText : props.theme.color.tab.text};
+  }
+
+  path {
+    fill: ${(props) =>
+      props.selected ? props.theme.color.tab.highlightText : props.theme.color.tab.text};
   }
 `;
 
@@ -116,7 +125,7 @@ const CurSizeBox = styled.div`
     font-size: 16px;
     font-weight: 500;
     line-height: 24px;
-    color: #26282b;
+    color: ${({ theme }) => theme.color.text.subGray04};
   }
 `;
 
@@ -147,6 +156,7 @@ const SIZES = {
 export default function Expand() {
   const { t } = useTranslation();
   const confirm = useConfirm();
+  const { isLightMode } = useAppSelector(themeInfoSelector);
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
   const result = useAppSelector(selectPageResult(selectedNovaTab));
   const { handleExpandImage } = useExpandImage();
@@ -314,6 +324,13 @@ export default function Expand() {
     return allOutOfBounds;
   };
 
+  const getCssVariable = (variableName: string) =>
+    getComputedStyle(document.documentElement).getPropertyValue(variableName).trim();
+
+  const borderColor = isLightMode
+    ? getCssVariable('--ai-purple-50-main')
+    : getCssVariable('--ai-purple-90');
+
   return (
     <Wrap>
       <GoBackHeader />
@@ -337,10 +354,10 @@ export default function Expand() {
                       rotateEnabled={false}
                       anchorSize={10}
                       anchorCornerRadius={10}
-                      borderStroke="#6f3ad0"
+                      borderStroke={borderColor}
                       borderStrokeWidth={2}
-                      anchorStroke="#6f3ad0"
-                      anchorFill="#6f3ad0"
+                      anchorStroke={borderColor}
+                      anchorFill={borderColor}
                       anchorStrokeWidth={2}
                       enabledAnchors={['top-left', 'top-right', 'bottom-left', 'bottom-right']}
                     />

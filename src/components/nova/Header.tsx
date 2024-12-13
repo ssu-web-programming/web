@@ -7,9 +7,9 @@ import { Trans, useTranslation } from 'react-i18next';
 import { initFlagSelector } from 'store/slices/initFlagSlice';
 import styled, { css } from 'styled-components';
 
+import { ReactComponent as ArrowLeftIcon } from '../../img/light/ico_arrow_left.svg';
 import ico_credit from '../../img/light/ico_credit_gray.svg';
 import { ReactComponent as CreditLineIcon } from '../../img/light/ico_credit_line.svg';
-import { ReactComponent as ArrowLeftIcon } from '../../img/light/nova/arrow_left.svg';
 import { ReactComponent as IconConvert } from '../../img/light/nova/tab/convert_Img.svg';
 import { creditInfoSelector, InitialState } from '../../store/slices/creditInfo';
 import {

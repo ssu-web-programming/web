@@ -41,7 +41,8 @@ const Container = styled.div`
   padding: 16px;
   flex: 1 1 0;
   overflow-y: auto;
-  background-color: #f4f6f8;
+  background: ${({ theme }) => theme.color.bg};
+  color: ${({ theme }) => theme.color.text.subGray05};
 `;
 
 const Body = styled.div`
@@ -54,7 +55,6 @@ const ExampleText = styled.p`
   font-weight: 700;
   line-height: 24px;
   text-align: center;
-  color: #454c53;
 `;
 
 const ImageBox = styled.div`
@@ -96,7 +96,6 @@ const SelectionBox = styled.div`
     font-weight: 500;
     line-height: 24px;
     text-align: center;
-    color: #454c53;
   }
 `;
 
@@ -117,8 +116,10 @@ const GridItem = styled.div<{ lang: string; isSelected: boolean }>`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: ${(props) => (props.isSelected ? '#ede5fe' : 'white')};
-  border: ${(props) => (props.isSelected ? '1px solid #c6a9ff' : 'none')};
+  background: ${({ theme, isSelected }) =>
+    isSelected ? theme.color.tab.highlightBg : theme.color.subBgGray05};
+  border: ${({ theme, isSelected }) =>
+    isSelected ? `1px solid ${theme.color.borderPurple01}` : 'none'};
   box-sizing: border-box;
   border-radius: 8px;
   cursor: pointer;
@@ -126,11 +127,25 @@ const GridItem = styled.div<{ lang: string; isSelected: boolean }>`
 
   svg {
     path {
-      fill: ${(props) => (props.isSelected ? '#6f3ad0' : '#72787f')};
+      fill: ${({ theme, isSelected }) =>
+        isSelected
+          ? theme.mode === 'light'
+            ? 'var(--ai-purple-50-main)'
+            : 'var(--ai-purple-90)'
+          : theme.mode === 'light'
+            ? 'var(--gray-gray-70)'
+            : 'var(--gray-gray-25)'};
     }
 
     circle {
-      stroke: ${(props) => (props.isSelected ? '#6f3ad0' : '#72787f')};
+      stroke: ${({ theme, isSelected }) =>
+        isSelected
+          ? theme.mode === 'light'
+            ? 'var(--ai-purple-50-main)'
+            : 'var(--ai-purple-90)'
+          : theme.mode === 'light'
+            ? 'var(--gray-gray-70)'
+            : 'var(--gray-gray-25)'};
     }
   }
 
@@ -141,7 +156,8 @@ const GridItem = styled.div<{ lang: string; isSelected: boolean }>`
     font-weight: 500;
     line-height: 21px;
 
-    color: ${(props) => (props.isSelected ? '#6f3ad0' : '#72787f')};
+    color: ${({ theme, isSelected }) =>
+      isSelected ? theme.color.text.main : theme.color.text.subGray06};
   }
 `;
 
@@ -151,7 +167,7 @@ const FileFormatGuideText = styled.p`
   font-weight: 500;
   line-height: 24px;
   text-align: center;
-  color: #454c53;
+  color: ${({ theme }) => theme.color.text.subGray03};
 `;
 
 const SelectFileFormatBox = styled.div`
@@ -169,21 +185,26 @@ const FileFormatBox = styled.div<{ isSelected: boolean }>`
   align-items: center;
   justify-content: center;
   height: 80px;
-  border: ${(props) => (props.isSelected ? '1px solid #c6a9ff' : 'none')};
-  border-radius: 8px;
   box-sizing: border-box;
   font-size: 12px;
   font-weight: 500;
   line-height: 18px;
   text-align: center;
   white-space: break-spaces;
-  background: ${(props) => (props.isSelected ? '#ede5fe' : 'white')};
-  color: ${(props) => (props.isSelected ? '#6f3ad0' : '#72787f')};
+  background: ${({ theme, isSelected }) =>
+    isSelected ? theme.color.tab.highlightBg : theme.color.subBgGray05};
+  border: ${({ theme, isSelected }) =>
+    isSelected ? `1px solid ${theme.color.borderPurple01}` : 'none'};
+  border-radius: 8px;
+  color: ${({ theme, isSelected }) =>
+    isSelected ? theme.color.text.main : theme.color.text.subGray06};
 
   .title {
     font-size: 16px;
     font-weight: 700;
     line-height: 24px;
+    color: ${({ theme, isSelected }) =>
+      isSelected ? theme.color.text.main : theme.color.text.subGray03};
   }
 `;
 
@@ -213,11 +234,11 @@ const MobileGuideText = styled.p`
   font-weight: 400;
   line-height: 21px;
   text-align: center;
-  color: #9ea4aa;
+  color: ${({ theme }) => theme.color.text.subGray07};
   margin-top: 8px;
 
   .highlight {
-    color: #454c53;
+    color: ${({ theme }) => theme.color.text.subGray03};
   }
 `;
 
