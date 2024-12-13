@@ -4,6 +4,7 @@ import { NOVA_TAB_TYPE } from 'store/slices/tabSlice';
 import { themeInfoSelector } from 'store/slices/theme';
 import { useAppSelector } from 'store/store';
 import styled, { FlattenSimpleInterpolation } from 'styled-components';
+import { FreeMode } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Swiper as SwiperClass } from 'swiper/types';
 import { isMobile } from 'util/bridge';
@@ -309,6 +310,8 @@ const Tabs = ({ tabs, activeTab, onChangeTab, showArrowBtn = true, cssExt }: Tab
   return (
     <Wrap cssExt={cssExt}>
       <Swiper
+        freeMode
+        modules={[FreeMode]}
         spaceBetween={8}
         slidesPerView="auto"
         centeredSlides={isCentered && showArrowBtn}
