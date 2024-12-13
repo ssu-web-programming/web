@@ -5,18 +5,24 @@ import useLangParameterNavigate from 'components/hooks/useLangParameterNavigate'
 import Icon from 'components/Icon';
 import Overlay from 'components/Overlay';
 import PreMarkdown from 'components/PreMarkdown';
+import ArrowCornerDarkIcon from 'img/dark/ico_arrow_corner.svg';
 import { ReactComponent as CopyChatDarkIcon } from 'img/dark/ico_copy_chat.svg';
 import { ReactComponent as InsertDocsDarkIcon } from 'img/dark/ico_insert_docs.svg';
 import { ReactComponent as RetryChatDarkIcon } from 'img/dark/ico_retry_chat.svg';
 import { ReactComponent as ShareChatDarkIcon } from 'img/dark/ico_share_chat.svg';
+import SparkleDarkIcon from 'img/dark/ico_sparkle.svg';
 import UserDarkIcon from 'img/dark/ico_user.svg';
-import Loading from 'img/light/agent_loading.gif';
-import ico_ai from 'img/light/ico_ai.svg';
+import AIDarkIcon from 'img/dark/nova/ico_ai_nova.svg';
+import SkeletonDarkIcon from 'img/dark/skeleton.gif';
+import ArrowCornerLightIcon from 'img/light/ico_arrow_corner.svg';
 import { ReactComponent as CopyChatLightIcon } from 'img/light/ico_copy_chat.svg';
 import { ReactComponent as InsertDocsLightIcon } from 'img/light/ico_insert_docs.svg';
 import { ReactComponent as RetryChatLightIcon } from 'img/light/ico_retry_chat.svg';
 import { ReactComponent as ShareChatLightIcon } from 'img/light/ico_share_chat.svg';
+import SparkleLightIcon from 'img/light/ico_sparkle.svg';
 import UserLightIcon from 'img/light/ico_user.svg';
+import AILightIcon from 'img/light/nova/ico_ai_nova.svg';
+import SkeletonLightIcon from 'img/light/skeleton.gif';
 import { ClientStatusType } from 'pages/Nova/Nova';
 import { useTranslation } from 'react-i18next';
 import {
@@ -28,18 +34,21 @@ import {
   setIsShareMode,
   toggleItemSelection
 } from 'store/slices/nova/novaHistorySlice';
-import { selectTabSlice } from 'store/slices/tabSlice';
+import { NOVA_TAB_TYPE, selectNovaTab, selectTabSlice } from 'store/slices/tabSlice';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import styled, { css } from 'styled-components';
 import Bridge, { ClientType, getPlatform } from 'util/bridge';
 import { getFileExtension, sliceFileName } from 'util/common';
 
 import { themeInfoSelector } from '../../store/slices/theme';
+import { setDriveFiles, setLocalFiles } from '../../store/slices/uploadFiles';
+import { blobToFile } from '../../util/files';
 import CheckBox from '../CheckBox';
 import useCopyText from '../hooks/copyText';
 import { useInsertDocsHandler } from '../hooks/nova/useInsertDocsHandler';
 
 import { flexCenter, getFileIcon, InputBarSubmitParam } from './InputBar';
+import Tabs from './tabs';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -131,6 +140,28 @@ const FileItem = styled.div`
   }
 `;
 
+const MakeNewImageGuide = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  overflow: hidden;
+`;
+
+const MakeNewImageMessage = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 4px;
+  margin-top: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 20px;
+  color: ${({ theme }) => theme.color.text.main};
+`;
+
 interface ChatListProps {
   novaHistory: NovaChatType[];
   onSubmit: (submitParam: InputBarSubmitParam) => void;
@@ -154,15 +185,29 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
   const confirm = useConfirm();
   const { insertDocsHandler } = useInsertDocsHandler();
   const { isLightMode } = useAppSelector(themeInfoSelector);
+  const { selectedNovaTab } = useAppSelector(selectTabSlice);
   const { creating } = useAppSelector(selectTabSlice);
   const selectedItems = useAppSelector(selectedItemsSelector);
   const isShareMode = useAppSelector(isShareModeSelector);
   const { from } = useLangParameterNavigate();
   const { onCopy } = useCopyText();
   const scrollRef = useRef<HTMLDivElement | null>(null);
+  const tabValues: NOVA_TAB_TYPE[] = Object.values(NOVA_TAB_TYPE);
+  const filteredTabValues = tabValues.filter((tab) => tab !== NOVA_TAB_TYPE.aiChat);
 
   const handleToggleItemSelection = (id: string) => {
     dispatch(toggleItemSelection(id));
+  };
+
+  const handleChangeTab = async (selectTab: NOVA_TAB_TYPE, image: string) => {
+    dispatch(selectNovaTab(selectTab));
+    dispatch(setDriveFiles([]));
+
+    const res = await fetch(image);
+    const blob = await res.blob();
+    dispatch(setLocalFiles([blobToFile(blob)]));
+
+    Bridge.callBridgeApi('curNovaTab', selectTab);
   };
 
   const CHAT_BUTTON_LIST: ChatButtonType[] = [
@@ -317,34 +362,65 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                 `}
               />
             )}
-            <Icon size={32} iconSrc={ico_ai}></Icon>
+            <Icon size={32} iconSrc={isLightMode ? AILightIcon : AIDarkIcon}></Icon>
             {item.status === 'request' ? (
-              <img src={Loading} alt="loading" style={{ paddingTop: '4px' }} />
+              <img
+                src={isLightMode ? SkeletonLightIcon : SkeletonDarkIcon}
+                alt="loading"
+                style={{ paddingTop: '4px' }}
+              />
             ) : (
-              <div style={{ paddingTop: '3px' }}>
+              <div style={{ paddingTop: '3px', overflow: 'hidden' }}>
                 <PreMarkdown text={item.output}>
                   <Overlay onSave={() => onSave(item)} />
                 </PreMarkdown>
                 {!isShareMode && (
-                  <ChatButtonWrapper>
-                    {chatButtonList
-                      .filter((btn) => btn.status.includes(item.status))
-                      .map((btn) => (
-                        <IconTextButton
-                          disable={creating == 'NOVA' || expiredNOVA}
-                          key={btn.name}
-                          width={'fit'}
-                          iconSize={24}
-                          iconSrc={btn.iconSrc}
-                          iconPos="left"
-                          onClick={() => btn.clickHandler(item)}
+                  <>
+                    {item.res && (
+                      <MakeNewImageGuide>
+                        <MakeNewImageMessage>
+                          <img
+                            src={isLightMode ? ArrowCornerLightIcon : ArrowCornerDarkIcon}
+                            alt="arrow"
+                          />
+                          <span>{t('Nova.aiChat.ChangeImage')}</span>
+                          <img src={isLightMode ? SparkleLightIcon : SparkleDarkIcon} alt="arrow" />
+                        </MakeNewImageMessage>
+                        <Tabs
+                          tabs={filteredTabValues}
+                          activeTab={selectedNovaTab}
+                          showArrowBtn={false}
                           cssExt={css`
-                            background: transparent;
+                            height: auto;
+                            min-height: auto;
                             padding: 0;
                           `}
+                          onChangeTab={(tab) => {
+                            handleChangeTab(tab, item.res || '');
+                          }}
                         />
-                      ))}
-                  </ChatButtonWrapper>
+                      </MakeNewImageGuide>
+                    )}
+                    <ChatButtonWrapper>
+                      {chatButtonList
+                        .filter((btn) => btn.status.includes(item.status))
+                        .map((btn) => (
+                          <IconTextButton
+                            disable={creating == 'NOVA' || expiredNOVA}
+                            key={btn.name}
+                            width={'fit'}
+                            iconSize={24}
+                            iconSrc={btn.iconSrc}
+                            iconPos="left"
+                            onClick={() => btn.clickHandler(item)}
+                            cssExt={css`
+                              background: transparent;
+                              padding: 0;
+                            `}
+                          />
+                        ))}
+                    </ChatButtonWrapper>
+                  </>
                 )}
               </div>
             )}

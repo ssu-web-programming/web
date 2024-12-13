@@ -4,8 +4,8 @@ import icon_credit_purple from 'img/light/ico_credit_purple.svg';
 import { useTranslation } from 'react-i18next';
 import styled, { css, FlattenSimpleInterpolation } from 'styled-components';
 
-import icon_ai from '../img/light/ico_ai.svg';
 import icon_ai_loading from '../img/light/loading_dot_2x.webp';
+import icon_ai from '../img/light/nova/ico_ai_nova.svg';
 import { Chat } from '../store/slices/chatHistorySlice';
 import { selectRecFuncSlice } from '../store/slices/recFuncSlice';
 import { selectTabSlice } from '../store/slices/tabSlice';

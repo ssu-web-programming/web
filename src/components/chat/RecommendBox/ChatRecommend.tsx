@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled, { FlattenSimpleInterpolation } from 'styled-components';
 
-import icon_ai from '../../../img/light/ico_ai.svg';
 import { ReactComponent as IconArrowDown } from '../../../img/light/ico_arrow_down_small.svg';
 import { ReactComponent as IconArrowUp } from '../../../img/light/ico_arrow_up_small.svg';
+import icon_ai from '../../../img/light/nova/ico_ai_nova.svg';
 import {
   closeRecFunc,
   initRecFunc,
