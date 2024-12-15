@@ -126,20 +126,17 @@ export default function TimeOut() {
   };
 
   return (
-    <>
-      <GoBackHeader />
-      <Container>
-        <Wrap>
-          <ContentWrap>
-            <BangIcon />
-            <Title>{t(`Nova.TimeOut.Title`)}</Title>
-          </ContentWrap>
-          <ButtonWrap onClick={handleRetry}>
-            <span>{t(`Nova.TimeOut.Retry`)}</span>
-            <img src={CreditColorIcon} alt="credit" />
-          </ButtonWrap>
-        </Wrap>
-      </Container>
-    </>
+    <Container>
+      <Wrap>
+        <ContentWrap>
+          <BangIcon />
+          <Title>{t(`Nova.TimeOut.Title`)}</Title>
+        </ContentWrap>
+        <ButtonWrap onClick={handleRetry}>
+          <span>{t(`Nova.TimeOut.Retry`)}</span>
+          <img src={CreditColorIcon} alt="credit" />
+        </ButtonWrap>
+      </Wrap>
+    </Container>
   );
 }

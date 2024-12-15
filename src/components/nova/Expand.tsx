@@ -17,8 +17,6 @@ import { useAppSelector } from '../../store/store';
 import { useConfirm } from '../Confirm';
 import { useExpandImage } from '../hooks/nova/useExpandImage';
 
-import GoBackHeader from './GoBackHeader';
-
 const Wrap = styled.div`
   width: 100%;
   height: 100%;
@@ -333,7 +331,6 @@ export default function Expand() {
 
   return (
     <Wrap>
-      <GoBackHeader />
       <Body>
         <GuideBox>
           <ImageBox width={canvasSize.width} height={canvasSize.height}>

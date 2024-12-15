@@ -4,12 +4,14 @@ import { useTranslation } from 'react-i18next';
 import Lottie from 'react-lottie-player';
 import { useLocation } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from 'store/store';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import { apiWrapper } from '../../api/apiWrapper';
 import { NOVA_SHARE_CHAT } from '../../api/constant';
 import IconButton from '../../components/buttons/IconButton';
+import CheckBox from '../../components/CheckBox';
 import { useConfirm } from '../../components/Confirm';
+import useCopyText from '../../components/hooks/copyText';
 import useSubmitHandler from '../../components/hooks/nova/useSubmitHandler';
 import { useChatNova } from '../../components/hooks/useChatNova';
 import Icon from '../../components/Icon';
@@ -31,6 +33,7 @@ import {
   NovaChatType,
   NovaFileInfo,
   novaHistorySelector,
+  selectAllItems,
   selectedItemsSelector,
   setIsExporting,
   setIsShareMode
@@ -105,21 +108,38 @@ const ShareButton = styled.button<{ disabled?: boolean }>`
   cursor: ${({ disabled }) => (disabled ? 'auto' : 'pointer')};
 `;
 
-const ShareGuide = styled.div`
+const ShareGuide = styled.div<{ isActive: boolean }>`
   width: 100%;
-  padding: 6px;
-  background: #f5f1fd;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  background: ${({ theme, isActive }) => (isActive ? theme.color.mainBg : theme.color.subBgGray01)};
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 16px;
   text-align: center;
-  color: var(--ai-purple-50-main);
+  color: ${({ theme, isActive }) =>
+    isActive ? theme.color.text.highlightText : theme.color.text.subGray02};
+  border: 1px solid ${({ theme }) => theme.color.borderGray02};
+
+  div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    color: ${({ theme, isActive }) =>
+      isActive ? theme.color.text.highlightText02 : theme.color.text.subGray03};
+  }
 `;
 
 export default function AIChat() {
   const dispatch = useAppDispatch();
   const location = useLocation();
   const { t } = useTranslation();
+  const { onCopy } = useCopyText();
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const confirm = useConfirm();
   const chatNova = useChatNova();
@@ -221,8 +241,6 @@ export default function AIChat() {
       }
 
       const resultType = type === 'q' ? 'question' : 'answer';
-      const contentType =
-        resultType === 'question' ? matchedItem.type || 'text' : matchedItem.res ? 'image' : 'text';
       const content = type === 'q' ? matchedItem.input : matchedItem.output;
       const files = matchedItem.files ? matchedItem.files.map((file) => file.name) : [];
 
@@ -233,17 +251,7 @@ export default function AIChat() {
       };
     });
 
-    setTimeout(() => {
-      dispatch(setIsExporting(false));
-      dispatch(setIsShareMode(false));
-      dispatch(deselectAllItems());
-      dispatch(activeToast({ type: 'info', msg: '링크 복사가 완료되었습니다.' }));
-    }, 1000);
-
-    console.log('nova history: ', novaHistory);
-    console.log(jsonResult);
-    console.log('thread id: ', novaHistory[novaHistory.length - 1].threadId);
-    const { res, logger } = await apiWrapper().request(NOVA_SHARE_CHAT, {
+    const { res } = await apiWrapper().request(NOVA_SHARE_CHAT, {
       body: JSON.stringify({
         threadId: novaHistory[novaHistory.length - 1].threadId,
         list: jsonResult
@@ -251,19 +259,14 @@ export default function AIChat() {
       method: 'POST'
     });
     const response = await res.json();
-    console.log(response);
-
-    // const blob = new Blob([JSON.stringify(jsonResult, null, 2)], {
-    //   type: 'application/json'
-    // });
-    // const url = URL.createObjectURL(blob);
-    //
-    // const link = document.createElement('a');
-    // link.href = url;
-    // link.download = 'chat_history.json';
-    // link.click();
-    //
-    // URL.revokeObjectURL(url);
+    const searchParams = new URLSearchParams(location.search);
+    const fullUrl = `${window.location.origin}/Nova/share/${response.data.shareId}?${searchParams.toString()}`;
+    onCopy(fullUrl).then(() => {
+      dispatch(setIsExporting(false));
+      dispatch(setIsShareMode(false));
+      dispatch(deselectAllItems());
+      dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.CopyLinkCompleted`) }));
+    });
   };
 
   const PROMPT_EXAMPLE = [
@@ -281,6 +284,14 @@ export default function AIChat() {
     }
   ];
 
+  const handleChangeSelection = () => {
+    if (selectedItems.length === novaHistory.length * 2) {
+      dispatch(deselectAllItems());
+    } else {
+      dispatch(selectAllItems());
+    }
+  };
+
   return (
     <Wrap>
       {novaHistory.length < 1 ? (
@@ -297,7 +308,20 @@ export default function AIChat() {
       ) : (
         <>
           {isShareMode && (
-            <ShareGuide>{`${selectedItems.length}개의 항목을 선택했습니다.`}</ShareGuide>
+            <ShareGuide isActive={selectedItems.length > 0}>
+              <div>
+                <CheckBox
+                  isChecked={selectedItems.length === novaHistory.length * 2}
+                  setIsChecked={() => {}}
+                  onClick={handleChangeSelection}
+                  cssExt={css`
+                    margin: 6px;
+                  `}
+                />
+                <span>{t(`Nova.aiChat.SelectAll`)}</span>
+              </div>
+              <span>{t('Nova.aiChat.SelectChat', { count: selectedItems.length })!}</span>
+            </ShareGuide>
           )}
           <ChatList
             expiredNOVA={expiredNOVA}
@@ -330,7 +354,7 @@ export default function AIChat() {
             {isExporting ? (
               <Lottie animationData={Spinner} loop play style={{ width: 27, height: 27 }} />
             ) : (
-              <span>{'링크 생성 및 복사'}</span>
+              <span>{t(`Nova.aiChat.CreateLink`)}</span>
             )}
           </ShareButton>
         </div>

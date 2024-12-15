@@ -3,6 +3,7 @@ import {
   AI_CREDIT_INFO,
   NOVA_GET_ANNOUNCEMENT_LIST,
   NOVA_GET_EXPIRED_TIME,
+  NOVA_GET_SHARE_CHAT,
   NOVA_GET_USER_INFO_AGREEMENT
 } from 'api/constant';
 import { ERR_INVALID_SESSION } from 'error/error';
@@ -19,10 +20,11 @@ import usePostSplunkLog from '../../api/usePostSplunkLog';
 import { ClientStatusType } from '../../pages/Nova/Nova';
 import { initComplete } from '../../store/slices/initFlagSlice';
 import { IAnnouceInfo, setAnnounceInfo, tabTypeMap } from '../../store/slices/nova/announceSlice';
+import { setNovaShareChat } from '../../store/slices/nova/novaShareChatHistory';
 import { setPageStatus } from '../../store/slices/nova/pageStatusSlice';
 import { setPlatformInfo } from '../../store/slices/platformInfo';
 
-export default function useInitApp() {
+export default function useInitApp(id?: string) {
   const dispatch = useAppDispatch();
 
   const platform = getPlatform();
@@ -131,6 +133,30 @@ export default function useInitApp() {
     [dispatch]
   );
 
+  const initShareChatHistory = useCallback(
+    async (headers: HeadersInit) => {
+      try {
+        console.log('id: ', id);
+        const res = await fetch(NOVA_GET_SHARE_CHAT, {
+          method: 'POST',
+          body: JSON.stringify({
+            shareId: id,
+            page: 1,
+            pageCount: 1
+          }),
+          headers: {
+            ...headers
+          }
+        });
+        const { resultCode, list } = await res.json();
+        if (resultCode === 0) dispatch(setNovaShareChat(list));
+      } catch (err) {
+        /* empty */
+      }
+    },
+    [dispatch]
+  );
+
   return async () => {
     const resSession = await Bridge.checkSession('app init');
     if (!resSession || !resSession.success) {
@@ -157,10 +183,14 @@ export default function useInitApp() {
     }
     dispatch(setPageStatus({ tab: 'aiChat', status: 'home' }));
 
-    await initCreditInfo(headers);
-    await initUserInfo(headers);
-    await initAnnouncementInfo(headers);
-    await initNovaExpireTime(headers);
+    if (!id) {
+      await initCreditInfo(headers);
+      await initUserInfo(headers);
+      await initAnnouncementInfo(headers);
+      await initNovaExpireTime(headers);
+    } else {
+      await initShareChatHistory(headers);
+    }
 
     dispatch(
       initComplete({

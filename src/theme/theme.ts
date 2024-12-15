@@ -39,7 +39,8 @@ export const lightTheme = {
       subGray06: 'var(--gray-gray-70)',
       subGray07: 'var(--gray-gray-60-03)',
       subGray08: 'var(--gray-gray-60-03)',
-      highlightText: 'var(--ai-purple-45)'
+      highlightText: 'var(--ai-purple-45)',
+      highlightText02: 'var(--gray-gray-80-02)'
     },
     toast: {
       success: {
@@ -96,7 +97,8 @@ export const darkTheme = {
       subGray06: 'var(--gray-gray-25)',
       subGray07: 'var(--gray-gray-60)',
       subGray08: 'var(--gray-gray-35)',
-      highlightText: 'var(--ai-purple-90)'
+      highlightText: 'var(--ai-purple-90)',
+      highlightText02: 'var(--ai-purple-90)'
     },
     toast: {
       success: {

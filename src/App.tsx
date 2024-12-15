@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import useInitApp from 'components/hooks/useInitApp';
 import Nova from 'pages/Nova/Nova';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useParams } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 
 import Confirm from './components/Confirm';
@@ -46,7 +46,9 @@ function App() {
       }
 
       await initBridgeListener();
-      await initApp();
+      if (!location.pathname.toLowerCase().startsWith('/nova/share')) {
+        await initApp();
+      }
     };
 
     fetchInit();
@@ -74,7 +76,7 @@ function App() {
               </>
             }
           />
-          <Route path="/NOVA/share/:id" element={<ShareChat />} />
+          <Route path="/NOVA/share/:id" element={<ShareChatWithInit />} />
           <Route path="/AskDocStep" element={<AskDocHome />}>
             <Route index element={<AskDocLoading />} />
             <Route path="/AskDocStep/CheckDocHistory" element={<CheckDocHistory />} />
@@ -93,5 +95,19 @@ function App() {
     </ThemeProvider>
   );
 }
+
+const ShareChatWithInit = () => {
+  const { id } = useParams();
+  const initApp = useInitApp(id);
+
+  useEffect(() => {
+    const init = async () => {
+      await initApp();
+    };
+    init();
+  }, []);
+
+  return <ShareChat />;
+};
 
 export default App;

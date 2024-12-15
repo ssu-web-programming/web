@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useRef } from 'react';
+import React, { forwardRef, useEffect, useRef } from 'react';
 import IconTextButton from 'components/buttons/IconTextButton';
 import { useConfirm } from 'components/Confirm';
 import useLangParameterNavigate from 'components/hooks/useLangParameterNavigate';
@@ -13,7 +13,7 @@ import { ReactComponent as ShareChatDarkIcon } from 'img/dark/ico_share_chat.svg
 import SparkleDarkIcon from 'img/dark/ico_sparkle.svg';
 import UserDarkIcon from 'img/dark/ico_user.svg';
 import AIDarkIcon from 'img/dark/nova/ico_ai_nova.svg';
-import SkeletonDarkIcon from 'img/dark/skeleton.gif';
+import SkeletonDarkIcon from 'img/dark/skeleton.json';
 import ArrowCornerLightIcon from 'img/light/ico_arrow_corner.svg';
 import { ReactComponent as CopyChatLightIcon } from 'img/light/ico_copy_chat.svg';
 import { ReactComponent as InsertDocsLightIcon } from 'img/light/ico_insert_docs.svg';
@@ -22,9 +22,10 @@ import { ReactComponent as ShareChatLightIcon } from 'img/light/ico_share_chat.s
 import SparkleLightIcon from 'img/light/ico_sparkle.svg';
 import UserLightIcon from 'img/light/ico_user.svg';
 import AILightIcon from 'img/light/nova/ico_ai_nova.svg';
-import SkeletonLightIcon from 'img/light/skeleton.gif';
+import SkeletonLightIcon from 'img/light/skeleton.json';
 import { ClientStatusType } from 'pages/Nova/Nova';
 import { useTranslation } from 'react-i18next';
+import Lottie from 'react-lottie-player';
 import {
   deselectAllItems,
   isShareModeSelector,
@@ -364,10 +365,10 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
             )}
             <Icon size={32} iconSrc={isLightMode ? AILightIcon : AIDarkIcon}></Icon>
             {item.status === 'request' ? (
-              <img
-                src={isLightMode ? SkeletonLightIcon : SkeletonDarkIcon}
-                alt="loading"
-                style={{ paddingTop: '4px' }}
+              <Lottie
+                animationData={isLightMode ? SkeletonLightIcon : SkeletonDarkIcon}
+                loop
+                play
               />
             ) : (
               <div style={{ paddingTop: '3px', overflow: 'hidden' }}>

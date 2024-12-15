@@ -7,8 +7,6 @@ import { NOVA_TAB_TYPE, selectTabSlice } from '../../store/slices/tabSlice';
 import { useAppSelector } from '../../store/store';
 import { useChangeBackground } from '../hooks/nova/useChangeBackground';
 
-import GoBackHeader from './GoBackHeader';
-
 const Wrap = styled.div`
   width: 100%;
   height: 100%;
@@ -178,7 +176,6 @@ export default function Prompt() {
 
   return (
     <Wrap>
-      <GoBackHeader />
       <Container>
         <Body>
           <ImageBox isBordered={selectedNovaTab === NOVA_TAB_TYPE.removeBG}>

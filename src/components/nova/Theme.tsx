@@ -13,8 +13,6 @@ import { NOVA_TAB_TYPE, selectTabSlice } from '../../store/slices/tabSlice';
 import { useAppSelector } from '../../store/store';
 import { useChangeStyle } from '../hooks/nova/useChangeStyle';
 
-import GoBackHeader from './GoBackHeader';
-
 const Container = styled.div`
   height: 100%;
   display: flex;
@@ -198,7 +196,6 @@ export default function Theme() {
 
   return (
     <Wrap>
-      <GoBackHeader />
       <Container>
         <Body>
           <ImageBox isBordered={selectedNovaTab === NOVA_TAB_TYPE.removeBG}>

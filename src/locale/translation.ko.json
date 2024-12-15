@@ -193,7 +193,8 @@
     "CopyCompleted": "복사가 완료되었어요.",
     "CopyFailed": "복사가 실패되었어요.",
     "SaveCompleted": "저장 완료",
-    "SaveFailed": "저장 실패"
+    "SaveFailed": "저장 실패",
+    "CopyLinkCompleted": "링크 복사가 완료되었습니다."
   },
   "Offline": {
     "UnstableConnection": "서비스 접속이 원활하지 않습니다.",
@@ -321,7 +322,14 @@
       },
       "Uploading": "업로드 중..",
       "CreateImage": "요청하신 이미지가 생성되었어요.",
-      "ChangeImage": "이미지를 더 새롭게 변신시켜 보세요!"
+      "ChangeImage": "이미지를 더 새롭게 변신시켜 보세요!",
+      "Share": "공유하기",
+      "SelectAll": "전체 선택",
+      "SelectChat": "{{count}}개의 항목 선택됨",
+      "CreateLink": "링크 생성 및 복사",
+      "ShareChat": {
+        "ExpiryDate": "※ 본 링크는 7일 간만 유효합니다."
+      }
     },
     "convert2DTo3D": {
       "Guide": {

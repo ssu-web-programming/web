@@ -7,10 +7,12 @@ import { Trans, useTranslation } from 'react-i18next';
 import { initFlagSelector } from 'store/slices/initFlagSlice';
 import styled, { css } from 'styled-components';
 
-import { ReactComponent as ArrowLeftIcon } from '../../img/light/ico_arrow_left.svg';
+import ArrowLeftDarkIcon from '../../img/dark/ico_arrow_left.svg';
+import { ReactComponent as IconConvertDark } from '../../img/dark/nova/tab/convert_Img.svg';
+import ArrowLeftLightIcon from '../../img/light/ico_arrow_left.svg';
 import ico_credit from '../../img/light/ico_credit_gray.svg';
 import { ReactComponent as CreditLineIcon } from '../../img/light/ico_credit_line.svg';
-import { ReactComponent as IconConvert } from '../../img/light/nova/tab/convert_Img.svg';
+import { ReactComponent as IconConvertLight } from '../../img/light/nova/tab/convert_Img.svg';
 import { creditInfoSelector, InitialState } from '../../store/slices/creditInfo';
 import {
   deselectAllItems,
@@ -20,6 +22,12 @@ import {
   selectedItemsSelector,
   setIsShareMode
 } from '../../store/slices/nova/novaHistorySlice';
+import {
+  selectPageStatus,
+  setPageData,
+  setPageResult,
+  setPageStatus
+} from '../../store/slices/nova/pageStatusSlice';
 import { NOVA_TAB_TYPE, selectTabSlice } from '../../store/slices/tabSlice';
 import { themeInfoSelector } from '../../store/slices/theme';
 import { setDriveFiles, setLocalFiles } from '../../store/slices/uploadFiles';
@@ -40,19 +48,13 @@ const flexCenter = css`
 
 const StyledHeader = styled(Header)`
   width: 100%;
-  color: var(--ai-purple-50-main);
 `;
 
 const TitleWrapper = styled.div`
-  gap: 4px;
-
-  img.nova {
-    width: 55px;
-    height: 16px;
-  }
-
   ${flexCenter};
   flex-direction: row;
+  gap: 4px;
+  color: ${({ theme }) => theme.color.text.subGray04};
 `;
 
 const Logo = styled.img`
@@ -96,6 +98,18 @@ const SelectionText = styled.span`
   color: var(--ai-purple-50-main);
 `;
 
+const StyledIconConvertLight = styled(IconConvertLight)`
+  path {
+    fill: black;
+  }
+`;
+
+const StyledIconConvertDark = styled(IconConvertDark)`
+  path {
+    fill: var(--gray-gray-25);
+  }
+`;
+
 export interface NovaHeaderProps {
   setInputContents?: React.Dispatch<React.SetStateAction<string>>;
 }
@@ -106,7 +120,8 @@ export default function NovaHeader(props: NovaHeaderProps) {
   const novaHistory = useAppSelector(novaHistorySelector);
   const isShareMode = useAppSelector(isShareModeSelector);
   const selectedItems = useAppSelector(selectedItemsSelector);
-  const { selectedNovaTab } = useAppSelector(selectTabSlice);
+  const { usingAI, selectedNovaTab } = useAppSelector(selectTabSlice);
+  const status = useAppSelector(selectPageStatus(selectedNovaTab));
   const dispatch = useAppDispatch();
   const confirm = useConfirm();
   const chatNova = useChatNova();
@@ -143,7 +158,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
         <Trans
           i18nKey={`Nova.CreditInfo.Convert2DTo3D`}
           components={{
-            img: <IconConvert height={11} />
+            img: isLightMode ? <IconConvertLight height={11} /> : <IconConvertDark height={11} />
           }}
         />
       )
@@ -264,19 +279,62 @@ export default function NovaHeader(props: NovaHeaderProps) {
     }
   };
 
+  const getTabTranslationKey = (tab: NOVA_TAB_TYPE) => {
+    if (tab === 'convert2DTo3D') {
+      return (
+        <Trans
+          i18nKey={`Nova.Tabs.${tab}`}
+          components={{
+            img: isLightMode ? (
+              <StyledIconConvertLight height={11} />
+            ) : (
+              <StyledIconConvertDark height={11} />
+            )
+          }}
+        />
+      );
+    }
+
+    return t(`Nova.Tabs.${tab}`);
+  };
+
+  const handleGoBack = () => {
+    dispatch(setLocalFiles([]));
+    dispatch(setDriveFiles([]));
+    dispatch(setPageStatus({ tab: selectedNovaTab, status: 'home' }));
+    dispatch(setPageData({ tab: selectedNovaTab, data: null }));
+    dispatch(setPageResult({ tab: selectedNovaTab, result: null }));
+  };
+
   return (
     <StyledHeader title="" subTitle="">
       {isShareMode ? (
         <>
-          <ArrowLeftIcon width={32} height={32} onClick={() => dispatch(setIsShareMode(false))} />
-          <SelectionText onClick={handleChangeSelection}>
-            {selectedItems.length > 0 ? '선택 해제' : '모두 선택'}
-          </SelectionText>
+          <span>{t(`Nova.aiChat.CreateLink`)}</span>
+          <IconButton
+            iconComponent={isLightMode ? CloseLightIcon : CloseDarkIcon}
+            onClick={() => dispatch(setIsShareMode(false))}
+            iconSize="lg"
+            width={32}
+            height={32}
+          />
         </>
       ) : (
         <>
           <TitleWrapper>
-            <Logo />
+            {(status === 'home' || status === 'progress') &&
+            (selectedNovaTab !== NOVA_TAB_TYPE.aiChat || !usingAI) ? (
+              <Logo />
+            ) : (
+              <>
+                <img
+                  src={isLightMode ? ArrowLeftLightIcon : ArrowLeftDarkIcon}
+                  alt="arrow-left"
+                  onClick={handleGoBack}
+                />
+                <span>{getTabTranslationKey(selectedNovaTab)}</span>
+              </>
+            )}
           </TitleWrapper>
           <ButtonWrapper>
             {novaHistory.length > 0 && selectedNovaTab === NOVA_TAB_TYPE.aiChat && (

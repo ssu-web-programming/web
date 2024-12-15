@@ -193,7 +193,8 @@
     "CopyCompleted": "コピーが完了しました。",
     "CopyFailed": "コピーに失敗しました。",
     "SaveCompleted": "保存",
-    "SaveFailed": "保存に失敗しました"
+    "SaveFailed": "保存に失敗しました",
+    "CopyLinkCompleted": "リンクが正常にコピーされました。"
   },
   "Offline": {
     "UnstableConnection": "サービス接続に問題が発生しました。",
@@ -320,7 +321,15 @@
         "Example3": "2024年EV市場の成長見通し。"
       },
       "Uploading": "アップロード中..",
-      "CreateImage": "リクエストされた画像が生成されました。"
+      "CreateImage": "リクエストされた画像が生成されました。",
+      "ChangeImage": "画像を新しく変身させましょう！",
+      "Share": "共有",
+      "SelectAll": "すべて選択",
+      "SelectChat": "{{count}}個の項目を選択しました。",
+      "CreateLink": "リンクを作成してコピー",
+      "ShareChat": {
+        "ExpiryDate": "※ このリンクは7日間のみ有効です。"
+      }
     },
     "convert2DTo3D": {
       "Guide": {

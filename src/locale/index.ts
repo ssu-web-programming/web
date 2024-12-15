@@ -9,9 +9,9 @@ import ko from './translation.ko.json';
 export const LANG_KO_KR = 'ko';
 export const LANG_JA_JP = 'ja';
 export const LANG_EN_US = 'en';
-export const LANG_KO_KR_CODE = 'ko_KR';
-export const LANG_JA_JP_CODE = 'ja_JP';
-export const LANG_EN_US_CODE = 'en_US';
+export const LANG_KO_KR_CODE = 'ko-KR';
+export const LANG_JA_JP_CODE = 'ja-JP';
+export const LANG_EN_US_CODE = 'en-US';
 
 const getLangCodeFromParams = () => {
   try {

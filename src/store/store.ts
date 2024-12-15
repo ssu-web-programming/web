@@ -17,6 +17,7 @@ import network from './slices/network';
 import announceInfoSlice from './slices/nova/announceSlice';
 import novaHistory from './slices/nova/novaHistorySlice';
 import novaModal from './slices/nova/novaModalsSlice';
+import novaShareChatHistory from './slices/nova/novaShareChatHistory';
 import pageStatusSlice from './slices/nova/pageStatusSlice';
 import platformInfo from './slices/platformInfo';
 import recFunction from './slices/recFuncSlice';
@@ -58,7 +59,8 @@ const store = configureStore({
     announceInfoSlice,
     platformInfo,
     screenMode,
-    theme
+    theme,
+    novaShareChatHistory
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }).concat(shareAnswerState),

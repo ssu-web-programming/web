@@ -23,8 +23,6 @@ import { ReactComponent as ZoomRight } from '../../img/light/nova/convert2DTo3D/
 import { ClientType, getPlatform } from '../../util/bridge';
 import { useConvert2DTo3D } from '../hooks/nova/useConvert2DTo3D';
 
-import GoBackHeader from './GoBackHeader';
-
 const Wrap = styled.div`
   width: 100%;
   height: 100%;
@@ -279,7 +277,6 @@ export default function Convert() {
 
   return (
     <Wrap>
-      <GoBackHeader />
       <Container>
         <Body>
           <ExampleText>{t(`Nova.Convert.Example`)}</ExampleText>

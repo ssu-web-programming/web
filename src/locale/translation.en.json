@@ -193,7 +193,8 @@
     "CopyCompleted": "Copy completed.",
     "CopyFailed": "Copy failed.",
     "SaveCompleted": "Saved",
-    "SaveFailed": "Failed to save"
+    "SaveFailed": "Failed to save",
+    "CopyLinkCompleted": "Link copied successfully."
   },
   "Offline": {
     "UnstableConnection": "Service connectivity issues!",
@@ -320,7 +321,15 @@
         "Example3": "Growth prospects of the 2024 EV market."
       },
       "Uploading": "Uploading..",
-      "CreateImage": "The requested image has been created."
+      "CreateImage": "The requested image has been created.",
+      "ChangeImage": "Give your images a new look!",
+      "Share": "Share",
+      "SelectAll": "Select All",
+      "SelectChat": "You have selected {{count}} items.",
+      "CreateLink": "Create and copy links",
+      "ShareChat": {
+        "ExpiryDate": "※ This link is only valid for 7 days."
+      }
     },
     "convert2DTo3D": {
       "Guide": {

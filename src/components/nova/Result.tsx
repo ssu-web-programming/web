@@ -31,8 +31,6 @@ import { useChangeBackground } from '../hooks/nova/useChangeBackground';
 import { useInsertDocsHandler } from '../hooks/nova/useInsertDocsHandler';
 import { useRemakeImage } from '../hooks/nova/useRemakeImage';
 
-import GoBackHeader from './GoBackHeader';
-
 const Container = styled.div`
   height: 100%;
   display: flex;
@@ -248,7 +246,6 @@ export default function Result() {
 
   return (
     <Wrap>
-      <GoBackHeader />
       <Container>
         <Body>
           <Guide>

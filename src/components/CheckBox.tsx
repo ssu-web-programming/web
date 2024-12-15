@@ -1,6 +1,9 @@
 import styled, { FlattenSimpleInterpolation } from 'styled-components';
 
-import icon_check from '../img/light/ico_check.svg';
+import CheckDarkIcon from '../img/dark/ico_check.svg';
+import CheckLightIcon from '../img/light/ico_check.svg';
+import { themeInfoSelector } from '../store/slices/theme';
+import { useAppSelector } from '../store/store';
 
 export interface CheckBoxProps {
   isChecked: boolean;
@@ -11,10 +14,11 @@ export interface CheckBoxProps {
 
 const CheckBox = (props: CheckBoxProps) => {
   const { isChecked, onClick, cssExt } = props;
+  const { isLightMode } = useAppSelector(themeInfoSelector);
 
   return (
     <Circle checked={isChecked} onClick={onClick} cssExt={cssExt}>
-      {isChecked && <IconImg src={icon_check} />}
+      {isChecked && <img src={isLightMode ? CheckLightIcon : CheckDarkIcon} />}
     </Circle>
   );
 };
@@ -30,14 +34,8 @@ const Circle = styled.div<{ checked: boolean; cssExt?: FlattenSimpleInterpolatio
   min-width: 20px;
   height: 20px;
   margin-left: auto;
-  background-color: ${(props) => (props.checked ? '#6f3ad0' : 'none')};
   border: ${(props) => (props.checked ? 'none' : '1px solid #c9cdd2')};
   border-radius: 20px;
 
   ${(props) => props.cssExt || ''};
-`;
-
-const IconImg = styled.img`
-  width: 12px;
-  height: 12px;
 `;
