@@ -32,12 +32,24 @@ function App() {
   const initBridgeListener = useInitBridgeListener();
   const initApp = useInitApp();
   const dispatch = useAppDispatch();
-  const { isLightMode, curTheme } = useAppSelector(themeInfoSelector);
+  const { curTheme } = useAppSelector(themeInfoSelector);
 
-  const toggleTheme = () => {
-    const newTheme = isLightMode ? ThemeType.dark : ThemeType.light;
-    dispatch(setThemeInfo(newTheme));
-  };
+  useEffect(() => {
+    const detectTheme = () => {
+      const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const newTheme = prefersDarkMode ? ThemeType.dark : ThemeType.light;
+      dispatch(setThemeInfo(newTheme));
+    };
+
+    detectTheme();
+
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    mediaQuery.addEventListener('change', detectTheme);
+
+    return () => {
+      mediaQuery.removeEventListener('change', detectTheme);
+    };
+  }, [dispatch]);
 
   useEffect(() => {
     const fetchInit = async () => {
@@ -63,19 +75,7 @@ function App() {
           <Route path="/txt2img" element={<TextToImage></TextToImage>}></Route>
           <Route path="/askdoc" element={<AskDoc />} />
           <Route path="/alli" element={<Alli />} />
-          <Route
-            path="/NOVA"
-            element={
-              <>
-                <button
-                  onClick={toggleTheme}
-                  style={{ position: 'absolute', top: 10, right: 100, zIndex: 100 }}>
-                  Switch Theme
-                </button>
-                <Nova />
-              </>
-            }
-          />
+          <Route path="/NOVA" element={<Nova />} />
           <Route path="/NOVA/share/:id" element={<ShareChatWithInit />} />
           <Route path="/AskDocStep" element={<AskDocHome />}>
             <Route index element={<AskDocLoading />} />

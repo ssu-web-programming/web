@@ -1,6 +1,7 @@
 import DarkLogo from '../img/dark/nova/ico_logo_nova.svg';
 import LightLogo from '../img/light/nova/ico_logo_nova.svg';
 import { ThemeType } from '../store/slices/theme';
+import { ClientType, getPlatform } from '../util/bridge';
 
 export const lightTheme = {
   mode: 'light',
@@ -119,14 +120,13 @@ export const darkTheme = {
 };
 
 export const selectTheme = (theme: ThemeType) => {
-  // const params = new URLSearchParams(window.location.search);
-  // const platform = params.get('platform');
-  //
-  // switch (platform) {
-  //   case 'android':
-  //     return darkTheme;
-  //   default:
-  //     return lightTheme;
-  // }
-  return theme == ThemeType.light ? lightTheme : darkTheme;
+  if (
+    getPlatform() != ClientType.mac ||
+    getPlatform() != ClientType.web ||
+    getPlatform() != ClientType.unknown
+  ) {
+    return theme == ThemeType.light ? lightTheme : darkTheme;
+  } else {
+    return lightTheme;
+  }
 };
