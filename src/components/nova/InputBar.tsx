@@ -456,7 +456,11 @@ export default function InputBar(props: InputBarProps) {
             maxLength={1000}
             ref={textAreaRef}
             onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-              if (e.key === 'Enter' && e.ctrlKey) {
+              if (e.key === 'Enter' && e.shiftKey) {
+                return;
+              }
+
+              if (e.key === 'Enter') {
                 if (contents.length > 0) {
                   handleOnClick();
                 } else {
