@@ -318,7 +318,11 @@ export default function AIChat() {
                     margin: 6px;
                   `}
                 />
-                <span>{t(`Nova.aiChat.SelectAll`)}</span>
+                <span>
+                  {selectedItems.length === novaHistory.length * 2
+                    ? t(`Nova.aiChat.SelectCancel`)
+                    : t(`Nova.aiChat.SelectAll`)}
+                </span>
               </div>
               <span>{t('Nova.aiChat.SelectChat', { count: selectedItems.length })!}</span>
             </ShareGuide>

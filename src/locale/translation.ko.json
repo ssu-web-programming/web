@@ -325,6 +325,7 @@
       "ChangeImage": "이미지를 더 새롭게 변신시켜 보세요!",
       "Share": "공유하기",
       "SelectAll": "전체 선택",
+      "SelectCancel": "선택 해제",
       "SelectChat": "{{count}}개의 항목 선택됨",
       "CreateLink": "링크 생성 및 복사",
       "ShareChat": {

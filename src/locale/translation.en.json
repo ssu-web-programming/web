@@ -325,6 +325,7 @@
       "ChangeImage": "Give your images a new look!",
       "Share": "Share",
       "SelectAll": "Select All",
+      "SelectCancel": "Deselect",
       "SelectChat": "You have selected {{count}} items.",
       "CreateLink": "Create and copy links",
       "ShareChat": {
