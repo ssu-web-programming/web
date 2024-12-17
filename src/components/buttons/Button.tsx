@@ -25,7 +25,7 @@ const Body = styled.button<{
 
   user-select: none;
 
-  border-radius: 4px;
+  border-radius: 8px;
   padding: 6px;
 
   font-size: 13px;

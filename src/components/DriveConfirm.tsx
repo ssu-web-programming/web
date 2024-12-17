@@ -122,6 +122,7 @@ const DriveConfirm = (props: DriveConfirmType) => {
               min-width: 92px;
               width: 100%;
               line-height: 19px;
+              box-shadow: none !important;
             `}
             disable={onOk.disable}>
             {onOk.text}
