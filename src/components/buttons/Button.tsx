@@ -25,7 +25,7 @@ const Body = styled.button<{
 
   user-select: none;
 
-  border-radius: 4px;
+  border-radius: 8px;
   padding: 6px;
 
   font-size: 13px;
@@ -95,7 +95,9 @@ export type ButtonVariant =
   | 'gray'
   | 'darkGray'
   | 'transparent'
-  | 'purple';
+  | 'purple'
+  | 'grayToPurple';
+
 const VARIANTS = {
   none: css`
     background-color: transparent;
@@ -119,6 +121,11 @@ const VARIANTS = {
     background-color: ${({ selected, theme }) =>
       selected ? `var(--ai-purple-97-list-over)` : theme.color.subBgGray02};
     color: ${({ theme }) => theme.color.text.subGray04};
+  `,
+  grayToPurple: css<{ selected: boolean }>`
+    background-color: ${({ selected, theme }) =>
+      selected ? `var(--ai-purple-50-main) !important` : theme.color.subBgGray02};
+    color: ${({ theme, selected }) => (selected ? 'white !important' : theme.color.text.subGray01)};
   `,
   darkGray: css<{ selected: boolean }>`
     background-color: ${({ selected }) => (selected ? `var(--ai-purple-97-list-over)` : `#D2D9E0`)};

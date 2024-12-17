@@ -112,7 +112,8 @@ const DriveConfirm = (props: DriveConfirmType) => {
         <ContentArea ref={contentsRef}>{msg}</ContentArea>
         <Footer direction={direction} ref={footerRef}>
           <Button
-            variant="purple"
+            selected={!onOk.disable}
+            variant="grayToPurple"
             width={'full'}
             height={HEIGHT_BY_DIRECTION}
             onClick={onOk.callback}
@@ -121,6 +122,7 @@ const DriveConfirm = (props: DriveConfirmType) => {
               min-width: 92px;
               width: 100%;
               line-height: 19px;
+              box-shadow: none !important;
             `}
             disable={onOk.disable}>
             {onOk.text}
