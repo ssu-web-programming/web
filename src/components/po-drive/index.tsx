@@ -140,8 +140,13 @@ export default function PoDrive(props: PoDriveProps) {
 
       if (a.fileType !== b.fileType) return a.fileType === 'DIR' ? -1 : 1;
 
-      const sortOrder = type === 'name_desc' ? 1 : -1;
-      return a.fileName.localeCompare(b.fileName, 'ko') * sortOrder;
+      const sortOrder = type === 'name_asc' ? 1 : -1;
+      return (
+        a.fileName.localeCompare(b.fileName, 'en', {
+          numeric: true,
+          caseFirst: 'upper'
+        }) * sortOrder
+      );
     });
   };
 
