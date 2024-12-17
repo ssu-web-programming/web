@@ -263,6 +263,10 @@ export default function AIChat() {
     const response = await res.json();
     const searchParams = new URLSearchParams(location.search);
     const fullUrl = `${window.location.origin}/Nova/share/${response.data.shareId}?${searchParams.toString()}`;
+    console.log('luna fullUrl: ', fullUrl);
+    console.log('luna window.location.origin: ', window.location.origin);
+    console.log('luna response.data.shareId: ', response.data.shareId);
+    console.log('luna searchParams: ', searchParams);
     onCopy(fullUrl).then(() => {
       dispatch(setIsExporting(false));
       dispatch(setIsShareMode(false));
