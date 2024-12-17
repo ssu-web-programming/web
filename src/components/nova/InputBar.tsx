@@ -455,11 +455,13 @@ export default function InputBar(props: InputBarProps) {
             maxLength={1000}
             ref={textAreaRef}
             onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+              const isComposing = e.nativeEvent.isComposing;
+
               if (e.key === 'Enter' && e.shiftKey) {
                 return;
               }
 
-              if (e.key === 'Enter') {
+              if (e.key === 'Enter' && !isComposing) {
                 if (contents.length > 0) {
                   handleOnClick();
                 } else {
