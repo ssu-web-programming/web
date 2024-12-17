@@ -331,6 +331,9 @@ export default function NovaHeader(props: NovaHeaderProps) {
                   src={isLightMode ? ArrowLeftLightIcon : ArrowLeftDarkIcon}
                   alt="arrow-left"
                   onClick={handleGoBack}
+                  style={{
+                    cursor: 'pointer'
+                  }}
                 />
                 <span>{getTabTranslationKey(selectedNovaTab)}</span>
               </>
