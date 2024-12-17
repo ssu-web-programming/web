@@ -12,7 +12,7 @@ import {
 import ExTextbox from 'components/ExTextbox';
 import Grid from 'components/layout/Grid';
 import SubTitle from 'components/SubTitle';
-import { VERSION_MAP } from 'constants/credit';
+import { ENGINE_VERSION_TO_CREDIT, VERSION_MAP } from 'constants/credit';
 import { useTranslation } from 'react-i18next';
 import { setCurrentWrite, WriteType } from 'store/slices/writeHistorySlice';
 import { useAppDispatch } from 'store/store';
@@ -25,7 +25,7 @@ import icon_credit_outline from '../../../img/light/ico_credit_outline.svg';
 import ModelSelect from './model-select';
 import * as S from './style';
 
-type SelectedOption = 'WRITE_GPT4O' | 'WRITE_GPT4' | 'GPT3' | 'WRITE_CLOVA' | 'WRITE_CLADE3';
+export type SelectedOption = 'WRITE_GPT4O' | 'WRITE_GPT4' | 'GPT3' | 'WRITE_CLOVA' | 'WRITE_CLADE3';
 
 const subjectMaxLength = 1000;
 
@@ -42,8 +42,13 @@ const AIWriteInput = ({
 }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const { input, form: selectedForm, length: selectedLength } = selectedOptions;
-  const [modelSelectedOption, setModelSelectedOption] = useState<SelectedOption>('WRITE_CLOVA');
+  const {
+    input,
+    form: selectedForm,
+    length: selectedLength,
+    version: { version }
+  } = selectedOptions;
+  const [modelSelectedOption, setModelSelectedOption] = useState(ENGINE_VERSION_TO_CREDIT[version]);
 
   const handleChangeOption = (value: SelectedOption) => {
     setSelectedOptions({
