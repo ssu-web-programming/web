@@ -43,7 +43,7 @@ const AIWriteInput = ({
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { input, form: selectedForm, length: selectedLength } = selectedOptions;
-  const [modelSelectedOption, setModelSelectedOption] = useState<SelectedOption>('WRITE_GPT4O');
+  const [modelSelectedOption, setModelSelectedOption] = useState<SelectedOption>('WRITE_CLOVA');
 
   const handleChangeOption = (value: SelectedOption) => {
     setSelectedOptions({
