@@ -5,7 +5,6 @@ import Icon from 'components/Icon';
 import { ReactComponent as DeleteDarkIcon } from 'img/dark/ico_input_delete.svg';
 import PlusCircleDarkIcon from 'img/dark/ico_plus_circle.svg';
 import { ReactComponent as SendDisabledDarkIcon } from 'img/dark/ico_send_disabled.svg';
-import ico_plus_circle from 'img/ico_plus_circle.svg';
 import ico_file_csv from 'img/light/ico_file_csv.svg';
 import ico_file_doc from 'img/light/ico_file_doc.svg';
 import ico_file_hwp from 'img/light/ico_file_hwp.svg';
@@ -466,6 +465,15 @@ export default function InputBar(props: InputBarProps) {
             }}
             onFocus={() => {
               handleInActiveUploadBtn();
+            }}
+            onPaste={(e: React.ClipboardEvent<HTMLTextAreaElement>) => {
+              // 클립보드에 이미지 파일이 있는 경우 텍스트 붙여넣기 방지
+              const hasImageFile = Array.from(e.clipboardData.items).some((item) =>
+                item.type.startsWith('image/')
+              );
+              if (hasImageFile) {
+                e.preventDefault();
+              }
             }}
           />
         </div>
