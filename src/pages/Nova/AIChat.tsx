@@ -21,8 +21,10 @@ import { Guide } from '../../components/nova/Guide';
 import { ImagePreview } from '../../components/nova/ImagePreview';
 import InputBar, { flexCenter } from '../../components/nova/InputBar';
 import { FileUpladState } from '../../constants/fileTypes';
+import ico_reading_glasses_dark from '../../img/dark/duotone_magnifying_glass_dark.svg';
 import ico_documents_dark from '../../img/dark/ico_documents.svg';
 import ico_image_dark from '../../img/dark/ico_image.svg';
+import ico_reading_glasses_light from '../../img/light/duotone_magnifying_glass.svg';
 import ico_documents_light from '../../img/light/ico_documents.svg';
 import ico_image_light from '../../img/light/ico_image.svg';
 import Spinner from '../../img/light/spinner.json';
@@ -270,8 +272,9 @@ export default function AIChat() {
   };
 
   const PROMPT_EXAMPLE = [
+    // 호진FIXME: 다국어 텍스트 번역 요청!
     {
-      src: isLightMode ? ico_documents_light : ico_documents_dark,
+      src: isLightMode ? ico_reading_glasses_light : ico_reading_glasses_dark,
       txt: t(`Nova.aiChat.Guide.Example1`)
     },
     {
