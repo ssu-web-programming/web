@@ -54,7 +54,6 @@ export const ContentArea = styled.div`
   justify-content: flex-start;
   align-items: flex-start;
   white-space: break-spaces;
-  padding-bottom: 24px;
   overflow-y: auto;
 
   & .important {
@@ -99,6 +98,7 @@ export const Footer = styled.div<{ direction?: 'column' | 'row' }>`
   display: flex;
   flex-direction: ${(props) => props.direction};
   gap: 8px;
+  padding: 16px;
 
   button {
     font-size: 16px;
