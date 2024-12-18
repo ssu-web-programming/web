@@ -21,6 +21,7 @@ const FileUploadWrapper = styled.div`
   left: 0;
   top: 0;
   background: ${({ theme }) => theme.color.bg};
+  z-index: 1;
 `;
 
 const Background = styled.div`
