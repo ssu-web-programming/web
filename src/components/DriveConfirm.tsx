@@ -48,11 +48,6 @@ const Title = styled.p`
   line-height: 24px;
   color: ${({ theme }) => theme.color.text.subGray04};
 `;
-const MobileHeaderContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 10px;
-`;
 
 const HeaderContainer = styled.div`
   display: flex;
