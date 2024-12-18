@@ -15,10 +15,8 @@ import { ReactComponent as CreditLineIcon } from '../../img/light/ico_credit_lin
 import { ReactComponent as IconConvertLight } from '../../img/light/nova/tab/convert_Img.svg';
 import { creditInfoSelector, InitialState } from '../../store/slices/creditInfo';
 import {
-  deselectAllItems,
   isShareModeSelector,
   novaHistorySelector,
-  selectAllItems,
   selectedItemsSelector,
   setIsShareMode
 } from '../../store/slices/nova/novaHistorySlice';
@@ -248,16 +246,16 @@ export default function NovaHeader(props: NovaHeaderProps) {
     }
   );
 
-  const newChat = async () => {
+  const newChat = async (isBack = false) => {
     const ret = await confirm({
-      title: t(`Nova.Confirm.NewChat.Title`)!,
-      msg: t(`Nova.Confirm.NewChat.Msg`),
+      title: isBack ? undefined : t(`Nova.Confirm.NewChat.Title`)!,
+      msg: isBack ? t(`Nova.Confirm.ResetChat.Msg`) : t(`Nova.Confirm.NewChat.Msg`),
       onCancel: {
         text: t(`Cancel`)!,
         callback: () => {}
       },
       onOk: {
-        text: t(`Nova.Confirm.NewChat.Ok`),
+        text: isBack ? t(`Nova.Confirm.ResetChat.Ok`) : t(`Nova.Confirm.NewChat.Ok`),
         callback: () => {}
       },
       direction: 'row'
@@ -268,14 +266,6 @@ export default function NovaHeader(props: NovaHeaderProps) {
       if (props.setInputContents) props.setInputContents('');
       dispatch(setLocalFiles([]));
       dispatch(setDriveFiles([]));
-    }
-  };
-
-  const handleChangeSelection = () => {
-    if (selectedItems.length > 0) {
-      dispatch(deselectAllItems());
-    } else {
-      dispatch(selectAllItems());
     }
   };
 
@@ -298,12 +288,16 @@ export default function NovaHeader(props: NovaHeaderProps) {
     return t(`Nova.Tabs.${tab}`);
   };
 
-  const handleGoBack = () => {
-    dispatch(setLocalFiles([]));
-    dispatch(setDriveFiles([]));
-    dispatch(setPageStatus({ tab: selectedNovaTab, status: 'home' }));
-    dispatch(setPageData({ tab: selectedNovaTab, data: null }));
-    dispatch(setPageResult({ tab: selectedNovaTab, result: null }));
+  const handleGoBack = async () => {
+    if (selectedNovaTab === NOVA_TAB_TYPE.aiChat) {
+      await newChat(true);
+    } else {
+      dispatch(setLocalFiles([]));
+      dispatch(setDriveFiles([]));
+      dispatch(setPageStatus({ tab: selectedNovaTab, status: 'home' }));
+      dispatch(setPageData({ tab: selectedNovaTab, data: null }));
+      dispatch(setPageResult({ tab: selectedNovaTab, result: null }));
+    }
   };
 
   return (
@@ -343,7 +337,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
             {novaHistory.length > 0 && selectedNovaTab === NOVA_TAB_TYPE.aiChat && (
               <IconButton
                 iconComponent={isLightMode ? MessagePlusLightIcon : MessagePlusDarkIcon}
-                onClick={newChat}
+                onClick={() => newChat()}
                 iconSize="lg"
                 width={32}
                 height={32}

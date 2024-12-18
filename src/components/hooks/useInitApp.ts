@@ -136,7 +136,6 @@ export default function useInitApp(id?: string) {
   const initShareChatHistory = useCallback(
     async (headers: HeadersInit) => {
       try {
-        console.log('id: ', id);
         const res = await fetch(NOVA_GET_SHARE_CHAT, {
           method: 'POST',
           body: JSON.stringify({

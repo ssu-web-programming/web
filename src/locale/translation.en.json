@@ -576,6 +576,10 @@
         "Msg": "When you select 'New Conversation', the contents of the conversation so far will be deleted. ",
         "Ok": "Start a new conversation"
       },
+      "ResetChat": {
+        "Msg": "If you go back, your conversation with NOVA will be reset. Do you want to proceed?",
+        "Ok": "Go Back"
+      },
       "PersonalInfo": {
         "Title": "Consent to Collection and Use of Personal Information (Required)",
         "Msg1": "To provide the AI NOVA service, we need your consent for the collection and use of personal information as follows.",

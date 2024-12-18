@@ -14,6 +14,7 @@ import ico_user from '../../../img/light/ico_user.svg';
 import NoneFileLightIcon from '../../../img/light/none_file.svg';
 import ico_ai from '../../../img/light/nova/ico_ai_nova.svg';
 import { langCode } from '../../../locale';
+import { initFlagSelector } from '../../../store/slices/initFlagSlice';
 import { novaShareChatSelector } from '../../../store/slices/nova/novaShareChatHistory';
 import { themeInfoSelector } from '../../../store/slices/theme';
 import { useAppSelector } from '../../../store/store';
@@ -23,10 +24,11 @@ import { DateWithGuide } from './style';
 
 export default function ShareChat() {
   const { t } = useTranslation();
+  const { isInit } = useAppSelector(initFlagSelector);
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const novaShareChatHistory = useAppSelector(novaShareChatSelector);
 
-  console.log('novaShareChatHistory: ', novaShareChatHistory.length);
+  console.log('novaShareChatHistory: ', novaShareChatHistory);
   const formatDate = (locale: string): string => {
     const now = new Date();
     return new Intl.DateTimeFormat(locale, {
