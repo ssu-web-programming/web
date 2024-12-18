@@ -1,13 +1,15 @@
 import styled from 'styled-components';
 
-export const Wrapper = styled.div<{
-  $isMobile: boolean;
-}>`
+export const Wrapper = styled.div`
   width: 100%;
-  padding: ${({ $isMobile }) => ($isMobile ? '24px 16px' : '80px 200px')};
+  padding: 80px 200px;
   display: flex;
   flex-direction: column;
   gap: 40px;
+
+  @media (max-width: 768px) {
+    padding: 24px 16px !important;
+  }
 `;
 
 export const EmptyWrapper = styled.div`
@@ -37,14 +39,17 @@ export const Header = styled.div`
   gap: 20px;
 `;
 
-export const DateWithGuide = styled.div<{
-  $isMobile: boolean;
-}>`
+export const DateWithGuide = styled.div`
   width: 100%;
   display: flex;
-  flex-direction: ${({ $isMobile }) => ($isMobile ? 'column' : 'row')};
-  align-items: ${({ $isMobile }) => ($isMobile ? 'flex-start' : 'center')};
+  flex-direction: row;
+  align-items: center;
   justify-content: space-between;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
   .date {
     font-size: 20px;

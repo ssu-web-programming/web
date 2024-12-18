@@ -3,7 +3,6 @@ import { ReactComponent as IconLogoNova } from 'img/light/nova/ico_logo_nova.svg
 import { marked } from 'marked';
 import { useTranslation } from 'react-i18next';
 import { css } from 'styled-components';
-import { isMobile } from 'util/bridge';
 
 import Button from '../../../components/buttons/Button';
 import Icon from '../../../components/Icon';
@@ -39,12 +38,12 @@ export default function ShareChat() {
   };
 
   return (
-    <S.Wrapper $isMobile={isMobile}>
+    <S.Wrapper>
       {novaShareChatHistory.length > 0 ? (
         <>
           <S.Header>
             <IconLogoNova width={107} height={32} />
-            <DateWithGuide $isMobile={isMobile}>
+            <DateWithGuide>
               <span className="date">{formatDate(langCode)}</span>
               <span className="guide">{t(`Nova.aiChat.ShareChat.ExpiryDate`)}</span>
             </DateWithGuide>
