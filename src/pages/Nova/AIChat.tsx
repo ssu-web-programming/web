@@ -264,7 +264,7 @@ export default function AIChat() {
     });
     const response = await res.json();
     const url = {
-      text: `${window.location.origin}/Nova/share/${response.data.shareId}?${lang}`
+      text: `${window.location.origin}/Nova/share/${response.data.shareId}?lang=${lang}`
     };
     await Bridge.callBridgeApi('copyClipboard', JSON.stringify(url));
 
