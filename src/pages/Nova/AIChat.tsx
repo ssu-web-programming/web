@@ -28,6 +28,7 @@ import ico_reading_glasses_light from '../../img/light/duotone_magnifying_glass.
 import ico_documents_light from '../../img/light/ico_documents.svg';
 import ico_image_light from '../../img/light/ico_image.svg';
 import Spinner from '../../img/light/spinner.json';
+import { lang } from '../../locale';
 import {
   deselectAllItems,
   isExportingSelector,
@@ -262,9 +263,8 @@ export default function AIChat() {
       method: 'POST'
     });
     const response = await res.json();
-    const searchParams = new URLSearchParams(location.search);
     const url = {
-      text: `${window.location.origin}/Nova/share/${response.data.shareId}?${searchParams.toString()}`
+      text: `${window.location.origin}/Nova/share/${response.data.shareId}?${lang}`
     };
     await Bridge.callBridgeApi('copyClipboard', JSON.stringify(url));
 
@@ -276,7 +276,6 @@ export default function AIChat() {
   };
 
   const PROMPT_EXAMPLE = [
-    // 호진FIXME: 다국어 텍스트 번역 요청!
     {
       src: isLightMode ? ico_reading_glasses_light : ico_reading_glasses_dark,
       txt: t(`Nova.aiChat.Guide.Example1`)
