@@ -264,8 +264,9 @@ export default function AIChat() {
     const response = await res.json();
     const searchParams = new URLSearchParams(location.search);
     const fullUrl = `${window.location.origin}/Nova/share/${response.data.shareId}?${searchParams.toString()}`;
-    await Bridge.callBridgeApi('copyClipboard', fullUrl);
+    await Bridge.callBridgeApi('copyClipboard', JSON.stringify(fullUrl));
 
+    console.log(JSON.stringify(fullUrl));
     dispatch(setIsExporting(false));
     dispatch(setIsShareMode(false));
     dispatch(deselectAllItems());
