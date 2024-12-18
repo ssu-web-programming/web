@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ReactComponent as IconLogoNova } from 'img/light/nova/ico_logo_nova.svg';
 import { marked } from 'marked';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 import { css } from 'styled-components';
 
+import { NOVA_GET_SHARE_CHAT } from '../../../api/constant';
 import Button from '../../../components/buttons/Button';
 import Icon from '../../../components/Icon';
 import { getFileIcon } from '../../../components/nova/InputBar';
@@ -13,21 +15,40 @@ import ico_user from '../../../img/light/ico_user.svg';
 import NoneFileLightIcon from '../../../img/light/none_file.svg';
 import ico_ai from '../../../img/light/nova/ico_ai_nova.svg';
 import { langCode } from '../../../locale';
-import { initFlagSelector } from '../../../store/slices/initFlagSlice';
-import { novaShareChatSelector } from '../../../store/slices/nova/novaShareChatHistory';
 import { themeInfoSelector } from '../../../store/slices/theme';
 import { useAppSelector } from '../../../store/store';
 
 import * as S from './style';
 import { DateWithGuide } from './style';
 
-export default function ShareChat() {
-  const { t } = useTranslation();
-  const { isInit } = useAppSelector(initFlagSelector);
-  const { isLightMode } = useAppSelector(themeInfoSelector);
-  const novaShareChatHistory = useAppSelector(novaShareChatSelector);
+type NovaChatType = {
+  type: string;
+  content: string;
+  files?: string[];
+};
 
-  console.log('novaShareChatHistory: ', novaShareChatHistory);
+export default function ShareChat() {
+  const { id } = useParams();
+  const { t } = useTranslation();
+  const { isLightMode } = useAppSelector(themeInfoSelector);
+  const [data, setData] = useState<NovaChatType[]>([]);
+
+  useEffect(() => {
+    const fetchInit = async () => {
+      const res = await fetch(NOVA_GET_SHARE_CHAT, {
+        method: 'POST',
+        body: JSON.stringify({
+          shareId: id,
+          page: 1,
+          pageCount: 1
+        })
+      });
+      const { list } = await res.json();
+      setData(list);
+    };
+    fetchInit();
+  }, []);
+
   const formatDate = (locale: string): string => {
     const now = new Date();
     return new Intl.DateTimeFormat(locale, {
@@ -39,7 +60,7 @@ export default function ShareChat() {
 
   return (
     <S.Wrapper>
-      {novaShareChatHistory.length > 0 ? (
+      {data.length > 0 ? (
         <>
           <S.Header>
             <IconLogoNova width={107} height={32} />
@@ -49,7 +70,7 @@ export default function ShareChat() {
             </DateWithGuide>
           </S.Header>
           <S.Content>
-            {novaShareChatHistory.map((item, index) => (
+            {data.map((item, index) => (
               <S.Message key={index}>
                 <p>
                   <strong>
