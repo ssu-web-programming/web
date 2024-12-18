@@ -1,7 +1,7 @@
 import styled, { FlattenSimpleInterpolation } from 'styled-components';
 
-import CheckDarkIcon from '../img/dark/ico_check.svg';
-import CheckLightIcon from '../img/light/ico_check.svg';
+import CheckDarkIcon from '../img/dark/ico_check_circle.svg';
+import CheckLightIcon from '../img/light/ico_check_circle.svg';
 import { themeInfoSelector } from '../store/slices/theme';
 import { useAppSelector } from '../store/store';
 

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { ReactComponent as CheckIcon } from '../../img/light/ico_check.svg';
+import { ReactComponent as CheckIcon } from '../../img/common/ico_check.svg';
 import Composition from '../../img/light/nova/changeStyle/change_style_composition.png';
 import Mosaic from '../../img/light/nova/changeStyle/change_style_mosaic.png';
 import Scream from '../../img/light/nova/changeStyle/change_style_scream.png';
@@ -143,12 +143,6 @@ const CheckBox = styled.div`
   align-items: center;
   justify-content: center;
   background-color: #6f3ad0;
-
-  svg {
-    width: 13px;
-    height: 14px;
-    margin-left: -1px;
-  }
 `;
 
 const Button = styled.div<{ isActive: boolean }>`
