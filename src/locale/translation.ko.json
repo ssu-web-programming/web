@@ -329,7 +329,9 @@
       "SelectChat": "{{count}}개의 항목 선택됨",
       "CreateLink": "링크 생성 및 복사",
       "ShareChat": {
-        "ExpiryDate": "※ 본 링크는 7일 간만 유효합니다."
+        "ExpiryDate": "※ 본 링크는 7일 간만 유효합니다.",
+        "NotValidPage": "유효하지 않은 페이지입니다.",
+        "MovePOPage": "폴라리스 오피스 바로가기"
       }
     },
     "convert2DTo3D": {

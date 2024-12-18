@@ -329,7 +329,9 @@
       "SelectChat": "{{count}}個の項目を選択しました。",
       "CreateLink": "リンクを作成してコピー",
       "ShareChat": {
-        "ExpiryDate": "※ このリンクは7日間のみ有効です。"
+        "ExpiryDate": "※ このリンクは7日間のみ有効です。",
+        "NotValidPage": "このページは現在利用できません。",
+        "MovePOPage": "Polaris Officeに移動"
       }
     },
     "convert2DTo3D": {

@@ -10,6 +10,25 @@ export const Wrapper = styled.div<{
   gap: 40px;
 `;
 
+export const EmptyWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+`;
+
+export const EmptyBox = styled.div`
+  width: 100%;
+  height: 548px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: ${({ theme }) => theme.color.subBgGray04};
+  color: ${({ theme }) => theme.color.text.subGray01};
+`;
+
 export const Header = styled.div`
   display: flex;
   flex-direction: column;

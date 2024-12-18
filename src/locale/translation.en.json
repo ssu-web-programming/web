@@ -329,7 +329,9 @@
       "SelectChat": "You have selected {{count}} items.",
       "CreateLink": "Create and copy links",
       "ShareChat": {
-        "ExpiryDate": "※ This link is only valid for 7 days."
+        "ExpiryDate": "※ This link is only valid for 7 days.",
+        "NotValidPage": "This page is currently unavailable.",
+        "MovePOPage": "Go to Polaris Office"
       }
     },
     "convert2DTo3D": {
