@@ -1,3 +1,6 @@
+import { SelectedOption } from 'components/aiWrite/ai-write-input';
+import { VersionListType } from 'components/chat/RecommendBox/FormRec';
+
 const CREDIT_NAME_MAP: { [key: string]: string } = {
   WRITE_GPT4O: 'GPT 4o',
   WRITE_GPT4: 'GPT 4',
@@ -30,4 +33,12 @@ const VERSION_MAP: { [key: string]: string } = {
   WRITE_CLADE3: 'claude'
 };
 
-export { CREDIT_DESCRITION_MAP, CREDIT_NAME_MAP, VERSION_MAP };
+const ENGINE_VERSION_TO_CREDIT: Record<VersionListType['version'], SelectedOption> = {
+  'gpt3.5': 'GPT3',
+  gpt4: 'WRITE_GPT4',
+  gpt4o: 'WRITE_GPT4O',
+  clovax: 'WRITE_CLOVA',
+  claude: 'WRITE_CLADE3'
+};
+
+export { CREDIT_DESCRITION_MAP, CREDIT_NAME_MAP, ENGINE_VERSION_TO_CREDIT, VERSION_MAP };

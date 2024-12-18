@@ -62,7 +62,7 @@ const IconWrapper = styled.span<{ isOpen: boolean; $iconStyles?: FlattenSimpleIn
   position: absolute;
   right: 0;
   top: 50%;
-  transform: translateY(-50%) rotate(0);
+  transform: translateY(-50%) ${({ isOpen }) => (isOpen ? 'rotate(180deg)' : 'rotate(0)')};
   transition: transform 0.2s ease;
 
   ${({ $iconStyles }) => $iconStyles && $iconStyles}
