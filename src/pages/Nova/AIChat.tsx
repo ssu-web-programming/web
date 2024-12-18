@@ -263,10 +263,12 @@ export default function AIChat() {
     });
     const response = await res.json();
     const searchParams = new URLSearchParams(location.search);
-    const fullUrl = `${window.location.origin}/Nova/share/${response.data.shareId}?${searchParams.toString()}`;
-    await Bridge.callBridgeApi('copyClipboard', JSON.stringify(fullUrl));
+    const url = {
+      text: `${window.location.origin}/Nova/share/${response.data.shareId}?${searchParams.toString()}`
+    };
+    await Bridge.callBridgeApi('copyClipboard', JSON.stringify(url));
 
-    console.log(JSON.stringify(fullUrl));
+    console.log(JSON.stringify(url));
     dispatch(setIsExporting(false));
     dispatch(setIsShareMode(false));
     dispatch(deselectAllItems());
