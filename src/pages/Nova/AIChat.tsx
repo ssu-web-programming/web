@@ -264,12 +264,12 @@ export default function AIChat() {
     const response = await res.json();
     const searchParams = new URLSearchParams(location.search);
     const fullUrl = `${window.location.origin}/Nova/share/${response.data.shareId}?${searchParams.toString()}`;
-    await Bridge.callBridgeApi('copyClipboard', fullUrl).then(() => {
-      dispatch(setIsExporting(false));
-      dispatch(setIsShareMode(false));
-      dispatch(deselectAllItems());
-      dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.CopyLinkCompleted`) }));
-    });
+    await Bridge.callBridgeApi('copyClipboard', fullUrl);
+
+    dispatch(setIsExporting(false));
+    dispatch(setIsShareMode(false));
+    dispatch(deselectAllItems());
+    dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.CopyLinkCompleted`) }));
   };
 
   const PROMPT_EXAMPLE = [
