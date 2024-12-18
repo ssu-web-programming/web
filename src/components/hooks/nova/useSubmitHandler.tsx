@@ -99,7 +99,7 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
             let base64Data: string | null = null;
 
             if (target.success) {
-              if (target.file.type.startsWith('image/')) {
+              if (type === 'image') {
                 const { contentType, data } = await fileToBase64(target.file);
                 base64Data = `data:${contentType};base64,${data}`;
               }
