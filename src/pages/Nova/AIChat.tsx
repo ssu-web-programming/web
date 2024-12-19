@@ -178,7 +178,7 @@ export default function AIChat() {
         }
       });
     }
-  }, [expiredNOVA, t, confirm, chatNova]);
+  }, [expiredNOVA]);
 
   useEffect(() => {
     if (location.state) {
