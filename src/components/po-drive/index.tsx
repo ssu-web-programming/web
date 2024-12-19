@@ -295,7 +295,13 @@ export default function PoDrive(props: PoDriveProps) {
                     <div className="createdAt">{`${date.toLocaleString()}`}</div>
                   </div>
                   {item.fileType === 'FILE' && (
-                    <CheckBox isChecked={props.selectedFiles[0]?.fileId === item.fileId} />
+                    <CheckBox
+                      isChecked={
+                        props.isSingleFileSelection
+                          ? props.selectedFiles[0]?.fileId === item.fileId
+                          : props.selectedFiles.some((file) => file.fileId === item.fileId)
+                      }
+                    />
                   )}
                 </S.ItemWrapper>
               </S.FileItem>
