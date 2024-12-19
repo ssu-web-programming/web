@@ -238,6 +238,8 @@ export default function AIChat() {
   };
 
   const handleShareChat = async () => {
+    if (isExporting) return;
+
     dispatch(setIsExporting(true));
     const jsonResult = selectedItems.map((item) => {
       const threadItems = item.split(':');
