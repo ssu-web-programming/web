@@ -160,13 +160,10 @@ const Tooltip = (props: TooltipProps) => {
   } = props;
 
   const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
-  const localFiles = useAppSelector(getLocalFiles);
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
   const { isInit } = useAppSelector(initFlagSelector);
 
   const handleClickOutside = (event: MouseEvent) => {
-    if (localFiles.length > 0) setIsOpen(false);
-
     if (tooltipRef.current && !tooltipRef.current.contains(event.target as Node)) {
       setIsOpen(false);
     }
