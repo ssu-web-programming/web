@@ -111,11 +111,10 @@ const ImageCreate = ({ contents }: { contents: string }) => {
         dispatch(
           activeToast({
             type: 'info',
-            msg: ` ${t(`Txt2ImgTab.ToastMsg.StartCreatingImage`)} 
-             ${t(`ToastMsg.AboutCredit`, {
-               deductionCredit: deductionCredit,
-               leftCredit: leftCredit === '-1' ? t('Unlimited') : leftCredit
-             })}`
+            msg: `${t(`Txt2ImgTab.ToastMsg.StartCreatingImage`)} \n${t(`ToastMsg.AboutCredit`, {
+              deductionCredit: deductionCredit,
+              leftCredit: leftCredit === '-1' ? t('Unlimited') : leftCredit
+            })}`
           })
         );
 
