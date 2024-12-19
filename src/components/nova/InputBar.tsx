@@ -26,6 +26,7 @@ import { useTranslation } from 'react-i18next';
 import { NovaChatType } from 'store/slices/nova/novaHistorySlice';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import styled, { css } from 'styled-components';
+import { isMobile } from 'util/bridge';
 import { sliceFileName } from 'util/common';
 
 import { getValidExt, SUPPORT_DOCUMENT_TYPE } from '../../constants/fileTypes';
@@ -455,17 +456,27 @@ export default function InputBar(props: InputBarProps) {
             maxLength={1000}
             ref={textAreaRef}
             onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-              const isComposing = e.nativeEvent.isComposing;
+              if (isMobile) {
+                if (e.key === 'Enter' && e.ctrlKey) {
+                  if (contents.length > 0) {
+                    handleOnClick();
+                  } else {
+                    e.preventDefault();
+                  }
+                }
+              } else {
+                const isComposing = e.nativeEvent.isComposing;
 
-              if (e.key === 'Enter' && e.shiftKey) {
-                return;
-              }
+                if (e.key === 'Enter' && e.shiftKey) {
+                  return;
+                }
 
-              if (e.key === 'Enter' && !isComposing) {
-                if (contents.length > 0) {
-                  handleOnClick();
-                } else {
-                  e.preventDefault();
+                if (e.key === 'Enter' && !isComposing) {
+                  if (contents.length > 0) {
+                    handleOnClick();
+                  } else {
+                    e.preventDefault();
+                  }
                 }
               }
             }}
