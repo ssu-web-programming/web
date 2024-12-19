@@ -147,7 +147,7 @@ export default function AIChat() {
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const confirm = useConfirm();
   const chatNova = useChatNova();
-  const { creating } = useAppSelector(selectTabSlice);
+  const { usingAI, creating } = useAppSelector(selectTabSlice);
   const novaHistory = useAppSelector(novaHistorySelector);
   const selectedItems = useAppSelector(selectedItemsSelector);
   const isShareMode = useAppSelector(isShareModeSelector);
@@ -200,6 +200,12 @@ export default function AIChat() {
       window.removeEventListener('orientationchange', handleOrientationChange);
     };
   });
+
+  useEffect(() => {
+    if (!usingAI) {
+      setImagePreview(null);
+    }
+  }, [usingAI]);
 
   const ShowScrollButton = (el: HTMLDivElement | null) => {
     if (!el) return;

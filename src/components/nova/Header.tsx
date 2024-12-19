@@ -17,7 +17,6 @@ import { creditInfoSelector, InitialState } from '../../store/slices/creditInfo'
 import {
   isShareModeSelector,
   novaHistorySelector,
-  selectedItemsSelector,
   setIsShareMode
 } from '../../store/slices/nova/novaHistorySlice';
 import {
@@ -117,7 +116,6 @@ export default function NovaHeader(props: NovaHeaderProps) {
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const novaHistory = useAppSelector(novaHistorySelector);
   const isShareMode = useAppSelector(isShareModeSelector);
-  const selectedItems = useAppSelector(selectedItemsSelector);
   const { usingAI, selectedNovaTab } = useAppSelector(selectTabSlice);
   const status = useAppSelector(selectPageStatus(selectedNovaTab));
   const dispatch = useAppDispatch();
