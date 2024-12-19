@@ -3,6 +3,7 @@ import NovaLogoDarkIcon from 'img/dark/nova/ico_logo_nova.svg';
 import NovaLogoLightIcon from 'img/light/nova/ico_logo_nova.svg';
 import { marked } from 'marked';
 import { useTranslation } from 'react-i18next';
+import Lottie from 'react-lottie-player';
 import { useParams } from 'react-router-dom';
 import { css } from 'styled-components';
 
@@ -12,9 +13,11 @@ import Icon from '../../../components/Icon';
 import { getFileIcon } from '../../../components/nova/InputBar';
 import ArrowRightIcon from '../../../img/common/ico_arrow_right.svg';
 import NoneFileDarkIcon from '../../../img/dark/none_file.svg';
+import SkeletonDarkIcon from '../../../img/dark/nova/skeleton_share.json';
 import ico_user from '../../../img/light/ico_user.svg';
 import NoneFileLightIcon from '../../../img/light/none_file.svg';
 import ico_ai from '../../../img/light/nova/ico_ai_nova.svg';
+import SkeletonLightIcon from '../../../img/light/nova/skeleton_share.json';
 import { lang, langCode } from '../../../locale';
 import { themeInfoSelector } from '../../../store/slices/theme';
 import { useAppSelector } from '../../../store/store';
@@ -33,6 +36,7 @@ export default function ShareChat() {
   const { t } = useTranslation();
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const [data, setData] = useState<NovaChatType[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchInit = async () => {
@@ -46,7 +50,9 @@ export default function ShareChat() {
       });
       const { list } = await res.json();
       setData(list);
+      setIsLoading(false);
     };
+    setIsLoading(true);
     fetchInit();
   }, []);
 
@@ -109,10 +115,14 @@ export default function ShareChat() {
             width={107}
             height={40}
           />
-          <S.EmptyBox>
-            <img src={isLightMode ? NoneFileLightIcon : NoneFileDarkIcon} alt="none-file" />
-            <span>{t(`Nova.aiChat.ShareChat.NotValidPage`)}</span>
-          </S.EmptyBox>
+          {isLoading ? (
+            <Lottie animationData={isLightMode ? SkeletonLightIcon : SkeletonDarkIcon} loop play />
+          ) : (
+            <S.EmptyBox>
+              <img src={isLightMode ? NoneFileLightIcon : NoneFileDarkIcon} alt="none-file" />
+              <span>{t(`Nova.aiChat.ShareChat.NotValidPage`)}</span>
+            </S.EmptyBox>
+          )}
           <Button
             variant="purple"
             width={328}
