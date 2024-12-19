@@ -213,25 +213,25 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
 
   const CHAT_BUTTON_LIST: ChatButtonType[] = [
     {
-      name: 'recreating',
+      name: t('Nova.Result.Remake'),
       status: ['done', 'cancel'],
       iconSrc: isLightMode ? <RetryChatLightIcon /> : <RetryChatDarkIcon />,
       clickHandler: (history: NovaChatType) => onSubmit({ input: history.input, type: '' })
     },
     {
-      name: 'copy',
+      name: t('Nova.Chat.Copy'),
       status: ['done'],
       iconSrc: isLightMode ? <CopyChatLightIcon /> : <CopyChatDarkIcon />,
       clickHandler: (history: NovaChatType) => onCopy(history.output)
     },
     {
-      name: 'insert',
+      name: t('Nova.Result.InsertDoc'),
       status: ['done'],
       iconSrc: isLightMode ? <InsertDocsLightIcon /> : <InsertDocsDarkIcon />,
       clickHandler: (history: NovaChatType) => insertDocsHandler(history)
     },
     {
-      name: 'share',
+      name: t('Nova.Result.Share'),
       status: ['done'],
       iconSrc: isLightMode ? <ShareChatLightIcon /> : <ShareChatDarkIcon />,
       clickHandler: () => {
@@ -371,7 +371,7 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                 play
               />
             ) : (
-              <div style={{ paddingTop: '3px', overflow: 'hidden' }}>
+              <div style={{ paddingTop: '3px' }}>
                 <PreMarkdown text={item.output}>
                   <Overlay onSave={() => onSave(item)} />
                 </PreMarkdown>
@@ -418,6 +418,7 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                               background: transparent;
                               padding: 0;
                             `}
+                            tooltip={btn.name}
                           />
                         ))}
                     </ChatButtonWrapper>

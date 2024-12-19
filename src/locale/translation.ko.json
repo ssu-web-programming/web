@@ -473,7 +473,8 @@
     "Result": {
       "Remake": "다시 만들기",
       "InsertDoc": "문서에 삽입",
-      "Save": "저장"
+      "Save": "저장",
+      "Share" : "공유"
     },
     "DragAndDrop": {
       "Title": "업로드",

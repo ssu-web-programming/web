@@ -473,7 +473,8 @@
     "Result": {
       "Remake": "再生成",
       "InsertDoc": "文書に挿入",
-      "Save": "保存"
+      "Save": "保存",
+      "Share" : "共有"
     },
     "DragAndDrop": {
       "Title": "アップロード",
