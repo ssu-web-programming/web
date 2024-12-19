@@ -473,7 +473,8 @@
     "Result": {
       "Remake": "Regenerate",
       "InsertDoc": "Insert into document",
-      "Save": "Save"
+      "Save": "Save",
+      "Share" : "Share"
     },
     "DragAndDrop": {
       "Title": "Upload",
