@@ -304,7 +304,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
     <StyledHeader title="" subTitle="">
       {isShareMode ? (
         <>
-          <span>{t(`Nova.aiChat.CreateLink`)}</span>
+          <span>{t(`Nova.aiChat.Share`)}</span>
           <IconButton
             iconComponent={isLightMode ? CloseLightIcon : CloseDarkIcon}
             onClick={() => dispatch(setIsShareMode(false))}
