@@ -1,8 +1,11 @@
-import { ReactComponent as IconMax } from 'img/light/ico_nova_max.svg';
-import { ReactComponent as IconMin } from 'img/light/ico_nova_min.svg';
+import { ReactComponent as MaxDarkIcon } from 'img/dark/nova/ico_max.svg';
+import { ReactComponent as MinDarkIcon } from 'img/dark/nova/ico_min.svg';
+import { ReactComponent as MaxLightIcon } from 'img/light/nova/ico_max.svg';
+import { ReactComponent as MinLightIcon } from 'img/light/nova/ico_min.svg';
 
 import { DeviceType, platformInfoSelector } from '../../store/slices/platformInfo';
 import { screenModeSelector, setScreenMode } from '../../store/slices/screenMode';
+import { themeInfoSelector } from '../../store/slices/theme';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import Bridge, { isDesktop } from '../../util/bridge';
 import IconButton from '../buttons/IconButton';
@@ -10,6 +13,7 @@ import useLangParameterNavigate from '../hooks/useLangParameterNavigate';
 
 export const ScreenChangeButton = () => {
   const dispatch = useAppDispatch();
+  const { isLightMode } = useAppSelector(themeInfoSelector);
   const { screenMode } = useAppSelector(screenModeSelector);
   const { platform, device } = useAppSelector(platformInfoSelector);
   const { from } = useLangParameterNavigate();
@@ -20,9 +24,16 @@ export const ScreenChangeButton = () => {
   ) {
     return (
       <IconButton
-        iconComponent={screenMode === 'min' ? IconMax : IconMin}
+        iconComponent={
+          screenMode === 'min'
+            ? isLightMode
+              ? MaxLightIcon
+              : MaxDarkIcon
+            : isLightMode
+              ? MinLightIcon
+              : MinDarkIcon
+        }
         onClick={() => {
-          console.log('클릭되지?', screenMode);
           Bridge.callBridgeApi('changeScreenSize', screenMode === 'min' ? 'max' : 'min');
           dispatch(setScreenMode(screenMode === 'min' ? 'max' : 'min'));
         }}
