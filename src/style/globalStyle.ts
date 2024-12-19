@@ -110,7 +110,7 @@ const GlobalStyle = createGlobalStyle`
     flex-direction: column;
 
     margin: 0;
-    padding-left: 20px;
+    padding-left: 25px;
     margin-block-start: 0px;
     margin-block-end: 0px;
     height: fit-content;
