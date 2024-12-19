@@ -7,13 +7,12 @@ import { useAppSelector } from '../store/store';
 
 export interface CheckBoxProps {
   isChecked: boolean;
-  setIsChecked: (check: boolean) => void;
+  setIsChecked?: (check: boolean) => void;
   onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
   cssExt?: FlattenSimpleInterpolation;
 }
 
-const CheckBox = (props: CheckBoxProps) => {
-  const { isChecked, onClick, cssExt } = props;
+const CheckBox = ({ isChecked, onClick, cssExt }: CheckBoxProps) => {
   const { isLightMode } = useAppSelector(themeInfoSelector);
 
   return (

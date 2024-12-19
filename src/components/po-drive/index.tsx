@@ -274,6 +274,8 @@ export default function PoDrive(props: PoDriveProps) {
                     if (props.isSingleFileSelection) {
                       if (!props.selectedFiles.includes(item)) {
                         props.handleSelectedFiles([item]);
+                      } else {
+                        props.handleSelectedFiles([]);
                       }
                     } else {
                       if (props.selectedFiles.includes(item)) {
@@ -293,10 +295,7 @@ export default function PoDrive(props: PoDriveProps) {
                     <div className="createdAt">{`${date.toLocaleString()}`}</div>
                   </div>
                   {item.fileType === 'FILE' && (
-                    <CheckBox
-                      isChecked={props.selectedFiles.includes(item)}
-                      setIsChecked={() => {}}
-                      onClick={() => {}}></CheckBox>
+                    <CheckBox isChecked={props.selectedFiles[0]?.fileId === item.fileId} />
                   )}
                 </S.ItemWrapper>
               </S.FileItem>
