@@ -65,23 +65,6 @@ export const ContentArea = styled.div`
   font-weight: 400;
   line-height: 24px;
   color: ${({ theme }) => theme.color.text.subGray03};
-  scrollbar-color: #c9cdd2 #ffffff;
-  scrollbar-width: thin;
-
-  &::-webkit-scrollbar {
-    width: 6px;
-    background: #ffffff;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    background-color: #c9cdd2;
-  }
-
-  &::-webkit-scrollbar-track {
-    border-radius: 4px;
-    background: #ffffff;
-  }
 `;
 
 export const CheckWrap = styled.div`

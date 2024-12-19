@@ -43,24 +43,6 @@ const Wrapper = styled.div<{ isScroll: boolean }>`
   flex-direction: column;
   justify-content: flex-start;
   overflow: hidden;
-
-  scrollbar-color: #c9cdd2 #ffffff;
-  scrollbar-width: thin;
-
-  &::-webkit-scrollbar {
-    width: 6px;
-    background: #ffffff;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    background-color: #c9cdd2;
-  }
-
-  &::-webkit-scrollbar-track {
-    border-radius: 4px;
-    background: #ffffff;
-  }
 `;
 
 const Body = styled.div`

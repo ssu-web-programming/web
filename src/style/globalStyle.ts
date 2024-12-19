@@ -10,36 +10,30 @@ const GlobalStyle = createGlobalStyle`
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 
-    scrollbar-color: #ebebeb #ffffff;
-    scrollbar-width: thin;
     font-weight: 500;
   }
 
   html, body, #root, div, textarea {
+    scrollbar-width: thin;
+    scrollbar-color: ${({ theme }: { theme: any }) => theme.color.borderGray01} transparent;
+
     &::-webkit-scrollbar {
-      width: 8px;
+      width: 6px;
+      background: #ffffff;
     }
 
     &::-webkit-scrollbar-thumb {
-      border-radius: 4px;
-      background-color: rgba(0, 0, 0, 0.2);
-
-      &:hover {
-        background-color: rgba(0, 0, 0, 0.4);
-        cursor: pointer;
-      }
+      border-radius: 14px;
     }
 
     &::-webkit-scrollbar-track {
-      background: transparent;
+      background: #ffffff;
+      border-radius: 14px;
     }
   }
 
   img {
     -webkit-user-drag: none;
-    -khtml-user-drag: none;
-    -moz-user-drag: none;
-    -o-user-drag: none;
   }
 
   :root {
@@ -111,8 +105,8 @@ const GlobalStyle = createGlobalStyle`
 
     margin: 0;
     padding-left: 25px;
-    margin-block-start: 0px;
-    margin-block-end: 0px;
+    margin-block-start: 0;
+    margin-block-end: 0;
     height: fit-content;
 
     li {
@@ -126,7 +120,6 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
     padding: 0;
     border: 0;
-    font-size: 100%;
     font: inherit;
     vertical-align: baseline;
 

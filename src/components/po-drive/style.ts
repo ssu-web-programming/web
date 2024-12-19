@@ -46,23 +46,6 @@ const FileList = styled.div`
   flex-direction: column;
   overflow: hidden auto;
   position: relative;
-  scrollbar-color: #c9cdd2 #ffffff;
-  scrollbar-width: thin;
-
-  &::-webkit-scrollbar {
-    width: 6px;
-    background: #ffffff;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    background-color: #c9cdd2;
-  }
-
-  &::-webkit-scrollbar-track {
-    border-radius: 4px;
-    background: #ffffff;
-  }
 `;
 
 const FileItem = styled.div`

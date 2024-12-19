@@ -208,9 +208,6 @@ const TextArea = styled.textarea<{ value: string }>`
   color: ${({ theme }) => theme.color.text.subGray04};
   background-color: transparent;
 
-  scrollbar-width: thin;
-  scrollbar-color: #c9cdd2 transparent;
-
   &::placeholder {
     color: ${({ value }) => (value ? 'transparent' : '#aaa')};
   }
