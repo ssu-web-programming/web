@@ -355,7 +355,8 @@ export default function NovaHeader(props: NovaHeaderProps) {
               title={t(`Nova.CreditInfo.Title`) as string}
               placement="bottom-end"
               type="normal"
-              options={TOOLTIP_CREDIT_OPTIONS}>
+              options={TOOLTIP_CREDIT_OPTIONS}
+              style={{ maxHeight: `${window.innerHeight - 56}px`, overflowY: 'auto' }}>
               <CreditIcon $isInit={isInit} />
             </Tooltip>
             <ScreenChangeButton></ScreenChangeButton>
