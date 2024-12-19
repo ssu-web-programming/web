@@ -60,7 +60,7 @@ export default function ShareChat() {
 
   return (
     <S.Wrapper>
-      {data.length > 0 ? (
+      {data?.length > 0 ? (
         <>
           <S.Header>
             <IconLogoNova width={107} height={32} />

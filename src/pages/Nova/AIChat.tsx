@@ -255,24 +255,27 @@ export default function AIChat() {
       };
     });
 
-    const { res } = await apiWrapper().request(NOVA_SHARE_CHAT, {
-      body: JSON.stringify({
-        threadId: novaHistory[novaHistory.length - 1].threadId,
-        list: jsonResult
-      }),
-      method: 'POST'
-    });
-    const response = await res.json();
-    const url = {
-      text: `${window.location.origin}/Nova/share/${response.data.shareId}?lang=${lang}`
-    };
-    await Bridge.callBridgeApi('copyClipboard', JSON.stringify(url));
+    try {
+      const { res } = await apiWrapper().request(NOVA_SHARE_CHAT, {
+        body: JSON.stringify({
+          threadId: novaHistory[novaHistory.length - 1].threadId,
+          list: jsonResult
+        }),
+        method: 'POST'
+      });
+      const response = await res.json();
+      const url = {
+        text: `${window.location.origin}/Nova/share/${response.data.shareId}?lang=${lang}`
+      };
+      await Bridge.callBridgeApi('copyClipboard', JSON.stringify(url));
+      dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.CopyLinkCompleted`) }));
+    } catch (err) {
+      dispatch(activeToast({ type: 'error', msg: t(`ToastMsg.CopyFailed`) }));
+    }
 
-    console.log(JSON.stringify(url));
     dispatch(setIsExporting(false));
     dispatch(setIsShareMode(false));
     dispatch(deselectAllItems());
-    dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.CopyLinkCompleted`) }));
   };
 
   const PROMPT_EXAMPLE = [
