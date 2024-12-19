@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { ReactComponent as IconLogoNova } from 'img/light/nova/ico_logo_nova.svg';
+import NovaLogoDarkIcon from 'img/dark/nova/ico_logo_nova.svg';
+import NovaLogoLightIcon from 'img/light/nova/ico_logo_nova.svg';
 import { marked } from 'marked';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -14,9 +15,10 @@ import NoneFileDarkIcon from '../../../img/dark/none_file.svg';
 import ico_user from '../../../img/light/ico_user.svg';
 import NoneFileLightIcon from '../../../img/light/none_file.svg';
 import ico_ai from '../../../img/light/nova/ico_ai_nova.svg';
-import { langCode } from '../../../locale';
+import { lang, langCode } from '../../../locale';
 import { themeInfoSelector } from '../../../store/slices/theme';
 import { useAppSelector } from '../../../store/store';
+import Bridge from '../../../util/bridge';
 
 import * as S from './style';
 import { DateWithGuide } from './style';
@@ -63,7 +65,12 @@ export default function ShareChat() {
       {data?.length > 0 ? (
         <>
           <S.Header>
-            <IconLogoNova width={107} height={32} />
+            <img
+              src={isLightMode ? NovaLogoLightIcon : NovaLogoDarkIcon}
+              alt="logo"
+              width={107}
+              height={32}
+            />
             <DateWithGuide>
               <span className="date">{formatDate(langCode)}</span>
               <span className="guide">{t(`Nova.aiChat.ShareChat.ExpiryDate`)}</span>
@@ -97,12 +104,24 @@ export default function ShareChat() {
         </>
       ) : (
         <S.EmptyWrapper>
-          <IconLogoNova width={107} height={40} />
+          <img
+            src={isLightMode ? NovaLogoLightIcon : NovaLogoDarkIcon}
+            alt="logo"
+            width={107}
+            height={40}
+          />
           <S.EmptyBox>
             <img src={isLightMode ? NoneFileLightIcon : NoneFileDarkIcon} alt="none-file" />
             <span>{t(`Nova.aiChat.ShareChat.NotValidPage`)}</span>
           </S.EmptyBox>
-          <Button variant="purple" width={328} height={48} onClick={() => {}} cssExt={css``}>
+          <Button
+            variant="purple"
+            width={328}
+            height={48}
+            onClick={() => {
+              Bridge.callBridgeApi('movePage', `https://www.polarisoffice.com/${lang}`);
+            }}
+            cssExt={css``}>
             {t(`Nova.aiChat.ShareChat.MovePOPage`)}
             <img src={ArrowRightIcon} alt="arrow-left" />
           </Button>
