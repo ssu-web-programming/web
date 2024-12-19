@@ -27,10 +27,10 @@ import { ClientStatusType } from 'pages/Nova/Nova';
 import { useTranslation } from 'react-i18next';
 import Lottie from 'react-lottie-player';
 import {
-  deselectAllItems,
   isShareModeSelector,
   NovaChatType,
   NovaFileInfo,
+  selectAllItems,
   selectedItemsSelector,
   setIsShareMode,
   toggleItemSelection
@@ -235,7 +235,7 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
       status: ['done'],
       iconSrc: isLightMode ? <ShareChatLightIcon /> : <ShareChatDarkIcon />,
       clickHandler: () => {
-        dispatch(deselectAllItems());
+        dispatch(selectAllItems());
         dispatch(setIsShareMode(true));
       }
     }
