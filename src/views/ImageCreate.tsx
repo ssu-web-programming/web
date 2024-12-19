@@ -113,7 +113,7 @@ const ImageCreate = ({ contents }: { contents: string }) => {
             type: 'info',
             msg: `${t(`Txt2ImgTab.ToastMsg.StartCreatingImage`)} \n${t(`ToastMsg.AboutCredit`, {
               deductionCredit: deductionCredit,
-              leftCredit: leftCredit === '-1' ? t('Unlimited') : leftCredit
+              leftCredit: leftCredit === '-1' ? t('Unlimited') : Number(leftCredit).toLocaleString()
             })}`
           })
         );
