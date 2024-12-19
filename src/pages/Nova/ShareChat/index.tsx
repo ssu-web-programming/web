@@ -18,7 +18,6 @@ import ico_ai from '../../../img/light/nova/ico_ai_nova.svg';
 import { lang, langCode } from '../../../locale';
 import { themeInfoSelector } from '../../../store/slices/theme';
 import { useAppSelector } from '../../../store/store';
-import Bridge from '../../../util/bridge';
 
 import * as S from './style';
 import { DateWithGuide } from './style';
@@ -119,7 +118,7 @@ export default function ShareChat() {
             width={328}
             height={48}
             onClick={() => {
-              Bridge.callBridgeApi('movePage', `https://www.polarisoffice.com/${lang}`);
+              window.open(`https://www.polarisoffice.com/${lang}`, '_blank', 'noopener,noreferrer');
             }}
             cssExt={css``}>
             {t(`Nova.aiChat.ShareChat.MovePOPage`)}
