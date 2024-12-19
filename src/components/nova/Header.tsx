@@ -7,6 +7,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { initFlagSelector } from 'store/slices/initFlagSlice';
 import styled, { css } from 'styled-components';
 
+import ArrowLeftDisableIcon from '../../img/common/ico_arrow_left_disabled.svg';
 import ArrowLeftDarkIcon from '../../img/dark/ico_arrow_left.svg';
 import { ReactComponent as IconConvertDark } from '../../img/dark/nova/tab/convert_Img.svg';
 import ArrowLeftLightIcon from '../../img/light/ico_arrow_left.svg';
@@ -88,13 +89,6 @@ const CreditIcon = styled(CreditLineIcon)<{
   }
 `;
 
-const SelectionText = styled.span`
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 19px;
-  color: var(--ai-purple-50-main);
-`;
-
 const StyledIconConvertLight = styled(IconConvertLight)`
   path {
     fill: black;
@@ -116,7 +110,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const novaHistory = useAppSelector(novaHistorySelector);
   const isShareMode = useAppSelector(isShareModeSelector);
-  const { usingAI, selectedNovaTab } = useAppSelector(selectTabSlice);
+  const { creating, usingAI, selectedNovaTab } = useAppSelector(selectTabSlice);
   const status = useAppSelector(selectPageStatus(selectedNovaTab));
   const dispatch = useAppDispatch();
   const confirm = useConfirm();
@@ -287,14 +281,21 @@ export default function NovaHeader(props: NovaHeaderProps) {
   };
 
   const handleGoBack = async () => {
-    if (selectedNovaTab === NOVA_TAB_TYPE.aiChat) {
-      await newChat(true);
-    } else {
-      dispatch(setLocalFiles([]));
-      dispatch(setDriveFiles([]));
-      dispatch(setPageStatus({ tab: selectedNovaTab, status: 'home' }));
-      dispatch(setPageData({ tab: selectedNovaTab, data: null }));
-      dispatch(setPageResult({ tab: selectedNovaTab, result: null }));
+    if (
+      status !== 'progress' &&
+      status !== 'saving' &&
+      status !== 'loading' &&
+      creating != 'NOVA'
+    ) {
+      if (selectedNovaTab === NOVA_TAB_TYPE.aiChat) {
+        await newChat(true);
+      } else {
+        dispatch(setLocalFiles([]));
+        dispatch(setDriveFiles([]));
+        dispatch(setPageStatus({ tab: selectedNovaTab, status: 'home' }));
+        dispatch(setPageData({ tab: selectedNovaTab, data: null }));
+        dispatch(setPageResult({ tab: selectedNovaTab, result: null }));
+      }
     }
   };
 
@@ -320,7 +321,16 @@ export default function NovaHeader(props: NovaHeaderProps) {
             ) : (
               <>
                 <img
-                  src={isLightMode ? ArrowLeftLightIcon : ArrowLeftDarkIcon}
+                  src={
+                    status !== 'progress' &&
+                    status !== 'saving' &&
+                    status !== 'loading' &&
+                    creating != 'NOVA'
+                      ? isLightMode
+                        ? ArrowLeftLightIcon
+                        : ArrowLeftDarkIcon
+                      : ArrowLeftDisableIcon
+                  }
                   alt="arrow-left"
                   onClick={handleGoBack}
                   style={{

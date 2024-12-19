@@ -10,16 +10,16 @@ export interface ResultImage {
 }
 
 export type PageStatus =
-  | 'home'
-  | 'progress'
-  | 'saving'
-  | 'loading'
-  | 'convert'
-  | 'prompt'
-  | 'expand'
-  | 'theme'
-  | 'done'
-  | 'timeout';
+  | 'home' // 메인 화면
+  | 'progress' // 프로그레스 화면
+  | 'saving' // 이미지 저장 중
+  | 'loading' // 로딩 중 (이미지 업로드)
+  | 'convert' // 2d->3d 이미지 변환
+  | 'prompt' // changeBG
+  | 'expand' // expandImg
+  | 'theme' // changeStyle
+  | 'done' // 결과 화면
+  | 'timeout'; // 타임 아웃
 export type PageData = File | null;
 export type PageResult = ResultImage | null;
 
