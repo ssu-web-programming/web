@@ -241,33 +241,51 @@ export default function AIChat() {
     if (isExporting) return;
 
     dispatch(setIsExporting(true));
-    const jsonResult = selectedItems.map((item) => {
-      const threadItems = item.split(':');
-      const type = threadItems[0];
-      const id = threadItems[1];
+    const jsonResult = novaHistory.flatMap((historyItem) => {
+      const matchingItems = selectedItems.filter((item) => {
+        const [, id] = item.split(':');
+        return historyItem.id === id;
+      });
 
-      const matchedItem = novaHistory.find((historyItem) => historyItem.id === id);
-      if (!matchedItem) {
-        console.error(`No matching item found for id: ${id}`);
-        return null;
-      }
+      if (matchingItems.length === 0) return [];
 
-      const resultType = type === 'q' ? 'question' : 'answer';
-      const content = type === 'q' ? matchedItem.input : matchedItem.output;
-      const files = matchedItem.files ? matchedItem.files.map((file) => file.name) : [];
+      return matchingItems.map((item) => {
+        const [type, id] = item.split(':');
 
-      return {
-        type: resultType,
-        content: content,
-        files: resultType === 'question' ? files : []
-      };
+        const resultType = type === 'q' ? 'question' : 'answer';
+        const content = type === 'q' ? historyItem.input : historyItem.output;
+
+        const files =
+          resultType === 'question' ? historyItem.files?.map((file) => file.name) || [] : [];
+
+        return {
+          id,
+          type: resultType,
+          content: content,
+          files: files
+        };
+      });
     });
+
+    const groupedResult = Object.values(
+      jsonResult.reduce(
+        (acc, curr) => {
+          const { id } = curr;
+          if (!acc[id]) acc[id] = [];
+          acc[id].push(curr);
+          return acc;
+        },
+        {} as Record<string, (typeof jsonResult)[0][]>
+      )
+    ).flatMap(
+      (group) => group.sort((a, b) => (a.type === 'question' ? -1 : 1)) // 질문이 답변보다 먼저 오도록 정렬
+    );
 
     try {
       const { res } = await apiWrapper().request(NOVA_SHARE_CHAT, {
         body: JSON.stringify({
           threadId: novaHistory[novaHistory.length - 1].threadId,
-          list: jsonResult
+          list: groupedResult
         }),
         method: 'POST'
       });

@@ -100,6 +100,7 @@ const QuestionContents = styled.div`
 `;
 
 const Answer = styled(Chat)`
+  width: 100%;
   align-items: flex-start;
 
   p {
@@ -372,7 +373,7 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                 play
               />
             ) : (
-              <div style={{ paddingTop: '3px' }}>
+              <div style={{ width: '100%', maxWidth: 'calc(100% - 40px)', paddingTop: '3px' }}>
                 <PreMarkdown text={item.output}>
                   <Overlay onSave={() => onSave(item)} />
                 </PreMarkdown>
