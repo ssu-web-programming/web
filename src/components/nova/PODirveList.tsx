@@ -14,13 +14,14 @@ interface PODriveListProps {
   setIsOpen: (isOpen: boolean) => void;
   uploadTarget: string;
   setUploadTarget: (uploadTarget: string) => void;
+  onClearPastedImages?: () => void;
 }
 
 export default function PODriveList(props: PODriveListProps) {
-  const { isOpen, setIsOpen, uploadTarget, setUploadTarget } = props;
+  const { isOpen, setIsOpen, uploadTarget, setUploadTarget, onClearPastedImages } = props;
   const { t } = useTranslation();
   const { getMaxFilesPerUpload } = useUserInfoUtils();
-  const { loadDriveFile } = useManageFile();
+  const { loadDriveFile } = useManageFile({ onClearPastedImages });
   const [selectedFiles, setSelectedFiles] = useState<DriveFileInfo[]>([]);
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
 
