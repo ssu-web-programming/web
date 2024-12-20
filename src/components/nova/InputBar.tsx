@@ -315,6 +315,7 @@ export default function InputBar(props: InputBarProps) {
   }, [expiredNOVA]);
 
   const handleOnClick = async () => {
+    handleInActiveUploadBtn();
     const hasLocalFiles = localFiles.length > 0;
     const hasDriveFiles = driveFiles.length > 0;
     const hasPasteImages = pastedImagesAsFileType.length > 0;
