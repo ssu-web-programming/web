@@ -17,7 +17,6 @@ import ConfirmDoc from './pages/AskDocStep/ConfirmDoc';
 import ProgressAnalysisDoc from './pages/AskDocStep/ProgressAnalysisDoc';
 import StartAnalysisDoc from './pages/AskDocStep/StartAnalysisDoc';
 import InvalidAccess from './pages/InvalidAccess';
-import InvalidAccessNova from './pages/Nova/InvalidAccessNova';
 import ShareChat from './pages/Nova/ShareChat';
 import Offline from './pages/Offline';
 import TextToImage from './pages/TextToImage';
@@ -77,7 +76,6 @@ function App() {
           <Route path="/askdoc" element={<AskDoc />} />
           <Route path="/alli" element={<Alli />} />
           <Route path="/NOVA" element={<Nova />} />
-          <Route path="NOVA/*" element={<InvalidAccessNova />}></Route>
           <Route path="/NOVA/share/:id" element={<ShareChat />} />
           <Route path="/AskDocStep" element={<AskDocHome />}>
             <Route index element={<AskDocLoading />} />
