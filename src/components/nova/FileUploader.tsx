@@ -41,12 +41,17 @@ type FileUploaderProps = {
   inputRef: RefObject<HTMLInputElement>;
   tooltipStyle?: React.CSSProperties;
   onFinish?: () => void;
+  onClearPastedImages?: () => void;
 };
 
 export const FileUploader = (props: FileUploaderProps) => {
-  const { target, accept, children, inputRef, tooltipStyle, onFinish } = props;
+  const { target, accept, children, inputRef, tooltipStyle, onFinish, onClearPastedImages } = props;
 
-  const { loadLocalFile, getFileInfo } = useManageFile(onFinish);
+  const { loadLocalFile, getFileInfo } = useManageFile({
+    onFinishCallback: onFinish,
+    onClearPastedImages
+  });
+
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { isLightMode } = useAppSelector(themeInfoSelector);
@@ -366,6 +371,7 @@ export const FileUploader = (props: FileUploaderProps) => {
           setIsOpen={setIsOpen}
           uploadTarget={uploadTarget}
           setUploadTarget={setUploadTarget}
+          onClearPastedImages={onClearPastedImages}
         />
       )}
     </>

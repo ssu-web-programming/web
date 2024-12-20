@@ -432,7 +432,8 @@ export default function InputBar(props: InputBarProps) {
                   accept={btn.accept}
                   inputRef={btn.ref}
                   tooltipStyle={{ padding: '12px 16px' }}
-                  onFinish={handleInActiveUploadBtn}>
+                  onFinish={handleInActiveUploadBtn}
+                  onClearPastedImages={handleClearPastedImages}>
                   {btn.children}
                 </FileUploader>
               ))}

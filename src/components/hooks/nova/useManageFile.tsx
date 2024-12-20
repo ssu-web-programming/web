@@ -20,9 +20,12 @@ import { getFileExtension } from '../../../util/common';
 import { useChatNova } from '../useChatNova';
 import useUserInfoUtils from '../useUserInfoUtils';
 
-type FinishCallback = () => void;
+interface Props {
+  onFinishCallback?: () => void;
+  onClearPastedImages?: () => void;
+}
 
-export function useManageFile(onFinishCallback?: FinishCallback) {
+export function useManageFile({ onFinishCallback, onClearPastedImages }: Props = {}) {
   const { t } = useTranslation();
   const chatNova = useChatNova();
   const confirm = useConfirm();
@@ -34,6 +37,7 @@ export function useManageFile(onFinishCallback?: FinishCallback) {
   const loadLocalFile = async (files: File[]) => {
     dispatch(setDriveFiles([]));
     onFinishCallback?.();
+    onClearPastedImages?.();
 
     const maxFileUploadCntOnce = getMaxFilesPerUpload(selectedNovaTab);
     if (files.length > maxFileUploadCntOnce) {
@@ -144,6 +148,7 @@ export function useManageFile(onFinishCallback?: FinishCallback) {
     }
 
     onFinishCallback?.();
+    onClearPastedImages?.();
     dispatch(setLocalFiles([]));
     dispatch(setDriveFiles(files));
   };
