@@ -277,8 +277,8 @@ export default function AIChat() {
         },
         {} as Record<string, (typeof jsonResult)[0][]>
       )
-    ).flatMap(
-      (group) => group.sort((a, b) => (a.type === 'question' ? -1 : 1)) // 질문이 답변보다 먼저 오도록 정렬
+    ).flatMap((group) =>
+      group.sort((a, b) => (a.type === 'question' ? -1 : 1)).map(({ id, ...rest }) => rest)
     );
 
     try {
