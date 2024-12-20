@@ -1,4 +1,5 @@
 import React from 'react';
+import { ReactComponent as MessagePlusDisabledIcon } from 'img/common/ico_message_plus.svg';
 import { ReactComponent as MessagePlusDarkIcon } from 'img/dark/ico_message_plus.svg';
 import { ReactComponent as CloseDarkIcon } from 'img/dark/ico_nova_close.svg';
 import { ReactComponent as MessagePlusLightIcon } from 'img/light/ico_message_plus.svg';
@@ -239,6 +240,8 @@ export default function NovaHeader(props: NovaHeaderProps) {
   );
 
   const newChat = async (isBack = false) => {
+    if (creating === 'NOVA') return;
+
     const ret = await confirm({
       title: isBack ? undefined : t(`Nova.Confirm.NewChat.Title`)!,
       msg: isBack ? t(`Nova.Confirm.ResetChat.Msg`) : t(`Nova.Confirm.NewChat.Msg`),
@@ -344,7 +347,13 @@ export default function NovaHeader(props: NovaHeaderProps) {
           <ButtonWrapper>
             {novaHistory.length > 0 && selectedNovaTab === NOVA_TAB_TYPE.aiChat && (
               <IconButton
-                iconComponent={isLightMode ? MessagePlusLightIcon : MessagePlusDarkIcon}
+                iconComponent={
+                  creating != 'NOVA'
+                    ? isLightMode
+                      ? MessagePlusLightIcon
+                      : MessagePlusDarkIcon
+                    : MessagePlusDisabledIcon
+                }
                 onClick={() => newChat()}
                 iconSize="lg"
                 width={32}

@@ -9,6 +9,7 @@ import { setPageStatus } from '../../store/slices/nova/pageStatusSlice';
 export const useChatNova = () => {
   const dispatch = useAppDispatch();
   const novaHistory = useAppSelector(novaHistorySelector);
+
   const newChat = async () => {
     try {
       const lastChat = novaHistory[novaHistory.length - 1];
