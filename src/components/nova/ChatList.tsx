@@ -91,11 +91,12 @@ const Question = styled(Chat)`
 `;
 
 const QuestionContents = styled.div`
-  width: 100%;
+  width: calc(100% - 40px);
   display: flex;
   flex-direction: column;
   gap: 8px;
   padding-top: 3px;
+  word-wrap: break-word;
 `;
 
 const Answer = styled(Chat)`
