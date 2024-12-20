@@ -37,7 +37,6 @@ export default function useClipboard({
   const validateImage = async (file: File): Promise<boolean> => {
     // 파일 크기 체크
     if (file.size > maxFileSize) {
-      console.error('파일 크기는 20MB 이하여야 합니다.');
       await confirm({
         title: '',
         msg: t('Nova.Alert.OverFileUploadSize', {

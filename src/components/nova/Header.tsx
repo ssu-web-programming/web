@@ -34,6 +34,7 @@ import { useAppDispatch, useAppSelector } from '../../store/store';
 import Bridge, { isDesktop } from '../../util/bridge';
 import IconButton from '../buttons/IconButton';
 import { useConfirm } from '../Confirm';
+import useClipboard from '../hooks/nova/use-clipboard';
 import { useChatNova } from '../hooks/useChatNova';
 import Header from '../layout/Header';
 import Tooltip from '../Tooltip';
@@ -118,6 +119,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
   const chatNova = useChatNova();
   const creditInfo = useAppSelector(creditInfoSelector);
   const { isInit } = useAppSelector(initFlagSelector);
+  const { handleClearPastedImages } = useClipboard();
 
   const CREDIT_NAME_MAP: {
     [category: string]:
@@ -258,6 +260,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
 
     if (ret) {
       await chatNova.newChat();
+      handleClearPastedImages();
       if (props.setInputContents) props.setInputContents('');
       dispatch(setLocalFiles([]));
       dispatch(setDriveFiles([]));
