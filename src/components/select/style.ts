@@ -82,6 +82,18 @@ const OptionsContainer = styled.div<{ $optionContainerStyle?: FlattenSimpleInter
   width: max-content;
   padding: 8px 16px;
 
+  /* 세로 모드 */
+  @media screen and (orientation: portrait) {
+    max-height: 240px;
+    overflow-y: auto;
+  }
+
+  /* 가로 모드 */
+  @media screen and (orientation: landscape) {
+    max-height: 110px;
+    overflow-y: auto;
+  }
+
   ${({ $optionContainerStyle }) => $optionContainerStyle && $optionContainerStyle}
 `;
 
