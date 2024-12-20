@@ -156,20 +156,21 @@ export default function ImageUploader(props: ImageUploaderProps) {
     try {
       let fileData: File = selectedFile;
 
-      if (
-        (await isPixelLimitExceeded(selectedFile, props.curTab)) &&
-        isSpecificFormat(selectedFile)
-      ) {
-        await confirm({
-          title: '',
-          msg: `${t('Nova.Confirm.OverMaxFilePixel')}\n\n${t(
-            `Nova.${NOVA_TAB_TYPE.removeBG}.AllowImageSize`
-          )}`,
-          onOk: {
-            text: t('OK'),
-            callback: () => {}
-          }
-        });
+      if (isSpecificFormat(selectedFile)) {
+        if (await isPixelLimitExceeded(selectedFile, props.curTab)) {
+          await confirm({
+            title: '',
+            msg: `${t('Nova.Confirm.OverMaxFilePixel')}\n\n${t(
+              `Nova.${NOVA_TAB_TYPE.removeBG}.AllowImageSize`
+            )}`,
+            onOk: {
+              text: t('OK'),
+              callback: () => {
+                return;
+              }
+            }
+          });
+        }
       } else {
         fileData = await compressImage(selectedFile, props.curTab);
       }
