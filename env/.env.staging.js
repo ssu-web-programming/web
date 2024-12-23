@@ -99,6 +99,7 @@ module.exports = new Promise((resolve, reject) => {
   resolve({
     REACT_APP_USE_LOGGER_SPLUNK,
     REACT_APP_PO_API,
+    REACT_APP_PO_PUBLIC_API,
     GENERATE_SOURCEMAP,
     REACT_APP_USE_LOGGER_MODE_VF,
     REACT_APP_SHARE_TECH_API,
