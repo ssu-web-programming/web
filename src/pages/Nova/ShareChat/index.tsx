@@ -40,7 +40,7 @@ export default function ShareChat() {
 
   useEffect(() => {
     const fetchInit = async () => {
-      const res = await fetch(NOVA_GET_SHARE_CHAT, {
+      const res = await fetch(`${process.env.REACT_APP_PO_PUBLIC_API}${NOVA_GET_SHARE_CHAT}`, {
         method: 'POST',
         body: JSON.stringify({
           shareId: id,
