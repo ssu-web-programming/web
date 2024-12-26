@@ -36,9 +36,18 @@ function App() {
 
   useEffect(() => {
     const detectTheme = () => {
-      const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const newTheme = prefersDarkMode ? ThemeType.dark : ThemeType.light;
-      dispatch(setThemeInfo(newTheme));
+      const platform = getPlatform();
+      if (
+        platform === ClientType.mac ||
+        platform === ClientType.web ||
+        platform === ClientType.unknown
+      ) {
+        const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const newTheme = prefersDarkMode ? ThemeType.dark : ThemeType.light;
+        dispatch(setThemeInfo(newTheme));
+      } else {
+        dispatch(setThemeInfo(ThemeType.light));
+      }
     };
 
     detectTheme();
