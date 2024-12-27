@@ -12,9 +12,9 @@ export const LANG_EN_US = 'en';
 export const LANG_KO_KR_CODE = 'ko-KR';
 export const LANG_JA_JP_CODE = 'ja-JP';
 export const LANG_EN_US_CODE = 'en-US';
-export const LANG_FORMAT_KO_KR_CODE = 'ko-KR';
-export const LANG_FORMAT_JA_JP_CODE = 'js-JP';
-export const LANG_FORMAT_EN_US_CODE = 'en-US';
+export const LANG_FORMAT_KO_KR_CODE = 'ko_KR';
+export const LANG_FORMAT_JA_JP_CODE = 'js_JP';
+export const LANG_FORMAT_EN_US_CODE = 'en_US';
 
 const getLangCodeFromParams = () => {
   try {
