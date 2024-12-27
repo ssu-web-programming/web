@@ -6,7 +6,7 @@ import {
   NOVA_GET_USER_INFO_AGREEMENT
 } from 'api/constant';
 import { ERR_INVALID_SESSION } from 'error/error';
-import { lang, langCode } from 'locale';
+import { lang, langFormatCode } from 'locale';
 import { setNovaExpireTime } from 'store/slices/appState';
 import { setCreditInfo } from 'store/slices/creditInfo';
 import { setNovaAgreement, setUserInfo } from 'store/slices/userInfo';
@@ -105,7 +105,7 @@ export default function useInitApp() {
             'Content-Type': 'application/json',
             ...headers
           },
-          body: JSON.stringify({ language: langCode })
+          body: JSON.stringify({ language: langFormatCode })
         });
         const {
           data: { announcementInfos }

@@ -12,6 +12,9 @@ export const LANG_EN_US = 'en';
 export const LANG_KO_KR_CODE = 'ko-KR';
 export const LANG_JA_JP_CODE = 'ja-JP';
 export const LANG_EN_US_CODE = 'en-US';
+export const LANG_FORMAT_KO_KR_CODE = 'ko-KR';
+export const LANG_FORMAT_JA_JP_CODE = 'js-JP';
+export const LANG_FORMAT_EN_US_CODE = 'en-US';
 
 const getLangCodeFromParams = () => {
   try {
@@ -73,8 +76,24 @@ const getLangCode = () => {
     return LANG_EN_US_CODE;
   }
 };
+const getLangFormatCode = () => {
+  const code = getLangCodeFromParams() || getLangCodeFromUA() || LANG_FORMAT_EN_US_CODE;
+  try {
+    const lower = code?.toLowerCase();
+    if (lower?.startsWith('ko')) {
+      return LANG_FORMAT_KO_KR_CODE;
+    } else if (lower?.startsWith('ja')) {
+      return LANG_FORMAT_JA_JP_CODE;
+    } else {
+      return LANG_FORMAT_EN_US_CODE;
+    }
+  } catch (err) {
+    return LANG_FORMAT_EN_US_CODE;
+  }
+};
 export const lang = getLang();
 export const langCode = getLangCode();
+export const langFormatCode = getLangFormatCode();
 
 const resources = {
   ko: {
