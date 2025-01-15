@@ -33,7 +33,7 @@ const OverlayWrapper = styled.div`
 
 const ImageModal = styled.div`
   position: relative;
-  width: 100%
+  width: 100%;
   height: auto;
   border-radius: 12px;
   overflow: hidden;
