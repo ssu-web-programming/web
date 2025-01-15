@@ -1,4 +1,13 @@
+import { ReactComponent as TransFile } from 'img/light/nova/translation/trans_file.svg';
+import { ReactComponent as TransTxt } from 'img/light/nova/translation/trans_txt.svg';
 import styled from 'styled-components';
+
+const TranslationWrapper = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+`;
 
 const ToggleWrapper = styled.div`
   display: flex;
@@ -50,4 +59,49 @@ const TextAreaBottom = styled.div`
   }
 `;
 
-export { TextArea, TextAreaBottom, TextAreaHeader, TextAreaWrapper, ToggleWrapper };
+const StyledTransTxt = styled(TransTxt)<{
+  $isActive?: boolean;
+}>`
+  & path {
+    fill: ${({ $isActive }) => ($isActive ? '#6F3AD0' : '')};
+  }
+`;
+
+const StyledTransFile = styled(TransFile)<{
+  $isActive?: boolean;
+}>`
+  & path {
+    fill: ${({ $isActive }) => ($isActive ? '#6F3AD0' : '')};
+  }
+`;
+
+const TranslationButton = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #6f3ad0;
+  padding: 12px 0;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 30px;
+
+  span {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    color: white;
+  }
+`;
+
+export {
+  StyledTransFile,
+  StyledTransTxt,
+  TextArea,
+  TextAreaBottom,
+  TextAreaHeader,
+  TextAreaWrapper,
+  ToggleWrapper,
+  TranslationButton,
+  TranslationWrapper
+};

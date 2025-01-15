@@ -1,41 +1,26 @@
 import { useState } from 'react';
 import NovaHeader from 'components/nova/Header';
 import { ReactComponent as DeepL } from 'img/light/nova/translation/deepl_logo.svg';
-import { ReactComponent as TransFile } from 'img/light/nova/translation/trans_file.svg';
-import { ReactComponent as TransTxt } from 'img/light/nova/translation/trans_txt.svg';
-import styled from 'styled-components';
 
 import BgContainer from './components/bg-container';
 import Toggle, { type ToggleOption } from './components/toggle';
 import * as S from './style';
-
-const StyledTransTxt = styled(TransTxt)<{
-  $isActive?: boolean;
-}>`
-  & path {
-    fill: ${({ $isActive }) => ($isActive ? '#6F3AD0' : '')};
-  }
-`;
-
-const StyledTransFile = styled(TransFile)<{
-  $isActive?: boolean;
-}>`
-  & path {
-    fill: ${({ $isActive }) => ($isActive ? '#6F3AD0' : '')};
-  }
-`;
 
 export default function Translation() {
   const [activeId, setActiveId] = useState<string>('text');
   const [translateInputValue, setTranslateInputValue] = useState('');
 
   const options: ToggleOption[] = [
-    { id: 'text', label: '텍스트 번역', icon: <StyledTransTxt $isActive={activeId === 'text'} /> },
-    { id: 'file', label: '파일 번역', icon: <StyledTransFile $isActive={activeId === 'file'} /> }
+    {
+      id: 'text',
+      label: '텍스트 번역',
+      icon: <S.StyledTransTxt $isActive={activeId === 'text'} />
+    },
+    { id: 'file', label: '파일 번역', icon: <S.StyledTransFile $isActive={activeId === 'file'} /> }
   ];
 
   return (
-    <>
+    <S.TranslationWrapper>
       <NovaHeader />
       <BgContainer>
         <S.ToggleWrapper>
@@ -55,7 +40,11 @@ export default function Translation() {
             <span>{translateInputValue.length}자/40,000자</span>
           </S.TextAreaBottom>
         </S.TextAreaWrapper>
+
+        <S.TranslationButton onClick={() => console.log('123')}>
+          <span>번역하기</span>
+        </S.TranslationButton>
       </BgContainer>
-    </>
+    </S.TranslationWrapper>
   );
 }
