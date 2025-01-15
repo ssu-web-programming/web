@@ -16,6 +16,7 @@ const ToggleButton = styled.button<ToggleButtonProps>`
   font-weight: 500;
   font-size: 16px;
   line-height: 24px;
+  cursor: pointer;
 
   ${({ isActive }) =>
     isActive
@@ -40,7 +41,7 @@ const ToggleContainer = styled.div<{
   containerStyle?: FlattenSimpleInterpolation;
 }>`
   display: inline-flex;
-  background: #f3f4f6;
+  background: #f2f4f6;
   padding: 4px;
   border-radius: 100px;
   border: 1px solid #e8ebed;
