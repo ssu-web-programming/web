@@ -215,25 +215,25 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
 
   const CHAT_BUTTON_LIST: ChatButtonType[] = [
     {
-      name: t('Nova.Result.Remake'),
+      name: t('Index.Result.Remake'),
       status: ['done', 'cancel'],
       iconSrc: isLightMode ? <RetryChatLightIcon /> : <RetryChatDarkIcon />,
       clickHandler: (history: NovaChatType) => onSubmit({ input: history.input, type: '' })
     },
     {
-      name: t('Nova.Chat.Copy'),
+      name: t('Index.Chat.Copy'),
       status: ['done'],
       iconSrc: isLightMode ? <CopyChatLightIcon /> : <CopyChatDarkIcon />,
       clickHandler: (history: NovaChatType) => onCopy(history.output)
     },
     {
-      name: t('Nova.Result.InsertDoc'),
+      name: t('Index.Result.InsertDoc'),
       status: ['done'],
       iconSrc: isLightMode ? <InsertDocsLightIcon /> : <InsertDocsDarkIcon />,
       clickHandler: (history: NovaChatType) => insertDocsHandler(history)
     },
     {
-      name: t('Nova.Result.Share'),
+      name: t('Index.Result.Share'),
       status: ['done'],
       iconSrc: isLightMode ? <ShareChatLightIcon /> : <ShareChatDarkIcon />,
       clickHandler: () => {
@@ -303,7 +303,7 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                                 default: {
                                   confirm({
                                     title: '',
-                                    msg: t('Nova.Chat.FailOpenDoc'),
+                                    msg: t('Index.Chat.FailOpenDoc'),
                                     onOk: {
                                       text: t('Confirm'),
                                       callback: () => {}
@@ -386,7 +386,7 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                             src={isLightMode ? ArrowCornerLightIcon : ArrowCornerDarkIcon}
                             alt="arrow"
                           />
-                          <span>{t('Nova.aiChat.ChangeImage')}</span>
+                          <span>{t('Index.aiChat.ChangeImage')}</span>
                           <img src={isLightMode ? SparkleLightIcon : SparkleDarkIcon} alt="arrow" />
                         </MakeNewImageMessage>
                         <Tabs

@@ -2,14 +2,14 @@ import React, { useEffect } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import aiChatIcon from '../../img/light/nova/imgSample/ai_chat_sample.png';
-import changeBGIcon from '../../img/light/nova/imgSample/bg_change_sample.png';
-import removeBGIcon from '../../img/light/nova/imgSample/bg_delete_sample.png';
-import convert2DTo3DIcon from '../../img/light/nova/imgSample/convert_2dto3d_smaple.gif';
-import expandImgIcon from '../../img/light/nova/imgSample/image_expand_sample.png';
-import remakeImgIcon from '../../img/light/nova/imgSample/image_remake_sample.png';
-import changeStyleIcon from '../../img/light/nova/imgSample/image_style_sample.png';
-import improvedResIcon from '../../img/light/nova/imgSample/image_upscaling_sample.png';
+import aiChatIcon from '../../img/common/nova/imgSample/ai_chat_sample.png';
+import changeBGIcon from '../../img/common/nova/imgSample/bg_change_sample.png';
+import removeBGIcon from '../../img/common/nova/imgSample/bg_delete_sample.png';
+import convert2DTo3DIcon from '../../img/common/nova/imgSample/convert_2dto3d_smaple.gif';
+import expandImgIcon from '../../img/common/nova/imgSample/image_expand_sample.png';
+import remakeImgIcon from '../../img/common/nova/imgSample/image_remake_sample.png';
+import changeStyleIcon from '../../img/common/nova/imgSample/image_style_sample.png';
+import improvedResIcon from '../../img/common/nova/imgSample/image_upscaling_sample.png';
 import { ReactComponent as IconConvert } from '../../img/light/nova/tab/convert_Img.svg';
 import { announceInfoSelector } from '../../store/slices/nova/announceSlice';
 import { NOVA_TAB_TYPE, selectTabSlice } from '../../store/slices/tabSlice';
@@ -88,13 +88,17 @@ export const Guide = (props: GuideProps) => {
 
   const iconMap: Record<NOVA_TAB_TYPE, string> = {
     aiChat: aiChatIcon,
+    perplexity: aiChatIcon,
     convert2DTo3D: convert2DTo3DIcon,
     removeBG: removeBGIcon,
     changeBG: changeBGIcon,
     remakeImg: remakeImgIcon,
     expandImg: expandImgIcon,
     improvedRes: improvedResIcon,
-    changeStyle: changeStyleIcon
+    changeStyle: changeStyleIcon,
+    translation: aiChatIcon,
+    voiceDictation: aiChatIcon,
+    aiVideo: aiChatIcon
   };
 
   const getTranslationKey = () => {

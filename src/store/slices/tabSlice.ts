@@ -14,25 +14,25 @@ export type CREATING_TYPE =
   | 'PreAsk' // askdoc 질의
   | 'MakeSummary' // askdoc 문서 요약
   | 'AI Apps'
-  | 'NOVA' // nova 시작
-  | 'NOVAAsk' // nova 질의 중
-  | 'ChangeBG' // nova 배경변경 prompt 작성
-  | 'ExpandImg' // nova 이미지 사이즈 조절
-  | 'Loading' // nova 로딩
-  | 'Done' // nova 동작 완료
+  | 'usingNova' // nova 사용 중
+  | 'NOVA' // nova 답변 생성 중
   | 'TimeOver'; // nova time over;
 
 export type AI_WRITE_TAB_TYPE = 'write' | 'chat';
 
 export enum NOVA_TAB_TYPE {
   aiChat = 'aiChat',
+  perplexity = 'perplexity',
   convert2DTo3D = 'convert2DTo3D',
   removeBG = 'removeBG',
   changeBG = 'changeBG',
   remakeImg = 'remakeImg',
   expandImg = 'expandImg',
   improvedRes = 'improvedRes',
-  changeStyle = 'changeStyle'
+  changeStyle = 'changeStyle',
+  translation = 'translation',
+  voiceDictation = 'voiceDictation',
+  aiVideo = 'aiVideo'
 }
 
 interface TabType {

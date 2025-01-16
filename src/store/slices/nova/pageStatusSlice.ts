@@ -10,7 +10,7 @@ export interface ResultImage {
 }
 
 export type PageStatus =
-  | 'home' // 메인 화면
+  | 'home' // 홈 화면 (각 기능의 홈화면)
   | 'progress' // 프로그레스 화면
   | 'saving' // 이미지 저장 중
   | 'loading' // 로딩 중 (이미지 업로드)

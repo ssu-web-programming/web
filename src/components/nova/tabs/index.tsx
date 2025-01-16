@@ -3,13 +3,12 @@ import { Trans, useTranslation } from 'react-i18next';
 import { NOVA_TAB_TYPE } from 'store/slices/tabSlice';
 import { themeInfoSelector } from 'store/slices/theme';
 import { useAppSelector } from 'store/store';
-import styled, { FlattenSimpleInterpolation } from 'styled-components';
+import { FlattenSimpleInterpolation } from 'styled-components';
 import { FreeMode } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Swiper as SwiperClass } from 'swiper/types';
 import { isMobile } from 'util/bridge';
 
-import { ReactComponent as IconConvertDark } from '../../../img/dark/nova/tab/convert_Img.svg';
 import convert2DTo3DDarkIcon from '../../../img/dark/nova/tab/tab_3d_dark_n.svg';
 import convert2DTo3DDarkSelectedIcon from '../../../img/dark/nova/tab/tab_3d_dark_s.svg';
 import aiChatDarkIcon from '../../../img/dark/nova/tab/tab_ai_chat_dark_n.svg';
@@ -28,7 +27,6 @@ import remakeImgDarkIcon from '../../../img/dark/nova/tab/tab_remake_dark_n.svg'
 import remakeImgDarkSelectedIcon from '../../../img/dark/nova/tab/tab_remake_dark_s.svg';
 import changeStyleDarkIcon from '../../../img/dark/nova/tab/tab_style_dark_n.svg';
 import changeStyleDarkSelectedIcon from '../../../img/dark/nova/tab/tab_style_dark_s.svg';
-import { ReactComponent as IconConvertLight } from '../../../img/light/nova/tab/convert_Img.svg';
 import convert2DTo3DLightIcon from '../../../img/light/nova/tab/tab_3d_n.svg';
 import convert2DTo3DLightSelectedIcon from '../../../img/light/nova/tab/tab_3d_s.svg';
 import aiChatLightIcon from '../../../img/light/nova/tab/tab_ai_chat_n.svg';
@@ -48,6 +46,8 @@ import remakeImgLightSelectedIcon from '../../../img/light/nova/tab/tab_remake_s
 import changeStyleLightIcon from '../../../img/light/nova/tab/tab_style_n.svg';
 import changeStyleLightSelectedIcon from '../../../img/light/nova/tab/tab_style_s.svg';
 
+import * as S from './style';
+
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -61,6 +61,10 @@ const iconMap: Record<
   }
 > = {
   aiChat: {
+    light: { default: aiChatLightIcon, selected: aiChatLightSelectedIcon },
+    dark: { default: aiChatDarkIcon, selected: aiChatDarkSelectedIcon }
+  },
+  perplexity: {
     light: { default: aiChatLightIcon, selected: aiChatLightSelectedIcon },
     dark: { default: aiChatDarkIcon, selected: aiChatDarkSelectedIcon }
   },
@@ -91,98 +95,20 @@ const iconMap: Record<
   changeStyle: {
     light: { default: changeStyleLightIcon, selected: changeStyleLightSelectedIcon },
     dark: { default: changeStyleDarkIcon, selected: changeStyleDarkSelectedIcon }
+  },
+  translation: {
+    light: { default: aiChatLightIcon, selected: aiChatLightSelectedIcon },
+    dark: { default: aiChatDarkIcon, selected: aiChatDarkSelectedIcon }
+  },
+  voiceDictation: {
+    light: { default: aiChatLightIcon, selected: aiChatLightSelectedIcon },
+    dark: { default: aiChatDarkIcon, selected: aiChatDarkSelectedIcon }
+  },
+  aiVideo: {
+    light: { default: aiChatLightIcon, selected: aiChatLightSelectedIcon },
+    dark: { default: aiChatDarkIcon, selected: aiChatDarkSelectedIcon }
   }
 };
-
-const Wrap = styled.div<{ cssExt?: FlattenSimpleInterpolation }>`
-  width: 100%;
-  height: 52px;
-  min-height: 52px;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 8px;
-  padding: 8px 16px;
-  z-index: 1;
-  background-color: ${({ theme }) => theme.color.bg};
-
-  ${(props) => props.cssExt || ''};
-`;
-
-const Tap = styled.div<{ isHighlighted: boolean }>`
-  height: 32px;
-  display: flex;
-  align-items: center;
-  padding: 6px 12px 6px 8px;
-  border: 1px solid
-    ${(props) =>
-      props.isHighlighted ? props.theme.color.tab.highlightBorder : props.theme.color.tab.border};
-  border-radius: 8px;
-  background-color: ${(props) =>
-    props.isHighlighted ? props.theme.color.tab.highlightBg : props.theme.color.tab.bg};
-  cursor: pointer;
-`;
-
-const Badge = styled.div`
-  width: 16px;
-  height: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #fb4949;
-  border-radius: 4px;
-
-  span {
-    font-size: 10px;
-    font-weight: bold;
-    line-height: 10px;
-    color: white;
-  }
-`;
-
-const Text = styled.div<{ isHighlighted: boolean }>`
-  font-size: 14px;
-  font-weight: ${(props) => (props.isHighlighted ? 500 : 400)};
-  color: ${(props) =>
-    props.isHighlighted ? props.theme.color.tab.highlightText : props.theme.color.tab.text};
-`;
-
-const CustomNavButton = styled.button<{ isVisible: boolean }>`
-  width: 52px;
-  height: 52px;
-  top: var(--swiper-navigation-top-offset, 42%);
-  display: ${(props) => (props.isVisible ? 'block' : 'none')};
-  padding: 0;
-  background: none;
-  border: none;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-
-  &.left {
-    left: 0;
-  }
-
-  &.right {
-    right: 0;
-  }
-
-  :after {
-    display: none;
-  }
-`;
-
-const StyledIconConvertLight = styled(IconConvertLight)<{ $isHighlighted: boolean }>`
-  path {
-    fill: ${(props) => (props.$isHighlighted ? '#511bb2' : 'black')};
-  }
-`;
-
-const StyledIconConvertDark = styled(IconConvertDark)<{ $isHighlighted: boolean }>`
-  path {
-    fill: ${(props) => (props.$isHighlighted ? '#c6a9ff' : '#d8d8d8')};
-  }
-`;
 
 interface TabProps {
   tabs: NOVA_TAB_TYPE[];
@@ -207,9 +133,9 @@ const Tabs = ({ tabs, activeTab, onChangeTab, showArrowBtn = true, cssExt }: Tab
           i18nKey={`Nova.Tabs.${tab}`}
           components={{
             img: isLightMode ? (
-              <StyledIconConvertLight $isHighlighted={isActive} height={11} />
+              <S.StyledIconConvertLight $isHighlighted={isActive} height={11} />
             ) : (
-              <StyledIconConvertDark $isHighlighted={isActive} height={11} />
+              <S.StyledIconConvertDark $isHighlighted={isActive} height={11} />
             )
           }}
         />
@@ -308,7 +234,7 @@ const Tabs = ({ tabs, activeTab, onChangeTab, showArrowBtn = true, cssExt }: Tab
   };
 
   return (
-    <Wrap cssExt={cssExt}>
+    <S.Wrap cssExt={cssExt}>
       <Swiper
         freeMode
         modules={[FreeMode]}
@@ -333,15 +259,15 @@ const Tabs = ({ tabs, activeTab, onChangeTab, showArrowBtn = true, cssExt }: Tab
 
           return (
             <SwiperSlide key={tab} style={{ width: 'auto' }}>
-              <Tap onClick={() => handleMoveToActiveIndex(tab, idx)} isHighlighted={isActive}>
+              <S.Tap onClick={() => handleMoveToActiveIndex(tab, idx)} isHighlighted={isActive}>
                 {tab === NOVA_TAB_TYPE.convert2DTo3D && (
-                  <Badge>
+                  <S.Badge>
                     <span>N</span>
-                  </Badge>
+                  </S.Badge>
                 )}
                 <img src={getIcon(tab, isActive)} alt="logo" />
-                <Text isHighlighted={isActive}>{getTabTranslationKey(tab, isActive)}</Text>
-              </Tap>
+                <S.Text isHighlighted={isActive}>{getTabTranslationKey(tab, isActive)}</S.Text>
+              </S.Tap>
             </SwiperSlide>
           );
         })}
@@ -349,21 +275,21 @@ const Tabs = ({ tabs, activeTab, onChangeTab, showArrowBtn = true, cssExt }: Tab
 
       {!isMobile && showArrowBtn && (
         <>
-          <CustomNavButton
+          <S.CustomNavButton
             className="swiper-button-prev left"
             isVisible={!isBeginning}
             onClick={handlePrevClick}>
             <img src={isLightMode ? leftArrowLightIcon : leftArrowDarkIcon} alt="Left Arrow" />
-          </CustomNavButton>
-          <CustomNavButton
+          </S.CustomNavButton>
+          <S.CustomNavButton
             className="swiper-button-next right"
             isVisible={!isEnd}
             onClick={handleNextClick}>
             <img src={isLightMode ? rightArrowLightIcon : rightArrowDarkIcon} alt="Right Arrow" />
-          </CustomNavButton>
+          </S.CustomNavButton>
         </>
       )}
-    </Wrap>
+    </S.Wrap>
   );
 };
 

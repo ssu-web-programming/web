@@ -1,63 +1,43 @@
 import { Suspense, useCallback, useEffect } from 'react';
-import Tabs from 'components/nova/tabs/index';
 import { FileWithPath, useDropzone } from 'react-dropzone';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import styled from 'styled-components';
 
-import { useConfirm } from '../../components/Confirm';
-import { useChangeBackground } from '../../components/hooks/nova/useChangeBackground';
-import { useChangeStyle } from '../../components/hooks/nova/useChangeStyle';
-import { useConvert2DTo3D } from '../../components/hooks/nova/useConvert2DTo3D';
-import { useExpandImage } from '../../components/hooks/nova/useExpandImage';
-import { useImprovedResolution } from '../../components/hooks/nova/useImprovedResolution';
-import useManageFile from '../../components/hooks/nova/useManageFile';
-import usePrivacyConsent from '../../components/hooks/nova/usePrivacyConsent';
-import { useRemakeImage } from '../../components/hooks/nova/useRemakeImage';
-import { useRemoveBackground } from '../../components/hooks/nova/useRemoveBackground';
-import Convert from '../../components/nova/Convert';
-import Expand from '../../components/nova/Expand';
-import { Guide } from '../../components/nova/Guide';
-import NovaHeader from '../../components/nova/Header';
-import ImageUploader from '../../components/nova/ImageUploader';
-import Loading from '../../components/nova/Loading';
-import Modals, { Overlay } from '../../components/nova/modals/Modals';
-import Progress from '../../components/nova/Progress';
-import Prompt from '../../components/nova/Prompt';
-import Result from '../../components/nova/Result';
-import Theme from '../../components/nova/Theme';
-import TimeOut from '../../components/nova/TimeOut';
-import Uploading from '../../components/nova/Uploading';
-import { selectPageStatus } from '../../store/slices/nova/pageStatusSlice';
-import { NOVA_TAB_TYPE, selectNovaTab, selectTabSlice } from '../../store/slices/tabSlice';
-import { setDriveFiles, setLocalFiles } from '../../store/slices/uploadFiles';
-import { useAppSelector } from '../../store/store';
-import Bridge from '../../util/bridge';
+import { useConfirm } from '../../../components/Confirm';
+import { useChangeBackground } from '../../../components/hooks/nova/useChangeBackground';
+import { useChangeStyle } from '../../../components/hooks/nova/useChangeStyle';
+import { useConvert2DTo3D } from '../../../components/hooks/nova/useConvert2DTo3D';
+import { useExpandImage } from '../../../components/hooks/nova/useExpandImage';
+import { useImprovedResolution } from '../../../components/hooks/nova/useImprovedResolution';
+import useManageFile from '../../../components/hooks/nova/useManageFile';
+import usePrivacyConsent from '../../../components/hooks/nova/usePrivacyConsent';
+import { useRemakeImage } from '../../../components/hooks/nova/useRemakeImage';
+import { useRemoveBackground } from '../../../components/hooks/nova/useRemoveBackground';
+import AIChat from '../../../components/nova/aiChat';
+import Convert from '../../../components/nova/Convert';
+import Expand from '../../../components/nova/Expand';
+import { Guide } from '../../../components/nova/Guide';
+import NovaHeader from '../../../components/nova/Header';
+import ImageUploader from '../../../components/nova/ImageUploader';
+import Loading from '../../../components/nova/Loading';
+import Modals, { Overlay } from '../../../components/nova/modals/Modals';
+import Progress from '../../../components/nova/Progress';
+import Prompt from '../../../components/nova/Prompt';
+import Result from '../../../components/nova/Result';
+import Theme from '../../../components/nova/Theme';
+import TimeOut from '../../../components/nova/TimeOut';
+import Uploading from '../../../components/nova/Uploading';
+import { selectPageStatus } from '../../../store/slices/nova/pageStatusSlice';
+import { NOVA_TAB_TYPE, selectNovaTab, selectTabSlice } from '../../../store/slices/tabSlice';
+import { setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
+import { useAppSelector } from '../../../store/store';
+import Bridge from '../../../util/bridge';
 
-import AIChat from './AIChat';
-
-const Wrapper = styled.div<{ isScroll: boolean }>`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  overflow: hidden;
-`;
-
-const Body = styled.div`
-  flex: 1;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  position: relative;
-  flex-direction: column;
-  background-color: ${({ theme }) => theme.color.bg};
-`;
+import * as S from './style';
 
 export type ClientStatusType = 'home' | 'doc_edit_mode' | 'doc_view_mode';
 
-export default function Nova() {
+export default function Index() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const confirm = useConfirm();
@@ -174,19 +154,19 @@ export default function Nova() {
 
   return (
     <>
-      <Wrapper {...getRootProps()} isScroll={selectedNovaTab != 'aiChat'}>
+      <S.Wrapper {...getRootProps()} isScroll={selectedNovaTab != 'aiChat'}>
         {(usingAI || status === 'home') && isDragActive && <Uploading />}
         <NovaHeader />
         {(status === 'progress' || status === 'saving') && <Progress />}
-        {(status === 'home' || status === 'progress') &&
-          (selectedNovaTab !== NOVA_TAB_TYPE.aiChat || !usingAI) && (
-            <Tabs tabs={tabValues} activeTab={selectedNovaTab} onChangeTab={handleChangeTab} />
-          )}
-        <Body>{renderContent()}</Body>
+        {/*{(status === 'home' || status === 'progress') &&*/}
+        {/*  (selectedNovaTab !== NOVA_TAB_TYPE.aiChat || !usingAI) && (*/}
+        {/*    <Tabs tabs={tabValues} activeTab={selectedNovaTab} onChangeTab={handleChangeTab} />*/}
+        {/*  )}*/}
+        <S.Body>{renderContent()}</S.Body>
         <Suspense fallback={<Overlay />}>
           <Modals />
         </Suspense>
-      </Wrapper>
+      </S.Wrapper>
     </>
   );
 }

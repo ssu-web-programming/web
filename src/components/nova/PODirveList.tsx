@@ -36,7 +36,7 @@ export default function PODriveList(props: PODriveListProps) {
 
   return (
     <DriveConfirm
-      title={t('Nova.UploadTooltip.PolarisDrive')}
+      title={t('Index.UploadTooltip.PolarisDrive')}
       msg={
         <>
           <PoDrive

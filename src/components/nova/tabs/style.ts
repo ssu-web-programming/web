@@ -1,8 +1,9 @@
-import styled from 'styled-components';
+import styled, { FlattenSimpleInterpolation } from 'styled-components';
 
-import { ReactComponent as IconConvert } from '../../../img/nova/tab/convert_Img.svg';
+import { ReactComponent as IconConvertDark } from '../../../img/dark/nova/tab/convert_Img.svg';
+import { ReactComponent as IconConvertLight } from '../../../img/light/nova/tab/convert_Img.svg';
 
-const Wrap = styled.div`
+export const Wrap = styled.div<{ cssExt?: FlattenSimpleInterpolation }>`
   width: 100%;
   height: 52px;
   min-height: 52px;
@@ -13,20 +14,26 @@ const Wrap = styled.div`
   gap: 8px;
   padding: 8px 16px;
   z-index: 1;
+  background-color: ${({ theme }) => theme.color.bg};
+
+  ${(props) => props.cssExt || ''};
 `;
 
-const Tap = styled.div<{ isHighlighted: boolean }>`
+export const Tap = styled.div<{ isHighlighted: boolean }>`
   height: 32px;
   display: flex;
   align-items: center;
   padding: 6px 12px 6px 8px;
-  border: 1px solid ${(props) => (props.isHighlighted ? '#c6a9ff' : '#c9cdd2')};
+  border: 1px solid
+    ${(props) =>
+      props.isHighlighted ? props.theme.color.tab.highlightBorder : props.theme.color.tab.border};
   border-radius: 8px;
-  background-color: ${(props) => (props.isHighlighted ? '#ede5fe' : 'white')};
+  background-color: ${(props) =>
+    props.isHighlighted ? props.theme.color.tab.highlightBg : props.theme.color.tab.bg};
   cursor: pointer;
 `;
 
-const Badge = styled.div`
+export const Badge = styled.div`
   width: 16px;
   height: 16px;
   display: flex;
@@ -43,13 +50,14 @@ const Badge = styled.div`
   }
 `;
 
-const Text = styled.div<{ isHighlighted: boolean }>`
+export const Text = styled.div<{ isHighlighted: boolean }>`
   font-size: 14px;
   font-weight: ${(props) => (props.isHighlighted ? 500 : 400)};
-  color: ${(props) => (props.isHighlighted ? '#511bb2' : 'black')};
+  color: ${(props) =>
+    props.isHighlighted ? props.theme.color.tab.highlightText : props.theme.color.tab.text};
 `;
 
-const CustomNavButton = styled.button<{ isVisible: boolean }>`
+export const CustomNavButton = styled.button<{ isVisible: boolean }>`
   width: 52px;
   height: 52px;
   top: var(--swiper-navigation-top-offset, 42%);
@@ -73,10 +81,14 @@ const CustomNavButton = styled.button<{ isVisible: boolean }>`
   }
 `;
 
-const StyledIconConvert = styled(IconConvert)<{ $isHighlighted: boolean }>`
+export const StyledIconConvertLight = styled(IconConvertLight)<{ $isHighlighted: boolean }>`
   path {
     fill: ${(props) => (props.$isHighlighted ? '#511bb2' : 'black')};
   }
 `;
 
-export { Badge, CustomNavButton, StyledIconConvert, Tap, Text, Wrap };
+export const StyledIconConvertDark = styled(IconConvertDark)<{ $isHighlighted: boolean }>`
+  path {
+    fill: ${(props) => (props.$isHighlighted ? '#c6a9ff' : '#d8d8d8')};
+  }
+`;

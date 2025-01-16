@@ -407,7 +407,7 @@ export default function Expand() {
               } else {
                 await confirm({
                   title: '',
-                  msg: t('Nova.Alert.MoveImageInBox'),
+                  msg: t('Index.Alert.MoveImageInBox'),
                   onOk: {
                     text: t('Confirm'),
                     callback: () => {
