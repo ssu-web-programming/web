@@ -40,7 +40,7 @@ const Container = styled.div`
   flex: 1 1 0;
   overflow-y: auto;
   background: ${({ theme }) => theme.color.bg};
-  color: ${({ theme }) => theme.color.text.subGray05};
+  color: ${({ theme }) => theme.color.text.gray05};
 `;
 
 const Body = styled.div`
@@ -115,9 +115,9 @@ const GridItem = styled.div<{ lang: string; isSelected: boolean }>`
   align-items: center;
   justify-content: center;
   background: ${({ theme, isSelected }) =>
-    isSelected ? theme.color.tab.highlightBg : theme.color.subBgGray05};
+    isSelected ? theme.color.tab.highlightBg : theme.color.background.gray05};
   border: ${({ theme, isSelected }) =>
-    isSelected ? `1px solid ${theme.color.borderPurple01}` : 'none'};
+    isSelected ? `1px solid ${theme.color.border.purple01}` : 'none'};
   box-sizing: border-box;
   border-radius: 8px;
   cursor: pointer;
@@ -155,7 +155,7 @@ const GridItem = styled.div<{ lang: string; isSelected: boolean }>`
     line-height: 21px;
 
     color: ${({ theme, isSelected }) =>
-      isSelected ? theme.color.text.main : theme.color.text.subGray06};
+      isSelected ? theme.color.text.main : theme.color.text.gray06};
   }
 `;
 
@@ -165,7 +165,7 @@ const FileFormatGuideText = styled.p`
   font-weight: 500;
   line-height: 24px;
   text-align: center;
-  color: ${({ theme }) => theme.color.text.subGray03};
+  color: ${({ theme }) => theme.color.text.gray03};
 `;
 
 const SelectFileFormatBox = styled.div`
@@ -190,19 +190,19 @@ const FileFormatBox = styled.div<{ isSelected: boolean }>`
   text-align: center;
   white-space: break-spaces;
   background: ${({ theme, isSelected }) =>
-    isSelected ? theme.color.tab.highlightBg : theme.color.subBgGray05};
+    isSelected ? theme.color.tab.highlightBg : theme.color.background.gray05};
   border: ${({ theme, isSelected }) =>
-    isSelected ? `1px solid ${theme.color.borderPurple01}` : 'none'};
+    isSelected ? `1px solid ${theme.color.border.purple01}` : 'none'};
   border-radius: 8px;
   color: ${({ theme, isSelected }) =>
-    isSelected ? theme.color.text.main : theme.color.text.subGray06};
+    isSelected ? theme.color.text.main : theme.color.text.gray06};
 
   .title {
     font-size: 16px;
     font-weight: 700;
     line-height: 24px;
     color: ${({ theme, isSelected }) =>
-      isSelected ? theme.color.text.main : theme.color.text.subGray03};
+      isSelected ? theme.color.text.main : theme.color.text.gray03};
   }
 `;
 
@@ -232,11 +232,11 @@ const MobileGuideText = styled.p`
   font-weight: 400;
   line-height: 21px;
   text-align: center;
-  color: ${({ theme }) => theme.color.text.subGray07};
+  color: ${({ theme }) => theme.color.text.gray07};
   margin-top: 8px;
 
   .highlight {
-    color: ${({ theme }) => theme.color.text.subGray03};
+    color: ${({ theme }) => theme.color.text.gray03};
   }
 `;
 

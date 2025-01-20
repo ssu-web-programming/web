@@ -56,8 +56,8 @@ const Tooltip = styled.div`
   left: 50%;
   transform: translateX(-50%);
 
-  background-color: ${({ theme }) => theme.color.subBgGray08};
-  color: ${({ theme }) => theme.color.subBgGray05};
+  background-color: ${({ theme }) => theme.color.background.gray08};
+  color: ${({ theme }) => theme.color.background.gray05};
   text-align: center;
   padding: 8px;
   border-radius: 4px;
@@ -65,6 +65,7 @@ const Tooltip = styled.div`
   white-space: nowrap;
 
   /* 말풍선 꼬리 */
+
   &:after {
     content: '';
     position: absolute;
@@ -73,7 +74,8 @@ const Tooltip = styled.div`
     margin-left: -5px;
     border-width: 5px;
     border-style: solid;
-    border-color: ${({ theme }) => theme.color.subBgGray08} transparent transparent transparent;
+    border-color: ${({ theme }) => theme.color.background.gray08} transparent transparent
+      transparent;
   }
 
   ${TooltipWrapper}:hover & {

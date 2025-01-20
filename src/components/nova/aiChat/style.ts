@@ -10,17 +10,22 @@ export const Wrap = styled(Container)`
   flex-direction: column;
 `;
 
-export const GuideExample = styled.div`
+export const GuideExample = styled.div<{ isWithIcon: boolean }>`
+  height: 45px;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: ${({ isWithIcon }) => (isWithIcon ? 'flex-start' : 'center')};
   gap: 8px;
   padding: 12px;
-  border: 1px solid ${({ theme }) => theme.color.borderGray01};
+  border: 1px solid ${({ theme }) => theme.color.border.gray01};
   border-radius: 8px;
-  font-size: 14px;
-  color: ${({ theme }) => theme.color.text.subGray03};
-  background-color: ${({ theme }) => theme.color.subBgGray01};
+  background-color: ${({ theme }) => theme.color.background.gray01};
+
+  span {
+    font-size: 14px;
+    line-height: 21px;
+    color: ${({ theme }) => theme.color.text.gray03};
+  }
 
   &:hover {
     cursor: pointer;
@@ -72,14 +77,15 @@ export const ShareGuide = styled.div<{ isActive: boolean }>`
   align-items: center;
   justify-content: space-between;
   padding: 8px 16px;
-  background: ${({ theme, isActive }) => (isActive ? theme.color.mainBg : theme.color.subBgGray01)};
+  background: ${({ theme, isActive }) =>
+    isActive ? theme.color.mainBg : theme.color.background.gray01};
   font-size: 14px;
   font-weight: 400;
   line-height: 16px;
   text-align: center;
   color: ${({ theme, isActive }) =>
-    isActive ? theme.color.text.highlightText : theme.color.text.subGray02};
-  border: 1px solid ${({ theme }) => theme.color.borderGray02};
+    isActive ? theme.color.text.highlightText : theme.color.text.gray02};
+  border: 1px solid ${({ theme }) => theme.color.border.gray02};
 
   div {
     display: flex;
@@ -89,6 +95,6 @@ export const ShareGuide = styled.div<{ isActive: boolean }>`
     font-size: 16px;
     font-weight: 600;
     color: ${({ theme, isActive }) =>
-      isActive ? theme.color.text.highlightText02 : theme.color.text.subGray03};
+      isActive ? theme.color.text.highlightText02 : theme.color.text.gray03};
   }
 `;

@@ -25,7 +25,7 @@ export const ConfirmBox = styled.div`
   min-width: 328px;
   max-width: 343px;
   box-shadow: 0 8px 16px 0 #0000001a;
-  background: ${({ theme }) => theme.color.subBgGray05};
+  background: ${({ theme }) => theme.color.background.gray05};
   border-radius: 10px;
   z-index: 100;
   max-height: 100vh;
@@ -43,7 +43,7 @@ const Title = styled.h2`
   font-weight: 700;
   line-height: 24px;
   box-sizing: border-box;
-  color: ${({ theme }) => theme.color.text.subGray04};
+  color: ${({ theme }) => theme.color.text.gray04};
 `;
 
 export const ContentArea = styled.div`
@@ -64,7 +64,7 @@ export const ContentArea = styled.div`
   font-size: 16px;
   font-weight: 400;
   line-height: 24px;
-  color: ${({ theme }) => theme.color.text.subGray03};
+  color: ${({ theme }) => theme.color.text.gray03};
 `;
 
 export const CheckWrap = styled.div`

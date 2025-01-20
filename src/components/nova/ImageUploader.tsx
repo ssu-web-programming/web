@@ -30,9 +30,9 @@ const Wrap = styled.div`
   position: relative;
   height: 206px;
   padding: 0 16px;
-  border: 1px dashed ${({ theme }) => theme.color.borderGray01};
+  border: 1px dashed ${({ theme }) => theme.color.border.grayray01};
   border-radius: 8px;
-  background-color: ${({ theme }) => theme.color.subBgGray01};
+  background-color: ${({ theme }) => theme.color.background.gray01};
 `;
 
 const ImageBox = styled.div`
@@ -63,7 +63,7 @@ const Icon = styled.div<{ disable: boolean }>`
     font-size: 16px;
     font-weight: 700;
     line-height: 24px;
-    color: ${({ theme }) => theme.color.text.subGray03};
+    color: ${({ theme }) => theme.color.text.gray03};
   }
 `;
 
@@ -74,7 +74,7 @@ const Credit = styled.div`
   justify-content: center;
   gap: 4px;
   padding: 2px 2px 2px 12px;
-  background: ${({ theme }) => theme.color.subBgGray02};
+  background: ${({ theme }) => theme.color.background.gray02};
   border-radius: 999px;
 
   .img {
@@ -93,7 +93,7 @@ const Credit = styled.div`
     font-size: 16px;
     font-weight: 700;
     padding-bottom: 2px;
-    color: ${({ theme }) => theme.color.text.subGray03};
+    color: ${({ theme }) => theme.color.text.gray03};
   }
 `;
 

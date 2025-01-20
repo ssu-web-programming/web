@@ -18,7 +18,7 @@ export const TitleWrapper = styled.div`
   ${flexCenter};
   flex-direction: row;
   gap: 4px;
-  color: ${({ theme }) => theme.color.text.subGray04};
+  color: ${({ theme }) => theme.color.text.gray04};
 `;
 
 export const Logo = styled.img`
@@ -31,7 +31,7 @@ export const ChatMode = styled.div`
   align-items: center;
   justify-content: center;
   padding: 4px 6px;
-  background: ${({ theme }) => theme.color.subBgGray09};
+  background: ${({ theme }) => theme.color.background.gray09};
   border-radius: 6px;
   font-size: 11px;
   font-weight: 600;

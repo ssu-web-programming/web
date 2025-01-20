@@ -3,7 +3,6 @@ import { initFlagSelector } from 'store/slices/initFlagSlice';
 import styled, { css } from 'styled-components';
 
 import { NOVA_TAB_TYPE, selectTabSlice } from '../store/slices/tabSlice';
-import { getLocalFiles } from '../store/slices/uploadFiles';
 import { userInfoSelector } from '../store/slices/userInfo';
 import { useAppSelector } from '../store/store';
 import Bridge from '../util/bridge';
@@ -84,7 +83,7 @@ const TooltipContent = styled.div<{
   right: ${({ placement }) => (placement.endsWith('end') ? '0' : 'auto')};
   width: max-content;
   padding: ${({ type }) => (type === 'selectable' ? '0 16px' : '12px 16px')};
-  border: 1px solid ${({ theme }) => theme.color.borderGray01};
+  border: 1px solid ${({ theme }) => theme.color.border.gray01};
   border-radius: 8px;
   box-shadow: 0 2px 8px 0 #0000001a;
   background-color: ${({ theme }) => (theme.mode === 'light' ? 'white' : 'var(--gray-gray-87)')};
@@ -101,7 +100,7 @@ const OptionList = styled.ul`
   padding: 0;
   font-size: 14px;
   font-weight: 400;
-  color: ${({ theme }) => theme.color.text.subGray04};
+  color: ${({ theme }) => theme.color.text.gray04};
 `;
 
 const CategoryItem = styled.li`
@@ -120,7 +119,7 @@ const Title = styled.div`
   line-height: 24px;
   font-weight: 500;
   font-size: 16px;
-  color: ${({ theme }) => theme.color.text.subGray04};
+  color: ${({ theme }) => theme.color.text.gray04};
 `;
 
 const OptionItemWrapper = styled.div<{ type: TooltipType }>`
@@ -128,12 +127,12 @@ const OptionItemWrapper = styled.div<{ type: TooltipType }>`
   display: flex;
   align-items: center;
   font-size: 14px;
-  color: ${({ theme }) => theme.color.text.subGray04};
+  color: ${({ theme }) => theme.color.text.gray04};
 `;
 
 const Divider = styled.div`
   height: 1px;
-  background-color: ${({ theme }) => theme.color.borderGray01};
+  background-color: ${({ theme }) => theme.color.border.gray01};
 
   &:last-child {
     display: none;

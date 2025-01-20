@@ -77,7 +77,7 @@ const Title = styled.div<{ lang: string }>`
     font-size: 24px;
     font-weight: 700;
     line-height: 36px;
-    color: ${({ theme }) => theme.color.text.subGray04};
+    color: ${({ theme }) => theme.color.text.gray04};
     text-align: center;
     white-space: break-spaces;
   }
@@ -87,7 +87,7 @@ const SubTitle = styled.span`
   font-size: 16px;
   font-weight: 500;
   line-height: 24px;
-  color: ${({ theme }) => theme.color.text.subGray05};
+  color: ${({ theme }) => theme.color.text.gray05};
   text-align: center;
   white-space: break-spaces;
 `;
@@ -102,7 +102,7 @@ const ImageBox = styled.div<{ isBordered: boolean }>`
   align-items: center;
   justify-content: center;
   margin-bottom: 24px;
-  border: ${({ theme, isBordered }) => (isBordered ? theme.color.borderGray02 : 'none')};
+  border: ${({ theme, isBordered }) => (isBordered ? theme.color.border.gray02 : 'none')};
   border-radius: 8px;
   overflow: hidden;
   height: 100%;

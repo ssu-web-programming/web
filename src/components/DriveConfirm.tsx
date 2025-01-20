@@ -39,14 +39,14 @@ const Wrapper = styled(ConfirmBox)<{
   position: fixed;
   margin: auto;
   height: ${({ $isMobile }) => ($isMobile ? '100%' : '506px')};
-  background-color: ${({ theme }) => theme.color.subBgGray01};
+  background-color: ${({ theme }) => theme.color.background.gray01};
 `;
 
 const Title = styled.p`
   margin: 0;
   font-size: 16px;
   line-height: 24px;
-  color: ${({ theme }) => theme.color.text.subGray04};
+  color: ${({ theme }) => theme.color.text.gray04};
 `;
 
 const HeaderContainer = styled.div`

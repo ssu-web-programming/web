@@ -14,9 +14,9 @@ const Contents = styled.div<{ isBorder: boolean }>`
 
   padding: 8px 5px 8px 10px;
   height: 48px;
-  color: ${({ theme }) => theme.color.text.subGray04};
-  background-color: ${({ theme }) => theme.color.subBgGray01};
-  border-bottom: 1px solid ${(props) => (props.isBorder ? props.theme.color.borderGray01 : 'none')};
+  color: ${({ theme }) => theme.color.text.gray04};
+  background-color: ${({ theme }) => theme.color.background.gray01};
+  border-bottom: 1px solid ${(props) => (props.isBorder ? props.theme.color.border.gray01 : 'none')};
 `;
 
 const TitleWrapper = styled.div`

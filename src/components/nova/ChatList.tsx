@@ -68,7 +68,7 @@ const ChatItem = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;
-  color: ${({ theme }) => theme.color.text.subGray04};
+  color: ${({ theme }) => theme.color.text.gray04};
 `;
 
 const Chat = styled.div`
@@ -132,7 +132,7 @@ const FileItem = styled.div`
   padding: 8px;
   border: 1px solid var(--gray-gray-40);
   border-radius: 8px;
-  background: ${({ theme }) => theme.color.subBgGray04};
+  background: ${({ theme }) => theme.color.background.gray04};
 
   font-size: 14px;
   line-height: 21px;

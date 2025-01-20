@@ -10,8 +10,7 @@ export const InputBarBase = styled.div<{ disabled: boolean }>`
   border-top: ${({ theme }) => (theme.mode === 'dark' ? '1px solid var(--gray-gray-87)' : 'none')};
   box-shadow: ${({ theme }) =>
     theme.mode === 'light' ? '0px -4px 8px 0px var(--gray-shadow-light)' : 'none'};
-  background-color: ${({ theme }) =>
-    theme.mode === 'light' ? theme.color.subBgGray01 : 'transparent'};
+  background-color: ${({ theme }) => theme.color.background.gray05};
 
   ${({ disabled }) =>
     disabled &&
@@ -41,8 +40,8 @@ export const ClipboardItem = styled.div`
   display: flex;
   align-items: center;
   border-radius: 8px;
-  background: ${({ theme }) => theme.color.subBgGray04};
-  color: ${({ theme }) => theme.color.text.subGray04};
+  background: ${({ theme }) => theme.color.background.gray04};
+  color: ${({ theme }) => theme.color.text.gray04};
 
   font-size: 16px;
   line-height: 21px;
@@ -74,8 +73,8 @@ export const FileItem = styled.div`
   gap: 8px;
   padding: 8px;
   border-radius: 8px;
-  background: ${({ theme }) => theme.color.subBgGray04};
-  color: ${({ theme }) => theme.color.text.subGray04};
+  background: ${({ theme }) => theme.color.background.gray04};
+  color: ${({ theme }) => theme.color.text.gray04};
 
   font-size: 16px;
   line-height: 21px;
@@ -108,12 +107,12 @@ export const PromptWrap = styled.div`
   .swiper-slide {
     width: fit-content;
     padding: 8px 16px;
-    background-color: var(--gray-gray-10);
+    background-color: ${({ theme }) => theme.color.background.gray10};
     border-radius: 8px;
     font-size: 13px;
     font-weight: 400;
     line-height: 19.5px;
-    color: var(--gray-gray-80-02);
+    color: ${({ theme }) => theme.color.text.gray03};
     cursor: pointer;
   }
 
@@ -138,7 +137,7 @@ export const TextAreaWrap = styled.div`
   align-items: center;
   justify-content: center;
   gap: 8px;
-  border: 1px solid var(--gray-gray-40);
+  border: 1px solid ${({ theme }) => theme.color.border.gray01};
   border-radius: 24px;
 `;
 
@@ -158,7 +157,7 @@ export const TextArea = styled.textarea<{ value: string }>`
   font-size: 14px;
   line-height: 20px;
   z-index: 2;
-  color: ${({ theme }) => theme.color.text.subGray04};
+  color: ${({ theme }) => theme.color.text.gray04};
   background-color: transparent;
 
   &::placeholder {

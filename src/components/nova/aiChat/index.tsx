@@ -8,6 +8,7 @@ import { css } from 'styled-components';
 
 import { apiWrapper } from '../../../api/apiWrapper';
 import { NOVA_SHARE_CHAT } from '../../../api/constant';
+import { CHAT_MODES } from '../../../constants/chatType';
 import { FileUploadState } from '../../../constants/fileTypes';
 import ico_reading_glasses_dark from '../../../img/dark/duotone_magnifying_glass_dark.svg';
 import ico_documents_dark from '../../../img/dark/ico_documents.svg';
@@ -21,6 +22,7 @@ import {
   deselectAllItems,
   isExportingSelector,
   isShareModeSelector,
+  novaChatModeSelector,
   NovaChatType,
   NovaFileInfo,
   novaHistorySelector,
@@ -68,6 +70,7 @@ const AIChat = (props: AIChatProps) => {
   const selectedItems = useAppSelector(selectedItemsSelector);
   const isShareMode = useAppSelector(isShareModeSelector);
   const isExporting = useAppSelector(isExportingSelector);
+  const chatMode = useAppSelector(novaChatModeSelector);
   const [inputContents, setInputContents] = useState<string>('');
   const [imagePreview, setImagePreview] = useState<NovaFileInfo | null>(null);
 
@@ -198,7 +201,24 @@ const AIChat = (props: AIChatProps) => {
     dispatch(deselectAllItems());
   };
 
-  const PROMPT_EXAMPLE = [
+  interface PromptExample {
+    txt: string;
+    src?: string;
+  }
+
+  const PERPLEXITY_PROMPT_EXAMPLE: PromptExample[] = [
+    {
+      txt: t(`Nova.perplexity.Guide.Example1`)
+    },
+    {
+      txt: t(`Nova.perplexity.Guide.Example2`)
+    },
+    {
+      txt: t(`Nova.perplexity.Guide.Example3`)
+    }
+  ];
+
+  const CHAT_PROMPT_EXAMPLE: PromptExample[] = [
     {
       src: isLightMode ? ico_reading_glasses_light : ico_reading_glasses_dark,
       txt: t(`Nova.aiChat.Guide.Example1`)
@@ -212,6 +232,9 @@ const AIChat = (props: AIChatProps) => {
       txt: t(`Nova.aiChat.Guide.Example3`)
     }
   ];
+
+  const PROMPT_EXAMPLE =
+    chatMode === CHAT_MODES.PERPLEXITY ? PERPLEXITY_PROMPT_EXAMPLE : CHAT_PROMPT_EXAMPLE;
 
   const handleChangeSelection = () => {
     if (selectedItems.length === novaHistory.length * 2) {
@@ -228,8 +251,11 @@ const AIChat = (props: AIChatProps) => {
           <>
             <Guide>
               {PROMPT_EXAMPLE.map((item) => (
-                <S.GuideExample key={item.txt} onClick={() => setInputContents?.(item.txt)}>
-                  <Icon iconSrc={item.src} size="md" />
+                <S.GuideExample
+                  key={item.txt}
+                  onClick={() => setInputContents?.(item.txt)}
+                  isWithIcon={!!item.src}>
+                  {item.src && <Icon iconSrc={item.src} size="md" />}
                   <span>{item.txt}</span>
                 </S.GuideExample>
               ))}

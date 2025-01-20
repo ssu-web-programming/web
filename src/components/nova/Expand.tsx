@@ -56,8 +56,8 @@ const ImageBox = styled.div<{ height: number; width: number }>`
   align-items: center;
   justify-content: center;
   touch-action: none;
-  background: ${({ theme }) => theme.color.subBgGray07};
-  border: 1px solid ${({ theme }) => theme.color.borderGray03};
+  background: ${({ theme }) => theme.color.background.gray07};
+  border: 1px solid ${({ theme }) => theme.color.border.gray03};
 `;
 
 const StyledStage = styled(Stage)<{ width: number; height: number }>`
@@ -123,7 +123,7 @@ const CurSizeBox = styled.div`
     font-size: 16px;
     font-weight: 500;
     line-height: 24px;
-    color: ${({ theme }) => theme.color.text.subGray04};
+    color: ${({ theme }) => theme.color.text.gray04};
   }
 `;
 

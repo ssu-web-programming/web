@@ -20,7 +20,7 @@ const SelectButton = styled.button<{
   width: 100%;
   text-align: left;
   background: transparent;
-  color: ${({ theme }) => theme.color.text.subGray04};
+  color: ${({ theme }) => theme.color.text.gray04};
   border-radius: 8px;
   cursor: pointer;
   outline: none;
@@ -75,8 +75,8 @@ const OptionsContainer = styled.div<{ $optionContainerStyle?: FlattenSimpleInter
   z-index: 10;
   max-height: 240px;
   overflow-y: auto;
-  background: ${({ theme }) => theme.color.subBgGray03};
-  border: 1px solid ${({ theme }) => theme.color.borderGray01};
+  background: ${({ theme }) => theme.color.background.gray03};
+  border: 1px solid ${({ theme }) => theme.color.border.gray01};
   border-radius: 8px;
   box-shadow: 0 2px 8px 0 #0000001a;
   width: max-content;
@@ -109,10 +109,10 @@ const Option = styled.div<{
   justify-content: space-between;
   font-size: 14px;
   font-weight: 500;
-  color: ${({ theme }) => theme.color.text.subGray04};
+  color: ${({ theme }) => theme.color.text.gray04};
 
   &:not(:last-child) {
-    border-bottom: 1px solid ${({ theme }) => theme.color.borderGray02};
+    border-bottom: 1px solid ${({ theme }) => theme.color.border.gray02};
   }
 
   /* 호진TODO: Mobile에서도 hover가 적용되는지 확인 필요 */

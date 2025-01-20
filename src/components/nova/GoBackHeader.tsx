@@ -28,7 +28,7 @@ const Wrap = styled.div`
     font-size: 14px;
     font-weight: 500;
     line-height: 21px;
-    color: ${({ theme }) => theme.color.text.subGray04};
+    color: ${({ theme }) => theme.color.text.gray04};
   }
 
   svg {
