@@ -1,26 +1,20 @@
 import { useEffect, useRef } from 'react';
+import { useConfirm } from 'components/Confirm';
+import useErrorHandle from 'components/hooks/useErrorHandle';
+import { FileUploader } from 'components/nova/FileUploader';
+import { compressImage, isPixelLimitExceeded, SUPPORT_IMAGE_TYPE } from 'constants/fileTypes';
+import { ReactComponent as UploadDarkIcon } from 'img/dark/ico_upload_img_plus.svg';
+import CreditIcon from 'img/light/ico_credit_gray.svg';
+import { ReactComponent as UploadLightIcon } from 'img/light/ico_upload_img_plus.svg';
 import { useTranslation } from 'react-i18next';
+import { selectPageData, setPageData, setPageStatus } from 'store/slices/nova/pageStatusSlice';
+import { NOVA_TAB_TYPE } from 'store/slices/tabSlice';
+import { themeInfoSelector } from 'store/slices/theme';
+import { getDriveFiles, getLocalFiles } from 'store/slices/uploadFiles';
+import { userInfoSelector } from 'store/slices/userInfo';
+import { useAppDispatch, useAppSelector } from 'store/store';
 import styled from 'styled-components';
-
-import { compressImage, isPixelLimitExceeded, SUPPORT_IMAGE_TYPE } from '../../constants/fileTypes';
-import { ReactComponent as UploadDarkIcon } from '../../img/dark/ico_upload_img_plus.svg';
-import CreditIcon from '../../img/light/ico_credit_gray.svg';
-import { ReactComponent as UploadLightIcon } from '../../img/light/ico_upload_img_plus.svg';
-import {
-  selectPageData,
-  setPageData,
-  setPageStatus
-} from '../../store/slices/nova/pageStatusSlice';
-import { NOVA_TAB_TYPE } from '../../store/slices/tabSlice';
-import { themeInfoSelector } from '../../store/slices/theme';
-import { getDriveFiles, getLocalFiles } from '../../store/slices/uploadFiles';
-import { userInfoSelector } from '../../store/slices/userInfo';
-import { useAppDispatch, useAppSelector } from '../../store/store';
-import { convertDriveFileToFile } from '../../util/files';
-import { useConfirm } from '../Confirm';
-import useErrorHandle from '../hooks/useErrorHandle';
-
-import { FileUploader } from './FileUploader';
+import { convertDriveFileToFile } from 'util/files';
 
 const Wrap = styled.div`
   display: flex;
@@ -112,7 +106,7 @@ interface ImageUploaderProps {
   curTab: NOVA_TAB_TYPE;
 }
 
-export default function ImageUploader({
+export default function TranslationFileUploader({
   guideMsg,
   handleUploadComplete,
   curTab
@@ -218,7 +212,7 @@ export default function ImageUploader({
         <ImageBox>
           <Icon disable={isAgreed === undefined}>
             {isLightMode ? <UploadLightIcon /> : <UploadDarkIcon />}
-            <span>{t(`Nova.UploadTooltip.UploadImage`)}</span>
+            <span>파일 업로드</span>
           </Icon>
           <Credit>
             <span>10</span>

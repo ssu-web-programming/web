@@ -142,6 +142,8 @@ export default function Nova() {
       switch (status) {
         case 'home':
         case 'progress':
+          console.log(t(`Nova.${selectedNovaTab}.Guide.ImgUploader`));
+          console.log('selectedNovaTab', selectedNovaTab);
           return (
             <Guide>
               <ImageUploader

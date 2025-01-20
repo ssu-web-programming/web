@@ -10,7 +10,7 @@ export interface ToggleOption {
 
 interface ToggleProps {
   options: ToggleOption[];
-  activeId: string;
+  type: string;
   onToggle: (id: string) => void;
   containerStyle?: FlattenSimpleInterpolation;
   buttonStyle?: FlattenSimpleInterpolation;
@@ -18,7 +18,7 @@ interface ToggleProps {
 
 export default function Toggle({
   options,
-  activeId,
+  type,
   onToggle,
   containerStyle,
   buttonStyle
@@ -28,7 +28,7 @@ export default function Toggle({
       {options.map((option) => (
         <S.ToggleButton
           key={option.id}
-          isActive={activeId === option.id}
+          isActive={type === option.id}
           onClick={() => onToggle(option.id)}
           buttonStyle={buttonStyle}>
           {option.icon && option.icon}

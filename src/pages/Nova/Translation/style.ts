@@ -29,6 +29,45 @@ const TextAreaHeader = styled.div`
   justify-content: space-around;
   align-items: center;
   height: 48px;
+  flex: 1 1 auto;
+
+  & > span {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  & > div:nth-child(1) {
+    flex: 1 1 0;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+  }
+
+  & > div:nth-child(2) {
+    flex-basis: 24px;
+    height: 24px;
+    text-align: center;
+  }
+
+  & > div:nth-child(3) {
+    flex: 1 1 0;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+
+    & > span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+    }
+  }
 `;
 
 const TextArea = styled.textarea`
@@ -38,7 +77,7 @@ const TextArea = styled.textarea`
   font-size: 16px;
   line-height: 24px;
   color: #26282b;
-  padding: 12px 16px;
+  padding: 12px 32px 12px 16px;
   border-top: 1px solid #e8ebed;
   border-bottom: 1px solid #e8ebed;
 `;
@@ -75,7 +114,7 @@ const StyledTransFile = styled(TransFile)<{
   }
 `;
 
-const TranslationButton = styled.div`
+const TranslationButton = styled.div<{ isActive: boolean }>`
   width: 100%;
   display: flex;
   align-items: center;
@@ -86,15 +125,26 @@ const TranslationButton = styled.div`
   cursor: pointer;
   margin-top: 30px;
 
+  background: ${({ isActive, theme }) =>
+    isActive ? 'var(--ai-purple-50-main)' : theme.color.subBgGray06};
+
+  cursor: ${(props) => (props.isActive ? 'pointer' : 'default')};
+
   span {
     font-size: 16px;
     font-weight: 500;
     line-height: 24px;
-    color: white;
+    color: ${({ theme, isActive }) => (isActive ? 'var(--white)' : theme.color.text.subGray08)};
   }
 `;
 
+const FileUploaderWrapper = styled.div`
+  width: 100%;
+  height: 322px;
+`;
+
 export {
+  FileUploaderWrapper,
   StyledTransFile,
   StyledTransTxt,
   TextArea,
