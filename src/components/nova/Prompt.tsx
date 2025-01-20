@@ -70,7 +70,7 @@ const TextWrap = styled.div<{ isActive: boolean }>`
   padding: 12px;
   gap: 10px;
   border: 1px solid
-    ${({ isActive, theme }) => (isActive ? 'var(--ai-purple-50-main)' : theme.color.borderGray01)};
+    ${({ isActive, theme }) => (isActive ? 'var(--ai-purple-50-main)' : theme.color.g01)};
   border-radius: 8px;
   background: ${({ theme }) => (theme.mode === 'light' ? 'var(--white)' : 'none')};
 `;
@@ -83,7 +83,7 @@ const TextArea = styled.textarea`
   resize: none;
   font-size: 14px;
   background: transparent;
-  color: ${({ theme }) => theme.color.text.subGray04};
+  color: ${({ theme }) => theme.color.text.gray04};
 `;
 
 const ButtonWrap = styled.div`
@@ -104,7 +104,7 @@ const ExamButton = styled.button<{ isActive: boolean }>`
   padding: 0 12px;
   border-radius: 4px;
   background: ${({ isActive, theme }) =>
-    isActive ? theme.color.subBgGray02 : theme.color.subBgGray06};
+    isActive ? theme.color.gray02 : theme.color.background.gray06};
   cursor: ${(props) => (props.isActive ? 'pointer' : 'default')};
 
   span {
@@ -112,7 +112,7 @@ const ExamButton = styled.button<{ isActive: boolean }>`
     font-weight: 500;
     line-height: 18px;
     color: ${({ isActive, theme }) =>
-      isActive ? theme.color.text.subGray04 : theme.color.text.subGray08};
+      isActive ? theme.color.text.gray04 : theme.color.text.gray08};
   }
 `;
 
@@ -126,7 +126,7 @@ const CreatingButton = styled.div<{ isActive: boolean }>`
   margin-top: 16px;
   margin-bottom: 16px;
   background: ${({ isActive, theme }) =>
-    isActive ? 'var(--ai-purple-50-main)' : theme.color.subBgGray06};
+    isActive ? 'var(--ai-purple-50-main)' : theme.color.background.gray06};
   border-radius: 8px;
   cursor: ${(props) => (props.isActive ? 'pointer' : 'default')};
   -webkit-tap-highlight-color: transparent;
@@ -135,7 +135,7 @@ const CreatingButton = styled.div<{ isActive: boolean }>`
     font-size: 16px;
     font-weight: 500;
     line-height: 24px;
-    color: ${({ theme, isActive }) => (isActive ? 'var(--white)' : theme.color.text.subGray08)};
+    color: ${({ theme, isActive }) => (isActive ? 'var(--white)' : theme.color.text.gray08)};
   }
 `;
 

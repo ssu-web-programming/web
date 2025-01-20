@@ -80,7 +80,7 @@ const ThemeSelectionWrap = styled.div`
     font-weight: 500;
     line-height: 24px;
     text-align: center;
-    color: ${({ theme }) => theme.color.text.subGray03};
+    color: ${({ theme }) => theme.color.text.gray03};
   }
 `;
 
@@ -154,7 +154,7 @@ const Button = styled.div<{ isActive: boolean }>`
   justify-content: center;
 
   background: ${({ isActive, theme }) =>
-    isActive ? 'var(--ai-purple-50-main)' : theme.color.subBgGray06};
+    isActive ? 'var(--ai-purple-50-main)' : theme.color.background.gray06};
   border-radius: 8px;
   cursor: ${(props) => (props.isActive ? 'pointer' : 'default')};
   -webkit-tap-highlight-color: transparent;
@@ -164,7 +164,7 @@ const Button = styled.div<{ isActive: boolean }>`
     font-size: 16px;
     font-weight: 500;
     line-height: 24px;
-    color: ${({ theme, isActive }) => (isActive ? 'var(--white)' : theme.color.text.subGray08)};
+    color: ${({ theme, isActive }) => (isActive ? 'var(--white)' : theme.color.text.gray08)};
   }
 `;
 

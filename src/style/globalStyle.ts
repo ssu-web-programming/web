@@ -6,7 +6,7 @@ const GlobalStyle = createGlobalStyle`
   #root {
     margin: 0;
     padding: 0;
-    background-color: ${({ theme }: { theme: any }) => theme.color.subBgGray05};
+    background-color: ${({ theme }: { theme: any }) => theme.color.background.gray02};
     font-family: 'Pretendard', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -16,7 +16,7 @@ const GlobalStyle = createGlobalStyle`
 
   html, body, #root, div, textarea {
     scrollbar-width: thin;
-    scrollbar-color: ${({ theme }: { theme: any }) => theme.color.borderGray01} transparent;
+    scrollbar-color: ${({ theme }: { theme: any }) => theme.color.border.gray01} transparent;
 
     &::-webkit-scrollbar {
       width: 6px;

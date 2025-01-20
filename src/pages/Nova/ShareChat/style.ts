@@ -27,8 +27,8 @@ export const EmptyBox = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: ${({ theme }) => theme.color.subBgGray04};
-  color: ${({ theme }) => theme.color.text.subGray01};
+  background: ${({ theme }) => theme.color.background.gray04};
+  color: ${({ theme }) => theme.color.text.gray01};
 `;
 
 export const Header = styled.div`

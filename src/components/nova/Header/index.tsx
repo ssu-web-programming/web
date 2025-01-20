@@ -27,7 +27,7 @@ import {
   setPageResult,
   setPageStatus
 } from '../../../store/slices/nova/pageStatusSlice';
-import { NOVA_TAB_TYPE, selectTabSlice } from '../../../store/slices/tabSlice';
+import { NOVA_TAB_TYPE, selectNovaTab, selectTabSlice } from '../../../store/slices/tabSlice';
 import { setThemeInfo, themeInfoSelector, ThemeType } from '../../../store/slices/theme';
 import { setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
@@ -234,15 +234,16 @@ export default function NovaHeader(props: NovaHeaderProps) {
       status !== 'loading' &&
       creating != 'NOVA'
     ) {
-      if (selectedNovaTab === NOVA_TAB_TYPE.aiChat) {
+      if (selectedNovaTab === NOVA_TAB_TYPE.aiChat && novaHistory.length > 0) {
         await newChat(true);
-      } else {
-        dispatch(setLocalFiles([]));
-        dispatch(setDriveFiles([]));
-        dispatch(setPageStatus({ tab: selectedNovaTab, status: 'home' }));
-        dispatch(setPageData({ tab: selectedNovaTab, data: null }));
-        dispatch(setPageResult({ tab: selectedNovaTab, result: null }));
       }
+
+      dispatch(setLocalFiles([]));
+      dispatch(setDriveFiles([]));
+      dispatch(setPageStatus({ tab: selectedNovaTab, status: 'home' }));
+      dispatch(setPageData({ tab: selectedNovaTab, data: null }));
+      dispatch(setPageResult({ tab: selectedNovaTab, result: null }));
+      dispatch(selectNovaTab(NOVA_TAB_TYPE.home));
     }
   };
 
@@ -262,7 +263,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
       ) : (
         <>
           <S.TitleWrapper>
-            {isStartedByRibbon ? (
+            {selectedNovaTab === NOVA_TAB_TYPE.home || isStartedByRibbon ? (
               <S.Logo />
             ) : (
               <>
@@ -284,7 +285,8 @@ export default function NovaHeader(props: NovaHeaderProps) {
                   }}
                 />
                 <span>{getTabTranslationKey(selectedNovaTab)}</span>
-                {selectedNovaTab === NOVA_TAB_TYPE.aiChat && (
+                {(selectedNovaTab === NOVA_TAB_TYPE.aiChat ||
+                  selectedNovaTab === NOVA_TAB_TYPE.perplexity) && (
                   <ChatMode>
                     <span>{chatMode}</span>
                   </ChatMode>

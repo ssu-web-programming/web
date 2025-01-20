@@ -20,7 +20,7 @@ export const ToolWrap = styled.div`
   justify-content: center;
   gap: 4px;
   padding: 16px;
-  background-color: white;
+  background-color: ${({ theme }) => theme.color.background.gray01};
   border-radius: 12px;
 `;
 
@@ -28,7 +28,7 @@ export const ToolTitle = styled.span`
   font-size: 18px;
   font-weight: 500;
   line-height: 27px;
-  color: var(--gray-gray-90-01);
+  color: ${({ theme }) => theme.color.text.gray03};
 `;
 
 export const AIToolWrap = styled.div`
@@ -57,7 +57,7 @@ export const AIToolWrap = styled.div`
     font-size: 13px;
     font-weight: 500;
     line-height: 19.5px;
-    color: var(--gray-gray-80-02);
+    color: ${({ theme }) => theme.color.text.gray03};
   }
 `;
 
@@ -73,7 +73,7 @@ export const ImageItem = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--gray-gray-30);
+  border: 1px solid ${({ theme }) => theme.color.border.gray02};
   border-radius: 8px;
   cursor: pointer;
 
@@ -87,5 +87,6 @@ export const ImageItem = styled.div`
     font-weight: 500;
     line-height: 20px;
     padding: 4px 0;
+    color: ${({ theme }) => theme.color.text.gray03};
   }
 `;

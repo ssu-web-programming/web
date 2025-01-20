@@ -304,6 +304,7 @@
   "Nova": {
     "Tabs": {
       "aiChat": "AI 채팅",
+      "perplexity": "웹 검색",
       "convert2DTo3D": "2D <img/> 3D 변환",
       "removeBG": "배경 제거",
       "changeBG": "배경 변경",
@@ -332,6 +333,15 @@
         "ExpiryDate": "※ 본 링크는 7일 간만 유효합니다.",
         "NotValidPage": "유효하지 않은 페이지입니다.",
         "MovePOPage": "폴라리스 오피스 바로가기"
+      }
+    },
+    "perplexity": {
+      "Guide": {
+        "Title": "웹 검색",
+        "SubTitle": "",
+        "Example1": "서류 합격을 위한 자기소개서 초안을 작성해줘",
+        "Example2": "AI를 주제로 한 이미지를 만들어줘",
+        "Example3": "2024년 전기차 시장의 성장 전망을 알려줘"
       }
     },
     "convert2DTo3D": {
@@ -474,7 +484,7 @@
       "Remake": "다시 만들기",
       "InsertDoc": "문서에 삽입",
       "Save": "저장",
-      "Share" : "공유"
+      "Share": "공유"
     },
     "DragAndDrop": {
       "Title": "업로드",

@@ -4,6 +4,7 @@ import useClipboard from 'components/hooks/nova/use-clipboard';
 import Icon from 'components/Icon';
 import { ReactComponent as DeleteDarkIcon } from 'img/dark/ico_input_delete.svg';
 import PlusCircleDarkIcon from 'img/dark/ico_plus_circle.svg';
+import { ReactComponent as SendActiveDarkIcon } from 'img/dark/ico_send_active.svg';
 import { ReactComponent as SendDisabledDarkIcon } from 'img/dark/ico_send_disabled.svg';
 import ico_file_csv from 'img/light/ico_file_csv.svg';
 import ico_file_doc from 'img/light/ico_file_doc.svg';
@@ -20,7 +21,7 @@ import ico_file_word from 'img/light/ico_file_word.svg';
 import ico_file_xls from 'img/light/ico_file_xls.svg';
 import { ReactComponent as DeleteLightIcon } from 'img/light/ico_input_delete.svg';
 import PlusCircleLightIcon from 'img/light/ico_plus_circle.svg';
-import { ReactComponent as SendActiveIcon } from 'img/light/ico_send_active.svg';
+import { ReactComponent as SendActiveLightIcon } from 'img/light/ico_send_active.svg';
 import { ReactComponent as SendDisabledLightIcon } from 'img/light/ico_send_disabled.svg';
 import { useTranslation } from 'react-i18next';
 import {
@@ -37,10 +38,10 @@ import { sliceFileName } from 'util/common';
 
 import { CHAT_MODES, CHAT_TYPE_LIST, ChatMode } from '../../../constants/chatType';
 import { getValidExt, SUPPORT_DOCUMENT_TYPE } from '../../../constants/fileTypes';
-import { ReactComponent as DocsPlusIconDark } from '../../../img/dark/ico_upload_docs_plus.svg';
-import { ReactComponent as ImagePlusIconDark } from '../../../img/dark/ico_upload_img_plus.svg';
-import { ReactComponent as DocsPlusIconLight } from '../../../img/light/ico_upload_docs_plus.svg';
-import { ReactComponent as ImagePlusIconLight } from '../../../img/light/ico_upload_img_plus.svg';
+import { ReactComponent as DocsIconDark } from '../../../img/dark/ico_input_upload_docs.svg';
+import { ReactComponent as ImagesIconDark } from '../../../img/dark/ico_input_upload_images.svg';
+import { ReactComponent as DocsIconLight } from '../../../img/light/ico_input_upload_docs.svg';
+import { ReactComponent as ImagesIconLight } from '../../../img/light/ico_input_upload_images.svg';
 import LoadingSpinner from '../../../img/light/spinner.webp';
 import { NOVA_TAB_TYPE, selectNovaTab, selectTabSlice } from '../../../store/slices/tabSlice';
 import { themeInfoSelector } from '../../../store/slices/theme';
@@ -194,13 +195,13 @@ export default function InputBar(props: InputBarProps) {
     {
       target: 'nova-file',
       accept: SUPPORT_DOCUMENT_TYPE,
-      children: isLightMode ? <DocsPlusIconLight /> : <DocsPlusIconDark />,
+      children: isLightMode ? <DocsIconLight /> : <DocsIconDark />,
       ref: inputDocsFileRef
     },
     {
       target: 'nova-image',
       accept: getValidExt(selectedNovaTab),
-      children: isLightMode ? <ImagePlusIconLight /> : <ImagePlusIconDark />,
+      children: isLightMode ? <ImagesIconLight /> : <ImagesIconDark />,
       ref: inputImgFileRef
     }
   ];
@@ -364,7 +365,9 @@ export default function InputBar(props: InputBarProps) {
                   ? isLightMode
                     ? SendDisabledLightIcon
                     : SendDisabledDarkIcon
-                  : SendActiveIcon
+                  : isLightMode
+                    ? SendActiveLightIcon
+                    : SendActiveDarkIcon
               }
               cssExt={css`
                 display: flex;
@@ -384,6 +387,13 @@ export default function InputBar(props: InputBarProps) {
               selectedItem={chatMode}
               setSelectedItem={(item: string) => {
                 dispatch(setChatMode(item as ChatMode));
+                if (selectedNovaTab !== NOVA_TAB_TYPE.home) {
+                  if ((item as ChatMode) === CHAT_MODES.PERPLEXITY) {
+                    dispatch(selectNovaTab(NOVA_TAB_TYPE.perplexity));
+                  } else {
+                    dispatch(selectNovaTab(NOVA_TAB_TYPE.aiChat));
+                  }
+                }
               }}
             />
           )}

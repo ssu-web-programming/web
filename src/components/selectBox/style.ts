@@ -24,7 +24,7 @@ export const Form = styled(FormControl)`
     align-items: center;
     justify-content: center;
     padding: 4px 4.5px 4px 10px;
-    border: 1px solid var(--gray-gray-30);
+    border: 1px solid ${({ theme }) => theme.color.border.gray03};
     border-radius: 8px;
 
     div {
@@ -32,7 +32,7 @@ export const Form = styled(FormControl)`
       font-weight: 600;
       font-family: Pretendard, sans-serif;
       line-height: 21px;
-      color: var(--gray-gray-90-01);
+      color: ${({ theme }) => theme.color.text.gray04};
     }
   }
 `;
@@ -44,7 +44,7 @@ export const StyledMenuItem = styled(MenuItem)`
   }
 
   &.Mui-selected {
-    background-color: var(--ai-purple-97-list-over) !important;
+    background-color: ${({ theme }) => theme.color.background.selected} !important;
     border-radius: 8px;
   }
 `;

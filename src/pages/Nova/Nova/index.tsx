@@ -149,7 +149,10 @@ export default function Nova() {
           fileUploadState={fileUploadState}
         />
       );
-    } else if (selectedNovaTab === NOVA_TAB_TYPE.aiChat) {
+    } else if (
+      selectedNovaTab === NOVA_TAB_TYPE.aiChat ||
+      selectedNovaTab === NOVA_TAB_TYPE.perplexity
+    ) {
       return (
         <>
           {status === 'progress' && <Progress />}

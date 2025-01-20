@@ -119,13 +119,13 @@ const VARIANTS = {
   `,
   gray: css<{ selected: boolean }>`
     background-color: ${({ selected, theme }) =>
-      selected ? `var(--ai-purple-97-list-over)` : theme.color.subBgGray02};
-    color: ${({ theme }) => theme.color.text.subGray04};
+      selected ? `var(--ai-purple-97-list-over)` : theme.color.background.gray02};
+    color: ${({ theme }) => theme.color.text.gray04};
   `,
   grayToPurple: css<{ selected: boolean }>`
     background-color: ${({ selected, theme }) =>
-      selected ? `var(--ai-purple-50-main) !important` : theme.color.subBgGray02};
-    color: ${({ theme, selected }) => (selected ? 'white !important' : theme.color.text.subGray01)};
+      selected ? `var(--ai-purple-50-main) !important` : theme.color.background.gray02};
+    color: ${({ theme, selected }) => (selected ? 'white !important' : theme.color.text.gray01)};
   `,
   darkGray: css<{ selected: boolean }>`
     background-color: ${({ selected }) => (selected ? `var(--ai-purple-97-list-over)` : `#D2D9E0`)};

@@ -7,7 +7,7 @@ const Wrapper = styled.div`
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  border-top: 1px solid ${({ theme }) => theme.color.borderGray01};
+  border-top: 1px solid ${({ theme }) => theme.color.border.gray01};
   overflow: hidden;
 `;
 
@@ -20,7 +20,7 @@ const Navi = styled.div`
   align-items: center;
   gap: 4px;
 
-  border-bottom: 1px solid ${({ theme }) => theme.color.borderGray01};
+  border-bottom: 1px solid ${({ theme }) => theme.color.border.gray01};
   padding: 16px;
   font-weight: 600;
   font-size: 14px;
@@ -61,7 +61,7 @@ const FileItem = styled.div`
   align-items: center;
 
   & + & {
-    border-top: 1px solid ${({ theme }) => theme.color.borderGray02};
+    border-top: 1px solid ${({ theme }) => theme.color.border.gray02};
   }
 
   .icon {

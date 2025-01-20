@@ -4,6 +4,8 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 import { ReactComponent as ArrowIcon } from '../../img/light/ico_arrow_down_normal.svg';
 import CreditIcon from '../../img/light/ico_credit_gray.svg';
+import { themeInfoSelector } from '../../store/slices/theme';
+import { useAppSelector } from '../../store/store';
 
 import * as S from './style';
 
@@ -17,6 +19,7 @@ interface SelectBoxProps {
 
 export default function SelectBox(props: SelectBoxProps) {
   const { menuItem, selectedItem, setSelectedItem } = props;
+  const { isLightMode } = useAppSelector(themeInfoSelector);
 
   const handleChange = (event: SelectChangeEvent) => {
     setSelectedItem(event.target.value as string);
@@ -35,7 +38,8 @@ export default function SelectBox(props: SelectBoxProps) {
                 mt: '-8.5px',
                 ml: '-4px',
                 boxShadow: '0px 2px 8px 0px rgba(0, 0, 0, 0.1)',
-                border: '1px solid var(--gray-gray-40)'
+                border: `1px solid ${isLightMode ? 'var(--gray-gray-40)' : 'var(--gray-gray-87)'}`,
+                backgroundColor: `${isLightMode ? 'var(--white)' : 'var(--gray-gray-90)'}`
               }
             },
             anchorOrigin: {

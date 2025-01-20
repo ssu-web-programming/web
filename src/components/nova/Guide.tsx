@@ -1,17 +1,19 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import aiChatIcon from '../../img/common/nova/imgSample/ai_chat_sample.png';
-import changeBGIcon from '../../img/common/nova/imgSample/bg_change_sample.png';
-import removeBGIcon from '../../img/common/nova/imgSample/bg_delete_sample.png';
+import aiChatIcon from '../../img/common/nova/imgSample/ai_chat_sample.svg';
+import changeBGIcon from '../../img/common/nova/imgSample/bg_change_sample.svg';
+import removeBGIcon from '../../img/common/nova/imgSample/bg_delete_sample.svg';
 import convert2DTo3DIcon from '../../img/common/nova/imgSample/convert_2dto3d_smaple.gif';
-import expandImgIcon from '../../img/common/nova/imgSample/image_expand_sample.png';
-import remakeImgIcon from '../../img/common/nova/imgSample/image_remake_sample.png';
-import changeStyleIcon from '../../img/common/nova/imgSample/image_style_sample.png';
-import improvedResIcon from '../../img/common/nova/imgSample/image_upscaling_sample.png';
+import expandImgIcon from '../../img/common/nova/imgSample/image_expand_sample.svg';
+import remakeImgIcon from '../../img/common/nova/imgSample/image_remake_sample.svg';
+import changeStyleIcon from '../../img/common/nova/imgSample/image_style_sample.svg';
+import improvedResIcon from '../../img/common/nova/imgSample/image_upscaling_sample.svg';
+import perplexityIcon from '../../img/common/nova/imgSample/perplexity_sample.svg';
 import { ReactComponent as IconConvert } from '../../img/light/nova/tab/convert_Img.svg';
 import { announceInfoSelector } from '../../store/slices/nova/announceSlice';
+import { novaChatModeSelector } from '../../store/slices/nova/novaHistorySlice';
 import { NOVA_TAB_TYPE, selectTabSlice } from '../../store/slices/tabSlice';
 import { useAppSelector } from '../../store/store';
 import Announcement from '../Announcement';
@@ -32,8 +34,6 @@ const GuideWrapper = styled.div`
 `;
 
 const GuideImage = styled.img`
-  width: 120px;
-  height: 80px;
   border-radius: 8px;
 `;
 
@@ -59,7 +59,7 @@ const GuideTitle = styled.div`
     font-weight: 500;
     line-height: 24px;
     letter-spacing: -0.02em;
-    color: ${({ theme }) => theme.color.text.subGray03};
+    color: ${({ theme }) => theme.color.text.gray03};
     text-align: center;
     white-space: break-spaces;
   }
@@ -84,12 +84,13 @@ interface GuideProps {
 export const Guide = (props: GuideProps) => {
   const { t } = useTranslation();
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
+  const chatMode = useAppSelector(novaChatModeSelector);
   const announceInfo = useAppSelector(announceInfoSelector(selectedNovaTab));
 
   const iconMap: Record<NOVA_TAB_TYPE, string> = {
     home: '',
     aiChat: aiChatIcon,
-    perplexity: aiChatIcon,
+    perplexity: perplexityIcon,
     convert2DTo3D: convert2DTo3DIcon,
     removeBG: removeBGIcon,
     changeBG: changeBGIcon,
@@ -103,20 +104,20 @@ export const Guide = (props: GuideProps) => {
   };
 
   const getTranslationKey = () => {
-    if (selectedNovaTab === 'convert2DTo3D') {
-      return (
-        <Trans
-          i18nKey={`Nova.${selectedNovaTab}.Guide.Title`}
-          components={{
-            img: <StyledIconConvert height={18} width={19} />
-          }}
-        />
-      );
+    switch (selectedNovaTab) {
+      case NOVA_TAB_TYPE.convert2DTo3D:
+        return (
+          <Trans
+            i18nKey={`Nova.${selectedNovaTab}.Guide.Title`}
+            components={{
+              img: <StyledIconConvert height={18} width={19} />
+            }}
+          />
+        );
+      default:
+        return t(`Nova.${selectedNovaTab}.Guide.Title`);
     }
-    return t(`Nova.${selectedNovaTab}.Guide.Title`);
   };
-
-  useEffect(() => {}, [announceInfo]);
 
   return (
     <Container>
