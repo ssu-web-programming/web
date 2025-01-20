@@ -60,6 +60,10 @@ const iconMap: Record<
     dark: { default: string; selected: string };
   }
 > = {
+  home: {
+    light: { default: aiChatLightIcon, selected: aiChatLightSelectedIcon },
+    dark: { default: aiChatDarkIcon, selected: aiChatDarkSelectedIcon }
+  },
   aiChat: {
     light: { default: aiChatLightIcon, selected: aiChatLightSelectedIcon },
     dark: { default: aiChatDarkIcon, selected: aiChatDarkSelectedIcon }

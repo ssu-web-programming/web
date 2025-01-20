@@ -10,7 +10,7 @@ import { css } from 'styled-components';
 import { NOVA_GET_SHARE_CHAT } from '../../../api/constant';
 import Button from '../../../components/buttons/Button';
 import Icon from '../../../components/Icon';
-import { getFileIcon } from '../../../components/nova/InputBar';
+import { getFileIcon } from '../../../components/nova/inputBar';
 import ArrowRightIcon from '../../../img/common/ico_arrow_right.svg';
 import NoneFileDarkIcon from '../../../img/dark/none_file.svg';
 import SkeletonDarkIcon from '../../../img/dark/nova/skeleton_share.json';

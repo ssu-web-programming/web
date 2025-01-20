@@ -21,6 +21,7 @@ export type CREATING_TYPE =
 export type AI_WRITE_TAB_TYPE = 'write' | 'chat';
 
 export enum NOVA_TAB_TYPE {
+  home = 'home',
   aiChat = 'aiChat',
   perplexity = 'perplexity',
   convert2DTo3D = 'convert2DTo3D',
@@ -48,7 +49,7 @@ const tabSlice = createSlice({
   initialState: {
     creating: 'none',
     selectedTabId: 'write',
-    selectedNovaTab: 'aiChat',
+    selectedNovaTab: 'home',
     showChatEOS: false,
     usingAI: false
   } as TabType,
@@ -56,7 +57,7 @@ const tabSlice = createSlice({
     initTab: (state) => {
       state.creating = 'none';
       state.selectedTabId = 'chat';
-      state.selectedNovaTab = NOVA_TAB_TYPE.aiChat;
+      state.selectedNovaTab = NOVA_TAB_TYPE.home;
     },
     setCreating: (state, action: PayloadAction<CREATING_TYPE>) => {
       state.creating = action.payload;

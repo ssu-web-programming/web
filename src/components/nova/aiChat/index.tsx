@@ -8,7 +8,7 @@ import { css } from 'styled-components';
 
 import { apiWrapper } from '../../../api/apiWrapper';
 import { NOVA_SHARE_CHAT } from '../../../api/constant';
-import { FileUpladState } from '../../../constants/fileTypes';
+import { FileUploadState } from '../../../constants/fileTypes';
 import ico_reading_glasses_dark from '../../../img/dark/duotone_magnifying_glass_dark.svg';
 import ico_documents_dark from '../../../img/dark/ico_documents.svg';
 import ico_image_dark from '../../../img/dark/ico_image.svg';
@@ -39,59 +39,40 @@ import IconButton from '../../buttons/IconButton';
 import CheckBox from '../../CheckBox';
 import { useConfirm } from '../../Confirm';
 import useCopyText from '../../hooks/copyText';
-import useSubmitHandler from '../../hooks/nova/useSubmitHandler';
-import { useChatNova } from '../../hooks/useChatNova';
 import Icon from '../../Icon';
 import ChatList from '../ChatList';
 import { FileUploading } from '../FileUploading';
 import { Guide } from '../Guide';
 import { ImagePreview } from '../ImagePreview';
-import InputBar from '../InputBar';
-import NovaHome from '../novaHome';
+import InputBar, { InputBarSubmitParam } from '../inputBar';
 
 import * as S from './style';
 
-const AIChat = () => {
+interface AIChatProps {
+  expiredNOVA: boolean;
+  setExpiredNOVA: (isExpired: boolean) => void;
+  createNovaSubmitHandler: (param: InputBarSubmitParam) => Promise<void>;
+  fileUploadState: FileUploadState;
+}
+
+const AIChat = (props: AIChatProps) => {
   const dispatch = useAppDispatch();
   const location = useLocation();
   const { t } = useTranslation();
   const { onCopy } = useCopyText();
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const confirm = useConfirm();
-  const chatNova = useChatNova();
   const { usingAI, creating, selectedNovaTab } = useAppSelector(selectTabSlice);
   const status = useAppSelector(selectPageStatus(selectedNovaTab));
   const novaHistory = useAppSelector(novaHistorySelector);
   const selectedItems = useAppSelector(selectedItemsSelector);
   const isShareMode = useAppSelector(isShareModeSelector);
   const isExporting = useAppSelector(isExportingSelector);
-  const [expiredNOVA, setExpiredNOVA] = useState<boolean>(false);
   const [inputContents, setInputContents] = useState<string>('');
   const [imagePreview, setImagePreview] = useState<NovaFileInfo | null>(null);
-  const [fileUploadState, setFileUploadState] = useState<FileUpladState>({
-    type: '',
-    state: 'ready',
-    progress: 0
-  });
-  const { createNovaSubmitHandler } = useSubmitHandler({ setFileUploadState, setExpiredNOVA });
+
   const chatListRef = useRef<HTMLDivElement>(null);
   const [showScrollDownBtn, setShowScrollDownBtn] = useState(false);
-
-  useEffect(() => {
-    if (expiredNOVA) {
-      confirm({
-        title: '',
-        msg: t('Index.Alert.ExpiredNOVA'),
-        onOk: {
-          text: t(`Confirm`),
-          callback: () => {
-            setExpiredNOVA(false);
-            chatNova.newChat();
-          }
-        }
-      });
-    }
-  }, [expiredNOVA]);
 
   useEffect(() => {
     if (location.state) {
@@ -243,9 +224,7 @@ const AIChat = () => {
   return (
     <S.Wrap>
       <>
-        {creating != 'usingNova' ? (
-          <NovaHome />
-        ) : novaHistory.length < 1 ? (
+        {novaHistory.length < 1 ? (
           <>
             <Guide>
               {PROMPT_EXAMPLE.map((item) => (
@@ -279,9 +258,9 @@ const AIChat = () => {
               </S.ShareGuide>
             )}
             <ChatList
-              expiredNOVA={expiredNOVA}
+              expiredNOVA={props.expiredNOVA}
               novaHistory={novaHistory}
-              onSubmit={createNovaSubmitHandler}
+              onSubmit={props.createNovaSubmitHandler}
               onSave={onSave}
               scrollHandler={handleOnScroll}
               setImagePreview={setImagePreview}
@@ -318,12 +297,12 @@ const AIChat = () => {
             <InputBar
               novaHistory={novaHistory}
               disabled={creating === 'NOVA'}
-              expiredNOVA={expiredNOVA}
-              onSubmit={createNovaSubmitHandler}
+              expiredNOVA={props.expiredNOVA}
+              onSubmit={props.createNovaSubmitHandler}
               contents={inputContents}
               setContents={setInputContents}
             />
-            <FileUploading {...fileUploadState} />
+            <FileUploading {...props.fileUploadState} />
           </>
         )}
 

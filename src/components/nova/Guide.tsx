@@ -87,6 +87,7 @@ export const Guide = (props: GuideProps) => {
   const announceInfo = useAppSelector(announceInfoSelector(selectedNovaTab));
 
   const iconMap: Record<NOVA_TAB_TYPE, string> = {
+    home: '',
     aiChat: aiChatIcon,
     perplexity: aiChatIcon,
     convert2DTo3D: convert2DTo3DIcon,

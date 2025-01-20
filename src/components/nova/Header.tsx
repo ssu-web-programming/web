@@ -15,6 +15,7 @@ import ArrowLeftLightIcon from '../../img/light/ico_arrow_left.svg';
 import ico_credit from '../../img/light/ico_credit_gray.svg';
 import { ReactComponent as CreditLineIcon } from '../../img/light/ico_credit_line.svg';
 import { ReactComponent as IconConvertLight } from '../../img/light/nova/tab/convert_Img.svg';
+import { appStateSelector } from '../../store/slices/appState';
 import { creditInfoSelector, InitialState } from '../../store/slices/creditInfo';
 import {
   isShareModeSelector,
@@ -28,7 +29,7 @@ import {
   setPageStatus
 } from '../../store/slices/nova/pageStatusSlice';
 import { NOVA_TAB_TYPE, selectTabSlice } from '../../store/slices/tabSlice';
-import { themeInfoSelector } from '../../store/slices/theme';
+import { setThemeInfo, themeInfoSelector, ThemeType } from '../../store/slices/theme';
 import { setDriveFiles, setLocalFiles } from '../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import Bridge, { isDesktop } from '../../util/bridge';
@@ -109,7 +110,7 @@ export interface NovaHeaderProps {
 
 export default function NovaHeader(props: NovaHeaderProps) {
   const { t } = useTranslation();
-  const { isLightMode } = useAppSelector(themeInfoSelector);
+  const { isLightMode, curTheme } = useAppSelector(themeInfoSelector);
   const novaHistory = useAppSelector(novaHistorySelector);
   const isShareMode = useAppSelector(isShareModeSelector);
   const { creating, usingAI, selectedNovaTab } = useAppSelector(selectTabSlice);
@@ -119,6 +120,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
   const chatNova = useChatNova();
   const creditInfo = useAppSelector(creditInfoSelector);
   const { isInit } = useAppSelector(initFlagSelector);
+  const { isStartedByRibbon } = useAppSelector(appStateSelector);
   const { handleClearPastedImages } = useClipboard();
 
   const CREDIT_NAME_MAP: {
@@ -321,8 +323,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
       ) : (
         <>
           <TitleWrapper>
-            {(status === 'home' || status === 'progress') &&
-            (selectedNovaTab !== NOVA_TAB_TYPE.aiChat || !usingAI) ? (
+            {isStartedByRibbon ? (
               <Logo />
             ) : (
               <>
@@ -348,6 +349,13 @@ export default function NovaHeader(props: NovaHeaderProps) {
             )}
           </TitleWrapper>
           <ButtonWrapper>
+            <button
+              onClick={() => {
+                const theme = curTheme === ThemeType.light ? ThemeType.dark : ThemeType.light;
+                dispatch(setThemeInfo(theme));
+              }}>
+              theme
+            </button>
             {novaHistory.length > 0 && selectedNovaTab === NOVA_TAB_TYPE.aiChat && (
               <IconButton
                 iconComponent={

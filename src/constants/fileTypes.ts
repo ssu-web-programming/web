@@ -232,7 +232,7 @@ export const isPixelLimitExceeded = async (file: File, tab: NOVA_TAB_TYPE) => {
     });
 };
 
-export interface FileUpladState extends Pick<NovaChatType, 'type'> {
+export interface FileUploadState extends Pick<NovaChatType, 'type'> {
   state: 'ready' | 'upload' | 'wait' | 'delay';
   progress: number;
 }
