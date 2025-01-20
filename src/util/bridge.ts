@@ -9,6 +9,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { useConfirm } from '../components/Confirm';
 import useManageFile from '../components/hooks/nova/useManageFile';
 import gI18n, { convertLangFromLangCode } from '../locale';
+import { setIsStartedByRibbon } from '../store/slices/appState';
 import { AskDocStatus, setSrouceId, setStatus } from '../store/slices/askDoc';
 import { setFiles } from '../store/slices/askDocAnalyzeFiesSlice';
 import { initConfirm } from '../store/slices/confirm';
@@ -381,6 +382,8 @@ export const useInitBridgeListener = () => {
               })
             );
 
+            if (body.isStartedByRibbon) dispatch(setIsStartedByRibbon(body.isStartedByRibbon));
+
             if (body.openTab in NOVA_TAB_TYPE) {
               const tab = body.openTab;
               dispatch(resetPageData(tab));
@@ -415,7 +418,7 @@ export const useInitBridgeListener = () => {
                 if (showCreditGuide && !getCookie('creditGuide')) {
                   confirm({
                     title: '',
-                    msg: t('Index.Alert.ExecuteFunction', {
+                    msg: t('Nova.Alert.ExecuteFunction', {
                       creditAmount: 10
                     })!,
                     neverShowAgain: true,

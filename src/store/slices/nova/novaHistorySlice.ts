@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+import { CHAT_MODES, ChatMode } from '../../../constants/chatType';
 import { RootState } from '../../store';
 
 export interface NovaFileInfo {
@@ -30,6 +31,7 @@ export type NovaChatType = {
 
 export type NovaHistoryState = {
   chatHistory: NovaChatType[];
+  chatMode: ChatMode;
   selectedItems: string[];
   isShareMode: boolean;
   isExporting: boolean;
@@ -37,6 +39,7 @@ export type NovaHistoryState = {
 
 const initialState: NovaHistoryState = {
   chatHistory: [],
+  chatMode: CHAT_MODES.GPT_4O,
   selectedItems: [],
   isShareMode: false,
   isExporting: false
@@ -84,6 +87,9 @@ const novaHistorySlice = createSlice({
     removeChat: (state, action: PayloadAction<NovaChatType['id']>) => {
       state.chatHistory = state.chatHistory.filter((chat) => chat.id !== action.payload);
     },
+    setChatMode: (state, action: PayloadAction<ChatMode>) => {
+      state.chatMode = action.payload;
+    },
     toggleItemSelection: (state, action: PayloadAction<string>) => {
       const itemId = action.payload;
       if (state.selectedItems.includes(itemId)) {
@@ -119,6 +125,7 @@ export const {
   appendChatOutput,
   updateChatStatus,
   removeChat,
+  setChatMode,
   toggleItemSelection,
   selectAllItems,
   deselectAllItems,
@@ -127,6 +134,7 @@ export const {
 } = novaHistorySlice.actions;
 
 export const novaHistorySelector = (state: RootState) => state.novaHistory.chatHistory;
+export const novaChatModeSelector = (state: RootState) => state.novaHistory.chatMode;
 export const selectedItemsSelector = (state: RootState) => state.novaHistory.selectedItems;
 export const isShareModeSelector = (state: RootState) => state.novaHistory.isShareMode;
 export const isExportingSelector = (state: RootState) => state.novaHistory.isExporting;

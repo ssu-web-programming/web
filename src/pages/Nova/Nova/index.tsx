@@ -1,4 +1,4 @@
-import { Suspense, useCallback, useEffect } from 'react';
+import { Suspense, useCallback, useEffect, useState } from 'react';
 import { FileWithPath, useDropzone } from 'react-dropzone';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
@@ -13,6 +13,8 @@ import useManageFile from '../../../components/hooks/nova/useManageFile';
 import usePrivacyConsent from '../../../components/hooks/nova/usePrivacyConsent';
 import { useRemakeImage } from '../../../components/hooks/nova/useRemakeImage';
 import { useRemoveBackground } from '../../../components/hooks/nova/useRemoveBackground';
+import useSubmitHandler from '../../../components/hooks/nova/useSubmitHandler';
+import { useChatNova } from '../../../components/hooks/useChatNova';
 import AIChat from '../../../components/nova/aiChat';
 import Convert from '../../../components/nova/Convert';
 import Expand from '../../../components/nova/Expand';
@@ -21,12 +23,14 @@ import NovaHeader from '../../../components/nova/Header';
 import ImageUploader from '../../../components/nova/ImageUploader';
 import Loading from '../../../components/nova/Loading';
 import Modals, { Overlay } from '../../../components/nova/modals/Modals';
+import NovaHome from '../../../components/nova/novaHome';
 import Progress from '../../../components/nova/Progress';
 import Prompt from '../../../components/nova/Prompt';
 import Result from '../../../components/nova/Result';
 import Theme from '../../../components/nova/Theme';
 import TimeOut from '../../../components/nova/TimeOut';
 import Uploading from '../../../components/nova/Uploading';
+import { FileUploadState } from '../../../constants/fileTypes';
 import { selectPageStatus } from '../../../store/slices/nova/pageStatusSlice';
 import { NOVA_TAB_TYPE, selectNovaTab, selectTabSlice } from '../../../store/slices/tabSlice';
 import { setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
@@ -37,7 +41,7 @@ import * as S from './style';
 
 export type ClientStatusType = 'home' | 'doc_edit_mode' | 'doc_view_mode';
 
-export default function Index() {
+export default function Nova() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const confirm = useConfirm();
@@ -53,6 +57,31 @@ export default function Index() {
   const tabValues: NOVA_TAB_TYPE[] = Object.values(NOVA_TAB_TYPE);
   const { handleAgreement } = usePrivacyConsent();
   const { loadLocalFile } = useManageFile();
+
+  const chatNova = useChatNova();
+  const [expiredNOVA, setExpiredNOVA] = useState<boolean>(false);
+  const [fileUploadState, setFileUploadState] = useState<FileUploadState>({
+    type: '',
+    state: 'ready',
+    progress: 0
+  });
+  const { createNovaSubmitHandler } = useSubmitHandler({ setFileUploadState, setExpiredNOVA });
+
+  useEffect(() => {
+    if (expiredNOVA) {
+      confirm({
+        title: '',
+        msg: t('Index.Alert.ExpiredNOVA'),
+        onOk: {
+          text: t(`Confirm`),
+          callback: () => {
+            setExpiredNOVA(false);
+            chatNova.newChat();
+          }
+        }
+      });
+    }
+  }, [expiredNOVA]);
 
   const onDrop = useCallback(
     async (acceptedFiles: FileWithPath[]) => {
@@ -111,11 +140,25 @@ export default function Index() {
       }
     };
 
-    if (selectedNovaTab == NOVA_TAB_TYPE.aiChat) {
+    if (selectedNovaTab == NOVA_TAB_TYPE.home) {
+      return (
+        <NovaHome
+          expiredNOVA={expiredNOVA}
+          setExpiredNOVA={setExpiredNOVA}
+          createNovaSubmitHandler={createNovaSubmitHandler}
+          fileUploadState={fileUploadState}
+        />
+      );
+    } else if (selectedNovaTab === NOVA_TAB_TYPE.aiChat) {
       return (
         <>
           {status === 'progress' && <Progress />}
-          <AIChat />
+          <AIChat
+            expiredNOVA={expiredNOVA}
+            setExpiredNOVA={setExpiredNOVA}
+            createNovaSubmitHandler={createNovaSubmitHandler}
+            fileUploadState={fileUploadState}
+          />
         </>
       );
     } else {

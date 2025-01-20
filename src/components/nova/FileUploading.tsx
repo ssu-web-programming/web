@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import Lottie from 'react-lottie-player';
 import styled from 'styled-components';
 
-import { FileUpladState } from '../../constants/fileTypes';
+import { FileUploadState } from '../../constants/fileTypes';
 import BlurDarkIcon from '../../img/dark/nova/ico_bg_blur_loading.svg';
 import SpinnerDark from '../../img/dark/nova/nova_spinner.json';
 import BlurLightIcon from '../../img/light/nova/ico_bg_blur_loading.png';
@@ -48,7 +48,7 @@ const Background = styled.div`
   }
 `;
 
-interface FileUploadingProps extends FileUpladState {
+interface FileUploadingProps extends FileUploadState {
   progress: number;
 }
 

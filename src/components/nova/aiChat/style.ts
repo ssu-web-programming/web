@@ -1,7 +1,5 @@
 import styled from 'styled-components';
 
-import { flexCenter } from '../InputBar';
-
 export const Container = styled.div`
   width: 100%;
   height: 100%;
@@ -13,7 +11,8 @@ export const Wrap = styled(Container)`
 `;
 
 export const GuideExample = styled.div`
-  ${flexCenter};
+  display: flex;
+  align-items: center;
   justify-content: flex-start;
   gap: 8px;
   padding: 12px;

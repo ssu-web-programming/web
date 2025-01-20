@@ -3,7 +3,7 @@ import CheckBox from 'components/CheckBox';
 import useManageFile from 'components/hooks/nova/useManageFile';
 import useUserInfoUtils from 'components/hooks/useUserInfoUtils';
 import Icon from 'components/Icon';
-import { getFileIcon } from 'components/nova/InputBar';
+import { getFileIcon } from 'components/nova/inputBar';
 import Select from 'components/select';
 import { getMaxFileSize } from 'constants/fileTypes';
 import { ReactComponent as RightDarkIcon } from 'img/dark/ico_angle_right.svg';

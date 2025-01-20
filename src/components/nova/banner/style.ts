@@ -5,26 +5,25 @@ export const SwiperWrapper = styled.div`
 
   .swiper {
     width: 100%;
-    height: 120px;
+  }
+
+  .swiper-button-prev,
+  .swiper-button-next {
+    display: none;
   }
 
   .swiper-pagination {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    bottom: 12px;
-  }
-
-  .swiper-pagination-bullet {
-    width: 4px;
-    height: 4px;
-    background-color: rgba(255, 255, 255, 0.4);
-  }
-
-  .swiper-pagination-bullet-active {
-    width: 6px;
-    height: 6px;
-    background-color: white;
+    width: fit-content;
+    left: auto;
+    right: 8px;
+    bottom: 8px;
+    background-color: var(--black-alpha);
+    padding: 3.5px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 400;
+    line-height: 11px;
+    color: var(--white);
   }
 
   .swiper-slide {

@@ -20,17 +20,18 @@ import { v4 } from 'uuid';
 import { track } from '@amplitude/analytics-browser';
 
 import { NOVA_CHAT_API, PO_DRIVE_DOC_OPEN_STATUS } from '../../../api/constant';
+import { FileUploadState } from '../../../constants/fileTypes';
 import { appStateSelector } from '../../../store/slices/appState';
 import { DriveFileInfo } from '../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { convertFiles, downloadFiles, fileToBase64, uploadFiles } from '../../../util/files';
 import { useConfirm } from '../../Confirm';
-import { InputBarSubmitParam } from '../../nova/InputBar';
+import { InputBarSubmitParam } from '../../nova/inputBar';
 import useErrorHandle from '../useErrorHandle';
 import { useShowCreditToast } from '../useShowCreditToast';
 
 interface SubmitHandlerProps {
-  setFileUploadState: React.Dispatch<React.SetStateAction<any>>;
+  setFileUploadState: React.Dispatch<React.SetStateAction<FileUploadState>>;
   setExpiredNOVA: React.Dispatch<React.SetStateAction<boolean>>;
 }
 

@@ -48,7 +48,7 @@ import CheckBox from '../CheckBox';
 import useCopyText from '../hooks/copyText';
 import { useInsertDocsHandler } from '../hooks/nova/useInsertDocsHandler';
 
-import { flexCenter, getFileIcon, InputBarSubmitParam } from './InputBar';
+import { getFileIcon, InputBarSubmitParam } from './inputBar';
 import Tabs from './tabs';
 
 const Wrapper = styled.div`
@@ -126,7 +126,8 @@ const ChatButtonWrapper = styled.div`
 const FileItem = styled.div`
   width: fit-content;
   height: 40px;
-  ${flexCenter};
+  display: flex;
+  align-items: center;
   gap: 8px;
   padding: 8px;
   border: 1px solid var(--gray-gray-40);

@@ -1,63 +1,11 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import FormControl from '@mui/material/FormControl';
-import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import styled from 'styled-components';
 
 import { ReactComponent as ArrowIcon } from '../../img/light/ico_arrow_down_normal.svg';
+import CreditIcon from '../../img/light/ico_credit_gray.svg';
 
-const Form = styled(FormControl)`
-  .MuiInputBase-root {
-    svg {
-      width: 24px;
-      height: 24px;
-      top: unset;
-    }
-  }
-
-  .MuiOutlinedInput-notchedOutline {
-    border: none;
-  }
-
-  .MuiInputBase-root.Mui-focused .MuiOutlinedInput-notchedOutline {
-    border: none;
-  }
-
-  .MuiSelect-select {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 4px 4.5px 4px 10px;
-    border: 1px solid var(--gray-gray-30);
-    border-radius: 8px;
-
-    div {
-      font-size: 14px;
-      font-weight: 600;
-      line-height: 21px;
-      color: var(--gray-gray-90-01);
-    }
-  }
-`;
-
-const StyledMenuItem = styled(MenuItem)`
-  &.MuiMenuItem-root {
-    display: flex;
-    justify-content: space-between;
-  }
-
-  &.Mui-selected {
-    background-color: var(--ai-purple-97-list-over) !important;
-    border-radius: 8px;
-  }
-`;
-
-const ItemWrap = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-`;
+import * as S from './style';
 
 export type Item = { icon?: string; title: string; desc?: string; credit?: number };
 
@@ -76,7 +24,7 @@ export default function SelectBox(props: SelectBoxProps) {
 
   return (
     <Box sx={{ minWidth: 90 }}>
-      <Form fullWidth>
+      <S.Form fullWidth>
         <Select
           value={selectedItem}
           onChange={handleChange}
@@ -100,7 +48,8 @@ export default function SelectBox(props: SelectBoxProps) {
             },
             MenuListProps: {
               sx: {
-                p: 0.5
+                p: 0.5,
+                minWidth: '290px'
               }
             }
           }}
@@ -110,16 +59,25 @@ export default function SelectBox(props: SelectBoxProps) {
           }}>
           {menuItem.map((item, index) => {
             return (
-              <StyledMenuItem value={item.title} key={index}>
-                <ItemWrap>
+              <S.StyledMenuItem value={item.title} key={index}>
+                <S.ItemWrap>
                   {item.icon && <img src={item.icon} alt="icon" />}
-                  {item.title}
-                </ItemWrap>
-              </StyledMenuItem>
+                  <S.TextWrap selected={selectedItem === item.title}>
+                    <span className="title">{item.title}</span>
+                    <span className="desc">{item.desc}</span>
+                  </S.TextWrap>
+                  {item.credit && (
+                    <S.CreditWrap>
+                      <img src={CreditIcon} alt="credit" />
+                      <span>{item.credit}</span>
+                    </S.CreditWrap>
+                  )}
+                </S.ItemWrap>
+              </S.StyledMenuItem>
             );
           })}
         </Select>
-      </Form>
+      </S.Form>
     </Box>
   );
 }

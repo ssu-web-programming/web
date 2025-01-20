@@ -17,4 +17,5 @@ export const Body = styled.div`
   position: relative;
   flex-direction: column;
   background-color: ${({ theme }) => theme.color.bg};
+  overflow: auto;
 `;

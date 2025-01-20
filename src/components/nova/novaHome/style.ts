@@ -9,6 +9,7 @@ export const Body = styled.div`
   justify-content: flex-start;
   gap: 16px;
   padding: 24px 12px;
+  overflow: auto;
 `;
 
 export const ToolWrap = styled.div`
@@ -17,29 +18,17 @@ export const ToolWrap = styled.div`
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  gap: 16px;
+  gap: 4px;
   padding: 16px;
   background-color: white;
   border-radius: 12px;
 `;
 
-export const ToolTitle = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-
-  span {
-    font-size: 18px;
-    font-weight: 700;
-    line-height: 27px;
-    color: var(--gray-gray-90-01);
-  }
-
-  img {
-    width: 24px;
-    height: 24px;
-  }
+export const ToolTitle = styled.span`
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 27px;
+  color: var(--gray-gray-90-01);
 `;
 
 export const AIToolWrap = styled.div`
@@ -50,70 +39,51 @@ export const AIToolWrap = styled.div`
   gap: 12px;
 
   div {
-    min-width: 75px;
+    min-width: 76px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
+    gap: 8px;
   }
 
   img {
-    width: 40px;
-    height: 40px;
+    width: 56px;
+    height: 56px;
   }
 
   span {
-    font-size: 16px;
+    font-size: 13px;
     font-weight: 500;
-    line-height: 24px;
+    line-height: 19.5px;
     color: var(--gray-gray-80-02);
-    white-space: nowrap;
   }
 `;
 
 export const AIImageWrap = styled.div`
   width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+`;
+
+export const ImageItem = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-
-  .swiper {
-    width: 100%;
-  }
-
-  .swiper-pagination {
-    display: none;
-  }
-
-  .swiper-slide {
-    width: 120px !important;
-    margin-right: 8px !important;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-
-  //div {
-  //  min-width: 80px;
-  //  display: flex;
-  //  flex-direction: column;
-  //  align-items: center;
-  //  justify-content: space-between;
-  //}
+  border: 1px solid var(--gray-gray-30);
+  border-radius: 8px;
 
   img {
-    width: 120px;
-    height: 80px;
-    border-radius: 8px;
+    width: 100%;
+    border-radius: 8px 8px 0 0;
   }
 
   span {
-    font-size: 16px;
+    font-size: 13px;
     font-weight: 500;
-    line-height: 24px;
-    color: var(--gray-gray-80-02);
-    white-space: nowrap;
+    line-height: 20px;
+    padding: 4px 0;
   }
 `;
