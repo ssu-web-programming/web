@@ -2,7 +2,12 @@ import { useEffect, useRef } from 'react';
 import { useConfirm } from 'components/Confirm';
 import useErrorHandle from 'components/hooks/useErrorHandle';
 import { FileUploader } from 'components/nova/FileUploader';
-import { compressImage, isPixelLimitExceeded, SUPPORT_IMAGE_TYPE } from 'constants/fileTypes';
+import {
+  compressImage,
+  isPixelLimitExceeded,
+  SUPPORT_DOCUMENT_TYPE,
+  SUPPORT_IMAGE_TYPE
+} from 'constants/fileTypes';
 import { ReactComponent as UploadDarkIcon } from 'img/dark/ico_upload_img_plus.svg';
 import CreditIcon from 'img/light/ico_credit_gray.svg';
 import { ReactComponent as UploadFileLightIcon } from 'img/light/nova/translation/file_upload.svg';
@@ -114,8 +119,8 @@ export default function TranslationFileUploader({
   curTab,
   creditCount = 10
 }: ImageUploaderProps) {
-  // const { t } = useTranslation();
-  // const confirm = useConfirm();
+  const { t } = useTranslation();
+  const confirm = useConfirm();
   const inputImgFileRef = useRef<HTMLInputElement | null>(null);
   const dispatch = useAppDispatch();
   const errorHandle = useErrorHandle();
@@ -165,18 +170,18 @@ export default function TranslationFileUploader({
         if (await isPixelLimitExceeded(selectedFile, curTab)) {
           console.log('alert!!');
 
-          // await confirm({
-          //   title: '',
-          //   msg: `${t('Nova.Confirm.OverMaxFilePixel')}\n\n${t(
-          //     `Nova.${NOVA_TAB_TYPE.removeBG}.AllowImageSize`
-          //   )}`,
-          //   onOk: {
-          //     text: t('OK'),
-          //     callback: () => {
-          //       return;
-          //     }
-          //   }
-          // });
+          await confirm({
+            title: '',
+            msg: `${t('Nova.Confirm.OverMaxFilePixel')}\n\n${t(
+              `Nova.${NOVA_TAB_TYPE.removeBG}.AllowImageSize`
+            )}`,
+            onOk: {
+              text: t('OK'),
+              callback: () => {
+                return;
+              }
+            }
+          });
         }
       } else {
         fileData = await compressImage(selectedFile, curTab);

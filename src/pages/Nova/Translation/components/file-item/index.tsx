@@ -3,14 +3,14 @@ import { ReactComponent as DocxIcon } from 'img/light/nova/translation/docx_icon
 import * as S from './style';
 
 interface Props {
-  file: File;
+  file?: File;
 }
 
 export default function FileItem({ file }: Props) {
   return (
     <S.Wrapper>
       <DocxIcon />
-      <S.FileName>{file.name}</S.FileName>
+      <S.FileName>{file?.name || '그냥 보여줘라'}</S.FileName>
     </S.Wrapper>
   );
 }

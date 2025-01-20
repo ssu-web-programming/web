@@ -359,6 +359,7 @@ export const FileUploader = (props: FileUploaderProps) => {
             target={target}
             accept={getAccept(accept)}
             handleOnChange={(files) => {
+              console.log('files', files);
               loadLocalFile(files);
             }}
             ref={inputRef}>
@@ -381,6 +382,7 @@ export const FileUploader = (props: FileUploaderProps) => {
 };
 
 export const getAccept = (infos: SupportFileType[] | File) => {
+  console.log('infos', infos);
   // web = extensioin, others = mimeType
   const platform = getPlatform();
   if (infos instanceof File) {
