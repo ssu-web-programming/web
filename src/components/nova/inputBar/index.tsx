@@ -402,19 +402,7 @@ export default function InputBar(props: InputBarProps) {
         </FileListViewer>
       )}
       <InputTxtWrapper hasValue={!!contents}>
-        <UploadBtn>
-          {UPLOAD_BTN_LIST.map((btn) => (
-            <FileUploader
-              key={btn.target}
-              target={btn.target}
-              accept={btn.accept}
-              inputRef={btn.ref}
-              tooltipStyle={{ padding: '12px 16px' }}
-              onClearPastedImages={handleClearPastedImages}>
-              {btn.children}
-            </FileUploader>
-          ))}
-        </UploadBtn>
+        <UploadBtn></UploadBtn>
         <div>
           <TextArea
             placeholder={t(`Nova.ActionWindow.Placeholder`)!}
@@ -474,6 +462,18 @@ export default function InputBar(props: InputBarProps) {
             `}
           />
         </div>
+
+        {UPLOAD_BTN_LIST.map((btn) => (
+          <FileUploader
+            key={btn.target}
+            target={btn.target}
+            accept={btn.accept}
+            inputRef={btn.ref}
+            tooltipStyle={{ padding: '12px 16px' }}
+            onClearPastedImages={handleClearPastedImages}>
+            {btn.children}
+          </FileUploader>
+        ))}
       </InputTxtWrapper>
     </InputBarBase>
   );

@@ -5,45 +5,51 @@ import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import styled from 'styled-components';
 
-import { ReactComponent as ArrowIcon } from '../img/light/ico_arrow_down_normal.svg';
-import CheckIcon from '../img/light/ico_check_purple.svg';
+import { ReactComponent as ArrowIcon } from '../../img/light/ico_arrow_down_normal.svg';
 
 const Form = styled(FormControl)`
-  min-width: 136px;
-
   .MuiInputBase-root {
-    fieldset {
-      padding: 19px 8px;
-      top: -8px;
+    svg {
+      width: 24px;
+      height: 24px;
+      top: unset;
     }
+  }
+
+  .MuiOutlinedInput-notchedOutline {
+    border: none;
   }
 
   .MuiInputBase-root.Mui-focused .MuiOutlinedInput-notchedOutline {
-    border: 1px solid #c9cdd2 !important;
+    border: none;
   }
 
   .MuiSelect-select {
-    padding-top: 12px;
-    padding-right: 36px !important;
-    padding-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 4.5px 4px 10px;
+    border: 1px solid var(--gray-gray-30);
+    border-radius: 8px;
 
     div {
-      font-size: 16px;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 21px;
+      color: var(--gray-gray-90-01);
     }
-  }
-
-  .MuiSelect-icon {
-    top: calc(50% - 12px);
-    right: 16px;
   }
 `;
 
 const StyledMenuItem = styled(MenuItem)`
-  min-width: 160px;
-
   &.MuiMenuItem-root {
     display: flex;
     justify-content: space-between;
+  }
+
+  &.Mui-selected {
+    background-color: var(--ai-purple-97-list-over) !important;
+    border-radius: 8px;
   }
 `;
 
@@ -51,11 +57,9 @@ const ItemWrap = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 14px;
-  color: #26282b;
 `;
 
-export type Item = { name: string; icon?: string };
+export type Item = { icon?: string; title: string; desc?: string; credit?: number };
 
 interface SelectBoxProps {
   menuItem: Item[];
@@ -71,41 +75,46 @@ export default function SelectBox(props: SelectBoxProps) {
   };
 
   return (
-    <Box sx={{ minWidth: 120 }}>
+    <Box sx={{ minWidth: 90 }}>
       <Form fullWidth>
         <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
           value={selectedItem}
           onChange={handleChange}
           IconComponent={ArrowIcon}
           MenuProps={{
+            PaperProps: {
+              sx: {
+                mt: '-8.5px',
+                ml: '-4px',
+                boxShadow: '0px 2px 8px 0px rgba(0, 0, 0, 0.1)',
+                border: '1px solid var(--gray-gray-40)'
+              }
+            },
             anchorOrigin: {
               vertical: 'top',
               horizontal: 'left'
             },
             transformOrigin: {
-              vertical: 'top',
+              vertical: 'bottom',
               horizontal: 'left'
             },
-            PaperProps: {
+            MenuListProps: {
               sx: {
-                borderRadius: '8px'
+                p: 0.5
               }
             }
           }}
           renderValue={(value) => {
-            const selectedItem = menuItem.find((item) => item.name === value);
-            return <div>{selectedItem?.name}</div>;
+            const selectedItem = menuItem.find((item) => item.title === value);
+            return <div>{selectedItem?.title}</div>;
           }}>
-          {menuItem.map((item) => {
+          {menuItem.map((item, index) => {
             return (
-              <StyledMenuItem value={item.name} key={item.name}>
+              <StyledMenuItem value={item.title} key={index}>
                 <ItemWrap>
                   {item.icon && <img src={item.icon} alt="icon" />}
-                  {item.name}
+                  {item.title}
                 </ItemWrap>
-                {selectedItem === item.name && <img src={CheckIcon} alt="check" />}
               </StyledMenuItem>
             );
           })}
