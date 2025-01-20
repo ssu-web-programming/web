@@ -6,6 +6,7 @@ import { compressImage, isPixelLimitExceeded, SUPPORT_IMAGE_TYPE } from 'constan
 import { ReactComponent as UploadDarkIcon } from 'img/dark/ico_upload_img_plus.svg';
 import CreditIcon from 'img/light/ico_credit_gray.svg';
 import { ReactComponent as UploadLightIcon } from 'img/light/ico_upload_img_plus.svg';
+import { ReactComponent as UploadFileLightIcon } from 'img/light/nova/translation/file_upload.svg';
 import { useTranslation } from 'react-i18next';
 import { selectPageData, setPageData, setPageStatus } from 'store/slices/nova/pageStatusSlice';
 import { NOVA_TAB_TYPE } from 'store/slices/tabSlice';
@@ -16,6 +17,8 @@ import { useAppDispatch, useAppSelector } from 'store/store';
 import styled from 'styled-components';
 import { convertDriveFileToFile } from 'util/files';
 
+import UploadComplete from '../upload-complete';
+
 const Wrap = styled.div`
   display: flex;
   flex-direction: column;
@@ -24,7 +27,6 @@ const Wrap = styled.div`
   position: relative;
   height: 206px;
   padding: 0 16px;
-  border: 1px dashed ${({ theme }) => theme.color.borderGray01};
   border-radius: 8px;
   background-color: ${({ theme }) => theme.color.subBgGray01};
 `;
@@ -96,7 +98,7 @@ const Guide = styled.div`
   font-weight: 400;
   line-height: 21px;
   color: #9ea4aa;
-  white-space: break-spaces;
+  white-space: pre-wrap;
   text-align: center;
 `;
 
@@ -104,12 +106,14 @@ interface ImageUploaderProps {
   guideMsg: string;
   handleUploadComplete: () => void;
   curTab: NOVA_TAB_TYPE;
+  creditCount?: number;
 }
 
 export default function TranslationFileUploader({
   guideMsg,
   handleUploadComplete,
-  curTab
+  curTab,
+  creditCount = 10
 }: ImageUploaderProps) {
   const { t } = useTranslation();
   const confirm = useConfirm();
@@ -128,6 +132,10 @@ export default function TranslationFileUploader({
     const extension = file?.name?.split('.').pop()?.toLowerCase();
     return extension === 'mp4' || extension === 'gif' || extension === 'bmp';
   };
+
+  console.log('currentFile', currentFile);
+  console.log('driveFiles', driveFiles);
+  console.log('localFiles', localFiles);
 
   const getSelectedFile = async () => {
     if (localFiles[0]) return localFiles[0];
@@ -196,33 +204,37 @@ export default function TranslationFileUploader({
 
   return (
     <Wrap>
-      <FileUploader
-        key={target}
-        target={target}
-        accept={SUPPORT_IMAGE_TYPE}
-        inputRef={inputImgFileRef}
-        tooltipStyle={{
-          minWidth: '165px',
-          top: '12px',
-          left: 'unset',
-          right: 'unset',
-          bottom: 'unset',
-          padding: '12px 16px'
-        }}>
-        <ImageBox>
-          <Icon disable={isAgreed === undefined}>
-            {isLightMode ? <UploadLightIcon /> : <UploadDarkIcon />}
-            <span>파일 업로드</span>
-          </Icon>
-          <Credit>
-            <span>10</span>
-            <div className="img">
-              <img src={CreditIcon} alt="credit" />
-            </div>
-          </Credit>
-          <Guide>{guideMsg}</Guide>
-        </ImageBox>
-      </FileUploader>
+      {currentFile ? (
+        <UploadComplete file={currentFile} />
+      ) : (
+        <FileUploader
+          key={target}
+          target={target}
+          accept={SUPPORT_IMAGE_TYPE}
+          inputRef={inputImgFileRef}
+          tooltipStyle={{
+            minWidth: '165px',
+            top: '12px',
+            left: 'unset',
+            right: 'unset',
+            bottom: 'unset',
+            padding: '12px 16px'
+          }}>
+          <ImageBox>
+            <Icon disable={isAgreed === undefined}>
+              {isLightMode ? <UploadFileLightIcon /> : <UploadDarkIcon />}
+              <span>파일 업로드</span>
+            </Icon>
+            <Credit>
+              <span>{creditCount}</span>
+              <div className="img">
+                <img src={CreditIcon} alt="credit" />
+              </div>
+            </Credit>
+            <Guide>{guideMsg}</Guide>
+          </ImageBox>
+        </FileUploader>
+      )}
     </Wrap>
   );
 }

@@ -141,6 +141,11 @@ const TranslationButton = styled.div<{ isActive: boolean }>`
 const FileUploaderWrapper = styled.div`
   width: 100%;
   height: 322px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top: 1px solid #e8ebed;
+  border-bottom: 1px solid #e8ebed;
 `;
 
 export {

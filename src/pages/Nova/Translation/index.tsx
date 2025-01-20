@@ -3,6 +3,7 @@ import NovaHeader from 'components/nova/Header';
 import { ReactComponent as ArrowIcon } from 'img/light/nova/translation/arrow_down.svg';
 import { ReactComponent as DeepL } from 'img/light/nova/translation/deepl_logo.svg';
 import { ReactComponent as Switch } from 'img/light/nova/translation/switch.svg';
+import { useTranslation } from 'react-i18next';
 import { NOVA_TAB_TYPE } from 'store/slices/tabSlice';
 import { css } from 'styled-components';
 
@@ -13,6 +14,7 @@ import TranslationFileUploader from './components/translation-file-uploader';
 import * as S from './style';
 
 export default function Translation() {
+  const { t } = useTranslation();
   const [type, setType] = useState<string>('text');
   const [translateInputValue, setTranslateInputValue] = useState('');
 
@@ -65,7 +67,8 @@ export default function Translation() {
             <S.FileUploaderWrapper>
               <DragAndDrop onDrop={() => console.log('여기!')}>
                 <TranslationFileUploader
-                  guideMsg="가이드를 합시다!"
+                  guideMsg={t('Nova.Translate.UploadGuide')}
+                  creditCount={20}
                   curTab={NOVA_TAB_TYPE.convert2DTo3D}
                   handleUploadComplete={() => console.log('123')}
                 />
@@ -75,7 +78,7 @@ export default function Translation() {
 
           <S.TextAreaBottom>
             <DeepL />
-            <span>{translateInputValue.length}자/40,000자</span>
+            {type === 'text' && <span>{translateInputValue.length}자/40,000자</span>}
           </S.TextAreaBottom>
         </S.TextAreaWrapper>
 
