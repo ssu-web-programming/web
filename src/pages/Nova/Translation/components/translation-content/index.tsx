@@ -3,6 +3,7 @@ import NovaHeader from 'components/nova/Header';
 
 import { ComponentType, useTranslationContext } from '../../provider/translation-provider';
 import BgContainer from '../bg-container';
+import LanguageSearch from '../language-search';
 import TranslationFileResult from '../translation-file-result';
 import TranslationIntro from '../translation-intro';
 import TranslationTextResult from '../translation-text-result';
@@ -17,7 +18,8 @@ export default function TranslationContent() {
   const componentMap: Record<ComponentType, ReactNode> = {
     INTRO: <TranslationIntro />,
     TEXT_RESULT: <TranslationTextResult />,
-    FILE_RESULT: <TranslationFileResult />
+    FILE_RESULT: <TranslationFileResult />,
+    LANG_SEARCH: <LanguageSearch />
   };
 
   return (

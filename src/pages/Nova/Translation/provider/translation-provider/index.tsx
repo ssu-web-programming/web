@@ -1,6 +1,6 @@
 import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState } from 'react';
 
-export type ComponentType = 'INTRO' | 'TEXT_RESULT' | 'FILE_RESULT';
+export type ComponentType = 'INTRO' | 'TEXT_RESULT' | 'FILE_RESULT' | 'LANG_SEARCH';
 
 interface SharedTranslation {
   componentType: ComponentType;

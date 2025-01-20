@@ -84,6 +84,7 @@ const TextArea = styled.textarea`
 
 const TextInputWrapper = styled.div`
   position: relative;
+  height: 322px;
 `;
 
 const CloseIconWrapper = styled.div`

@@ -33,7 +33,7 @@ export default function TranslationIntro() {
   const handleTranslate = () => {
     setSharedTranslationInfo((prevSharedTranslationInfo) => ({
       ...prevSharedTranslationInfo,
-      componentType: 'FILE_RESULT'
+      componentType: 'LANG_SEARCH'
     }));
   };
 
