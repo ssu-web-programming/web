@@ -5,7 +5,6 @@ import { FileUploader } from 'components/nova/FileUploader';
 import { compressImage, isPixelLimitExceeded, SUPPORT_IMAGE_TYPE } from 'constants/fileTypes';
 import { ReactComponent as UploadDarkIcon } from 'img/dark/ico_upload_img_plus.svg';
 import CreditIcon from 'img/light/ico_credit_gray.svg';
-import { ReactComponent as UploadLightIcon } from 'img/light/ico_upload_img_plus.svg';
 import { ReactComponent as UploadFileLightIcon } from 'img/light/nova/translation/file_upload.svg';
 import { useTranslation } from 'react-i18next';
 import { selectPageData, setPageData, setPageStatus } from 'store/slices/nova/pageStatusSlice';
@@ -17,7 +16,7 @@ import { useAppDispatch, useAppSelector } from 'store/store';
 import styled from 'styled-components';
 import { convertDriveFileToFile } from 'util/files';
 
-import UploadComplete from '../upload-complete';
+import FileItem from '../file-item';
 
 const Wrap = styled.div`
   display: flex;
@@ -205,7 +204,7 @@ export default function TranslationFileUploader({
   return (
     <Wrap>
       {currentFile ? (
-        <UploadComplete file={currentFile} />
+        <FileItem file={currentFile} />
       ) : (
         <FileUploader
           key={target}

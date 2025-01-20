@@ -82,6 +82,17 @@ const TextArea = styled.textarea`
   border-bottom: 1px solid #e8ebed;
 `;
 
+const TextInputWrapper = styled.div`
+  position: relative;
+`;
+
+const CloseIconWrapper = styled.div`
+  position: absolute;
+  top: 12px;
+  right: 8px;
+  cursor: pointer;
+`;
+
 const TextAreaBottom = styled.div`
   display: flex;
   width: 100%;
@@ -149,6 +160,7 @@ const FileUploaderWrapper = styled.div`
 `;
 
 export {
+  CloseIconWrapper,
   FileUploaderWrapper,
   StyledTransFile,
   StyledTransTxt,
@@ -156,6 +168,7 @@ export {
   TextAreaBottom,
   TextAreaHeader,
   TextAreaWrapper,
+  TextInputWrapper,
   ToggleWrapper,
   TranslationButton,
   TranslationWrapper
