@@ -38,6 +38,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   :root {
+    --ai-purple-30: #3e0f8d;
     --ai-purple-40: #602bc1;
     --ai-purple-45: #511bb2;
     --ai-purple-50-main: #6f3ad0;

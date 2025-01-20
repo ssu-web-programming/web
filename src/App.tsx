@@ -5,6 +5,7 @@ import { Route, Routes } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 
 import Confirm from './components/Confirm';
+import { useChangeBackground } from './components/hooks/nova/useChangeBackground';
 import Spinner from './components/Spinner';
 import Toast from './components/toast/Toast';
 import Alli from './pages/Alli/Alli';
@@ -31,6 +32,7 @@ import { ClientType, getPlatform, useInitBridgeListener } from './util/bridge';
 function App() {
   const initBridgeListener = useInitBridgeListener();
   const initApp = useInitApp();
+  const { goPromptPage } = useChangeBackground();
   const dispatch = useAppDispatch();
   const { curTheme } = useAppSelector(themeInfoSelector);
 
