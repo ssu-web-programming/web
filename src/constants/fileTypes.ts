@@ -8,6 +8,12 @@ export type SupportFileType = {
   extensions: string;
 };
 
+export const ALLOWED_MIME_TYPES = [
+  'application/pdf',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // docx
+  'application/vnd.openxmlformats-officedocument.presentationml.presentation' // pptx
+];
+
 export const SUPPORT_DOCUMENT_TYPE: SupportFileType[] = [
   {
     mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',

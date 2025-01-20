@@ -119,11 +119,11 @@ export default function TranslationFileUploader({
   curTab,
   creditCount = 10
 }: ImageUploaderProps) {
-  const { t } = useTranslation();
-  const confirm = useConfirm();
+  // const { t } = useTranslation();
+  // const confirm = useConfirm();
   const inputImgFileRef = useRef<HTMLInputElement | null>(null);
-  const dispatch = useAppDispatch();
-  const errorHandle = useErrorHandle();
+  // const dispatch = useAppDispatch();
+  // const errorHandle = useErrorHandle();
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
   const localFiles = useAppSelector(getLocalFiles);
@@ -132,88 +132,91 @@ export default function TranslationFileUploader({
 
   console.log('currentFile', currentFile);
   console.log('localFiles', localFiles);
+  console.log('driveFiles', driveFiles);
 
   const target = 'nova-image';
 
-  const isSpecificFormat = (file: File) => {
-    console.log('file', file);
-    const extension = file?.name?.split('.').pop()?.toLowerCase();
-    return extension === 'mp4' || extension === 'gif' || extension === 'bmp';
-  };
+  // const isSpecificFormat = (file: File) => {
+  //   console.log('file', file);
+  //   const extension = file?.name?.split('.').pop()?.toLowerCase();
+  //   return extension === 'mp4' || extension === 'gif' || extension === 'bmp';
+  // };
 
-  const getSelectedFile = async () => {
-    if (localFiles[0]) return localFiles[0];
-    if (driveFiles[0]) {
-      try {
-        return await convertDriveFileToFile(driveFiles[0]);
-      } catch (err) {
-        errorHandle(err);
-        return null;
-      }
-    }
-    return null;
-  };
+  // const getSelectedFile = async () => {
+  //   if (localFiles[0]) return localFiles[0];
+  //   if (driveFiles[0]) {
+  //     try {
+  //       return await convertDriveFileToFile(driveFiles[0]);
+  //     } catch (err) {
+  //       errorHandle(err);
+  //       return null;
+  //     }
+  //   }
+  //   return null;
+  // };
 
-  const handleFileProcessing = async () => {
-    dispatch(setPageStatus({ tab: curTab, status: 'progress' }));
+  // const handleFileProcessing = async () => {
+  //   console.log('여기 돌아여?');
+  //   dispatch(setPageStatus({ tab: curTab, status: 'progress' }));
 
-    const selectedFile = await getSelectedFile();
-    if (!selectedFile) {
-      dispatch(setPageStatus({ tab: curTab, status: 'home' }));
-      return;
-    }
+  //   const selectedFile = await getSelectedFile();
+  //   if (!selectedFile) {
+  //     dispatch(setPageStatus({ tab: curTab, status: 'home' }));
+  //     return;
+  //   }
 
-    try {
-      let fileData: File = selectedFile;
+  //   try {
+  //     let fileData: File = selectedFile;
 
-      if (isSpecificFormat(selectedFile)) {
-        if (await isPixelLimitExceeded(selectedFile, curTab)) {
-          console.log('alert!!');
+  //     if (isSpecificFormat(selectedFile)) {
+  //       if (await isPixelLimitExceeded(selectedFile, curTab)) {
+  //         console.log('alert!!');
 
-          await confirm({
-            title: '',
-            msg: `${t('Nova.Confirm.OverMaxFilePixel')}\n\n${t(
-              `Nova.${NOVA_TAB_TYPE.removeBG}.AllowImageSize`
-            )}`,
-            onOk: {
-              text: t('OK'),
-              callback: () => {
-                return;
-              }
-            }
-          });
-        }
-      } else {
-        fileData = await compressImage(selectedFile, curTab);
-      }
+  //         await confirm({
+  //           title: '',
+  //           msg: `${t('Nova.Confirm.OverMaxFilePixel')}\n\n${t(
+  //             `Nova.${NOVA_TAB_TYPE.removeBG}.AllowImageSize`
+  //           )}`,
+  //           onOk: {
+  //             text: t('OK'),
+  //             callback: () => {
+  //               return;
+  //             }
+  //           }
+  //         });
+  //       }
+  //     } else {
+  //       fileData = await compressImage(selectedFile, curTab);
+  //     }
 
-      dispatch(
-        setPageData({
-          tab: curTab,
-          data: fileData
-        })
-      );
-      dispatch(setPageStatus({ tab: curTab, status: 'home' }));
-    } catch (err) {
-      dispatch(setPageStatus({ tab: curTab, status: 'home' }));
-      errorHandle(err);
-    }
-  };
+  //     dispatch(
+  //       setPageData({
+  //         tab: curTab,
+  //         data: fileData
+  //       })
+  //     );
+  //     dispatch(setPageStatus({ tab: curTab, status: 'home' }));
+  //   } catch (err) {
+  //     dispatch(setPageStatus({ tab: curTab, status: 'home' }));
+  //     errorHandle(err);
+  //   }
+  // };
 
-  useEffect(() => {
-    if (currentFile) {
-      handleUploadComplete();
-    } else {
-      handleFileProcessing();
-    }
-  }, [localFiles, driveFiles, currentFile, curTab]);
+  // useEffect(() => {
+  //   if (currentFile) {
+  //     handleUploadComplete();
+  //   } else {
+  //     handleFileProcessing();
+  //   }
+  // }, [localFiles, driveFiles, currentFile, curTab]);
 
   return (
     <Wrap>
-      {currentFile ? (
-        <FileItem file={currentFile} />
+      {localFiles.length > 0 ? (
+        <FileItem file={localFiles[0]} />
       ) : (
         <FileUploader
+          type="file"
           key={target}
           target={target}
           accept={SUPPORT_IMAGE_TYPE}
