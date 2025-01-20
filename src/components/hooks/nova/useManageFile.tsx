@@ -89,6 +89,8 @@ export function useManageFile({ onFinishCallback, onClearPastedImages }: Props =
 
     const support = supportedExtensions.filter((ext) => ext !== '.jpeg').join(', ');
     if (invalidFiles.length > 0) {
+      console.log('여기가 울리나?');
+
       await confirm({
         title: '',
         msg:

@@ -2,6 +2,8 @@ import { ReactNode } from 'react';
 import NovaHeader from 'components/nova/Header';
 
 import { ComponentType, useTranslationContext } from '../../provider/translation-provider';
+import BgContainer from '../bg-container';
+import TranslationFileResult from '../translation-file-result';
 import TranslationIntro from '../translation-intro';
 import TranslationTextResult from '../translation-text-result';
 
@@ -15,13 +17,13 @@ export default function TranslationContent() {
   const componentMap: Record<ComponentType, ReactNode> = {
     INTRO: <TranslationIntro />,
     TEXT_RESULT: <TranslationTextResult />,
-    FILE_RESULT: null
+    FILE_RESULT: <TranslationFileResult />
   };
 
   return (
     <S.TranslationWrapper>
       <NovaHeader />
-      {componentMap[componentType]}
+      <BgContainer>{componentMap[componentType]}</BgContainer>
     </S.TranslationWrapper>
   );
 }

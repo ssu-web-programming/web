@@ -7,14 +7,14 @@ interface Props {
   translatedLang: string;
   isCopyAction?: boolean;
   isInsertDocAction?: boolean;
-  value: string;
+  translatedValue: string;
 }
 
 export default function TranslationResultAction({
   translatedLang = '한국어',
   isCopyAction = true,
   isInsertDocAction = false,
-  value
+  translatedValue
 }: Props) {
   return (
     <S.Wrapper>
@@ -26,7 +26,7 @@ export default function TranslationResultAction({
         </S.IconWrapper>
       </S.Header>
 
-      <S.TextArea value={value} />
+      <S.TextArea value={translatedValue} readOnly />
     </S.Wrapper>
   );
 }

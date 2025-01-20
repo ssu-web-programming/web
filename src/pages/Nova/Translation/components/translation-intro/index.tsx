@@ -8,7 +8,6 @@ import { NOVA_TAB_TYPE } from 'store/slices/tabSlice';
 import { css } from 'styled-components';
 
 import { useTranslationContext } from '../../provider/translation-provider';
-import BgContainer from '../bg-container';
 import DragAndDrop from '../drag-and-drop';
 import Toggle, { ToggleOption } from '../toggle';
 import TranslationFileUploader from '../translation-file-uploader';
@@ -34,12 +33,12 @@ export default function TranslationIntro() {
   const handleTranslate = () => {
     setSharedTranslationInfo((prevSharedTranslationInfo) => ({
       ...prevSharedTranslationInfo,
-      componentType: 'TEXT_RESULT'
+      componentType: 'FILE_RESULT'
     }));
   };
 
   return (
-    <BgContainer>
+    <>
       <S.ToggleWrapper>
         <Toggle
           options={options}
@@ -99,6 +98,6 @@ export default function TranslationIntro() {
       <S.TranslationButton isActive={translateInputValue.length > 0} onClick={handleTranslate}>
         <span>번역하기</span>
       </S.TranslationButton>
-    </BgContainer>
+    </>
   );
 }

@@ -114,8 +114,8 @@ export default function TranslationFileUploader({
   curTab,
   creditCount = 10
 }: ImageUploaderProps) {
-  const { t } = useTranslation();
-  const confirm = useConfirm();
+  // const { t } = useTranslation();
+  // const confirm = useConfirm();
   const inputImgFileRef = useRef<HTMLInputElement | null>(null);
   const dispatch = useAppDispatch();
   const errorHandle = useErrorHandle();
@@ -125,16 +125,16 @@ export default function TranslationFileUploader({
   const driveFiles = useAppSelector(getDriveFiles);
   const currentFile = useAppSelector(selectPageData(curTab));
 
+  console.log('currentFile', currentFile);
+  console.log('localFiles', localFiles);
+
   const target = 'nova-image';
 
   const isSpecificFormat = (file: File) => {
+    console.log('file', file);
     const extension = file?.name?.split('.').pop()?.toLowerCase();
     return extension === 'mp4' || extension === 'gif' || extension === 'bmp';
   };
-
-  console.log('currentFile', currentFile);
-  console.log('driveFiles', driveFiles);
-  console.log('localFiles', localFiles);
 
   const getSelectedFile = async () => {
     if (localFiles[0]) return localFiles[0];
@@ -163,18 +163,20 @@ export default function TranslationFileUploader({
 
       if (isSpecificFormat(selectedFile)) {
         if (await isPixelLimitExceeded(selectedFile, curTab)) {
-          await confirm({
-            title: '',
-            msg: `${t('Nova.Confirm.OverMaxFilePixel')}\n\n${t(
-              `Nova.${NOVA_TAB_TYPE.removeBG}.AllowImageSize`
-            )}`,
-            onOk: {
-              text: t('OK'),
-              callback: () => {
-                return;
-              }
-            }
-          });
+          console.log('alert!!');
+
+          // await confirm({
+          //   title: '',
+          //   msg: `${t('Nova.Confirm.OverMaxFilePixel')}\n\n${t(
+          //     `Nova.${NOVA_TAB_TYPE.removeBG}.AllowImageSize`
+          //   )}`,
+          //   onOk: {
+          //     text: t('OK'),
+          //     callback: () => {
+          //       return;
+          //     }
+          //   }
+          // });
         }
       } else {
         fileData = await compressImage(selectedFile, curTab);
