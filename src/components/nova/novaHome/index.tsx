@@ -14,8 +14,8 @@ import PerplexityLightIcon from '../../../img/light/nova/perplexity/ico_perplexi
 import TranslationLightIcon from '../../../img/light/nova/translation/ico_translation.svg';
 import VoiceDictationLightIcon from '../../../img/light/nova/voiceDictation/ico_voice_dictation.svg';
 import { novaHistorySelector } from '../../../store/slices/nova/novaHistorySlice';
-import { selectTabSlice } from '../../../store/slices/tabSlice';
-import { useAppSelector } from '../../../store/store';
+import { NOVA_TAB_TYPE, selectNovaTab, selectTabSlice } from '../../../store/slices/tabSlice';
+import { useAppDispatch, useAppSelector } from '../../../store/store';
 import Banner from '../banner';
 import { FileUploading } from '../FileUploading';
 import InputBar, { InputBarSubmitParam } from '../inputBar';
@@ -23,20 +23,36 @@ import InputBar, { InputBarSubmitParam } from '../inputBar';
 import * as S from './style';
 
 const AI_TOOLS = [
-  { icon: PerplexityLightIcon, name: '웹 검색', alt: 'perplexity' },
-  { icon: TranslationLightIcon, name: '번역', alt: 'translation' },
-  { icon: VoiceDictationLightIcon, name: '받아쓰기', alt: 'voice dictation' },
-  { icon: AIVideoLightIcon, name: '비디오', alt: 'ai video' }
+  { icon: PerplexityLightIcon, name: '웹 검색', alt: 'perplexity', tab: NOVA_TAB_TYPE.perplexity },
+  { icon: TranslationLightIcon, name: '번역', alt: 'translation', tab: NOVA_TAB_TYPE.translation },
+  {
+    icon: VoiceDictationLightIcon,
+    name: '받아쓰기',
+    alt: 'voice dictation',
+    tab: NOVA_TAB_TYPE.voiceDictation
+  },
+  { icon: AIVideoLightIcon, name: '비디오', alt: 'ai video', tab: NOVA_TAB_TYPE.aiVideo }
 ];
 
 const AI_IMAGES = [
-  { icon: RemoveBGIcon, name: '배경 제거', alt: 'translation' },
-  { icon: improveImgIcon, name: '해상도 향상', alt: 'voice dictation' },
-  { icon: ChangeBGIcon, name: '배경 변경', alt: 'remove background' },
-  { icon: RemakeImgIcon, name: '이미지 리메이크', alt: 'ai video' },
-  { icon: ExpandImgIcon, name: '이미지 확장', alt: 'ai video' },
-  { icon: ChangeStyleIcon, name: '스타일 변환', alt: 'ai video' },
-  { icon: Convert2DTo3DIcon, name: '2D -> 3D', alt: 'ai video' }
+  { icon: RemoveBGIcon, name: 'AIChat(Test)', alt: 'test', tab: NOVA_TAB_TYPE.aiChat },
+  { icon: RemoveBGIcon, name: '배경 제거', alt: 'removeBG', tab: NOVA_TAB_TYPE.removeBG },
+  { icon: improveImgIcon, name: '해상도 향상', alt: 'improveRes', tab: NOVA_TAB_TYPE.improvedRes },
+  { icon: ChangeBGIcon, name: '배경 변경', alt: 'changeBG', tab: NOVA_TAB_TYPE.changeBG },
+  { icon: RemakeImgIcon, name: '이미지 리메이크', alt: 'remakeImg', tab: NOVA_TAB_TYPE.remakeImg },
+  { icon: ExpandImgIcon, name: '이미지 확장', alt: 'expandImg', tab: NOVA_TAB_TYPE.expandImg },
+  {
+    icon: ChangeStyleIcon,
+    name: '스타일 변환',
+    alt: 'changeStyle',
+    tab: NOVA_TAB_TYPE.changeStyle
+  },
+  {
+    icon: Convert2DTo3DIcon,
+    name: '2D -> 3D',
+    alt: 'convert2DTo3D',
+    tab: NOVA_TAB_TYPE.convert2DTo3D
+  }
 ];
 
 interface NovaHomeProps {
@@ -48,6 +64,7 @@ interface NovaHomeProps {
 
 const NovaHome = (props: NovaHomeProps) => {
   const location = useLocation();
+  const dispatch = useAppDispatch();
 
   const novaHistory = useAppSelector(novaHistorySelector);
   const { creating } = useAppSelector(selectTabSlice);
@@ -60,6 +77,10 @@ const NovaHome = (props: NovaHomeProps) => {
       setInputContents(inputText);
     }
   }, [location.state]);
+
+  const handleMovePage = (tab: NOVA_TAB_TYPE) => {
+    dispatch(selectNovaTab(tab));
+  };
 
   return (
     <>
@@ -80,7 +101,7 @@ const NovaHome = (props: NovaHomeProps) => {
           <S.ToolTitle>이미지</S.ToolTitle>
           <S.AIImageWrap>
             {AI_IMAGES.map((tool, index) => (
-              <S.ImageItem key={index}>
+              <S.ImageItem key={index} onClick={() => handleMovePage(tool.tab)}>
                 <img src={tool.icon} alt={tool.alt} />
                 <span>{tool.name}</span>
               </S.ImageItem>

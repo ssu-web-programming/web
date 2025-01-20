@@ -45,6 +45,7 @@ export const AIToolWrap = styled.div`
     align-items: center;
     justify-content: space-between;
     gap: 8px;
+    cursor: pointer;
   }
 
   img {
@@ -74,6 +75,7 @@ export const ImageItem = styled.div`
   justify-content: center;
   border: 1px solid var(--gray-gray-30);
   border-radius: 8px;
+  cursor: pointer;
 
   img {
     width: 100%;

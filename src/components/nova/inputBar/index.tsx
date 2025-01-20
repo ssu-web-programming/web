@@ -98,20 +98,12 @@ export default function InputBar(props: InputBarProps) {
 
   const [activatedUploadBtn, setActivatedUploadBtn] = useState(false);
 
-  useEffect(() => {
-    if (selectedNovaTab === NOVA_TAB_TYPE.home) {
-      setActivatedUploadBtn(true);
-    }
-  }, [selectedNovaTab]);
-
   const handleActiveUploadBtn = () => {
     setActivatedUploadBtn(true);
   };
 
   const handleInActiveUploadBtn = () => {
-    if (selectedNovaTab !== NOVA_TAB_TYPE.home) {
-      setActivatedUploadBtn(false);
-    }
+    setActivatedUploadBtn(false);
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -268,7 +260,7 @@ export default function InputBar(props: InputBarProps) {
         </S.FileListViewer>
       )}
       <S.InputTxtWrapper hasValue={!!contents}>
-        {(selectedNovaTab === NOVA_TAB_TYPE.home || props.novaHistory.length <= 0) && (
+        {selectedNovaTab === NOVA_TAB_TYPE.home && props.novaHistory.length <= 0 && (
           <S.PromptWrap>
             <Swiper
               slidesPerView={'auto'}
@@ -290,21 +282,32 @@ export default function InputBar(props: InputBarProps) {
           </S.PromptWrap>
         )}
         <InputWrap>
-          {chatMode === CHAT_MODES.GPT_4O && selectedNovaTab !== NOVA_TAB_TYPE.home && (
-            <S.DocButtonWrap>
-              {UPLOAD_BTN_LIST.map((btn) => (
-                <FileUploader
-                  key={btn.target}
-                  target={btn.target}
-                  accept={btn.accept}
-                  inputRef={btn.ref}
-                  tooltipStyle={{ padding: '12px 16px' }}
-                  onClearPastedImages={handleClearPastedImages}>
-                  {btn.children}
-                </FileUploader>
-              ))}
-            </S.DocButtonWrap>
-          )}
+          {chatMode === CHAT_MODES.GPT_4O &&
+            selectedNovaTab === NOVA_TAB_TYPE.aiChat &&
+            props.novaHistory.length > 0 && (
+              <S.DocButtonWrap>
+                {activatedUploadBtn ? (
+                  UPLOAD_BTN_LIST.map((btn) => (
+                    <FileUploader
+                      key={btn.target}
+                      target={btn.target}
+                      accept={btn.accept}
+                      inputRef={btn.ref}
+                      tooltipStyle={{ padding: '12px 16px' }}
+                      onClearPastedImages={handleClearPastedImages}>
+                      {btn.children}
+                    </FileUploader>
+                  ))
+                ) : (
+                  <Icon
+                    iconSrc={isLightMode ? PlusCircleLightIcon : PlusCircleDarkIcon}
+                    size={24}
+                    onClick={handleActiveUploadBtn}
+                  />
+                )}
+              </S.DocButtonWrap>
+            )}
+
           <S.TextAreaWrap>
             <S.TextArea
               placeholder={t(`Nova.ActionWindow.Placeholder`)!}
@@ -375,7 +378,7 @@ export default function InputBar(props: InputBarProps) {
           </S.TextAreaWrap>
         </InputWrap>
         <S.ButtonWrap>
-          {selectedNovaTab === NOVA_TAB_TYPE.home && (
+          {props.novaHistory.length <= 0 && (
             <SelectBox
               menuItem={CHAT_TYPE_LIST}
               selectedItem={chatMode}
@@ -384,28 +387,19 @@ export default function InputBar(props: InputBarProps) {
               }}
             />
           )}
-
-          {chatMode === CHAT_MODES.GPT_4O && selectedNovaTab === NOVA_TAB_TYPE.home && (
+          {chatMode === CHAT_MODES.GPT_4O && props.novaHistory.length <= 0 && (
             <S.DocButtonWrap>
-              {activatedUploadBtn ? (
-                UPLOAD_BTN_LIST.map((btn) => (
-                  <FileUploader
-                    key={btn.target}
-                    target={btn.target}
-                    accept={btn.accept}
-                    inputRef={btn.ref}
-                    tooltipStyle={{ padding: '12px 16px' }}
-                    onClearPastedImages={handleClearPastedImages}>
-                    {btn.children}
-                  </FileUploader>
-                ))
-              ) : (
-                <Icon
-                  iconSrc={isLightMode ? PlusCircleLightIcon : PlusCircleDarkIcon}
-                  size={24}
-                  onClick={handleActiveUploadBtn}
-                />
-              )}
+              {UPLOAD_BTN_LIST.map((btn) => (
+                <FileUploader
+                  key={btn.target}
+                  target={btn.target}
+                  accept={btn.accept}
+                  inputRef={btn.ref}
+                  tooltipStyle={{ padding: '12px 16px' }}
+                  onClearPastedImages={handleClearPastedImages}>
+                  {btn.children}
+                </FileUploader>
+              ))}
             </S.DocButtonWrap>
           )}
         </S.ButtonWrap>

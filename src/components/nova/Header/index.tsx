@@ -6,103 +6,41 @@ import { ReactComponent as MessagePlusLightIcon } from 'img/light/ico_message_pl
 import { ReactComponent as CloseLightIcon } from 'img/light/ico_nova_close.svg';
 import { Trans, useTranslation } from 'react-i18next';
 import { initFlagSelector } from 'store/slices/initFlagSlice';
-import styled, { css } from 'styled-components';
 
-import ArrowLeftDisableIcon from '../../img/common/ico_arrow_left_disabled.svg';
-import ArrowLeftDarkIcon from '../../img/dark/ico_arrow_left.svg';
-import { ReactComponent as IconConvertDark } from '../../img/dark/nova/tab/convert_Img.svg';
-import ArrowLeftLightIcon from '../../img/light/ico_arrow_left.svg';
-import ico_credit from '../../img/light/ico_credit_gray.svg';
-import { ReactComponent as CreditLineIcon } from '../../img/light/ico_credit_line.svg';
-import { ReactComponent as IconConvertLight } from '../../img/light/nova/tab/convert_Img.svg';
-import { appStateSelector } from '../../store/slices/appState';
-import { creditInfoSelector, InitialState } from '../../store/slices/creditInfo';
+import ArrowLeftDisableIcon from '../../../img/common/ico_arrow_left_disabled.svg';
+import ArrowLeftDarkIcon from '../../../img/dark/ico_arrow_left.svg';
+import { ReactComponent as IconConvertDark } from '../../../img/dark/nova/tab/convert_Img.svg';
+import ArrowLeftLightIcon from '../../../img/light/ico_arrow_left.svg';
+import ico_credit from '../../../img/light/ico_credit_gray.svg';
+import { ReactComponent as IconConvertLight } from '../../../img/light/nova/tab/convert_Img.svg';
+import { appStateSelector } from '../../../store/slices/appState';
+import { creditInfoSelector, InitialState } from '../../../store/slices/creditInfo';
 import {
   isShareModeSelector,
+  novaChatModeSelector,
   novaHistorySelector,
   setIsShareMode
-} from '../../store/slices/nova/novaHistorySlice';
+} from '../../../store/slices/nova/novaHistorySlice';
 import {
   selectPageStatus,
   setPageData,
   setPageResult,
   setPageStatus
-} from '../../store/slices/nova/pageStatusSlice';
-import { NOVA_TAB_TYPE, selectTabSlice } from '../../store/slices/tabSlice';
-import { setThemeInfo, themeInfoSelector, ThemeType } from '../../store/slices/theme';
-import { setDriveFiles, setLocalFiles } from '../../store/slices/uploadFiles';
-import { useAppDispatch, useAppSelector } from '../../store/store';
-import Bridge, { isDesktop } from '../../util/bridge';
-import IconButton from '../buttons/IconButton';
-import { useConfirm } from '../Confirm';
-import useClipboard from '../hooks/nova/use-clipboard';
-import { useChatNova } from '../hooks/useChatNova';
-import Header from '../layout/Header';
-import Tooltip from '../Tooltip';
+} from '../../../store/slices/nova/pageStatusSlice';
+import { NOVA_TAB_TYPE, selectTabSlice } from '../../../store/slices/tabSlice';
+import { setThemeInfo, themeInfoSelector, ThemeType } from '../../../store/slices/theme';
+import { setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
+import { useAppDispatch, useAppSelector } from '../../../store/store';
+import Bridge, { isDesktop } from '../../../util/bridge';
+import IconButton from '../../buttons/IconButton';
+import { useConfirm } from '../../Confirm';
+import useClipboard from '../../hooks/nova/use-clipboard';
+import { useChatNova } from '../../hooks/useChatNova';
+import Tooltip from '../../Tooltip';
+import { ScreenChangeButton } from '../ScreenChangeButton';
 
-import { ScreenChangeButton } from './ScreenChangeButton';
-
-const flexCenter = css`
-  display: flex;
-  align-items: center;
-`;
-
-const StyledHeader = styled(Header)`
-  width: 100%;
-`;
-
-const TitleWrapper = styled.div`
-  ${flexCenter};
-  flex-direction: row;
-  gap: 4px;
-  color: ${({ theme }) => theme.color.text.subGray04};
-`;
-
-const Logo = styled.img`
-  content: url(${({ theme }) => theme.img.logo});
-`;
-
-const ButtonWrapper = styled.div`
-  height: 32px;
-  gap: 8px;
-
-  ${flexCenter};
-  flex-direction: row;
-`;
-
-const CreditIcon = styled(CreditLineIcon)<{
-  $isInit: boolean;
-}>`
-  path {
-    fill: ${({ $isInit, theme }) =>
-      $isInit
-        ? theme.mode === 'light'
-          ? 'var(--gray-gray-80-02)'
-          : 'var(--gray-gray-25)'
-        : '#454c5380'};
-  }
-
-  circle {
-    stroke: ${({ $isInit, theme }) =>
-      $isInit
-        ? theme.mode === 'light'
-          ? 'var(--gray-gray-80-02)'
-          : 'var(--gray-gray-25)'
-        : '#454c5380'};
-  }
-`;
-
-const StyledIconConvertLight = styled(IconConvertLight)`
-  path {
-    fill: black;
-  }
-`;
-
-const StyledIconConvertDark = styled(IconConvertDark)`
-  path {
-    fill: var(--gray-gray-25);
-  }
-`;
+import * as S from './style';
+import { ChatMode } from './style';
 
 export interface NovaHeaderProps {
   setInputContents?: React.Dispatch<React.SetStateAction<string>>;
@@ -121,6 +59,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
   const creditInfo = useAppSelector(creditInfoSelector);
   const { isInit } = useAppSelector(initFlagSelector);
   const { isStartedByRibbon } = useAppSelector(appStateSelector);
+  const chatMode = useAppSelector(novaChatModeSelector);
   const { handleClearPastedImages } = useClipboard();
 
   const CREDIT_NAME_MAP: {
@@ -276,9 +215,9 @@ export default function NovaHeader(props: NovaHeaderProps) {
           i18nKey={`Nova.Tabs.${tab}`}
           components={{
             img: isLightMode ? (
-              <StyledIconConvertLight height={11} />
+              <S.StyledIconConvertLight height={11} />
             ) : (
-              <StyledIconConvertDark height={11} />
+              <S.StyledIconConvertDark height={11} />
             )
           }}
         />
@@ -308,7 +247,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
   };
 
   return (
-    <StyledHeader title="" subTitle="">
+    <S.StyledHeader title="" subTitle="">
       {isShareMode ? (
         <>
           <span>{t(`Nova.aiChat.Share`)}</span>
@@ -322,9 +261,9 @@ export default function NovaHeader(props: NovaHeaderProps) {
         </>
       ) : (
         <>
-          <TitleWrapper>
+          <S.TitleWrapper>
             {isStartedByRibbon ? (
-              <Logo />
+              <S.Logo />
             ) : (
               <>
                 <img
@@ -345,10 +284,15 @@ export default function NovaHeader(props: NovaHeaderProps) {
                   }}
                 />
                 <span>{getTabTranslationKey(selectedNovaTab)}</span>
+                {selectedNovaTab === NOVA_TAB_TYPE.aiChat && (
+                  <ChatMode>
+                    <span>{chatMode}</span>
+                  </ChatMode>
+                )}
               </>
             )}
-          </TitleWrapper>
-          <ButtonWrapper>
+          </S.TitleWrapper>
+          <S.ButtonWrapper>
             <button
               onClick={() => {
                 const theme = curTheme === ThemeType.light ? ThemeType.dark : ThemeType.light;
@@ -377,7 +321,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
               type="normal"
               options={TOOLTIP_CREDIT_OPTIONS}
               style={{ maxHeight: `${window.innerHeight - 56}px`, overflowY: 'auto' }}>
-              <CreditIcon $isInit={isInit} />
+              <S.CreditIcon $isInit={isInit} />
             </Tooltip>
             <ScreenChangeButton></ScreenChangeButton>
             {isDesktop && (
@@ -391,10 +335,10 @@ export default function NovaHeader(props: NovaHeaderProps) {
                 height={32}
               />
             )}
-          </ButtonWrapper>
+          </S.ButtonWrapper>
         </>
       )}
-    </StyledHeader>
+    </S.StyledHeader>
   );
 }
 
