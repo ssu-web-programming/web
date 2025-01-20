@@ -22,15 +22,15 @@ const usePrivacyConsent = () => {
   const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
 
   const Msg = () => {
-    const chatRetention = t('Nova.Confirm.PersonalInfo.ChatRetention');
-    const fileRetention = t('Nova.Confirm.PersonalInfo.FileRetention');
+    const chatRetention = t('Index.Confirm.PersonalInfo.ChatRetention');
+    const fileRetention = t('Index.Confirm.PersonalInfo.FileRetention');
 
-    const msg1 = t('Nova.Confirm.PersonalInfo.Msg1');
-    const msg2 = t('Nova.Confirm.PersonalInfo.Msg2', {
+    const msg1 = t('Index.Confirm.PersonalInfo.Msg1');
+    const msg2 = t('Index.Confirm.PersonalInfo.Msg2', {
       chatRetention,
       fileRetention
     });
-    const msg3 = t('Nova.Confirm.PersonalInfo.Msg3');
+    const msg3 = t('Index.Confirm.PersonalInfo.Msg3');
     const msg = `${msg1}\n\n${msg2}\n\n${msg3}`;
     const splitMsg = msg.split('\n');
 

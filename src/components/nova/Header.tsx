@@ -134,7 +134,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
           textIcon?: any;
         };
   } = {
-    [t('Nova.CreditInfo.AIChat.Title')]: {
+    [t('Index.CreditInfo.Index.Title')]: {
       NOVA_CHAT_GPT4O: {
         text: t(`Nova.CreditInfo.AIChat.Chat`)
       },

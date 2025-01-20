@@ -125,7 +125,7 @@ const useErrorHandle = () => {
     } else if (error instanceof DocConvertingError) {
       confirm({
         title: '',
-        msg: t('Nova.Alert.FailedConvertDoc'),
+        msg: t('Index.Alert.FailedConvertDoc'),
         onOk: {
           text: t('Confirm'),
           callback: () => {}
@@ -143,14 +143,14 @@ const useErrorHandle = () => {
               flexDirection: 'column',
               alignItems: 'flex-start'
             }}>
-            <div style={{ marginBottom: '20px' }}>{t('Nova.Alert.UnopenableDocError')}</div>
+            <div style={{ marginBottom: '20px' }}>{t('Index.Alert.UnopenableDocError')}</div>
             {unopenable.length > 0 && (
-              <div>{`- ${t('Nova.Alert.Unopenable')} : ${unopenable
+              <div>{`- ${t('Index.Alert.Unopenable')} : ${unopenable
                 .map((item) => sliceFileName(item.filename, 10))
                 .join(', ')}`}</div>
             )}
             {password.length > 0 && (
-              <div>{`- ${t('Nova.Alert.Password')} : ${password
+              <div>{`- ${t('Index.Alert.Password')} : ${password
                 .map((item) => sliceFileName(item.filename, 10))
                 .join(', ')}`}</div>
             )}
@@ -164,7 +164,7 @@ const useErrorHandle = () => {
     } else if (error instanceof DelayDocConverting) {
       confirm({
         title: '',
-        msg: t('Nova.Alert.ReQuestion'),
+        msg: t('Index.Alert.ReQuestion'),
         onOk: {
           text: t('Confirm'),
           callback: () => {}
@@ -173,7 +173,7 @@ const useErrorHandle = () => {
     } else if (error instanceof NoFileInDrive) {
       confirm({
         title: '',
-        msg: t('Nova.Alert.NoFileInDrive'),
+        msg: t('Index.Alert.NoFileInDrive'),
         onOk: {
           text: t('Confirm'),
           callback: () => {}

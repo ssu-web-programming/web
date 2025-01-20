@@ -111,9 +111,9 @@ export default function PoDrive(props: PoDriveProps) {
 
   const getTranslationKey = (): string => {
     if (selectedNovaTab === NOVA_TAB_TYPE.aiChat) {
-      return 'Nova.PoDrive.LimitDesc';
+      return 'Index.PoDrive.LimitDesc';
     } else {
-      return 'Nova.PoDrive.Desc';
+      return 'Index.PoDrive.Desc';
     }
   };
 
@@ -191,7 +191,7 @@ export default function PoDrive(props: PoDriveProps) {
     dispatch(
       activeToast({
         type: 'info',
-        msg: t(props.target === 'nova-file' ? 'Nova.Toast.SelectDoc' : 'Nova.Toast.SelectImg')
+        msg: t(props.target === 'nova-file' ? 'Index.Toast.SelectDoc' : 'Index.Toast.SelectImg')
       })
     );
   }, []);
@@ -240,7 +240,7 @@ export default function PoDrive(props: PoDriveProps) {
             <Icon size={24} iconSrc={getDirIcon(navi[navi.length - 1])} />
             <div className="currentDir">
               {navi[navi.length - 1].fileName === 'drive'
-                ? t('Nova.UploadTooltip.PolarisDrive')
+                ? t('Index.UploadTooltip.PolarisDrive')
                 : navi[navi.length - 1].fileName}
             </div>
           </div>
@@ -316,7 +316,7 @@ export default function PoDrive(props: PoDriveProps) {
               <IconUploadImg width={56} height={56} color="var(--gray-gray-40)" />
             )}
             <span>
-              {t('Nova.PoDrive.NoFile', {
+              {t('Index.PoDrive.NoFile', {
                 type: t(`${props.target === 'nova-file' ? 'document' : 'image'}`)
               })}
             </span>

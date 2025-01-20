@@ -89,10 +89,10 @@ export const FileUploader = (props: FileUploaderProps) => {
             setIsOpen(false);
             await confirm({
               title: '',
-              msg: t('Nova.Confirm.OverMaxFileUploadCnt', {
+              msg: t('Index.Confirm.OverMaxFileUploadCnt', {
                 max: getAvailableFileCnt(selectedNovaTab)
               })!,
-              onOk: { text: t('Nova.Confirm.NewChat.StartNewChat'), callback: chatNova.newChat },
+              onOk: { text: t('Index.Confirm.NewChat.StartNewChat'), callback: chatNova.newChat },
               onCancel: {
                 text: t('Cancel'),
                 callback: () => {}
@@ -174,8 +174,10 @@ export const FileUploader = (props: FileUploaderProps) => {
       setIsOpen(false);
       await confirm({
         title: '',
-        msg: t('Nova.Confirm.OverMaxFileUploadCnt', { max: getAvailableFileCnt(selectedNovaTab) })!,
-        onOk: { text: t('Nova.Confirm.NewChat.StartNewChat'), callback: chatNova.newChat },
+        msg: t('Index.Confirm.OverMaxFileUploadCnt', {
+          max: getAvailableFileCnt(selectedNovaTab)
+        })!,
+        onOk: { text: t('Index.Confirm.NewChat.StartNewChat'), callback: chatNova.newChat },
         onCancel: {
           text: t('Cancel'),
           callback: () => {
@@ -189,7 +191,7 @@ export const FileUploader = (props: FileUploaderProps) => {
     if (currentFile.type === 'notSupported') {
       await confirm({
         title: '',
-        msg: t('Nova.Alert.UnopenableDocError', { max: getAvailableFileCnt(selectedNovaTab) })!,
+        msg: t('Index.Alert.UnopenableDocError', { max: getAvailableFileCnt(selectedNovaTab) })!,
         onOk: {
           text: t('Confirm'),
           callback: () => {
@@ -224,10 +226,10 @@ export const FileUploader = (props: FileUploaderProps) => {
       title: '',
       msg:
         platform === ClientType.web || platform === 'unknown'
-          ? t('Nova.Confirm.NotSavedFileInWeb.Msg')
-          : t('Nova.Confirm.NotSavedFile.Msg'),
+          ? t('Index.Confirm.NotSavedFileInWeb.Msg')
+          : t('Index.Confirm.NotSavedFile.Msg'),
       onOk: {
-        text: t('Nova.Confirm.NotSavedFile.Ok'),
+        text: t('Index.Confirm.NotSavedFile.Ok'),
         callback: () => {
           dispatch(setPageStatus({ tab: selectedNovaTab, status: 'progress' }));
           Bridge.callBridgeApi('uploadFile');
@@ -243,7 +245,7 @@ export const FileUploader = (props: FileUploaderProps) => {
             }
           }
         : {
-            text: t('Nova.Confirm.NotSavedFile.Cancel'),
+            text: t('Index.Confirm.NotSavedFile.Cancel'),
             callback: async () => {
               dispatch(setCreating('NOVA'));
               dispatch(setLocalFiles([]));
@@ -263,9 +265,9 @@ export const FileUploader = (props: FileUploaderProps) => {
   const confirmUploadFile = async () => {
     await confirm({
       title: '',
-      msg: t('Nova.Confirm.UploadFile.Msg'),
+      msg: t('Index.Confirm.UploadFile.Msg'),
       onOk: {
-        text: t('Nova.Confirm.UploadFile.Ok'),
+        text: t('Index.Confirm.UploadFile.Ok'),
         callback: () => {
           dispatch(setPageStatus({ tab: selectedNovaTab, status: 'progress' }));
           Bridge.callBridgeApi('uploadFile');
@@ -282,7 +284,7 @@ export const FileUploader = (props: FileUploaderProps) => {
     if (platform === ClientType.windows) {
       await confirm({
         title: '',
-        msg: t('Nova.Confirm.UpdateVersionWindows.Msg'),
+        msg: t('Index.Confirm.UpdateVersionWindows.Msg'),
         onOk: {
           text: t('Ok'),
           callback: () => {}
@@ -291,15 +293,15 @@ export const FileUploader = (props: FileUploaderProps) => {
     } else {
       await confirm({
         title: '',
-        msg: t('Nova.Confirm.UpdateVersion.Msg'),
+        msg: t('Index.Confirm.UpdateVersion.Msg'),
         onOk: {
-          text: t('Nova.Confirm.UpdateVersion.Ok'),
+          text: t('Index.Confirm.UpdateVersion.Ok'),
           callback: () => {
             Bridge.callBridgeApi('openWindow', url);
           }
         },
         onCancel: {
-          text: t('Nova.Confirm.UpdateVersion.Cancel'),
+          text: t('Index.Confirm.UpdateVersion.Cancel'),
           callback: () => {}
         }
       });

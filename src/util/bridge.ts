@@ -415,7 +415,7 @@ export const useInitBridgeListener = () => {
                 if (showCreditGuide && !getCookie('creditGuide')) {
                   confirm({
                     title: '',
-                    msg: t('Nova.Alert.ExecuteFunction', {
+                    msg: t('Index.Alert.ExecuteFunction', {
                       creditAmount: 10
                     })!,
                     neverShowAgain: true,

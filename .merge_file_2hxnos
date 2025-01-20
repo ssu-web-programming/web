@@ -137,7 +137,7 @@ const Tabs = ({ tabs, activeTab, onChangeTab }: TabProps) => {
     if (tab === 'convert2DTo3D') {
       return (
         <Trans
-          i18nKey={`Nova.Tabs.${tab}`}
+          i18nKey={`Index.Tabs.${tab}`}
           components={{
             img: <StyledIconConvert $isHighlighted={isActive} height={11} />
           }}
@@ -145,7 +145,7 @@ const Tabs = ({ tabs, activeTab, onChangeTab }: TabProps) => {
       );
     }
 
-    return t(`Nova.Tabs.${tab}`);
+    return t(`Index.Tabs.${tab}`);
   };
 
   const getIcon = (tab: NOVA_TAB_TYPE, isSelected: boolean) => {

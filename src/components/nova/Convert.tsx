@@ -269,7 +269,7 @@ export default function Convert() {
   const [selectedOption, setSelectedOption] = useState<ConvertOption | null>(verticalOption);
   const [fileFormat, setFileFormat] = useState<FileFormat>('mp4');
 
-  const text = t('Nova.Convert.MobileGuide');
+  const text = t('Index.Convert.MobileGuide');
 
   const handleOptionClick = (option: ConvertOption) => {
     setSelectedOption(option);

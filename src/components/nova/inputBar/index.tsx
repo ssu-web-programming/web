@@ -1,9 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import IconButton from 'components/buttons/IconButton';
 import useClipboard from 'components/hooks/nova/use-clipboard';
 import Icon from 'components/Icon';
 import { ReactComponent as DeleteDarkIcon } from 'img/dark/ico_input_delete.svg';
-import PlusCircleDarkIcon from 'img/dark/ico_plus_circle.svg';
 import { ReactComponent as SendDisabledDarkIcon } from 'img/dark/ico_send_disabled.svg';
 import ico_file_csv from 'img/light/ico_file_csv.svg';
 import ico_file_doc from 'img/light/ico_file_doc.svg';
@@ -19,7 +18,6 @@ import ico_file_txt from 'img/light/ico_file_txt.svg';
 import ico_file_word from 'img/light/ico_file_word.svg';
 import ico_file_xls from 'img/light/ico_file_xls.svg';
 import { ReactComponent as DeleteLightIcon } from 'img/light/ico_input_delete.svg';
-import PlusCircleLightIcon from 'img/light/ico_plus_circle.svg';
 import { ReactComponent as SendActiveIcon } from 'img/light/ico_send_active.svg';
 import { ReactComponent as SendDisabledLightIcon } from 'img/light/ico_send_disabled.svg';
 import { useTranslation } from 'react-i18next';
@@ -56,13 +54,13 @@ export const flexCenter = css`
 `;
 
 const UploadBtn = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  width: 56px;
+  display: flex;
   gap: 8px;
 
   > button {
-    width: 32px;
-    height: 38px;
+    width: 24px;
+    height: 24px;
     ${flexCenter};
     justify-content: center;
   }
@@ -98,7 +96,7 @@ const FileListViewer = styled.div`
   scrollbar-width: none;
 
   &::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
+    display: none;
   }
 `;
 
@@ -165,15 +163,13 @@ const InputTxtWrapper = styled.div<{ hasValue: boolean }>`
   padding: 6px 12px;
   box-sizing: border-box;
   display: flex;
+  flex-direction: column;
   gap: 8px;
 
-  & > div:nth-child(1) {
+  & > div:nth-child(2) {
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-
-  & > div:nth-child(2) {
     z-index: 1;
     padding: 1px;
     border-radius: 4px;
@@ -181,12 +177,6 @@ const InputTxtWrapper = styled.div<{ hasValue: boolean }>`
       ${({ theme, hasValue }) => (hasValue ? 'var(--ai-purple-50-main)' : theme.color.borderGray01)};
     overflow: hidden;
     flex-grow: 1;
-  }
-
-  & > div:nth-child(3) {
-    display: flex;
-    flex-direction: column-reverse;
-    margin-bottom: 5px;
   }
 `;
 
@@ -259,16 +249,6 @@ export default function InputBar(props: InputBarProps) {
   const inputDocsFileRef = useRef<HTMLInputElement | null>(null);
   const inputImgFileRef = useRef<HTMLInputElement | null>(null);
 
-  const [activatedUploadBtn, setActivatedUploadBtn] = useState(false);
-
-  const handleActiveUploadBtn = () => {
-    setActivatedUploadBtn(true);
-  };
-
-  const handleInActiveUploadBtn = () => {
-    setActivatedUploadBtn(false);
-  };
-
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const inputText = event.target.value;
 
@@ -315,7 +295,6 @@ export default function InputBar(props: InputBarProps) {
   }, [expiredNOVA]);
 
   const handleOnClick = async () => {
-    handleInActiveUploadBtn();
     const hasLocalFiles = localFiles.length > 0;
     const hasDriveFiles = driveFiles.length > 0;
     const hasPasteImages = pastedImagesAsFileType.length > 0;
@@ -423,30 +402,7 @@ export default function InputBar(props: InputBarProps) {
         </FileListViewer>
       )}
       <InputTxtWrapper hasValue={!!contents}>
-        <div>
-          {activatedUploadBtn ? (
-            <UploadBtn>
-              {UPLOAD_BTN_LIST.map((btn) => (
-                <FileUploader
-                  key={btn.target}
-                  target={btn.target}
-                  accept={btn.accept}
-                  inputRef={btn.ref}
-                  tooltipStyle={{ padding: '12px 16px' }}
-                  onFinish={handleInActiveUploadBtn}
-                  onClearPastedImages={handleClearPastedImages}>
-                  {btn.children}
-                </FileUploader>
-              ))}
-            </UploadBtn>
-          ) : (
-            <Icon
-              iconSrc={isLightMode ? PlusCircleLightIcon : PlusCircleDarkIcon}
-              size={24}
-              onClick={handleActiveUploadBtn}
-            />
-          )}
-        </div>
+        <UploadBtn></UploadBtn>
         <div>
           <TextArea
             placeholder={t(`Nova.ActionWindow.Placeholder`)!}
@@ -479,9 +435,6 @@ export default function InputBar(props: InputBarProps) {
                 }
               }
             }}
-            onFocus={() => {
-              handleInActiveUploadBtn();
-            }}
             onPaste={(e: React.ClipboardEvent<HTMLTextAreaElement>) => {
               // 클립보드에 이미지 파일이 있는 경우 텍스트 붙여넣기 방지
               const hasImageFile = Array.from(e.clipboardData.items).some((item) =>
@@ -492,8 +445,6 @@ export default function InputBar(props: InputBarProps) {
               }
             }}
           />
-        </div>
-        <div>
           <IconButton
             disable={contents.length < 1}
             onClick={handleOnClick}
@@ -511,6 +462,18 @@ export default function InputBar(props: InputBarProps) {
             `}
           />
         </div>
+
+        {UPLOAD_BTN_LIST.map((btn) => (
+          <FileUploader
+            key={btn.target}
+            target={btn.target}
+            accept={btn.accept}
+            inputRef={btn.ref}
+            tooltipStyle={{ padding: '12px 16px' }}
+            onClearPastedImages={handleClearPastedImages}>
+            {btn.children}
+          </FileUploader>
+        ))}
       </InputTxtWrapper>
     </InputBarBase>
   );

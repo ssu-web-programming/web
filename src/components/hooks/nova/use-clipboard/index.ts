@@ -39,7 +39,7 @@ export default function useClipboard({
     if (file.size > maxFileSize) {
       await confirm({
         title: '',
-        msg: t('Nova.Alert.OverFileUploadSize', {
+        msg: t('Index.Alert.OverFileUploadSize', {
           max: getMaxFileSize(selectedNovaTab),
           min: MIN_FILE_UPLOAD_SIZE_KB
         })!,
@@ -58,7 +58,7 @@ export default function useClipboard({
         title: '',
         msg:
           selectedNovaTab === 'aiChat'
-            ? t('Nova.Alert.CommonUnsupportFile')
+            ? t('Index.Alert.CommonUnsupportFile')
             : t(`Nova.Alert.CommonUnsupportImage`, { support: ALLOWED_IMAGES.join(',') }),
         onOk: {
           text: t('Confirm'),

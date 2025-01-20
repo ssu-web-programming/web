@@ -164,7 +164,7 @@ export default function ImageUploader({
         if (await isPixelLimitExceeded(selectedFile, curTab)) {
           await confirm({
             title: '',
-            msg: `${t('Nova.Confirm.OverMaxFilePixel')}\n\n${t(
+            msg: `${t('Index.Confirm.OverMaxFilePixel')}\n\n${t(
               `Nova.${NOVA_TAB_TYPE.removeBG}.AllowImageSize`
             )}`,
             onOk: {

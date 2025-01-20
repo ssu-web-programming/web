@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import useInitApp from 'components/hooks/useInitApp';
 import Nova from 'pages/Nova/Nova';
+import Index from 'pages/Nova/Nova';
 import Translation from 'pages/Nova/Translation';
 import { Route, Routes } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
@@ -87,6 +88,7 @@ function App() {
           <Route path="/alli" element={<Alli />} />
           <Route path="/NOVA" element={<Nova />} />
           <Route path="/translation" element={<Translation />} />
+          <Route path="/NOVA" element={<Index />} />
           <Route path="/NOVA/share/:id" element={<ShareChat />} />
           <Route path="/AskDocStep" element={<AskDocHome />}>
             <Route index element={<AskDocLoading />} />

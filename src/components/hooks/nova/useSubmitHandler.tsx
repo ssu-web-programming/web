@@ -210,7 +210,7 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
                     }
                     case 'annotations': {
                       const ref = JSON.parse(json.data);
-                      return `\n\n${t('Nova.Chat.ReferFile', {
+                      return `\n\n${t('Index.Chat.ReferFile', {
                         file: ref
                           .map((r: string) => (r.length > 20 ? `${r.slice(0, 20)}...` : r))
                           .join(', ')
