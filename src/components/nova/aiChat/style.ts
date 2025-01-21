@@ -84,7 +84,7 @@ export const ShareGuide = styled.div<{ isActive: boolean }>`
   line-height: 16px;
   text-align: center;
   color: ${({ theme, isActive }) =>
-    isActive ? theme.color.text.highlightText : theme.color.text.gray02};
+    isActive ? theme.color.text.highlight01 : theme.color.text.gray02};
   border: 1px solid ${({ theme }) => theme.color.border.gray02};
 
   div {
@@ -95,6 +95,6 @@ export const ShareGuide = styled.div<{ isActive: boolean }>`
     font-size: 16px;
     font-weight: 600;
     color: ${({ theme, isActive }) =>
-      isActive ? theme.color.text.highlightText02 : theme.color.text.gray03};
+      isActive ? theme.color.text.highlight02 : theme.color.text.gray03};
   }
 `;

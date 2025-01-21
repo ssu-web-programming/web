@@ -36,7 +36,7 @@ export const ChatMode = styled.div`
   font-size: 11px;
   font-weight: 600;
   line-height: 16.5px;
-  color: ${({ theme }) => theme.color.text.highlightText};
+  color: ${({ theme }) => theme.color.text.highlight01};
 `;
 
 export const ButtonWrapper = styled.div`

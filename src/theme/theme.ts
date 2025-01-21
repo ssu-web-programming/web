@@ -35,7 +35,7 @@ export const lightTheme = {
       bg: 'var(--white)',
       highlightBg: 'var(--ai-purple-97-list-over)',
       text: 'var(--gray-gray-90-01)',
-      highlightText: 'var(--ai-purple-45)'
+      highlight: 'var(--ai-purple-45)'
     },
     text: {
       main: 'var(--ai-purple-50-main)',
@@ -48,8 +48,10 @@ export const lightTheme = {
       gray06: 'var(--gray-gray-70)',
       gray07: 'var(--gray-gray-60-03)',
       gray08: 'var(--gray-gray-60-03)',
-      highlightText: 'var(--ai-purple-45)',
-      highlightText02: 'var(--gray-gray-80-02)'
+      gray09: 'var(--gray-gray-70)',
+      highlight01: 'var(--ai-purple-45)',
+      highlight02: 'var(--gray-gray-80-02)',
+      highlight03: 'var(--ai-purple-50-main )'
     },
     toast: {
       success: {
@@ -101,7 +103,7 @@ export const darkTheme = {
       bg: 'var(--gray-gray-90)',
       highlightBg: 'var(--ai-purple-50-main-alpha)',
       text: 'var(--gray-gray-25)',
-      highlightText: 'var(--ai-purple-90)'
+      highlight: 'var(--ai-purple-90)'
     },
     text: {
       main: 'var(--ai-purple-90)',
@@ -114,8 +116,10 @@ export const darkTheme = {
       gray06: 'var(--gray-gray-25)',
       gray07: 'var(--gray-gray-60)',
       gray08: 'var(--gray-gray-35)',
-      highlightText: 'var(--ai-purple-90)',
-      highlightText02: 'var(--ai-purple-90)'
+      gray09: 'var(--gray-gray-60)',
+      highlight01: 'var(--ai-purple-90)',
+      highlight02: 'var(--ai-purple-90)',
+      highlight03: 'var(--ai-purple-90)'
     },
     toast: {
       success: {

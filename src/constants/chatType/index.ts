@@ -1,7 +1,11 @@
-import ClaudeLogoIcon from '../../img/common/nova/ico_claude_logo.svg';
-import ClovaLogoIcon from '../../img/common/nova/ico_clova_logo.svg';
-import GPTLogoIcon from '../../img/common/nova/ico_gpt_logo.svg';
-import PerplexityLogoIcon from '../../img/common/nova/ico_perplexity_logo.svg';
+import ClaudeLogoDarkIcon from '../../img/dark/nova/logo/ico_claude_logo.svg';
+import ClovaLogoDarkIcon from '../../img/dark/nova/logo/ico_clova_logo.svg';
+import GPTLogoDarkIcon from '../../img/dark/nova/logo/ico_gpt_logo.svg';
+import PerplexityLogoDarkIcon from '../../img/dark/nova/logo/ico_perplexity_logo.svg';
+import ClaudeLogoLightIcon from '../../img/light/nova/logo/ico_claude_logo.svg';
+import ClovaLogoLightIcon from '../../img/light/nova/logo/ico_clova_logo.svg';
+import GPTLogoLightIcon from '../../img/light/nova/logo/ico_gpt_logo.svg';
+import PerplexityLogoLightIcon from '../../img/light/nova/logo/ico_perplexity_logo.svg';
 
 export const CHAT_MODES = {
   GPT_4O: 'GPT-4o',
@@ -14,9 +18,9 @@ export const CHAT_MODES = {
 
 export type ChatMode = (typeof CHAT_MODES)[keyof typeof CHAT_MODES];
 
-export const CHAT_TYPE_LIST = [
+export const getChatTypeList = (isLightMode: boolean) => [
   {
-    icon: GPTLogoIcon,
+    icon: isLightMode ? GPTLogoLightIcon : GPTLogoDarkIcon,
     title: CHAT_MODES.GPT_4O,
     desc: '다양한 텍스트를 생성하는데 탁월해요',
     credit: 5,
@@ -27,7 +31,7 @@ export const CHAT_TYPE_LIST = [
     ]
   },
   {
-    icon: GPTLogoIcon,
+    icon: isLightMode ? GPTLogoLightIcon : GPTLogoDarkIcon,
     title: CHAT_MODES.GPT_4,
     desc: '속도가 빨라 단순 작업을 잘 처리해요',
     credit: 5,
@@ -38,7 +42,7 @@ export const CHAT_TYPE_LIST = [
     ]
   },
   {
-    icon: GPTLogoIcon,
+    icon: isLightMode ? GPTLogoLightIcon : GPTLogoDarkIcon,
     title: CHAT_MODES.GPT_3_5,
     desc: '속도가 빨라 단순 작업을 잘 처리해요',
     credit: 2,
@@ -49,7 +53,7 @@ export const CHAT_TYPE_LIST = [
     ]
   },
   {
-    icon: ClovaLogoIcon,
+    icon: isLightMode ? ClovaLogoLightIcon : ClovaLogoDarkIcon,
     title: CHAT_MODES.CLOVA_X,
     desc: '한국어 작업에 효과적이에요',
     credit: 2,
@@ -60,7 +64,7 @@ export const CHAT_TYPE_LIST = [
     ]
   },
   {
-    icon: ClaudeLogoIcon,
+    icon: isLightMode ? ClaudeLogoLightIcon : ClaudeLogoDarkIcon,
     title: CHAT_MODES.CLAUDE_3_5,
     desc: '창의적인 글을 잘 써요',
     credit: 5,
@@ -71,7 +75,7 @@ export const CHAT_TYPE_LIST = [
     ]
   },
   {
-    icon: PerplexityLogoIcon,
+    icon: isLightMode ? PerplexityLogoLightIcon : PerplexityLogoDarkIcon,
     title: CHAT_MODES.PERPLEXITY,
     desc: '다양한 정보를 정확하게 제공해요',
     credit: 5,
