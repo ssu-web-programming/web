@@ -54,7 +54,7 @@ export const Text = styled.div<{ isHighlighted: boolean }>`
   font-size: 14px;
   font-weight: ${(props) => (props.isHighlighted ? 500 : 400)};
   color: ${(props) =>
-    props.isHighlighted ? props.theme.color.tab.highlightText : props.theme.color.tab.text};
+    props.isHighlighted ? props.theme.color.tab.highlight : props.theme.color.tab.text};
 `;
 
 export const CustomNavButton = styled.button<{ isVisible: boolean }>`

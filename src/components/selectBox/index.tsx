@@ -2,8 +2,9 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
+import CreditDarkIcon from '../../img/dark/ico_credit_gray.svg';
 import { ReactComponent as ArrowIcon } from '../../img/light/ico_arrow_down_normal.svg';
-import CreditIcon from '../../img/light/ico_credit_gray.svg';
+import CreditLightIcon from '../../img/light/ico_credit_gray.svg';
 import { themeInfoSelector } from '../../store/slices/theme';
 import { useAppSelector } from '../../store/store';
 
@@ -72,7 +73,7 @@ export default function SelectBox(props: SelectBoxProps) {
                   </S.TextWrap>
                   {item.credit && (
                     <S.CreditWrap>
-                      <img src={CreditIcon} alt="credit" />
+                      <img src={isLightMode ? CreditLightIcon : CreditDarkIcon} alt="credit" />
                       <span>{item.credit}</span>
                     </S.CreditWrap>
                   )}

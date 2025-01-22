@@ -67,34 +67,35 @@ export const TextWrap = styled.div<{ selected: boolean }>`
     font-size: 14px;
     font-weight: ${({ selected }) => (selected ? 700 : 500)};
     line-height: 21px;
-    color: ${({ selected }) => (selected ? 'var(--ai-purple-50-main)' : 'var(--gray-gray-80-02)')};
+    color: ${({ selected, theme }) =>
+      selected ? theme.color.text.highlight03 : theme.color.text.gray03};
   }
 
   .desc {
     font-size: 12px;
     font-weight: ${({ selected }) => (selected ? 500 : 400)};
     line-height: 18px;
-    color: ${({ selected }) => (selected ? 'var(--ai-purple-50-main)' : 'var(--gray-gray-70)')};
+    color: ${({ selected, theme }) =>
+      selected ? theme.color.text.highlight03 : theme.color.text.gray09};
   }
 `;
 
 export const CreditWrap = styled.div`
-  position: absolute;
-  right: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 4.5px;
+  margin-left: 4px;
 
   img {
-    width: 15px;
-    height: 15px;
+    width: 20px;
+    height: 20px;
   }
 
   span {
     font-size: 14px;
     font-weight: 400;
     line-height: 21px;
-    color: var(--gray-gray-90-01);
+    color: ${({ theme }) => theme.color.text.gray04};
   }
 `;

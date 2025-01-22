@@ -118,7 +118,7 @@ const NoFile = styled.div`
 const SubTitle = styled.div`
   font-size: 14px;
   line-height: 16px;
-  color: ${({ theme }) => theme.color.text.highlightText};
+  color: ${({ theme }) => theme.color.text.highlight01};
   text-align: center;
   background-color: ${({ theme }) => theme.color.mainBg};
   padding: 6px 0;

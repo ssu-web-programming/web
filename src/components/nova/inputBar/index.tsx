@@ -36,7 +36,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { isMobile } from 'util/bridge';
 import { sliceFileName } from 'util/common';
 
-import { CHAT_MODES, CHAT_TYPE_LIST, ChatMode } from '../../../constants/chatType';
+import { CHAT_MODES, ChatMode, getChatTypeList } from '../../../constants/chatType';
 import { getValidExt, SUPPORT_DOCUMENT_TYPE } from '../../../constants/fileTypes';
 import { ReactComponent as DocsIconDark } from '../../../img/dark/ico_input_upload_docs.svg';
 import { ReactComponent as ImagesIconDark } from '../../../img/dark/ico_input_upload_images.svg';
@@ -270,15 +270,17 @@ export default function InputBar(props: InputBarProps) {
                 clickable: true
               }}
               modules={[Pagination]}>
-              {CHAT_TYPE_LIST.find((chat) => chat.title === chatMode)?.prompt?.map((prompt) => (
-                <SwiperSlide
-                  key={prompt}
-                  onClick={() => {
-                    setContents(prompt);
-                  }}>
-                  {prompt}
-                </SwiperSlide>
-              ))}
+              {getChatTypeList(isLightMode)
+                .find((chat) => chat.title === chatMode)
+                ?.prompt?.map((prompt) => (
+                  <SwiperSlide
+                    key={prompt}
+                    onClick={() => {
+                      setContents(prompt);
+                    }}>
+                    {prompt}
+                  </SwiperSlide>
+                ))}
             </Swiper>
           </S.PromptWrap>
         )}
@@ -383,7 +385,7 @@ export default function InputBar(props: InputBarProps) {
         <S.ButtonWrap>
           {props.novaHistory.length <= 0 && (
             <SelectBox
-              menuItem={CHAT_TYPE_LIST}
+              menuItem={getChatTypeList(isLightMode)}
               selectedItem={chatMode}
               setSelectedItem={(item: string) => {
                 dispatch(setChatMode(item as ChatMode));

@@ -105,12 +105,12 @@ const RatioButton = styled.div<{ selected: boolean }>`
     font-weight: 500;
     line-height: 21px;
     color: ${(props) =>
-      props.selected ? props.theme.color.tab.highlightText : props.theme.color.tab.text};
+      props.selected ? props.theme.color.tab.highlight : props.theme.color.tab.text};
   }
 
   path {
     fill: ${(props) =>
-      props.selected ? props.theme.color.tab.highlightText : props.theme.color.tab.text};
+      props.selected ? props.theme.color.tab.highlight : props.theme.color.tab.text};
   }
 `;
 
