@@ -138,7 +138,7 @@ const TranslationButton = styled.div<{ isActive: boolean }>`
   margin-top: 30px;
 
   background: ${({ isActive, theme }) =>
-    isActive ? 'var(--ai-purple-50-main)' : theme.color.subBgGray06};
+    isActive ? 'var(--ai-purple-50-main)' : theme.color.background.gray02};
 
   cursor: ${(props) => (props.isActive ? 'pointer' : 'default')};
 
@@ -146,7 +146,7 @@ const TranslationButton = styled.div<{ isActive: boolean }>`
     font-size: 16px;
     font-weight: 500;
     line-height: 24px;
-    color: ${({ theme, isActive }) => (isActive ? 'var(--white)' : theme.color.text.subGray08)};
+    color: ${({ theme, isActive }) => (isActive ? 'var(--white)' : theme.color.text.gray01)};
   }
 `;
 

@@ -2,32 +2,32 @@ import { FlattenSimpleInterpolation } from 'styled-components';
 
 import * as S from './style';
 
-export interface ToggleOption {
-  id: string;
+export interface ToggleOption<T> {
+  id: T;
   label: string;
   icon?: React.ReactNode;
 }
 
-interface ToggleProps {
-  options: ToggleOption[];
-  type: string;
-  onToggle: (id: string) => void;
+interface ToggleProps<T> {
+  options: ToggleOption<T>[];
+  type: T;
+  onToggle: (id: T) => void;
   containerStyle?: FlattenSimpleInterpolation;
   buttonStyle?: FlattenSimpleInterpolation;
 }
 
-export default function Toggle({
+export default function Toggle<T>({
   options,
   type,
   onToggle,
   containerStyle,
   buttonStyle
-}: ToggleProps) {
+}: ToggleProps<T>) {
   return (
     <S.ToggleContainer containerStyle={containerStyle}>
-      {options.map((option) => (
+      {options.map((option, idx) => (
         <S.ToggleButton
-          key={option.id}
+          key={idx}
           isActive={type === option.id}
           onClick={() => onToggle(option.id)}
           buttonStyle={buttonStyle}>

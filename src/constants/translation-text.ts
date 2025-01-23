@@ -36,6 +36,38 @@ export const SOURCE_LANGUAGES = [
   '스페인어'
 ];
 
+export const SOURCE_LANGUAGES_WITH_LANG_CODE = [
+  { lang: '아랍어', langCode: 'AR' },
+  { lang: '에스토니아어', langCode: 'ET' },
+  { lang: '영어', langCode: 'EN' },
+  { lang: '우크라이나어', langCode: 'UK' },
+  { lang: '이탈리아어', langCode: 'IT' },
+  { lang: '인도네시아어', langCode: 'ID' },
+  { lang: '일본어', langCode: 'JA' },
+  { lang: '중국어', langCode: 'ZH' },
+  { lang: '체코어', langCode: 'CS' },
+  { lang: '터키어', langCode: 'TR' },
+  { lang: '프랑스어', langCode: 'FR' },
+  { lang: '폴란드어', langCode: 'PL' },
+  { lang: '포르투갈어', langCode: 'PT' },
+  { lang: '필란드어', langCode: 'FI' },
+  { lang: '헝가리어', langCode: 'HU' },
+  { lang: '그리스어', langCode: 'EL' },
+  { lang: '네덜란드어', langCode: 'NL' },
+  { lang: '노르웨이어 보크몰', langCode: 'NB' },
+  { lang: '덴마크어', langCode: 'DA' },
+  { lang: '독일어', langCode: 'DE' },
+  { lang: '라트비아어', langCode: 'LV' },
+  { lang: '러시아어', langCode: 'RU' },
+  { lang: '루마니아어', langCode: 'RO' },
+  { lang: '리투아니아어', langCode: 'LT' },
+  { lang: '불가리아어', langCode: 'BG' },
+  { lang: '슬로바키아어', langCode: 'SK' },
+  { lang: '슬로베니아어', langCode: 'SL' },
+  { lang: '스웨덴어', langCode: 'SV' },
+  { lang: '스페인어', langCode: 'ES' }
+];
+
 export const TARGET_LANGUAGES = [
   '그리스어',
   '네덜란드어',
@@ -70,4 +102,40 @@ export const TARGET_LANGUAGES = [
   '포르투갈어',
   '필란드어',
   '헝가리어'
+];
+
+export const TARGET_LANGUAGES_WITH_LANG_CODE = [
+  { lang: '그리스어', langCode: 'EL' },
+  { lang: '네덜란드어', langCode: 'NL' },
+  { lang: '노르웨이어 보크몰', langCode: 'NB' },
+  { lang: '덴마크어', langCode: 'DA' },
+  { lang: '독일어', langCode: 'DE' },
+  { lang: '라트비아어', langCode: 'LV' },
+  { lang: '러시아어', langCode: 'RU' },
+  { lang: '루마니아어', langCode: 'RO' },
+  { lang: '리투아니아어', langCode: 'LT' },
+  { lang: '모술타메바니아어', langCode: null },
+  { lang: '불가리아어', langCode: 'BG' },
+  { lang: '스웨덴어', langCode: 'SV' },
+  { lang: '스페인어', langCode: 'ES' },
+  { lang: '슬로바키아어', langCode: 'SK' },
+  { lang: '슬로베니아어', langCode: 'SL' },
+  { lang: '아랍어', langCode: 'AR' },
+  { lang: '에스토니아어', langCode: 'ET' },
+  { lang: '영어(영국)', langCode: 'EN-GB' },
+  { lang: '영어(미국)', langCode: 'EN-US' },
+  { lang: '우크라이나어', langCode: 'UK' },
+  { lang: '이탈리아어', langCode: 'IT' },
+  { lang: '인도네시아어', langCode: 'ID' },
+  { lang: '일본어', langCode: 'JA' },
+  { lang: '중국어(간체)', langCode: 'ZH-HANS' },
+  { lang: '중국어(번체)', langCode: 'ZH-HANT' },
+  { lang: '체코어', langCode: 'CS' },
+  { lang: '터키어', langCode: 'TR' },
+  { lang: '폴란드어', langCode: 'PL' },
+  { lang: '프랑스어', langCode: 'FR' },
+  { lang: '프랑스어(브뤼셀)', langCode: 'FR' },
+  { lang: '포르투갈어', langCode: 'PT' },
+  { lang: '필란드어', langCode: 'FI' },
+  { lang: '헝가리어', langCode: 'HU' }
 ];

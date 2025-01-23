@@ -15,7 +15,7 @@ const Container = styled.div`
   padding: 24px 16px;
   flex: 1 1 0;
   overflow-y: auto;
-  background: ${({ theme }) => theme.color.bg};
+  background: ${({ theme }) => theme.color.background.bg};
   color: ${({ theme }) => theme.color.text.subGray05};
 `;
 

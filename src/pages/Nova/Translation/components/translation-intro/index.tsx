@@ -14,33 +14,52 @@ import TranslationFileUploader from '../translation-file-uploader';
 
 import * as S from './style';
 
+type TranslateType = 'TEXT' | 'FILE';
+
 export default function TranslationIntro() {
   const { t } = useTranslation();
 
-  const [type, setType] = useState<string>('text');
+  const [type, setType] = useState<TranslateType>('TEXT');
   const [translateInputValue, setTranslateInputValue] = useState('');
-  const { setSharedTranslationInfo } = useTranslationContext();
+  const { setSharedTranslationInfo, sharedTranslationInfo } = useTranslationContext();
 
-  const options: ToggleOption[] = [
+  const options: ToggleOption<TranslateType>[] = [
     {
-      id: 'text',
+      id: 'TEXT',
       label: '텍스트 번역',
-      icon: <S.StyledTransTxt $isActive={type === 'text'} />
+      icon: <S.StyledTransTxt $isActive={type === 'TEXT'} />
     },
-    { id: 'file', label: '파일 번역', icon: <S.StyledTransFile $isActive={type === 'file'} /> }
+    { id: 'FILE', label: '파일 번역', icon: <S.StyledTransFile $isActive={type === 'FILE'} /> }
   ];
 
-  const handleTranslate = () => {
-    setSharedTranslationInfo((prevSharedTranslationInfo) => ({
-      ...prevSharedTranslationInfo,
-      componentType: 'LANG_SEARCH'
-    }));
+  const submitTextTranslate = () => {
+    console.log('Text 번역을 시작해주세요.');
   };
+
+  const submitFileTranslate = () => {
+    console.log('File 번역을 시작해주세요.');
+  };
+
+  const handleTranslate = () => {
+    if (type === 'TEXT') {
+      submitTextTranslate();
+      return;
+    }
+    // File 번역일때 타는 로직!
+    submitFileTranslate();
+
+    // setSharedTranslationInfo((prevSharedTranslationInfo) => ({
+    //   ...prevSharedTranslationInfo,
+    //   componentType: 'LANG_SEARCH'
+    // }));
+  };
+
+  console.log('translateInputValue', translateInputValue);
 
   return (
     <>
       <S.ToggleWrapper>
-        <Toggle
+        <Toggle<TranslateType>
           options={options}
           type={type}
           onToggle={setType}
@@ -65,7 +84,7 @@ export default function TranslationIntro() {
             <ArrowIcon />
           </div>
         </S.TextAreaHeader>
-        {type === 'text' ? (
+        {type === 'TEXT' ? (
           <S.TextInputWrapper>
             <S.TextArea
               placeholder="번역할 내용을 입력하세요."
@@ -91,7 +110,7 @@ export default function TranslationIntro() {
 
         <S.TextAreaBottom>
           <DeepL />
-          {type === 'text' && <span>{translateInputValue.length}자/40,000자</span>}
+          {type === 'TEXT' && <span>{translateInputValue.length}자/10,000자</span>}
         </S.TextAreaBottom>
       </S.TextAreaWrapper>
 
