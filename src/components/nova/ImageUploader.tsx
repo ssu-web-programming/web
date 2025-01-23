@@ -112,7 +112,11 @@ interface ImageUploaderProps {
   curTab: NOVA_TAB_TYPE;
 }
 
-export default function ImageUploader(props: ImageUploaderProps) {
+export default function ImageUploader({
+  guideMsg,
+  handleUploadComplete,
+  curTab
+}: ImageUploaderProps) {
   const { t } = useTranslation();
   const confirm = useConfirm();
   const inputImgFileRef = useRef<HTMLInputElement | null>(null);
@@ -122,7 +126,7 @@ export default function ImageUploader(props: ImageUploaderProps) {
   const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
   const localFiles = useAppSelector(getLocalFiles);
   const driveFiles = useAppSelector(getDriveFiles);
-  const currentFile = useAppSelector(selectPageData(props.curTab));
+  const currentFile = useAppSelector(selectPageData(curTab));
 
   const target = 'nova-image';
 
@@ -145,11 +149,11 @@ export default function ImageUploader(props: ImageUploaderProps) {
   };
 
   const handleFileProcessing = async () => {
-    dispatch(setPageStatus({ tab: props.curTab, status: 'progress' }));
+    dispatch(setPageStatus({ tab: curTab, status: 'progress' }));
 
     const selectedFile = await getSelectedFile();
     if (!selectedFile) {
-      dispatch(setPageStatus({ tab: props.curTab, status: 'home' }));
+      dispatch(setPageStatus({ tab: curTab, status: 'home' }));
       return;
     }
 
@@ -157,7 +161,7 @@ export default function ImageUploader(props: ImageUploaderProps) {
       let fileData: File = selectedFile;
 
       if (isSpecificFormat(selectedFile)) {
-        if (await isPixelLimitExceeded(selectedFile, props.curTab)) {
+        if (await isPixelLimitExceeded(selectedFile, curTab)) {
           await confirm({
             title: '',
             msg: `${t('Index.Confirm.OverMaxFilePixel')}\n\n${t(
@@ -172,29 +176,29 @@ export default function ImageUploader(props: ImageUploaderProps) {
           });
         }
       } else {
-        fileData = await compressImage(selectedFile, props.curTab);
+        fileData = await compressImage(selectedFile, curTab);
       }
 
       dispatch(
         setPageData({
-          tab: props.curTab,
+          tab: curTab,
           data: fileData
         })
       );
-      dispatch(setPageStatus({ tab: props.curTab, status: 'home' }));
+      dispatch(setPageStatus({ tab: curTab, status: 'home' }));
     } catch (err) {
-      dispatch(setPageStatus({ tab: props.curTab, status: 'home' }));
+      dispatch(setPageStatus({ tab: curTab, status: 'home' }));
       errorHandle(err);
     }
   };
 
   useEffect(() => {
     if (currentFile) {
-      props.handleUploadComplete();
+      handleUploadComplete();
     } else {
       handleFileProcessing();
     }
-  }, [localFiles, driveFiles, currentFile, props.curTab]);
+  }, [localFiles, driveFiles, currentFile, curTab]);
 
   return (
     <Wrap>
@@ -222,7 +226,7 @@ export default function ImageUploader(props: ImageUploaderProps) {
               <img src={CreditIcon} alt="credit" />
             </div>
           </Credit>
-          <Guide>{props.guideMsg}</Guide>
+          <Guide>{guideMsg}</Guide>
         </ImageBox>
       </FileUploader>
     </Wrap>

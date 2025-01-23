@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import Lottie from 'react-lottie-player';
 import styled from 'styled-components';

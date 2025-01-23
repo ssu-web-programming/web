@@ -66,7 +66,11 @@ export default function Header(props: HeaderProps) {
   const { title, subTitle, children } = props;
   const location = useLocation();
 
-  if (location.pathname.toLowerCase() === '/nova') {
+  // 호진FIXME: state 변경 방식으로 바뀌면 제거하기!
+  if (
+    location.pathname.toLowerCase() === '/nova' ||
+    location.pathname.toLowerCase() === '/translation'
+  ) {
     return (
       <Contents
         isBorder={true}

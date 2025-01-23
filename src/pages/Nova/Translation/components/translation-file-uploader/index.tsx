@@ -1,0 +1,249 @@
+import { useEffect, useRef } from 'react';
+import { useConfirm } from 'components/Confirm';
+import useErrorHandle from 'components/hooks/useErrorHandle';
+import { FileUploader } from 'components/nova/FileUploader';
+import {
+  compressImage,
+  isPixelLimitExceeded,
+  SUPPORT_DOCUMENT_TYPE,
+  SUPPORT_IMAGE_TYPE
+} from 'constants/fileTypes';
+import { ReactComponent as UploadDarkIcon } from 'img/dark/ico_upload_img_plus.svg';
+import CreditIcon from 'img/light/ico_credit_gray.svg';
+import { ReactComponent as UploadFileLightIcon } from 'img/light/nova/translation/file_upload.svg';
+import { useTranslation } from 'react-i18next';
+import { selectPageData, setPageData, setPageStatus } from 'store/slices/nova/pageStatusSlice';
+import { NOVA_TAB_TYPE } from 'store/slices/tabSlice';
+import { themeInfoSelector } from 'store/slices/theme';
+import { getDriveFiles, getLocalFiles } from 'store/slices/uploadFiles';
+import { userInfoSelector } from 'store/slices/userInfo';
+import { useAppDispatch, useAppSelector } from 'store/store';
+import styled from 'styled-components';
+import { convertDriveFileToFile } from 'util/files';
+
+import FileItem from '../file-item';
+
+const Wrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  height: 206px;
+  padding: 0 16px;
+  border-radius: 8px;
+  background-color: ${({ theme }) => theme.color.subBgGray01};
+`;
+
+const ImageBox = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+`;
+
+const Icon = styled.div<{ disable: boolean }>`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    width: 48px;
+    height: 48px;
+
+    cursor: ${(props) => (props.disable ? 'initial' : 'pointer')};
+    color: ${(props) => (props.disable ? '#454c5380' : 'var(--gray-gray-80-02)')};
+  }
+
+  span {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 24px;
+    color: ${({ theme }) => theme.color.text.subGray03};
+  }
+`;
+
+const Credit = styled.div`
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 2px 2px 2px 12px;
+  background: ${({ theme }) => theme.color.subBgGray02};
+  border-radius: 999px;
+
+  .img {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  span {
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 700;
+    padding-bottom: 2px;
+    color: ${({ theme }) => theme.color.text.subGray03};
+  }
+`;
+
+const Guide = styled.div`
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  color: #9ea4aa;
+  white-space: pre-wrap;
+  text-align: center;
+`;
+
+interface ImageUploaderProps {
+  guideMsg: string;
+  handleUploadComplete: () => void;
+  curTab: NOVA_TAB_TYPE;
+  creditCount?: number;
+}
+
+export default function TranslationFileUploader({
+  guideMsg,
+  handleUploadComplete,
+  curTab,
+  creditCount = 10
+}: ImageUploaderProps) {
+  // const { t } = useTranslation();
+  // const confirm = useConfirm();
+  const inputImgFileRef = useRef<HTMLInputElement | null>(null);
+  // const dispatch = useAppDispatch();
+  // const errorHandle = useErrorHandle();
+  const { isLightMode } = useAppSelector(themeInfoSelector);
+  const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
+  const localFiles = useAppSelector(getLocalFiles);
+  const driveFiles = useAppSelector(getDriveFiles);
+  const currentFile = useAppSelector(selectPageData(curTab));
+
+  console.log('currentFile', currentFile);
+  console.log('localFiles', localFiles);
+  console.log('driveFiles', driveFiles);
+
+  const target = 'nova-image';
+
+  // const isSpecificFormat = (file: File) => {
+  //   console.log('file', file);
+  //   const extension = file?.name?.split('.').pop()?.toLowerCase();
+  //   return extension === 'mp4' || extension === 'gif' || extension === 'bmp';
+  // };
+
+  // const getSelectedFile = async () => {
+  //   if (localFiles[0]) return localFiles[0];
+  //   if (driveFiles[0]) {
+  //     try {
+  //       return await convertDriveFileToFile(driveFiles[0]);
+  //     } catch (err) {
+  //       errorHandle(err);
+  //       return null;
+  //     }
+  //   }
+  //   return null;
+  // };
+
+  // const handleFileProcessing = async () => {
+  //   console.log('여기 돌아여?');
+  //   dispatch(setPageStatus({ tab: curTab, status: 'progress' }));
+
+  //   const selectedFile = await getSelectedFile();
+  //   if (!selectedFile) {
+  //     dispatch(setPageStatus({ tab: curTab, status: 'home' }));
+  //     return;
+  //   }
+
+  //   try {
+  //     let fileData: File = selectedFile;
+
+  //     if (isSpecificFormat(selectedFile)) {
+  //       if (await isPixelLimitExceeded(selectedFile, curTab)) {
+  //         console.log('alert!!');
+
+  //         await confirm({
+  //           title: '',
+  //           msg: `${t('Nova.Confirm.OverMaxFilePixel')}\n\n${t(
+  //             `Nova.${NOVA_TAB_TYPE.removeBG}.AllowImageSize`
+  //           )}`,
+  //           onOk: {
+  //             text: t('OK'),
+  //             callback: () => {
+  //               return;
+  //             }
+  //           }
+  //         });
+  //       }
+  //     } else {
+  //       fileData = await compressImage(selectedFile, curTab);
+  //     }
+
+  //     dispatch(
+  //       setPageData({
+  //         tab: curTab,
+  //         data: fileData
+  //       })
+  //     );
+  //     dispatch(setPageStatus({ tab: curTab, status: 'home' }));
+  //   } catch (err) {
+  //     dispatch(setPageStatus({ tab: curTab, status: 'home' }));
+  //     errorHandle(err);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   if (currentFile) {
+  //     handleUploadComplete();
+  //   } else {
+  //     handleFileProcessing();
+  //   }
+  // }, [localFiles, driveFiles, currentFile, curTab]);
+
+  return (
+    <Wrap>
+      {localFiles.length > 0 ? (
+        <FileItem file={localFiles[0]} />
+      ) : (
+        <FileUploader
+          type="file"
+          key={target}
+          target={target}
+          accept={SUPPORT_IMAGE_TYPE}
+          inputRef={inputImgFileRef}
+          tooltipStyle={{
+            minWidth: '165px',
+            top: '12px',
+            left: 'unset',
+            right: 'unset',
+            bottom: 'unset',
+            padding: '12px 16px'
+          }}>
+          <ImageBox>
+            <Icon disable={isAgreed === undefined}>
+              {isLightMode ? <UploadFileLightIcon /> : <UploadDarkIcon />}
+              <span>파일 업로드</span>
+            </Icon>
+            <Credit>
+              <span>{creditCount}</span>
+              <div className="img">
+                <img src={CreditIcon} alt="credit" />
+              </div>
+            </Credit>
+            <Guide>{guideMsg}</Guide>
+          </ImageBox>
+        </FileUploader>
+      )}
+    </Wrap>
+  );
+}

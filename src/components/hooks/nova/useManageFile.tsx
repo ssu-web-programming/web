@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { apiWrapper } from '../../../api/apiWrapper';
 import { PO_DRIVE_FILEINFO, PO_DRIVE_LIST } from '../../../api/constant';
 import {
+  ALLOWED_MIME_TYPES,
   getMaxFileSize,
   getValidExt,
   isValidFileSize,
@@ -25,6 +26,12 @@ interface Props {
   onClearPastedImages?: () => void;
 }
 
+interface ValidationResult {
+  isValid: boolean;
+  invalidFiles: File[];
+  validFiles: File[];
+}
+
 export function useManageFile({ onFinishCallback, onClearPastedImages }: Props = {}) {
   const { t } = useTranslation();
   const chatNova = useChatNova();
@@ -33,6 +40,38 @@ export function useManageFile({ onFinishCallback, onClearPastedImages }: Props =
   const novaHistory = useAppSelector(novaHistorySelector);
   const { getMaxFilesPerUpload, getAvailableFileCnt } = useUserInfoUtils();
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
+
+  const validateFilesType = (files: File[]): ValidationResult => {
+    const result: ValidationResult = {
+      isValid: true,
+      invalidFiles: [],
+      validFiles: []
+    };
+
+    files.forEach((file) => {
+      if (ALLOWED_MIME_TYPES.includes(file.type)) {
+        result.validFiles.push(file);
+      } else {
+        result.isValid = false;
+        result.invalidFiles.push(file);
+      }
+    });
+
+    return result;
+  };
+
+  const validateFileUpload = (files: File[]) => {
+    const validation = validateFilesType(files);
+
+    // 실패했을때 나오는 팝업!
+    if (validation.isValid === false) {
+      console.log('validation', validation);
+      console.log('file이 들어옴!', files);
+    }
+
+    // 성공했을때는 localFiles에 넣는다.
+    dispatch(setLocalFiles(files));
+  };
 
   const loadLocalFile = async (files: File[]) => {
     dispatch(setDriveFiles([]));
@@ -88,7 +127,10 @@ export function useManageFile({ onFinishCallback, onClearPastedImages }: Props =
     });
 
     const support = supportedExtensions.filter((ext) => ext !== '.jpeg').join(', ');
+
     if (invalidFiles.length > 0) {
+      console.log('여기가 울리나?', invalidFiles);
+
       await confirm({
         title: '',
         msg:
@@ -241,7 +283,8 @@ export function useManageFile({ onFinishCallback, onClearPastedImages }: Props =
     loadLocalFile,
     loadDriveFile,
     getFileList,
-    getFileInfo
+    getFileInfo,
+    validateFileUpload
   };
 }
 

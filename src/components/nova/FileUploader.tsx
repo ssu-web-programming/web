@@ -42,12 +42,22 @@ type FileUploaderProps = {
   tooltipStyle?: React.CSSProperties;
   onFinish?: () => void;
   onClearPastedImages?: () => void;
+  type?: 'image' | 'file';
 };
 
 export const FileUploader = (props: FileUploaderProps) => {
-  const { target, accept, children, inputRef, tooltipStyle, onFinish, onClearPastedImages } = props;
+  const {
+    target,
+    accept,
+    children,
+    inputRef,
+    tooltipStyle,
+    onFinish,
+    onClearPastedImages,
+    type = 'image'
+  } = props;
 
-  const { loadLocalFile, getFileInfo } = useManageFile({
+  const { loadLocalFile, getFileInfo, validateFileUpload } = useManageFile({
     onFinishCallback: onFinish,
     onClearPastedImages
   });
@@ -359,7 +369,7 @@ export const FileUploader = (props: FileUploaderProps) => {
             target={target}
             accept={getAccept(accept)}
             handleOnChange={(files) => {
-              loadLocalFile(files);
+              type === 'file' ? validateFileUpload(files) : loadLocalFile(files);
             }}
             ref={inputRef}>
             {children}
