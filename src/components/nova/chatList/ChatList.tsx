@@ -52,6 +52,7 @@ import useCopyText from '../../hooks/copyText';
 import { useInsertDocsHandler } from '../../hooks/nova/useInsertDocsHandler';
 import SelectBox from '../../selectBox';
 import { getFileIcon, InputBarSubmitParam } from '../inputBar';
+import Reference from '../reference';
 import Tabs from '../tabs';
 
 import * as S from './style';
@@ -134,6 +135,7 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
       }
     }
   ];
+
   const chatButtonList =
     from === 'home' ? CHAT_BUTTON_LIST.filter((btn) => btn.name !== 'insert') : CHAT_BUTTON_LIST;
 
@@ -153,7 +155,8 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
           (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
         }
       }}
-      onScroll={(ref) => scrollHandler(ref)}>
+      onScroll={(ref) => scrollHandler(ref)}
+      isPerplexity={chatMode === CHAT_MODES.PERPLEXITY}>
       {novaHistory.map((item) => (
         <S.ChatItem key={item.id}>
           <S.Question>
@@ -266,10 +269,7 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
               />
             ) : (
               <div style={{ width: '100%', maxWidth: 'calc(100% - 40px)', paddingTop: '3px' }}>
-                <div>
-                  출처
-                  {item.references?.map((ref, index) => <div key={index}>{ref.title}</div>)}
-                </div>
+                {item.references && <Reference references={item.references} />}
                 <PreMarkdown text={item.output}>
                   <Overlay onSave={() => onSave(item)} />
                 </PreMarkdown>

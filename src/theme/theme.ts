@@ -19,6 +19,10 @@ export const lightTheme = {
       gray09: 'var(--ai-purple-97-list-over)',
       gray10: 'var(--gray-gray-10)',
       gray11: 'var(--gray-gray-20)',
+      gray12: 'var(--gray-gray-15)',
+      gray13: 'var(--gray-gray-22)',
+      yellow01: 'var(--yellow-yellow-95)',
+      yellow02: 'var(--yellow-yellow-95)',
       mainBg: 'var(--ai-purple-99-bg-light)',
       selected: 'var(--ai-purple-97-list-over)',
       dimBg: 'var(--white-alpha)'
@@ -27,6 +31,7 @@ export const lightTheme = {
       gray01: 'var(--gray-gray-40)',
       gray02: 'var(--gray-gray-30)',
       gray03: 'var(--gray-gray-40)',
+      gray04: 'var(--gray-gray-12)',
       purple01: 'var(--ai-purple-90)'
     },
     main: 'var(--ai-purple-50-main)',
@@ -50,6 +55,7 @@ export const lightTheme = {
       gray07: 'var(--gray-gray-60-03)',
       gray08: 'var(--gray-gray-60-03)',
       gray09: 'var(--gray-gray-70)',
+      gray10: 'var(--gray-gray-80-02)',
       highlight01: 'var(--ai-purple-45)',
       highlight02: 'var(--gray-gray-80-02)',
       highlight03: 'var(--ai-purple-50-main )'
@@ -88,6 +94,10 @@ export const darkTheme = {
       gray09: 'var(--ai-purple-30)',
       gray10: 'var(--gray-gray-87)',
       gray11: 'var(--gray-gray-85)',
+      gray12: 'var(--gray-gray-87)',
+      gray13: 'var(--gray-gray-35)',
+      yellow01: 'var(--gray-gray-85)',
+      yellow02: 'var(--gray-gray-90)',
       mainBg: 'var(--ai-purple-50-main-alpha)',
       selected: 'var(--ai-purple-50-main-alpha)',
       dimBg: 'var(--black-alpha)'
@@ -96,6 +106,7 @@ export const darkTheme = {
       gray01: 'var(--gray-gray-35)',
       gray02: 'var(--gray-gray-87)',
       gray03: 'var(--gray-gray-87)',
+      gray04: 'var(--gray-gray-87)',
       purple01: 'var(--ai-purple-80-sub)'
     },
     main: 'var(--ai-purple-50-main)',
@@ -119,6 +130,7 @@ export const darkTheme = {
       gray07: 'var(--gray-gray-60)',
       gray08: 'var(--gray-gray-35)',
       gray09: 'var(--gray-gray-60)',
+      gray10: 'var(--gray-gray-65)',
       highlight01: 'var(--ai-purple-90)',
       highlight02: 'var(--ai-purple-90)',
       highlight03: 'var(--ai-purple-90)'
