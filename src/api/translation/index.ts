@@ -29,7 +29,7 @@ const translationHttp = {
 
     const response = await res.json();
     console.log('response', response);
-    return response;
+    return response.data;
   },
   postTranslateDocument: async ({ file, sourceLang, targetLang }: PostTranslateDocument) => {
     const { res } = await apiWrapper().request(NOVA_TRANSLATE_DOCUMENT, {

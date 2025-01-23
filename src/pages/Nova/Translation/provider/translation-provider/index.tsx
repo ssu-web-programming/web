@@ -2,8 +2,14 @@ import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useStat
 
 export type ComponentType = 'INTRO' | 'TEXT_RESULT' | 'FILE_RESULT' | 'LANG_SEARCH';
 
-interface SharedTranslation {
+export interface TranslateResult {
+  detectedSourceLanguage: string;
+  translatedText: string;
+}
+
+interface SharedTranslation extends TranslateResult {
   componentType: ComponentType;
+  translateInputValue: string;
 }
 
 interface TranslationContextType {
@@ -26,7 +32,13 @@ export const useTranslationContext = () => {
 
 export function TranslationProvider({ children }: Props) {
   const [sharedTranslationInfo, setSharedTranslationInfo] = useState<SharedTranslation>({
-    componentType: 'INTRO'
+    componentType: 'INTRO',
+    // 번역 할 문장
+    translateInputValue: '',
+    // 감지된 언어
+    detectedSourceLanguage: '',
+    // 번역 된 문장
+    translatedText: ''
   });
 
   return (

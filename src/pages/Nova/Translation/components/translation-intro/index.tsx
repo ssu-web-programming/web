@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import translationHttp from 'api/translation';
 import { ReactComponent as CloseLightIcon } from 'img/light/ico_nova_close.svg';
 import { ReactComponent as ArrowIcon } from 'img/light/nova/translation/arrow_down.svg';
 import { ReactComponent as DeepL } from 'img/light/nova/translation/deepl_logo.svg';
@@ -7,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { NOVA_TAB_TYPE } from 'store/slices/tabSlice';
 import { css } from 'styled-components';
 
-import { useTranslationContext } from '../../provider/translation-provider';
+import { TranslateResult, useTranslationContext } from '../../provider/translation-provider';
 import DragAndDrop from '../drag-and-drop';
 import Toggle, { ToggleOption } from '../toggle';
 import TranslationFileUploader from '../translation-file-uploader';
@@ -32,8 +33,27 @@ export default function TranslationIntro() {
     { id: 'FILE', label: '파일 번역', icon: <S.StyledTransFile $isActive={type === 'FILE'} /> }
   ];
 
-  const submitTextTranslate = () => {
-    console.log('Text 번역을 시작해주세요.');
+  const handleMoveToTextResult = ({ detectedSourceLanguage, translatedText }: TranslateResult) => {
+    setSharedTranslationInfo((prevSharedTranslationInfo) => ({
+      ...prevSharedTranslationInfo,
+      componentType: 'TEXT_RESULT',
+      detectedSourceLanguage,
+      translatedText
+    }));
+  };
+
+  const submitTextTranslate = async () => {
+    const response = await translationHttp.postTranslateText({
+      text: translateInputValue,
+      sourceLang: 'KO',
+      targetLang: 'EL'
+    });
+
+    const {
+      result: { detectedSourceLanguage, translatedText }
+    } = response;
+
+    handleMoveToTextResult({ detectedSourceLanguage, translatedText });
   };
 
   const submitFileTranslate = () => {
@@ -54,7 +74,7 @@ export default function TranslationIntro() {
     // }));
   };
 
-  console.log('translateInputValue', translateInputValue);
+  // console.log('translateInputValue', translateInputValue);
 
   return (
     <>
