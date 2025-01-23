@@ -1,5 +1,4 @@
 import { ReactNode } from 'react';
-import NovaHeader from 'components/nova/Header';
 
 import { ComponentType, useTranslationContext } from '../../provider/translation-provider';
 import BgContainer from '../bg-container';
@@ -24,7 +23,7 @@ export default function TranslationContent() {
 
   return (
     <S.TranslationWrapper>
-      <NovaHeader />
+      {/* <NovaHeader /> */}
       <BgContainer>{componentMap[componentType]}</BgContainer>
     </S.TranslationWrapper>
   );

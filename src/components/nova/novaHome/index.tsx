@@ -92,7 +92,7 @@ const NovaHome = (props: NovaHomeProps) => {
           <S.ToolTitle>도구</S.ToolTitle>
           <S.AIToolWrap>
             {AI_TOOLS.map((tool, index) => (
-              <div key={index}>
+              <div key={index} onClick={() => handleMovePage(tool.tab)}>
                 <img src={tool.icon} alt={tool.alt} />
                 <span>{tool.name}</span>
               </div>

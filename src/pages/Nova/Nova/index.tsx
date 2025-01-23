@@ -36,6 +36,7 @@ import { NOVA_TAB_TYPE, selectNovaTab, selectTabSlice } from '../../../store/sli
 import { setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
 import { useAppSelector } from '../../../store/store';
 import Bridge from '../../../util/bridge';
+import Translation from '../Translation';
 
 import * as S from './style';
 
@@ -164,6 +165,8 @@ export default function Nova() {
           />
         </>
       );
+    } else if (selectedNovaTab === NOVA_TAB_TYPE.translation) {
+      return <Translation />;
     } else {
       switch (status) {
         case 'home':
