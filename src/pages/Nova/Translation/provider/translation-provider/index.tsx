@@ -1,6 +1,6 @@
 import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState } from 'react';
 
-export type ComponentType = 'INTRO' | 'TEXT_RESULT' | 'FILE_RESULT' | 'LANG_SEARCH';
+export type ComponentType = 'INTRO' | 'TEXT_RESULT' | 'FILE_RESULT' | 'LANG_SEARCH' | 'LOADING';
 
 export interface TranslateResult {
   detectedSourceLanguage: string;
@@ -15,6 +15,7 @@ interface SharedTranslation extends TranslateResult {
 interface TranslationContextType {
   sharedTranslationInfo: SharedTranslation;
   setSharedTranslationInfo: Dispatch<SetStateAction<SharedTranslation>>;
+  triggerLoading: () => void;
 }
 
 interface Props {
@@ -41,8 +42,16 @@ export function TranslationProvider({ children }: Props) {
     translatedText: ''
   });
 
+  const triggerLoading = () => {
+    setSharedTranslationInfo({
+      ...sharedTranslationInfo,
+      componentType: 'LOADING'
+    });
+  };
+
   return (
-    <TranslationContext.Provider value={{ sharedTranslationInfo, setSharedTranslationInfo }}>
+    <TranslationContext.Provider
+      value={{ sharedTranslationInfo, setSharedTranslationInfo, triggerLoading }}>
       {children}
     </TranslationContext.Provider>
   );

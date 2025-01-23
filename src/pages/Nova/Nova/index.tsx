@@ -37,6 +37,7 @@ import { setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles'
 import { useAppSelector } from '../../../store/store';
 import Bridge from '../../../util/bridge';
 import Translation from '../Translation';
+import TranslationTextResult from '../Translation/components/translation-text-result';
 
 import * as S from './style';
 

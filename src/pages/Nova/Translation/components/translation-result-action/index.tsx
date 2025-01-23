@@ -1,5 +1,8 @@
-import { ReactComponent as CopyIcon } from 'img/light/nova/translation/copy.svg';
-import { ReactComponent as InsertDocIcon } from 'img/light/nova/translation/insert_docs.svg';
+import IconTextButton from 'components/buttons/IconTextButton';
+import { useCopyToClipboard } from 'components/hooks/useCopyToClipboard';
+import copyIcon from 'img/light/nova/translation/copy.svg';
+import insertDocIcon from 'img/light/nova/translation/insert_docs.svg';
+import { useTranslation } from 'react-i18next';
 
 import * as S from './style';
 
@@ -16,13 +19,41 @@ export default function TranslationResultAction({
   isInsertDocAction = false,
   translatedValue
 }: Props) {
+  const { t } = useTranslation();
+  const { copyText } = useCopyToClipboard();
+
+  const ICON_BUTTON_LIST = [
+    {
+      name: t('Nova.Chat.InsertDoc.Title'),
+      iconSrc: insertDocIcon,
+      clickHandler: () => {
+        console.log('123');
+      },
+      isActive: isInsertDocAction
+    },
+    {
+      name: t('Nova.Chat.Copy'),
+      iconSrc: copyIcon,
+      clickHandler: async () => await copyText(translatedValue),
+      isActive: isCopyAction
+    }
+  ];
+
   return (
     <S.Wrapper>
       <S.Header>
         <p>{translatedLang}</p>
         <S.IconWrapper>
-          <div>{isInsertDocAction && <InsertDocIcon />}</div>
-          <div>{isCopyAction && <CopyIcon />}</div>
+          {ICON_BUTTON_LIST.filter((iconButton) => iconButton.isActive).map((iconButton) => (
+            <IconTextButton
+              key={iconButton.name}
+              onClick={iconButton.clickHandler}
+              tooltip={iconButton.name}
+              iconSrc={iconButton.iconSrc}
+              iconSize={24}
+              width={'fit'}
+            />
+          ))}
         </S.IconWrapper>
       </S.Header>
 

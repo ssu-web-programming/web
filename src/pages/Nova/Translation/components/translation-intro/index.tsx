@@ -22,7 +22,7 @@ export default function TranslationIntro() {
 
   const [type, setType] = useState<TranslateType>('TEXT');
   const [translateInputValue, setTranslateInputValue] = useState('');
-  const { setSharedTranslationInfo, sharedTranslationInfo } = useTranslationContext();
+  const { setSharedTranslationInfo, triggerLoading } = useTranslationContext();
 
   const options: ToggleOption<TranslateType>[] = [
     {
@@ -38,11 +38,15 @@ export default function TranslationIntro() {
       ...prevSharedTranslationInfo,
       componentType: 'TEXT_RESULT',
       detectedSourceLanguage,
-      translatedText
+      translatedText,
+      translateInputValue
     }));
   };
 
   const submitTextTranslate = async () => {
+    // 호진FIXME: 로딩 돌릴때 상태변경하는 로직 확인해야함!
+    triggerLoading();
+
     const response = await translationHttp.postTranslateText({
       text: translateInputValue,
       sourceLang: 'KO',

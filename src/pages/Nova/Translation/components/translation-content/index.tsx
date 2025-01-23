@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import Loading from 'components/nova/Loading';
 
 import { ComponentType, useTranslationContext } from '../../provider/translation-provider';
 import BgContainer from '../bg-container';
@@ -15,6 +16,7 @@ export default function TranslationContent() {
   } = useTranslationContext();
 
   const componentMap: Record<ComponentType, ReactNode> = {
+    LOADING: <Loading />,
     INTRO: <TranslationIntro />,
     TEXT_RESULT: <TranslationTextResult />,
     FILE_RESULT: <TranslationFileResult />,
