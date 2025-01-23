@@ -13,8 +13,9 @@ import * as S from './style';
 export type Item = { icon?: string; title: string; desc?: string; credit?: number };
 
 interface SelectBoxProps {
+  placeHolder?: string;
   menuItem: Item[];
-  selectedItem: string;
+  selectedItem?: string;
   setSelectedItem: (item: string) => void;
 }
 
@@ -30,7 +31,7 @@ export default function SelectBox(props: SelectBoxProps) {
     <Box sx={{ minWidth: 90 }}>
       <S.Form fullWidth>
         <Select
-          value={selectedItem}
+          value={selectedItem ?? props.placeHolder}
           onChange={handleChange}
           IconComponent={ArrowIcon}
           MenuProps={{
@@ -60,7 +61,7 @@ export default function SelectBox(props: SelectBoxProps) {
           }}
           renderValue={(value) => {
             const selectedItem = menuItem.find((item) => item.title === value);
-            return <div>{selectedItem?.title}</div>;
+            return selectedItem ? <div>{selectedItem.title}</div> : <div>{props.placeHolder}</div>;
           }}>
           {menuItem.map((item, index) => {
             return (

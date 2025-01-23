@@ -1,4 +1,5 @@
 export const AI_WRITE_RESPONSE_STREAM_API = '/api/v2/nlp/chatStream';
+export const NOVA_GET_LINK_REFERENCE = '/api/v2/nlp/og';
 export const ALLI_RESPONSE_STREAM_API = '/api/v2/alli/run';
 export const TEXT_TO_IMAGE_API = '/api/v2/image/generation';
 export const VOICEDOC_MAKE_VOICE = '/api/v2/tts/get-voice';

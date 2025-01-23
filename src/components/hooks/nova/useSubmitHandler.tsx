@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import {
   addChatOutputRes,
   appendChatOutput,
+  appendChatReferences,
   NovaChatType,
   NovaFileInfo,
   novaHistorySelector,
@@ -19,7 +20,13 @@ import { v4 } from 'uuid';
 
 import { track } from '@amplitude/analytics-browser';
 
-import { NOVA_CHAT_API, PO_DRIVE_DOC_OPEN_STATUS } from '../../../api/constant';
+import {
+  AI_WRITE_RESPONSE_STREAM_API,
+  NOVA_CHAT_API,
+  NOVA_GET_LINK_REFERENCE,
+  PO_DRIVE_DOC_OPEN_STATUS
+} from '../../../api/constant';
+import { ChatMode, getChatEngine } from '../../../constants/chatType';
 import { FileUploadState } from '../../../constants/fileTypes';
 import { appStateSelector } from '../../../store/slices/appState';
 import { DriveFileInfo } from '../../../store/slices/uploadFiles';
@@ -67,8 +74,8 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
     return results;
   };
 
-  const createNovaSubmitHandler = useCallback(
-    async (submitParam: InputBarSubmitParam) => {
+  const createChatSubmitHandler = useCallback(
+    async (submitParam: InputBarSubmitParam, chatMode: ChatMode) => {
       const id = v4();
       let result = '';
       const lastChat = novaHistory[novaHistory.length - 1];
@@ -143,7 +150,19 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
         formData.append('vsId', vsId);
         formData.append('threadId', threadId);
 
-        dispatch(pushChat({ id, input, type, role, vsId, threadId, output: '', files: fileInfo }));
+        dispatch(
+          pushChat({
+            id,
+            input,
+            type,
+            role,
+            vsId,
+            threadId,
+            chatType: chatMode,
+            output: '',
+            files: fileInfo
+          })
+        );
 
         requestor.current = apiWrapper();
         if (type === 'image' || type === 'document') {
@@ -289,7 +308,179 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
     [dispatch, errorHandle, novaHistory, setFileUploadState, showCreditToast, t, confirm]
   );
 
-  return { createNovaSubmitHandler };
+  const createAIWriteSubmitHandler = useCallback(
+    async (submitParam: InputBarSubmitParam, chatMode: ChatMode) => {
+      const id = v4();
+      let result = '';
+      const lastChat = novaHistory[novaHistory.length - 1];
+      const { vsId = '', threadId = '' } = lastChat || {};
+      const { input, files = [], type } = submitParam;
+      let splunk = null;
+      const timer = null;
+
+      try {
+        dispatch(setCreating('NOVA'));
+        dispatch(setUsingAI(true));
+
+        if (expireTimer.current) clearTimeout(expireTimer.current);
+
+        const formData = new FormData();
+        const role = 'user';
+        formData.append('content', input);
+        formData.append('role', role);
+        formData.append('type', type);
+        formData.append('vsId', vsId);
+        formData.append('threadId', threadId);
+
+        dispatch(
+          pushChat({ id, input, type, role, vsId, threadId, chatType: chatMode, output: '' })
+        );
+
+        requestor.current = apiWrapper();
+        const { res, logger } = await requestor.current.request(AI_WRITE_RESPONSE_STREAM_API, {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            engine: getChatEngine(chatMode),
+            history: [
+              {
+                content: input,
+                role: 'user'
+              }
+            ]
+          }),
+          method: 'POST'
+        });
+        splunk = logger;
+
+        if (timer) clearTimeout(timer);
+
+        const resVsId = res.headers.get('X-PO-AI-NOVA-API-VSID') || '';
+        const resThreadId = res.headers.get('X-PO-AI-NOVA-API-TID') || '';
+        const askType = res.headers.get('X-PO-AI-NOVA-API-ASK-TYPE') || '';
+        const expiredTime = res.headers.get('X-PO-AI-NOVA-API-EXPIRED-TIME') || '';
+
+        setFileUploadState({ type: '', state: 'ready', progress: 0 });
+        await streaming(res, async (contents) => {
+          const contentArr = contents.trim().split('\n');
+
+          for (const content of contentArr) {
+            if (!content.trim()) continue;
+
+            try {
+              const parsed = JSON.parse(content.trim());
+
+              if (parsed.citations.length > 0) {
+                const { res } = await apiWrapper().request(NOVA_GET_LINK_REFERENCE, {
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({
+                    urls: parsed.citations
+                  }),
+                  method: 'POST'
+                });
+
+                const response = await res.json();
+
+                if (response.success && Array.isArray(response.data)) {
+                  const references = response.data.map(
+                    (item: {
+                      data: {
+                        success: boolean;
+                        site_name: string;
+                        title: string;
+                        description: string;
+                        type: string;
+                        url: string;
+                      };
+                      url: string;
+                    }) => ({
+                      site: item.data.site_name || '',
+                      title: item.data.title || '',
+                      desc: item.data.description,
+                      type: item.data.type || '',
+                      url: item.url || '',
+                      favicon: item.url
+                        ? `https://www.google.com/s2/favicons?domain=${new URL(item.url).hostname}`
+                        : ''
+                    })
+                  );
+
+                  dispatch(
+                    appendChatReferences({
+                      id,
+                      references
+                    })
+                  );
+                  console.log('references: ', references);
+                }
+              }
+
+              dispatch(
+                appendChatOutput({
+                  id,
+                  output: parsed.content,
+                  vsId: resVsId,
+                  threadId: resThreadId,
+                  askType: askType as NovaChatType['askType'],
+                  expiredTime: parseInt(expiredTime, 10)
+                })
+              );
+              console.log('parsed: ', parsed);
+
+              result += parsed.content;
+            } catch (error) {
+              console.log('Error parsing JSON: ', error, 'Content:', content);
+            }
+          }
+        });
+
+        dispatch(updateChatStatus({ id, status: 'done' }));
+      } catch (err) {
+        if (timer) clearTimeout(timer);
+        if (requestor.current?.isAborted() === true) {
+          dispatch(updateChatStatus({ id, status: 'cancel' }));
+        } else {
+          dispatch(removeChat(id));
+          errorHandle(err);
+        }
+
+        dispatch(setUsingAI(false));
+      } finally {
+        dispatch(setCreating('none'));
+        setFileUploadState({ type: '', state: 'ready', progress: 0 });
+
+        try {
+          if (splunk) {
+            splunk({
+              dp: 'ai.nova',
+              el: vsId || type !== '' ? 'nova_document_or_image' : 'nova_chating',
+              gpt_ver: vsId || type !== '' ? 'NOVA_ASK_DOC_GPT4O' : 'NOVA_CHAT_GPT4O'
+            });
+            if (type) {
+              splunk({
+                dp: 'ai.nova',
+                el: 'upload_file',
+                file_type: type
+              });
+            }
+          }
+          track('click_nova_chating', { is_document: files.length > 0 });
+        } catch (err) {
+          /*empty*/
+        }
+
+        expireTimer.current = setTimeout(() => {
+          setExpiredNOVA(true);
+        }, novaExpireTime);
+      }
+    },
+    [dispatch, errorHandle, novaHistory, setFileUploadState, showCreditToast, t, confirm]
+  );
+
+  return { createChatSubmitHandler, createAIWriteSubmitHandler };
 };
 
 export default useSubmitHandler;

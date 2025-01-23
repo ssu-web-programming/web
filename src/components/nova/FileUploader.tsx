@@ -191,7 +191,7 @@ export const FileUploader = (props: FileUploaderProps) => {
     if (currentFile.type === 'notSupported') {
       await confirm({
         title: '',
-        msg: t('Index.Alert.UnopenableDocError', { max: getAvailableFileCnt(selectedNovaTab) })!,
+        msg: t('Nova.Alert.UnopenableDocError', { max: getAvailableFileCnt(selectedNovaTab) })!,
         onOk: {
           text: t('Confirm'),
           callback: () => {

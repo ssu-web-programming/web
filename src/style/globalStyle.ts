@@ -6,7 +6,7 @@ const GlobalStyle = createGlobalStyle`
   #root {
     margin: 0;
     padding: 0;
-    background-color: ${({ theme }: { theme: any }) => theme.color.background.gray02};
+    background-color: ${({ theme }: { theme: any }) => theme.color.background.gray11};
     font-family: 'Pretendard', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

@@ -11,6 +11,15 @@ export interface NovaFileInfo {
   base64?: string | null;
 }
 
+export interface NovaWebReference {
+  site?: string;
+  title: string;
+  desc?: string;
+  type?: string;
+  url: string;
+  favicon?: string;
+}
+
 export type NovaChatType = {
   id: string;
   input: string;
@@ -21,12 +30,15 @@ export type NovaChatType = {
   vsId?: string;
   threadId?: string;
   askType: '' | 'document' | 'image';
+  chatType: ChatMode;
 
   res?: string;
   expiredTime?: number;
 
   status: 'none' | 'request' | 'stream' | 'done' | 'cancel';
   files?: NovaFileInfo[];
+
+  references?: NovaWebReference[];
 };
 
 export type NovaHistoryState = {
@@ -55,6 +67,15 @@ const novaHistorySlice = createSlice({
     },
     pushChat: (state, action: PayloadAction<Omit<NovaChatType, 'status' | 'askType'>>) => {
       state.chatHistory.push({ ...action.payload, status: 'request', askType: '' });
+    },
+    appendChatReferences: (
+      state,
+      action: PayloadAction<Pick<NovaChatType, 'id' | 'references'>>
+    ) => {
+      const chat = state.chatHistory.find((chat) => chat.id === action.payload.id);
+      if (chat) {
+        chat.references = action.payload.references;
+      }
     },
     appendChatOutput: (
       state,
@@ -123,6 +144,7 @@ export const {
   pushChat,
   addChatOutputRes,
   appendChatOutput,
+  appendChatReferences,
   updateChatStatus,
   removeChat,
   setChatMode,

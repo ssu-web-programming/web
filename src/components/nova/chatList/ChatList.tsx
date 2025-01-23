@@ -28,143 +28,33 @@ import { useTranslation } from 'react-i18next';
 import Lottie from 'react-lottie-player';
 import {
   isShareModeSelector,
+  novaChatModeSelector,
   NovaChatType,
   NovaFileInfo,
   selectAllItems,
   selectedItemsSelector,
+  setChatMode,
   setIsShareMode,
   toggleItemSelection
 } from 'store/slices/nova/novaHistorySlice';
 import { NOVA_TAB_TYPE, selectNovaTab, selectTabSlice } from 'store/slices/tabSlice';
 import { useAppDispatch, useAppSelector } from 'store/store';
-import styled, { css } from 'styled-components';
+import { css } from 'styled-components';
 import Bridge, { ClientType, getPlatform } from 'util/bridge';
 import { getFileExtension, sliceFileName } from 'util/common';
 
-import { themeInfoSelector } from '../../store/slices/theme';
-import { setDriveFiles, setLocalFiles } from '../../store/slices/uploadFiles';
-import { blobToFile } from '../../util/files';
-import CheckBox from '../CheckBox';
-import useCopyText from '../hooks/copyText';
-import { useInsertDocsHandler } from '../hooks/nova/useInsertDocsHandler';
+import { CHAT_MODES, ChatMode, getChatTypeList } from '../../../constants/chatType';
+import { themeInfoSelector } from '../../../store/slices/theme';
+import { setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
+import { blobToFile } from '../../../util/files';
+import CheckBox from '../../CheckBox';
+import useCopyText from '../../hooks/copyText';
+import { useInsertDocsHandler } from '../../hooks/nova/useInsertDocsHandler';
+import SelectBox from '../../selectBox';
+import { getFileIcon, InputBarSubmitParam } from '../inputBar';
+import Tabs from '../tabs';
 
-import { getFileIcon, InputBarSubmitParam } from './inputBar';
-import Tabs from './tabs';
-
-const Wrapper = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex: 1 1 0;
-  gap: 12px;
-  flex-direction: column;
-  padding: 24px 16px;
-  overflow-y: auto;
-`;
-
-const ChatItem = styled.div`
-  width: 100%;
-  height: fit-content;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  color: ${({ theme }) => theme.color.text.gray04};
-`;
-
-const Chat = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 8px;
-
-  p {
-    font-size: 16px;
-  }
-`;
-
-const Question = styled(Chat)`
-  align-items: flex-start;
-
-  p {
-    font-weight: 500;
-    line-height: 25.6px;
-  }
-`;
-
-const QuestionContents = styled.div`
-  width: calc(100% - 40px);
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding-top: 3px;
-  word-wrap: break-word;
-`;
-
-const Answer = styled(Chat)`
-  width: 100%;
-  align-items: flex-start;
-
-  p {
-    font-weight: 400;
-    line-height: 24px;
-  }
-`;
-
-const ChatButtonWrapper = styled.div`
-  width: 100%;
-  height: 34px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 12px;
-  margin-top: 12px;
-
-  button > div {
-    gap: 4px;
-  }
-`;
-
-const FileItem = styled.div`
-  width: fit-content;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px;
-  border: 1px solid var(--gray-gray-40);
-  border-radius: 8px;
-  background: ${({ theme }) => theme.color.background.gray04};
-
-  font-size: 14px;
-  line-height: 21px;
-  text-align: left;
-
-  &:hover {
-    background-color: #c9cdd2;
-    cursor: pointer;
-  }
-`;
-
-const MakeNewImageGuide = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 6px;
-  overflow: hidden;
-`;
-
-const MakeNewImageMessage = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 4px;
-  margin-top: 6px;
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 20px;
-  color: ${({ theme }) => theme.color.text.main};
-`;
+import * as S from './style';
 
 interface ChatListProps {
   novaHistory: NovaChatType[];
@@ -193,6 +83,7 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
   const { creating } = useAppSelector(selectTabSlice);
   const selectedItems = useAppSelector(selectedItemsSelector);
   const isShareMode = useAppSelector(isShareModeSelector);
+  const chatMode = useAppSelector(novaChatModeSelector);
   const { from } = useLangParameterNavigate();
   const { onCopy } = useCopyText();
   const scrollRef = useRef<HTMLDivElement | null>(null);
@@ -253,7 +144,7 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
   }, [novaHistory]);
 
   return (
-    <Wrapper
+    <S.Wrapper
       ref={(node) => {
         scrollRef.current = node;
         if (typeof ref === 'function') {
@@ -264,8 +155,8 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
       }}
       onScroll={(ref) => scrollHandler(ref)}>
       {novaHistory.map((item) => (
-        <ChatItem key={item.id}>
-          <Question>
+        <S.ChatItem key={item.id}>
+          <S.Question>
             {isShareMode && (
               <CheckBox
                 isChecked={selectedItems.includes('q:' + item.id)}
@@ -277,10 +168,10 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
               />
             )}
             <Icon size={32} iconSrc={isLightMode ? UserLightIcon : UserDarkIcon}></Icon>
-            <QuestionContents>
+            <S.QuestionContents>
               <p>{item.input}</p>
               {item.files?.map((file) => (
-                <FileItem
+                <S.FileItem
                   key={file.name}
                   style={{ width: '100%' }}
                   onClick={async () => {
@@ -351,11 +242,11 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                   }}>
                   <Icon size={28} iconSrc={getFileIcon(file.name)}></Icon>
                   <span>{sliceFileName(file.name)}</span>
-                </FileItem>
+                </S.FileItem>
               ))}
-            </QuestionContents>
-          </Question>
-          <Answer>
+            </S.QuestionContents>
+          </S.Question>
+          <S.Answer>
             {isShareMode && (
               <CheckBox
                 isChecked={selectedItems.includes('a:' + item.id)}
@@ -375,21 +266,25 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
               />
             ) : (
               <div style={{ width: '100%', maxWidth: 'calc(100% - 40px)', paddingTop: '3px' }}>
+                <div>
+                  출처
+                  {item.references?.map((ref, index) => <div key={index}>{ref.title}</div>)}
+                </div>
                 <PreMarkdown text={item.output}>
                   <Overlay onSave={() => onSave(item)} />
                 </PreMarkdown>
                 {!isShareMode && (
                   <>
                     {item.res && (
-                      <MakeNewImageGuide>
-                        <MakeNewImageMessage>
+                      <S.MakeNewImageGuide>
+                        <S.MakeNewImageMessage>
                           <img
                             src={isLightMode ? ArrowCornerLightIcon : ArrowCornerDarkIcon}
                             alt="arrow"
                           />
                           <span>{t('Index.aiChat.ChangeImage')}</span>
                           <img src={isLightMode ? SparkleLightIcon : SparkleDarkIcon} alt="arrow" />
-                        </MakeNewImageMessage>
+                        </S.MakeNewImageMessage>
                         <Tabs
                           tabs={filteredTabValues}
                           activeTab={selectedNovaTab}
@@ -403,9 +298,9 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                             handleChangeTab(tab, item.res || '');
                           }}
                         />
-                      </MakeNewImageGuide>
+                      </S.MakeNewImageGuide>
                     )}
-                    <ChatButtonWrapper>
+                    <S.ChatButtonWrapper>
                       {chatButtonList
                         .filter((btn) => btn.status.includes(item.status))
                         .map((btn) => (
@@ -424,15 +319,36 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                             tooltip={btn.name}
                           />
                         ))}
-                    </ChatButtonWrapper>
+                      {creating != 'NOVA' &&
+                        !expiredNOVA &&
+                        novaHistory[novaHistory.length - 1].id === item.id &&
+                        item.chatType !== CHAT_MODES.PERPLEXITY && (
+                          <SelectBox
+                            placeHolder={'다른 답변 보기'}
+                            menuItem={getChatTypeList(isLightMode).filter(
+                              (item) => item.title !== chatMode
+                            )}
+                            setSelectedItem={(item: string) => {
+                              dispatch(setChatMode(item as ChatMode));
+                              if (selectedNovaTab !== NOVA_TAB_TYPE.home) {
+                                if ((item as ChatMode) === CHAT_MODES.PERPLEXITY) {
+                                  dispatch(selectNovaTab(NOVA_TAB_TYPE.perplexity));
+                                } else {
+                                  dispatch(selectNovaTab(NOVA_TAB_TYPE.aiChat));
+                                }
+                              }
+                            }}
+                          />
+                        )}
+                    </S.ChatButtonWrapper>
                   </>
                 )}
               </div>
             )}
-          </Answer>
-        </ChatItem>
+          </S.Answer>
+        </S.ChatItem>
       ))}
-    </Wrapper>
+    </S.Wrapper>
   );
 });
 

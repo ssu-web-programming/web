@@ -125,7 +125,7 @@ const useErrorHandle = () => {
     } else if (error instanceof DocConvertingError) {
       confirm({
         title: '',
-        msg: t('Index.Alert.FailedConvertDoc'),
+        msg: t('Nova.Alert.FailedConvertDoc'),
         onOk: {
           text: t('Confirm'),
           callback: () => {}
@@ -164,7 +164,7 @@ const useErrorHandle = () => {
     } else if (error instanceof DelayDocConverting) {
       confirm({
         title: '',
-        msg: t('Index.Alert.ReQuestion'),
+        msg: t('Nova.Alert.ReQuestion'),
         onOk: {
           text: t('Confirm'),
           callback: () => {}
@@ -173,7 +173,7 @@ const useErrorHandle = () => {
     } else if (error instanceof NoFileInDrive) {
       confirm({
         title: '',
-        msg: t('Index.Alert.NoFileInDrive'),
+        msg: t('Nova.Alert.NoFileInDrive'),
         onOk: {
           text: t('Confirm'),
           callback: () => {}

@@ -7,7 +7,6 @@ export const InputBarBase = styled.div<{ disabled: boolean }>`
   align-items: center;
   flex-direction: column;
   justify-content: center;
-  border-top: ${({ theme }) => (theme.mode === 'dark' ? '1px solid var(--gray-gray-87)' : 'none')};
   box-shadow: ${({ theme }) =>
     theme.mode === 'light' ? '0px -4px 8px 0px var(--gray-shadow-light)' : 'none'};
   background-color: ${({ theme }) => theme.color.background.gray05};
@@ -96,7 +95,7 @@ export const InputTxtWrapper = styled.div<{ hasValue: boolean }>`
   width: 100%;
   min-height: 40px;
   height: auto;
-  padding: 6px 12px;
+  padding: 12px 12px 8px 12px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;

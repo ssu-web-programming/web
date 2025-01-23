@@ -93,7 +93,7 @@ export function useManageFile({ onFinishCallback, onClearPastedImages }: Props =
         title: '',
         msg:
           selectedNovaTab === 'aiChat'
-            ? t('Index.Alert.CommonUnsupportFile')
+            ? t('Nova.Alert.CommonUnsupportFile')
             : t(`Nova.Alert.CommonUnsupportImage`, { support }),
         onOk: {
           text: t('Confirm'),
@@ -109,7 +109,7 @@ export function useManageFile({ onFinishCallback, onClearPastedImages }: Props =
     if (invalidSize.length > 0) {
       confirm({
         title: '',
-        msg: t('Index.Alert.OverFileUploadSize', {
+        msg: t('Nova.Alert.OverFileUploadSize', {
           max: getMaxFileSize(selectedNovaTab),
           min: MIN_FILE_UPLOAD_SIZE_KB
         })!,

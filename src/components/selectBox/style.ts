@@ -20,12 +20,15 @@ export const Form = styled(FormControl)`
   }
 
   .MuiSelect-select {
+    height: 29px !important;
+    min-height: 29px !important;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 4px 4.5px 4px 10px;
     border: 1px solid ${({ theme }) => theme.color.border.gray03};
     border-radius: 8px;
+    box-sizing: border-box;
 
     div {
       font-size: 14px;

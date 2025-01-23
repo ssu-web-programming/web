@@ -86,3 +86,22 @@ export const getChatTypeList = (isLightMode: boolean) => [
     ]
   }
 ];
+
+export const getChatEngine = (mode: ChatMode) => {
+  switch (mode) {
+    case 'GPT-3.5':
+      return 'gpt3.5';
+    case 'GPT-4':
+      return 'gpt4';
+    case 'GPT-4o':
+      return 'gpt4o';
+    case 'Claude 3.5 Sonnet':
+      return 'claude';
+    case 'CLOVA X':
+      return 'clovax';
+    case 'Perplexity':
+      return 'perplexity';
+    default:
+      return '';
+  }
+};

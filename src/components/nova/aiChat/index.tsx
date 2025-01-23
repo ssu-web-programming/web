@@ -42,7 +42,7 @@ import CheckBox from '../../CheckBox';
 import { useConfirm } from '../../Confirm';
 import useCopyText from '../../hooks/copyText';
 import Icon from '../../Icon';
-import ChatList from '../ChatList';
+import ChatList from '../chatList/ChatList';
 import { FileUploading } from '../FileUploading';
 import { Guide } from '../Guide';
 import { ImagePreview } from '../ImagePreview';
@@ -53,7 +53,7 @@ import * as S from './style';
 interface AIChatProps {
   expiredNOVA: boolean;
   setExpiredNOVA: (isExpired: boolean) => void;
-  createNovaSubmitHandler: (param: InputBarSubmitParam) => Promise<void>;
+  createChatSubmitHandler: (param: InputBarSubmitParam) => Promise<void>;
   fileUploadState: FileUploadState;
 }
 
@@ -286,7 +286,7 @@ const AIChat = (props: AIChatProps) => {
             <ChatList
               expiredNOVA={props.expiredNOVA}
               novaHistory={novaHistory}
-              onSubmit={props.createNovaSubmitHandler}
+              onSubmit={props.createChatSubmitHandler}
               onSave={onSave}
               scrollHandler={handleOnScroll}
               setImagePreview={setImagePreview}
@@ -324,7 +324,7 @@ const AIChat = (props: AIChatProps) => {
               novaHistory={novaHistory}
               disabled={creating === 'NOVA'}
               expiredNOVA={props.expiredNOVA}
-              onSubmit={props.createNovaSubmitHandler}
+              onSubmit={props.createChatSubmitHandler}
               contents={inputContents}
               setContents={setInputContents}
             />

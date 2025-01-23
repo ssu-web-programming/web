@@ -30,7 +30,9 @@ import Result from '../../../components/nova/Result';
 import Theme from '../../../components/nova/Theme';
 import TimeOut from '../../../components/nova/TimeOut';
 import Uploading from '../../../components/nova/Uploading';
+import { CHAT_MODES } from '../../../constants/chatType';
 import { FileUploadState } from '../../../constants/fileTypes';
+import { novaChatModeSelector } from '../../../store/slices/nova/novaHistorySlice';
 import { selectPageStatus } from '../../../store/slices/nova/pageStatusSlice';
 import { NOVA_TAB_TYPE, selectNovaTab, selectTabSlice } from '../../../store/slices/tabSlice';
 import { setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
@@ -65,13 +67,17 @@ export default function Nova() {
     state: 'ready',
     progress: 0
   });
-  const { createNovaSubmitHandler } = useSubmitHandler({ setFileUploadState, setExpiredNOVA });
+  const chatMode = useAppSelector(novaChatModeSelector);
+  const { createChatSubmitHandler, createAIWriteSubmitHandler } = useSubmitHandler({
+    setFileUploadState,
+    setExpiredNOVA
+  });
 
   useEffect(() => {
     if (expiredNOVA) {
       confirm({
         title: '',
-        msg: t('Index.Alert.ExpiredNOVA'),
+        msg: t('Nova.Alert.ExpiredNOVA'),
         onOk: {
           text: t(`Confirm`),
           callback: () => {
@@ -145,7 +151,11 @@ export default function Nova() {
         <NovaHome
           expiredNOVA={expiredNOVA}
           setExpiredNOVA={setExpiredNOVA}
-          createNovaSubmitHandler={createNovaSubmitHandler}
+          createChatSubmitHandler={
+            chatMode === CHAT_MODES.GPT_4O
+              ? (submitParam) => createChatSubmitHandler(submitParam, chatMode)
+              : (submitParam) => createAIWriteSubmitHandler(submitParam, chatMode)
+          }
           fileUploadState={fileUploadState}
         />
       );
@@ -159,7 +169,11 @@ export default function Nova() {
           <AIChat
             expiredNOVA={expiredNOVA}
             setExpiredNOVA={setExpiredNOVA}
-            createNovaSubmitHandler={createNovaSubmitHandler}
+            createChatSubmitHandler={
+              chatMode === CHAT_MODES.GPT_4O
+                ? (submitParam) => createChatSubmitHandler(submitParam, chatMode)
+                : (submitParam) => createAIWriteSubmitHandler(submitParam, chatMode) // 래퍼 함수로 전달
+            }
             fileUploadState={fileUploadState}
           />
         </>

@@ -59,7 +59,7 @@ const AI_IMAGES = [
 interface NovaHomeProps {
   expiredNOVA: boolean;
   setExpiredNOVA: (isExpired: boolean) => void;
-  createNovaSubmitHandler: (param: InputBarSubmitParam) => Promise<void>;
+  createChatSubmitHandler: (param: InputBarSubmitParam) => Promise<void>;
   fileUploadState: FileUploadState;
 }
 
@@ -115,7 +115,7 @@ const NovaHome = (props: NovaHomeProps) => {
         novaHistory={novaHistory}
         disabled={creating === 'NOVA'}
         expiredNOVA={props.expiredNOVA}
-        onSubmit={props.createNovaSubmitHandler}
+        onSubmit={props.createChatSubmitHandler}
         contents={inputContents}
         setContents={setInputContents}
       />
