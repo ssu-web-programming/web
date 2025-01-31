@@ -38,6 +38,8 @@ const GlobalStyle = createGlobalStyle`
   }
 
   :root {
+    --yellow-yellow-95: #fcfcf9;
+
     --ai-purple-30: #3e0f8d;
     --ai-purple-40: #602bc1;
     --ai-purple-45: #511bb2;
@@ -67,7 +69,10 @@ const GlobalStyle = createGlobalStyle`
     --gray-gray-30: #E8EBED;
     --gray-gray-35: #595959;
     --gray-gray-25: #d8d8d8;
+    --gray-gray-22: #e5e5e5;
     --gray-gray-20: #f2f4f6;
+    --gray-gray-15: #f3f3ee;
+    --gray-gray-12: #ebebe5;
     --gray-gray-10: #f7f8f9;
     --white: #ffffff;
     --white-alpha: rgba(255, 255, 255, 0.7);
