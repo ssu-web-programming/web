@@ -1,17 +1,13 @@
-import React, { useRef, useState } from 'react';
-import Button from 'components/buttons/Button';
-import DownloadIcon from 'img/light/ico_download_white.svg';
+import React, { PropsWithChildren, useRef, useState } from 'react';
 import { ReactComponent as GoBackward } from 'img/light/nova/voiceDictation/go_backward.svg';
 import { ReactComponent as GoForward } from 'img/light/nova/voiceDictation/go_forward.svg';
 import { ReactComponent as Pause } from 'img/light/nova/voiceDictation/pause.svg';
 import { ReactComponent as Play } from 'img/light/nova/voiceDictation/play.svg';
-import { useTranslation } from 'react-i18next';
-import { css } from 'styled-components';
 
 import * as S from './style';
 
 // 메인 컴포넌트 Props 타입
-interface AudioPlayerProps {
+interface AudioPlayerProps extends PropsWithChildren {
   audioUrl: string;
   onTimeUpdate?: (currentTime: number) => void;
   onDurationChange?: (duration: number) => void;
@@ -27,14 +23,14 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
   onTimeUpdate,
   onDurationChange,
   onPlay,
-  onPause
+  onPause,
+  children
 }) => {
-  const { t } = useTranslation();
-
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [duration, setDuration] = useState<number>(0);
   const [playbackSpeed, setPlaybackSpeed] = useState<PlaybackSpeed>(1.0);
+
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const formatTime = (timeInSeconds: number): string => {
@@ -138,27 +134,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
         </S.SkipButton>
       </S.ControlsContainer>
 
-      <S.ButtonWrapper>
-        <Button
-          variant="purple"
-          width={'full'}
-          height={48}
-          cssExt={css`
-            display: flex;
-            gap: 4px;
-            font-size: 16px;
-            font-weight: 500;
-            border-radius: 8px;
-          `}
-          onClick={() => console.log(123)}>
-          <img src={DownloadIcon} alt="download" />
-          <span>{t(`Nova.Result.Save`)}</span>
-        </Button>
-      </S.ButtonWrapper>
-
-      {/* <S.BottomBar>
-        <S.BottomIndicator />
-      </S.BottomBar> */}
+      {children}
     </S.Container>
   );
 };

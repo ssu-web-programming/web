@@ -87,14 +87,7 @@ const PlayButton = styled(Button)`
   }
 `;
 
-const ButtonWrapper = styled.div`
-  padding: 0px 16px;
-  margin-top: 16px;
-  margin-bottom: 24px;
-`;
-
 export {
-  ButtonWrapper,
   Container,
   ControlsContainer,
   PlaybackSpeedButton,

@@ -1,14 +1,21 @@
+import Button from 'components/buttons/Button';
 import CheckDarkIcon from 'img/dark/nova/check_purple.svg';
+import DownloadIcon from 'img/light/ico_download_white.svg';
 import CheckLightIcon from 'img/light/nova/check_purple.svg';
+import { overlay } from 'overlay-kit';
+import { useTranslation } from 'react-i18next';
 import { themeInfoSelector } from 'store/slices/theme';
 import { useAppSelector } from 'store/store';
+import { css } from 'styled-components';
 
 import AudioPlayer from '../voice-audio-player';
+import VoiceSaveBottomSheet from '../voice-save-bottom-sheet';
 
 import * as S from './style';
 
 export default function VoiceDictationResult() {
   const { isLightMode } = useAppSelector(themeInfoSelector);
+  const { t } = useTranslation();
 
   const transcripts = [
     {
@@ -36,6 +43,12 @@ export default function VoiceDictationResult() {
       text: '가나다라마바사 안녕하세요는 가나다라마바사 안녕하세요는 가나다라마바사 안녕하세요는 가나다라마바사 안녕하세요는가나다라마바사가나다라마바사 안녕하세요는 가나다라마바사 안녕하세요는 가나다라마바사 안녕하세요는 가나다라마바사 안녕하세요는가나다라마바사가나다라마바사 안녕하세요는 가나다라마바사 안녕하세요는 가나다라마바사 안녕하세요는 가나다라마바사 안녕하세요는가나다라마바사 안녕하세요는 가나다라마바사 안녕하세요는가나다라마바사 안녕하세요는 가나다라마바사 안녕하세요는'
     }
   ];
+
+  const handleOpenSaveOverlay = () => {
+    overlay.open(({ isOpen, close }) => {
+      return <VoiceSaveBottomSheet isOpened={isOpen} setIsOpened={close} />;
+    });
+  };
 
   return (
     <S.Wrapper>
@@ -76,8 +89,26 @@ export default function VoiceDictationResult() {
           audioUrl="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3"
           onPlay={() => console.log('Started playing')}
           onPause={() => console.log('Paused')}
-          onTimeUpdate={(time) => console.log('Current time:', time)}
-        />
+          onTimeUpdate={(time) => console.log('Current time:', time)}>
+          {/* 호진FIXME: 아래 컴포넌트는 audio 로직과 떨어져있는게 맞는 것 같음! */}
+          <S.ButtonWrapper>
+            <Button
+              variant="purple"
+              width={'full'}
+              height={48}
+              cssExt={css`
+                display: flex;
+                gap: 4px;
+                font-size: 16px;
+                font-weight: 500;
+                border-radius: 8px;
+              `}
+              onClick={handleOpenSaveOverlay}>
+              <img src={DownloadIcon} alt="download" />
+              <span>{t(`Nova.Result.Save`)}</span>
+            </Button>
+          </S.ButtonWrapper>
+        </AudioPlayer>
       </S.Container>
     </S.Wrapper>
   );

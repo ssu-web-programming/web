@@ -141,7 +141,14 @@ const SaveButton = styled.button`
   font-weight: 500;
 `;
 
+const ButtonWrapper = styled.div`
+  padding: 0px 16px;
+  margin-top: 16px;
+  margin-bottom: 24px;
+`;
+
 export {
+  ButtonWrapper,
   Container,
   Description,
   Header,

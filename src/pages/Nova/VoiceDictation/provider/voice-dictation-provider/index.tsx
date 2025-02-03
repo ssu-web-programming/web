@@ -33,7 +33,7 @@ export const useVoiceDictationContext = () => {
 export default function VoiceDictationProvider({ children }: Props) {
   const [sharedVoiceDictationInfo, setSharedVoiceDictationInfo] =
     useState<SharedVoiceDictationInfo>({
-      componentType: 'VOICE_READY'
+      componentType: 'RESULT'
     });
 
   return (
