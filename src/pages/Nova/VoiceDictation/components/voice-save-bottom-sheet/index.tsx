@@ -4,6 +4,8 @@ import { ReactComponent as File } from 'img/light/nova/voiceDictation/file.svg';
 import { ReactComponent as Mic } from 'img/light/nova/voiceDictation/mic.svg';
 import { overlay } from 'overlay-kit';
 
+import VoiceFileModalContent from '../voice-file-modal-content';
+
 import * as S from './style';
 
 interface Props {
@@ -13,12 +15,12 @@ interface Props {
 
 export default function VoiceSaveBottomSheet({ isOpened, setIsOpened }: Props) {
   const handleOpenSaveFileFormat = () => {
-    console.log('123123123123');
+    overlay.closeAll();
 
     overlay.open(({ isOpen, close }) => {
       return (
         <OverlayModal isOpen={isOpen} onClose={close}>
-          <div>안녕!</div>
+          <VoiceFileModalContent />
         </OverlayModal>
       );
     });
@@ -28,12 +30,12 @@ export default function VoiceSaveBottomSheet({ isOpened, setIsOpened }: Props) {
       <S.Container>
         <S.Title>저장하기</S.Title>
         <S.ItemWrapper>
-          <S.Item onClick={handleOpenSaveFileFormat}>
+          <S.Item>
             <Mic />
             <p>음성파일</p>
           </S.Item>
 
-          <S.Item>
+          <S.Item onClick={handleOpenSaveFileFormat}>
             <File />
             <p>받아쓰기 파일</p>
           </S.Item>
