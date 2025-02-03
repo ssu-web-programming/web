@@ -18,7 +18,8 @@ export default function VoiceDictationContent() {
   const componentMap: Record<VoiceDictationComponentType, ReactNode> = {
     LOADING: <Loading />,
     INTRO: <VoiceDictationIntro />,
-    READY: <VoiceDictationReady />,
+    FILE_READY: <VoiceDictationReady />,
+    VOICE_READY: <VoiceDictationReady />,
     RESULT: <VoiceDictationResult />
   };
 

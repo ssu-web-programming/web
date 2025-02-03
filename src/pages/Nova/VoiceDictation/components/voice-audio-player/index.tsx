@@ -10,12 +10,9 @@ import { css } from 'styled-components';
 
 import * as S from './style';
 
-// 스타일드 컴포넌트 Props 타입
-
 // 메인 컴포넌트 Props 타입
 interface AudioPlayerProps {
   audioUrl: string;
-  title?: string;
   onTimeUpdate?: (currentTime: number) => void;
   onDurationChange?: (duration: number) => void;
   onPlay?: () => void;

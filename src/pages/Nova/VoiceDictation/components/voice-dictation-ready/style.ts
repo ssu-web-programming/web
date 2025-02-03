@@ -79,9 +79,22 @@ const RecordingBox = styled.div`
 
 const FileTitle = styled.span`
   color: #454c53;
-  margin-top: 8px;
   font-size: 16px;
   line-height: 24px;
+`;
+
+const InputFileWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+`;
+
+const InputFileTitle = styled.input`
+  font-family: Pretendard;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  text-align: center;
 `;
 
 const Duration = styled.span`
@@ -154,6 +167,8 @@ export {
   Duration,
   FileTitle,
   Header,
+  InputFileTitle,
+  InputFileWrapper,
   LanguageLabel,
   LanguageSelector,
   LanguageValue,

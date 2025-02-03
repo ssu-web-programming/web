@@ -1,6 +1,11 @@
 import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState } from 'react';
 
-export type VoiceDictationComponentType = 'INTRO' | 'LOADING' | 'READY' | 'RESULT';
+export type VoiceDictationComponentType =
+  | 'INTRO'
+  | 'LOADING'
+  | 'VOICE_READY'
+  | 'FILE_READY'
+  | 'RESULT';
 
 interface Props {
   children: ReactNode;
@@ -28,7 +33,7 @@ export const useVoiceDictationContext = () => {
 export default function VoiceDictationProvider({ children }: Props) {
   const [sharedVoiceDictationInfo, setSharedVoiceDictationInfo] =
     useState<SharedVoiceDictationInfo>({
-      componentType: 'RESULT'
+      componentType: 'VOICE_READY'
     });
 
   return (

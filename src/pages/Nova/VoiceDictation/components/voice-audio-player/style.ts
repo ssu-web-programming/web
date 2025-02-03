@@ -8,7 +8,6 @@ interface ProgressBarProps {
 const Container = styled.div`
   width: 100%;
   background-color: white;
-  border-radius: 8px;
   margin-top: 12px;
 `;
 
