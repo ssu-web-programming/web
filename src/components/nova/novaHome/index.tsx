@@ -36,7 +36,6 @@ const AI_TOOLS = [
 ];
 
 const AI_IMAGES = [
-  { icon: RemoveBGIcon, name: 'AIChat(Test)', alt: 'test', tab: NOVA_TAB_TYPE.aiChat },
   { icon: RemoveBGIcon, name: '배경 제거', alt: 'removeBG', tab: NOVA_TAB_TYPE.removeBG },
   { icon: improveImgIcon, name: '해상도 향상', alt: 'improveRes', tab: NOVA_TAB_TYPE.improvedRes },
   { icon: ChangeBGIcon, name: '배경 변경', alt: 'changeBG', tab: NOVA_TAB_TYPE.changeBG },

@@ -61,7 +61,6 @@ export function apiWrapper() {
       throw new Error(ERR_INVALID_SESSION);
     }
 
-    console.log('resSession', resSession);
     const AID = resSession.sessionInfo['AID'];
     const BID = resSession.sessionInfo['BID'];
     const SID = resSession.sessionInfo['SID'];

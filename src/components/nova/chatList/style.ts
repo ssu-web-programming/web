@@ -1,7 +1,5 @@
 import styled from 'styled-components';
 
-import translation from '../../../api/translation';
-
 export const Wrapper = styled.div<{ isPerplexity: boolean }>`
   width: 100%;
   height: 100%;
@@ -12,7 +10,7 @@ export const Wrapper = styled.div<{ isPerplexity: boolean }>`
   padding: 24px 16px;
   overflow-y: auto;
   background-color: ${({ isPerplexity, theme }) =>
-    isPerplexity ? theme.color.background.yellow01 : translation};
+    isPerplexity ? theme.color.background.yellow01 : 'transparent'};
 `;
 
 export const ChatItem = styled.div`

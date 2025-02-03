@@ -36,7 +36,7 @@ export const StyledButton = styled.div<{ isExpanded: boolean }>`
 export const ItemWrap = styled.div`
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  align-items: center;
+  align-items: flex-start;
   gap: 4px;
 `;
 
@@ -153,5 +153,10 @@ export const SheetItem = styled.div`
     font-weight: 400;
     line-height: 21px;
     color: ${({ theme }) => theme.color.text.gray10};
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 `;

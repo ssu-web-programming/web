@@ -227,7 +227,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
     return t(`Nova.Tabs.${tab}`);
   };
 
-  const handleGoBack = async () => {
+  const handleGoHome = async () => {
     if (
       status !== 'progress' &&
       status !== 'saving' &&
@@ -264,7 +264,15 @@ export default function NovaHeader(props: NovaHeaderProps) {
         <>
           <S.TitleWrapper>
             {selectedNovaTab === NOVA_TAB_TYPE.home || isStartedByRibbon ? (
-              <S.Logo />
+              <>
+                <S.Logo onClick={handleGoHome} />
+                {(selectedNovaTab === NOVA_TAB_TYPE.aiChat ||
+                  selectedNovaTab === NOVA_TAB_TYPE.perplexity) && (
+                  <ChatMode>
+                    <span>{chatMode}</span>
+                  </ChatMode>
+                )}
+              </>
             ) : (
               <>
                 <img
@@ -279,7 +287,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
                       : ArrowLeftDisableIcon
                   }
                   alt="arrow-left"
-                  onClick={handleGoBack}
+                  onClick={handleGoHome}
                   style={{
                     cursor: 'pointer'
                   }}

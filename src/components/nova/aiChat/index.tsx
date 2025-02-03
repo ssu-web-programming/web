@@ -8,7 +8,7 @@ import { css } from 'styled-components';
 
 import { apiWrapper } from '../../../api/apiWrapper';
 import { NOVA_SHARE_CHAT } from '../../../api/constant';
-import { CHAT_MODES } from '../../../constants/chatType';
+import { CHAT_MODES, ChatMode } from '../../../constants/chatType';
 import { FileUploadState } from '../../../constants/fileTypes';
 import ico_reading_glasses_dark from '../../../img/dark/duotone_magnifying_glass_dark.svg';
 import ico_documents_dark from '../../../img/dark/ico_documents.svg';
@@ -53,7 +53,16 @@ import * as S from './style';
 interface AIChatProps {
   expiredNOVA: boolean;
   setExpiredNOVA: (isExpired: boolean) => void;
-  createChatSubmitHandler: (param: InputBarSubmitParam) => Promise<void>;
+  createChatSubmitHandler: (
+    param: InputBarSubmitParam,
+    chatMode: ChatMode,
+    isAnswer: boolean
+  ) => Promise<void>;
+  createAIWriteSubmitHandler: (
+    param: InputBarSubmitParam,
+    chatMode: ChatMode,
+    isAnswer: boolean
+  ) => Promise<void>;
   fileUploadState: FileUploadState;
 }
 
@@ -280,16 +289,18 @@ const AIChat = (props: AIChatProps) => {
                       : t(`Nova.aiChat.SelectAll`)}
                   </span>
                 </div>
-                <span>{t('Index.aiChat.SelectChat', { count: selectedItems.length })!}</span>
+                <span>{t('Nova.aiChat.SelectChat', { count: selectedItems.length })!}</span>
               </S.ShareGuide>
             )}
             <ChatList
               expiredNOVA={props.expiredNOVA}
               novaHistory={novaHistory}
-              onSubmit={props.createChatSubmitHandler}
+              createChatSubmitHandler={props.createChatSubmitHandler}
+              createAIWriteSubmitHandler={props.createAIWriteSubmitHandler}
               onSave={onSave}
               scrollHandler={handleOnScroll}
               setImagePreview={setImagePreview}
+              setInputContents={setInputContents}
               ref={chatListRef}
             />
             {showScrollDownBtn && (
@@ -324,7 +335,11 @@ const AIChat = (props: AIChatProps) => {
               novaHistory={novaHistory}
               disabled={creating === 'NOVA'}
               expiredNOVA={props.expiredNOVA}
-              onSubmit={props.createChatSubmitHandler}
+              onSubmit={
+                chatMode === CHAT_MODES.GPT_4O
+                  ? props.createChatSubmitHandler
+                  : props.createAIWriteSubmitHandler
+              }
               contents={inputContents}
               setContents={setInputContents}
             />

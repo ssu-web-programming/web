@@ -30,7 +30,7 @@ const Wrap = styled.div`
   position: relative;
   height: 206px;
   padding: 0 16px;
-  border: 1px dashed ${({ theme }) => theme.color.border.grayray01};
+  border: 1px dashed ${({ theme }) => theme.color.border.gray01};
   border-radius: 8px;
   background-color: ${({ theme }) => theme.color.background.gray01};
 `;

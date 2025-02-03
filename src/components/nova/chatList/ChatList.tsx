@@ -33,7 +33,6 @@ import {
   NovaFileInfo,
   selectAllItems,
   selectedItemsSelector,
-  setChatMode,
   setIsShareMode,
   toggleItemSelection
 } from 'store/slices/nova/novaHistorySlice';
@@ -52,6 +51,7 @@ import useCopyText from '../../hooks/copyText';
 import { useInsertDocsHandler } from '../../hooks/nova/useInsertDocsHandler';
 import SelectBox from '../../selectBox';
 import { getFileIcon, InputBarSubmitParam } from '../inputBar';
+import RecommendedQuestions from '../recommendedQuestions';
 import Reference from '../reference';
 import Tabs from '../tabs';
 
@@ -59,11 +59,21 @@ import * as S from './style';
 
 interface ChatListProps {
   novaHistory: NovaChatType[];
-  onSubmit: (submitParam: InputBarSubmitParam) => void;
+  createChatSubmitHandler: (
+    submitParam: InputBarSubmitParam,
+    chatMode: ChatMode,
+    isAnswer: boolean
+  ) => void;
+  createAIWriteSubmitHandler: (
+    submitParam: InputBarSubmitParam,
+    chatMode: ChatMode,
+    isAnswer: boolean
+  ) => void;
   onSave: (history: NovaChatType) => void;
   scrollHandler: (e: React.UIEvent<HTMLDivElement>) => void;
   expiredNOVA: boolean;
   setImagePreview: React.Dispatch<React.SetStateAction<NovaFileInfo | null>>;
+  setInputContents: React.Dispatch<React.SetStateAction<string>>;
 }
 
 type ChatButtonType = {
@@ -74,7 +84,15 @@ type ChatButtonType = {
 };
 
 const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
-  const { novaHistory, onSubmit, onSave, scrollHandler, expiredNOVA } = props;
+  const {
+    novaHistory,
+    createChatSubmitHandler,
+    createAIWriteSubmitHandler,
+    onSave,
+    scrollHandler,
+    expiredNOVA,
+    setInputContents
+  } = props;
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const confirm = useConfirm();
@@ -111,7 +129,11 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
       name: t('Index.Result.Remake'),
       status: ['done', 'cancel'],
       iconSrc: isLightMode ? <RetryChatLightIcon /> : <RetryChatDarkIcon />,
-      clickHandler: (history: NovaChatType) => onSubmit({ input: history.input, type: '' })
+      clickHandler: (history: NovaChatType) => {
+        chatMode === CHAT_MODES.GPT_4O
+          ? createChatSubmitHandler({ input: history.input, type: '' }, chatMode, false)
+          : createAIWriteSubmitHandler({ input: history.input, type: '' }, chatMode, false);
+      }
     },
     {
       name: t('Index.Chat.Copy'),
@@ -269,7 +291,9 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
               />
             ) : (
               <div style={{ width: '100%', maxWidth: 'calc(100% - 40px)', paddingTop: '3px' }}>
-                {item.references && <Reference references={item.references} />}
+                {item.chatType === CHAT_MODES.PERPLEXITY && (
+                  <Reference references={item.references || []} />
+                )}
                 <PreMarkdown text={item.output}>
                   <Overlay onSave={() => onSave(item)} />
                 </PreMarkdown>
@@ -282,7 +306,7 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                             src={isLightMode ? ArrowCornerLightIcon : ArrowCornerDarkIcon}
                             alt="arrow"
                           />
-                          <span>{t('Index.aiChat.ChangeImage')}</span>
+                          <span>{t('Nova.aiChat.ChangeImage')}</span>
                           <img src={isLightMode ? SparkleLightIcon : SparkleDarkIcon} alt="arrow" />
                         </S.MakeNewImageMessage>
                         <Tabs
@@ -321,21 +345,33 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                         ))}
                       {creating != 'NOVA' &&
                         !expiredNOVA &&
-                        novaHistory[novaHistory.length - 1].id === item.id &&
+                        [...novaHistory].reverse().find((item) => item.isAnswer === false)?.id ===
+                          item.id &&
                         item.chatType !== CHAT_MODES.PERPLEXITY && (
                           <SelectBox
                             placeHolder={'다른 답변 보기'}
                             menuItem={getChatTypeList(isLightMode).filter(
                               (item) => item.title !== chatMode
                             )}
-                            setSelectedItem={(item: string) => {
-                              dispatch(setChatMode(item as ChatMode));
-                              if (selectedNovaTab !== NOVA_TAB_TYPE.home) {
-                                if ((item as ChatMode) === CHAT_MODES.PERPLEXITY) {
-                                  dispatch(selectNovaTab(NOVA_TAB_TYPE.perplexity));
-                                } else {
-                                  dispatch(selectNovaTab(NOVA_TAB_TYPE.aiChat));
-                                }
+                            setSelectedItem={(selectedItem: string) => {
+                              if ((selectedItem as ChatMode) === CHAT_MODES.GPT_4O) {
+                                createChatSubmitHandler(
+                                  {
+                                    input: item.input,
+                                    type: ''
+                                  },
+                                  selectedItem as ChatMode,
+                                  true
+                                );
+                              } else {
+                                createAIWriteSubmitHandler(
+                                  {
+                                    input: item.input,
+                                    type: ''
+                                  },
+                                  selectedItem as ChatMode,
+                                  true
+                                );
                               }
                             }}
                           />
@@ -346,6 +382,12 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
               </div>
             )}
           </S.Answer>
+          {item.recommendedQuestions?.length ? (
+            <RecommendedQuestions
+              questions={item.recommendedQuestions ?? []}
+              setInputContents={setInputContents}
+            />
+          ) : null}
         </S.ChatItem>
       ))}
     </S.Wrapper>
