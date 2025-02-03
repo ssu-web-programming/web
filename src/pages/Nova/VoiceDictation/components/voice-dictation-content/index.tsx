@@ -7,6 +7,7 @@ import {
   VoiceDictationComponentType
 } from '../../provider/voice-dictation-provider';
 import VoiceDictationIntro from '../voice-dictation-intro';
+import VoiceDictationReady from '../voice-dictation-ready';
 import VoiceDictationResult from '../voice-dictation-result';
 
 export default function VoiceDictationContent() {
@@ -17,6 +18,7 @@ export default function VoiceDictationContent() {
   const componentMap: Record<VoiceDictationComponentType, ReactNode> = {
     LOADING: <Loading />,
     INTRO: <VoiceDictationIntro />,
+    READY: <VoiceDictationReady />,
     RESULT: <VoiceDictationResult />
   };
 

@@ -4,8 +4,19 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100%;
+  min-height: 100vh;
+`;
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
   width: 100%;
+  height: 100vh;
+`;
+
+const Header = styled.div`
+  text-align: center;
+  padding: 24px 16px 0px;
 `;
 
 const Title = styled.div<{ lang: string }>`
@@ -25,139 +36,126 @@ const Title = styled.div<{ lang: string }>`
   }
 `;
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  padding: 1rem;
-`;
-
-const Header = styled.div`
-  display: flex;
-  align-items: center;
-  color: #7c3aed;
-  margin-bottom: 8px;
-`;
-
-const CheckIcon = styled.div`
-  width: 1.5rem;
-  height: 1.5rem;
-  border-radius: 50%;
-  background-color: #7c3aed;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 0.5rem;
-
-  svg {
-    width: 1rem;
-    height: 1rem;
-    color: white;
-  }
-`;
-
 const Description = styled.p`
   color: #454c53;
   font-size: 16px;
-  margin-bottom: 24px;
+  margin-bottom: 12px;
   text-align: center;
   font-weight: 500;
   line-height: 24px;
-`;
-
-const RecordingBox = styled.div`
-  width: 100%;
-  background-color: #fff;
-  border-radius: 8px;
-  padding: 32px 16px 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border: 1px solid #c9cdd2;
-`;
-
-const FileTitle = styled.span`
-  color: #454c53;
   margin-top: 8px;
-  font-size: 16px;
-  line-height: 24px;
 `;
 
-const Duration = styled.span`
-  color: #9ea4aa;
-  margin-top: 4px;
-  font-size: 14px;
-  font-weight: 400;
+const TranscriptWrapper = styled.div`
+  height: 100%;
+  padding: 0px 16px;
+`;
+
+const TranscriptContainer = styled.div`
+  flex: 1;
+  overflow-y: auto;
+  background: #fff;
+  padding: 16px;
+  border-radius: 16px;
+  height: 314px;
+  margin: 0px 16px;
+`;
+
+const NewTranscript = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+  border-radius: 0.5rem;
+  border: none;
+  width: 100%;
+  justify-content: space-between;
+  color: #374151;
+  font-size: 0.875rem;
+
+  & > span:nth-child(1) {
+    color: #454c53;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  & > span:nth-child(2) {
+    color: #9ea4aa;
+    font-size: 14px;
+    font-weight: 400;
+  }
+`;
+
+const TranscriptItem = styled.div<{ color: string }>`
+  display: flex;
+  gap: 0.75rem;
   margin-bottom: 16px;
 `;
 
-const LanguageSelector = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-top: 1px solid #e8ebed;
-  padding-top: 16px;
-`;
-
-const LanguageLabel = styled.span`
-  color: #374151;
-`;
-
-const LanguageValue = styled.div`
-  display: flex;
-  align-items: center;
-  color: #7c3aed;
-`;
-
-const ButtonWrap = styled.div`
-  width: 100%;
-  height: 48px;
-  min-height: 48px;
-  position: relative;
+const TranscriptIcon = styled.div<{ color: string }>`
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: ${(props) => props.color};
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 24px 0;
-  background: #6f3ad0;
-  border-radius: 8px;
-  cursor: pointer;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  color: white;
+  font-size: 0.75rem;
+`;
 
-  & > span {
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 24px;
-    color: white;
-  }
+const TranscriptContent = styled.div`
+  flex: 1;
+`;
 
-  div {
-    display: flex;
-    position: absolute;
-    right: 12px;
-    align-items: center;
-    gap: 2px;
+const TranscriptName = styled.div`
+  font-size: 14px;
+  line-height: 21px;
+  font-weight: 600;
+`;
+const TranscriptInfo = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+`;
 
-    & > span {
-      font-size: 14px;
-      color: white;
-    }
-  }
+const TranscriptTime = styled.div`
+  color: #9ca3af;
+  font-size: 14px;
+  line-height: 21px;
+`;
+
+const TranscriptText = styled.div`
+  color: #454c53;
+  font-size: 14px;
+  margin-top: 4px;
+  line-height: 21px;
+`;
+
+const SaveButton = styled.button`
+  width: 100%;
+  padding: 0.75rem;
+  background: #7c3aed;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 500;
 `;
 
 export {
-  ButtonWrap,
-  CheckIcon,
   Container,
   Description,
-  Duration,
-  FileTitle,
   Header,
-  LanguageLabel,
-  LanguageSelector,
-  LanguageValue,
-  RecordingBox,
+  NewTranscript,
+  SaveButton,
   Title,
+  TranscriptContainer,
+  TranscriptContent,
+  TranscriptIcon,
+  TranscriptInfo,
+  TranscriptItem,
+  TranscriptName,
+  TranscriptText,
+  TranscriptTime,
+  TranscriptWrapper,
   Wrapper
 };

@@ -1,6 +1,6 @@
 import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState } from 'react';
 
-export type VoiceDictationComponentType = 'INTRO' | 'LOADING' | 'RESULT';
+export type VoiceDictationComponentType = 'INTRO' | 'LOADING' | 'READY' | 'RESULT';
 
 interface Props {
   children: ReactNode;
