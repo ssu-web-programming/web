@@ -478,6 +478,9 @@
         "Title": "실시간 녹음",
         "SubTitle": "최대 2시간만 가능합니다.",
         "UploadGuide": "최대 1GB 용량, 최대 길이 약 2시간의 \n .m4a, .mp3, .aac, .amr, .wav 파일을 지원합니다."
+      },
+      "Done": {
+        "Title": "변환 준비 완료"
       }
     },
     "Prompt": {
