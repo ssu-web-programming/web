@@ -40,6 +40,7 @@ import { useAppSelector } from '../../../store/store';
 import Bridge from '../../../util/bridge';
 import Translation from '../Translation';
 import TranslationTextResult from '../Translation/components/translation-text-result';
+import VoiceDictation from '../VoiceDictation';
 
 import * as S from './style';
 
@@ -182,6 +183,8 @@ export default function Nova() {
       );
     } else if (selectedNovaTab === NOVA_TAB_TYPE.translation) {
       return <Translation />;
+    } else if (selectedNovaTab === NOVA_TAB_TYPE.voiceDictation) {
+      return <VoiceDictation />;
     } else {
       switch (status) {
         case 'home':

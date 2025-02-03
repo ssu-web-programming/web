@@ -312,7 +312,8 @@
       "expandImg": "이미지 확장",
       "improvedRes": "해상도 향상",
       "changeStyle": "스타일 변환",
-      "translation": "번역"
+      "translation": "번역",
+      "voiceDictation": "받아쓰기"
     },
     "aiChat": {
       "Guide": {
@@ -471,6 +472,13 @@
     },
     "Translate": {
       "UploadGuide": "PDF, DOCX, PPTX 문서를 번역합니다. \n지원 용량: 최대 30MB\n 지원 글자 수: 최대 10,000 자"
+    },
+    "voiceDictation": {
+      "Guide": {
+        "Title": "실시간 녹음",
+        "SubTitle": "최대 2시간만 가능합니다.",
+        "UploadGuide": "최대 1GB 용량, 최대 길이 약 2시간의 \n .m4a, .mp3, .aac, .amr, .wav 파일을 지원합니다."
+      }
     },
     "Prompt": {
       "Placeholder": "바꾸고 싶은 배경을 설명해 주세요.",

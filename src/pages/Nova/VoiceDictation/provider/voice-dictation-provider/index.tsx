@@ -1,13 +1,13 @@
 import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState } from 'react';
 
-type ComponentType = 'INTRO';
+export type VoiceDictationComponentType = 'INTRO' | 'LOADING';
 
 interface Props {
   children: ReactNode;
 }
 
 interface SharedVoiceDictationInfo {
-  componentType: ComponentType;
+  componentType: VoiceDictationComponentType;
 }
 
 interface VoiceDictationContextType {
