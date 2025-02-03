@@ -69,7 +69,7 @@ interface InputBarProps {
   novaHistory: NovaChatType[];
   disabled?: boolean;
   expiredNOVA?: boolean;
-  onSubmit: (param: InputBarSubmitParam) => Promise<void>;
+  onSubmit: (param: InputBarSubmitParam, chatMode: ChatMode, isAnswer: boolean) => Promise<void>;
   contents?: string;
   setContents: React.Dispatch<React.SetStateAction<string>>;
 }
@@ -177,17 +177,21 @@ export default function InputBar(props: InputBarProps) {
           : 'document';
 
     dispatch(selectNovaTab(NOVA_TAB_TYPE.aiChat));
-    await props.onSubmit({
-      input: contents,
-      files: hasLocalFiles
-        ? localFiles
-        : hasDriveFiles
-          ? driveFiles
-          : hasPasteImages
-            ? pastedImagesAsFileType
-            : [],
-      type: fileType
-    });
+    await props.onSubmit(
+      {
+        input: contents,
+        files: hasLocalFiles
+          ? localFiles
+          : hasDriveFiles
+            ? driveFiles
+            : hasPasteImages
+              ? pastedImagesAsFileType
+              : [],
+        type: fileType
+      },
+      chatMode,
+      false
+    );
     textAreaRef.current?.focus();
   };
 

@@ -1,7 +1,6 @@
 import { Suspense, useCallback, useEffect, useState } from 'react';
 import { FileWithPath, useDropzone } from 'react-dropzone';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
 
 import { useConfirm } from '../../../components/Confirm';
 import { useChangeBackground } from '../../../components/hooks/nova/useChangeBackground';
@@ -34,12 +33,9 @@ import { CHAT_MODES } from '../../../constants/chatType';
 import { FileUploadState } from '../../../constants/fileTypes';
 import { novaChatModeSelector } from '../../../store/slices/nova/novaHistorySlice';
 import { selectPageStatus } from '../../../store/slices/nova/pageStatusSlice';
-import { NOVA_TAB_TYPE, selectNovaTab, selectTabSlice } from '../../../store/slices/tabSlice';
-import { setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
+import { NOVA_TAB_TYPE, selectTabSlice } from '../../../store/slices/tabSlice';
 import { useAppSelector } from '../../../store/store';
-import Bridge from '../../../util/bridge';
 import Translation from '../Translation';
-import TranslationTextResult from '../Translation/components/translation-text-result';
 import VoiceDictation from '../VoiceDictation';
 
 import * as S from './style';
@@ -48,7 +44,6 @@ export type ClientStatusType = 'home' | 'doc_edit_mode' | 'doc_view_mode';
 
 export default function Nova() {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
   const confirm = useConfirm();
   const { goConvertPage } = useConvert2DTo3D();
   const { goPromptPage } = useChangeBackground();
@@ -59,7 +54,6 @@ export default function Nova() {
   const { goThemePage } = useChangeStyle();
   const { usingAI, selectedNovaTab } = useAppSelector(selectTabSlice);
   const status = useAppSelector(selectPageStatus(selectedNovaTab));
-  const tabValues: NOVA_TAB_TYPE[] = Object.values(NOVA_TAB_TYPE);
   const { handleAgreement } = usePrivacyConsent();
   const { loadLocalFile } = useManageFile();
 
@@ -108,14 +102,6 @@ export default function Nova() {
     noKeyboard: true
   });
 
-  const handleChangeTab = (selectTab: NOVA_TAB_TYPE) => {
-    dispatch(selectNovaTab(selectTab));
-    dispatch(setLocalFiles([]));
-    dispatch(setDriveFiles([]));
-
-    Bridge.callBridgeApi('curNovaTab', selectTab);
-  };
-
   useEffect(() => {}, [usingAI, status]);
 
   const renderContent = () => {
@@ -156,8 +142,8 @@ export default function Nova() {
           setExpiredNOVA={setExpiredNOVA}
           createChatSubmitHandler={
             chatMode === CHAT_MODES.GPT_4O
-              ? (submitParam) => createChatSubmitHandler(submitParam, chatMode)
-              : (submitParam) => createAIWriteSubmitHandler(submitParam, chatMode)
+              ? (submitParam) => createChatSubmitHandler(submitParam, chatMode, false)
+              : (submitParam) => createAIWriteSubmitHandler(submitParam, chatMode, false)
           }
           fileUploadState={fileUploadState}
         />
@@ -172,10 +158,11 @@ export default function Nova() {
           <AIChat
             expiredNOVA={expiredNOVA}
             setExpiredNOVA={setExpiredNOVA}
-            createChatSubmitHandler={
-              chatMode === CHAT_MODES.GPT_4O
-                ? (submitParam) => createChatSubmitHandler(submitParam, chatMode)
-                : (submitParam) => createAIWriteSubmitHandler(submitParam, chatMode) // 래퍼 함수로 전달
+            createChatSubmitHandler={(submitParam, chatMode, isAnswer) =>
+              createChatSubmitHandler(submitParam, chatMode, isAnswer)
+            }
+            createAIWriteSubmitHandler={(submitParam, chatMode, isAnswer) =>
+              createAIWriteSubmitHandler(submitParam, chatMode, isAnswer)
             }
             fileUploadState={fileUploadState}
           />
@@ -225,10 +212,6 @@ export default function Nova() {
         {(usingAI || status === 'home') && isDragActive && <Uploading />}
         <NovaHeader />
         {(status === 'progress' || status === 'saving') && <Progress />}
-        {/*{(status === 'home' || status === 'progress') &&*/}
-        {/*  (selectedNovaTab !== NOVA_TAB_TYPE.aiChat || !usingAI) && (*/}
-        {/*    <Tabs tabs={tabValues} activeTab={selectedNovaTab} onChangeTab={handleChangeTab} />*/}
-        {/*  )}*/}
         <S.Body>{renderContent()}</S.Body>
         <Suspense fallback={<Overlay />}>
           <Modals />

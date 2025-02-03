@@ -31,6 +31,7 @@ export type NovaChatType = {
   threadId?: string;
   askType: '' | 'document' | 'image';
   chatType: ChatMode;
+  isAnswer?: boolean;
 
   res?: string;
   expiredTime?: number;
@@ -39,6 +40,7 @@ export type NovaChatType = {
   files?: NovaFileInfo[];
 
   references?: NovaWebReference[];
+  recommendedQuestions?: string[];
 };
 
 export type NovaHistoryState = {
@@ -65,8 +67,16 @@ const novaHistorySlice = createSlice({
       state.chatHistory = [];
       state.selectedItems = [];
     },
-    pushChat: (state, action: PayloadAction<Omit<NovaChatType, 'status' | 'askType'>>) => {
-      state.chatHistory.push({ ...action.payload, status: 'request', askType: '' });
+    pushChat: (
+      state,
+      action: PayloadAction<Omit<NovaChatType, 'status' | 'askType'> & { isAnswer?: boolean }>
+    ) => {
+      state.chatHistory.push({
+        ...action.payload,
+        status: 'request',
+        askType: '',
+        isAnswer: action.payload.isAnswer ?? false
+      });
     },
     appendChatReferences: (
       state,
@@ -75,6 +85,15 @@ const novaHistorySlice = createSlice({
       const chat = state.chatHistory.find((chat) => chat.id === action.payload.id);
       if (chat) {
         chat.references = action.payload.references;
+      }
+    },
+    appendChatRecommendedQuestions: (
+      state,
+      action: PayloadAction<Pick<NovaChatType, 'id' | 'recommendedQuestions'>>
+    ) => {
+      const chat = state.chatHistory.find((chat) => chat.id === action.payload.id);
+      if (chat) {
+        chat.recommendedQuestions = action.payload.recommendedQuestions;
       }
     },
     appendChatOutput: (
@@ -145,6 +164,7 @@ export const {
   addChatOutputRes,
   appendChatOutput,
   appendChatReferences,
+  appendChatRecommendedQuestions,
   updateChatStatus,
   removeChat,
   setChatMode,

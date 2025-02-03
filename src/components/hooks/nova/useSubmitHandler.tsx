@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import {
   addChatOutputRes,
   appendChatOutput,
-  appendChatReferences,
+  appendChatRecommendedQuestions,
   NovaChatType,
   NovaFileInfo,
   novaHistorySelector,
@@ -23,10 +23,9 @@ import { track } from '@amplitude/analytics-browser';
 import {
   AI_WRITE_RESPONSE_STREAM_API,
   NOVA_CHAT_API,
-  NOVA_GET_LINK_REFERENCE,
   PO_DRIVE_DOC_OPEN_STATUS
 } from '../../../api/constant';
-import { ChatMode, getChatEngine } from '../../../constants/chatType';
+import { CHAT_MODES, ChatMode, getChatEngine } from '../../../constants/chatType';
 import { FileUploadState } from '../../../constants/fileTypes';
 import { appStateSelector } from '../../../store/slices/appState';
 import { DriveFileInfo } from '../../../store/slices/uploadFiles';
@@ -37,6 +36,8 @@ import { InputBarSubmitParam } from '../../nova/inputBar';
 import useErrorHandle from '../useErrorHandle';
 import { useShowCreditToast } from '../useShowCreditToast';
 
+import useGetChatReferences from './useGetChatReferences';
+
 interface SubmitHandlerProps {
   setFileUploadState: React.Dispatch<React.SetStateAction<FileUploadState>>;
   setExpiredNOVA: React.Dispatch<React.SetStateAction<boolean>>;
@@ -46,6 +47,7 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
   const dispatch = useAppDispatch();
   const novaHistory = useAppSelector(novaHistorySelector);
   const { novaExpireTime } = useAppSelector(appStateSelector);
+  const { getReferences } = useGetChatReferences();
   const errorHandle = useErrorHandle();
   const showCreditToast = useShowCreditToast();
   const { t } = useTranslation();
@@ -75,7 +77,7 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
   };
 
   const createChatSubmitHandler = useCallback(
-    async (submitParam: InputBarSubmitParam, chatMode: ChatMode) => {
+    async (submitParam: InputBarSubmitParam, chatMode: ChatMode, isAnswer?: boolean) => {
       const id = v4();
       let result = '';
       const lastChat = novaHistory[novaHistory.length - 1];
@@ -160,7 +162,8 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
             threadId,
             chatType: chatMode,
             output: '',
-            files: fileInfo
+            files: fileInfo,
+            isAnswer: isAnswer
           })
         );
 
@@ -309,7 +312,7 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
   );
 
   const createAIWriteSubmitHandler = useCallback(
-    async (submitParam: InputBarSubmitParam, chatMode: ChatMode) => {
+    async (submitParam: InputBarSubmitParam, chatMode: ChatMode, isAnswer?: boolean) => {
       const id = v4();
       let result = '';
       const lastChat = novaHistory[novaHistory.length - 1];
@@ -317,6 +320,7 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
       const { input, files = [], type } = submitParam;
       let splunk = null;
       const timer = null;
+      let citations: string[] = [];
 
       try {
         dispatch(setCreating('NOVA'));
@@ -333,7 +337,17 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
         formData.append('threadId', threadId);
 
         dispatch(
-          pushChat({ id, input, type, role, vsId, threadId, chatType: chatMode, output: '' })
+          pushChat({
+            id,
+            input,
+            type,
+            role,
+            vsId,
+            threadId,
+            chatType: chatMode,
+            output: '',
+            isAnswer: isAnswer
+          })
         );
 
         requestor.current = apiWrapper();
@@ -362,78 +376,56 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
         const expiredTime = res.headers.get('X-PO-AI-NOVA-API-EXPIRED-TIME') || '';
 
         setFileUploadState({ type: '', state: 'ready', progress: 0 });
+
         await streaming(res, async (contents) => {
-          const contentArr = contents.trim().split('\n');
+          if (chatMode === CHAT_MODES.PERPLEXITY) {
+            const contentArr = contents.split('\n');
 
-          for (const content of contentArr) {
-            if (!content.trim()) continue;
+            for (let index = 0; index < contentArr.length; index++) {
+              const content = contentArr[index];
+              try {
+                const parsed = JSON.parse(content.trim());
 
-            try {
-              const parsed = JSON.parse(content.trim());
+                dispatch(
+                  appendChatOutput({
+                    id,
+                    output: parsed.content,
+                    vsId: resVsId,
+                    threadId: resThreadId,
+                    askType: askType as NovaChatType['askType'],
+                    expiredTime: parseInt(expiredTime, 10)
+                  })
+                );
+                result += parsed.content;
 
-              if (parsed.citations.length > 0) {
-                const { res } = await apiWrapper().request(NOVA_GET_LINK_REFERENCE, {
-                  headers: {
-                    'Content-Type': 'application/json'
-                  },
-                  body: JSON.stringify({
-                    urls: parsed.citations
-                  }),
-                  method: 'POST'
-                });
-
-                const response = await res.json();
-
-                if (response.success && Array.isArray(response.data)) {
-                  const references = response.data.map(
-                    (item: {
-                      data: {
-                        success: boolean;
-                        site_name: string;
-                        title: string;
-                        description: string;
-                        type: string;
-                        url: string;
-                      };
-                      url: string;
-                    }) => ({
-                      site: item.data.site_name || '',
-                      title: item.data.title || '',
-                      desc: item.data.description,
-                      type: item.data.type || '',
-                      url: item.url || '',
-                      favicon: item.url
-                        ? `https://www.google.com/s2/favicons?domain=${new URL(item.url).hostname}`
-                        : ''
-                    })
-                  );
-
+                if (parsed.recommended_questions.length > 0) {
                   dispatch(
-                    appendChatReferences({
+                    appendChatRecommendedQuestions({
                       id,
-                      references
+                      recommendedQuestions: parsed.recommended_questions
                     })
                   );
-                  console.log('references: ', references);
                 }
+
+                if (parsed.citations.length > 0) {
+                  citations = parsed.citations;
+                }
+              } catch (error) {
+                /* do nothing */
               }
-
-              dispatch(
-                appendChatOutput({
-                  id,
-                  output: parsed.content,
-                  vsId: resVsId,
-                  threadId: resThreadId,
-                  askType: askType as NovaChatType['askType'],
-                  expiredTime: parseInt(expiredTime, 10)
-                })
-              );
-              console.log('parsed: ', parsed);
-
-              result += parsed.content;
-            } catch (error) {
-              console.log('Error parsing JSON: ', error, 'Content:', content);
             }
+          } else {
+            dispatch(
+              appendChatOutput({
+                id,
+                output: contents,
+                vsId: resVsId,
+                threadId: resThreadId,
+                askType: askType as NovaChatType['askType'],
+                expiredTime: parseInt(expiredTime, 10)
+              })
+            );
+            result += contents;
           }
         });
 
@@ -453,6 +445,10 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
         setFileUploadState({ type: '', state: 'ready', progress: 0 });
 
         try {
+          if (citations.length > 0) {
+            await getReferences(citations, id);
+          }
+
           if (splunk) {
             splunk({
               dp: 'ai.nova',

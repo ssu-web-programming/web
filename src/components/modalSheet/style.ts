@@ -21,6 +21,6 @@ export const CustomSheet = styled(Sheet)`
   }
 
   .react-modal-sheet-content {
-    /* custom styles */
+    overflow-y: auto;
   }
 `;
