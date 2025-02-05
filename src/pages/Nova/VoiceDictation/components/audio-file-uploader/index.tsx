@@ -8,12 +8,13 @@ import {
   SUPPORT_DOCUMENT_TYPE,
   SUPPORT_IMAGE_TYPE
 } from 'constants/fileTypes';
+import { NOVA_TAB_TYPE } from 'constants/novaTapTypes';
 import { ReactComponent as UploadDarkIcon } from 'img/dark/ico_upload_img_plus.svg';
 import CreditIcon from 'img/light/ico_credit_gray.svg';
 import { ReactComponent as UploadFileLightIcon } from 'img/light/nova/translation/file_upload.svg';
 import { useTranslation } from 'react-i18next';
 import { selectPageData, setPageData, setPageStatus } from 'store/slices/nova/pageStatusSlice';
-import { NOVA_TAB_TYPE } from 'store/slices/tabSlice';
+// import { NOVA_TAB_TYPE } from 'store/slices/tabSlice';
 import { themeInfoSelector } from 'store/slices/theme';
 import { getDriveFiles, getLocalFiles } from 'store/slices/uploadFiles';
 import { userInfoSelector } from 'store/slices/userInfo';

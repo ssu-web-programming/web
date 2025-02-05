@@ -8,8 +8,9 @@ import { getDriveFiles, getLocalFiles } from 'store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import { css } from 'styled-components';
 import Bridge from 'util/bridge';
-import { useTranslationContext } from '../../provider/translation-provider';
+
 import { NOVA_TAB_TYPE } from '../../../../../constants/novaTapTypes';
+import { useTranslationContext } from '../../provider/translation-provider';
 import FileItem from '../file-item';
 
 import * as S from './style';

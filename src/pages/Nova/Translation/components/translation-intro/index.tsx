@@ -10,6 +10,7 @@ import { getDriveFiles, getLocalFiles } from 'store/slices/uploadFiles';
 import { useAppSelector } from 'store/store';
 import { css } from 'styled-components';
 import { downloadFiles } from 'util/files';
+
 import { NOVA_TAB_TYPE } from '../../../../../constants/novaTapTypes';
 import { TranslateResult, useTranslationContext } from '../../provider/translation-provider';
 import DragAndDrop from '../drag-and-drop';
