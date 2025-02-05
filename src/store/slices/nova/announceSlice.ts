@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import { RootState } from '../../store';
-import { NOVA_TAB_TYPE } from '../tabSlice';
 
 export const tabTypeMap = {
   [NOVA_TAB_TYPE.aiChat]: 'NOVA_CHAT_GPT4O',

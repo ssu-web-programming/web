@@ -1,9 +1,10 @@
 import { apiWrapper } from 'api/apiWrapper';
 import { NOVA_DELETE_CONVERSATION } from 'api/constant';
 import { initNovaHistory, novaHistorySelector } from 'store/slices/nova/novaHistorySlice';
-import { NOVA_TAB_TYPE, setCreating, setUsingAI } from 'store/slices/tabSlice';
+import { setCreating, setUsingAI } from 'store/slices/tabSlice';
 import { useAppDispatch, useAppSelector } from 'store/store';
 
+import { NOVA_TAB_TYPE } from '../../constants/novaTapTypes';
 import { setPageStatus } from '../../store/slices/nova/pageStatusSlice';
 
 export const useChatNova = () => {

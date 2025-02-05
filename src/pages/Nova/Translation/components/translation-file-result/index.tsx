@@ -2,15 +2,14 @@ import IconTextButton from 'components/buttons/IconTextButton';
 import { ReactComponent as CheckLightIcon } from 'img/light/nova/check_purple.svg';
 import compareViewerIcon from 'img/light/nova/translation/book.svg';
 import downloadIcon from 'img/light/nova/translation/download.svg';
-import { activeLoadingSpinner, initLoadingSpinner } from 'store/slices/loadingSpinner';
+import { activeLoadingSpinner } from 'store/slices/loadingSpinner';
 import { selectPageData } from 'store/slices/nova/pageStatusSlice';
-import { NOVA_TAB_TYPE } from 'store/slices/tabSlice';
 import { getDriveFiles, getLocalFiles } from 'store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import { css } from 'styled-components';
 import Bridge from 'util/bridge';
-
 import { useTranslationContext } from '../../provider/translation-provider';
+import { NOVA_TAB_TYPE } from '../../../../../constants/novaTapTypes';
 import FileItem from '../file-item';
 
 import * as S from './style';

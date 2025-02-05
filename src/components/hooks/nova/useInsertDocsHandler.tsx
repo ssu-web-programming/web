@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import { ClientStatusType } from '../../../pages/Nova/Nova';
 import { NovaChatType } from '../../../store/slices/nova/novaHistorySlice';
 import {
@@ -9,7 +10,7 @@ import {
   selectPageResult,
   setPageStatus
 } from '../../../store/slices/nova/pageStatusSlice';
-import { NOVA_TAB_TYPE, selectTabSlice } from '../../../store/slices/tabSlice';
+import { selectTabSlice } from '../../../store/slices/tabSlice';
 import { activeToast } from '../../../store/slices/toastSlice';
 import { setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../store/store';

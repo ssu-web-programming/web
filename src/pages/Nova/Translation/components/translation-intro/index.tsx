@@ -6,12 +6,11 @@ import { ReactComponent as DeepL } from 'img/light/nova/translation/deepl_logo.s
 import { ReactComponent as Switch } from 'img/light/nova/translation/switch.svg';
 import { useTranslation } from 'react-i18next';
 import { selectPageData } from 'store/slices/nova/pageStatusSlice';
-import { NOVA_TAB_TYPE } from 'store/slices/tabSlice';
 import { getDriveFiles, getLocalFiles } from 'store/slices/uploadFiles';
 import { useAppSelector } from 'store/store';
 import { css } from 'styled-components';
 import { downloadFiles } from 'util/files';
-
+import { NOVA_TAB_TYPE } from '../../../../../constants/novaTapTypes';
 import { TranslateResult, useTranslationContext } from '../../provider/translation-provider';
 import DragAndDrop from '../drag-and-drop';
 import Toggle, { ToggleOption } from '../toggle';
@@ -25,7 +24,7 @@ export default function TranslationIntro() {
   const { t } = useTranslation();
   const localFiles = useAppSelector(getLocalFiles);
   const driveFiles = useAppSelector(getDriveFiles);
-  const currentFile = useAppSelector(selectPageData('translation'));
+  const currentFile = useAppSelector(selectPageData(NOVA_TAB_TYPE.translation));
 
   const [type, setType] = useState<TranslateType>('TEXT');
   const [translateInputValue, setTranslateInputValue] = useState('');

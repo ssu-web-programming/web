@@ -13,7 +13,6 @@ import CreditIcon from 'img/light/ico_credit_gray.svg';
 import { ReactComponent as UploadFileLightIcon } from 'img/light/nova/translation/file_upload.svg';
 import { useTranslation } from 'react-i18next';
 import { selectPageData, setPageData, setPageStatus } from 'store/slices/nova/pageStatusSlice';
-import { NOVA_TAB_TYPE } from 'store/slices/tabSlice';
 import { themeInfoSelector } from 'store/slices/theme';
 import { getDriveFiles, getLocalFiles } from 'store/slices/uploadFiles';
 import { userInfoSelector } from 'store/slices/userInfo';
@@ -21,6 +20,7 @@ import { useAppDispatch, useAppSelector } from 'store/store';
 import styled from 'styled-components';
 import { convertDriveFileToFile } from 'util/files';
 
+import { NOVA_TAB_TYPE } from '../../../../../constants/novaTapTypes';
 import FileItem from '../file-item';
 
 const Wrap = styled.div`

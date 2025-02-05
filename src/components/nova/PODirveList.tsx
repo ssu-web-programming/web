@@ -2,7 +2,8 @@ import { useState } from 'react';
 import PoDrive from 'components/po-drive';
 import { useTranslation } from 'react-i18next';
 
-import { NOVA_TAB_TYPE, selectTabSlice } from '../../store/slices/tabSlice';
+import { NOVA_TAB_TYPE } from '../../constants/novaTapTypes';
+import { selectTabSlice } from '../../store/slices/tabSlice';
 import { DriveFileInfo } from '../../store/slices/uploadFiles';
 import { useAppSelector } from '../../store/store';
 import DriveConfirm from '../DriveConfirm';

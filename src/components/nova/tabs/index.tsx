@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { NOVA_TAB_TYPE } from 'store/slices/tabSlice';
 import { themeInfoSelector } from 'store/slices/theme';
 import { useAppSelector } from 'store/store';
 import { FlattenSimpleInterpolation } from 'styled-components';
@@ -9,6 +8,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Swiper as SwiperClass } from 'swiper/types';
 import { isMobile } from 'util/bridge';
 
+import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import convert2DTo3DDarkIcon from '../../../img/dark/nova/tab/tab_3d_dark_n.svg';
 import convert2DTo3DDarkSelectedIcon from '../../../img/dark/nova/tab/tab_3d_dark_s.svg';
 import aiChatDarkIcon from '../../../img/dark/nova/tab/tab_ai_chat_dark_n.svg';

@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import { RootState } from '../../store';
 
 export interface ResultImage {
@@ -9,90 +10,131 @@ export interface ResultImage {
   info?: any;
 }
 
-export type PageStatus =
-  | 'home' // 홈 화면 (각 기능의 홈화면)
-  | 'progress' // 프로그레스 화면
-  | 'saving' // 이미지 저장 중
-  | 'loading' // 로딩 중 (이미지 업로드)
-  | 'convert' // 2d->3d 이미지 변환
-  | 'prompt' // changeBG
-  | 'expand' // expandImg
-  | 'theme' // changeStyle
-  | 'done' // 결과 화면
-  | 'timeout' // 타임 아웃
-  | 'translation'; // 번역
+export type StepStatus<T extends string> =
+  | 'home'
+  | 'progress'
+  | 'saving'
+  | 'loading'
+  | 'done'
+  | 'timeout'
+  | T;
+
+export type PageStatus = {
+  [NOVA_TAB_TYPE.home]: StepStatus<''>;
+  [NOVA_TAB_TYPE.aiChat]: StepStatus<''>;
+  [NOVA_TAB_TYPE.perplexity]: StepStatus<''>;
+  [NOVA_TAB_TYPE.convert2DTo3D]: StepStatus<'convert'>;
+  [NOVA_TAB_TYPE.removeBG]: StepStatus<''>;
+  [NOVA_TAB_TYPE.changeBG]: StepStatus<'prompt'>;
+  [NOVA_TAB_TYPE.remakeImg]: StepStatus<''>;
+  [NOVA_TAB_TYPE.expandImg]: StepStatus<'expand'>;
+  [NOVA_TAB_TYPE.improvedRes]: StepStatus<''>;
+  [NOVA_TAB_TYPE.changeStyle]: StepStatus<'theme'>;
+  [NOVA_TAB_TYPE.translation]: StepStatus<''>;
+  [NOVA_TAB_TYPE.voiceDictation]: StepStatus<''>;
+  [NOVA_TAB_TYPE.aiVideo]: StepStatus<'avatar' | 'voice' | 'script'>;
+};
+
 export type PageData = File | null;
 export type PageResult = ResultImage | null;
 
-interface PageState<T> {
-  [tab: string]: T;
-}
-
-interface PageStateType {
-  status: PageState<PageStatus>;
-  data: PageState<PageData>;
-  result: PageState<PageResult>;
-}
+export type PageStateType = {
+  status: { [K in keyof PageStatus]: PageStatus[K] };
+  data: { [K in keyof PageStatus]: PageData };
+  result: { [K in keyof PageStatus]: PageResult };
+};
 
 const initialPageState: PageStateType = {
-  status: {},
-  data: {},
-  result: {}
+  status: Object.keys(NOVA_TAB_TYPE).reduce(
+    (acc, key) => ({
+      ...acc,
+      [key as keyof PageStatus]: 'home'
+    }),
+    {} as PageStateType['status']
+  ),
+  data: Object.keys(NOVA_TAB_TYPE).reduce(
+    (acc, key) => ({
+      ...acc,
+      [key as keyof PageStatus]: null
+    }),
+    {} as PageStateType['data']
+  ),
+  result: Object.keys(NOVA_TAB_TYPE).reduce(
+    (acc, key) => ({
+      ...acc,
+      [key as keyof PageStatus]: null
+    }),
+    {} as PageStateType['result']
+  )
 };
 
 const pageSlice = createSlice({
   name: 'page',
   initialState: initialPageState,
   reducers: {
-    setStatus: (state, action: PayloadAction<{ tab: string; status: PageStatus }>) => {
-      const { tab, status } = action.payload;
-      state.status[tab] = status;
+    setPageStatus: <T extends keyof PageStatus>(
+      state: PageStateType,
+      action: PayloadAction<{ tab: T; status: PageStatus[T] }>
+    ) => {
+      state.status[action.payload.tab] = action.payload.status;
     },
-    resetStatus: (state, action: PayloadAction<string>) => {
-      const tab = action.payload;
-      state.status[tab] = 'home';
+
+    resetPageStatus: <T extends keyof PageStatus>(
+      state: PageStateType,
+      action: PayloadAction<T>
+    ) => {
+      state.status[action.payload] = 'home';
     },
-    setData: (state, action: PayloadAction<{ tab: string; data: PageData }>) => {
-      const { tab, data } = action.payload;
-      state.data[tab] = data;
+
+    setPageData: <T extends keyof PageStatus>(
+      state: PageStateType,
+      action: PayloadAction<{ tab: T; data: PageData }>
+    ) => {
+      state.data[action.payload.tab] = action.payload.data;
     },
-    resetData: (state, action: PayloadAction<string>) => {
-      const tab = action.payload;
-      state.data[tab] = null;
+
+    resetPageData: <T extends keyof PageStatus>(state: PageStateType, action: PayloadAction<T>) => {
+      state.data[action.payload] = null;
     },
-    setResult: (state, action: PayloadAction<{ tab: string; result: PageResult }>) => {
-      const { tab, result } = action.payload;
-      state.result[tab] = result;
+
+    setPageResult: <T extends keyof PageStatus>(
+      state: PageStateType,
+      action: PayloadAction<{ tab: T; result: PageResult }>
+    ) => {
+      state.result[action.payload.tab] = action.payload.result;
     },
-    resetResult: (state, action: PayloadAction<string>) => {
-      const tab = action.payload;
-      state.result[tab] = null;
+
+    resetPageResult: <T extends keyof PageStatus>(
+      state: PageStateType,
+      action: PayloadAction<T>
+    ) => {
+      state.result[action.payload] = null;
     }
   }
 });
 
 export const {
-  setStatus: setPageStatus,
-  resetStatus: resetPageStatus,
-  setData: setPageData,
-  resetData: resetPageData,
-  setResult: setPageResult,
-  resetResult: resetPageResult
+  setPageStatus,
+  resetPageStatus,
+  setPageData,
+  resetPageData,
+  setPageResult,
+  resetPageResult
 } = pageSlice.actions;
 
 export const selectPageStatus =
-  (tab: string) =>
-  (state: RootState): PageStatus =>
-    state.pageStatusSlice.status[tab] || 'home';
+  <T extends keyof PageStatus>(tab: T) =>
+  (state: RootState): PageStatus[T] =>
+    state.pageStatusSlice.status[tab] ?? 'home';
 
 export const selectPageData =
-  (tab: string) =>
+  <T extends keyof PageStatus>(tab: T) =>
   (state: RootState): PageData =>
-    state.pageStatusSlice.data[tab] || null;
+    state.pageStatusSlice.data[tab] ?? null;
 
 export const selectPageResult =
-  (tab: string) =>
+  <T extends keyof PageStatus>(tab: T) =>
   (state: RootState): PageResult =>
-    state.pageStatusSlice.result[tab] || null;
+    state.pageStatusSlice.result[tab] ?? null;
 
 export default pageSlice.reducer;

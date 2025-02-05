@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
+import { NOVA_TAB_TYPE } from '../../constants/novaTapTypes';
 import { ReactComponent as CheckIcon } from '../../img/common/ico_check.svg';
 import Composition from '../../img/light/nova/changeStyle/change_style_composition.png';
 import Mosaic from '../../img/light/nova/changeStyle/change_style_mosaic.png';
@@ -9,7 +10,7 @@ import Scream from '../../img/light/nova/changeStyle/change_style_scream.png';
 import Starry from '../../img/light/nova/changeStyle/change_style_starry.png';
 import Wave from '../../img/light/nova/changeStyle/change_style_wave.png';
 import { selectPageResult } from '../../store/slices/nova/pageStatusSlice';
-import { NOVA_TAB_TYPE, selectTabSlice } from '../../store/slices/tabSlice';
+import { selectTabSlice } from '../../store/slices/tabSlice';
 import { useAppSelector } from '../../store/store';
 import { useChangeStyle } from '../hooks/nova/useChangeStyle';
 

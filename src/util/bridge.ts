@@ -10,6 +10,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { useConfirm } from '../components/Confirm';
 import useManageFile from '../components/hooks/nova/useManageFile';
+import { NOVA_TAB_TYPE } from '../constants/novaTapTypes';
 import gI18n, { convertLangFromLangCode } from '../locale';
 import { setIsStartedByRibbon } from '../store/slices/appState';
 import { AskDocStatus, setSrouceId, setStatus } from '../store/slices/askDoc';
@@ -23,7 +24,7 @@ import {
 import { DeviceType, setPlatformInfo } from '../store/slices/platformInfo';
 import { setRecognizedVoice } from '../store/slices/recognizedVoice';
 import { setScreenMode } from '../store/slices/screenMode';
-import { NOVA_TAB_TYPE, selectNovaTab, setCreating } from '../store/slices/tabSlice';
+import { selectNovaTab, setCreating } from '../store/slices/tabSlice';
 import { activeToast } from '../store/slices/toastSlice';
 import { updateT2ICurItemIndex, updateT2ICurListId } from '../store/slices/txt2imgHistory';
 import {
@@ -402,7 +403,7 @@ export const useInitBridgeListener = () => {
               const tab = body.openTab;
               dispatch(resetPageData(tab));
               dispatch(setDriveFiles([]));
-              dispatch(setPageStatus({ tab: 'aiChat', status: 'home' }));
+              dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiChat, status: 'home' }));
               dispatch(setLocalFiles([]));
               dispatch(selectNovaTab(NOVA_TAB_TYPE[body.openTab as keyof typeof NOVA_TAB_TYPE]));
               const isBlob = body.image instanceof Blob && body.image.size > 0;
@@ -490,7 +491,7 @@ export const useInitBridgeListener = () => {
             break;
           }
           case 'finishUploadFile': {
-            dispatch(setPageStatus({ tab: 'aiChat', status: 'home' }));
+            dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiChat, status: 'home' }));
             dispatch(setLocalFiles([]));
             dispatch(setDriveFiles([]));
             dispatch(setLoadingFile({ id: body.fileId }));

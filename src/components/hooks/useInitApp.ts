@@ -16,6 +16,7 @@ import Bridge, { ClientType, getDevice, getPlatform, getVersion } from 'util/bri
 import { init } from '@amplitude/analytics-browser';
 
 import usePostSplunkLog from '../../api/usePostSplunkLog';
+import { NOVA_TAB_TYPE } from '../../constants/novaTapTypes';
 import { ClientStatusType } from '../../pages/Nova/Nova';
 import { initComplete } from '../../store/slices/initFlagSlice';
 import { IAnnouceInfo, setAnnounceInfo, tabTypeMap } from '../../store/slices/nova/announceSlice';
@@ -155,7 +156,7 @@ export default function useInitApp() {
     if (platform != ClientType.unknown && version) {
       dispatch(setPlatformInfo({ platform: platform, device: device, version: version }));
     }
-    dispatch(setPageStatus({ tab: 'aiChat', status: 'home' }));
+    dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiChat, status: 'home' }));
 
     await initCreditInfo(headers);
     await initUserInfo(headers);
