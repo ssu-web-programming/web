@@ -1,6 +1,8 @@
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { initLoadingSpinner } from 'store/slices/loadingSpinner';
+import { setFileState } from 'store/slices/nova/translation/download-slice';
 import { resetCurrentWrite } from 'store/slices/writeHistorySlice';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -226,6 +228,18 @@ const callApi = (api: ApiType, arg?: string | number) => {
             }
             break;
           }
+          case 'compareSourceAndTranslation': {
+            if (window.webkit.messageHandlers.compareSourceAndTranslation) {
+              window.webkit.messageHandlers.compareSourceAndTranslation.postMessage(arg);
+            }
+            break;
+          }
+          case 'downloadFile': {
+            if (window.webkit.messageHandlers.downloadFile) {
+              window.webkit.messageHandlers.downloadFile.postMessage(arg);
+            }
+            break;
+          }
         }
         break;
       }
@@ -363,7 +377,7 @@ export const useInitBridgeListener = () => {
 
     try {
       const { cmd, body } = msg;
-      if (cmd && cmd !== '') {
+      if (cmd && (cmd as any) !== '') {
         switch (cmd) {
           case 'openAiTools':
           case 'openTextToImg':
@@ -551,6 +565,12 @@ export const useInitBridgeListener = () => {
             dispatch(setRecognizedVoice({ recognizedVoice: body }));
             break;
           }
+          // 다운로드 완료될때 불리는 command
+          case 'finishDownloadFile': {
+            dispatch(setFileState({ type: body.translation, isSaved: body.isSaved }));
+            dispatch(initLoadingSpinner());
+            break;
+          }
           default: {
             break;
           }
@@ -638,7 +658,9 @@ type ApiType =
   | 'pchome_mydoc'
   | 'curNovaTab'
   | 'analyzeCurFile'
-  | 'uploadFile';
+  | 'uploadFile'
+  | 'compareSourceAndTranslation'
+  | 'downloadFile';
 
 const Bridge = {
   checkSession: (api: string) => {
@@ -696,9 +718,19 @@ const Bridge = {
     });
   },
 
-  callBridgeApi: async (api: ApiType, arg?: string | number | Blob) => {
-    const apiArg =
-      arg && typeof arg !== 'string' && typeof arg !== 'number' ? await fileToString(arg) : arg;
+  callBridgeApi: async <T extends string | number | Blob | object>(api: ApiType, arg?: T) => {
+    let apiArg: string | number | undefined;
+
+    if (arg) {
+      if (arg instanceof Blob) {
+        apiArg = await fileToString(arg);
+      } else if (typeof arg === 'object') {
+        apiArg = JSON.stringify(arg);
+      } else if (typeof arg === 'string' || typeof arg === 'number') {
+        apiArg = arg;
+      }
+    }
+
     callApi(api, apiArg);
   },
 

@@ -209,15 +209,12 @@ export default function Result() {
   const OnSave = async () => {
     if (result) {
       if (result.link) {
-        console.log('여기 들어옴?', result.link);
         try {
           const res = await fetch(result.link, { method: 'HEAD' });
           const contentType = res.headers.get('Content-Type');
           if (contentType && contentType.includes('text/html')) {
             ShowExpireLinkPopup();
           } else {
-            console.log('123122312312');
-
             dispatch(setPageStatus({ tab: selectedNovaTab, status: 'saving' }));
             Bridge.callBridgeApi('downloadAnimation', result.link);
           }

@@ -18,6 +18,7 @@ import announceInfoSlice from './slices/nova/announceSlice';
 import novaHistory from './slices/nova/novaHistorySlice';
 import novaModal from './slices/nova/novaModalsSlice';
 import pageStatusSlice from './slices/nova/pageStatusSlice';
+import fileStateSlice from './slices/nova/translation/download-slice';
 import platformInfo from './slices/platformInfo';
 import recFunction from './slices/recFuncSlice';
 import recognizedVoice from './slices/recognizedVoice';
@@ -58,7 +59,8 @@ const store = configureStore({
     announceInfoSlice,
     platformInfo,
     screenMode,
-    theme
+    theme,
+    fileStateSlice
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }).concat(shareAnswerState),

@@ -10,6 +10,13 @@ export interface TranslateResult {
 interface SharedTranslation extends TranslateResult {
   componentType: ComponentType;
   translateInputValue: string;
+
+  // 원본-번역 비교보기를 위한 로직
+  originalFileType: 'currentDoc' | 'drive' | 'local';
+  originalFileName: string;
+  originFile: any;
+  translationFileName: string;
+  translationFileUrl: string;
 }
 
 interface TranslationContextType {
@@ -39,7 +46,12 @@ export function TranslationProvider({ children }: Props) {
     // 감지된 언어
     detectedSourceLanguage: '',
     // 번역 된 문장
-    translatedText: ''
+    translatedText: '',
+    originalFileType: 'local',
+    originalFileName: '이름',
+    originFile: '',
+    translationFileName: '',
+    translationFileUrl: ''
   });
 
   const triggerLoading = () => {

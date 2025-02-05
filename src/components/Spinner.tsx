@@ -21,8 +21,6 @@ const SpinnerWrapper = styled.div`
   width: 250px;
   height: 200px;
   border-radius: 4px;
-  border: solid 1px var(--gray-gray-50);
-  background-color: #fff;
 
   font-size: 13px;
   font-weight: normal;
@@ -35,8 +33,8 @@ const SpinnerImg = styled.img`
   background-color: white;
   border-radius: 50%;
   margin-bottom: 16px;
-  width: 66px;
-  height: 66px;
+  width: 48px;
+  height: 48px;
 `;
 
 const Spinner = () => {

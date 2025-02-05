@@ -72,7 +72,6 @@ export default function TranslationIntro() {
   };
 
   const submitTextTranslate = async () => {
-    // 호진FIXME: 로딩 돌릴때 상태변경하는 로직 확인해야함!
     triggerLoading();
 
     const response = await translationHttp.postTranslateText({
@@ -108,11 +107,6 @@ export default function TranslationIntro() {
     }
     // File 번역일때 타는 로직!
     submitFileTranslate();
-
-    // setSharedTranslationInfo((prevSharedTranslationInfo) => ({
-    //   ...prevSharedTranslationInfo,
-    //   componentType: 'LANG_SEARCH'
-    // }));
   };
 
   // console.log('translateInputValue', translateInputValue);
