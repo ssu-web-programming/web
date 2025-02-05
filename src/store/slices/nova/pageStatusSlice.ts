@@ -19,7 +19,8 @@ export type PageStatus =
   | 'expand' // expandImg
   | 'theme' // changeStyle
   | 'done' // 결과 화면
-  | 'timeout'; // 타임 아웃
+  | 'timeout' // 타임 아웃
+  | 'translation'; // 번역
 export type PageData = File | null;
 export type PageResult = ResultImage | null;
 

@@ -4,6 +4,7 @@ import compareViewerIcon from 'img/light/nova/translation/book.svg';
 import downloadIcon from 'img/light/nova/translation/download.svg';
 import { selectPageData } from 'store/slices/nova/pageStatusSlice';
 import { NOVA_TAB_TYPE } from 'store/slices/tabSlice';
+import { getDriveFiles, getLocalFiles } from 'store/slices/uploadFiles';
 import { useAppSelector } from 'store/store';
 import { css } from 'styled-components';
 
@@ -13,6 +14,12 @@ import * as S from './style';
 
 export default function TranslationFileResult() {
   const currentFile = useAppSelector(selectPageData(NOVA_TAB_TYPE.convert2DTo3D));
+  const localFiles = useAppSelector(getLocalFiles);
+  const driveFiles = useAppSelector(getDriveFiles);
+
+  console.log('currentFile', currentFile);
+  console.log('localFiles', localFiles);
+  console.log('driveFiles', driveFiles);
 
   return (
     <S.Container>

@@ -7,6 +7,8 @@ const TranslationWrapper = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  padding: 16px;
+  background: ${({ theme }) => theme.color.background.bg};
 `;
 
 const ToggleWrapper = styled.div`

@@ -37,8 +37,6 @@ const translationHttp = {
     formData.append('sourceLang', sourceLang || '');
     formData.append('targetLang', targetLang);
 
-    console.log('file', file.name);
-
     const { res } = await apiWrapper().request(NOVA_TRANSLATE_DOCUMENT, {
       method: 'POST',
       body: formData
