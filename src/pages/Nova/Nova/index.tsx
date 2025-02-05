@@ -36,6 +36,7 @@ import { selectPageStatus } from '../../../store/slices/nova/pageStatusSlice';
 import { NOVA_TAB_TYPE, selectTabSlice } from '../../../store/slices/tabSlice';
 import { useAppSelector } from '../../../store/store';
 import Translation from '../Translation';
+import VoiceDictation from '../VoiceDictation';
 
 import * as S from './style';
 
@@ -169,6 +170,8 @@ export default function Nova() {
       );
     } else if (selectedNovaTab === NOVA_TAB_TYPE.translation) {
       return <Translation />;
+    } else if (selectedNovaTab === NOVA_TAB_TYPE.voiceDictation) {
+      return <VoiceDictation />;
     } else {
       switch (status) {
         case 'home':
