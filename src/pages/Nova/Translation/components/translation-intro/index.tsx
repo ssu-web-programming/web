@@ -6,6 +6,8 @@ import { ReactComponent as DeepL } from 'img/light/nova/translation/deepl_logo.s
 import { ReactComponent as Switch } from 'img/light/nova/translation/switch.svg';
 import { useTranslation } from 'react-i18next';
 import { NOVA_TAB_TYPE } from 'store/slices/tabSlice';
+import { getLocalFiles } from 'store/slices/uploadFiles';
+import { useAppSelector } from 'store/store';
 import { css } from 'styled-components';
 
 import { TranslateResult, useTranslationContext } from '../../provider/translation-provider';
@@ -19,6 +21,7 @@ type TranslateType = 'TEXT' | 'FILE';
 
 export default function TranslationIntro() {
   const { t } = useTranslation();
+  const localFiles = useAppSelector(getLocalFiles);
 
   const [type, setType] = useState<TranslateType>('TEXT');
   const [translateInputValue, setTranslateInputValue] = useState('');
@@ -60,8 +63,14 @@ export default function TranslationIntro() {
     handleMoveToTextResult({ detectedSourceLanguage, translatedText });
   };
 
-  const submitFileTranslate = () => {
-    console.log('File 번역을 시작해주세요.');
+  const submitFileTranslate = async () => {
+    const response = await translationHttp.postTranslateDocument({
+      file: localFiles[0],
+      sourceLang: 'KO',
+      targetLang: 'EL'
+    });
+
+    console.log('submitFileTranslate-response', response);
   };
 
   const handleTranslate = () => {
@@ -138,7 +147,9 @@ export default function TranslationIntro() {
         </S.TextAreaBottom>
       </S.TextAreaWrapper>
 
-      <S.TranslationButton isActive={translateInputValue.length > 0} onClick={handleTranslate}>
+      <S.TranslationButton
+        isActive={translateInputValue.length > 0 || localFiles.length > 0}
+        onClick={handleTranslate}>
         <span>번역하기</span>
       </S.TranslationButton>
     </>

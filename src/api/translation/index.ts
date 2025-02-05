@@ -32,11 +32,16 @@ const translationHttp = {
     return response.data;
   },
   postTranslateDocument: async ({ file, sourceLang, targetLang }: PostTranslateDocument) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    sourceLang && formData.append('sourceLang', sourceLang);
+    formData.append('targetLang', targetLang);
+
     const { res } = await apiWrapper().request(NOVA_TRANSLATE_DOCUMENT, {
       headers: {
-        'Content-Type': 'mulitpart/form-data'
+        'Content-Type': 'multipart/form-data'
       },
-      body: JSON.stringify({ file, sourceLang, targetLang }),
+      body: formData,
       method: 'POST'
     });
 

@@ -25,7 +25,6 @@ export default function TranslationContent() {
 
   return (
     <S.TranslationWrapper>
-      {/* <NovaHeader /> */}
       <BgContainer>{componentMap[componentType]}</BgContainer>
     </S.TranslationWrapper>
   );

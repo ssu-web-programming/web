@@ -41,6 +41,21 @@ export const SUPPORT_DOCUMENT_TYPE: SupportFileType[] = [
   }
 ];
 
+export const TRANSLATION_SUPPORT_TYPE: SupportFileType[] = [
+  {
+    mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    extensions: '.docx'
+  },
+  {
+    mimeType: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+    extensions: '.pptx'
+  },
+  {
+    mimeType: 'application/pdf',
+    extensions: '.pdf'
+  }
+];
+
 export const SUPPORT_IMAGE_TYPE: SupportFileType[] = [
   {
     mimeType: 'image/jpeg',

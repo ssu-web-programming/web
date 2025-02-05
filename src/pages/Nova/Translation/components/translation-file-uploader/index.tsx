@@ -134,8 +134,6 @@ export default function TranslationFileUploader({
   console.log('localFiles', localFiles);
   console.log('driveFiles', driveFiles);
 
-  const target = 'nova-image';
-
   // const isSpecificFormat = (file: File) => {
   //   console.log('file', file);
   //   const extension = file?.name?.split('.').pop()?.toLowerCase();
@@ -217,8 +215,8 @@ export default function TranslationFileUploader({
       ) : (
         <FileUploader
           type="file"
-          key={target}
-          target={target}
+          key={'nova-translation'}
+          target={'nova-translation'}
           accept={SUPPORT_IMAGE_TYPE}
           inputRef={inputImgFileRef}
           tooltipStyle={{
