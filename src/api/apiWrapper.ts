@@ -70,15 +70,24 @@ export function apiWrapper() {
     session['X-PO-AI-MayFlower-Auth-BID'] = BID;
     session['X-PO-AI-MayFlower-Auth-SID'] = SID;
 
+    let headers = {
+      'User-Agent': navigator.userAgent,
+      'X-PO-AI-API-LANGUAGE': lang,
+      ...session
+    };
+
+    // FormData인 경우 Content-Type 헤더를 추가하지 않음
+    if (!(init.body instanceof FormData)) {
+      headers = {
+        ...headers,
+        ...init.headers
+      };
+    }
+
     const res = await fetch(api, {
       ...init,
       signal: abortController.signal,
-      headers: {
-        'User-Agent': navigator.userAgent,
-        'X-PO-AI-API-LANGUAGE': lang,
-        ...session,
-        ...init.headers
-      }
+      headers
     });
 
     if (res.status !== 200) {
