@@ -2,6 +2,7 @@ import React, { RefObject, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { getValidExt, SUPPORT_DOCUMENT_TYPE, SupportFileType } from '../../constants/fileTypes';
+import { NOVA_TAB_TYPE } from '../../constants/novaTapTypes';
 import InsertDocsDarkIcon from '../../img/dark/ico_insert_docs.svg';
 import MobileDarkIcon from '../../img/dark/ico_mobile.svg';
 import PCDarkIcon from '../../img/dark/ico_pc.svg';
@@ -12,7 +13,7 @@ import MobileLightIcon from '../../img/light/ico_mobile.svg';
 import PCLightIcon from '../../img/light/ico_pc.svg';
 import { setPageStatus } from '../../store/slices/nova/pageStatusSlice';
 import { platformInfoSelector } from '../../store/slices/platformInfo';
-import { NOVA_TAB_TYPE, selectTabSlice, setCreating } from '../../store/slices/tabSlice';
+import { selectTabSlice, setCreating } from '../../store/slices/tabSlice';
 import { themeInfoSelector } from '../../store/slices/theme';
 import {
   getCurrentFile,

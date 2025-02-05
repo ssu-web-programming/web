@@ -13,8 +13,9 @@ import {
   SUPPORT_DOCUMENT_TYPE,
   SupportFileType
 } from '../../../constants/fileTypes';
+import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import { novaHistorySelector } from '../../../store/slices/nova/novaHistorySlice';
-import { NOVA_TAB_TYPE, selectTabSlice } from '../../../store/slices/tabSlice';
+import { selectTabSlice } from '../../../store/slices/tabSlice';
 import { DriveFileInfo, setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { getFileExtension } from '../../../util/common';

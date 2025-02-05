@@ -7,6 +7,7 @@ import { ReactComponent as CloseLightIcon } from 'img/light/ico_nova_close.svg';
 import { Trans, useTranslation } from 'react-i18next';
 import { initFlagSelector } from 'store/slices/initFlagSlice';
 
+import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import ArrowLeftDisableIcon from '../../../img/common/ico_arrow_left_disabled.svg';
 import ArrowLeftDarkIcon from '../../../img/dark/ico_arrow_left.svg';
 import { ReactComponent as IconConvertDark } from '../../../img/dark/nova/tab/convert_Img.svg';
@@ -27,7 +28,7 @@ import {
   setPageResult,
   setPageStatus
 } from '../../../store/slices/nova/pageStatusSlice';
-import { NOVA_TAB_TYPE, selectNovaTab, selectTabSlice } from '../../../store/slices/tabSlice';
+import { selectNovaTab, selectTabSlice } from '../../../store/slices/tabSlice';
 import { setThemeInfo, themeInfoSelector, ThemeType } from '../../../store/slices/theme';
 import { setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../store/store';

@@ -38,12 +38,13 @@ import { sliceFileName } from 'util/common';
 
 import { CHAT_MODES, ChatMode, getChatTypeList } from '../../../constants/chatType';
 import { getValidExt, SUPPORT_DOCUMENT_TYPE } from '../../../constants/fileTypes';
+import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import { ReactComponent as DocsIconDark } from '../../../img/dark/ico_input_upload_docs.svg';
 import { ReactComponent as ImagesIconDark } from '../../../img/dark/ico_input_upload_images.svg';
 import { ReactComponent as DocsIconLight } from '../../../img/light/ico_input_upload_docs.svg';
 import { ReactComponent as ImagesIconLight } from '../../../img/light/ico_input_upload_images.svg';
 import LoadingSpinner from '../../../img/light/spinner.webp';
-import { NOVA_TAB_TYPE, selectNovaTab, selectTabSlice } from '../../../store/slices/tabSlice';
+import { selectNovaTab, selectTabSlice } from '../../../store/slices/tabSlice';
 import { themeInfoSelector } from '../../../store/slices/theme';
 import {
   DriveFileInfo,

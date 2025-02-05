@@ -2,6 +2,7 @@ import { track } from '@amplitude/analytics-browser';
 
 import { apiWrapper } from '../../../api/apiWrapper';
 import { NOVA_CHANGE_BACKGROUND } from '../../../api/constant';
+import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import {
   resetPageData,
   resetPageResult,
@@ -10,7 +11,6 @@ import {
   setPageResult,
   setPageStatus
 } from '../../../store/slices/nova/pageStatusSlice';
-import { NOVA_TAB_TYPE } from '../../../store/slices/tabSlice';
 import { setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { calLeftCredit } from '../../../util/common';

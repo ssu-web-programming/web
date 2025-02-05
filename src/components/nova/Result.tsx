@@ -8,6 +8,7 @@ import ReactPlayer from 'react-player';
 import { setOnlineStatus } from 'store/slices/network';
 import styled, { css } from 'styled-components';
 
+import { NOVA_TAB_TYPE } from '../../constants/novaTapTypes';
 import CheckDarkIcon from '../../img/dark/nova/check_purple.svg';
 import CreditColorIcon from '../../img/light/ico_credit_color.svg';
 import CheckLightIcon from '../../img/light/nova/check_purple.svg';
@@ -18,7 +19,7 @@ import {
   selectPageResult,
   setPageStatus
 } from '../../store/slices/nova/pageStatusSlice';
-import { NOVA_TAB_TYPE, selectTabSlice } from '../../store/slices/tabSlice';
+import { selectTabSlice } from '../../store/slices/tabSlice';
 import { themeInfoSelector } from '../../store/slices/theme';
 import { activeToast } from '../../store/slices/toastSlice';
 import { getCurrentFile, setDriveFiles, setLocalFiles } from '../../store/slices/uploadFiles';

@@ -15,6 +15,7 @@ import { useRemoveBackground } from '../../../components/hooks/nova/useRemoveBac
 import useSubmitHandler from '../../../components/hooks/nova/useSubmitHandler';
 import { useChatNova } from '../../../components/hooks/useChatNova';
 import AIChat from '../../../components/nova/aiChat';
+import AIVideo from '../../../components/nova/aiVideo';
 import Convert from '../../../components/nova/Convert';
 import Expand from '../../../components/nova/Expand';
 import { Guide } from '../../../components/nova/Guide';
@@ -31,9 +32,15 @@ import TimeOut from '../../../components/nova/TimeOut';
 import Uploading from '../../../components/nova/Uploading';
 import { CHAT_MODES } from '../../../constants/chatType';
 import { FileUploadState } from '../../../constants/fileTypes';
+import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
+import { ReactComponent as UploadDarkIcon } from '../../../img/dark/ico_upload_img_plus.svg';
+import CreditIcon from '../../../img/light/ico_credit_gray.svg';
+import { ReactComponent as UploadLightIcon } from '../../../img/light/ico_upload_img_plus.svg';
 import { novaChatModeSelector } from '../../../store/slices/nova/novaHistorySlice';
 import { selectPageStatus } from '../../../store/slices/nova/pageStatusSlice';
-import { NOVA_TAB_TYPE, selectTabSlice } from '../../../store/slices/tabSlice';
+import { selectTabSlice } from '../../../store/slices/tabSlice';
+import { themeInfoSelector } from '../../../store/slices/theme';
+import { userInfoSelector } from '../../../store/slices/userInfo';
 import { useAppSelector } from '../../../store/store';
 import Translation from '../Translation';
 
@@ -51,6 +58,8 @@ export default function Nova() {
   const { goExpandPage } = useExpandImage();
   const { handleImprovedResolution } = useImprovedResolution();
   const { goThemePage } = useChangeStyle();
+  const { isLightMode } = useAppSelector(themeInfoSelector);
+  const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
   const { usingAI, selectedNovaTab } = useAppSelector(selectTabSlice);
   const status = useAppSelector(selectPageStatus(selectedNovaTab));
   const { handleAgreement } = usePrivacyConsent();
@@ -167,6 +176,8 @@ export default function Nova() {
           />
         </>
       );
+    } else if (selectedNovaTab === NOVA_TAB_TYPE.aiVideo) {
+      return <AIVideo />;
     } else if (selectedNovaTab === NOVA_TAB_TYPE.translation) {
       return <Translation />;
     } else {
@@ -175,11 +186,21 @@ export default function Nova() {
         case 'progress':
           return (
             <Guide>
-              <ImageUploader
-                guideMsg={t(`Nova.${selectedNovaTab}.Guide.ImgUploader`)}
-                handleUploadComplete={handleUploadComplete}
-                curTab={selectedNovaTab}
-              />
+              <ImageUploader handleUploadComplete={handleUploadComplete} curTab={selectedNovaTab}>
+                <S.ImageBox>
+                  <S.Icon disable={isAgreed === undefined}>
+                    {isLightMode ? <UploadLightIcon /> : <UploadDarkIcon />}
+                    <span>{t(`Nova.UploadTooltip.UploadImage`)}</span>
+                  </S.Icon>
+                  <S.Credit>
+                    <span>10</span>
+                    <div className="img">
+                      <img src={CreditIcon} alt="credit" />
+                    </div>
+                  </S.Credit>
+                  <S.Guide>{t(`Nova.${selectedNovaTab}.Guide.ImgUploader`)}</S.Guide>
+                </S.ImageBox>
+              </ImageUploader>
             </Guide>
           );
         case 'convert':

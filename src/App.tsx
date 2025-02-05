@@ -10,6 +10,7 @@ import Confirm from './components/Confirm';
 import { useChangeBackground } from './components/hooks/nova/useChangeBackground';
 import Spinner from './components/Spinner';
 import Toast from './components/toast/Toast';
+import { NOVA_TAB_TYPE } from './constants/novaTapTypes';
 import Alli from './pages/Alli/Alli';
 import AskDoc from './pages/AskDoc';
 import AskDocHome from './pages/AskDocStep/AskDocHome';
@@ -67,7 +68,7 @@ function App() {
   useEffect(() => {
     const fetchInit = async () => {
       if (getPlatform() === ClientType.windows || getPlatform() === ClientType.mac) {
-        dispatch(setPageStatus({ tab: 'aiChat', status: 'progress' }));
+        dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiChat, status: 'progress' }));
       }
 
       if (!location.pathname.toLowerCase().startsWith('/nova/share')) {

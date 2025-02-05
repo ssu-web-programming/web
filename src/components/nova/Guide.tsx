@@ -2,6 +2,7 @@ import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
+import { NOVA_TAB_TYPE } from '../../constants/novaTapTypes';
 import aiChatIcon from '../../img/common/nova/imgSample/ai_chat_sample.svg';
 import changeBGIcon from '../../img/common/nova/imgSample/bg_change_sample.svg';
 import removeBGIcon from '../../img/common/nova/imgSample/bg_delete_sample.svg';
@@ -14,7 +15,7 @@ import perplexityIcon from '../../img/common/nova/imgSample/perplexity_sample.sv
 import { ReactComponent as IconConvert } from '../../img/light/nova/tab/convert_Img.svg';
 import { announceInfoSelector } from '../../store/slices/nova/announceSlice';
 import { novaChatModeSelector } from '../../store/slices/nova/novaHistorySlice';
-import { NOVA_TAB_TYPE, selectTabSlice } from '../../store/slices/tabSlice';
+import { selectTabSlice } from '../../store/slices/tabSlice';
 import { useAppSelector } from '../../store/store';
 import Announcement from '../Announcement';
 
@@ -66,6 +67,7 @@ const GuideTitle = styled.div`
 `;
 const GuideBody = styled.div`
   width: 100%;
+  height: 206px;
   display: grid;
   gap: 8px;
   margin-bottom: 16px;

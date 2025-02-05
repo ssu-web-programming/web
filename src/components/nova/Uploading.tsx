@@ -2,9 +2,10 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
+import { NOVA_TAB_TYPE } from '../../constants/novaTapTypes';
 import { ReactComponent as UploadDocs } from '../../img/light/ico_upload_docs_plus.svg';
 import { ReactComponent as UploadImg } from '../../img/light/ico_upload_img_plus.svg';
-import { NOVA_TAB_TYPE, selectTabSlice } from '../../store/slices/tabSlice';
+import { selectTabSlice } from '../../store/slices/tabSlice';
 import { useAppSelector } from '../../store/store';
 
 const Dim = styled.div`

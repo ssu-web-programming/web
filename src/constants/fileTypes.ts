@@ -1,7 +1,8 @@
 import Resizer from 'react-image-file-resizer';
 
 import { NovaChatType } from '../store/slices/nova/novaHistorySlice';
-import { NOVA_TAB_TYPE } from '../store/slices/tabSlice';
+
+import { NOVA_TAB_TYPE } from './novaTapTypes';
 
 export type SupportFileType = {
   mimeType: string;

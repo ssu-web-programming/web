@@ -2,8 +2,9 @@ import { ChangeEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
+import { NOVA_TAB_TYPE } from '../../constants/novaTapTypes';
 import { selectPageResult } from '../../store/slices/nova/pageStatusSlice';
-import { NOVA_TAB_TYPE, selectTabSlice } from '../../store/slices/tabSlice';
+import { selectTabSlice } from '../../store/slices/tabSlice';
 import { useAppSelector } from '../../store/store';
 import { useChangeBackground } from '../hooks/nova/useChangeBackground';
 

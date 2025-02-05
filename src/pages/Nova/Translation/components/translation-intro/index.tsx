@@ -5,9 +5,9 @@ import { ReactComponent as ArrowIcon } from 'img/light/nova/translation/arrow_do
 import { ReactComponent as DeepL } from 'img/light/nova/translation/deepl_logo.svg';
 import { ReactComponent as Switch } from 'img/light/nova/translation/switch.svg';
 import { useTranslation } from 'react-i18next';
-import { NOVA_TAB_TYPE } from 'store/slices/tabSlice';
 import { css } from 'styled-components';
 
+import { NOVA_TAB_TYPE } from '../../../../../constants/novaTapTypes';
 import { TranslateResult, useTranslationContext } from '../../provider/translation-provider';
 import DragAndDrop from '../drag-and-drop';
 import Toggle, { ToggleOption } from '../toggle';

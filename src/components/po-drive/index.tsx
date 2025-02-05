@@ -14,11 +14,12 @@ import ico_file_poDrive from 'img/light/ico_file_po_drive.svg';
 import { ReactComponent as IconUploadDocs } from 'img/light/ico_upload_docs.svg';
 import { ReactComponent as IconUploadImg } from 'img/light/ico_upload_img.svg';
 import { useTranslation } from 'react-i18next';
-import { NOVA_TAB_TYPE, selectTabSlice } from 'store/slices/tabSlice';
+import { selectTabSlice } from 'store/slices/tabSlice';
 import { activeToast } from 'store/slices/toastSlice';
 import { DriveFileInfo } from 'store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from 'store/store';
 
+import { NOVA_TAB_TYPE } from '../../constants/novaTapTypes';
 import LoadingSpinner from '../../img/light/spinner.webp';
 import { themeInfoSelector } from '../../store/slices/theme';
 

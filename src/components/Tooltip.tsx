@@ -2,7 +2,8 @@ import React, { ReactElement, useEffect, useRef, useState } from 'react';
 import { initFlagSelector } from 'store/slices/initFlagSlice';
 import styled, { css } from 'styled-components';
 
-import { NOVA_TAB_TYPE, selectTabSlice } from '../store/slices/tabSlice';
+import { NOVA_TAB_TYPE } from '../constants/novaTapTypes';
+import { selectTabSlice } from '../store/slices/tabSlice';
 import { userInfoSelector } from '../store/slices/userInfo';
 import { useAppSelector } from '../store/store';
 import Bridge from '../util/bridge';

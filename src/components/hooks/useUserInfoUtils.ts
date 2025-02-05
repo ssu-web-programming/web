@@ -2,7 +2,7 @@ import { novaHistorySelector } from 'store/slices/nova/novaHistorySlice';
 import { userInfoSelector } from 'store/slices/userInfo';
 import { useAppSelector } from 'store/store';
 
-import { NOVA_TAB_TYPE } from '../../store/slices/tabSlice';
+import { NOVA_TAB_TYPE } from '../../constants/novaTapTypes';
 
 export default function useUserInfoUtils() {
   const { userInfo } = useAppSelector(userInfoSelector);

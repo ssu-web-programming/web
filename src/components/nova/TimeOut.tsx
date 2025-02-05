@@ -3,9 +3,10 @@ import CreditColorIcon from 'img/light/ico_credit_color_outline.svg';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
+import { NOVA_TAB_TYPE } from '../../constants/novaTapTypes';
 import { ReactComponent as BangIcon } from '../../img/light/bang_circle.svg';
 import { selectPageResult } from '../../store/slices/nova/pageStatusSlice';
-import { NOVA_TAB_TYPE, selectTabSlice } from '../../store/slices/tabSlice';
+import { selectTabSlice } from '../../store/slices/tabSlice';
 import { useAppSelector } from '../../store/store';
 import { useChangeBackground } from '../hooks/nova/useChangeBackground';
 import { useChangeStyle } from '../hooks/nova/useChangeStyle';

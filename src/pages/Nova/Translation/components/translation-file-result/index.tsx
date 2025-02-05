@@ -3,10 +3,10 @@ import { ReactComponent as CheckLightIcon } from 'img/light/nova/check_purple.sv
 import compareViewerIcon from 'img/light/nova/translation/book.svg';
 import downloadIcon from 'img/light/nova/translation/download.svg';
 import { selectPageData } from 'store/slices/nova/pageStatusSlice';
-import { NOVA_TAB_TYPE } from 'store/slices/tabSlice';
 import { useAppSelector } from 'store/store';
 import { css } from 'styled-components';
 
+import { NOVA_TAB_TYPE } from '../../../../../constants/novaTapTypes';
 import FileItem from '../file-item';
 
 import * as S from './style';

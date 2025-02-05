@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { FileUploadState } from '../../../constants/fileTypes';
+import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import ChangeBGIcon from '../../../img/common/nova/imgSample/bg_change_sample.svg';
 import RemoveBGIcon from '../../../img/common/nova/imgSample/bg_delete_sample.svg';
 import Convert2DTo3DIcon from '../../../img/common/nova/imgSample/convert_2dto3d_smaple.gif';
@@ -15,7 +16,7 @@ import TranslationLightIcon from '../../../img/light/nova/translation/ico_transl
 import VoiceDictationLightIcon from '../../../img/light/nova/voiceDictation/ico_voice_dictation.svg';
 import { setIsStartedByRibbon } from '../../../store/slices/appState';
 import { novaHistorySelector } from '../../../store/slices/nova/novaHistorySlice';
-import { NOVA_TAB_TYPE, selectNovaTab, selectTabSlice } from '../../../store/slices/tabSlice';
+import { selectNovaTab, selectTabSlice } from '../../../store/slices/tabSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
 import Banner from '../banner';
 import { FileUploading } from '../FileUploading';

@@ -36,13 +36,14 @@ import {
   setIsShareMode,
   toggleItemSelection
 } from 'store/slices/nova/novaHistorySlice';
-import { NOVA_TAB_TYPE, selectNovaTab, selectTabSlice } from 'store/slices/tabSlice';
+import { selectNovaTab, selectTabSlice } from 'store/slices/tabSlice';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import { css } from 'styled-components';
 import Bridge, { ClientType, getPlatform } from 'util/bridge';
 import { getFileExtension, sliceFileName } from 'util/common';
 
 import { CHAT_MODES, ChatMode, getChatTypeList } from '../../../constants/chatType';
+import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import { themeInfoSelector } from '../../../store/slices/theme';
 import { setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
 import { blobToFile } from '../../../util/files';
