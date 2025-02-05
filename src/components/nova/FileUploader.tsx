@@ -1,7 +1,12 @@
 import React, { RefObject, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { getValidExt, SUPPORT_DOCUMENT_TYPE, SupportFileType } from '../../constants/fileTypes';
+import {
+  getValidExt,
+  SUPPORT_DOCUMENT_TYPE,
+  SupportFileType,
+  TRANSLATION_SUPPORT_TYPE
+} from '../../constants/fileTypes';
 import { NOVA_TAB_TYPE } from '../../constants/novaTapTypes';
 import InsertDocsDarkIcon from '../../img/dark/ico_insert_docs.svg';
 import MobileDarkIcon from '../../img/dark/ico_mobile.svg';
@@ -36,7 +41,7 @@ import Tooltip from '../Tooltip';
 import PODriveList from './PODirveList';
 
 type FileUploaderProps = {
-  target: string;
+  target: 'nova-image' | 'nova-translation' | string;
   accept: SupportFileType[];
   children: React.ReactNode;
   inputRef: RefObject<HTMLInputElement>;
@@ -129,7 +134,12 @@ export const FileUploader = (props: FileUploaderProps) => {
           const element = inputRef?.current;
           if (element) {
             const targetType =
-              target === 'nova-image' ? getValidExt(selectedNovaTab) : SUPPORT_DOCUMENT_TYPE;
+              target === 'nova-image'
+                ? getValidExt(selectedNovaTab)
+                : target === 'nova-translation'
+                  ? TRANSLATION_SUPPORT_TYPE
+                  : SUPPORT_DOCUMENT_TYPE;
+
             element.accept = getAccept(targetType);
             // #IOS-5525 ios webp 파일 단일 선택 시 특정 버전에서 error가 발생하므로, 무조건 multiple로 지원하도록 수정함
             element.multiple =

@@ -2,17 +2,74 @@ import IconTextButton from 'components/buttons/IconTextButton';
 import { ReactComponent as CheckLightIcon } from 'img/light/nova/check_purple.svg';
 import compareViewerIcon from 'img/light/nova/translation/book.svg';
 import downloadIcon from 'img/light/nova/translation/download.svg';
+import { activeLoadingSpinner } from 'store/slices/loadingSpinner';
 import { selectPageData } from 'store/slices/nova/pageStatusSlice';
-import { useAppSelector } from 'store/store';
+import { getDriveFiles, getLocalFiles } from 'store/slices/uploadFiles';
+import { useAppDispatch, useAppSelector } from 'store/store';
 import { css } from 'styled-components';
+import Bridge from 'util/bridge';
 
 import { NOVA_TAB_TYPE } from '../../../../../constants/novaTapTypes';
+import { useTranslationContext } from '../../provider/translation-provider';
 import FileItem from '../file-item';
 
 import * as S from './style';
 
+interface CompareSouceAndTranslationArgs {
+  originalFileType: 'currentDoc' | 'drive' | 'local';
+  originalFileName: string;
+  originFile: any;
+  translationFileName: string;
+  translationFileUrl: string;
+}
+
+interface DownloadFileArgs {
+  fileName: string;
+  url: string;
+}
+
 export default function TranslationFileResult() {
-  const currentFile = useAppSelector(selectPageData(NOVA_TAB_TYPE.convert2DTo3D));
+  const dispatch = useAppDispatch();
+  const currentFile = useAppSelector(selectPageData(NOVA_TAB_TYPE.voiceDictation));
+  const localFiles = useAppSelector(getLocalFiles);
+  const driveFiles = useAppSelector(getDriveFiles);
+
+  const {
+    sharedTranslationInfo: {
+      originFile,
+      originalFileName,
+      originalFileType,
+      translationFileName,
+      translationFileUrl
+    }
+  } = useTranslationContext();
+
+  console.log('currentFile', currentFile);
+  console.log('localFiles', localFiles);
+  console.log('driveFiles', driveFiles);
+
+  // 호진FIXME: 만들어진 url로 다운로드가 가능하게만 변경하기 ( 원본-번역 비교보기 )
+  const handleCompareSourceAndTranslation = async () => {
+    dispatch(activeLoadingSpinner());
+
+    await Bridge.callBridgeApi<CompareSouceAndTranslationArgs>('compareSourceAndTranslation', {
+      originalFileType,
+      originalFileName,
+      originFile,
+      translationFileName,
+      translationFileUrl
+    });
+  };
+
+  // 호진FIXME: 만들어진 url로 다운로드가 가능하게만 변경하기 ( 저장하기 )
+  const handleDownloadFile = async () => {
+    dispatch(activeLoadingSpinner());
+
+    await Bridge.callBridgeApi<DownloadFileArgs>('downloadFile', {
+      fileName: translationFileName,
+      url: translationFileUrl
+    });
+  };
 
   return (
     <S.Container>
@@ -33,7 +90,7 @@ export default function TranslationFileResult() {
           width={'full'}
           height={48}
           borderType="gray"
-          onClick={() => console.log('123')}
+          onClick={handleCompareSourceAndTranslation}
           iconSrc={compareViewerIcon}
           iconPos={'left'}
           iconSize={24}
@@ -41,12 +98,12 @@ export default function TranslationFileResult() {
             border-radius: 8px;
             font-size: 15px;
           `}>
-          {'원본-번역 비교 보기'}
+          원본-번역 비교 보기
         </IconTextButton>
         <IconTextButton
           width={'full'}
           height={48}
-          onClick={() => console.log('123')}
+          onClick={handleDownloadFile}
           iconSrc={downloadIcon}
           iconPos={'left'}
           iconSize={24}

@@ -5,7 +5,11 @@ import { ReactComponent as ArrowIcon } from 'img/light/nova/translation/arrow_do
 import { ReactComponent as DeepL } from 'img/light/nova/translation/deepl_logo.svg';
 import { ReactComponent as Switch } from 'img/light/nova/translation/switch.svg';
 import { useTranslation } from 'react-i18next';
+import { selectPageData } from 'store/slices/nova/pageStatusSlice';
+import { getDriveFiles, getLocalFiles } from 'store/slices/uploadFiles';
+import { useAppSelector } from 'store/store';
 import { css } from 'styled-components';
+import { downloadFiles } from 'util/files';
 
 import { NOVA_TAB_TYPE } from '../../../../../constants/novaTapTypes';
 import { TranslateResult, useTranslationContext } from '../../provider/translation-provider';
@@ -19,6 +23,9 @@ type TranslateType = 'TEXT' | 'FILE';
 
 export default function TranslationIntro() {
   const { t } = useTranslation();
+  const localFiles = useAppSelector(getLocalFiles);
+  const driveFiles = useAppSelector(getDriveFiles);
+  const currentFile = useAppSelector(selectPageData(NOVA_TAB_TYPE.translation));
 
   const [type, setType] = useState<TranslateType>('TEXT');
   const [translateInputValue, setTranslateInputValue] = useState('');
@@ -43,8 +50,28 @@ export default function TranslationIntro() {
     }));
   };
 
+  const handleMoveToFileResult = () => {
+    setSharedTranslationInfo((prevSharedTranslationInfo) => ({
+      ...prevSharedTranslationInfo,
+      componentType: 'FILE_RESULT'
+    }));
+  };
+
+  const convertFileObject = async () => {
+    // driveFiles의 경우에는 id를 파일객체로 변환해야함
+    if (driveFiles.length) {
+      const results = await downloadFiles(driveFiles);
+      return results[0].file;
+    }
+
+    if (currentFile) {
+      return currentFile;
+    }
+
+    return localFiles[0];
+  };
+
   const submitTextTranslate = async () => {
-    // 호진FIXME: 로딩 돌릴때 상태변경하는 로직 확인해야함!
     triggerLoading();
 
     const response = await translationHttp.postTranslateText({
@@ -60,8 +87,17 @@ export default function TranslationIntro() {
     handleMoveToTextResult({ detectedSourceLanguage, translatedText });
   };
 
-  const submitFileTranslate = () => {
-    console.log('File 번역을 시작해주세요.');
+  const submitFileTranslate = async () => {
+    triggerLoading();
+
+    const response = await translationHttp.postTranslateDocument({
+      file: await convertFileObject(),
+      sourceLang: 'KO',
+      targetLang: 'EL'
+    });
+
+    handleMoveToFileResult();
+    console.log('submitFileTranslate-response', response);
   };
 
   const handleTranslate = () => {
@@ -71,11 +107,6 @@ export default function TranslationIntro() {
     }
     // File 번역일때 타는 로직!
     submitFileTranslate();
-
-    // setSharedTranslationInfo((prevSharedTranslationInfo) => ({
-    //   ...prevSharedTranslationInfo,
-    //   componentType: 'LANG_SEARCH'
-    // }));
   };
 
   // console.log('translateInputValue', translateInputValue);
@@ -138,7 +169,14 @@ export default function TranslationIntro() {
         </S.TextAreaBottom>
       </S.TextAreaWrapper>
 
-      <S.TranslationButton isActive={translateInputValue.length > 0} onClick={handleTranslate}>
+      <S.TranslationButton
+        isActive={
+          translateInputValue.length > 0 ||
+          localFiles.length > 0 ||
+          driveFiles.length > 0 ||
+          !!currentFile
+        }
+        onClick={handleTranslate}>
         <span>번역하기</span>
       </S.TranslationButton>
     </>

@@ -32,17 +32,42 @@ const translationHttp = {
     return response.data;
   },
   postTranslateDocument: async ({ file, sourceLang, targetLang }: PostTranslateDocument) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('sourceLang', sourceLang || '');
+    formData.append('targetLang', targetLang);
+
     const { res } = await apiWrapper().request(NOVA_TRANSLATE_DOCUMENT, {
-      headers: {
-        'Content-Type': 'mulitpart/form-data'
-      },
-      body: JSON.stringify({ file, sourceLang, targetLang }),
-      method: 'POST'
+      method: 'POST',
+      body: formData
     });
 
-    const response = await res.json();
-    console.log('response', response);
-    return response;
+    const contentType = res.headers.get('Content-Type');
+
+    if (contentType?.includes('application/json')) {
+      const errorResponse = await res.json();
+      console.error('Translation failed:', errorResponse);
+      throw errorResponse;
+    } else if (contentType?.includes('application/octet-stream')) {
+      const blob = await res.blob();
+      const contentDisposition = res.headers.get('Content-Disposition');
+      let filename = 'translated_document';
+
+      if (contentDisposition) {
+        const filenameMatch = contentDisposition.match(/filename\*=UTF-8''(.+)/);
+        if (filenameMatch) {
+          filename = decodeURIComponent(filenameMatch[1]);
+        }
+      }
+
+      return {
+        success: true,
+        filename,
+        blob
+      };
+    }
+
+    throw new Error('Unexpected response type');
   },
   postTranslateLatestLang: async () => {
     const { res } = await apiWrapper().request(NOVA_TRANSLATE_LATEST_LANG, {

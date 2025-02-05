@@ -74,7 +74,7 @@ const Credit = styled.div`
   justify-content: center;
   gap: 4px;
   padding: 2px 2px 2px 12px;
-  background: ${({ theme }) => theme.color.subBgGray02};
+  background: ${({ theme }) => theme.color.background.gray02};
   border-radius: 999px;
 
   .img {
@@ -130,11 +130,16 @@ export default function TranslationFileUploader({
   const driveFiles = useAppSelector(getDriveFiles);
   const currentFile = useAppSelector(selectPageData(curTab));
 
+  const getActiveFile = () => {
+    if (localFiles.length > 0) return localFiles[0];
+    if (driveFiles.length > 0) return driveFiles[0];
+
+    return currentFile || null;
+  };
+
   console.log('currentFile', currentFile);
   console.log('localFiles', localFiles);
   console.log('driveFiles', driveFiles);
-
-  const target = 'nova-image';
 
   // const isSpecificFormat = (file: File) => {
   //   console.log('file', file);
@@ -212,13 +217,13 @@ export default function TranslationFileUploader({
 
   return (
     <Wrap>
-      {localFiles.length > 0 ? (
-        <FileItem file={localFiles[0]} />
+      {getActiveFile() ? (
+        <FileItem file={getActiveFile()} />
       ) : (
         <FileUploader
           type="file"
-          key={target}
-          target={target}
+          key={'nova-translation'}
+          target={'nova-translation'}
           accept={SUPPORT_IMAGE_TYPE}
           inputRef={inputImgFileRef}
           tooltipStyle={{
