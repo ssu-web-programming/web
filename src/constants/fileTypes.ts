@@ -57,6 +57,29 @@ export const TRANSLATION_SUPPORT_TYPE: SupportFileType[] = [
   }
 ];
 
+export const AUDIO_SUPPORT_TYPE: SupportFileType[] = [
+  {
+    mimeType: 'audio/mp4',
+    extensions: '.m4a'
+  },
+  {
+    mimeType: 'audio/mpeg',
+    extensions: '.mp3'
+  },
+  {
+    mimeType: 'audio/aac',
+    extensions: '.aac'
+  },
+  {
+    mimeType: 'audio/amr',
+    extensions: '.amr'
+  },
+  {
+    mimeType: 'audio/wav',
+    extensions: '.wav'
+  }
+];
+
 export const SUPPORT_IMAGE_TYPE: SupportFileType[] = [
   {
     mimeType: 'image/jpeg',

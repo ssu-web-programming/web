@@ -12,7 +12,7 @@ import { useConfirm } from '../components/Confirm';
 import useManageFile from '../components/hooks/nova/useManageFile';
 import { NOVA_TAB_TYPE } from '../constants/novaTapTypes';
 import gI18n, { convertLangFromLangCode } from '../locale';
-import { setIsExternal } from '../store/slices/appState';
+import { setIsExternal, setIsRecordingState } from '../store/slices/appState';
 import { AskDocStatus, setSrouceId, setStatus } from '../store/slices/askDoc';
 import { setFiles } from '../store/slices/askDocAnalyzeFiesSlice';
 import { initConfirm } from '../store/slices/confirm';
@@ -238,6 +238,18 @@ const callApi = (api: ApiType, arg?: string | number) => {
           case 'downloadFile': {
             if (window.webkit.messageHandlers.downloadFile) {
               window.webkit.messageHandlers.downloadFile.postMessage(arg);
+            }
+            break;
+          }
+          case 'downloadVoiceFile': {
+            if (window.webkit.messageHandlers.downloadVoiceFile) {
+              window.webkit.messageHandlers.downloadVoiceFile.postMessage(arg);
+            }
+            break;
+          }
+          case 'getRecordingState': {
+            if (window.webkit.messageHandlers.getRecordingState) {
+              window.webkit.messageHandlers.getRecordingState.postMessage(arg);
             }
             break;
           }
@@ -572,6 +584,25 @@ export const useInitBridgeListener = () => {
             dispatch(initLoadingSpinner());
             break;
           }
+          case 'finishDownloadVoiceFile': {
+            dispatch(initLoadingSpinner());
+            break;
+          }
+          // 전화 여부를 판단하는 로직!
+          case 'getCallState': {
+            // 전화가 오면 녹음을 멈추고 전화가 안오면 녹음을 시작한다.
+            const isRecordState = state.appState.isRecordState;
+            dispatch(
+              setIsRecordingState(
+                isRecordState === 'not-started'
+                  ? 'not-started'
+                  : body.isIncomingCall
+                    ? 'pause'
+                    : 'start'
+              )
+            );
+            break;
+          }
           default: {
             break;
           }
@@ -661,7 +692,9 @@ type ApiType =
   | 'analyzeCurFile'
   | 'uploadFile'
   | 'compareSourceAndTranslation'
-  | 'downloadFile';
+  | 'downloadFile'
+  | 'downloadVoiceFile'
+  | 'getRecordingState';
 
 const Bridge = {
   checkSession: (api: string) => {

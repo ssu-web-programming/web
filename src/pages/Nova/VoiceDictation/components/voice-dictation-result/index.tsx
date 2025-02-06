@@ -5,9 +5,12 @@ import CheckLightIcon from 'img/light/nova/check_purple.svg';
 import { overlay } from 'overlay-kit';
 import { useTranslation } from 'react-i18next';
 import { themeInfoSelector } from 'store/slices/theme';
+import { getLocalFiles } from 'store/slices/uploadFiles';
 import { useAppSelector } from 'store/store';
 import { css } from 'styled-components';
+import { formatMilliseconds } from 'util/getAudioDuration';
 
+import { useVoiceDictationContext } from '../../provider/voice-dictation-provider';
 import AudioPlayer from '../voice-audio-player';
 import VoiceSaveBottomSheet from '../voice-save-bottom-sheet';
 
@@ -15,34 +18,12 @@ import * as S from './style';
 
 export default function VoiceDictationResult() {
   const { isLightMode } = useAppSelector(themeInfoSelector);
-  const { t } = useTranslation();
+  const {
+    sharedVoiceDictationInfo: { voiceDictationResult, audioDuration }
+  } = useVoiceDictationContext();
+  const localFiles = useAppSelector(getLocalFiles);
 
-  const transcripts = [
-    {
-      id: 1,
-      color: '#7c3aed',
-      time: '00:01',
-      text: '슈피리카 아니라 세소 피리라고 제발 좀 제수피'
-    },
-    {
-      id: 2,
-      color: '#10b981',
-      time: '00:07',
-      text: '죽느냐 사느냐 그것이 문제로다.'
-    },
-    {
-      id: 3,
-      color: '#ef4444',
-      time: '00:07',
-      text: 'The weather is so cold. Make sure to dress warmly to avoid catching a cold! What should you eat in cold weather?'
-    },
-    {
-      id: 4,
-      color: 'blue',
-      time: '00:12',
-      text: '가나다라마바사 안녕하세요는 가나다라마바사 안녕하세요는 가나다라마바사 안녕하세요는 가나다라마바사 안녕하세요는가나다라마바사가나다라마바사 안녕하세요는 가나다라마바사 안녕하세요는 가나다라마바사 안녕하세요는 가나다라마바사 안녕하세요는가나다라마바사가나다라마바사 안녕하세요는 가나다라마바사 안녕하세요는 가나다라마바사 안녕하세요는 가나다라마바사 안녕하세요는가나다라마바사 안녕하세요는 가나다라마바사 안녕하세요는가나다라마바사 안녕하세요는 가나다라마바사 안녕하세요는'
-    }
-  ];
+  const { t } = useTranslation();
 
   const handleOpenSaveOverlay = () => {
     overlay.open(({ isOpen, close }) => {
@@ -68,16 +49,16 @@ export default function VoiceDictationResult() {
         <S.TranscriptContainer>
           <S.NewTranscript>
             <span>새로운 받아쓰기</span>
-            <span>오늘 오후 10:57 · 1분 30초</span>
+            <span>오늘 오후 10:57 · {audioDuration}</span>
           </S.NewTranscript>
 
-          {transcripts.map((transcript) => (
-            <S.TranscriptItem key={transcript.id} color={transcript.color}>
-              <S.TranscriptIcon color={transcript.color}>참{transcript.id}</S.TranscriptIcon>
+          {voiceDictationResult?.data.segments.map((transcript, idx) => (
+            <S.TranscriptItem key={idx} color={'#7c3aed'}>
+              <S.TranscriptIcon color={'#7c3aed'}>참{transcript.speaker.label}</S.TranscriptIcon>
               <S.TranscriptContent>
                 <S.TranscriptInfo>
-                  <S.TranscriptName>참석자{transcript.id}</S.TranscriptName>
-                  <S.TranscriptTime>{transcript.time}</S.TranscriptTime>
+                  <S.TranscriptName>참석자{transcript.speaker.name}</S.TranscriptName>
+                  <S.TranscriptTime>{formatMilliseconds(transcript.end)}</S.TranscriptTime>
                 </S.TranscriptInfo>
                 <S.TranscriptText>{transcript.text}</S.TranscriptText>
               </S.TranscriptContent>
@@ -86,7 +67,8 @@ export default function VoiceDictationResult() {
         </S.TranscriptContainer>
 
         <AudioPlayer
-          audioUrl="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3"
+          // audioSource="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3"
+          audioSource={localFiles[0]}
           onPlay={() => console.log('Started playing')}
           onPause={() => console.log('Paused')}
           onTimeUpdate={(time) => console.log('Current time:', time)}>

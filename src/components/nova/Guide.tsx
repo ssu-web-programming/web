@@ -82,6 +82,7 @@ const StyledIconConvert = styled(IconConvert)`
 
 interface GuideProps {
   children: React.ReactNode;
+  onClick?: () => void;
 }
 
 export const Guide = (props: GuideProps) => {
@@ -127,7 +128,13 @@ export const Guide = (props: GuideProps) => {
       <GuideWrapper>
         {announceInfo.status && <Announcement content={announceInfo.content} />}
         <GuideTitle>
-          <GuideImage src={iconMap[selectedNovaTab]} alt="aiChat" />
+          <GuideImage
+            src={iconMap[selectedNovaTab]}
+            alt="aiChat"
+            onClick={() => {
+              props.onClick && props.onClick();
+            }}
+          />
           <div className="title">
             <p>{getTranslationKey()}</p>
           </div>

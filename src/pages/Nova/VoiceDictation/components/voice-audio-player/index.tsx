@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useRef, useState } from 'react';
+import React, { PropsWithChildren, useEffect, useRef, useState } from 'react';
 import { ReactComponent as GoBackward } from 'img/light/nova/voiceDictation/go_backward.svg';
 import { ReactComponent as GoForward } from 'img/light/nova/voiceDictation/go_forward.svg';
 import { ReactComponent as Pause } from 'img/light/nova/voiceDictation/pause.svg';
@@ -8,7 +8,7 @@ import * as S from './style';
 
 // 메인 컴포넌트 Props 타입
 interface AudioPlayerProps extends PropsWithChildren {
-  audioUrl: string;
+  audioSource: string | File;
   onTimeUpdate?: (currentTime: number) => void;
   onDurationChange?: (duration: number) => void;
   onPlay?: () => void;
@@ -19,7 +19,7 @@ interface AudioPlayerProps extends PropsWithChildren {
 type PlaybackSpeed = 0.8 | 1.0 | 1.2 | 1.5 | 1.8 | 2.0;
 
 const AudioPlayer: React.FC<AudioPlayerProps> = ({
-  audioUrl,
+  audioSource,
   onTimeUpdate,
   onDurationChange,
   onPlay,
@@ -30,6 +30,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [duration, setDuration] = useState<number>(0);
   const [playbackSpeed, setPlaybackSpeed] = useState<PlaybackSpeed>(1.0);
+  const [audioUrl, setAudioUrl] = useState<string>('');
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -97,6 +98,21 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
   };
 
   const progress = duration ? (currentTime / duration) * 100 : 0;
+
+  // File 객체를 URL로 변환
+  useEffect(() => {
+    if (audioSource instanceof File) {
+      const url = URL.createObjectURL(audioSource);
+      setAudioUrl(url);
+
+      // cleanup function
+      return () => {
+        URL.revokeObjectURL(url);
+      };
+    } else {
+      setAudioUrl(audioSource);
+    }
+  }, [audioSource]);
 
   return (
     <S.Container>

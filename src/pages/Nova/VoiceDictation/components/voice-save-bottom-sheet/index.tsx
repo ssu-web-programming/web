@@ -3,6 +3,9 @@ import OverlayModal from 'components/overlay-modal';
 import { ReactComponent as File } from 'img/light/nova/voiceDictation/file.svg';
 import { ReactComponent as Mic } from 'img/light/nova/voiceDictation/mic.svg';
 import { overlay } from 'overlay-kit';
+import { activeLoadingSpinner } from 'store/slices/loadingSpinner';
+import { useAppDispatch } from 'store/store';
+import Bridge from 'util/bridge';
 
 import VoiceFileModalContent from '../voice-file-modal-content';
 
@@ -14,6 +17,14 @@ interface Props {
 }
 
 export default function VoiceSaveBottomSheet({ isOpened, setIsOpened }: Props) {
+  const dispatch = useAppDispatch();
+
+  // 호진FIXME: 임의의 음성 파일 다운로드 URL 삽입
+  const handleDownloadVoiceFile = async () => {
+    dispatch(activeLoadingSpinner());
+    await Bridge.callBridgeApi('downloadVoiceFile', { fileName: '임의의 파일', url: '123' });
+  };
+
   const handleOpenSaveFileFormat = () => {
     overlay.closeAll();
 
@@ -30,7 +41,7 @@ export default function VoiceSaveBottomSheet({ isOpened, setIsOpened }: Props) {
       <S.Container>
         <S.Title>저장하기</S.Title>
         <S.ItemWrapper>
-          <S.Item>
+          <S.Item onClick={handleDownloadVoiceFile}>
             <Mic />
             <p>음성파일</p>
           </S.Item>
