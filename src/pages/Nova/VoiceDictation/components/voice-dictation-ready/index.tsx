@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import voiceDictationHttp from 'api/voice-dictation';
 import CheckDarkIcon from 'img/dark/nova/check_purple.svg';
 import CreditColorIcon from 'img/light/ico_credit_color_outline.svg';
@@ -19,13 +19,14 @@ import * as S from './style';
 
 export default function VoiceDictationReady() {
   const {
-    sharedVoiceDictationInfo: { componentType },
+    sharedVoiceDictationInfo: { componentType, audioDuration },
     setSharedVoiceDictationInfo,
     triggerLoading
   } = useVoiceDictationContext();
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const { t } = useTranslation();
   const [inputValue, setInputValue] = useState('2024-12-25 01:11:22');
+
   const [isEditMode, setIsEditMode] = useState(false);
   const localFiles = useAppSelector(getLocalFiles);
 
@@ -71,8 +72,8 @@ export default function VoiceDictationReady() {
         {componentType === 'FILE_READY' ? (
           <S.RecordingBox>
             <AudioFile />
-            <S.FileTitle>기존 파일 제목</S.FileTitle>
-            <S.Duration>1분 30초</S.Duration>
+            <S.FileTitle>{localFiles[0].name}</S.FileTitle>
+            <S.Duration>{audioDuration}</S.Duration>
 
             <S.LanguageSelector>
               <S.LanguageLabel>인식 언어</S.LanguageLabel>
@@ -97,7 +98,7 @@ export default function VoiceDictationReady() {
                 </>
               )}
             </S.InputFileWrapper>
-            <S.Duration>오늘 오후 10:57 · 1분 30초</S.Duration>
+            <S.Duration>오늘 오후 10:57 · {audioDuration}</S.Duration>
           </S.RecordingBox>
         )}
 

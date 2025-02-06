@@ -11,6 +11,9 @@ import { getLocalFiles, setLocalFiles } from 'store/slices/uploadFiles';
 import { userInfoSelector } from 'store/slices/userInfo';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import styled from 'styled-components';
+import { formatDuration, getAudioDuration } from 'util/getAudioDuration';
+
+import { useVoiceDictationContext } from '../../provider/voice-dictation-provider';
 
 const Wrap = styled.div`
   display: flex;
@@ -113,6 +116,7 @@ export default function AudioFileUploader({
 }: ImageUploaderProps) {
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
+  const { setSharedVoiceDictationInfo } = useVoiceDictationContext();
   const dispatch = useAppDispatch();
 
   const localFiles = useAppSelector(getLocalFiles);
@@ -133,6 +137,14 @@ export default function AudioFileUploader({
     }
   };
 
+  const audioDuration = async (file: File) => {
+    const duration = await getAudioDuration(file);
+    setSharedVoiceDictationInfo((prev) => ({
+      ...prev,
+      audioDuration: formatDuration(duration)
+    }));
+  };
+
   return (
     <Wrap>
       <FileButton
@@ -142,6 +154,7 @@ export default function AudioFileUploader({
         onClick={handleClickFileUpload}
         handleOnChange={async (files) => {
           await dispatch(setLocalFiles(files));
+          await audioDuration(files[0]);
           onNext?.();
         }}>
         <ImageBox>

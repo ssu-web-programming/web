@@ -27,7 +27,6 @@ export interface VoiceDictationResult {
   success: boolean;
   data: {
     segments: Segments[];
-    length: number;
   };
 }
 
@@ -38,6 +37,7 @@ interface Props {
 interface SharedVoiceDictationInfo {
   componentType: VoiceDictationComponentType;
   voiceDictationResult: VoiceDictationResult | null;
+  audioDuration: string;
 }
 
 interface VoiceDictationContextType {
@@ -60,7 +60,8 @@ export default function VoiceDictationProvider({ children }: Props) {
   const [sharedVoiceDictationInfo, setSharedVoiceDictationInfo] =
     useState<SharedVoiceDictationInfo>({
       componentType: 'INTRO',
-      voiceDictationResult: null
+      voiceDictationResult: null,
+      audioDuration: ''
     });
 
   const triggerLoading = () => {
