@@ -3,6 +3,7 @@ import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useStat
 export type VoiceDictationComponentType =
   | 'INTRO'
   | 'LOADING'
+  | 'AUDIO_RECORDER'
   | 'VOICE_READY'
   | 'FILE_READY'
   | 'RESULT';

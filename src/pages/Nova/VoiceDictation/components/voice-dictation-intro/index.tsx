@@ -17,8 +17,20 @@ export default function VoiceDictationIntro() {
     }));
   };
 
+  const startRecording = async () => {
+    try {
+      await navigator.mediaDevices.getUserMedia({ audio: true });
+      setSharedVoiceDictationInfo((prev) => ({
+        ...prev,
+        componentType: 'AUDIO_RECORDER'
+      }));
+    } catch (e) {
+      console.log('123123', e);
+    }
+  };
+
   return (
-    <Guide>
+    <Guide onClick={startRecording}>
       <RecognizedLang />
       <AudioFileUploader
         guideMsg={t('Nova.voiceDictation.Guide.UploadGuide')}
