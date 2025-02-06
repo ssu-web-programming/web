@@ -42,3 +42,5 @@ export const NOVA_GET_ANNOUNCEMENT_LIST = '/api/v2/nova/announcementList';
 export const NOVA_TRANSLATE_TEXT = '/api/v2/nova/translate/text';
 export const NOVA_TRANSLATE_DOCUMENT = '/api/v2/nova/translate/document';
 export const NOVA_TRANSLATE_LATEST_LANG = '/api/1/translate/latest-lang';
+
+export const NOVA_SPEECH_RECOGNIZE = '/api/v2/nova/speech/recognize';

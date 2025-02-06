@@ -1,26 +1,16 @@
-import { useEffect, useRef } from 'react';
-import { useConfirm } from 'components/Confirm';
-import useErrorHandle from 'components/hooks/useErrorHandle';
-import { FileUploader } from 'components/nova/FileUploader';
-import {
-  compressImage,
-  isPixelLimitExceeded,
-  SUPPORT_DOCUMENT_TYPE,
-  SUPPORT_IMAGE_TYPE
-} from 'constants/fileTypes';
+import { useRef } from 'react';
+import FileButton from 'components/FileButton';
+import { getAccept } from 'components/nova/FileUploader';
+import { AUDIO_SUPPORT_TYPE } from 'constants/fileTypes';
 import { NOVA_TAB_TYPE } from 'constants/novaTapTypes';
 import { ReactComponent as UploadDarkIcon } from 'img/dark/ico_upload_img_plus.svg';
 import CreditIcon from 'img/light/ico_credit_gray.svg';
 import { ReactComponent as UploadFileLightIcon } from 'img/light/nova/translation/file_upload.svg';
-import { useTranslation } from 'react-i18next';
-import { selectPageData, setPageData, setPageStatus } from 'store/slices/nova/pageStatusSlice';
-// import { NOVA_TAB_TYPE } from 'store/slices/tabSlice';
 import { themeInfoSelector } from 'store/slices/theme';
-import { getDriveFiles, getLocalFiles } from 'store/slices/uploadFiles';
+import { getLocalFiles, setLocalFiles } from 'store/slices/uploadFiles';
 import { userInfoSelector } from 'store/slices/userInfo';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import styled from 'styled-components';
-import { convertDriveFileToFile } from 'util/files';
 
 const Wrap = styled.div`
   display: flex;
@@ -111,38 +101,48 @@ interface ImageUploaderProps {
   handleUploadComplete: () => void;
   curTab: NOVA_TAB_TYPE;
   creditCount?: number;
+  onNext?: () => void;
 }
 
 export default function AudioFileUploader({
   guideMsg,
   handleUploadComplete,
   curTab,
-  creditCount = 10
+  creditCount = 10,
+  onNext
 }: ImageUploaderProps) {
-  const inputImgFileRef = useRef<HTMLInputElement | null>(null);
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
-  //   const localFiles = useAppSelector(getLocalFiles);
-  //   const driveFiles = useAppSelector(getDriveFiles);
-  //   const currentFile = useAppSelector(selectPageData(curTab));
+  const dispatch = useAppDispatch();
 
-  const target = 'nova-image';
+  const localFiles = useAppSelector(getLocalFiles);
+
+  console.log('localFiles', localFiles);
+
+  const target = 'nova-voice-dictation';
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleClickFileUpload = () => {
+    // IOS는 팝업을 넣어야함!
+    const element = inputRef?.current;
+    if (element) {
+      const targetType = AUDIO_SUPPORT_TYPE;
+      element.accept = getAccept(targetType);
+      element.multiple = false;
+      element.click();
+    }
+  };
 
   return (
     <Wrap>
-      <FileUploader
-        type="file"
-        key={target}
+      <FileButton
         target={target}
-        accept={SUPPORT_IMAGE_TYPE}
-        inputRef={inputImgFileRef}
-        tooltipStyle={{
-          minWidth: '165px',
-          top: '12px',
-          left: 'unset',
-          right: 'unset',
-          bottom: 'unset',
-          padding: '12px 16px'
+        accept={getAccept(AUDIO_SUPPORT_TYPE)}
+        ref={inputRef}
+        onClick={handleClickFileUpload}
+        handleOnChange={async (files) => {
+          await dispatch(setLocalFiles(files));
+          onNext?.();
         }}>
         <ImageBox>
           <Icon disable={isAgreed === undefined}>
@@ -157,7 +157,7 @@ export default function AudioFileUploader({
           </Credit>
           <Guide>{guideMsg}</Guide>
         </ImageBox>
-      </FileUploader>
+      </FileButton>
     </Wrap>
   );
 }

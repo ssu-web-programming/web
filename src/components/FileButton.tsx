@@ -24,20 +24,21 @@ const Label = styled.label<{ disable: boolean }>`
   justify-content: center;
 `;
 
-interface FileButtonProps extends React.ComponentPropsWithoutRef<'input'> {
+interface FileButtonProps extends Omit<React.ComponentPropsWithoutRef<'input'>, 'onClick'> {
   target: string;
   handleOnChange?: (files: File[]) => void;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void; // button의 onClick 타입으로 정의
 }
 
 const FileButton = forwardRef<HTMLInputElement, FileButtonProps>((props, ref) => {
-  const { target, children, accept, handleOnChange, ...otherProps } = props;
+  const { target, children, accept, handleOnChange, onClick: handleClick, ...otherProps } = props;
 
   const inputId = `__upload-local-file-${target}`;
   const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
   const { handleAgreement } = usePrivacyConsent();
 
   return (
-    <FileButtonBase onClick={() => handleAgreement()}>
+    <FileButtonBase onClick={target === 'nova-voice-dictation' ? handleClick : handleAgreement}>
       <Label disable={isAgreed === undefined}>{children}</Label>
       <input
         ref={ref}

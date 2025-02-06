@@ -2,11 +2,20 @@ import { Guide } from 'components/nova/Guide';
 import { NOVA_TAB_TYPE } from 'constants/novaTapTypes';
 import { useTranslation } from 'react-i18next';
 
+import { useVoiceDictationContext } from '../../provider/voice-dictation-provider';
 import AudioFileUploader from '../audio-file-uploader';
 import RecognizedLang from '../recognized-lang';
 
 export default function VoiceDictationIntro() {
   const { t } = useTranslation();
+  const { setSharedVoiceDictationInfo } = useVoiceDictationContext();
+
+  const handleMoveToFileReady = () => {
+    setSharedVoiceDictationInfo((prev) => ({
+      ...prev,
+      componentType: 'FILE_READY'
+    }));
+  };
 
   return (
     <Guide>
@@ -16,6 +25,7 @@ export default function VoiceDictationIntro() {
         curTab={NOVA_TAB_TYPE.voiceDictation}
         handleUploadComplete={() => console.log('123')}
         creditCount={30}
+        onNext={handleMoveToFileReady}
       />
     </Guide>
   );

@@ -1,4 +1,5 @@
 import { ChangeEvent, useState } from 'react';
+import voiceDictationHttp from 'api/voice-dictation';
 import CheckDarkIcon from 'img/dark/nova/check_purple.svg';
 import CreditColorIcon from 'img/light/ico_credit_color_outline.svg';
 import CheckLightIcon from 'img/light/nova/check_purple.svg';
@@ -6,20 +7,27 @@ import { ReactComponent as AudioFile } from 'img/light/nova/voiceDictation/audio
 import { ReactComponent as EditIcon } from 'img/light/nova/voiceDictation/edit.svg';
 import { useTranslation } from 'react-i18next';
 import { themeInfoSelector } from 'store/slices/theme';
+import { getLocalFiles } from 'store/slices/uploadFiles';
 import { useAppSelector } from 'store/store';
 
-import { useVoiceDictationContext } from '../../provider/voice-dictation-provider';
+import {
+  useVoiceDictationContext,
+  VoiceDictationResult
+} from '../../provider/voice-dictation-provider';
 
 import * as S from './style';
 
 export default function VoiceDictationReady() {
   const {
-    sharedVoiceDictationInfo: { componentType }
+    sharedVoiceDictationInfo: { componentType },
+    setSharedVoiceDictationInfo,
+    triggerLoading
   } = useVoiceDictationContext();
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const { t } = useTranslation();
   const [inputValue, setInputValue] = useState('2024-12-25 01:11:22');
   const [isEditMode, setIsEditMode] = useState(false);
+  const localFiles = useAppSelector(getLocalFiles);
 
   const handleChangeEditMode = () => {
     setIsEditMode(!isEditMode);
@@ -27,6 +35,22 @@ export default function VoiceDictationReady() {
 
   const handleChangeInputValue = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
+  };
+
+  const handleMoveToResult = (result: VoiceDictationResult) => {
+    setSharedVoiceDictationInfo((prev) => ({
+      ...prev,
+      componentType: 'RESULT',
+      voiceDictationResult: result
+    }));
+  };
+
+  const translationVoiceDictation = async () => {
+    triggerLoading();
+
+    const result = await voiceDictationHttp.postSpeechRecognize({ file: localFiles[0] });
+
+    handleMoveToResult(result);
   };
 
   return (
@@ -77,7 +101,7 @@ export default function VoiceDictationReady() {
           </S.RecordingBox>
         )}
 
-        <S.ButtonWrap onClick={() => console.log('123')}>
+        <S.ButtonWrap onClick={translationVoiceDictation}>
           <span>변환하기</span>
           <div>
             <img src={CreditColorIcon} alt="credit" width={20} height={20} />
