@@ -12,7 +12,12 @@ import { useConfirm } from '../components/Confirm';
 import useManageFile from '../components/hooks/nova/useManageFile';
 import { NOVA_TAB_TYPE } from '../constants/novaTapTypes';
 import gI18n, { convertLangFromLangCode } from '../locale';
-import { setIsClosedNovaState, setIsExternal, setIsRecordingState } from '../store/slices/appState';
+import {
+  setIsClosedNovaState,
+  setIsExternal,
+  setIsMicrophoneState,
+  setIsRecordingState
+} from '../store/slices/appState';
 import { AskDocStatus, setSrouceId, setStatus } from '../store/slices/askDoc';
 import { setFiles } from '../store/slices/askDocAnalyzeFiesSlice';
 import { initConfirm } from '../store/slices/confirm';
@@ -617,11 +622,7 @@ export const useInitBridgeListener = () => {
           }
           // AOS 오디오 접근 권한 확인 로직
           case 'audioPermissionState': {
-            if (body.isMicrophonePermission) {
-              console.log('123');
-            } else {
-              console.log('123123');
-            }
+            dispatch(setIsMicrophoneState(body.isMicrophonePermission));
             break;
           }
 

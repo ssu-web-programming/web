@@ -1,8 +1,9 @@
+import { useEffect } from 'react';
 import { Guide } from 'components/nova/Guide';
 import { NOVA_TAB_TYPE } from 'constants/novaTapTypes';
 import { useTranslation } from 'react-i18next';
-import { setIsClosedNovaState } from 'store/slices/appState';
-import { useAppDispatch } from 'store/store';
+import { appStateSelector } from 'store/slices/appState';
+import { useAppSelector } from 'store/store';
 import Bridge, { ClientType, getPlatform } from 'util/bridge';
 
 import { useVoiceDictationContext } from '../../provider/voice-dictation-provider';
@@ -12,7 +13,7 @@ import RecognizedLang from '../recognized-lang';
 export default function VoiceDictationIntro() {
   const { t } = useTranslation();
   const { setSharedVoiceDictationInfo } = useVoiceDictationContext();
-  const dispatch = useAppDispatch();
+  const { isAosMicrophonePermission } = useAppSelector(appStateSelector);
 
   const handleMoveToFileReady = () => {
     setSharedVoiceDictationInfo((prev) => ({
@@ -25,6 +26,9 @@ export default function VoiceDictationIntro() {
     try {
       if (getPlatform() === ClientType.android) {
         await Bridge.callBridgeApi('getAudioPermission', true);
+        if (!isAosMicrophonePermission) {
+          return;
+        }
       }
       await navigator.mediaDevices.getUserMedia({ audio: true });
       await Bridge.callBridgeApi('getRecordingState', true);
@@ -48,7 +52,6 @@ export default function VoiceDictationIntro() {
         creditCount={30}
         onNext={handleMoveToFileReady}
       />
-      <button onClick={() => dispatch(setIsClosedNovaState(true))}>팝업 뜨는지 확인</button>
     </Guide>
   );
 }

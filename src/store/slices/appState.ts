@@ -12,6 +12,7 @@ type InitialState = {
   isRecordState: 'not-started' | 'start' | 'pause';
   isExternal: boolean;
   isClosedNova: boolean;
+  isAosMicrophonePermission: boolean;
 };
 
 const initialState: InitialState = {
@@ -22,7 +23,8 @@ const initialState: InitialState = {
   isIncomingCall: false,
   isRecordState: 'not-started',
   isExternal: false,
-  isClosedNova: false
+  isClosedNova: false,
+  isAosMicrophonePermission: false
 };
 
 const appStateSlice = createSlice({
@@ -52,6 +54,10 @@ const appStateSlice = createSlice({
     setIsClosedNovaState: (state, action: PayloadAction<boolean>) => {
       state.isClosedNova = action.payload;
       return state;
+    },
+    setIsMicrophoneState: (state, action: PayloadAction<boolean>) => {
+      state.isAosMicrophonePermission = action.payload;
+      return state;
     }
   }
 });
@@ -62,7 +68,8 @@ export const {
   setIsCallState,
   setIsRecordingState,
   setIsExternal,
-  setIsClosedNovaState
+  setIsClosedNovaState,
+  setIsMicrophoneState
 } = appStateSlice.actions;
 export const appStateSelector = (state: RootState) => state.appState;
 export default appStateSlice.reducer;
