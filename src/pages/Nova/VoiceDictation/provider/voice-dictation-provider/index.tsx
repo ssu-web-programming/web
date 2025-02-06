@@ -17,7 +17,7 @@ interface Segments {
   speaker: {
     edited: boolean;
     label: string;
-    name: string;
+    name: 'A' | 'B' | 'C' | 'D' | 'E' | 'F';
   };
   start: number;
   text: string;

@@ -187,9 +187,6 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       };
 
       mediaRecorder.onstop = async () => {
-        console.log('chunksRef.current', chunksRef.current);
-        console.log('mediaRecorder', mediaRecorder);
-
         const blob = new Blob(chunksRef.current, { type: 'audio/mpeg' });
         const url = URL.createObjectURL(blob);
         setAudioUrl(url);
