@@ -59,7 +59,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
   const chatNova = useChatNova();
   const creditInfo = useAppSelector(creditInfoSelector);
   const { isInit } = useAppSelector(initFlagSelector);
-  const { isStartedByRibbon } = useAppSelector(appStateSelector);
+  const { isExternal } = useAppSelector(appStateSelector);
   const chatMode = useAppSelector(novaChatModeSelector);
   const { handleClearPastedImages } = useClipboard();
 
@@ -264,7 +264,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
       ) : (
         <>
           <S.TitleWrapper>
-            {selectedNovaTab === NOVA_TAB_TYPE.home || isStartedByRibbon ? (
+            {selectedNovaTab === NOVA_TAB_TYPE.home || !isExternal ? (
               <>
                 <S.Logo onClick={handleGoHome} />
                 {(selectedNovaTab === NOVA_TAB_TYPE.aiChat ||

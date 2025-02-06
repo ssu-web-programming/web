@@ -13,7 +13,7 @@ export const Container = styled.div`
 
 export const AvatarCard = styled.div`
   width: 248px;
-  height: 180px;
+  height: 233px;
   background: #e8ebed;
   border: 1px solid #c9cdd2;
   border-radius: 12px;
@@ -109,4 +109,24 @@ export const UploadInner = styled.div`
   justify-content: center;
   gap: 8px;
   padding: 12.5px 0;
+`;
+
+export const ImageUploadGuide = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+
+  .title {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 21px;
+    color: #454c53;
+  }
+  .desc {
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 18px;
+    color: #9ea4aa;
+  }
 `;

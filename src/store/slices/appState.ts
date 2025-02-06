@@ -6,13 +6,13 @@ type DocType = string;
 type InitialState = {
   docType: DocType;
   novaExpireTime: number;
-  isStartedByRibbon: boolean;
+  isExternal: boolean;
 };
 
 const initialState: InitialState = {
   docType: 'unknown',
   novaExpireTime: 1800000,
-  isStartedByRibbon: true
+  isExternal: false
 };
 
 const appStateSlice = createSlice({
@@ -27,13 +27,13 @@ const appStateSlice = createSlice({
       state.novaExpireTime = action.payload;
       return state;
     },
-    setIsStartedByRibbon: (state, action: PayloadAction<boolean>) => {
-      state.isStartedByRibbon = action.payload;
+    setIsExternal: (state, action: PayloadAction<boolean>) => {
+      state.isExternal = action.payload;
       return state;
     }
   }
 });
 
-export const { setDocType, setNovaExpireTime, setIsStartedByRibbon } = appStateSlice.actions;
+export const { setDocType, setNovaExpireTime, setIsExternal } = appStateSlice.actions;
 export const appStateSelector = (state: RootState) => state.appState;
 export default appStateSlice.reducer;
