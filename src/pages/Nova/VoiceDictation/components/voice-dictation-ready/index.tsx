@@ -25,7 +25,7 @@ export default function VoiceDictationReady() {
   } = useVoiceDictationContext();
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const { t } = useTranslation();
-  const [inputValue, setInputValue] = useState('2024-12-25 01:11:22');
+  const [inputValue, setInputValue] = useState('');
 
   const [isEditMode, setIsEditMode] = useState(false);
   const localFiles = useAppSelector(getLocalFiles);
@@ -53,6 +53,12 @@ export default function VoiceDictationReady() {
 
     handleMoveToResult(result);
   };
+
+  useEffect(() => {
+    if (localFiles.length) {
+      setInputValue(localFiles[0].name);
+    }
+  }, [localFiles]);
 
   return (
     <S.Wrapper>
@@ -88,6 +94,7 @@ export default function VoiceDictationReady() {
         ) : (
           <S.RecordingBox>
             <AudioFile />
+            {/* <S.FileTitle>{localFiles[0].name}</S.FileTitle> */}
             <S.InputFileWrapper>
               {isEditMode ? (
                 <S.InputFileTitle value={inputValue} onChange={handleChangeInputValue} />

@@ -1,7 +1,11 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { IoDownload, IoMic, IoPause, IoPlay, IoSquare } from 'react-icons/io5';
+import { ReactComponent as Lang } from 'img/light/nova/voiceDictation/lang.svg';
+import { ReactComponent as Pause } from 'img/light/nova/voiceDictation/pause.svg';
+import { ReactComponent as Play } from 'img/light/nova/voiceDictation/play.svg';
+import { ReactComponent as Stop } from 'img/light/nova/voiceDictation/stop.svg';
+import { IoDownload } from 'react-icons/io5';
 
-import styles from './audio-recorder.module.css';
+import * as S from './style';
 
 interface AudioRecorderProps {
   onRecordingComplete?: (blob: Blob) => void;
@@ -51,7 +55,8 @@ const draw = (
   const baseHeight = 40;
   const amp = canvas.height / 2;
 
-  ctx.fillStyle = '#fff';
+  // background color 색을 width , height만큼 채우는 코드
+  ctx.fillStyle = '#f7f8f9';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   const gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
@@ -89,7 +94,6 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [audioDuration, setAudioDuration] = useState<number | null>(null);
   const [recordingTime, setRecordingTime] = useState<number>(0);
-  const [isPlaying, setIsPlaying] = useState(false);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
@@ -183,7 +187,9 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       };
 
       mediaRecorder.onstop = async () => {
-        const blob = new Blob(chunksRef.current, { type: 'audio/mp4' });
+        console.log('chunksRef.current', chunksRef.current);
+
+        const blob = new Blob(chunksRef.current, { type: 'audio/mpeg' });
         const url = URL.createObjectURL(blob);
         setAudioUrl(url);
         await checkAudioDuration(blob);
@@ -262,27 +268,27 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
     }
   }, [startTimer]);
 
-  const handlePlayPause = () => {
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-      } else {
-        audioRef.current.play();
-      }
-      setIsPlaying(!isPlaying);
-    }
-  };
+  // const handlePlayPause = () => {
+  //   if (audioRef.current) {
+  //     if (isPlaying) {
+  //       audioRef.current.pause();
+  //     } else {
+  //       audioRef.current.play();
+  //     }
+  //     setIsPlaying(!isPlaying);
+  //   }
+  // };
 
-  const handleDownload = () => {
-    if (chunksRef.current.length === 0) return;
-    const blob = new Blob(chunksRef.current, { type: 'audio/mp4' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'recording.mp4';
-    a.click();
-    URL.revokeObjectURL(url);
-  };
+  // const handleDownload = () => {
+  //   if (chunksRef.current.length === 0) return;
+  //   const blob = new Blob(chunksRef.current, { type: 'audio/mp4' });
+  //   const url = URL.createObjectURL(blob);
+  //   const a = document.createElement('a');
+  //   a.href = url;
+  //   a.download = 'recording.mp4';
+  //   a.click();
+  //   URL.revokeObjectURL(url);
+  // };
 
   const formatDuration = (seconds: number): string => {
     const mins = Math.floor(seconds / 60);
@@ -309,10 +315,18 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   }, []);
 
   return (
-    <div className={styles.container}>
-      <canvas ref={canvasRef} className={styles.canvas} />
+    <S.Container>
+      <S.CanvasWrapper>
+        <S.StatusText $isPaused={isPaused}>
+          {isPaused ? `일시정지 중` : '한국어 인식 중'}
+        </S.StatusText>
 
-      <div className={styles.buttonGroup}>
+        <S.Canvas ref={canvasRef} />
+
+        <S.DurationText>{formatDuration(recordingTime)}</S.DurationText>
+      </S.CanvasWrapper>
+
+      <S.ButtonGroup>
         {/* {!isRecording ? (
           <button
             onClick={startRecording}
@@ -337,55 +351,41 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
           </>
         )} */}
 
-        <button onClick={stopRecording} className={styles.stopButton} aria-label="Stop Recording">
+        {/* <button onClick={stopRecording} aria-label="Stop Recording">
           <IoSquare />
         </button>
         <button
           onClick={isPaused ? resumeRecording : pauseRecording}
-          className={isPaused ? styles.resumeButton : styles.pauseButton}
           aria-label={isPaused ? 'Resume Recording' : 'Pause Recording'}>
-          {isPaused ? <IoPlay /> : <IoPause />}
-        </button>
-
+          {isPaused ? <Play /> : <Pause />}
+        </button> */}
+        <Lang />
+        {isPaused ? (
+          <Play width={64} height={64} onClick={resumeRecording} />
+        ) : (
+          <Pause width={64} height={64} onClick={pauseRecording} />
+        )}
+        <Stop onClick={stopRecording} />
+        {/* 
         {audioUrl && (
           <>
-            <button
-              onClick={handlePlayPause}
-              className={styles.playButton}
-              aria-label={isPlaying ? 'Pause' : 'Play'}>
-              <IoPlay />
+            <button onClick={handlePlayPause} aria-label={isPlaying ? 'Pause' : 'Play'}>
+              <Play />
             </button>
-            <button
-              onClick={handleDownload}
-              className={styles.downloadButton}
-              aria-label="Download Recording">
+            <button onClick={handleDownload} aria-label="Download Recording">
               <IoDownload />
             </button>
           </>
-        )}
-      </div>
+        )} */}
+      </S.ButtonGroup>
 
-      {audioUrl && (
+      {/* {audioUrl && (
         <>
-          <audio
-            ref={audioRef}
-            src={audioUrl}
-            onEnded={() => setIsPlaying(false)}
-            className={styles.audioPlayer}
-            controls
-          />
-          {audioDuration !== null && (
-            <p className={styles.durationText}>녹음 길이: {formatDuration(audioDuration)}</p>
-          )}
+          <audio ref={audioRef} src={audioUrl} onEnded={() => setIsPlaying(false)} controls />
+          {audioDuration !== null && <p>녹음 길이: {formatDuration(audioDuration)}</p>}
         </>
-      )}
-
-      <p className={styles.statusText}>
-        {isRecording
-          ? `녹음중입니다. (${formatDuration(recordingTime)})`
-          : '마이크를 눌러서 시작해주세요.'}
-      </p>
-    </div>
+      )} */}
+    </S.Container>
   );
 };
 

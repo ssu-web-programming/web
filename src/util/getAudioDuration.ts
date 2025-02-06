@@ -52,3 +52,11 @@ export const formatMilliseconds = (ms: number): string => {
     ? `${paddedHours}:${paddedMinutes}:${paddedSeconds}`
     : `${paddedMinutes}:${paddedSeconds}`;
 };
+
+export const blobToFile = (audioBlob: Blob) => {
+  const filename = `recording_${new Date().getTime()}.mp3`;
+  return new File([audioBlob], filename, {
+    type: 'audio/mpeg',
+    lastModified: Date.now()
+  });
+};
