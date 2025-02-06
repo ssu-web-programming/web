@@ -12,7 +12,7 @@ import { useConfirm } from '../components/Confirm';
 import useManageFile from '../components/hooks/nova/useManageFile';
 import { NOVA_TAB_TYPE } from '../constants/novaTapTypes';
 import gI18n, { convertLangFromLangCode } from '../locale';
-import { setIsExternal, setIsRecordingState } from '../store/slices/appState';
+import { setIsClosedNovaState, setIsExternal, setIsRecordingState } from '../store/slices/appState';
 import { AskDocStatus, setSrouceId, setStatus } from '../store/slices/askDoc';
 import { setFiles } from '../store/slices/askDocAnalyzeFiesSlice';
 import { initConfirm } from '../store/slices/confirm';
@@ -250,6 +250,18 @@ const callApi = (api: ApiType, arg?: string | number) => {
           case 'getRecordingState': {
             if (window.webkit.messageHandlers.getRecordingState) {
               window.webkit.messageHandlers.getRecordingState.postMessage(arg);
+            }
+            break;
+          }
+          case 'getAudioPermission': {
+            if (window.webkit.messageHandlers.getAudioPermission) {
+              window.webkit.messageHandlers.getAudioPermission.postMessage(arg);
+            }
+            break;
+          }
+          case 'closeNova': {
+            if (window.webkit.messageHandlers.closeNova) {
+              window.webkit.messageHandlers.closeNova.postMessage(arg);
             }
             break;
           }
@@ -603,6 +615,20 @@ export const useInitBridgeListener = () => {
             );
             break;
           }
+          // AOS 오디오 접근 권한 확인 로직
+          case 'audioPermissionState': {
+            if (body.isMicrophonePermission) {
+              console.log('123');
+            } else {
+              console.log('123123');
+            }
+            break;
+          }
+
+          case 'closeNova': {
+            dispatch(setIsClosedNovaState(true));
+            break;
+          }
           default: {
             break;
           }
@@ -694,7 +720,9 @@ type ApiType =
   | 'compareSourceAndTranslation'
   | 'downloadFile'
   | 'downloadVoiceFile'
-  | 'getRecordingState';
+  | 'getRecordingState'
+  | 'getAudioPermission'
+  | 'closeNova';
 
 const Bridge = {
   checkSession: (api: string) => {
@@ -752,7 +780,10 @@ const Bridge = {
     });
   },
 
-  callBridgeApi: async <T extends string | number | Blob | object>(api: ApiType, arg?: T) => {
+  callBridgeApi: async <T extends string | number | Blob | object | boolean>(
+    api: ApiType,
+    arg?: T
+  ) => {
     let apiArg: string | number | undefined;
 
     if (arg) {

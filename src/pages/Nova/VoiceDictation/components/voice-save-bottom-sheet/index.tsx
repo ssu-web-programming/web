@@ -22,7 +22,10 @@ export default function VoiceSaveBottomSheet({ isOpened, setIsOpened }: Props) {
   // 호진FIXME: 임의의 음성 파일 다운로드 URL 삽입
   const handleDownloadVoiceFile = async () => {
     dispatch(activeLoadingSpinner());
-    await Bridge.callBridgeApi('downloadVoiceFile', { fileName: '임의의 파일', url: '123' });
+    await Bridge.callBridgeApi('downloadVoiceFile', {
+      fileName: '임의의 파일',
+      url: 'https://vf-berlin.polarisoffice.com/nova/storage/speech/5723850b-c668-47aa-a87b-d245f980c9b1/voice_1738829359.mp3'
+    });
   };
 
   const handleOpenSaveFileFormat = () => {

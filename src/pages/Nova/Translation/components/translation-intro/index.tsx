@@ -5,13 +5,10 @@ import { ReactComponent as ArrowIcon } from 'img/light/nova/translation/arrow_do
 import { ReactComponent as DeepL } from 'img/light/nova/translation/deepl_logo.svg';
 import { ReactComponent as Switch } from 'img/light/nova/translation/switch.svg';
 import { useTranslation } from 'react-i18next';
-import { selectPageData } from 'store/slices/nova/pageStatusSlice';
-import { getDriveFiles, getLocalFiles } from 'store/slices/uploadFiles';
-import { useAppSelector } from 'store/store';
 import { css } from 'styled-components';
-import { downloadFiles } from 'util/files';
 
 import { NOVA_TAB_TYPE } from '../../../../../constants/novaTapTypes';
+import useTranslationIntro from '../../hooks/use-translation-intro';
 import { TranslateResult, useTranslationContext } from '../../provider/translation-provider';
 import DragAndDrop from '../drag-and-drop';
 import Toggle, { ToggleOption } from '../toggle';
@@ -23,9 +20,7 @@ type TranslateType = 'TEXT' | 'FILE';
 
 export default function TranslationIntro() {
   const { t } = useTranslation();
-  const localFiles = useAppSelector(getLocalFiles);
-  const driveFiles = useAppSelector(getDriveFiles);
-  const currentFile = useAppSelector(selectPageData(NOVA_TAB_TYPE.translation));
+  const { convertFileObject, sanitizedOriginFile, isTranslateActive } = useTranslationIntro();
 
   const [type, setType] = useState<TranslateType>('TEXT');
   const [translateInputValue, setTranslateInputValue] = useState('');
@@ -53,22 +48,9 @@ export default function TranslationIntro() {
   const handleMoveToFileResult = () => {
     setSharedTranslationInfo((prevSharedTranslationInfo) => ({
       ...prevSharedTranslationInfo,
-      componentType: 'FILE_RESULT'
+      componentType: 'FILE_RESULT',
+      ...sanitizedOriginFile()
     }));
-  };
-
-  const convertFileObject = async () => {
-    // driveFiles의 경우에는 id를 파일객체로 변환해야함
-    if (driveFiles.length) {
-      const results = await downloadFiles(driveFiles);
-      return results[0].file;
-    }
-
-    if (currentFile) {
-      return currentFile;
-    }
-
-    return localFiles[0];
   };
 
   const submitTextTranslate = async () => {
@@ -108,8 +90,6 @@ export default function TranslationIntro() {
     // File 번역일때 타는 로직!
     submitFileTranslate();
   };
-
-  // console.log('translateInputValue', translateInputValue);
 
   return (
     <>
@@ -170,12 +150,7 @@ export default function TranslationIntro() {
       </S.TextAreaWrapper>
 
       <S.TranslationButton
-        isActive={
-          translateInputValue.length > 0 ||
-          localFiles.length > 0 ||
-          driveFiles.length > 0 ||
-          !!currentFile
-        }
+        isActive={translateInputValue.length > 0 || isTranslateActive}
         onClick={handleTranslate}>
         <span>번역하기</span>
       </S.TranslationButton>
