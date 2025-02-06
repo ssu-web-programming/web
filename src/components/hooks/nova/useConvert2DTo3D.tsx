@@ -101,7 +101,7 @@ export const useConvert2DTo3D = () => {
 
         await logger({
           dp: 'ai.nova',
-          el: 'transform_3d',
+          el: 'transform_3d', // nova_transform_3d으로 바꾸기!!!!!
           gpt_ver: 'immersity'
         });
         track('click_nova_image', { image_name: 'Immersity' });

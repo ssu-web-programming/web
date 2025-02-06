@@ -14,7 +14,7 @@ import AIVideoLightIcon from '../../../img/light/nova/aiVideo/ico_ai_video.svg';
 import PerplexityLightIcon from '../../../img/light/nova/perplexity/ico_perplexity.svg';
 import TranslationLightIcon from '../../../img/light/nova/translation/ico_translation.svg';
 import VoiceDictationLightIcon from '../../../img/light/nova/voiceDictation/ico_voice_dictation.svg';
-import { setIsStartedByRibbon } from '../../../store/slices/appState';
+import { setIsExternal } from '../../../store/slices/appState';
 import { novaHistorySelector } from '../../../store/slices/nova/novaHistorySlice';
 import { selectNovaTab, selectTabSlice } from '../../../store/slices/tabSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
@@ -81,7 +81,7 @@ const NovaHome = (props: NovaHomeProps) => {
 
   const handleMovePage = (tab: NOVA_TAB_TYPE) => {
     dispatch(selectNovaTab(tab));
-    dispatch(setIsStartedByRibbon(false));
+    dispatch(setIsExternal(false));
   };
 
   return (

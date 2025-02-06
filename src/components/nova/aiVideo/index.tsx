@@ -1,3 +1,7 @@
+import { useEffect } from 'react';
+
+import { apiWrapper } from '../../../api/apiWrapper';
+import { NOVA_VIDEO_GET_AVATARS } from '../../../api/constant';
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import { selectPageStatus } from '../../../store/slices/nova/pageStatusSlice';
 import { useAppSelector } from '../../../store/store';
@@ -15,6 +19,23 @@ export default function AIVideo() {
     script: 2
   } as const;
   const active = statusToActive[status as keyof typeof statusToActive] ?? 0;
+
+  useEffect(() => {
+    getAvartarList();
+  }, []);
+
+  const getAvartarList = async () => {
+    const { res } = await apiWrapper().request(NOVA_VIDEO_GET_AVATARS, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'GET'
+    });
+
+    const response = await res.json();
+    console.log('response', response);
+    return response.data;
+  };
 
   return (
     <StepNavigator

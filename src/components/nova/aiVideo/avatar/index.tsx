@@ -1,16 +1,18 @@
 import { useState } from 'react';
+import { css } from 'styled-components';
 
 import { NOVA_TAB_TYPE } from '../../../../constants/novaTapTypes';
 import { ReactComponent as CheckIcon } from '../../../../img/common/ico_check.svg';
+import DownloadIcon from '../../../../img/light/ico_download_white.svg';
 import Composition from '../../../../img/light/nova/changeStyle/change_style_composition.png';
 import Mosaic from '../../../../img/light/nova/changeStyle/change_style_mosaic.png';
 import Scream from '../../../../img/light/nova/changeStyle/change_style_scream.png';
 import Starry from '../../../../img/light/nova/changeStyle/change_style_starry.png';
 import PlusDocLightIcon from '../../../../img/light/upload_img_plus_new.svg';
+import Button from '../../../buttons/Button';
 import ImageUploader from '../../ImageUploader';
 
 import * as S from './style';
-import { UploadInner } from './style';
 
 export default function Avatar() {
   const [selectedAvartar, setSelectedAvatar] = useState<{ src: string; alt: string } | null>(null);
@@ -55,9 +57,31 @@ export default function Avatar() {
           <ImageUploader handleUploadComplete={() => {}} curTab={NOVA_TAB_TYPE.aiVideo}>
             <S.UploadInner>
               <img src={PlusDocLightIcon} alt="doc_plus" />
+              <S.ImageUploadGuide>
+                <span className="title">나만의 아바타 만들기</span>
+                <span className="desc">JPG, PNG 형식, 최대 50MB 지원</span>
+              </S.ImageUploadGuide>
             </S.UploadInner>
           </ImageUploader>
         </S.AvatarSelectBox>
+        <S.TitleWrap>
+          <span>이미지 형태</span>
+          <span>사각형 원형</span>
+        </S.TitleWrap>
+        <Button
+          variant="purple"
+          width={'full'}
+          height={48}
+          cssExt={css`
+            display: flex;
+            gap: 4px;
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: 8px;
+          `}
+          onClick={() => {}}>
+          <span>{'AI 비디오 만들기'}</span>
+        </Button>
       </S.ContentWrap>
     </S.Container>
   );

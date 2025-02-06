@@ -10,6 +10,7 @@ type InitialState = {
   isIncomingCall: boolean;
   // not-started (녹음을 시작하지도 않음) , start(녹음을 시작함) , pause('녹음을 중지함');
   isRecordState: 'not-started' | 'start' | 'pause';
+  isExternal: boolean;
 };
 
 const initialState: InitialState = {
@@ -18,7 +19,8 @@ const initialState: InitialState = {
   isStartedByRibbon: true,
   // 전화 여부 추가
   isIncomingCall: false,
-  isRecordState: 'not-started'
+  isRecordState: 'not-started',
+  isExternal: false
 };
 
 const appStateSlice = createSlice({
@@ -33,8 +35,8 @@ const appStateSlice = createSlice({
       state.novaExpireTime = action.payload;
       return state;
     },
-    setIsStartedByRibbon: (state, action: PayloadAction<boolean>) => {
-      state.isStartedByRibbon = action.payload;
+    setIsExternal: (state, action: PayloadAction<boolean>) => {
+      state.isExternal = action.payload;
       return state;
     },
     setIsCallState: (state, action: PayloadAction<boolean>) => {
@@ -48,12 +50,7 @@ const appStateSlice = createSlice({
   }
 });
 
-export const {
-  setDocType,
-  setNovaExpireTime,
-  setIsStartedByRibbon,
-  setIsCallState,
-  setIsRecordingState
-} = appStateSlice.actions;
+export const { setDocType, setNovaExpireTime, setIsCallState, setIsRecordingState, setIsExternal } =
+  appStateSlice.actions;
 export const appStateSelector = (state: RootState) => state.appState;
 export default appStateSlice.reducer;

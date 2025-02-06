@@ -12,7 +12,7 @@ import { useConfirm } from '../components/Confirm';
 import useManageFile from '../components/hooks/nova/useManageFile';
 import { NOVA_TAB_TYPE } from '../constants/novaTapTypes';
 import gI18n, { convertLangFromLangCode } from '../locale';
-import { setIsRecordingState, setIsStartedByRibbon } from '../store/slices/appState';
+import { setIsExternal, setIsRecordingState } from '../store/slices/appState';
 import { AskDocStatus, setSrouceId, setStatus } from '../store/slices/askDoc';
 import { setFiles } from '../store/slices/askDocAnalyzeFiesSlice';
 import { initConfirm } from '../store/slices/confirm';
@@ -409,13 +409,13 @@ export const useInitBridgeListener = () => {
               })
             );
 
-            if (body.isStartedByRibbon) dispatch(setIsStartedByRibbon(body.isStartedByRibbon));
+            if (body.isStartedByRibbon) dispatch(setIsExternal(body.isStartedByRibbon));
 
             if (body.openTab in NOVA_TAB_TYPE) {
               const tab = body.openTab;
               dispatch(resetPageData(tab));
               dispatch(setDriveFiles([]));
-              dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiChat, status: 'home' }));
+              dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.home, status: 'home' }));
               dispatch(setLocalFiles([]));
               dispatch(selectNovaTab(NOVA_TAB_TYPE[body.openTab as keyof typeof NOVA_TAB_TYPE]));
               const isBlob = body.image instanceof Blob && body.image.size > 0;
