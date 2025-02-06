@@ -264,7 +264,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
       ) : (
         <>
           <S.TitleWrapper>
-            {selectedNovaTab === NOVA_TAB_TYPE.home || !isExternal ? (
+            {selectedNovaTab === NOVA_TAB_TYPE.home || isExternal ? (
               <>
                 <S.Logo onClick={handleGoHome} />
                 {(selectedNovaTab === NOVA_TAB_TYPE.aiChat ||
