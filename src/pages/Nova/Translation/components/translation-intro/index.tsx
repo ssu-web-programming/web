@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import translationHttp from 'api/translation';
+import CreditColorDisabledIcon from 'img/light/credit_color_outline.svg';
+import CreditColorIcon from 'img/light/ico_credit_color_outline.svg';
 import { ReactComponent as CloseLightIcon } from 'img/light/ico_nova_close.svg';
 import { ReactComponent as ArrowIcon } from 'img/light/nova/translation/arrow_down.svg';
 import { ReactComponent as DeepL } from 'img/light/nova/translation/deepl_logo.svg';
@@ -165,11 +167,24 @@ export default function TranslationIntro() {
         </S.TextAreaBottom>
       </S.TextAreaWrapper>
 
-      <S.TranslationButton
-        isActive={translateInputValue.length > 0 || isTranslateActive}
-        onClick={handleTranslate}>
+      <S.ButtonWrap
+        onClick={handleTranslate}
+        $isActive={translateInputValue.length > 0 || isTranslateActive}>
         <span>번역하기</span>
-      </S.TranslationButton>
+        <div>
+          <img
+            src={
+              translateInputValue.length > 0 || isTranslateActive
+                ? CreditColorIcon
+                : CreditColorDisabledIcon
+            }
+            alt="credit"
+            width={20}
+            height={20}
+          />
+          <span>20</span>
+        </div>
+      </S.ButtonWrap>
     </>
   );
 }
