@@ -1,9 +1,6 @@
-import { useEffect } from 'react';
 import { Guide } from 'components/nova/Guide';
 import { NOVA_TAB_TYPE } from 'constants/novaTapTypes';
 import { useTranslation } from 'react-i18next';
-import { appStateSelector } from 'store/slices/appState';
-import { useAppSelector } from 'store/store';
 import Bridge, { ClientType, getPlatform } from 'util/bridge';
 
 import { useVoiceDictationContext } from '../../provider/voice-dictation-provider';
@@ -13,7 +10,6 @@ import RecognizedLang from '../recognized-lang';
 export default function VoiceDictationIntro() {
   const { t } = useTranslation();
   const { setSharedVoiceDictationInfo } = useVoiceDictationContext();
-  const { isAosMicrophonePermission } = useAppSelector(appStateSelector);
 
   const handleMoveToFileReady = () => {
     setSharedVoiceDictationInfo((prev) => ({
@@ -25,10 +21,8 @@ export default function VoiceDictationIntro() {
   const startRecording = async () => {
     try {
       if (getPlatform() === ClientType.android) {
+        console.log('AOS 핸들러 호출 로직!');
         await Bridge.callBridgeApi('getAudioPermission', true);
-        if (!isAosMicrophonePermission) {
-          return;
-        }
       }
       await navigator.mediaDevices.getUserMedia({ audio: true });
       await Bridge.callBridgeApi('getRecordingState', true);
