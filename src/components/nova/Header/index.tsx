@@ -245,6 +245,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
       dispatch(setPageData({ tab: selectedNovaTab, data: null }));
       dispatch(setPageResult({ tab: selectedNovaTab, result: null }));
       dispatch(selectNovaTab(NOVA_TAB_TYPE.home));
+      Bridge.callBridgeApi('curNovaTab', NOVA_TAB_TYPE.home);
     }
   };
 

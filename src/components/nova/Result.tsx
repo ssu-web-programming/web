@@ -208,6 +208,14 @@ export default function Result() {
   };
 
   const OnSave = async () => {
+    // TODO: 제거
+    if (selectedNovaTab === NOVA_TAB_TYPE.aiVideo) {
+      Bridge.callBridgeApi(
+        'downloadAnimation',
+        'https://files2.heygen.ai/aws_pacific/avatar_tmp/ad159c3b2a5844039aef2ee28348edc2/c06fa673689d448187841edb519b5e12.mp4?Expires=1739158109&Signature=qNidnRvtSvxmEPdaBT7Ov2bztpkmTVDnuH13iqmTqJ6lddrDbxjh56fYC1K81uLXM-wMgEOZyEH70e~OpG15z5F~rmSjUhoeFFoozVCx8pwOwgZaQwiug6h~CAA~Tc8ZVxXSOYYzm4yhzQcY179bckWdAbgXpAJr0CYR9v-hSgznhTJ7hMWgD-6z8g3pIBgN8F8jvo~yoUNgi69AyxWPgebCeGKti-qfQkiAUuA2qOIUTRFv9gX73jDPSdwYyGnMi~M3EMZLodW9yyoXMrt6sthaJWrl8h6jHpCUuj1G3LisW3ORdHGNYSnAdHlzcH9d8-srNnVFZIreS5tctly2Uw__&Key-Pair-Id=K38HBHX5LX3X2H\n'
+      );
+    }
+
     if (result) {
       if (result.link) {
         try {
