@@ -83,6 +83,7 @@ const NovaHome = (props: NovaHomeProps) => {
   const handleMovePage = (tab: NOVA_TAB_TYPE) => {
     dispatch(selectNovaTab(tab));
     dispatch(setIsExternal(false));
+    console.log(tab);
     Bridge.callBridgeApi('curNovaTab', tab);
   };
 
