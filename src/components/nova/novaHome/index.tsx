@@ -18,6 +18,7 @@ import { setIsExternal } from '../../../store/slices/appState';
 import { novaHistorySelector } from '../../../store/slices/nova/novaHistorySlice';
 import { selectNovaTab, selectTabSlice } from '../../../store/slices/tabSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
+import Bridge from '../../../util/bridge';
 import Banner from '../banner';
 import { FileUploading } from '../FileUploading';
 import InputBar, { InputBarSubmitParam } from '../inputBar';
@@ -82,6 +83,7 @@ const NovaHome = (props: NovaHomeProps) => {
   const handleMovePage = (tab: NOVA_TAB_TYPE) => {
     dispatch(selectNovaTab(tab));
     dispatch(setIsExternal(false));
+    Bridge.callBridgeApi('curNovaTab', tab);
   };
 
   return (
