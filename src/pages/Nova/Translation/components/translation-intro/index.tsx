@@ -4,13 +4,19 @@ import { ReactComponent as CloseLightIcon } from 'img/light/ico_nova_close.svg';
 import { ReactComponent as ArrowIcon } from 'img/light/nova/translation/arrow_down.svg';
 import { ReactComponent as DeepL } from 'img/light/nova/translation/deepl_logo.svg';
 import { ReactComponent as Switch } from 'img/light/nova/translation/switch.svg';
+import { overlay } from 'overlay-kit';
 import { useTranslation } from 'react-i18next';
 import { css } from 'styled-components';
 
 import { NOVA_TAB_TYPE } from '../../../../../constants/novaTapTypes';
 import useTranslationIntro from '../../hooks/use-translation-intro';
-import { TranslateResult, useTranslationContext } from '../../provider/translation-provider';
+import {
+  LangType,
+  TranslateResult,
+  useTranslationContext
+} from '../../provider/translation-provider';
 import DragAndDrop from '../drag-and-drop';
+import LanguageSearch from '../language-search';
 import Toggle, { ToggleOption } from '../toggle';
 import TranslationFileUploader from '../translation-file-uploader';
 
@@ -24,7 +30,11 @@ export default function TranslationIntro() {
 
   const [type, setType] = useState<TranslateType>('TEXT');
   const [translateInputValue, setTranslateInputValue] = useState('');
-  const { setSharedTranslationInfo, triggerLoading } = useTranslationContext();
+  const {
+    setSharedTranslationInfo,
+    triggerLoading,
+    sharedTranslationInfo: { sourceLang, targetLang }
+  } = useTranslationContext();
 
   const options: ToggleOption<TranslateType>[] = [
     {
@@ -58,8 +68,8 @@ export default function TranslationIntro() {
 
     const response = await translationHttp.postTranslateText({
       text: translateInputValue,
-      sourceLang: 'KO',
-      targetLang: 'EL'
+      sourceLang,
+      targetLang
     });
 
     const {
@@ -74,8 +84,8 @@ export default function TranslationIntro() {
 
     const response = await translationHttp.postTranslateDocument({
       file: await convertFileObject(),
-      sourceLang: 'KO',
-      targetLang: 'EL'
+      sourceLang,
+      targetLang
     });
 
     handleMoveToFileResult();
@@ -89,6 +99,12 @@ export default function TranslationIntro() {
     }
     // File 번역일때 타는 로직!
     submitFileTranslate();
+  };
+
+  const handleOpenLangSearch = (type: LangType) => {
+    overlay.open(({ isOpen, close }) => (
+      <LanguageSearch isOpen={isOpen} setIsOpen={close} langType={type} />
+    ));
   };
 
   return (
@@ -109,14 +125,14 @@ export default function TranslationIntro() {
         <S.TextAreaHeader>
           <div>
             <span>한국어</span>
-            <ArrowIcon />
+            <ArrowIcon onClick={() => handleOpenLangSearch('source')} />
           </div>
           <div>
             <Switch />
           </div>
           <div>
             <span>나우아틀어</span>
-            <ArrowIcon />
+            <ArrowIcon onClick={() => handleOpenLangSearch('target')} />
           </div>
         </S.TextAreaHeader>
         {type === 'TEXT' ? (

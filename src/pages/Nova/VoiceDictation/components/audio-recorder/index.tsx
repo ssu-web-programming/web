@@ -146,7 +146,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
 
   const startRecording = useCallback(async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
       streamRef.current = stream;
 
       const mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/mp4' });

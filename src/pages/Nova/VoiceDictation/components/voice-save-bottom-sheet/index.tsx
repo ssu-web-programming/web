@@ -40,7 +40,7 @@ export default function VoiceSaveBottomSheet({ isOpened, setIsOpened }: Props) {
     });
   };
   return (
-    <ModalSheet isOpen={isOpened} setIsOpen={setIsOpened}>
+    <ModalSheet isOpen={isOpened} setIsOpen={setIsOpened} detent="content-height">
       <S.Container>
         <S.Title>저장하기</S.Title>
         <S.ItemWrapper>
