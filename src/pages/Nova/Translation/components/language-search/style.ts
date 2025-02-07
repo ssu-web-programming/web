@@ -2,8 +2,7 @@ import styled from 'styled-components';
 
 // 호진 FIXME: bottom sheet 안에 들어갈때는 제거하기!
 const Wrapper = styled.div`
-  background: #fff;
-  height: 100vh;
+  padding: 0px 16px 0px;
 `;
 const Title = styled.p`
   font-size: 20px;

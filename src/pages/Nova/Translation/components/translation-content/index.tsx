@@ -19,8 +19,7 @@ export default function TranslationContent() {
     LOADING: <Loading />,
     INTRO: <TranslationIntro />,
     TEXT_RESULT: <TranslationTextResult />,
-    FILE_RESULT: <TranslationFileResult />,
-    LANG_SEARCH: <LanguageSearch />
+    FILE_RESULT: <TranslationFileResult />
   };
 
   return (

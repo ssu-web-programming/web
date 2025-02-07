@@ -80,7 +80,7 @@ export default function Reference({ references }: referenceProps) {
               <span>{`+${references.length - 3}개 더`}</span>
             </S.Item>
           )}
-          <ModalSheet isOpen={isOpen} setIsOpen={setIsOpen}>
+          <ModalSheet isOpen={isOpen} setIsOpen={setIsOpen} detent="content-height">
             <S.SheetWrap>
               <S.SheetHeader>출처</S.SheetHeader>
               <S.SheetContent>

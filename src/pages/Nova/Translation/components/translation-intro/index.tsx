@@ -4,16 +4,19 @@ import { ReactComponent as CloseLightIcon } from 'img/light/ico_nova_close.svg';
 import { ReactComponent as ArrowIcon } from 'img/light/nova/translation/arrow_down.svg';
 import { ReactComponent as DeepL } from 'img/light/nova/translation/deepl_logo.svg';
 import { ReactComponent as Switch } from 'img/light/nova/translation/switch.svg';
+import { overlay } from 'overlay-kit';
 import { useTranslation } from 'react-i18next';
-import { selectPageData } from 'store/slices/nova/pageStatusSlice';
-import { getDriveFiles, getLocalFiles } from 'store/slices/uploadFiles';
-import { useAppSelector } from 'store/store';
 import { css } from 'styled-components';
-import { downloadFiles } from 'util/files';
 
 import { NOVA_TAB_TYPE } from '../../../../../constants/novaTapTypes';
-import { TranslateResult, useTranslationContext } from '../../provider/translation-provider';
+import useTranslationIntro from '../../hooks/use-translation-intro';
+import {
+  LangType,
+  TranslateResult,
+  useTranslationContext
+} from '../../provider/translation-provider';
 import DragAndDrop from '../drag-and-drop';
+import LanguageSearch from '../language-search';
 import Toggle, { ToggleOption } from '../toggle';
 import TranslationFileUploader from '../translation-file-uploader';
 
@@ -23,13 +26,15 @@ type TranslateType = 'TEXT' | 'FILE';
 
 export default function TranslationIntro() {
   const { t } = useTranslation();
-  const localFiles = useAppSelector(getLocalFiles);
-  const driveFiles = useAppSelector(getDriveFiles);
-  const currentFile = useAppSelector(selectPageData(NOVA_TAB_TYPE.translation));
+  const { convertFileObject, sanitizedOriginFile, isTranslateActive } = useTranslationIntro();
 
   const [type, setType] = useState<TranslateType>('TEXT');
   const [translateInputValue, setTranslateInputValue] = useState('');
-  const { setSharedTranslationInfo, triggerLoading } = useTranslationContext();
+  const {
+    setSharedTranslationInfo,
+    triggerLoading,
+    sharedTranslationInfo: { sourceLang, targetLang }
+  } = useTranslationContext();
 
   const options: ToggleOption<TranslateType>[] = [
     {
@@ -53,22 +58,9 @@ export default function TranslationIntro() {
   const handleMoveToFileResult = () => {
     setSharedTranslationInfo((prevSharedTranslationInfo) => ({
       ...prevSharedTranslationInfo,
-      componentType: 'FILE_RESULT'
+      componentType: 'FILE_RESULT',
+      ...sanitizedOriginFile()
     }));
-  };
-
-  const convertFileObject = async () => {
-    // driveFiles의 경우에는 id를 파일객체로 변환해야함
-    if (driveFiles.length) {
-      const results = await downloadFiles(driveFiles);
-      return results[0].file;
-    }
-
-    if (currentFile) {
-      return currentFile;
-    }
-
-    return localFiles[0];
   };
 
   const submitTextTranslate = async () => {
@@ -76,8 +68,8 @@ export default function TranslationIntro() {
 
     const response = await translationHttp.postTranslateText({
       text: translateInputValue,
-      sourceLang: 'KO',
-      targetLang: 'EL'
+      sourceLang,
+      targetLang
     });
 
     const {
@@ -92,8 +84,8 @@ export default function TranslationIntro() {
 
     const response = await translationHttp.postTranslateDocument({
       file: await convertFileObject(),
-      sourceLang: 'KO',
-      targetLang: 'EL'
+      sourceLang,
+      targetLang
     });
 
     handleMoveToFileResult();
@@ -109,7 +101,11 @@ export default function TranslationIntro() {
     submitFileTranslate();
   };
 
-  // console.log('translateInputValue', translateInputValue);
+  const handleOpenLangSearch = (type: LangType) => {
+    overlay.open(({ isOpen, close }) => (
+      <LanguageSearch isOpen={isOpen} setIsOpen={close} langType={type} />
+    ));
+  };
 
   return (
     <>
@@ -129,14 +125,14 @@ export default function TranslationIntro() {
         <S.TextAreaHeader>
           <div>
             <span>한국어</span>
-            <ArrowIcon />
+            <ArrowIcon onClick={() => handleOpenLangSearch('source')} />
           </div>
           <div>
             <Switch />
           </div>
           <div>
             <span>나우아틀어</span>
-            <ArrowIcon />
+            <ArrowIcon onClick={() => handleOpenLangSearch('target')} />
           </div>
         </S.TextAreaHeader>
         {type === 'TEXT' ? (
@@ -170,12 +166,7 @@ export default function TranslationIntro() {
       </S.TextAreaWrapper>
 
       <S.TranslationButton
-        isActive={
-          translateInputValue.length > 0 ||
-          localFiles.length > 0 ||
-          driveFiles.length > 0 ||
-          !!currentFile
-        }
+        isActive={translateInputValue.length > 0 || isTranslateActive}
         onClick={handleTranslate}>
         <span>번역하기</span>
       </S.TranslationButton>

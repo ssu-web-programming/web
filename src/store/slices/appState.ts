@@ -11,6 +11,8 @@ type InitialState = {
   // not-started (녹음을 시작하지도 않음) , start(녹음을 시작함) , pause('녹음을 중지함');
   isRecordState: 'not-started' | 'start' | 'pause';
   isExternal: boolean;
+  isClosedNova: boolean;
+  isAosMicrophonePermission: boolean;
 };
 
 const initialState: InitialState = {
@@ -20,7 +22,9 @@ const initialState: InitialState = {
   // 전화 여부 추가
   isIncomingCall: false,
   isRecordState: 'not-started',
-  isExternal: false
+  isExternal: false,
+  isClosedNova: false,
+  isAosMicrophonePermission: false
 };
 
 const appStateSlice = createSlice({
@@ -46,11 +50,26 @@ const appStateSlice = createSlice({
     setIsRecordingState: (state, action: PayloadAction<'not-started' | 'start' | 'pause'>) => {
       state.isRecordState = action.payload;
       return state;
+    },
+    setIsClosedNovaState: (state, action: PayloadAction<boolean>) => {
+      state.isClosedNova = action.payload;
+      return state;
+    },
+    setIsMicrophoneState: (state, action: PayloadAction<boolean>) => {
+      state.isAosMicrophonePermission = action.payload;
+      return state;
     }
   }
 });
 
-export const { setDocType, setNovaExpireTime, setIsCallState, setIsRecordingState, setIsExternal } =
-  appStateSlice.actions;
+export const {
+  setDocType,
+  setNovaExpireTime,
+  setIsCallState,
+  setIsRecordingState,
+  setIsExternal,
+  setIsClosedNovaState,
+  setIsMicrophoneState
+} = appStateSlice.actions;
 export const appStateSelector = (state: RootState) => state.appState;
 export default appStateSlice.reducer;

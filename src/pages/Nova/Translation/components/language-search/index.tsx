@@ -1,13 +1,21 @@
 import { useEffect, useMemo, useState } from 'react';
+import ModalSheet from 'components/modalSheet';
 import { TARGET_LANGUAGES } from 'constants/translation-text';
 import { ReactComponent as SearchIcon } from 'img/light/nova/translation/search.svg';
 import getInitialConsonant from 'util/getInitialConsonant';
 
+import { LangType } from '../../provider/translation-provider';
 import LanguageItemList from '../language-item-list';
 
 import * as S from './style';
 
-export default function LanguageSearch() {
+interface Props {
+  isOpen: boolean;
+  setIsOpen: () => void;
+  langType: LangType;
+}
+
+export default function LanguageSearch({ isOpen, setIsOpen, langType }: Props) {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [filteredLanguages, setFilteredLanguages] = useState(TARGET_LANGUAGES);
 
@@ -42,18 +50,22 @@ export default function LanguageSearch() {
     setFilteredLanguages(filteredResults);
   }, [filteredResults]);
 
-  return (
-    <S.Wrapper>
-      <S.Title>원본 언어</S.Title>
-      <S.InputWrapper>
-        <S.SearchInput placeholder="언어 검색" value={searchTerm} onChange={handleSearch} />
-        <SearchIcon />
-      </S.InputWrapper>
+  console.log('filteredResults', filteredResults);
 
-      <LanguageItemList
-        title={searchTerm ? '검색 결과' : '모든 언어'}
-        langList={filteredLanguages}
-      />
-    </S.Wrapper>
+  return (
+    <ModalSheet isOpen={isOpen} setIsOpen={setIsOpen} snapPoints={[0.8]} initialSnap={0}>
+      <S.Wrapper>
+        <S.Title>{langType === 'source' ? '원본 언어' : '번역될 언어'}</S.Title>
+        <S.InputWrapper>
+          <S.SearchInput placeholder="언어 검색" value={searchTerm} onChange={handleSearch} />
+          <SearchIcon />
+        </S.InputWrapper>
+
+        <LanguageItemList
+          title={searchTerm ? '검색 결과' : '모든 언어'}
+          langList={filteredLanguages}
+        />
+      </S.Wrapper>
+    </ModalSheet>
   );
 }

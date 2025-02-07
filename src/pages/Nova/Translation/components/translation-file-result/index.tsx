@@ -56,8 +56,10 @@ export default function TranslationFileResult() {
       originalFileType,
       originalFileName,
       originFile,
-      translationFileName,
-      translationFileUrl
+      translationFileName: translationFileName || '임의로 저장된 파일 이름',
+      translationFileUrl:
+        translationFileUrl ||
+        'https://vf-berlin.polarisoffice.com/nova/storage/translate/0d80c4d8-2584-4675-bae6-7888598b932b/template.docx'
     });
   };
 
@@ -66,8 +68,10 @@ export default function TranslationFileResult() {
     dispatch(activeLoadingSpinner());
 
     await Bridge.callBridgeApi<DownloadFileArgs>('downloadFile', {
-      fileName: translationFileName,
-      url: translationFileUrl
+      fileName: translationFileName || '임의로 저장된 파일 이름',
+      url:
+        translationFileUrl ||
+        'https://vf-berlin.polarisoffice.com/nova/storage/translate/0d80c4d8-2584-4675-bae6-7888598b932b/template.docx'
     });
   };
 

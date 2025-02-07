@@ -1,6 +1,8 @@
 import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState } from 'react';
 
-export type ComponentType = 'INTRO' | 'TEXT_RESULT' | 'FILE_RESULT' | 'LANG_SEARCH' | 'LOADING';
+export type ComponentType = 'INTRO' | 'TEXT_RESULT' | 'FILE_RESULT' | 'LOADING';
+export type LangType = 'source' | 'target';
+export type OriginalFileType = 'currentDoc' | 'drive' | 'local';
 
 export interface TranslateResult {
   detectedSourceLanguage: string;
@@ -12,11 +14,14 @@ interface SharedTranslation extends TranslateResult {
   translateInputValue: string;
 
   // 원본-번역 비교보기를 위한 로직
-  originalFileType: 'currentDoc' | 'drive' | 'local';
+  originalFileType: OriginalFileType;
   originalFileName: string;
   originFile: any;
   translationFileName: string;
   translationFileUrl: string;
+  sourceLang: string;
+  targetLang: string;
+  LangType: LangType;
 }
 
 interface TranslationContextType {
@@ -39,6 +44,7 @@ export const useTranslationContext = () => {
 };
 
 export function TranslationProvider({ children }: Props) {
+  // 비슷한 조건별로 state를 쪼게면 좋을 듯
   const [sharedTranslationInfo, setSharedTranslationInfo] = useState<SharedTranslation>({
     componentType: 'INTRO',
     // 번역 할 문장
@@ -47,11 +53,16 @@ export function TranslationProvider({ children }: Props) {
     detectedSourceLanguage: '',
     // 번역 된 문장
     translatedText: '',
+    // 원본-번역 비교보기를 위해 필요한 기능
     originalFileType: 'local',
-    originalFileName: '이름',
+    originalFileName: '',
     originFile: '',
     translationFileName: '',
-    translationFileUrl: ''
+    translationFileUrl: '',
+    // 언어 BottomSheet
+    sourceLang: 'KO',
+    targetLang: 'EN-US',
+    LangType: 'source'
   });
 
   const triggerLoading = () => {

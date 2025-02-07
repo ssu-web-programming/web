@@ -1,8 +1,8 @@
 import React, { PropsWithChildren, useEffect, useRef, useState } from 'react';
 import { ReactComponent as GoBackward } from 'img/light/nova/voiceDictation/go_backward.svg';
 import { ReactComponent as GoForward } from 'img/light/nova/voiceDictation/go_forward.svg';
-import { ReactComponent as Pause } from 'img/light/nova/voiceDictation/pause.svg';
-import { ReactComponent as Play } from 'img/light/nova/voiceDictation/play.svg';
+import { ReactComponent as Pause } from 'img/light/nova/voiceDictation/player_pause.svg';
+import { ReactComponent as Play } from 'img/light/nova/voiceDictation/player_play.svg';
 
 import * as S from './style';
 

@@ -1,4 +1,5 @@
 import Button from 'components/buttons/Button';
+import { VOICE_COLOR } from 'constants/voice-dictation';
 import CheckDarkIcon from 'img/dark/nova/check_purple.svg';
 import DownloadIcon from 'img/light/ico_download_white.svg';
 import CheckLightIcon from 'img/light/nova/check_purple.svg';
@@ -53,8 +54,10 @@ export default function VoiceDictationResult() {
           </S.NewTranscript>
 
           {voiceDictationResult?.data.segments.map((transcript, idx) => (
-            <S.TranscriptItem key={idx} color={'#7c3aed'}>
-              <S.TranscriptIcon color={'#7c3aed'}>참{transcript.speaker.label}</S.TranscriptIcon>
+            <S.TranscriptItem key={idx} color={VOICE_COLOR[transcript.speaker.name]}>
+              <S.TranscriptIcon color={VOICE_COLOR[transcript.speaker.name]}>
+                참{transcript.speaker.label}
+              </S.TranscriptIcon>
               <S.TranscriptContent>
                 <S.TranscriptInfo>
                   <S.TranscriptName>참석자{transcript.speaker.name}</S.TranscriptName>

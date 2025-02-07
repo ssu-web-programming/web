@@ -146,10 +146,10 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
 
   const startRecording = useCallback(async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
       streamRef.current = stream;
 
-      const mediaRecorder = new MediaRecorder(stream);
+      const mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/mp4' });
       mediaRecorderRef.current = mediaRecorder;
       chunksRef.current = [];
 
@@ -187,8 +187,6 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       };
 
       mediaRecorder.onstop = async () => {
-        console.log('chunksRef.current', chunksRef.current);
-
         const blob = new Blob(chunksRef.current, { type: 'audio/mpeg' });
         const url = URL.createObjectURL(blob);
         setAudioUrl(url);
