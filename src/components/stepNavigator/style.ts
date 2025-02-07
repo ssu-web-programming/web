@@ -11,13 +11,19 @@ export const StepWrap = styled.div`
   overflow-x: hidden;
 `;
 
-export const Step = styled(Stepper)<{ isStared: boolean; isFinished: boolean }>`
+interface StepProps {
+  isStared?: boolean;
+  isFinished?: boolean;
+}
+export const Step = styled(Stepper).withConfig({
+  shouldForwardProp: (prop) => !['isStared', 'isFinished'].includes(prop)
+})<StepProps>`
   padding: 16px 24px 4px 24px;
   transform: ${({ isStared, isFinished }) =>
     isStared
       ? 'translateX(calc(50% - 40px))'
       : isFinished
-        ? `translateX(calc(-1 * (50% - 40px)))`
+        ? 'translateX(calc(-1 * (50% - 40px)))'
         : 'none'};
 
   .MuiStep-root {

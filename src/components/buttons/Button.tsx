@@ -92,6 +92,7 @@ export type ButtonVariant =
   | 'none'
   | 'white'
   | 'purpleGradient'
+  | 'lightPurple'
   | 'gray'
   | 'darkGray'
   | 'transparent'
@@ -116,6 +117,12 @@ const VARIANTS = {
     background-image: ${({ selected }) =>
       selected ? `white` : `linear-gradient(to left, #a86cea, var(--ai-purple-50-main))`};
     color: white;
+  `,
+  lightPurple: css<{ selected: boolean }>`
+    background-color: ${({ selected, theme }) =>
+      selected ? theme.color.background.selected : theme.color.background.gray01} !important;
+    color: ${({ selected, theme }) =>
+      selected ? theme.color.text.main : theme.color.text.gray04} !important;
   `,
   gray: css<{ selected: boolean }>`
     background-color: ${({ selected, theme }) =>

@@ -32,6 +32,7 @@ export const lightTheme = {
       gray02: 'var(--gray-gray-30)',
       gray03: 'var(--gray-gray-40)',
       gray04: 'var(--gray-gray-12)',
+      gray05: 'var(--gray-gray-30)',
       purple01: 'var(--ai-purple-90)'
     },
     main: 'var(--ai-purple-50-main)',
@@ -107,6 +108,7 @@ export const darkTheme = {
       gray02: 'var(--gray-gray-87)',
       gray03: 'var(--gray-gray-87)',
       gray04: 'var(--gray-gray-87)',
+      gray05: 'var(--gray-gray-35)',
       purple01: 'var(--ai-purple-80-sub)'
     },
     main: 'var(--ai-purple-50-main)',

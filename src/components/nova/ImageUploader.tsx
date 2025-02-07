@@ -31,7 +31,7 @@ const Wrap = styled.div`
 `;
 
 interface ImageUploaderProps {
-  handleUploadComplete: () => void;
+  handleUploadComplete?: () => void;
   curTab: NOVA_TAB_TYPE;
   children: React.ReactNode;
 }
@@ -115,7 +115,7 @@ export default function ImageUploader({
   };
 
   useEffect(() => {
-    if (currentFile) {
+    if (currentFile && handleUploadComplete) {
       handleUploadComplete();
     } else {
       handleFileProcessing();

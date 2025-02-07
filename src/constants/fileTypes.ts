@@ -114,9 +114,6 @@ export const getValidExt = (tab: NOVA_TAB_TYPE) => {
         ['.jpg', '.jpeg', '.png', '.gif'].includes(extensions)
       );
     case 'convert2DTo3D':
-      return SUPPORT_IMAGE_TYPE.filter(({ extensions }) =>
-        ['.jpg', '.jpeg', '.png', '.webp'].includes(extensions)
-      );
     case 'removeBG':
     case 'changeBG':
     case 'remakeImg':
@@ -128,6 +125,10 @@ export const getValidExt = (tab: NOVA_TAB_TYPE) => {
     case 'changeStyle':
       return SUPPORT_IMAGE_TYPE.filter(({ extensions }) =>
         ['.jpg', '.jpeg', '.png', '.bmp', '.webp'].includes(extensions)
+      );
+    case 'aiVideo':
+      return SUPPORT_IMAGE_TYPE.filter(({ extensions }) =>
+        ['.jpg', '.jpeg', '.png'].includes(extensions)
       );
     default:
       return [];
@@ -142,6 +143,7 @@ export const MAX_FILE_UPLOAD_SIZE_MB_REMAKE_IMG = 30;
 export const MAX_FILE_UPLOAD_SIZE_MB_EXPAND_IMG = 30;
 export const MAX_FILE_UPLOAD_SIZE_MB_IMPROVED_RES = 10;
 export const MAX_FILE_UPLOAD_SIZE_MB_CHANGE_STYLE = 10;
+export const MAX_FILE_UPLOAD_SIZE_MB_AI_VIDEO = 50;
 export const MIN_FILE_UPLOAD_SIZE_KB = 1;
 
 export const getMaxFileSize = (tab: NOVA_TAB_TYPE): number => {
@@ -162,6 +164,8 @@ export const getMaxFileSize = (tab: NOVA_TAB_TYPE): number => {
       return MAX_FILE_UPLOAD_SIZE_MB_IMPROVED_RES;
     case NOVA_TAB_TYPE.changeStyle:
       return MAX_FILE_UPLOAD_SIZE_MB_CHANGE_STYLE;
+    case NOVA_TAB_TYPE.aiVideo:
+      return MAX_FILE_UPLOAD_SIZE_MB_AI_VIDEO;
     default:
       return MAX_FILE_UPLOAD_SIZE_MB_AI_CHAT;
   }
