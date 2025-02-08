@@ -1,5 +1,7 @@
 import translationHttp from 'api/translation';
+import { useShowCreditToast } from 'components/hooks/useShowCreditToast';
 import { overlay } from 'overlay-kit';
+import { calLeftCredit } from 'util/common';
 
 import LanguageSearch from '../../components/language-search';
 import {
@@ -10,6 +12,7 @@ import {
 import useSanitizedDrive from '../use-sanitized-drive';
 
 const useTranslationIntro = (translateInputValue: string) => {
+  const showCreditToast = useShowCreditToast();
   const {
     setSharedTranslationInfo,
     triggerLoading,
@@ -37,21 +40,27 @@ const useTranslationIntro = (translateInputValue: string) => {
 
   const submitTextTranslate = async () => {
     triggerLoading();
+    try {
+      const { response, headers } = await translationHttp.postTranslateText({
+        text: translateInputValue,
+        sourceLang,
+        targetLang
+      });
 
-    const response = await translationHttp.postTranslateText({
-      text: translateInputValue,
-      sourceLang,
-      targetLang
-    });
+      const {
+        result: { detectedSourceLanguage, translatedText }
+      } = response;
 
-    const {
-      result: { detectedSourceLanguage, translatedText }
-    } = response;
+      const { deductionCredit, leftCredit } = calLeftCredit(headers);
+      showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'nova');
 
-    handleMoveToTextResult({
-      detectedSourceLanguage: detectedSourceLanguage.toUpperCase(),
-      translatedText
-    });
+      handleMoveToTextResult({
+        detectedSourceLanguage: detectedSourceLanguage.toUpperCase(),
+        translatedText
+      });
+    } catch (e) {
+      console.log('e', e);
+    }
   };
 
   const submitFileTranslate = async () => {

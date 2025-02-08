@@ -31,6 +31,11 @@ interface ValidationResult {
   isValid: boolean;
   invalidFiles: File[];
   validFiles: File[];
+  invalidReason: {
+    // 실패 이유를 구분하기 위해 추가
+    type: File[]; // 타입이 맞지 않는 파일들
+    size: File[]; // 크기가 초과된 파일들
+  };
 }
 
 export function useManageFile({ onFinishCallback, onClearPastedImages }: Props = {}) {
@@ -42,32 +47,60 @@ export function useManageFile({ onFinishCallback, onClearPastedImages }: Props =
   const { getMaxFilesPerUpload, getAvailableFileCnt } = useUserInfoUtils();
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
 
-  const validateFilesType = (files: File[]): ValidationResult => {
+  const validateFiles = (files: File[], maxFileSize: number): ValidationResult => {
     const result: ValidationResult = {
       isValid: true,
       invalidFiles: [],
-      validFiles: []
+      validFiles: [],
+      invalidReason: {
+        type: [],
+        size: []
+      }
     };
 
     files.forEach((file) => {
-      if (ALLOWED_MIME_TYPES.includes(file.type)) {
+      let isFileValid = true;
+
+      // 파일 타입 검사
+      if (!ALLOWED_MIME_TYPES.includes(file.type)) {
+        isFileValid = false;
+        result.invalidReason.type.push(file);
+      }
+
+      // 파일 크기 검사
+      if (file.size > maxFileSize) {
+        isFileValid = false;
+        result.invalidReason.size.push(file);
+      }
+
+      if (isFileValid) {
         result.validFiles.push(file);
       } else {
-        result.isValid = false;
         result.invalidFiles.push(file);
       }
     });
 
+    result.isValid = result.invalidFiles.length === 0;
+
     return result;
   };
 
-  const validateFileUpload = (files: File[]) => {
-    const validation = validateFilesType(files);
+  const validateFileUpload = async (files: File[], maxFileSize: number) => {
+    const validation = validateFiles(files, maxFileSize);
 
     // 실패했을때 나오는 팝업!
-    if (validation.isValid === false) {
-      console.log('validation', validation);
-      console.log('file이 들어옴!', files);
+    if (validation.invalidReason.type.length > 0) {
+      await confirm({
+        msg: '지원하지 않는 파일 형식입니다. 다시 한 번 확인해 주세요.'
+      });
+      return;
+    }
+
+    if (validation.invalidReason.size.length > 0) {
+      await confirm({
+        msg: `파일의 크기가 너무 큽니다. 30MB 이하의 파일만 선택해주세요.`
+      });
+      return;
     }
 
     // 성공했을때는 localFiles에 넣는다.

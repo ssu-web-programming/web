@@ -49,6 +49,7 @@ type FileUploaderProps = {
   onFinish?: () => void;
   onClearPastedImages?: () => void;
   type?: 'image' | 'file';
+  maxFileSize?: number;
 };
 
 export const FileUploader = (props: FileUploaderProps) => {
@@ -60,7 +61,8 @@ export const FileUploader = (props: FileUploaderProps) => {
     tooltipStyle,
     onFinish,
     onClearPastedImages,
-    type = 'image'
+    type = 'image',
+    maxFileSize = 30
   } = props;
 
   const { loadLocalFile, getFileInfo, validateFileUpload } = useManageFile({
@@ -380,7 +382,7 @@ export const FileUploader = (props: FileUploaderProps) => {
             target={target}
             accept={getAccept(accept)}
             handleOnChange={(files) => {
-              type === 'file' ? validateFileUpload(files) : loadLocalFile(files);
+              type === 'file' ? validateFileUpload(files, maxFileSize) : loadLocalFile(files);
             }}
             ref={inputRef}>
             {children}

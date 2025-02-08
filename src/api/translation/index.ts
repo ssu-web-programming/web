@@ -28,8 +28,7 @@ const translationHttp = {
     });
 
     const response = await res.json();
-    console.log('response', response);
-    return response.data;
+    return { response: response.data, headers: res.headers };
   },
   postTranslateDocument: async ({ file, sourceLang, targetLang }: PostTranslateDocument) => {
     const formData = new FormData();
@@ -77,9 +76,8 @@ const translationHttp = {
       body: JSON.stringify({}),
       method: 'POST'
     });
-
     const response = await res.json();
-    console.log('response', response);
+
     return response;
   }
 };
