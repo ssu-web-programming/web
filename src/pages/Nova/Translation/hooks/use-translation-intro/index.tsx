@@ -1,62 +1,99 @@
-import { NOVA_TAB_TYPE } from 'constants/novaTapTypes';
-import { selectPageData } from 'store/slices/nova/pageStatusSlice';
-import { getDriveFiles, getLocalFiles } from 'store/slices/uploadFiles';
-import { useAppSelector } from 'store/store';
-import { downloadFiles } from 'util/files';
+import translationHttp from 'api/translation';
+import { overlay } from 'overlay-kit';
 
-const useTranslationIntro = () => {
-  const localFiles = useAppSelector(getLocalFiles);
-  const driveFiles = useAppSelector(getDriveFiles);
-  const currentFile = useAppSelector(selectPageData(NOVA_TAB_TYPE.translation));
+import LanguageSearch from '../../components/language-search';
+import {
+  LangType,
+  TranslateResult,
+  useTranslationContext
+} from '../../provider/translation-provider';
+import useSanitizedDrive from '../use-sanitized-drive';
 
-  const convertFileObject = async () => {
-    // driveFiles의 경우에는 id를 파일객체로 변환해야함
-    if (driveFiles.length) {
-      const results = await downloadFiles(driveFiles);
-      return results[0].file;
-    }
+const useTranslationIntro = (translateInputValue: string) => {
+  const {
+    setSharedTranslationInfo,
+    triggerLoading,
+    sharedTranslationInfo: { sourceLang, targetLang, isSwitchActive }
+  } = useTranslationContext();
+  const { convertFileObject, isDriveActive, sanitizedOriginFile } = useSanitizedDrive();
 
-    if (currentFile) {
-      return currentFile;
-    }
-
-    return localFiles[0];
+  const handleMoveToTextResult = ({ detectedSourceLanguage, translatedText }: TranslateResult) => {
+    setSharedTranslationInfo((prevSharedTranslationInfo) => ({
+      ...prevSharedTranslationInfo,
+      componentType: 'TEXT_RESULT',
+      detectedSourceLanguage,
+      translatedText,
+      translateInputValue
+    }));
   };
 
-  const sanitizedOriginFile = async () => {
-    const isDriveFiles = driveFiles.length;
-    const isCurrentFile = currentFile;
-    const isLocalFiles = localFiles[0];
+  const handleMoveToFileResult = () => {
+    setSharedTranslationInfo((prevSharedTranslationInfo) => ({
+      ...prevSharedTranslationInfo,
+      componentType: 'FILE_RESULT',
+      ...sanitizedOriginFile()
+    }));
+  };
 
-    if (isDriveFiles) {
-      return {
-        originalFileType: 'drive',
-        originalFileName: (await convertFileObject()).name,
-        originFile: driveFiles[0].fileId
-      };
-    }
+  const submitTextTranslate = async () => {
+    triggerLoading();
 
-    if (isCurrentFile) {
-      return {
-        originalFileType: 'currentDoc',
-        originalFileName: (await convertFileObject()).name,
-        originFile: ''
-      };
-    }
+    const response = await translationHttp.postTranslateText({
+      text: translateInputValue,
+      sourceLang,
+      targetLang
+    });
 
-    if (isLocalFiles) {
-      return {
-        originalFileType: 'local',
-        originalFileName: (await convertFileObject()).name,
-        originFile: new Blob([localFiles[0]], { type: localFiles[0].type })
-      };
+    const {
+      result: { detectedSourceLanguage, translatedText }
+    } = response;
+
+    handleMoveToTextResult({
+      detectedSourceLanguage: detectedSourceLanguage.toUpperCase(),
+      translatedText
+    });
+  };
+
+  const submitFileTranslate = async () => {
+    triggerLoading();
+
+    const response = await translationHttp.postTranslateDocument({
+      file: await convertFileObject(),
+      sourceLang,
+      targetLang
+    });
+
+    handleMoveToFileResult();
+    console.log('submitFileTranslate-response', response);
+  };
+
+  const handleSwitchLang = () => {
+    if (isSwitchActive) {
+      setSharedTranslationInfo((prev) => ({
+        ...prev,
+        sourceLang: targetLang,
+        targetLang: sourceLang
+      }));
     }
+  };
+
+  const handleOpenLangSearch = (type: LangType) => {
+    overlay.open(({ isOpen, close }) => (
+      <LanguageSearch
+        isOpen={isOpen}
+        close={close}
+        langType={type}
+        setSharedTranslationInfo={setSharedTranslationInfo}
+      />
+    ));
   };
 
   return {
-    convertFileObject,
-    sanitizedOriginFile,
-    isTranslateActive: localFiles.length > 0 || driveFiles.length > 0 || !!currentFile
+    isTranslateActive: isDriveActive,
+    submitTextTranslate,
+    submitFileTranslate,
+    handleSwitchLang,
+    handleOpenLangSearch
   };
 };
 

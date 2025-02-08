@@ -8,18 +8,15 @@ import { ReactComponent as DeepL } from 'img/light/nova/translation/deepl_logo.s
 import { ReactComponent as Switch } from 'img/light/nova/translation/switch.svg';
 import { overlay } from 'overlay-kit';
 import { useTranslation } from 'react-i18next';
+import { activeToast } from 'store/slices/toastSlice';
+import { useAppDispatch } from 'store/store';
 import { css } from 'styled-components';
 import { getLangFromLangCode } from 'util/translation';
 
 import { NOVA_TAB_TYPE } from '../../../../../constants/novaTapTypes';
 import useTranslationIntro from '../../hooks/use-translation-intro';
-import {
-  LangType,
-  TranslateResult,
-  useTranslationContext
-} from '../../provider/translation-provider';
+import { useTranslationContext } from '../../provider/translation-provider';
 import DragAndDrop from '../drag-and-drop';
-import LanguageSearch from '../language-search';
 import Toggle, { ToggleOption } from '../toggle';
 import TranslationFileUploader from '../translation-file-uploader';
 
@@ -29,15 +26,21 @@ type TranslateType = 'TEXT' | 'FILE';
 
 export default function TranslationIntro() {
   const { t } = useTranslation();
-  const { convertFileObject, sanitizedOriginFile, isTranslateActive } = useTranslationIntro();
-
+  const dispatch = useAppDispatch();
   const [type, setType] = useState<TranslateType>('TEXT');
   const [translateInputValue, setTranslateInputValue] = useState('');
+
   const {
-    setSharedTranslationInfo,
-    triggerLoading,
-    sharedTranslationInfo: { sourceLang, targetLang, isSwitchActive }
+    sharedTranslationInfo: { sourceLang, targetLang }
   } = useTranslationContext();
+
+  const {
+    handleOpenLangSearch,
+    handleSwitchLang,
+    isTranslateActive,
+    submitTextTranslate,
+    submitFileTranslate
+  } = useTranslationIntro(translateInputValue);
 
   const options: ToggleOption<TranslateType>[] = [
     {
@@ -48,53 +51,6 @@ export default function TranslationIntro() {
     { id: 'FILE', label: '파일 번역', icon: <S.StyledTransFile $isActive={type === 'FILE'} /> }
   ];
 
-  const handleMoveToTextResult = ({ detectedSourceLanguage, translatedText }: TranslateResult) => {
-    setSharedTranslationInfo((prevSharedTranslationInfo) => ({
-      ...prevSharedTranslationInfo,
-      componentType: 'TEXT_RESULT',
-      detectedSourceLanguage,
-      translatedText,
-      translateInputValue
-    }));
-  };
-
-  const handleMoveToFileResult = () => {
-    setSharedTranslationInfo((prevSharedTranslationInfo) => ({
-      ...prevSharedTranslationInfo,
-      componentType: 'FILE_RESULT',
-      ...sanitizedOriginFile()
-    }));
-  };
-
-  const submitTextTranslate = async () => {
-    triggerLoading();
-
-    const response = await translationHttp.postTranslateText({
-      text: translateInputValue,
-      sourceLang,
-      targetLang
-    });
-
-    const {
-      result: { detectedSourceLanguage, translatedText }
-    } = response;
-
-    handleMoveToTextResult({ detectedSourceLanguage, translatedText });
-  };
-
-  const submitFileTranslate = async () => {
-    triggerLoading();
-
-    const response = await translationHttp.postTranslateDocument({
-      file: await convertFileObject(),
-      sourceLang,
-      targetLang
-    });
-
-    handleMoveToFileResult();
-    console.log('submitFileTranslate-response', response);
-  };
-
   const handleTranslate = () => {
     if (type === 'TEXT') {
       submitTextTranslate();
@@ -102,27 +58,6 @@ export default function TranslationIntro() {
     }
     // File 번역일때 타는 로직!
     submitFileTranslate();
-  };
-
-  const handleSwitchLang = () => {
-    if (isSwitchActive) {
-      setSharedTranslationInfo((prev) => ({
-        ...prev,
-        sourceLang: targetLang,
-        targetLang: sourceLang
-      }));
-    }
-  };
-
-  const handleOpenLangSearch = (type: LangType) => {
-    overlay.open(({ isOpen, close }) => (
-      <LanguageSearch
-        isOpen={isOpen}
-        close={close}
-        langType={type}
-        setSharedTranslationInfo={setSharedTranslationInfo}
-      />
-    ));
   };
 
   return (
@@ -158,7 +93,15 @@ export default function TranslationIntro() {
             <S.TextArea
               placeholder="번역할 내용을 입력하세요."
               value={translateInputValue}
-              onChange={(e) => setTranslateInputValue(e.target.value)}
+              onChange={(e) => {
+                if (e.target.value.length > 10000) {
+                  dispatch(
+                    activeToast({ type: 'error', msg: '최대 10,000자까지만 입력이 가능합니다.' })
+                  );
+                }
+                setTranslateInputValue(e.target.value);
+              }}
+              maxLength={10000}
             />
             <S.CloseIconWrapper onClick={() => setTranslateInputValue('')}>
               <CloseLightIcon width={24} height={24} />

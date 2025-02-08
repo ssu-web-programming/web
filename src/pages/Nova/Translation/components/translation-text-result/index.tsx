@@ -5,8 +5,16 @@ import * as S from './style';
 
 export default function TranslationTextResult() {
   const {
-    sharedTranslationInfo: { detectedSourceLanguage, translateInputValue, translatedText }
+    sharedTranslationInfo: {
+      detectedSourceLanguage,
+      translateInputValue,
+      translatedText,
+      sourceLang
+    }
   } = useTranslationContext();
+
+  console.log('detectedSourceLanguage', detectedSourceLanguage);
+  console.log('sourceLang', sourceLang);
 
   return (
     <>
