@@ -9,6 +9,7 @@ import { ReactComponent as Switch } from 'img/light/nova/translation/switch.svg'
 import { overlay } from 'overlay-kit';
 import { useTranslation } from 'react-i18next';
 import { css } from 'styled-components';
+import { getLangFromLangCode } from 'util/translation';
 
 import { NOVA_TAB_TYPE } from '../../../../../constants/novaTapTypes';
 import useTranslationIntro from '../../hooks/use-translation-intro';
@@ -35,7 +36,7 @@ export default function TranslationIntro() {
   const {
     setSharedTranslationInfo,
     triggerLoading,
-    sharedTranslationInfo: { sourceLang, targetLang }
+    sharedTranslationInfo: { sourceLang, targetLang, isSwitchActive }
   } = useTranslationContext();
 
   const options: ToggleOption<TranslateType>[] = [
@@ -103,9 +104,24 @@ export default function TranslationIntro() {
     submitFileTranslate();
   };
 
+  const handleSwitchLang = () => {
+    if (isSwitchActive) {
+      setSharedTranslationInfo((prev) => ({
+        ...prev,
+        sourceLang: targetLang,
+        targetLang: sourceLang
+      }));
+    }
+  };
+
   const handleOpenLangSearch = (type: LangType) => {
     overlay.open(({ isOpen, close }) => (
-      <LanguageSearch isOpen={isOpen} setIsOpen={close} langType={type} />
+      <LanguageSearch
+        isOpen={isOpen}
+        close={close}
+        langType={type}
+        setSharedTranslationInfo={setSharedTranslationInfo}
+      />
     ));
   };
 
@@ -126,14 +142,14 @@ export default function TranslationIntro() {
       <S.TextAreaWrapper>
         <S.TextAreaHeader>
           <div>
-            <span>한국어</span>
+            <span>{getLangFromLangCode('source', sourceLang)}</span>
             <ArrowIcon onClick={() => handleOpenLangSearch('source')} />
           </div>
           <div>
-            <Switch />
+            <Switch onClick={handleSwitchLang} />
           </div>
           <div>
-            <span>나우아틀어</span>
+            <span>{getLangFromLangCode('target', targetLang)}</span>
             <ArrowIcon onClick={() => handleOpenLangSearch('target')} />
           </div>
         </S.TextAreaHeader>

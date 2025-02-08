@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
 import ModalSheet from 'components/modalSheet';
 import {
   SOURCE_LANGUAGES_WITH_LANG_CODE,
@@ -8,15 +8,16 @@ import { ReactComponent as SearchIcon } from 'img/light/nova/translation/search.
 import getInitialConsonant from 'util/getInitialConsonant';
 
 import useLangSearch from '../../hooks/use-lang-search';
-import { LangType } from '../../provider/translation-provider';
+import { LangType, SharedTranslation } from '../../provider/translation-provider';
 import LanguageItemList from '../language-item-list';
 
 import * as S from './style';
 
 interface Props {
   isOpen: boolean;
-  setIsOpen: () => void;
+  close: () => void;
   langType: LangType;
+  setSharedTranslationInfo: Dispatch<SetStateAction<SharedTranslation>>;
 }
 
 export interface Language {
@@ -24,7 +25,12 @@ export interface Language {
   lang: string;
 }
 
-export default function LanguageSearch({ isOpen, setIsOpen, langType }: Props) {
+export default function LanguageSearch({
+  isOpen,
+  close,
+  langType,
+  setSharedTranslationInfo
+}: Props) {
   const initialLanguages =
     langType === 'source' ? SOURCE_LANGUAGES_WITH_LANG_CODE : TARGET_LANGUAGES_WITH_LANG_CODE;
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -62,7 +68,7 @@ export default function LanguageSearch({ isOpen, setIsOpen, langType }: Props) {
   }, [searchTerm, initialLanguages]);
 
   return (
-    <ModalSheet isOpen={isOpen} setIsOpen={setIsOpen} snapPoints={[0.8]} initialSnap={0}>
+    <ModalSheet isOpen={isOpen} setIsOpen={close} snapPoints={[0.8]} initialSnap={0}>
       <S.Wrapper>
         <S.Title>{langType === 'source' ? '원본 언어' : '번역될 언어'}</S.Title>
         <S.InputWrapper>
@@ -71,10 +77,11 @@ export default function LanguageSearch({ isOpen, setIsOpen, langType }: Props) {
         </S.InputWrapper>
 
         <LanguageItemList
-          title={'모든 언어'}
           langList={filteredLanguages}
           latestLangList={latestLangList}
           langType={langType}
+          setSharedTranslationInfo={setSharedTranslationInfo}
+          close={close}
         />
       </S.Wrapper>
     </ModalSheet>

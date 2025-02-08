@@ -9,7 +9,7 @@ export interface TranslateResult {
   translatedText: string;
 }
 
-interface SharedTranslation extends TranslateResult {
+export interface SharedTranslation extends TranslateResult {
   componentType: ComponentType;
   translateInputValue: string;
 
@@ -22,6 +22,7 @@ interface SharedTranslation extends TranslateResult {
   sourceLang: string;
   targetLang: string;
   LangType: LangType;
+  isSwitchActive: boolean;
 }
 
 interface TranslationContextType {
@@ -64,7 +65,8 @@ export function TranslationProvider({ children }: Props) {
     sourceLang: 'KO',
     targetLang: 'EN-US',
     // 필요없으면 제거해도 괜찮을 것 같음
-    LangType: 'source'
+    LangType: 'source',
+    isSwitchActive: true
   });
 
   const triggerLoading = () => {
