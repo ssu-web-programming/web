@@ -12,10 +12,20 @@ interface PostTranslateText {
   targetLang: string;
 }
 
-interface PostTranslateDocument {
+export interface PostTranslateDocument {
   file: File;
   sourceLang?: string;
   targetLang: string;
+}
+
+export interface TranslateDocumentResponse {
+  translateId: string;
+}
+
+export interface CheckTranslateStatusResponse {
+  status: string;
+  secondsRemaining: number;
+  downloadUrl: string;
 }
 
 const translationHttp = {
@@ -54,7 +64,7 @@ const translationHttp = {
 
     const response = await res.json();
 
-    return response;
+    return response.data;
   },
   postTranslateLatestLang: async () => {
     const { res } = await apiWrapper().request(NOVA_TRANSLATE_LATEST_LANG, {

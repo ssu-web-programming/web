@@ -1,5 +1,10 @@
-import translationHttp from 'api/translation';
+import translationHttp, {
+  CheckTranslateStatusResponse,
+  PostTranslateDocument,
+  TranslateDocumentResponse
+} from 'api/translation';
 import { useShowCreditToast } from 'components/hooks/useShowCreditToast';
+import { usePolling } from 'hooks/use-polling';
 import { overlay } from 'overlay-kit';
 import { calLeftCredit } from 'util/common';
 
@@ -13,12 +18,29 @@ import useSanitizedDrive from '../use-sanitized-drive';
 
 const useTranslationIntro = (translateInputValue: string) => {
   const showCreditToast = useShowCreditToast();
+  // 전역상태의 번역 Context!
   const {
     setSharedTranslationInfo,
     triggerLoading,
     sharedTranslationInfo: { sourceLang, targetLang, isSwitchActive }
   } = useTranslationContext();
+
+  // 데이터 정제 작업을 위한 Hook
   const { convertFileObject, isDriveActive, sanitizedOriginFile } = useSanitizedDrive();
+  const { start: translationRequest } = usePolling<
+    TranslateDocumentResponse,
+    CheckTranslateStatusResponse,
+    PostTranslateDocument
+  >({
+    initialFn: (params) => translationHttp.postTranslateDocument(params),
+    pollingFn: (translateId) => translationHttp.postCheckTranslateStatus({ translateId }),
+    getPollingId: ({ translateId }) => translateId,
+    shouldContinue: ({ status }) => status === 'translating',
+    onPollingSuccess: (result) => {
+      console.log('result', result);
+      handleMoveToFileResult();
+    }
+  });
 
   const handleMoveToTextResult = ({ detectedSourceLanguage, translatedText }: TranslateResult) => {
     setSharedTranslationInfo((prevSharedTranslationInfo) => ({
@@ -66,14 +88,8 @@ const useTranslationIntro = (translateInputValue: string) => {
   const submitFileTranslate = async () => {
     triggerLoading();
 
-    const response = await translationHttp.postTranslateDocument({
-      file: await convertFileObject(),
-      sourceLang,
-      targetLang
-    });
-
-    // handleMoveToFileResult();
-    console.log('submitFileTranslate-response', response);
+    await translationRequest({ file: await convertFileObject(), sourceLang, targetLang });
+    // console.log('submitFileTranslate-response', response);
   };
 
   const handleSwitchLang = () => {
