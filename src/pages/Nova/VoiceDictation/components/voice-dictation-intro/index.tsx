@@ -1,8 +1,16 @@
+import { useEffect } from 'react';
+import { useConfirm } from 'components/Confirm';
 import { Guide } from 'components/nova/Guide';
 import GuideBox from 'components/nova/guide-box';
 import { NOVA_TAB_TYPE } from 'constants/novaTapTypes';
+import { MEDIA_ERROR_MESSAGES } from 'constants/voice-dictation';
+import { overlay } from 'overlay-kit';
 import { useTranslation } from 'react-i18next';
+import { appStateSelector } from 'store/slices/appState';
+import { activeLoadingSpinner } from 'store/slices/loadingSpinner';
+import { useAppDispatch, useAppSelector } from 'store/store';
 import styled from 'styled-components';
+import { MediaError, MediaErrorContent } from 'types/media-error';
 import Bridge, { ClientType, getPlatform } from 'util/bridge';
 
 import { useVoiceDictationContext } from '../../provider/voice-dictation-provider';
@@ -11,6 +19,21 @@ import AudioFileUploader from '../audio-file-uploader';
 export default function VoiceDictationIntro() {
   const { t } = useTranslation();
   const { setSharedVoiceDictationInfo } = useVoiceDictationContext();
+  const { isAosMicrophonePermission } = useAppSelector(appStateSelector);
+  const confirm = useConfirm();
+
+  const isAos = getPlatform() === ClientType.android;
+  const dispatch = useAppDispatch();
+
+  const errorTrigger = (errorMesaage: MediaErrorContent) => {
+    confirm({
+      title: errorMesaage.title,
+      msg: errorMesaage.msg,
+      onOk: {
+        text: t(`Confirm`)
+      }
+    });
+  };
 
   const handleMoveToFileReady = () => {
     setSharedVoiceDictationInfo((prev) => ({
@@ -19,27 +42,51 @@ export default function VoiceDictationIntro() {
     }));
   };
 
-  const checkPermission = async () => {
-    console.log('AOS 핸들러 호출 로직!');
+  const checkAosPermission = async () => {
+    dispatch(activeLoadingSpinner());
     await Bridge.callBridgeApi('getAudioPermission');
+    await Bridge.callBridgeApi('getRecordingState', true);
+
+    return;
+  };
+
+  const checkNonAosPermission = async () => {
+    if (!isAos) {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+      console.log('checkNonAosPermission-stream', stream);
+    }
+    await Bridge.callBridgeApi('getRecordingState', true);
+    setSharedVoiceDictationInfo((prev) => ({
+      ...prev,
+      componentType: 'AUDIO_RECORDER',
+      isVoiceRecording: true
+    }));
   };
 
   const startRecording = async () => {
     try {
-      if (getPlatform() === ClientType.android) {
-        checkPermission();
-      }
-      await navigator.mediaDevices.getUserMedia({ audio: true });
-      await Bridge.callBridgeApi('getRecordingState', true);
-      setSharedVoiceDictationInfo((prev) => ({
-        ...prev,
-        componentType: 'AUDIO_RECORDER'
-      }));
-    } catch (e) {
-      console.log('123123', e);
+      // AOS의 경우에는 permission 여부를 파악한 후 팝업을 띄울지 말지 결정한다.
+      const isExecuteAosPermission = isAos && isAosMicrophonePermission === false;
+
+      isExecuteAosPermission ? await checkAosPermission() : await checkNonAosPermission();
+    } catch (error) {
+      const mediaError = error as MediaError;
+      const errorMesaage = MEDIA_ERROR_MESSAGES[mediaError.name];
+      // 에러 타입에 맞는 팝업을 띄우면 된다.
+      console.log(mediaError);
+      console.log(mediaError.name);
+      console.log('errorMesaage', errorMesaage);
+      errorTrigger(errorMesaage);
+
       await Bridge.callBridgeApi('getRecordingState', false);
     }
   };
+
+  useEffect(() => {
+    if (isAosMicrophonePermission) {
+      startRecording();
+    }
+  }, [isAosMicrophonePermission]);
 
   return (
     <Guide>
