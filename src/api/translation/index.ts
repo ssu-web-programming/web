@@ -58,6 +58,9 @@ const translationHttp = {
   },
   postCheckTranslateStatus: async ({ translateId }: { translateId: string }) => {
     const { res } = await apiWrapper().request(NOVA_TRANSLATE_DOCUMENT_CHECK_STATUS, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
       method: 'POST',
       body: JSON.stringify({ translateId })
     });

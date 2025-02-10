@@ -15,7 +15,6 @@ import improvedResIcon from '../../img/common/nova/imgSample/image_upscaling_sam
 import perplexityIcon from '../../img/common/nova/imgSample/perplexity_sample.svg';
 import { ReactComponent as IconConvert } from '../../img/light/nova/tab/convert_Img.svg';
 import { announceInfoSelector } from '../../store/slices/nova/announceSlice';
-import { novaChatModeSelector } from '../../store/slices/nova/novaHistorySlice';
 import { selectTabSlice } from '../../store/slices/tabSlice';
 import { useAppSelector } from '../../store/store';
 import Announcement from '../Announcement';
@@ -88,7 +87,6 @@ interface GuideProps {
 export const Guide = (props: GuideProps) => {
   const { t } = useTranslation();
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
-  const chatMode = useAppSelector(novaChatModeSelector);
   const announceInfo = useAppSelector(announceInfoSelector(selectedNovaTab));
 
   const iconMap: Record<NOVA_TAB_TYPE, string> = {

@@ -1,11 +1,12 @@
 import { Guide } from 'components/nova/Guide';
+import GuideBox from 'components/nova/guide-box';
 import { NOVA_TAB_TYPE } from 'constants/novaTapTypes';
 import { useTranslation } from 'react-i18next';
+import styled from 'styled-components';
 import Bridge, { ClientType, getPlatform } from 'util/bridge';
 
 import { useVoiceDictationContext } from '../../provider/voice-dictation-provider';
 import AudioFileUploader from '../audio-file-uploader';
-import RecognizedLang from '../recognized-lang';
 
 export default function VoiceDictationIntro() {
   const { t } = useTranslation();
@@ -38,7 +39,11 @@ export default function VoiceDictationIntro() {
 
   return (
     <Guide onClick={startRecording}>
-      <RecognizedLang />
+      {/* <RecognizedLang /> */}
+      {/* <VoiceRealtimeDictation /> */}
+      <S.BoxWrapper>
+        <GuideBox guideTitle="실시간 받아쓰기" guideMsg={'최대 30분 가능합니다.'} />
+      </S.BoxWrapper>
       <AudioFileUploader
         guideMsg={t('Nova.voiceDictation.Guide.UploadGuide')}
         curTab={NOVA_TAB_TYPE.voiceDictation}
@@ -49,3 +54,18 @@ export default function VoiceDictationIntro() {
     </Guide>
   );
 }
+
+const S = {
+  BoxWrapper: styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    height: 78px;
+    padding: 16px;
+    border-radius: 8px;
+    background-color: var(--white);
+    border: 1px dashed var(--gray-gray-40);
+  `
+};

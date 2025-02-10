@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import FileButton from 'components/FileButton';
 import { getAccept } from 'components/nova/FileUploader';
+import GuideBox from 'components/nova/guide-box';
 import { AUDIO_SUPPORT_TYPE } from 'constants/fileTypes';
 import { NOVA_TAB_TYPE } from 'constants/novaTapTypes';
 import { ReactComponent as UploadDarkIcon } from 'img/dark/ico_upload_img_plus.svg';
@@ -15,89 +16,7 @@ import { formatDuration, getAudioDuration } from 'util/getAudioDuration';
 
 import { useVoiceDictationContext } from '../../provider/voice-dictation-provider';
 
-const Wrap = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  height: 206px;
-  padding: 0 16px;
-  border-radius: 8px;
-  background-color: ${({ theme }) => theme.color.background.gray01};
-  border: 1px dashed ${({ theme }) => theme.color.border.gray01};
-`;
-
-const ImageBox = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-`;
-
-const Icon = styled.div<{ disable: boolean }>`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  svg {
-    width: 48px;
-    height: 48px;
-
-    cursor: ${(props) => (props.disable ? 'initial' : 'pointer')};
-    color: ${(props) => (props.disable ? '#454c5380' : 'var(--gray-gray-80-02)')};
-  }
-
-  span {
-    font-size: 16px;
-    font-weight: 700;
-    line-height: 24px;
-    color: ${({ theme }) => theme.color.text.subGray03};
-  }
-`;
-
-const Credit = styled.div`
-  height: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  padding: 2px 2px 2px 12px;
-  background: ${({ theme }) => theme.color.background.gray02};
-  border-radius: 999px;
-
-  .img {
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  span {
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    font-weight: 700;
-    padding-bottom: 2px;
-    color: ${({ theme }) => theme.color.text.subGray03};
-  }
-`;
-
-const Guide = styled.div`
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 21px;
-  color: #9ea4aa;
-  white-space: pre-wrap;
-  text-align: center;
-`;
+import * as S from './style';
 
 interface ImageUploaderProps {
   guideMsg: string;
@@ -146,7 +65,7 @@ export default function AudioFileUploader({
   };
 
   return (
-    <Wrap>
+    <S.Wrap>
       <FileButton
         target={target}
         accept={getAccept(AUDIO_SUPPORT_TYPE)}
@@ -157,20 +76,8 @@ export default function AudioFileUploader({
           await audioDuration(files[0]);
           onNext?.();
         }}>
-        <ImageBox>
-          <Icon disable={isAgreed === undefined}>
-            {isLightMode ? <UploadFileLightIcon /> : <UploadDarkIcon />}
-            <span>음성 녹음 파일 업로드</span>
-          </Icon>
-          <Credit>
-            <span>{creditCount}</span>
-            <div className="img">
-              <img src={CreditIcon} alt="credit" />
-            </div>
-          </Credit>
-          <Guide>{guideMsg}</Guide>
-        </ImageBox>
+        <GuideBox guideMsg={guideMsg} guideTitle="음성 녹음 파일 업로드" />
       </FileButton>
-    </Wrap>
+    </S.Wrap>
   );
 }
