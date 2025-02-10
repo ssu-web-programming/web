@@ -9,7 +9,7 @@ export interface TranslateResult {
   translatedText: string;
 }
 
-interface SharedTranslation extends TranslateResult {
+export interface SharedTranslation extends TranslateResult {
   componentType: ComponentType;
   translateInputValue: string;
 
@@ -22,6 +22,7 @@ interface SharedTranslation extends TranslateResult {
   sourceLang: string;
   targetLang: string;
   LangType: LangType;
+  isSwitchActive: boolean;
 }
 
 interface TranslationContextType {
@@ -43,6 +44,7 @@ export const useTranslationContext = () => {
   return context;
 };
 
+// 호진FIXME: 아래 하나의 state로 관리되는 부분을 hook을 통해 관심사별로 분리하면 좋을 듯
 export function TranslationProvider({ children }: Props) {
   // 비슷한 조건별로 state를 쪼게면 좋을 듯
   const [sharedTranslationInfo, setSharedTranslationInfo] = useState<SharedTranslation>({
@@ -62,7 +64,9 @@ export function TranslationProvider({ children }: Props) {
     // 언어 BottomSheet
     sourceLang: 'KO',
     targetLang: 'EN-US',
-    LangType: 'source'
+    // 필요없으면 제거해도 괜찮을 것 같음
+    LangType: 'source',
+    isSwitchActive: true
   });
 
   const triggerLoading = () => {

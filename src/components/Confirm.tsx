@@ -124,7 +124,7 @@ const Confirm = () => {
     if (isChecked) {
       setCookie('creditGuide', String(isChecked));
     }
-    onOk.callback();
+    onOk?.callback?.();
   };
 
   const handleCancel = () => {
@@ -178,7 +178,7 @@ const Confirm = () => {
               font-weight: 500;
               flex: 2;
             `}>
-            {onOk.text}
+            {onOk?.text}
           </Button>
           {onCancel && (
             <Button
@@ -207,10 +207,11 @@ const Confirm = () => {
 export default Confirm;
 
 export function useConfirm() {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
   return function ({
-    title,
+    title = '',
     msg,
     onOk,
     onCancel,
@@ -219,7 +220,7 @@ export function useConfirm() {
   }: ConfirmType): Promise<boolean> {
     return new Promise((resolve) => {
       const handleOk = () => {
-        onOk.callback();
+        onOk?.callback?.();
         dispatch(initConfirm());
         resolve(true);
       };
@@ -237,11 +238,11 @@ export function useConfirm() {
           direction,
           neverShowAgain,
           onOk: {
-            text: onOk.text,
+            text: onOk?.text || t('Confirm'),
             callback: handleOk
           },
           onCancel: onCancel && {
-            text: onCancel.text,
+            text: onCancel.text || t('Cancel'),
             callback: handleCancel
           }
         })

@@ -1,23 +1,40 @@
-import { useEffect, useMemo, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
 import ModalSheet from 'components/modalSheet';
-import { TARGET_LANGUAGES } from 'constants/translation-text';
+import {
+  SOURCE_LANGUAGES_WITH_LANG_CODE,
+  TARGET_LANGUAGES_WITH_LANG_CODE
+} from 'constants/translation-text';
 import { ReactComponent as SearchIcon } from 'img/light/nova/translation/search.svg';
 import getInitialConsonant from 'util/getInitialConsonant';
 
-import { LangType } from '../../provider/translation-provider';
+import useLangSearch from '../../hooks/use-lang-search';
+import { LangType, SharedTranslation } from '../../provider/translation-provider';
 import LanguageItemList from '../language-item-list';
 
 import * as S from './style';
 
 interface Props {
   isOpen: boolean;
-  setIsOpen: () => void;
+  close: () => void;
   langType: LangType;
+  setSharedTranslationInfo: Dispatch<SetStateAction<SharedTranslation>>;
 }
 
-export default function LanguageSearch({ isOpen, setIsOpen, langType }: Props) {
+export interface Language {
+  langCode: string;
+  lang: string;
+}
+
+export default function LanguageSearch({
+  isOpen,
+  close,
+  langType,
+  setSharedTranslationInfo
+}: Props) {
+  const initialLanguages =
+    langType === 'source' ? SOURCE_LANGUAGES_WITH_LANG_CODE : TARGET_LANGUAGES_WITH_LANG_CODE;
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [filteredLanguages, setFilteredLanguages] = useState(TARGET_LANGUAGES);
+  const { latestLangList } = useLangSearch(langType);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -25,35 +42,33 @@ export default function LanguageSearch({ isOpen, setIsOpen, langType }: Props) {
   };
 
   // 검색 결과 필터링
-  const filteredResults = useMemo(() => {
+  const filteredLanguages = useMemo(() => {
     const searchValue = searchTerm.toLowerCase();
 
-    return TARGET_LANGUAGES.filter((language) => {
+    return initialLanguages.filter((language) => {
+      const { lang, langCode } = language;
+
       // 1. 일반 검색 (대소문자 구분 없이)
-      const normalMatch = language.toLowerCase().includes(searchValue);
+      const normalMatch = lang.toLowerCase().includes(searchValue);
 
       // 2. 초성 검색
-      const initialConsonant = getInitialConsonant(language);
+      const initialConsonant = getInitialConsonant(lang);
       const consonantMatch = initialConsonant.includes(searchTerm);
 
       // 3. 영어 검색 (예: '영어' 또는 'english')
       const englishMatch =
-        language.toLowerCase().includes(searchValue) ||
-        language.toLowerCase().replace('어', '').includes(searchValue);
+        lang.toLowerCase().includes(searchValue) ||
+        lang.toLowerCase().replace('어', '').includes(searchValue);
 
-      return normalMatch || consonantMatch || englishMatch;
+      // 4. 언어 코드 검색 (예: 'EN', 'KO')
+      const langCodeMatch = langCode.toLowerCase().includes(searchValue);
+
+      return normalMatch || consonantMatch || englishMatch || langCodeMatch;
     });
-  }, [searchTerm]);
-
-  // 검색 결과 업데이트
-  useEffect(() => {
-    setFilteredLanguages(filteredResults);
-  }, [filteredResults]);
-
-  console.log('filteredResults', filteredResults);
+  }, [searchTerm, initialLanguages]);
 
   return (
-    <ModalSheet isOpen={isOpen} setIsOpen={setIsOpen} snapPoints={[0.8]} initialSnap={0}>
+    <ModalSheet isOpen={isOpen} setIsOpen={close} snapPoints={[0.8]} initialSnap={0}>
       <S.Wrapper>
         <S.Title>{langType === 'source' ? '원본 언어' : '번역될 언어'}</S.Title>
         <S.InputWrapper>
@@ -62,8 +77,11 @@ export default function LanguageSearch({ isOpen, setIsOpen, langType }: Props) {
         </S.InputWrapper>
 
         <LanguageItemList
-          title={searchTerm ? '검색 결과' : '모든 언어'}
           langList={filteredLanguages}
+          latestLangList={latestLangList}
+          langType={langType}
+          setSharedTranslationInfo={setSharedTranslationInfo}
+          close={close}
         />
       </S.Wrapper>
     </ModalSheet>

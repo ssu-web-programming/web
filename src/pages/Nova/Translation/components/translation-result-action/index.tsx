@@ -3,11 +3,12 @@ import { useCopyToClipboard } from 'components/hooks/useCopyToClipboard';
 import copyIcon from 'img/light/nova/translation/copy.svg';
 import insertDocIcon from 'img/light/nova/translation/insert_docs.svg';
 import { useTranslation } from 'react-i18next';
+import { insertDoc } from 'util/common';
 
 import * as S from './style';
 
 interface Props {
-  translatedLang: string;
+  translatedLang?: string;
   isCopyAction?: boolean;
   isInsertDocAction?: boolean;
   translatedValue: string;
@@ -26,8 +27,9 @@ export default function TranslationResultAction({
     {
       name: t('Nova.Chat.InsertDoc.Title'),
       iconSrc: insertDocIcon,
-      clickHandler: () => {
-        console.log('123');
+      clickHandler: async () => {
+        await insertDoc(translatedValue);
+        console.log('문서에 삽입!');
       },
       isActive: isInsertDocAction
     },

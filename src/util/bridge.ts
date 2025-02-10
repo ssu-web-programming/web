@@ -115,7 +115,7 @@ export async function fileToString(file: Blob) {
   });
 }
 
-const callApi = (api: ApiType, arg?: string | number) => {
+const callApi = (api: ApiType, arg?: string | number | object | boolean) => {
   try {
     const platform = getPlatform();
     switch (platform) {
@@ -785,14 +785,14 @@ const Bridge = {
     api: ApiType,
     arg?: T
   ) => {
-    let apiArg: string | number | undefined;
+    let apiArg: any;
 
     if (arg) {
       if (arg instanceof Blob) {
         apiArg = await fileToString(arg);
       } else if (typeof arg === 'object') {
         apiArg = JSON.stringify(arg);
-      } else if (typeof arg === 'string' || typeof arg === 'number') {
+      } else {
         apiArg = arg;
       }
     }

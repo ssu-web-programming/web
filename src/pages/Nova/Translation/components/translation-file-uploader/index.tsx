@@ -1,24 +1,15 @@
-import { useEffect, useRef } from 'react';
-import { useConfirm } from 'components/Confirm';
-import useErrorHandle from 'components/hooks/useErrorHandle';
+import { useRef } from 'react';
 import { FileUploader } from 'components/nova/FileUploader';
-import {
-  compressImage,
-  isPixelLimitExceeded,
-  SUPPORT_DOCUMENT_TYPE,
-  SUPPORT_IMAGE_TYPE
-} from 'constants/fileTypes';
+import { SUPPORT_IMAGE_TYPE } from 'constants/fileTypes';
 import { ReactComponent as UploadDarkIcon } from 'img/dark/ico_upload_img_plus.svg';
 import CreditIcon from 'img/light/ico_credit_gray.svg';
 import { ReactComponent as UploadFileLightIcon } from 'img/light/nova/translation/file_upload.svg';
-import { useTranslation } from 'react-i18next';
-import { selectPageData, setPageData, setPageStatus } from 'store/slices/nova/pageStatusSlice';
+import { selectPageData } from 'store/slices/nova/pageStatusSlice';
 import { themeInfoSelector } from 'store/slices/theme';
 import { getDriveFiles, getLocalFiles } from 'store/slices/uploadFiles';
 import { userInfoSelector } from 'store/slices/userInfo';
-import { useAppDispatch, useAppSelector } from 'store/store';
+import { useAppSelector } from 'store/store';
 import styled from 'styled-components';
-import { convertDriveFileToFile } from 'util/files';
 
 import { NOVA_TAB_TYPE } from '../../../../../constants/novaTapTypes';
 import FileItem from '../file-item';
@@ -108,22 +99,16 @@ const Guide = styled.div`
 
 interface ImageUploaderProps {
   guideMsg: string;
-  handleUploadComplete: () => void;
   curTab: NOVA_TAB_TYPE;
   creditCount?: number;
 }
 
 export default function TranslationFileUploader({
   guideMsg,
-  handleUploadComplete,
   curTab,
   creditCount = 10
 }: ImageUploaderProps) {
-  // const { t } = useTranslation();
-  // const confirm = useConfirm();
   const inputImgFileRef = useRef<HTMLInputElement | null>(null);
-  // const dispatch = useAppDispatch();
-  // const errorHandle = useErrorHandle();
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
   const localFiles = useAppSelector(getLocalFiles);
@@ -137,88 +122,10 @@ export default function TranslationFileUploader({
     return currentFile || null;
   };
 
-  console.log('currentFile', currentFile);
-  console.log('localFiles', localFiles);
-  console.log('driveFiles', driveFiles);
-
-  // const isSpecificFormat = (file: File) => {
-  //   console.log('file', file);
-  //   const extension = file?.name?.split('.').pop()?.toLowerCase();
-  //   return extension === 'mp4' || extension === 'gif' || extension === 'bmp';
-  // };
-
-  // const getSelectedFile = async () => {
-  //   if (localFiles[0]) return localFiles[0];
-  //   if (driveFiles[0]) {
-  //     try {
-  //       return await convertDriveFileToFile(driveFiles[0]);
-  //     } catch (err) {
-  //       errorHandle(err);
-  //       return null;
-  //     }
-  //   }
-  //   return null;
-  // };
-
-  // const handleFileProcessing = async () => {
-  //   console.log('여기 돌아여?');
-  //   dispatch(setPageStatus({ tab: curTab, status: 'progress' }));
-
-  //   const selectedFile = await getSelectedFile();
-  //   if (!selectedFile) {
-  //     dispatch(setPageStatus({ tab: curTab, status: 'home' }));
-  //     return;
-  //   }
-
-  //   try {
-  //     let fileData: File = selectedFile;
-
-  //     if (isSpecificFormat(selectedFile)) {
-  //       if (await isPixelLimitExceeded(selectedFile, curTab)) {
-  //         console.log('alert!!');
-
-  //         await confirm({
-  //           title: '',
-  //           msg: `${t('Nova.Confirm.OverMaxFilePixel')}\n\n${t(
-  //             `Nova.${NOVA_TAB_TYPE.removeBG}.AllowImageSize`
-  //           )}`,
-  //           onOk: {
-  //             text: t('OK'),
-  //             callback: () => {
-  //               return;
-  //             }
-  //           }
-  //         });
-  //       }
-  //     } else {
-  //       fileData = await compressImage(selectedFile, curTab);
-  //     }
-
-  //     dispatch(
-  //       setPageData({
-  //         tab: curTab,
-  //         data: fileData
-  //       })
-  //     );
-  //     dispatch(setPageStatus({ tab: curTab, status: 'home' }));
-  //   } catch (err) {
-  //     dispatch(setPageStatus({ tab: curTab, status: 'home' }));
-  //     errorHandle(err);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (currentFile) {
-  //     handleUploadComplete();
-  //   } else {
-  //     handleFileProcessing();
-  //   }
-  // }, [localFiles, driveFiles, currentFile, curTab]);
-
   return (
     <Wrap>
       {getActiveFile() ? (
-        <FileItem file={getActiveFile()} />
+        <FileItem fileName={getActiveFile()?.name} />
       ) : (
         <FileUploader
           type="file"

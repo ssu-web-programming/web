@@ -7,9 +7,8 @@ import { selectPageData } from 'store/slices/nova/pageStatusSlice';
 import { getDriveFiles, getLocalFiles } from 'store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import { css } from 'styled-components';
-import Bridge from 'util/bridge';
+import Bridge, { ClientType, getPlatform } from 'util/bridge';
 
-import { NOVA_TAB_TYPE } from '../../../../../constants/novaTapTypes';
 import { useTranslationContext } from '../../provider/translation-provider';
 import FileItem from '../file-item';
 
@@ -30,9 +29,6 @@ interface DownloadFileArgs {
 
 export default function TranslationFileResult() {
   const dispatch = useAppDispatch();
-  const currentFile = useAppSelector(selectPageData(NOVA_TAB_TYPE.voiceDictation));
-  const localFiles = useAppSelector(getLocalFiles);
-  const driveFiles = useAppSelector(getDriveFiles);
 
   const {
     sharedTranslationInfo: {
@@ -44,11 +40,6 @@ export default function TranslationFileResult() {
     }
   } = useTranslationContext();
 
-  console.log('currentFile', currentFile);
-  console.log('localFiles', localFiles);
-  console.log('driveFiles', driveFiles);
-
-  // 호진FIXME: 만들어진 url로 다운로드가 가능하게만 변경하기 ( 원본-번역 비교보기 )
   const handleCompareSourceAndTranslation = async () => {
     dispatch(activeLoadingSpinner());
 
@@ -56,22 +47,17 @@ export default function TranslationFileResult() {
       originalFileType,
       originalFileName,
       originFile,
-      translationFileName: translationFileName || '임의로 저장된 파일 이름',
-      translationFileUrl:
-        translationFileUrl ||
-        'https://vf-berlin.polarisoffice.com/nova/storage/translate/0d80c4d8-2584-4675-bae6-7888598b932b/template.docx'
+      translationFileName,
+      translationFileUrl
     });
   };
 
-  // 호진FIXME: 만들어진 url로 다운로드가 가능하게만 변경하기 ( 저장하기 )
   const handleDownloadFile = async () => {
     dispatch(activeLoadingSpinner());
 
     await Bridge.callBridgeApi<DownloadFileArgs>('downloadFile', {
-      fileName: translationFileName || '임의로 저장된 파일 이름',
-      url:
-        translationFileUrl ||
-        'https://vf-berlin.polarisoffice.com/nova/storage/translate/0d80c4d8-2584-4675-bae6-7888598b932b/template.docx'
+      fileName: translationFileName,
+      url: translationFileUrl
     });
   };
 
@@ -86,24 +72,26 @@ export default function TranslationFileResult() {
         <p>저장하고 바로 번역된 내용을 확인해보세요!</p>
       </S.SubTitle>
       <S.FileItemWrapper>
-        {/* 호진FIXME: 해당 부분 수정 필요함! */}
-        <FileItem file={currentFile as File} />
+        <FileItem fileName={translationFileName} />
       </S.FileItemWrapper>
       <S.ButtonGroup>
-        <IconTextButton
-          width={'full'}
-          height={48}
-          borderType="gray"
-          onClick={handleCompareSourceAndTranslation}
-          iconSrc={compareViewerIcon}
-          iconPos={'left'}
-          iconSize={24}
-          cssExt={css`
-            border-radius: 8px;
-            font-size: 15px;
-          `}>
-          원본-번역 비교 보기
-        </IconTextButton>
+        {(getPlatform() === ClientType.windows || getPlatform() === ClientType.mac) && (
+          <IconTextButton
+            width={'full'}
+            height={48}
+            borderType="gray"
+            onClick={handleCompareSourceAndTranslation}
+            iconSrc={compareViewerIcon}
+            iconPos={'left'}
+            iconSize={24}
+            cssExt={css`
+              border-radius: 8px;
+              font-size: 15px;
+            `}>
+            원본-번역 비교 보기
+          </IconTextButton>
+        )}
+
         <IconTextButton
           width={'full'}
           height={48}
