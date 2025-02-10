@@ -3,9 +3,7 @@ import { ReactComponent as CheckLightIcon } from 'img/light/nova/check_purple.sv
 import compareViewerIcon from 'img/light/nova/translation/book.svg';
 import downloadIcon from 'img/light/nova/translation/download.svg';
 import { activeLoadingSpinner } from 'store/slices/loadingSpinner';
-import { selectPageData } from 'store/slices/nova/pageStatusSlice';
-import { getDriveFiles, getLocalFiles } from 'store/slices/uploadFiles';
-import { useAppDispatch, useAppSelector } from 'store/store';
+import { useAppDispatch } from 'store/store';
 import { css } from 'styled-components';
 import Bridge, { ClientType, getPlatform } from 'util/bridge';
 

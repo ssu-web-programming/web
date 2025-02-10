@@ -4,6 +4,7 @@ import { ReactComponent as MessagePlusDarkIcon } from 'img/dark/ico_message_plus
 import { ReactComponent as CloseDarkIcon } from 'img/dark/ico_nova_close.svg';
 import { ReactComponent as MessagePlusLightIcon } from 'img/light/ico_message_plus.svg';
 import { ReactComponent as CloseLightIcon } from 'img/light/ico_nova_close.svg';
+import { useVoiceDictationContext } from 'pages/Nova/VoiceDictation/provider/voice-dictation-provider';
 import { Trans, useTranslation } from 'react-i18next';
 import { initFlagSelector } from 'store/slices/initFlagSlice';
 
@@ -62,6 +63,8 @@ export default function NovaHeader(props: NovaHeaderProps) {
   const { isExternal } = useAppSelector(appStateSelector);
   const chatMode = useAppSelector(novaChatModeSelector);
   const { handleClearPastedImages } = useClipboard();
+
+  const { resetVoiceInfo } = useVoiceDictationContext();
 
   const CREDIT_NAME_MAP: {
     [category: string]:
@@ -245,6 +248,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
       dispatch(setPageData({ tab: selectedNovaTab, data: null }));
       dispatch(setPageResult({ tab: selectedNovaTab, result: null }));
       dispatch(selectNovaTab(NOVA_TAB_TYPE.home));
+      resetVoiceInfo();
       Bridge.callBridgeApi('curNovaTab', NOVA_TAB_TYPE.home);
     }
   };

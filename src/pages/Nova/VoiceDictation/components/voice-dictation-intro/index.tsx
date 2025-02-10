@@ -19,11 +19,15 @@ export default function VoiceDictationIntro() {
     }));
   };
 
+  const checkPermission = async () => {
+    console.log('AOS 핸들러 호출 로직!');
+    await Bridge.callBridgeApi('getAudioPermission');
+  };
+
   const startRecording = async () => {
     try {
       if (getPlatform() === ClientType.android) {
-        console.log('AOS 핸들러 호출 로직!');
-        await Bridge.callBridgeApi('getAudioPermission', true);
+        checkPermission();
       }
       await navigator.mediaDevices.getUserMedia({ audio: true });
       await Bridge.callBridgeApi('getRecordingState', true);
@@ -39,8 +43,6 @@ export default function VoiceDictationIntro() {
 
   return (
     <Guide>
-      {/* <RecognizedLang /> */}
-      {/* <VoiceRealtimeDictation /> */}
       <S.BoxWrapper onClick={startRecording}>
         <GuideBox guideTitle="실시간 받아쓰기" guideMsg={'최대 30분 가능합니다.'} />
       </S.BoxWrapper>

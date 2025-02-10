@@ -45,6 +45,7 @@ interface VoiceDictationContextType {
   sharedVoiceDictationInfo: SharedVoiceDictationInfo;
   setSharedVoiceDictationInfo: Dispatch<SetStateAction<SharedVoiceDictationInfo>>;
   triggerLoading: () => void;
+  resetVoiceInfo: () => void;
 }
 
 export const VoiceDictationContext = createContext<VoiceDictationContextType | null>(null);
@@ -72,9 +73,22 @@ export default function VoiceDictationProvider({ children }: Props) {
     });
   };
 
+  const resetVoiceInfo = () => {
+    setSharedVoiceDictationInfo({
+      componentType: 'INTRO',
+      voiceDictationResult: null,
+      audioDuration: ''
+    });
+  };
+
   return (
     <VoiceDictationContext.Provider
-      value={{ sharedVoiceDictationInfo, setSharedVoiceDictationInfo, triggerLoading }}>
+      value={{
+        sharedVoiceDictationInfo,
+        setSharedVoiceDictationInfo,
+        triggerLoading,
+        resetVoiceInfo
+      }}>
       {children}
     </VoiceDictationContext.Provider>
   );
