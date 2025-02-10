@@ -4,6 +4,7 @@ import { OverlayProvider } from 'overlay-kit';
 import Nova from 'pages/Nova/Nova';
 import Index from 'pages/Nova/Nova';
 import Translation from 'pages/Nova/Translation';
+import VoiceDictationProvider from 'pages/Nova/VoiceDictation/provider/voice-dictation-provider';
 import { Route, Routes } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 
@@ -82,36 +83,38 @@ function App() {
   }, []);
 
   return (
-    <ThemeProvider theme={selectTheme(curTheme)}>
-      <OverlayProvider>
-        <GlobalStyle />
-        <>
-          <Routes>
-            <Route path="/aiWrite" element={<Tools></Tools>}></Route>
-            <Route path="/txt2img" element={<TextToImage></TextToImage>}></Route>
-            <Route path="/askdoc" element={<AskDoc />} />
-            <Route path="/alli" element={<Alli />} />
-            <Route path="/NOVA" element={<Nova />} />
-            <Route path="/translation" element={<Translation />} />
-            <Route path="/NOVA" element={<Index />} />
-            <Route path="/NOVA/share/:id" element={<ShareChat />} />
-            <Route path="/AskDocStep" element={<AskDocHome />}>
-              <Route index element={<AskDocLoading />} />
-              <Route path="/AskDocStep/CheckDocHistory" element={<CheckDocHistory />} />
-              <Route path="/AskDocStep/ConfirmDoc" element={<ConfirmDoc />} />
-              <Route path="/AskDocStep/ProgressAnalysisDoc" element={<ProgressAnalysisDoc />} />
-              <Route path="/AskDocStep/StartAnalysisDoc" element={<StartAnalysisDoc />} />
-              <Route path="/AskDocStep/Chat" element={<Chat />} />
-            </Route>
-            <Route path="*" element={<InvalidAccess></InvalidAccess>}></Route>
-          </Routes>
-          <Offline />
-          <Toast />
-          <Spinner />
-          <Confirm />
-        </>
-      </OverlayProvider>
-    </ThemeProvider>
+    <VoiceDictationProvider>
+      <ThemeProvider theme={selectTheme(curTheme)}>
+        <OverlayProvider>
+          <GlobalStyle />
+          <>
+            <Routes>
+              <Route path="/aiWrite" element={<Tools></Tools>}></Route>
+              <Route path="/txt2img" element={<TextToImage></TextToImage>}></Route>
+              <Route path="/askdoc" element={<AskDoc />} />
+              <Route path="/alli" element={<Alli />} />
+              <Route path="/NOVA" element={<Nova />} />
+              <Route path="/translation" element={<Translation />} />
+              <Route path="/NOVA" element={<Index />} />
+              <Route path="/NOVA/share/:id" element={<ShareChat />} />
+              <Route path="/AskDocStep" element={<AskDocHome />}>
+                <Route index element={<AskDocLoading />} />
+                <Route path="/AskDocStep/CheckDocHistory" element={<CheckDocHistory />} />
+                <Route path="/AskDocStep/ConfirmDoc" element={<ConfirmDoc />} />
+                <Route path="/AskDocStep/ProgressAnalysisDoc" element={<ProgressAnalysisDoc />} />
+                <Route path="/AskDocStep/StartAnalysisDoc" element={<StartAnalysisDoc />} />
+                <Route path="/AskDocStep/Chat" element={<Chat />} />
+              </Route>
+              <Route path="*" element={<InvalidAccess></InvalidAccess>}></Route>
+            </Routes>
+            <Offline />
+            <Toast />
+            <Spinner />
+            <Confirm />
+          </>
+        </OverlayProvider>
+      </ThemeProvider>
+    </VoiceDictationProvider>
   );
 }
 

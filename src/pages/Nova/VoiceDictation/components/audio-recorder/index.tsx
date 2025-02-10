@@ -99,7 +99,6 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   const chunksRef = useRef<Blob[]>([]);
   const streamRef = useRef<MediaStream | null>(null);
   const intervalRef = useRef<number | null>(null);
-  const audioRef = useRef<HTMLAudioElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationFrameRef = useRef<number | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
@@ -108,6 +107,8 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   const startTimer = useCallback(() => {
     if (intervalRef.current) return;
     (intervalRef.current as any) = setInterval(() => {
+      console.log('mediaRecorderRef', mediaRecorderRef);
+      console.log('chunksRef', chunksRef.current);
       setRecordingTime((prev) => prev + 0.1);
     }, 100);
   }, []);
@@ -154,6 +155,8 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       chunksRef.current = [];
 
       mediaRecorder.ondataavailable = (event) => {
+        console.log('event.data', event.data);
+
         if (event.data.size > 0) {
           chunksRef.current.push(event.data);
         }
@@ -187,6 +190,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       };
 
       mediaRecorder.onstop = async () => {
+        console.log('stop-chunksRef.current', chunksRef.current);
         const blob = new Blob(chunksRef.current, { type: 'audio/mpeg' });
         const url = URL.createObjectURL(blob);
         setAudioUrl(url);
@@ -266,28 +270,6 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
     }
   }, [startTimer]);
 
-  // const handlePlayPause = () => {
-  //   if (audioRef.current) {
-  //     if (isPlaying) {
-  //       audioRef.current.pause();
-  //     } else {
-  //       audioRef.current.play();
-  //     }
-  //     setIsPlaying(!isPlaying);
-  //   }
-  // };
-
-  // const handleDownload = () => {
-  //   if (chunksRef.current.length === 0) return;
-  //   const blob = new Blob(chunksRef.current, { type: 'audio/mp4' });
-  //   const url = URL.createObjectURL(blob);
-  //   const a = document.createElement('a');
-  //   a.href = url;
-  //   a.download = 'recording.mp4';
-  //   a.click();
-  //   URL.revokeObjectURL(url);
-  // };
-
   const formatDuration = (seconds: number): string => {
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
@@ -325,38 +307,6 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       </S.CanvasWrapper>
 
       <S.ButtonGroup>
-        {/* {!isRecording ? (
-          <button
-            onClick={startRecording}
-            className={styles.recordButton}
-            aria-label="Start Recording">
-            <IoMic />
-          </button>
-        ) : (
-          <>
-            <button
-              onClick={stopRecording}
-              className={styles.stopButton}
-              aria-label="Stop Recording">
-              <IoSquare />
-            </button>
-            <button
-              onClick={isPaused ? resumeRecording : pauseRecording}
-              className={isPaused ? styles.resumeButton : styles.pauseButton}
-              aria-label={isPaused ? 'Resume Recording' : 'Pause Recording'}>
-              {isPaused ? <IoPlay /> : <IoPause />}
-            </button>
-          </>
-        )} */}
-
-        {/* <button onClick={stopRecording} aria-label="Stop Recording">
-          <IoSquare />
-        </button>
-        <button
-          onClick={isPaused ? resumeRecording : pauseRecording}
-          aria-label={isPaused ? 'Resume Recording' : 'Pause Recording'}>
-          {isPaused ? <Play /> : <Pause />}
-        </button> */}
         <Lang />
         {isPaused ? (
           <Play width={64} height={64} onClick={resumeRecording} />
@@ -364,25 +314,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
           <Pause width={64} height={64} onClick={pauseRecording} />
         )}
         <Stop onClick={stopRecording} />
-        {/* 
-        {audioUrl && (
-          <>
-            <button onClick={handlePlayPause} aria-label={isPlaying ? 'Pause' : 'Play'}>
-              <Play />
-            </button>
-            <button onClick={handleDownload} aria-label="Download Recording">
-              <IoDownload />
-            </button>
-          </>
-        )} */}
       </S.ButtonGroup>
-
-      {/* {audioUrl && (
-        <>
-          <audio ref={audioRef} src={audioUrl} onEnded={() => setIsPlaying(false)} controls />
-          {audioDuration !== null && <p>녹음 길이: {formatDuration(audioDuration)}</p>}
-        </>
-      )} */}
     </S.Container>
   );
 };
