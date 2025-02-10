@@ -72,7 +72,7 @@ const useTranslationIntro = (translateInputValue: string) => {
       targetLang
     });
 
-    handleMoveToFileResult();
+    // handleMoveToFileResult();
     console.log('submitFileTranslate-response', response);
   };
 

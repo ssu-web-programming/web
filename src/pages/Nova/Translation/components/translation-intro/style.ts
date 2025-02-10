@@ -160,46 +160,7 @@ const FileUploaderWrapper = styled.div`
   border-bottom: 1px solid #e8ebed;
 `;
 
-const ButtonWrap = styled.div<{ $isActive: boolean }>`
-  width: 100%;
-  height: 48px;
-  min-height: 48px;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 24px 0;
-  background: ${({ $isActive, theme }) =>
-    $isActive ? 'var(--ai-purple-50-main)' : theme.color.background.gray02};
-
-  cursor: ${(props) => (props.$isActive ? 'pointer' : 'default')};
-
-  border-radius: 8px;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-
-  & > span {
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 24px;
-    color: ${({ $isActive }) => ($isActive ? '#fff' : '#9ea4aa')};
-  }
-
-  div {
-    display: flex;
-    position: absolute;
-    right: 12px;
-    align-items: center;
-    gap: 2px;
-
-    & > span {
-      font-size: 14px;
-      color: ${({ $isActive }) => ($isActive ? '#fff' : '#9ea4aa')};
-    }
-  }
-`;
-
 export {
-  ButtonWrap,
   CloseIconWrapper,
   FileUploaderWrapper,
   StyledTransFile,

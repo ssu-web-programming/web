@@ -108,14 +108,12 @@ const Guide = styled.div`
 
 interface ImageUploaderProps {
   guideMsg: string;
-  handleUploadComplete: () => void;
   curTab: NOVA_TAB_TYPE;
   creditCount?: number;
 }
 
 export default function TranslationFileUploader({
   guideMsg,
-  handleUploadComplete,
   curTab,
   creditCount = 10
 }: ImageUploaderProps) {
@@ -132,12 +130,6 @@ export default function TranslationFileUploader({
 
     return currentFile || null;
   };
-
-  console.log('currentFile', currentFile);
-  console.log('localFiles', localFiles);
-  console.log('driveFiles', driveFiles);
-
-  console.log('inputImgFileRef', inputImgFileRef);
 
   return (
     <Wrap>

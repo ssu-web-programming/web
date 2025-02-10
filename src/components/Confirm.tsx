@@ -207,6 +207,7 @@ const Confirm = () => {
 export default Confirm;
 
 export function useConfirm() {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
   return function ({
@@ -237,11 +238,11 @@ export function useConfirm() {
           direction,
           neverShowAgain,
           onOk: {
-            text: onOk?.text || '확인',
+            text: onOk?.text || t('Confirm'),
             callback: handleOk
           },
           onCancel: onCancel && {
-            text: onCancel.text || '취소',
+            text: onCancel.text || t('Cancel'),
             callback: handleCancel
           }
         })

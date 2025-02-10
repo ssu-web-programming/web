@@ -1,12 +1,9 @@
 import { useState } from 'react';
-import translationHttp from 'api/translation';
-import CreditColorDisabledIcon from 'img/light/credit_color_outline.svg';
-import CreditColorIcon from 'img/light/ico_credit_color_outline.svg';
+import ButtonWithCredit from 'components/buttons/button-with-credit';
 import { ReactComponent as CloseLightIcon } from 'img/light/ico_nova_close.svg';
 import { ReactComponent as ArrowIcon } from 'img/light/nova/translation/arrow_down.svg';
 import { ReactComponent as DeepL } from 'img/light/nova/translation/deepl_logo.svg';
 import { ReactComponent as Switch } from 'img/light/nova/translation/switch.svg';
-import { overlay } from 'overlay-kit';
 import { useTranslation } from 'react-i18next';
 import { activeToast } from 'store/slices/toastSlice';
 import { useAppDispatch } from 'store/store';
@@ -114,7 +111,6 @@ export default function TranslationIntro() {
                 guideMsg={t('Nova.Translate.UploadGuide')}
                 creditCount={20}
                 curTab={NOVA_TAB_TYPE.convert2DTo3D}
-                handleUploadComplete={() => console.log('123')}
               />
             </DragAndDrop>
           </S.FileUploaderWrapper>
@@ -126,24 +122,11 @@ export default function TranslationIntro() {
         </S.TextAreaBottom>
       </S.TextAreaWrapper>
 
-      <S.ButtonWrap
+      <ButtonWithCredit
+        text="번역하기"
+        isActive={translateInputValue.length > 0 || isTranslateActive}
         onClick={handleTranslate}
-        $isActive={translateInputValue.length > 0 || isTranslateActive}>
-        <span>번역하기</span>
-        <div>
-          <img
-            src={
-              translateInputValue.length > 0 || isTranslateActive
-                ? CreditColorIcon
-                : CreditColorDisabledIcon
-            }
-            alt="credit"
-            width={20}
-            height={20}
-          />
-          <span>20</span>
-        </div>
-      </S.ButtonWrap>
+      />
     </>
   );
 }

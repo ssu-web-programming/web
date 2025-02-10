@@ -1,4 +1,5 @@
 import React, { RefObject, useState } from 'react';
+import useCurrentDocAnalysis from 'components/hooks/use-current-doc-analysis';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -62,16 +63,17 @@ export const FileUploader = (props: FileUploaderProps) => {
     onFinish,
     onClearPastedImages,
     type = 'image',
-    maxFileSize = 30
+    maxFileSize = 30 * 1024 * 1024
   } = props;
 
-  const { loadLocalFile, getFileInfo, validateFileUpload } = useManageFile({
+  const { loadLocalFile, validateFileUpload } = useManageFile({
     onFinishCallback: onFinish,
     onClearPastedImages
   });
 
+  const { analysisCurDoc } = useCurrentDocAnalysis();
+
   const { t } = useTranslation();
-  const dispatch = useAppDispatch();
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const confirm = useConfirm();
   const chatNova = useChatNova();
@@ -169,8 +171,9 @@ export const FileUploader = (props: FileUploaderProps) => {
     }
 
     const supportedExtensions = SUPPORT_DOCUMENT_TYPE.flatMap((type) => type.extensions);
+
     if (
-      target === 'nova-file' &&
+      (target === 'nova-file' || 'nova-translation') &&
       (currentFile.type === 'notSupported' ||
         (['drive', 'local'].includes(currentFile.type) &&
           supportedExtensions.includes(`.${currentFile.ext}`)))
@@ -185,122 +188,6 @@ export const FileUploader = (props: FileUploaderProps) => {
     }
 
     return options;
-  };
-
-  const analysisCurDoc = async () => {
-    if (isAgreed) {
-      setUploadTarget(target);
-    }
-
-    const uploadLimit = calcAvailableFileCnt(selectedNovaTab);
-    if (uploadLimit === 0) {
-      setIsOpen(false);
-      await confirm({
-        title: '',
-        msg: t('Index.Confirm.OverMaxFileUploadCnt', {
-          max: getAvailableFileCnt(selectedNovaTab)
-        })!,
-        onOk: { text: t('Index.Confirm.NewChat.StartNewChat'), callback: chatNova.newChat },
-        onCancel: {
-          text: t('Cancel'),
-          callback: () => {
-            dispatch(setCreating('none'));
-          }
-        }
-      });
-      return;
-    }
-
-    if (currentFile.type === 'notSupported') {
-      await confirm({
-        title: '',
-        msg: t('Nova.Alert.UnopenableDocError', { max: getAvailableFileCnt(selectedNovaTab) })!,
-        onOk: {
-          text: t('Confirm'),
-          callback: () => {
-            dispatch(setCreating('none'));
-          }
-        }
-      });
-    } else if (currentFile.type === 'drive') {
-      if (Number(currentFile.id) === -1) {
-        await confirmSaveDoc(true);
-      } else if (currentFile.isSaved) {
-        dispatch(setCreating('NOVA'));
-        dispatch(setLocalFiles([]));
-        dispatch(setDriveFiles([]));
-
-        dispatch(setLoadingFile({ id: currentFile.id }));
-        const curFile = await getFileInfo(currentFile.id);
-        dispatch(removeLoadingFile());
-
-        dispatch(setDriveFiles([curFile]));
-        dispatch(setCreating('none'));
-      } else {
-        await confirmSaveDoc(false);
-      }
-    } else if (currentFile.type === 'local') {
-      await confirmUploadFile();
-    }
-  };
-
-  const confirmSaveDoc = async (isCancel: boolean) => {
-    await confirm({
-      title: '',
-      msg:
-        platform === ClientType.web || platform === 'unknown'
-          ? t('Index.Confirm.NotSavedFileInWeb.Msg')
-          : t('Index.Confirm.NotSavedFile.Msg'),
-      onOk: {
-        text: t('Index.Confirm.NotSavedFile.Ok'),
-        callback: () => {
-          dispatch(setPageStatus({ tab: selectedNovaTab, status: 'progress' }));
-          Bridge.callBridgeApi('uploadFile');
-        }
-      },
-      onCancel: isCancel
-        ? {
-            text: t('Cancel'),
-            callback: async () => {
-              dispatch(setCreating('none'));
-              dispatch(setLocalFiles([]));
-              dispatch(setDriveFiles([]));
-            }
-          }
-        : {
-            text: t('Index.Confirm.NotSavedFile.Cancel'),
-            callback: async () => {
-              dispatch(setCreating('NOVA'));
-              dispatch(setLocalFiles([]));
-              dispatch(setDriveFiles([]));
-
-              dispatch(setLoadingFile({ id: currentFile.id }));
-              const curFile = await getFileInfo(currentFile.id);
-              dispatch(removeLoadingFile());
-
-              dispatch(setDriveFiles([curFile]));
-              dispatch(setCreating('none'));
-            }
-          }
-    });
-  };
-
-  const confirmUploadFile = async () => {
-    await confirm({
-      title: '',
-      msg: t('Index.Confirm.UploadFile.Msg'),
-      onOk: {
-        text: t('Index.Confirm.UploadFile.Ok'),
-        callback: () => {
-          dispatch(setPageStatus({ tab: selectedNovaTab, status: 'progress' }));
-          Bridge.callBridgeApi('uploadFile');
-        }
-      },
-      onCancel: {
-        text: t('Cancel'),
-        callback: () => {}
-      }
-    });
   };
 
   const confirmUpload = async (url: string) => {
