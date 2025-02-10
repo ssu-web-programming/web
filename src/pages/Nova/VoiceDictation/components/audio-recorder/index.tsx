@@ -3,7 +3,6 @@ import { ReactComponent as Lang } from 'img/light/nova/voiceDictation/lang.svg';
 import { ReactComponent as Pause } from 'img/light/nova/voiceDictation/pause.svg';
 import { ReactComponent as Play } from 'img/light/nova/voiceDictation/play.svg';
 import { ReactComponent as Stop } from 'img/light/nova/voiceDictation/stop.svg';
-import { IoDownload } from 'react-icons/io5';
 
 import * as S from './style';
 
@@ -11,6 +10,7 @@ interface AudioRecorderProps {
   onRecordingComplete?: (blob: Blob) => void;
   barWidth?: number;
   gap?: number;
+  isInitRecording?: boolean;
 }
 
 interface CustomCanvasRenderingContext2D extends CanvasRenderingContext2D {
@@ -87,9 +87,10 @@ const draw = (
 const AudioRecorder: React.FC<AudioRecorderProps> = ({
   onRecordingComplete,
   barWidth = 2,
-  gap = 5
+  gap = 5,
+  isInitRecording = false
 }) => {
-  const [isRecording, setIsRecording] = useState(false);
+  const [isRecording, setIsRecording] = useState(isInitRecording || false);
   const [isPaused, setIsPaused] = useState(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [audioDuration, setAudioDuration] = useState<number | null>(null);
@@ -148,6 +149,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   const startRecording = useCallback(async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+      console.log('startRecording-stream', stream);
       streamRef.current = stream;
 
       const mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/mp4' });
@@ -289,7 +291,8 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
 
   // 들어오면 바로 시작한다.
   useEffect(() => {
-    if (!isRecording) {
+    if (isInitRecording) {
+      console.log('openTab으로 여기를 다시 오면 다시 시작해버리는거야!', isInitRecording);
       startRecording();
     }
   }, []);

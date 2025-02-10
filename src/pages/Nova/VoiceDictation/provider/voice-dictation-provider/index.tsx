@@ -39,6 +39,7 @@ interface SharedVoiceDictationInfo {
   componentType: VoiceDictationComponentType;
   voiceDictationResult: VoiceDictationResult | null;
   audioDuration: string;
+  isVoiceRecording: boolean;
 }
 
 interface VoiceDictationContextType {
@@ -63,7 +64,8 @@ export default function VoiceDictationProvider({ children }: Props) {
     useState<SharedVoiceDictationInfo>({
       componentType: 'INTRO',
       voiceDictationResult: null,
-      audioDuration: ''
+      audioDuration: '',
+      isVoiceRecording: false
     });
 
   const triggerLoading = () => {
@@ -77,7 +79,8 @@ export default function VoiceDictationProvider({ children }: Props) {
     setSharedVoiceDictationInfo({
       componentType: 'INTRO',
       voiceDictationResult: null,
-      audioDuration: ''
+      audioDuration: '',
+      isVoiceRecording: false
     });
   };
 

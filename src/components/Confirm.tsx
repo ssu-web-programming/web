@@ -34,7 +34,7 @@ export const ConfirmBox = styled.div`
 
 export const Header = styled.div`
   width: 100%;
-  padding: 14.5px 16px;
+  /* padding: 14.5px 16px; */
 `;
 
 const Title = styled.h2`
@@ -81,7 +81,8 @@ export const Footer = styled.div<{ direction?: 'column' | 'row' }>`
   display: flex;
   flex-direction: ${(props) => props.direction};
   gap: 8px;
-  padding: 16px;
+  margin-top: 24px;
+  /* padding: 16px; */
 
   button {
     font-size: 16px;

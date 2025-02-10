@@ -1,4 +1,3 @@
-import voiceDictationHttp from 'api/voice-dictation';
 import { setLocalFiles } from 'store/slices/uploadFiles';
 import { useAppDispatch } from 'store/store';
 import { blobToFile } from 'util/getAudioDuration';
@@ -7,7 +6,10 @@ import { useVoiceDictationContext } from '../../provider/voice-dictation-provide
 import AudioRecorder from '../audio-recorder';
 
 export default function VoiceAudioRecorder() {
-  const { setSharedVoiceDictationInfo } = useVoiceDictationContext();
+  const {
+    setSharedVoiceDictationInfo,
+    sharedVoiceDictationInfo: { isVoiceRecording }
+  } = useVoiceDictationContext();
   const dispatch = useAppDispatch();
 
   const handleMoveToReady = async (file: File) => {
@@ -26,6 +28,7 @@ export default function VoiceAudioRecorder() {
         console.log('Recording completed:', blob);
         handleMoveToReady(blobToFile(blob));
       }}
+      isInitRecording={isVoiceRecording}
     />
   );
 }
