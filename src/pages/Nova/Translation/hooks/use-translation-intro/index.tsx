@@ -35,9 +35,10 @@ const useTranslationIntro = (translateInputValue: string) => {
     initialFn: (params) => translationHttp.postTranslateDocument(params),
     pollingFn: (translateId) => translationHttp.postCheckTranslateStatus({ translateId }),
     getPollingId: ({ translateId }) => translateId,
-    shouldContinue: ({ status }) => status === 'translating',
-    onPollingSuccess: () => {
-      handleMoveToFileResult();
+    shouldContinue: ({ status }) => status === 'translating' || status === 'queued',
+    onPollingSuccess: (result) => {
+      const { downloadUrl } = result;
+      handleMoveToFileResult({ downloadUrl });
     }
   });
 
@@ -51,11 +52,15 @@ const useTranslationIntro = (translateInputValue: string) => {
     }));
   };
 
-  const handleMoveToFileResult = () => {
+  const handleMoveToFileResult = async ({ downloadUrl }: { downloadUrl: string }) => {
+    const sanitizedFile = (await sanitizedOriginFile()) as any;
+
     setSharedTranslationInfo((prevSharedTranslationInfo) => ({
       ...prevSharedTranslationInfo,
       componentType: 'FILE_RESULT',
-      ...sanitizedOriginFile()
+      ...sanitizedFile,
+      translationFileUrl: downloadUrl,
+      translationFileName: sanitizedFile.originalFileName
     }));
   };
 
@@ -88,7 +93,6 @@ const useTranslationIntro = (translateInputValue: string) => {
     triggerLoading();
 
     await translationRequest({ file: await convertFileObject(), sourceLang, targetLang });
-    // console.log('submitFileTranslate-response', response);
   };
 
   const handleSwitchLang = () => {

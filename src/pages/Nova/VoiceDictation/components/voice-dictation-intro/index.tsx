@@ -38,10 +38,10 @@ export default function VoiceDictationIntro() {
   };
 
   return (
-    <Guide onClick={startRecording}>
+    <Guide>
       {/* <RecognizedLang /> */}
       {/* <VoiceRealtimeDictation /> */}
-      <S.BoxWrapper>
+      <S.BoxWrapper onClick={startRecording}>
         <GuideBox guideTitle="실시간 받아쓰기" guideMsg={'최대 30분 가능합니다.'} />
       </S.BoxWrapper>
       <AudioFileUploader

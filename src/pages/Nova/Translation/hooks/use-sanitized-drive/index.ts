@@ -19,7 +19,6 @@ export default function useSanitizedDrive() {
     if (currentFile) {
       return currentFile;
     }
-
     return localFiles[0];
   };
 

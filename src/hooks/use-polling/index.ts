@@ -99,6 +99,8 @@ export function usePolling<T, R, P>({
             attempts: prev.attempts + 1
           }));
 
+          console.log('executePoll-result', result);
+
           if (!shouldContinue(result)) {
             setState((prev) => ({ ...prev, status: 'done' }));
             onPollingSuccess?.(result);
