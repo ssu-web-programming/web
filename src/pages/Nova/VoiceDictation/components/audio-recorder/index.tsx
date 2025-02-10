@@ -203,7 +203,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
         }
       };
 
-      mediaRecorder.start();
+      mediaRecorder.start(1000);
       startVisualization(stream);
       setIsRecording(true);
       setIsPaused(false);
