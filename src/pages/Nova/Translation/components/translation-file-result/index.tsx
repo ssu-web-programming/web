@@ -7,7 +7,7 @@ import { selectPageData } from 'store/slices/nova/pageStatusSlice';
 import { getDriveFiles, getLocalFiles } from 'store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import { css } from 'styled-components';
-import Bridge from 'util/bridge';
+import Bridge, { ClientType, getPlatform } from 'util/bridge';
 
 import { NOVA_TAB_TYPE } from '../../../../../constants/novaTapTypes';
 import { useTranslationContext } from '../../provider/translation-provider';
@@ -90,20 +90,23 @@ export default function TranslationFileResult() {
         <FileItem file={currentFile as File} />
       </S.FileItemWrapper>
       <S.ButtonGroup>
-        <IconTextButton
-          width={'full'}
-          height={48}
-          borderType="gray"
-          onClick={handleCompareSourceAndTranslation}
-          iconSrc={compareViewerIcon}
-          iconPos={'left'}
-          iconSize={24}
-          cssExt={css`
-            border-radius: 8px;
-            font-size: 15px;
-          `}>
-          원본-번역 비교 보기
-        </IconTextButton>
+        {(getPlatform() === ClientType.windows || getPlatform() === ClientType.mac) && (
+          <IconTextButton
+            width={'full'}
+            height={48}
+            borderType="gray"
+            onClick={handleCompareSourceAndTranslation}
+            iconSrc={compareViewerIcon}
+            iconPos={'left'}
+            iconSize={24}
+            cssExt={css`
+              border-radius: 8px;
+              font-size: 15px;
+            `}>
+            원본-번역 비교 보기
+          </IconTextButton>
+        )}
+
         <IconTextButton
           width={'full'}
           height={48}

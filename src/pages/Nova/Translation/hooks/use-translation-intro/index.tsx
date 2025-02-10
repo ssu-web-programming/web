@@ -36,8 +36,7 @@ const useTranslationIntro = (translateInputValue: string) => {
     pollingFn: (translateId) => translationHttp.postCheckTranslateStatus({ translateId }),
     getPollingId: ({ translateId }) => translateId,
     shouldContinue: ({ status }) => status === 'translating',
-    onPollingSuccess: (result) => {
-      console.log('result', result);
+    onPollingSuccess: () => {
       handleMoveToFileResult();
     }
   });

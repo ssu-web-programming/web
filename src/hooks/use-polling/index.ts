@@ -51,6 +51,7 @@ interface PollingState<T, R> {
 }
 
 // T -> initialData , R -> pollingData , P -> initParams
+// 호진 FIXME: 해당 컴포넌트 flexible하게 수정 필요!
 export function usePolling<T, R, P>({
   initialFn,
   pollingFn,
@@ -148,8 +149,6 @@ export function usePolling<T, R, P>({
 
         // 초기 API 호출
         const result = await initialFn(params);
-
-        console.log('result', result);
 
         setState((prev) => ({
           ...prev,
