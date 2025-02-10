@@ -1,3 +1,4 @@
+import { setIsMicrophoneState } from 'store/slices/appState';
 import { setLocalFiles } from 'store/slices/uploadFiles';
 import { useAppDispatch } from 'store/store';
 import { blobToFile } from 'util/getAudioDuration';
@@ -29,6 +30,9 @@ export default function VoiceAudioRecorder() {
         handleMoveToReady(blobToFile(blob));
       }}
       isInitRecording={isVoiceRecording}
+      onRecordingFinish={() => {
+        dispatch(setIsMicrophoneState(false));
+      }}
     />
   );
 }

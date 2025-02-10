@@ -1,7 +1,7 @@
 import React from 'react';
 import voiceDictationIcon from 'img/light/nova/voiceDictation/voice_dictation_sample.svg';
 import { Trans, useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import styled, { FlattenSimpleInterpolation } from 'styled-components';
 
 import { NOVA_TAB_TYPE } from '../../constants/novaTapTypes';
 import aiChatIcon from '../../img/common/nova/imgSample/ai_chat_sample.svg';
@@ -38,7 +38,7 @@ const GuideImage = styled.img`
   border-radius: 8px;
 `;
 
-const GuideTitle = styled.div`
+const GuideTitle = styled.div<{ $guideTitleStyle?: FlattenSimpleInterpolation }>`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -64,6 +64,8 @@ const GuideTitle = styled.div`
     text-align: center;
     white-space: break-spaces;
   }
+
+  ${({ $guideTitleStyle }) => $guideTitleStyle && $guideTitleStyle}
 `;
 const GuideBody = styled.div`
   width: 100%;
@@ -82,6 +84,7 @@ const StyledIconConvert = styled(IconConvert)`
 interface GuideProps {
   children: React.ReactNode;
   onClick?: () => void;
+  $guideTitleStyle?: FlattenSimpleInterpolation;
 }
 
 export const Guide = (props: GuideProps) => {
@@ -125,7 +128,7 @@ export const Guide = (props: GuideProps) => {
     <Container>
       <GuideWrapper>
         {announceInfo.status && <Announcement content={announceInfo.content} />}
-        <GuideTitle>
+        <GuideTitle $guideTitleStyle={props.$guideTitleStyle}>
           <GuideImage
             src={iconMap[selectedNovaTab]}
             alt="aiChat"

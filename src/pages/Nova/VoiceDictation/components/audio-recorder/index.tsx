@@ -11,6 +11,7 @@ interface AudioRecorderProps {
   barWidth?: number;
   gap?: number;
   isInitRecording?: boolean;
+  onRecordingFinish?: () => void;
 }
 
 interface CustomCanvasRenderingContext2D extends CanvasRenderingContext2D {
@@ -88,7 +89,8 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   onRecordingComplete,
   barWidth = 2,
   gap = 5,
-  isInitRecording = false
+  isInitRecording = false,
+  onRecordingFinish
 }) => {
   const [isRecording, setIsRecording] = useState(isInitRecording || false);
   const [isPaused, setIsPaused] = useState(false);
@@ -231,6 +233,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       setIsPaused(false);
       stopTimer();
       setRecordingTime(0);
+      onRecordingFinish?.();
     }
   }, [isRecording, stopTimer]);
 
