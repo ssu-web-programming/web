@@ -1,9 +1,12 @@
 import React from 'react';
+import OverlayModal from 'components/overlay-modal';
 import { ReactComponent as MessagePlusDisabledIcon } from 'img/common/ico_message_plus.svg';
 import { ReactComponent as MessagePlusDarkIcon } from 'img/dark/ico_message_plus.svg';
 import { ReactComponent as CloseDarkIcon } from 'img/dark/ico_nova_close.svg';
 import { ReactComponent as MessagePlusLightIcon } from 'img/light/ico_message_plus.svg';
 import { ReactComponent as CloseLightIcon } from 'img/light/ico_nova_close.svg';
+import { overlay } from 'overlay-kit';
+import ClosedModalContent from 'pages/Nova/VoiceDictation/components/modals/closed-modal-content';
 import { useVoiceDictationContext } from 'pages/Nova/VoiceDictation/provider/voice-dictation-provider';
 import { Trans, useTranslation } from 'react-i18next';
 import { initFlagSelector } from 'store/slices/initFlagSlice';
@@ -64,7 +67,10 @@ export default function NovaHeader(props: NovaHeaderProps) {
   const chatMode = useAppSelector(novaChatModeSelector);
   const { handleClearPastedImages } = useClipboard();
 
-  const { resetVoiceInfo } = useVoiceDictationContext();
+  const {
+    resetVoiceInfo,
+    sharedVoiceDictationInfo: { isVoiceRecording }
+  } = useVoiceDictationContext();
 
   const CREDIT_NAME_MAP: {
     [category: string]:
@@ -230,6 +236,33 @@ export default function NovaHeader(props: NovaHeaderProps) {
 
     return t(`Nova.Tabs.${tab}`);
   };
+  const openClosedModal = async () => {
+    const result = await overlay.openAsync(({ isOpen, close }) => {
+      return (
+        <OverlayModal isOpen={isOpen} onClose={() => close(false)}>
+          <ClosedModalContent onConfirm={() => close(true)} />
+        </OverlayModal>
+      );
+    });
+
+    console.log('녹음 종료여부 - result', result);
+    return result;
+  };
+
+  const resetPage = async () => {
+    if (selectedNovaTab === NOVA_TAB_TYPE.aiChat && novaHistory.length > 0) {
+      await newChat(true);
+    }
+
+    dispatch(setLocalFiles([]));
+    dispatch(setDriveFiles([]));
+    dispatch(setPageStatus({ tab: selectedNovaTab, status: 'home' }));
+    dispatch(setPageData({ tab: selectedNovaTab, data: null }));
+    dispatch(setPageResult({ tab: selectedNovaTab, result: null }));
+    dispatch(selectNovaTab(NOVA_TAB_TYPE.home));
+    resetVoiceInfo();
+    Bridge.callBridgeApi('curNovaTab', NOVA_TAB_TYPE.home);
+  };
 
   const handleGoHome = async () => {
     if (
@@ -238,18 +271,13 @@ export default function NovaHeader(props: NovaHeaderProps) {
       status !== 'loading' &&
       creating != 'NOVA'
     ) {
-      if (selectedNovaTab === NOVA_TAB_TYPE.aiChat && novaHistory.length > 0) {
-        await newChat(true);
+      // 녹음중 상태이면 아래 팝업을 열어여한다.
+      if (isVoiceRecording) {
+        const result = await openClosedModal();
+        if (!result) return;
       }
 
-      dispatch(setLocalFiles([]));
-      dispatch(setDriveFiles([]));
-      dispatch(setPageStatus({ tab: selectedNovaTab, status: 'home' }));
-      dispatch(setPageData({ tab: selectedNovaTab, data: null }));
-      dispatch(setPageResult({ tab: selectedNovaTab, result: null }));
-      dispatch(selectNovaTab(NOVA_TAB_TYPE.home));
-      resetVoiceInfo();
-      Bridge.callBridgeApi('curNovaTab', NOVA_TAB_TYPE.home);
+      await resetPage();
     }
   };
 

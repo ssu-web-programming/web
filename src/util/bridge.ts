@@ -623,6 +623,7 @@ export const useInitBridgeListener = () => {
           // AOS 오디오 접근 권한 확인 로직
           case 'audioPermissionState': {
             dispatch(initLoadingSpinner());
+            console.log('AOS 권한', body);
             dispatch(setIsMicrophoneState(body.isMicrophonePermission));
             break;
           }

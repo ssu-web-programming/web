@@ -54,7 +54,7 @@ const SelectText = styled.span`
   overflow: hidden;
   text-align: right;
   padding-right: 25px;
-  font-weight: 400;
+  font-weight: 500;
   font-size: 14px;
 `;
 
@@ -70,7 +70,7 @@ const IconWrapper = styled.span<{ isOpen: boolean; $iconStyles?: FlattenSimpleIn
 
 const OptionsContainer = styled.div<{ $optionContainerStyle?: FlattenSimpleInterpolation }>`
   position: absolute;
-  top: calc(100% + 4px);
+  top: calc(100% + 9px);
   right: 0;
   z-index: 10;
   max-height: 240px;

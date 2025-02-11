@@ -4,17 +4,17 @@ import { Guide } from 'components/nova/Guide';
 import GuideBox from 'components/nova/guide-box';
 import { NOVA_TAB_TYPE } from 'constants/novaTapTypes';
 import { MEDIA_ERROR_MESSAGES } from 'constants/voice-dictation';
-import { overlay } from 'overlay-kit';
 import { useTranslation } from 'react-i18next';
-import { appStateSelector } from 'store/slices/appState';
+import { appStateSelector, setIsMicrophoneState } from 'store/slices/appState';
 import { activeLoadingSpinner } from 'store/slices/loadingSpinner';
 import { useAppDispatch, useAppSelector } from 'store/store';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { MediaError, MediaErrorContent } from 'types/media-error';
 import Bridge, { ClientType, getPlatform } from 'util/bridge';
 
 import { useVoiceDictationContext } from '../../provider/voice-dictation-provider';
 import AudioFileUploader from '../audio-file-uploader';
+import RecognizedLang from '../recognized-lang';
 
 export default function VoiceDictationIntro() {
   const { t } = useTranslation();
@@ -45,7 +45,6 @@ export default function VoiceDictationIntro() {
   const checkAosPermission = async () => {
     dispatch(activeLoadingSpinner());
     await Bridge.callBridgeApi('getAudioPermission');
-    await Bridge.callBridgeApi('getRecordingState', true);
 
     return;
   };
@@ -74,8 +73,6 @@ export default function VoiceDictationIntro() {
       const errorMesaage = MEDIA_ERROR_MESSAGES[mediaError.name];
       // 에러 타입에 맞는 팝업을 띄우면 된다.
       console.log(mediaError);
-      console.log(mediaError.name);
-      console.log('errorMesaage', errorMesaage);
       errorTrigger(errorMesaage);
 
       await Bridge.callBridgeApi('getRecordingState', false);
@@ -85,11 +82,18 @@ export default function VoiceDictationIntro() {
   useEffect(() => {
     if (isAosMicrophonePermission) {
       startRecording();
+    } else if (isAosMicrophonePermission === false) {
+      errorTrigger(MEDIA_ERROR_MESSAGES['PermissionDeniedError']);
+      dispatch(setIsMicrophoneState(null));
     }
   }, [isAosMicrophonePermission]);
 
   return (
-    <Guide>
+    <Guide
+      $guideTitleStyle={css`
+        margin-bottom: 16px;
+      `}>
+      <RecognizedLang />
       <S.BoxWrapper onClick={startRecording}>
         <GuideBox guideTitle="실시간 받아쓰기" guideMsg={'최대 30분 가능합니다.'} />
       </S.BoxWrapper>
