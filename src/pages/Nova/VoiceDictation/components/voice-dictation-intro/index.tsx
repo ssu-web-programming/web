@@ -44,9 +44,8 @@ export default function VoiceDictationIntro() {
 
   const checkAosPermission = async () => {
     dispatch(activeLoadingSpinner());
+    await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
     await Bridge.callBridgeApi('getAudioPermission');
-
-    return;
   };
 
   const checkNonAosPermission = async () => {
