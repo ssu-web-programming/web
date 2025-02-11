@@ -11,7 +11,7 @@ const Dim = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: ${({ theme }) => theme.color.dimBg};
+  background: ${({ theme }) => theme.color.background.dimBg};
   z-index: 2;
 
   img {

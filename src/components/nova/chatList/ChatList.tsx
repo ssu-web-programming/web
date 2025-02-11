@@ -127,7 +127,7 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
 
   const CHAT_BUTTON_LIST: ChatButtonType[] = [
     {
-      name: t('Index.Result.Remake'),
+      name: t('Index.Index.Remake'),
       status: ['done', 'cancel'],
       iconSrc: isLightMode ? <RetryChatLightIcon /> : <RetryChatDarkIcon />,
       clickHandler: (history: NovaChatType) => {
@@ -143,13 +143,13 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
       clickHandler: (history: NovaChatType) => onCopy(history.output)
     },
     {
-      name: t('Index.Result.InsertDoc'),
+      name: t('Index.Index.InsertDoc'),
       status: ['done'],
       iconSrc: isLightMode ? <InsertDocsLightIcon /> : <InsertDocsDarkIcon />,
       clickHandler: (history: NovaChatType) => insertDocsHandler(history)
     },
     {
-      name: t('Index.Result.Share'),
+      name: t('Index.Index.Share'),
       status: ['done'],
       iconSrc: isLightMode ? <ShareChatLightIcon /> : <ShareChatDarkIcon />,
       clickHandler: () => {

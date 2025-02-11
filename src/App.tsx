@@ -95,7 +95,6 @@ function App() {
               <Route path="/alli" element={<Alli />} />
               <Route path="/NOVA" element={<Nova />} />
               <Route path="/translation" element={<Translation />} />
-              <Route path="/NOVA" element={<Index />} />
               <Route path="/NOVA/share/:id" element={<ShareChat />} />
               <Route path="/AskDocStep" element={<AskDocHome />}>
                 <Route index element={<AskDocLoading />} />

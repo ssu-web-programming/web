@@ -6,7 +6,7 @@ export interface Avatars {
   preview_video_url: string;
   file?: File;
 }
-const InitAvatars: Avatars = {
+export const InitAvatars: Avatars = {
   avatar_id: '',
   avatar_name: '',
   gender: 'female',
@@ -17,17 +17,19 @@ const InitAvatars: Avatars = {
 
 export interface Voices {
   voice_id: string;
-  language: 'Korea' | 'English' | 'Japanese' | 'Chinese';
+  language: string;
   gender: 'female' | 'male';
   name: string;
   preview_audio: string;
+  flag: string;
 }
 const InitVoices: Voices = {
   voice_id: '',
-  language: 'Korea',
+  language: '',
   gender: 'female',
   name: '',
-  preview_audio: ''
+  preview_audio: '',
+  flag: ''
 };
 
 export enum EVideoStatus {
@@ -42,15 +44,25 @@ export interface Videos {
   createdAt: string;
   status: EVideoStatus;
   duration: number;
-  thumbnail: string;
-  video: string;
+  thumbnail_url: string;
+  video_url: string;
 }
+
+export const InitVideos: Videos = {
+  id: '',
+  createdAt: '',
+  status: EVideoStatus.processing,
+  duration: 0,
+  thumbnail_url: '',
+  video_url: ''
+};
 
 export interface AvatarInfo {
   avatar: Avatars;
   voice: Voices;
-  avatar_style: 'avatar' | 'taking_photo';
-  style: 'circle' | 'normal';
+  video: Videos;
+  avatar_type: 'avatar' | 'taking_photo';
+  avatar_style: 'circle' | 'normal';
   input_text: string;
   background_color: string; // 16진수 색상 값
 }
@@ -58,8 +70,9 @@ export interface AvatarInfo {
 export const InitAvatarInfo: AvatarInfo = {
   avatar: InitAvatars,
   voice: InitVoices,
-  avatar_style: 'avatar',
-  style: 'circle',
+  video: InitVideos,
+  avatar_type: 'avatar',
+  avatar_style: 'circle',
   input_text: '',
-  background_color: ''
+  background_color: '#e8ebed'
 };

@@ -37,31 +37,54 @@ export const TitleWrap = styled.div`
   }
 `;
 
-export const AvartarContainer = styled.div<{ isSelected: boolean }>`
+export const VoiceContainer = styled.div<{ isSelected: boolean }>`
   position: relative;
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+`;
+
+export const VoiceInfoWrap = styled.div`
+  display: flex;
+  align-items: center;
   justify-content: center;
+  gap: 10px;
+
+  .radio {
+    width: 32px;
+    height: 32px;
+  }
+
+  .name {
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 21px;
+    color: ${({ theme }) => theme.color.text.gray03};
+  }
 `;
 
-export const OuterBorder = styled.div<{ isSelected: boolean }>`
-  display: ${(props) => (props.isSelected ? 'flex' : 'none')};
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  border: 2px solid #6f3ad0;
-  border-radius: 6px;
-  pointer-events: none;
-  z-index: 1;
+export const VoiceInfo = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
 
-export const Image = styled.img`
-  width: 76px;
-  height: 76px;
-  border: 1.27px solid #e8ebed;
-  border-radius: 4px;
-  object-fit: cover;
-  cursor: pointer;
+export const IdentifyWrap = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 4px;
+
+  img {
+    width: 24px;
+  }
+
+  span {
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 18px;
+    color: ${({ theme }) => theme.color.text.gray07};
+  }
 `;
 
 export const CheckBox = styled.div`
@@ -76,47 +99,14 @@ export const CheckBox = styled.div`
   background-color: #6f3ad0;
   border-bottom-right-radius: 8px;
 `;
-export const CustomTabs = styled(Tabs)`
-  width: 100%;
-
-  .MuiTabs-flexContainer {
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .MuiTab-root {
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 24px;
-    font-family: Pretendard, sans-serif;
-    color: ${({ theme }) => theme.color.text.gray07} !important;
-  }
-
-  .Mui-selected {
-    color: ${({ theme }) => theme.color.text.highlight03} !important;
-  }
-
-  .MuiTabs-indicator {
-    background-color: ${({ theme }) => theme.color.text.highlight03} !important;
-  }
-`;
 
 export const ListWrap = styled.div`
   width: 100%;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  padding: 12px 12px 0 12px;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
   overflow-y: auto;
   background-color: ${({ theme }) => theme.color.background.bg};
-
-  img {
-    width: 100px;
-    height: 100px;
-    border: 1px solid ${({ theme }) => theme.color.border.gray05};
-    border-radius: 5.57px;
-  }
 `;
 
 export const ButtonWrap = styled.div`

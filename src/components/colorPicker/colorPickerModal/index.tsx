@@ -1,21 +1,45 @@
 import { Dispatch, SetStateAction } from 'react';
 import { css } from 'styled-components';
 
-import CreditColorIcon from '../../../img/light/ico_credit_color.svg';
 import Blanket from '../../Blanket';
 import Button from '../../buttons/Button';
 
 import * as S from './style';
+import { Preset } from './style';
 
 interface ColorPickerModalProps {
+  title: string;
+  color: string;
+  setColor: (color: string) => void;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-export default function ColorPickerModal({ setIsOpen }: ColorPickerModalProps) {
+const colorPreset = ['#000000', '#0008ff', '#00ff3b', '#e9ebed', '#ffffff'];
+
+export default function ColorPickerModal({
+  title,
+  color,
+  setColor,
+  setIsOpen
+}: ColorPickerModalProps) {
   return (
     <>
       <Blanket />
       <S.Container>
+        <S.ContentWrap>
+          <S.Title>{title}</S.Title>
+          <S.ColorPickerWrap>
+            <S.ColorPicker color={color} onChange={setColor} />
+            <S.ColorPickerInfo>
+              <S.CurrentColor color={color} />
+              <S.PresetWrap>
+                {colorPreset.map((color) => (
+                  <S.Preset color={color} key={color} onClick={() => setColor(color)} />
+                ))}
+              </S.PresetWrap>
+            </S.ColorPickerInfo>
+          </S.ColorPickerWrap>
+        </S.ContentWrap>
         <S.ButtonWrap>
           <Button
             variant="gray"
@@ -42,7 +66,10 @@ export default function ColorPickerModal({ setIsOpen }: ColorPickerModalProps) {
               border-radius: 8px;
               flex: 2;
             `}
-            onClick={() => {}}>
+            onClick={() => {
+              setColor(color);
+              setIsOpen(false);
+            }}>
             <span>{'완료'}</span>
           </Button>
         </S.ButtonWrap>

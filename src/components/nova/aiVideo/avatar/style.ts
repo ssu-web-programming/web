@@ -11,58 +11,6 @@ export const Container = styled.div`
   padding: 0 16px;
 `;
 
-export const AvatarCard = styled.div<{ isCircle: boolean }>`
-  width: 248px;
-  height: ${({ isCircle }) => (isCircle ? '233px' : '180px')};
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  border: 1px solid #c9cdd2;
-  border-radius: 12px;
-`;
-
-export const PreviewWrap = styled.div<{ isCircle: boolean }>`
-  width: ${({ isCircle }) => (isCircle ? '180px' : '246px')};
-  height: ${({ isCircle }) => (isCircle ? '180px' : '141px')};
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  background: #e8ebed;
-  border-radius: ${({ isCircle }) => (isCircle ? '99px' : '12px 12px 0 0')};
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    border-radius: ${({ isCircle }) => (isCircle ? '99px' : '12px 12px 0 0')};
-  }
-`;
-
-export const AvatarInfo = styled.div`
-  height: 37px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  background-color: transparent;
-
-  .name {
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 21px;
-    color: ${({ theme }) => theme.color.text.gray03};
-  }
-
-  .etc {
-    font-size: 13px;
-    font-weight: 500;
-    line-height: 19.5px;
-    color: ${({ theme }) => theme.color.text.gray07};
-  }
-`;
-
 export const ContentWrap = styled.div`
   width: 100%;
   display: flex;
@@ -153,8 +101,8 @@ export const CheckBox = styled.div`
   width: 20px;
   height: 20px;
   position: absolute;
-  top: 2px;
-  left: 2px;
+  top: 1px;
+  left: 1px;
   display: flex;
   align-items: center;
   justify-content: center;

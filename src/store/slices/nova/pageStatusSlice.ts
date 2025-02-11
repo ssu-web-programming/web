@@ -78,32 +78,38 @@ const pageSlice = createSlice({
     ) => {
       state.status[action.payload.tab] = action.payload.status;
     },
-
     resetPageStatus: <T extends keyof PageStatus>(
       state: PageStateType,
       action: PayloadAction<T>
     ) => {
       state.status[action.payload] = 'home';
     },
-
     setPageData: <T extends keyof PageStatus>(
       state: PageStateType,
       action: PayloadAction<{ tab: T; data: PageData }>
     ) => {
       state.data[action.payload.tab] = action.payload.data;
     },
-
     resetPageData: <T extends keyof PageStatus>(state: PageStateType, action: PayloadAction<T>) => {
       state.data[action.payload] = null;
     },
-
     setPageResult: <T extends keyof PageStatus>(
       state: PageStateType,
       action: PayloadAction<{ tab: T; result: PageResult }>
     ) => {
       state.result[action.payload.tab] = action.payload.result;
     },
-
+    updatePageResult: <T extends keyof PageStatus>(
+      state: PageStateType,
+      action: PayloadAction<{ tab: T; result: Partial<PageResult> }>
+    ) => {
+      if (state.result[action.payload.tab]) {
+        state.result[action.payload.tab] = {
+          ...state.result[action.payload.tab],
+          ...action.payload.result
+        };
+      }
+    },
     resetPageResult: <T extends keyof PageStatus>(
       state: PageStateType,
       action: PayloadAction<T>
@@ -119,6 +125,7 @@ export const {
   setPageData,
   resetPageData,
   setPageResult,
+  updatePageResult,
   resetPageResult
 } = pageSlice.actions;
 
