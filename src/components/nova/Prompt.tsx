@@ -71,7 +71,7 @@ const TextWrap = styled.div<{ isActive: boolean }>`
   padding: 12px;
   gap: 10px;
   border: 1px solid
-    ${({ isActive, theme }) => (isActive ? 'var(--ai-purple-50-main)' : theme.color.g01)};
+    ${({ isActive, theme }) => (isActive ? 'var(--ai-purple-50-main)' : theme.color.border.gray01)};
   border-radius: 8px;
   background: ${({ theme }) => (theme.mode === 'light' ? 'var(--white)' : 'none')};
 `;

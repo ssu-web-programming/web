@@ -1,5 +1,5 @@
 import React from 'react';
-import voiceDictationIcon from 'img/light/nova/voiceDictation/voice_dictation_sample.svg';
+import voiceDictationIcon from 'img/common/nova/imgSample/voice_dictation_sample.svg';
 import { Trans, useTranslation } from 'react-i18next';
 import styled, { FlattenSimpleInterpolation } from 'styled-components';
 

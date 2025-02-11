@@ -20,7 +20,7 @@ interface SelectAvatarProps {
   avatarList: Avatars[];
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   selectedAvatar: AvatarInfo | null;
-  setSelectedAvatar: Dispatch<SetStateAction<AvatarInfo | null>>;
+  changeSelectedAvatar: (avatar: Avatars) => void;
 }
 
 enum ETabType {
@@ -39,7 +39,7 @@ export default function SelectAvatar({
   avatarList,
   setIsOpen,
   selectedAvatar,
-  setSelectedAvatar
+  changeSelectedAvatar
 }: SelectAvatarProps) {
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const { screenMode } = useAppSelector(screenModeSelector);
@@ -65,7 +65,7 @@ export default function SelectAvatar({
 
   const handleSelectAvatar = () => {
     if (tempAvatar) {
-      setSelectedAvatar((prev) => (prev ? { ...prev, avatar: tempAvatar } : null));
+      changeSelectedAvatar(tempAvatar);
       setIsOpen(false);
     }
   };
@@ -103,7 +103,9 @@ export default function SelectAvatar({
                       </S.CheckBox>
                     )}
                     <S.Image
-                      src={avatar.preview_image_url}
+                      src={
+                        avatar.file ? URL.createObjectURL(avatar.file) : avatar.preview_image_url
+                      }
                       alt={'avatar'}
                       onClick={() => handleImageClick(avatar)}
                     />

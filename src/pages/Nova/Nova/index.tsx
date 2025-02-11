@@ -26,7 +26,7 @@ import Modals, { Overlay } from '../../../components/nova/modals/Modals';
 import NovaHome from '../../../components/nova/novaHome';
 import Progress from '../../../components/nova/Progress';
 import Prompt from '../../../components/nova/Prompt';
-import Result from '../../../components/nova/Result';
+import Result from '../../../components/nova/result/index';
 import Theme from '../../../components/nova/Theme';
 import TimeOut from '../../../components/nova/TimeOut';
 import Uploading from '../../../components/nova/Uploading';

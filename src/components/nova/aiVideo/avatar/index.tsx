@@ -1,7 +1,15 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import * as React from 'react';
 import { css } from 'styled-components';
 
-import { AvatarInfo, Avatars, InitAvatarInfo } from '../../../../constants/heygenTypes';
+import { apiWrapper } from '../../../../api/apiWrapper';
+import { NOVA_VIDEO_GET_AVATARS } from '../../../../api/constant';
+import {
+  AvatarInfo,
+  Avatars,
+  InitAvatarInfo,
+  InitAvatars
+} from '../../../../constants/heygenTypes';
 import { NOVA_TAB_TYPE } from '../../../../constants/novaTapTypes';
 import { ReactComponent as CheckIcon } from '../../../../img/common/ico_check.svg';
 import CircleDarkIcon from '../../../../img/dark/ico_circle.svg';
@@ -15,51 +23,87 @@ import CreditColorIcon from '../../../../img/light/ico_credit_color.svg';
 import SqureLightIcon from '../../../../img/light/ico_square.svg';
 import SqureSelectedLightIcon from '../../../../img/light/ico_square_selected.svg';
 import PlusDocLightIcon from '../../../../img/light/upload_img_plus_new.svg';
-import { selectPageData, setPageStatus } from '../../../../store/slices/nova/pageStatusSlice';
+import {
+  resetPageData,
+  selectPageData,
+  selectPageResult,
+  setPageResult,
+  setPageStatus,
+  updatePageResult
+} from '../../../../store/slices/nova/pageStatusSlice';
 import { themeInfoSelector } from '../../../../store/slices/theme';
+import { setLocalFiles } from '../../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../../store/store';
 import Button from '../../../buttons/Button';
-import ColorPicker from '../../../colorPicker';
 import ImageUploader from '../../ImageUploader';
+import AvatarCard from '../component/AvatarCard';
 import SelectAvatar from '../component/SelectAvatar';
 
 import * as S from './style';
 
 interface AvatarProps {
-  avatarList: Avatars[];
-  setAvatarList: Dispatch<SetStateAction<Avatars[]>>;
-  selectedAvatar: AvatarInfo | null;
-  setSelectedAvatar: Dispatch<SetStateAction<AvatarInfo | null>>;
+  activeStep: number;
+  setActiveStep: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export default function Avatar({
-  avatarList,
-  setAvatarList,
-  selectedAvatar,
-  setSelectedAvatar
-}: AvatarProps) {
+export default function Avatar({ activeStep, setActiveStep }: AvatarProps) {
   const dispatch = useAppDispatch();
   const { isLightMode } = useAppSelector(themeInfoSelector);
+  const result = useAppSelector(selectPageResult(NOVA_TAB_TYPE.aiVideo));
   const currentFile = useAppSelector(selectPageData(NOVA_TAB_TYPE.aiVideo));
-  const [avatarStyle, setAvatarStyle] = useState<'circle' | 'square'>('square');
+  const [avatarList, setAvatarList] = useState<Avatars[]>([]);
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!selectedAvatar && avatarList.length > 0) {
-      console.log('set');
-      setSelectedAvatar((prev) =>
-        prev
-          ? { ...prev, avatar: avatarList[0] }
-          : {
-              ...InitAvatarInfo,
-              avatar: avatarList[0]
+    getAvartarList();
+  }, []);
+
+  useEffect(() => {
+    if (!result?.info && avatarList.length > 0) {
+      dispatch(
+        setPageResult({
+          tab: NOVA_TAB_TYPE.aiVideo,
+          result: {
+            contentType: '',
+            data: '',
+            link: '',
+            info: {
+              selectedAvatar: result?.info?.selectedAvatar
+                ? { ...result.info.selectedAvatar }
+                : { ...InitAvatarInfo, avatar: avatarList[0] }
             }
+          }
+        })
       );
     }
   }, [avatarList]);
 
-  const handleImageClick = (avatar: Avatars) => {
-    setSelectedAvatar((prev) => (prev ? { ...prev, avatar } : null));
+  const getAvartarList = async () => {
+    const { res } = await apiWrapper().request(NOVA_VIDEO_GET_AVATARS, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'GET'
+    });
+
+    const { data } = await res.json();
+    setAvatarList(data.avatars);
+  };
+
+  const changeSelectedAvatar = (avatar: Avatars) => {
+    dispatch(
+      updatePageResult({
+        tab: NOVA_TAB_TYPE.aiVideo,
+        result: {
+          info: {
+            selectedAvatar: {
+              ...result?.info?.selectedAvatar,
+              avatar: avatar
+            }
+          }
+        }
+      })
+    );
     setAvatarList(
       avatar
         ? [avatar, ...avatarList.filter((item) => item.avatar_id !== avatar.avatar_id)]
@@ -67,51 +111,54 @@ export default function Avatar({
     );
   };
 
-  const getShapeIcon = (shape: 'circle' | 'square') => {
-    const isSelected = avatarStyle === shape;
+  const selectAvatarStyle = (shape: 'circle' | 'normal') => {
+    dispatch(
+      updatePageResult({
+        tab: NOVA_TAB_TYPE.aiVideo,
+        result: {
+          info: {
+            selectedAvatar: {
+              ...result?.info?.selectedAvatar,
+              avatar_style: shape
+            }
+          }
+        }
+      })
+    );
+  };
+
+  const getShapeIcon = (shape: 'circle' | 'normal') => {
+    const isSelected = result?.info.selectedAvatar?.avatar_style === shape;
     return isLightMode
       ? isSelected
-        ? shape === 'square'
+        ? shape === 'normal'
           ? SqureSelectedLightIcon
           : CircleSelectedLightIcon
-        : shape === 'square'
+        : shape === 'normal'
           ? SqureLightIcon
           : CircleLightIcon
       : isSelected
-        ? shape === 'square'
+        ? shape === 'normal'
           ? SqureSelectedDarkIcon
           : CircleSelectedDarkIcon
-        : shape === 'square'
+        : shape === 'normal'
           ? SqureDarkIcon
           : CircleDarkIcon;
   };
 
   const handleUploadedImage = () => {
     if (currentFile) {
-      console.log(currentFile);
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'avatar' }));
+      changeSelectedAvatar({ ...InitAvatars, file: currentFile });
+      dispatch(resetPageData(NOVA_TAB_TYPE.aiVideo));
+      dispatch(setLocalFiles([]));
     }
   };
 
   return (
     <>
       <S.Container>
-        <S.AvatarCard isCircle={avatarStyle === 'circle'}>
-          <ColorPicker
-            cssExt={css`
-              position: absolute;
-              top: 12px;
-              right: 12px;
-            `}
-          />
-          <S.PreviewWrap isCircle={avatarStyle === 'circle'}>
-            <img src={selectedAvatar?.avatar.preview_image_url} alt="preview_img" />
-          </S.PreviewWrap>
-          <S.AvatarInfo>
-            <span className="name">{'-'}</span>
-            {/*<span className="etc">{`${selectedAvatar?.voice.language} | ${selectedAvatar?.avatar.gender}`}</span>*/}
-          </S.AvatarInfo>
-        </S.AvatarCard>
+        <AvatarCard />
         <S.ContentWrap>
           <S.AvatarSelectBox>
             <S.TitleWrap>
@@ -125,19 +172,21 @@ export default function Avatar({
               {avatarList.slice(0, 4).map((avatar) => (
                 <S.AvartarContainer
                   key={avatar.avatar_id}
-                  isSelected={selectedAvatar?.avatar.avatar_id === avatar.avatar_id}>
+                  isSelected={result?.info.selectedAvatar?.avatar.avatar_id === avatar.avatar_id}>
                   <S.OuterBorder
-                    isSelected={selectedAvatar?.avatar.avatar_id === avatar.avatar_id}
+                    isSelected={result?.info.selectedAvatar?.avatar.avatar_id === avatar.avatar_id}
                   />
-                  {selectedAvatar?.avatar.avatar_id === avatar.avatar_id && (
+                  {result?.info.selectedAvatar?.avatar.avatar_id === avatar.avatar_id && (
                     <S.CheckBox>
                       <CheckIcon />
                     </S.CheckBox>
                   )}
                   <S.Image
-                    src={avatar.preview_image_url}
+                    src={
+                      avatar?.file ? URL.createObjectURL(avatar.file) : avatar?.preview_image_url
+                    }
                     alt={'avatar'}
-                    onClick={() => handleImageClick(avatar)}
+                    onClick={() => changeSelectedAvatar(avatar)}
                   />
                 </S.AvartarContainer>
               ))}
@@ -157,13 +206,13 @@ export default function Avatar({
           <S.TitleWrap>
             <span className="title">이미지 형태</span>
             <S.ButtonWrap>
-              {['square', 'circle'].map((shape) => (
+              {['normal', 'circle'].map((shape) => (
                 <Button
                   key={shape}
                   variant="lightPurple"
                   width={85}
                   height={36}
-                  selected={avatarStyle === shape}
+                  selected={result?.info.selectedAvatar?.avatar_style === shape}
                   cssExt={css`
                     display: flex;
                     gap: 4px;
@@ -172,9 +221,9 @@ export default function Avatar({
                     border-radius: 8px;
                     padding: 6px 8px;
                   `}
-                  onClick={() => setAvatarStyle(shape as 'circle' | 'square')}>
-                  <img src={getShapeIcon(shape as 'circle' | 'square')} alt={shape} />
-                  <span>{shape === 'square' ? '사각형' : '원형'}</span>
+                  onClick={() => selectAvatarStyle(shape as 'circle' | 'normal')}>
+                  <img src={getShapeIcon(shape as 'circle' | 'normal')} alt={shape} />
+                  <span>{shape === 'normal' ? '사각형' : '원형'}</span>
                 </Button>
               ))}
             </S.ButtonWrap>
@@ -192,7 +241,10 @@ export default function Avatar({
             border-radius: 8px;
             position: relative;
           `}
-          onClick={() => {}}>
+          onClick={() => {
+            setActiveStep(activeStep + 1);
+            dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'voice' }));
+          }}>
           <span>{'AI 비디오 만들기'}</span>
           <S.CreditInfo>
             <img src={CreditColorIcon} alt="credit" />
@@ -205,8 +257,8 @@ export default function Avatar({
         <SelectAvatar
           avatarList={avatarList}
           setIsOpen={setIsOpen}
-          selectedAvatar={selectedAvatar}
-          setSelectedAvatar={setSelectedAvatar}
+          selectedAvatar={result?.info.selectedAvatar}
+          changeSelectedAvatar={(avatar: Avatars) => changeSelectedAvatar(avatar)}
         />
       )}
     </>
