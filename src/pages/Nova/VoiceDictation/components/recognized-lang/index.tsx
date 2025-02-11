@@ -26,8 +26,8 @@ export default function RecognizedLang() {
       <Select<OptionValues>
         options={options}
         value={selectedOption}
-        onChange={() => {
-          console.log('123');
+        onChange={(result) => {
+          setSelectedOption(result);
         }}
         $optionContainerStyle={css`
           transform: translateX(-50%);

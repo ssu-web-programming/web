@@ -5,7 +5,7 @@ import GuideBox from 'components/nova/guide-box';
 import { NOVA_TAB_TYPE } from 'constants/novaTapTypes';
 import { MEDIA_ERROR_MESSAGES } from 'constants/voice-dictation';
 import { useTranslation } from 'react-i18next';
-import { appStateSelector } from 'store/slices/appState';
+import { appStateSelector, setIsMicrophoneState } from 'store/slices/appState';
 import { activeLoadingSpinner } from 'store/slices/loadingSpinner';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import styled, { css } from 'styled-components';
@@ -82,6 +82,9 @@ export default function VoiceDictationIntro() {
   useEffect(() => {
     if (isAosMicrophonePermission) {
       startRecording();
+    } else if (isAosMicrophonePermission === false) {
+      errorTrigger(MEDIA_ERROR_MESSAGES['PermissionDeniedError']);
+      dispatch(setIsMicrophoneState(null));
     }
   }, [isAosMicrophonePermission]);
 

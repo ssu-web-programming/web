@@ -12,7 +12,7 @@ type InitialState = {
   isRecordState: 'not-started' | 'start' | 'pause';
   isExternal: boolean;
   isClosedNova: boolean;
-  isAosMicrophonePermission: boolean;
+  isAosMicrophonePermission: boolean | null;
 };
 
 const initialState: InitialState = {
@@ -24,7 +24,7 @@ const initialState: InitialState = {
   isRecordState: 'not-started',
   isExternal: false,
   isClosedNova: false,
-  isAosMicrophonePermission: false
+  isAosMicrophonePermission: null
 };
 
 const appStateSlice = createSlice({
@@ -55,7 +55,7 @@ const appStateSlice = createSlice({
       state.isClosedNova = action.payload;
       return state;
     },
-    setIsMicrophoneState: (state, action: PayloadAction<boolean>) => {
+    setIsMicrophoneState: (state, action: PayloadAction<boolean | null>) => {
       state.isAosMicrophonePermission = action.payload;
       return state;
     }
