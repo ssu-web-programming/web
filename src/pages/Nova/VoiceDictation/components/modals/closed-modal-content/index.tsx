@@ -20,6 +20,7 @@ export default function ClosedModalContent({ onConfirm }: Props) {
   const handleClose = () => {
     overlay.closeAll();
     Bridge.callBridgeApi('closeNova');
+    Bridge.callBridgeApi('getRecordingState', false);
     dispatch(setIsClosedNovaState(false));
     onConfirm && onConfirm();
   };
