@@ -5,7 +5,7 @@ import downloadIcon from 'img/light/nova/translation/download.svg';
 import { activeLoadingSpinner } from 'store/slices/loadingSpinner';
 import { useAppDispatch } from 'store/store';
 import { css } from 'styled-components';
-import Bridge, { ClientType, getPlatform } from 'util/bridge';
+import Bridge, { ClientType, fileToString, getPlatform } from 'util/bridge';
 
 import { useTranslationContext } from '../../provider/translation-provider';
 import FileItem from '../file-item';
@@ -44,7 +44,7 @@ export default function TranslationFileResult() {
     await Bridge.callBridgeApi<CompareSouceAndTranslationArgs>('compareSourceAndTranslation', {
       originalFileType,
       originalFileName,
-      originFile,
+      originFile: await fileToString(originFile),
       translationFileName,
       translationFileUrl
     });
