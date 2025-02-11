@@ -65,7 +65,7 @@ export default function VoiceDictationIntro() {
   const startRecording = async () => {
     try {
       // AOS의 경우에는 permission 여부를 파악한 후 팝업을 띄울지 말지 결정한다.
-      const isExecuteAosPermission = isAos && isAosMicrophonePermission === false;
+      const isExecuteAosPermission = isAos && isAosMicrophonePermission === null;
 
       isExecuteAosPermission ? await checkAosPermission() : await checkNonAosPermission();
     } catch (error) {

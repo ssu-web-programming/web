@@ -32,7 +32,7 @@ export default function VoiceAudioRecorder() {
       }}
       isInitRecording={isVoiceRecording}
       onRecordingFinish={() => {
-        dispatch(setIsMicrophoneState(false));
+        dispatch(setIsMicrophoneState(null));
         Bridge.callBridgeApi('getRecordingState', false);
       }}
     />
