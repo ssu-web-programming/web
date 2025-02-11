@@ -5,7 +5,11 @@ import Bridge from 'util/bridge';
 
 import * as S from './style';
 
-export default function ClosedModalContent() {
+interface Props {
+  onConfirm?: () => void;
+}
+
+export default function ClosedModalContent({ onConfirm }: Props) {
   const dispatch = useAppDispatch();
 
   const handleCancle = () => {
@@ -17,6 +21,7 @@ export default function ClosedModalContent() {
     overlay.closeAll();
     Bridge.callBridgeApi('closeNova');
     dispatch(setIsClosedNovaState(false));
+    onConfirm && onConfirm();
   };
 
   return (

@@ -1,6 +1,7 @@
 import { setIsMicrophoneState } from 'store/slices/appState';
 import { setLocalFiles } from 'store/slices/uploadFiles';
 import { useAppDispatch } from 'store/store';
+import Bridge from 'util/bridge';
 import { blobToFile } from 'util/getAudioDuration';
 
 import { useVoiceDictationContext } from '../../provider/voice-dictation-provider';
@@ -32,6 +33,7 @@ export default function VoiceAudioRecorder() {
       isInitRecording={isVoiceRecording}
       onRecordingFinish={() => {
         dispatch(setIsMicrophoneState(false));
+        Bridge.callBridgeApi('getRecordingState', false);
       }}
     />
   );
