@@ -120,6 +120,7 @@ const callApi = (api: ApiType, arg?: string | number | object | boolean) => {
     const platform = getPlatform();
     switch (platform) {
       case ClientType.android: {
+        console.log('Android Bridge 호출', api);
         window.Native[api](arg);
         break;
       }
