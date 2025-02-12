@@ -305,6 +305,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   useEffect(() => {
     if (startCondition) {
       console.log('openTab으로 여기를 다시 오면 다시 시작해버리는거야!', startCondition);
+
       startRecording();
     }
   }, []);
