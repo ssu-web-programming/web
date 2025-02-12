@@ -301,12 +301,12 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
     };
   }, []);
 
-  // 들어오면 바로 시작한다.
   useEffect(() => {
-    if (startCondition) {
-      console.log('openTab으로 여기를 다시 오면 다시 시작해버리는거야!', startCondition);
-
+    // 맨 처음 최초 진입했을때만 실행하고 이후에는 절대 실행하면 안됨
+    const hasStarted = sessionStorage.getItem('hasStartedRecording') === 'true';
+    if (!hasStarted) {
       startRecording();
+      sessionStorage.setItem('hasStartedRecording', 'true');
     }
   }, []);
 

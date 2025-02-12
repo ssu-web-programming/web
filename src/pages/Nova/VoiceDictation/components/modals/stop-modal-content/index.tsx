@@ -21,7 +21,6 @@ export default function StopModalContent({ onConfirm }: Props) {
       ...prev,
       isVoiceRecording: false
     }));
-    Bridge.callBridgeApi('getRecordingState', false);
     onConfirm && onConfirm();
   };
 

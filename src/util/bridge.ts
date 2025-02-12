@@ -256,6 +256,7 @@ const callApi = (api: ApiType, arg?: string | number | object | boolean) => {
             break;
           }
           case 'getRecordingState': {
+            console.log('getRecordingState 전달되는 값!', arg);
             if (window.webkit.messageHandlers.getRecordingState) {
               window.webkit.messageHandlers.getRecordingState.postMessage(arg);
             }
@@ -445,14 +446,6 @@ export const useInitBridgeListener = () => {
                 tab === NOVA_TAB_TYPE.removeBG ||
                 tab === NOVA_TAB_TYPE.remakeImg ||
                 tab === NOVA_TAB_TYPE.improvedRes;
-
-              console.log('currentTab', tab);
-              if (tab === NOVA_TAB_TYPE.voiceDictation) {
-                setSharedVoiceDictationInfo((prev) => ({
-                  ...prev,
-                  previousPageType: 'OPEN_TAB'
-                }));
-              }
 
               const loadFile = () => {
                 let file: File | null = null;
