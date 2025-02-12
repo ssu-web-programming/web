@@ -154,7 +154,10 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
 
   const startRecording = useCallback(async () => {
     try {
+      console.log('startRecording');
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+      console.log('stream', stream);
+
       // console.log('startRecording-stream', stream);
       streamRef.current = stream;
 
@@ -301,12 +304,19 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
     };
   }, []);
 
+  // useEffect(() => {
+  //   // 맨 처음 최초 진입했을때만 실행하고 이후에는 절대 실행하면 안됨
+  //   const hasStarted = sessionStorage.getItem('hasStartedRecording') === 'true';
+  //   console.log('hasStarted', hasStarted);
+  //   if (!hasStarted) {
+  //     startRecording();
+  //     sessionStorage.setItem('hasStartedRecording', 'true');
+  //   }
+  // }, []);
+
   useEffect(() => {
-    // 맨 처음 최초 진입했을때만 실행하고 이후에는 절대 실행하면 안됨
-    const hasStarted = sessionStorage.getItem('hasStartedRecording') === 'true';
-    if (!hasStarted) {
+    if (isInitRecording) {
       startRecording();
-      sessionStorage.setItem('hasStartedRecording', 'true');
     }
   }, []);
 

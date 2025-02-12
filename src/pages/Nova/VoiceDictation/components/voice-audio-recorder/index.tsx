@@ -48,7 +48,7 @@ export default function VoiceAudioRecorder() {
       onRecordingFinish={() => {
         dispatch(setIsMicrophoneState(null));
         Bridge.callBridgeApi('getRecordingState', false);
-        sessionStorage.setItem('hasStartedRecording', 'false');
+        // sessionStorage.setItem('hasStartedRecording', 'false');
       }}
       onStopConfirm={openStopOverlay}
     />
