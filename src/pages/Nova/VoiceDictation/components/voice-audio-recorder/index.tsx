@@ -13,12 +13,11 @@ import StopModalContent from '../modals/stop-modal-content';
 export default function VoiceAudioRecorder() {
   const {
     setSharedVoiceDictationInfo,
-    sharedVoiceDictationInfo: { isVoiceRecording, previousPageType }
+    sharedVoiceDictationInfo: { isVoiceRecording, previousPageType, selectedLangOption }
   } = useVoiceDictationContext();
   const dispatch = useAppDispatch();
 
   const handleMoveToReady = async (file: File) => {
-    console.log('file', file);
     dispatch(setLocalFiles([file]));
 
     setSharedVoiceDictationInfo((prev) => ({
@@ -51,6 +50,7 @@ export default function VoiceAudioRecorder() {
         // sessionStorage.setItem('hasStartedRecording', 'false');
       }}
       onStopConfirm={openStopOverlay}
+      selectedLangOption={selectedLangOption}
     />
   );
 }

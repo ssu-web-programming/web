@@ -1,15 +1,17 @@
-import { useState } from 'react';
 import Select from 'components/select';
 import styled, { css } from 'styled-components';
 
-type OptionValues = 'KO' | 'EN' | 'JA' | 'ZH-HANS' | 'ZH-HANT' | 'KO_EN';
+import {
+  LangOptionValues,
+  useVoiceDictationContext
+} from '../../provider/voice-dictation-provider';
 
 type Option = {
-  value: OptionValues;
+  value: LangOptionValues;
   label: string;
 };
 
-const options: Option[] = [
+export const langOptions: Option[] = [
   { value: 'KO', label: '한국어' },
   { value: 'EN', label: '영어' },
   { value: 'JA', label: '일본어' },
@@ -19,15 +21,21 @@ const options: Option[] = [
 ];
 
 export default function RecognizedLang() {
-  const [selectedOption, setSelectedOption] = useState<OptionValues>('KO');
+  const {
+    setSharedVoiceDictationInfo,
+    sharedVoiceDictationInfo: { selectedLangOption }
+  } = useVoiceDictationContext();
 
   return (
     <S.SelectWrapper>
-      <Select<OptionValues>
-        options={options}
-        value={selectedOption}
+      <Select<LangOptionValues>
+        options={langOptions}
+        value={selectedLangOption}
         onChange={(result) => {
-          setSelectedOption(result);
+          setSharedVoiceDictationInfo((prev) => ({
+            ...prev,
+            selectedLangOption: result
+          }));
         }}
         $optionContainerStyle={css`
           transform: translateX(-50%);

@@ -9,7 +9,7 @@ const voiceDictationHttp = {
   postSpeechRecognize: async ({ file }: PostSpeechRecognize) => {
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('language', 'ko-KR');
+    formData.append('language', 'KO');
 
     const { res } = await apiWrapper().request(NOVA_SPEECH_RECOGNIZE, {
       method: 'POST',

@@ -4,6 +4,9 @@ import { ReactComponent as Pause } from 'img/light/nova/voiceDictation/pause.svg
 import { ReactComponent as Play } from 'img/light/nova/voiceDictation/play.svg';
 import { ReactComponent as Stop } from 'img/light/nova/voiceDictation/stop.svg';
 
+import { LangOptionValues } from '../../provider/voice-dictation-provider';
+import { langOptions } from '../recognized-lang';
+
 import * as S from './style';
 
 interface AudioRecorderProps {
@@ -14,6 +17,7 @@ interface AudioRecorderProps {
   onRecordingFinish?: () => void;
   onStopConfirm?: () => void | boolean | Promise<unknown>;
   startCondition?: boolean;
+  selectedLangOption?: LangOptionValues;
 }
 
 interface CustomCanvasRenderingContext2D extends CanvasRenderingContext2D {
@@ -94,7 +98,8 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   isInitRecording = false,
   onRecordingFinish,
   onStopConfirm,
-  startCondition
+  startCondition,
+  selectedLangOption
 }) => {
   const [isRecording, setIsRecording] = useState(isInitRecording || false);
   const [isPaused, setIsPaused] = useState(false);
@@ -293,6 +298,10 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
+  const filteredSelectedLangOptions = () => {
+    return langOptions.find((langOption) => langOption.value === selectedLangOption);
+  };
+
   useEffect(() => {
     return () => {
       if (intervalRef.current) {
@@ -324,7 +333,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
     <S.Container>
       <S.CanvasWrapper>
         <S.StatusText $isPaused={isPaused}>
-          {isPaused ? `일시정지 중` : '한국어 인식 중'}
+          {isPaused ? `일시정지 중` : `${filteredSelectedLangOptions()?.label} 인식 중`}
         </S.StatusText>
 
         <S.Canvas ref={canvasRef} />
