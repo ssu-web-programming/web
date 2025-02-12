@@ -52,66 +52,98 @@ export default function VoiceDictationIntro() {
     }));
   };
 
-  function getMicrophoneStream(): Promise<MicrophoneStreamResult> {
-    return new Promise((resolve) => {
-      let isResolved = false;
+  // function getMicrophoneStream(): Promise<MicrophoneStreamResult> {
+  //   return new Promise((resolve) => {
+  //     let isResolved = false;
 
-      navigator.mediaDevices
-        .getUserMedia({ audio: true, video: false })
-        .then((stream) => {
-          if (!isResolved) {
-            isResolved = true;
-            resolve({ success: true, stream });
-          }
-        })
-        .catch((error) => {
-          if (!isResolved) {
-            isResolved = true;
-            resolve({ success: false, error: error as Error });
-          }
-        });
+  //     navigator.mediaDevices
+  //       .getUserMedia({ audio: true, video: false })
+  //       .then((stream) => {
+  //         if (!isResolved) {
+  //           isResolved = true;
+  //           resolve({ success: true, stream });
+  //         }
+  //       })
+  //       .catch((error) => {
+  //         if (!isResolved) {
+  //           isResolved = true;
+  //           resolve({ success: false, error: error as Error });
+  //         }
+  //       });
 
-      // setTimeout(() => {
-      //   if (!isResolved) {
-      //     isResolved = true;
-      //     resolve({ success: false, error: new Error('Timeout') });
-      //   }
-      // }, timeout);
-    });
-  }
+  //     // setTimeout(() => {
+  //     //   if (!isResolved) {
+  //     //     isResolved = true;
+  //     //     resolve({ success: false, error: new Error('Timeout') });
+  //     //   }
+  //     // }, timeout);
+  //   });
+  // }
 
-  const checkAosPermission = async () => {
-    dispatch(activeLoadingSpinner());
-    await Bridge.callBridgeApi('getAudioPermission');
-    const result = await getMicrophoneStream();
-    if (result.success) {
-      console.log('성공!', result);
-    } else {
-      console.log('실패!', result);
-    }
-    // await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
-  };
+  // const checkAosPermission = async () => {
+  //   dispatch(activeLoadingSpinner());
+  //   await Bridge.callBridgeApi('getAudioPermission');
+  //   const result = await getMicrophoneStream();
+  //   if (result.success) {
+  //     console.log('성공!', result);
+  //   } else {
+  //     console.log('실패!', result);
+  //   }
+  //   // await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+  // };
 
-  const checkNonAosPermission = async () => {
-    if (!isAos) {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
-      console.log('checkNonAosPermission-stream', stream);
-    }
-    await Bridge.callBridgeApi('getRecordingState', true);
-    setSharedVoiceDictationInfo((prev) => ({
-      ...prev,
-      componentType: 'AUDIO_RECORDER',
-      isVoiceRecording: true,
-      previousPageType: 'AUDIO_RECORDER'
-    }));
-  };
+  // const checkNonAosPermission = async () => {
+  //   if (!isAos) {
+  //     const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+  //     console.log('checkNonAosPermission-stream', stream);
+  //   }
+  //   await Bridge.callBridgeApi('getRecordingState', true);
+  //   setSharedVoiceDictationInfo((prev) => ({
+  //     ...prev,
+  //     componentType: 'AUDIO_RECORDER',
+  //     isVoiceRecording: true,
+  //     previousPageType: 'AUDIO_RECORDER'
+  //   }));
+  // };
+
+  // const startRecording = async () => {
+  //   try {
+  //     // AOS의 경우에는 permission 여부를 파악한 후 팝업을 띄울지 말지 결정한다.
+  //     const isExecuteAosPermission = isAos && isAosMicrophonePermission === null;
+
+  //     isExecuteAosPermission ? await checkAosPermission() : await checkNonAosPermission();
+  //   } catch (error) {
+  //     const mediaError = error as MediaError;
+  //     const errorMesaage = MEDIA_ERROR_MESSAGES[mediaError.name];
+  //     // 에러 타입에 맞는 팝업을 띄우면 된다.
+  //     console.log(mediaError);
+  //     errorTrigger(errorMesaage);
+
+  //     await Bridge.callBridgeApi('getRecordingState', false);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   if (isAosMicrophonePermission) {
+  //     startRecording();
+  //   } else if (isAosMicrophonePermission === false) {
+  //     errorTrigger(MEDIA_ERROR_MESSAGES['PermissionDeniedError']);
+  //     dispatch(setIsMicrophoneState(null));
+  //   }
+  // }, [isAosMicrophonePermission]);
 
   const startRecording = async () => {
     try {
-      // AOS의 경우에는 permission 여부를 파악한 후 팝업을 띄울지 말지 결정한다.
-      const isExecuteAosPermission = isAos && isAosMicrophonePermission === null;
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+      console.log('checkNonAosPermission-stream', stream);
 
-      isExecuteAosPermission ? await checkAosPermission() : await checkNonAosPermission();
+      await Bridge.callBridgeApi('getRecordingState', true);
+      setSharedVoiceDictationInfo((prev) => ({
+        ...prev,
+        componentType: 'AUDIO_RECORDER',
+        isVoiceRecording: true,
+        previousPageType: 'AUDIO_RECORDER'
+      }));
     } catch (error) {
       const mediaError = error as MediaError;
       const errorMesaage = MEDIA_ERROR_MESSAGES[mediaError.name];
@@ -122,16 +154,6 @@ export default function VoiceDictationIntro() {
       await Bridge.callBridgeApi('getRecordingState', false);
     }
   };
-
-  useEffect(() => {
-    if (isAosMicrophonePermission) {
-      startRecording();
-    } else if (isAosMicrophonePermission === false) {
-      errorTrigger(MEDIA_ERROR_MESSAGES['PermissionDeniedError']);
-      dispatch(setIsMicrophoneState(null));
-    }
-  }, [isAosMicrophonePermission]);
-
   return (
     <Guide
       $guideTitleStyle={css`
