@@ -1,4 +1,5 @@
 import React from 'react';
+import VoiceDictationProvider from 'pages/Nova/VoiceDictation/provider/voice-dictation-provider';
 import ReactDOM from 'react-dom/client';
 import { HelmetProvider } from 'react-helmet-async';
 import { Provider } from 'react-redux';
@@ -28,13 +29,15 @@ const queryClient = new QueryClient();
 function Root() {
   return (
     <Provider store={store}>
-      <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <HelmetProvider>
-            <App />
-          </HelmetProvider>
-        </BrowserRouter>
-      </QueryClientProvider>
+      <VoiceDictationProvider>
+        <QueryClientProvider client={queryClient}>
+          <BrowserRouter>
+            <HelmetProvider>
+              <App />
+            </HelmetProvider>
+          </BrowserRouter>
+        </QueryClientProvider>
+      </VoiceDictationProvider>
     </Provider>
   );
 }

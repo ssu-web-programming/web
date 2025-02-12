@@ -56,7 +56,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
   const { isLightMode, curTheme } = useAppSelector(themeInfoSelector);
   const novaHistory = useAppSelector(novaHistorySelector);
   const isShareMode = useAppSelector(isShareModeSelector);
-  const { creating, usingAI, selectedNovaTab } = useAppSelector(selectTabSlice);
+  const { creating, selectedNovaTab } = useAppSelector(selectTabSlice);
   const status = useAppSelector(selectPageStatus(selectedNovaTab));
   const dispatch = useAppDispatch();
   const confirm = useConfirm();

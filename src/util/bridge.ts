@@ -1,4 +1,6 @@
 import { useCallback } from 'react';
+import { prev } from 'cheerio/dist/commonjs/api/traversing';
+import { useVoiceDictationContext } from 'pages/Nova/VoiceDictation/provider/voice-dictation-provider';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { initLoadingSpinner } from 'store/slices/loadingSpinner';
@@ -332,6 +334,7 @@ export const useInitBridgeListener = () => {
   const confirm = useConfirm();
 
   const { getFileInfo, loadLocalFile } = useManageFile();
+  const { setSharedVoiceDictationInfo } = useVoiceDictationContext();
 
   // const movePage = useMoveChatTab();
   const getPath = useCallback((cmd: PanelOpenCmd) => {
@@ -442,6 +445,13 @@ export const useInitBridgeListener = () => {
                 tab === NOVA_TAB_TYPE.removeBG ||
                 tab === NOVA_TAB_TYPE.remakeImg ||
                 tab === NOVA_TAB_TYPE.improvedRes;
+
+              if (tab === NOVA_TAB_TYPE.voiceDictation) {
+                setSharedVoiceDictationInfo((prev) => ({
+                  ...prev,
+                  previousPageType: 'OPEN_TAB'
+                }));
+              }
 
               const loadFile = () => {
                 let file: File | null = null;

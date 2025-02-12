@@ -16,6 +16,16 @@ import { useVoiceDictationContext } from '../../provider/voice-dictation-provide
 import AudioFileUploader from '../audio-file-uploader';
 import RecognizedLang from '../recognized-lang';
 
+type MicrophoneStreamResult =
+  | {
+      success: true;
+      stream: MediaStream;
+    }
+  | {
+      success: false;
+      error: Error;
+    };
+
 export default function VoiceDictationIntro() {
   const { t } = useTranslation();
   const { setSharedVoiceDictationInfo } = useVoiceDictationContext();
@@ -42,9 +52,43 @@ export default function VoiceDictationIntro() {
     }));
   };
 
+  function getMicrophoneStream(timeout = 10000): Promise<MicrophoneStreamResult> {
+    return new Promise((resolve) => {
+      let isResolved = false;
+
+      navigator.mediaDevices
+        .getUserMedia({ audio: true, video: false })
+        .then((stream) => {
+          if (!isResolved) {
+            isResolved = true;
+            resolve({ success: true, stream });
+          }
+        })
+        .catch((error) => {
+          if (!isResolved) {
+            isResolved = true;
+            resolve({ success: false, error: error as Error });
+          }
+        });
+
+      setTimeout(() => {
+        if (!isResolved) {
+          isResolved = true;
+          resolve({ success: false, error: new Error('Timeout') });
+        }
+      }, timeout);
+    });
+  }
+
   const checkAosPermission = async () => {
     dispatch(activeLoadingSpinner());
     await Bridge.callBridgeApi('getAudioPermission');
+    const result = await getMicrophoneStream();
+    if (result.success) {
+      console.log('성공!', result);
+    } else {
+      console.log('실패!', result);
+    }
     // await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
   };
 
