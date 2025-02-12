@@ -37,8 +37,6 @@ export default function VoiceAudioRecorder() {
     });
   };
 
-  console.log('들어가기전 shared상태', previousPageType);
-
   return (
     <AudioRecorder
       onRecordingComplete={async (blob) => {
@@ -50,6 +48,7 @@ export default function VoiceAudioRecorder() {
       onRecordingFinish={() => {
         dispatch(setIsMicrophoneState(null));
         Bridge.callBridgeApi('getRecordingState', false);
+        sessionStorage.setItem('hasStartedRecording', 'false');
       }}
       onStopConfirm={openStopOverlay}
     />

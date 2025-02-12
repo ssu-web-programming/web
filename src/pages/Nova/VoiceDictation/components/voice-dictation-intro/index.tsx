@@ -101,7 +101,8 @@ export default function VoiceDictationIntro() {
     setSharedVoiceDictationInfo((prev) => ({
       ...prev,
       componentType: 'AUDIO_RECORDER',
-      isVoiceRecording: true
+      isVoiceRecording: true,
+      previousPageType: 'AUDIO_RECORDER'
     }));
   };
 
