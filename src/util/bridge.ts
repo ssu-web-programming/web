@@ -525,7 +525,9 @@ export const useInitBridgeListener = () => {
             break;
           }
           case 'finishUploadFile': {
-            dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiChat, status: 'home' }));
+            // dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiChat, status: 'home' }));
+            console.log('selectedNovaTab', selectedNovaTab);
+            dispatch(setPageStatus({ tab: selectedNovaTab, status: 'home' }));
             dispatch(setLocalFiles([]));
             dispatch(setDriveFiles([]));
             dispatch(setLoadingFile({ id: body.fileId }));
