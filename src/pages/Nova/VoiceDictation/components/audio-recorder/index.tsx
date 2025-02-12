@@ -12,6 +12,7 @@ interface AudioRecorderProps {
   gap?: number;
   isInitRecording?: boolean;
   onRecordingFinish?: () => void;
+  onStopConfirm?: () => void | boolean | Promise<unknown>;
 }
 
 interface CustomCanvasRenderingContext2D extends CanvasRenderingContext2D {
@@ -90,7 +91,8 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   barWidth = 2,
   gap = 5,
   isInitRecording = false,
-  onRecordingFinish
+  onRecordingFinish,
+  onStopConfirm
 }) => {
   const [isRecording, setIsRecording] = useState(isInitRecording || false);
   const [isPaused, setIsPaused] = useState(false);
@@ -110,8 +112,8 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   const startTimer = useCallback(() => {
     if (intervalRef.current) return;
     (intervalRef.current as any) = setInterval(() => {
-      console.log('mediaRecorderRef', mediaRecorderRef);
-      console.log('chunksRef', chunksRef.current);
+      // console.log('mediaRecorderRef', mediaRecorderRef);
+      // console.log('chunksRef', chunksRef.current);
       setRecordingTime((prev) => prev + 0.1);
     }, 100);
   }, []);
@@ -151,7 +153,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   const startRecording = useCallback(async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
-      console.log('startRecording-stream', stream);
+      // console.log('startRecording-stream', stream);
       streamRef.current = stream;
 
       const mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/mp4' });
@@ -159,7 +161,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       chunksRef.current = [];
 
       mediaRecorder.ondataavailable = (event) => {
-        console.log('event.data', event.data);
+        // console.log('event.data', event.data);
 
         if (event.data.size > 0) {
           chunksRef.current.push(event.data);
@@ -194,7 +196,6 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       };
 
       mediaRecorder.onstop = async () => {
-        console.log('stop-chunksRef.current', chunksRef.current);
         const blob = new Blob(chunksRef.current, { type: 'audio/mpeg' });
         const url = URL.createObjectURL(blob);
         setAudioUrl(url);
@@ -219,21 +220,27 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
     }
   }, [onRecordingComplete, startTimer, startVisualization]);
 
-  const stopRecording = useCallback(() => {
+  const stopRecording = useCallback(async () => {
     if (mediaRecorderRef.current && isRecording) {
-      mediaRecorderRef.current.stop();
-      if (streamRef.current) {
-        streamRef.current.getTracks().forEach((track) => track.stop());
-        streamRef.current = null;
+      pauseRecording();
+      // stop했을때 confirm 창을 띄워서 확인하는 로직!
+      const confirmResult = await onStopConfirm?.();
+
+      if (confirmResult) {
+        mediaRecorderRef.current.stop();
+        if (streamRef.current) {
+          streamRef.current.getTracks().forEach((track) => track.stop());
+          streamRef.current = null;
+        }
+        if (animationFrameRef.current) {
+          cancelAnimationFrame(animationFrameRef.current);
+        }
+        setIsRecording(false);
+        setIsPaused(false);
+        stopTimer();
+        setRecordingTime(0);
+        onRecordingFinish?.();
       }
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current);
-      }
-      setIsRecording(false);
-      setIsPaused(false);
-      stopTimer();
-      setRecordingTime(0);
-      onRecordingFinish?.();
     }
   }, [isRecording, stopTimer]);
 
