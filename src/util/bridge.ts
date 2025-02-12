@@ -446,6 +446,7 @@ export const useInitBridgeListener = () => {
                 tab === NOVA_TAB_TYPE.remakeImg ||
                 tab === NOVA_TAB_TYPE.improvedRes;
 
+              console.log('currentTab', tab);
               if (tab === NOVA_TAB_TYPE.voiceDictation) {
                 setSharedVoiceDictationInfo((prev) => ({
                   ...prev,
