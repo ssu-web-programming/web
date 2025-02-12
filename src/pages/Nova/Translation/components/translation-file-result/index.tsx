@@ -5,7 +5,7 @@ import downloadIcon from 'img/light/nova/translation/download.svg';
 import { activeLoadingSpinner } from 'store/slices/loadingSpinner';
 import { useAppDispatch } from 'store/store';
 import { css } from 'styled-components';
-import Bridge, { ClientType, fileToString, getPlatform } from 'util/bridge';
+import Bridge, { fileToString } from 'util/bridge';
 
 import { useTranslationContext } from '../../provider/translation-provider';
 import FileItem from '../file-item';
@@ -40,11 +40,10 @@ export default function TranslationFileResult() {
 
   const handleCompareSourceAndTranslation = async () => {
     dispatch(activeLoadingSpinner());
-
     await Bridge.callBridgeApi<CompareSouceAndTranslationArgs>('compareSourceAndTranslation', {
       originalFileType,
       originalFileName,
-      originFile: await fileToString(originFile),
+      originFile: originalFileType === 'local' ? await fileToString(originFile) : originFile,
       translationFileName,
       translationFileUrl
     });
@@ -73,23 +72,23 @@ export default function TranslationFileResult() {
         <FileItem fileName={translationFileName} />
       </S.FileItemWrapper>
       <S.ButtonGroup>
-        {(getPlatform() === ClientType.windows || getPlatform() === ClientType.mac) && (
-          <IconTextButton
-            width={'full'}
-            height={48}
-            borderType="gray"
-            onClick={handleCompareSourceAndTranslation}
-            iconSrc={compareViewerIcon}
-            iconPos={'left'}
-            iconSize={24}
-            cssExt={css`
-              border-radius: 8px;
-              font-size: 15px;
-            `}>
-            원본-번역 비교 보기
-          </IconTextButton>
-        )}
-
+        {/* {(getPlatform() === ClientType.windows || getPlatform() === ClientType.mac) && (
+       
+        )} */}
+        <IconTextButton
+          width={'full'}
+          height={48}
+          borderType="gray"
+          onClick={handleCompareSourceAndTranslation}
+          iconSrc={compareViewerIcon}
+          iconPos={'left'}
+          iconSize={24}
+          cssExt={css`
+            border-radius: 8px;
+            font-size: 15px;
+          `}>
+          원본-번역 비교 보기
+        </IconTextButton>
         <IconTextButton
           width={'full'}
           height={48}
