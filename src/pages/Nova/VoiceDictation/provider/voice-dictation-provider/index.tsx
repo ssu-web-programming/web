@@ -31,6 +31,8 @@ export interface VoiceDictationResult {
   };
 }
 
+export type LangOptionValues = 'KO' | 'EN' | 'JA' | 'ZH-HANS' | 'ZH-HANT' | 'KO_EN';
+
 interface Props {
   children: ReactNode;
 }
@@ -41,6 +43,7 @@ interface SharedVoiceDictationInfo {
   audioDuration: string;
   isVoiceRecording: boolean;
   previousPageType: 'OPEN_TAB' | 'AUDIO_RECORDER' | null;
+  selectedLangOption: LangOptionValues;
 }
 
 interface VoiceDictationContextType {
@@ -67,7 +70,8 @@ export default function VoiceDictationProvider({ children }: Props) {
       voiceDictationResult: null,
       audioDuration: '',
       isVoiceRecording: false,
-      previousPageType: null
+      previousPageType: null,
+      selectedLangOption: 'KO'
     });
 
   const triggerLoading = () => {
@@ -83,7 +87,8 @@ export default function VoiceDictationProvider({ children }: Props) {
       voiceDictationResult: null,
       audioDuration: '',
       isVoiceRecording: false,
-      previousPageType: null
+      previousPageType: null,
+      selectedLangOption: 'KO'
     });
   };
 
