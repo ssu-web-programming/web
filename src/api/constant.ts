@@ -45,6 +45,8 @@ export const NOVA_TRANSLATE_DOCUMENT_CHECK_STATUS = '/api/v2/nova/translate/docu
 export const NOVA_TRANSLATE_LATEST_LANG = '/api/v2/nova/translate/latest-lang';
 
 export const NOVA_SPEECH_RECOGNIZE = '/api/v2/nova/speech/recognize';
+export const NOVA_SPEECH_DOWNLOAD = '/api/v2/nova/speech/script';
+
 export const NOVA_VIDEO_GET_AVATARS = '/api/v2/nova/video/avatars';
 export const NOVA_VIDEO_GET_VOICES = '/api/v2/nova/video/voices';
 export const NOVA_VIDEO_MAKE_AVATARS = '/api/v2/nova/video/photo/avatar';

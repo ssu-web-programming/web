@@ -101,9 +101,9 @@ export default function useCurrentDocAnalysis() {
 
   const confirmUploadFile = async () => {
     await confirm({
-      msg: t('Index.Confirm.UploadFile.Msg'),
+      msg: t('Nova.Confirm.UploadFile.Msg'),
       onOk: {
-        text: t('Index.Confirm.UploadFile.Ok'),
+        text: t('Nova.Confirm.UploadFile.Ok'),
         callback: () => {
           dispatch(setPageStatus({ tab: selectedNovaTab, status: 'progress' }));
           Bridge.callBridgeApi('uploadFile');

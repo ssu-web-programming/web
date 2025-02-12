@@ -35,7 +35,6 @@ import { ClientType, getPlatform, useInitBridgeListener } from './util/bridge';
 function App() {
   const initBridgeListener = useInitBridgeListener();
   const initApp = useInitApp();
-  const { goPromptPage } = useChangeBackground();
   const dispatch = useAppDispatch();
   const { curTheme } = useAppSelector(themeInfoSelector);
 

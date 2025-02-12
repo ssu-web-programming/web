@@ -610,6 +610,7 @@ export const useInitBridgeListener = () => {
           }
           case 'finishDownloadVoiceFile': {
             dispatch(initLoadingSpinner());
+            console.log('finishDownloadVoiceFile 호출 완료!');
             break;
           }
           // 전화 여부를 판단하는 로직!

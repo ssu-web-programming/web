@@ -28,6 +28,8 @@ export interface VoiceDictationResult {
   success: boolean;
   data: {
     segments: Segments[];
+    requestId: string;
+    voiceUrl: string;
   };
 }
 
@@ -44,6 +46,7 @@ interface SharedVoiceDictationInfo {
   isVoiceRecording: boolean;
   previousPageType: 'OPEN_TAB' | 'AUDIO_RECORDER' | null;
   selectedLangOption: LangOptionValues;
+  fileName: string;
 }
 
 interface VoiceDictationContextType {
@@ -71,7 +74,8 @@ export default function VoiceDictationProvider({ children }: Props) {
       audioDuration: '',
       isVoiceRecording: false,
       previousPageType: null,
-      selectedLangOption: 'KO'
+      selectedLangOption: 'KO',
+      fileName: ''
     });
 
   const triggerLoading = () => {
@@ -88,7 +92,8 @@ export default function VoiceDictationProvider({ children }: Props) {
       audioDuration: '',
       isVoiceRecording: false,
       previousPageType: null,
-      selectedLangOption: 'KO'
+      selectedLangOption: 'KO',
+      fileName: ''
     });
   };
 

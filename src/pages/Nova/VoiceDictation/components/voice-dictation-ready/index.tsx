@@ -19,13 +19,12 @@ import * as S from './style';
 
 export default function VoiceDictationReady() {
   const {
-    sharedVoiceDictationInfo: { componentType, audioDuration },
+    sharedVoiceDictationInfo: { componentType, audioDuration, fileName },
     setSharedVoiceDictationInfo,
     triggerLoading
   } = useVoiceDictationContext();
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const { t } = useTranslation();
-  const [inputValue, setInputValue] = useState('');
 
   const [isEditMode, setIsEditMode] = useState(false);
   const localFiles = useAppSelector(getLocalFiles);
@@ -35,7 +34,10 @@ export default function VoiceDictationReady() {
   };
 
   const handleChangeInputValue = (e: ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
+    setSharedVoiceDictationInfo((prev) => ({
+      ...prev,
+      fileName: e.target.value
+    }));
   };
 
   const handleMoveToResult = (result: VoiceDictationResult) => {
@@ -56,7 +58,10 @@ export default function VoiceDictationReady() {
 
   useEffect(() => {
     if (localFiles.length) {
-      setInputValue(localFiles[0].name);
+      setSharedVoiceDictationInfo((prev) => ({
+        ...prev,
+        fileName: localFiles[0].name
+      }));
     }
   }, [localFiles]);
 
@@ -78,7 +83,7 @@ export default function VoiceDictationReady() {
         {componentType === 'FILE_READY' ? (
           <S.RecordingBox>
             <AudioFile />
-            <S.FileTitle>{localFiles[0].name}</S.FileTitle>
+            <S.FileTitle>{fileName}</S.FileTitle>
             <S.Duration>{audioDuration}</S.Duration>
 
             <S.LanguageSelector>
@@ -97,10 +102,10 @@ export default function VoiceDictationReady() {
             {/* <S.FileTitle>{localFiles[0].name}</S.FileTitle> */}
             <S.InputFileWrapper>
               {isEditMode ? (
-                <S.InputFileTitle value={inputValue} onChange={handleChangeInputValue} />
+                <S.InputFileTitle value={fileName} onChange={handleChangeInputValue} />
               ) : (
                 <>
-                  <S.FileTitle>{inputValue}</S.FileTitle>
+                  <S.FileTitle>{fileName}</S.FileTitle>
                   <EditIcon onClick={handleChangeEditMode} />
                 </>
               )}
