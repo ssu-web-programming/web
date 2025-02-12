@@ -527,13 +527,12 @@ export const useInitBridgeListener = () => {
           case 'finishUploadFile': {
             // dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiChat, status: 'home' }));
             console.log('selectedNovaTab', selectedNovaTab);
-            dispatch(setPageStatus({ tab: selectedNovaTab, status: 'home' }));
             dispatch(setLocalFiles([]));
             dispatch(setDriveFiles([]));
             dispatch(setLoadingFile({ id: body.fileId }));
             const currentFile = await getFileInfo(body.fileId);
             dispatch(removeLoadingFile());
-
+            dispatch(setPageStatus({ tab: selectedNovaTab, status: 'home' }));
             dispatch(setDriveFiles([currentFile]));
             dispatch(setCreating('none'));
             break;
