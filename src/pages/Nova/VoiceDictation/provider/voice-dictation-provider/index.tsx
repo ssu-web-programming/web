@@ -40,6 +40,7 @@ interface SharedVoiceDictationInfo {
   voiceDictationResult: VoiceDictationResult | null;
   audioDuration: string;
   isVoiceRecording: boolean;
+  previousPageType: 'OPEN_TAB' | 'AUDIO_RECORDER';
 }
 
 interface VoiceDictationContextType {
@@ -65,7 +66,8 @@ export default function VoiceDictationProvider({ children }: Props) {
       componentType: 'INTRO',
       voiceDictationResult: null,
       audioDuration: '',
-      isVoiceRecording: false
+      isVoiceRecording: false,
+      previousPageType: 'AUDIO_RECORDER'
     });
 
   const triggerLoading = () => {
@@ -80,7 +82,8 @@ export default function VoiceDictationProvider({ children }: Props) {
       componentType: 'INTRO',
       voiceDictationResult: null,
       audioDuration: '',
-      isVoiceRecording: false
+      isVoiceRecording: false,
+      previousPageType: 'AUDIO_RECORDER'
     });
   };
 

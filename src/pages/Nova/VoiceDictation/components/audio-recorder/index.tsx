@@ -13,6 +13,7 @@ interface AudioRecorderProps {
   isInitRecording?: boolean;
   onRecordingFinish?: () => void;
   onStopConfirm?: () => void | boolean | Promise<unknown>;
+  startCondition?: boolean;
 }
 
 interface CustomCanvasRenderingContext2D extends CanvasRenderingContext2D {
@@ -92,7 +93,8 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   gap = 5,
   isInitRecording = false,
   onRecordingFinish,
-  onStopConfirm
+  onStopConfirm,
+  startCondition
 }) => {
   const [isRecording, setIsRecording] = useState(isInitRecording || false);
   const [isPaused, setIsPaused] = useState(false);
@@ -301,8 +303,8 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
 
   // 들어오면 바로 시작한다.
   useEffect(() => {
-    if (isInitRecording) {
-      console.log('openTab으로 여기를 다시 오면 다시 시작해버리는거야!', isInitRecording);
+    if (startCondition) {
+      console.log('openTab으로 여기를 다시 오면 다시 시작해버리는거야!', startCondition);
       startRecording();
     }
   }, []);

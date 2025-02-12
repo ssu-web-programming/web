@@ -13,7 +13,7 @@ import StopModalContent from '../modals/stop-modal-content';
 export default function VoiceAudioRecorder() {
   const {
     setSharedVoiceDictationInfo,
-    sharedVoiceDictationInfo: { isVoiceRecording }
+    sharedVoiceDictationInfo: { isVoiceRecording, previousPageType }
   } = useVoiceDictationContext();
   const dispatch = useAppDispatch();
 
@@ -44,6 +44,7 @@ export default function VoiceAudioRecorder() {
         handleMoveToReady(blobToFile(blob));
       }}
       isInitRecording={isVoiceRecording}
+      startCondition={isVoiceRecording && previousPageType === 'AUDIO_RECORDER'}
       onRecordingFinish={() => {
         dispatch(setIsMicrophoneState(null));
         Bridge.callBridgeApi('getRecordingState', false);
