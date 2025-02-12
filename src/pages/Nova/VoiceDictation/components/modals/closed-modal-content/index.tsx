@@ -21,7 +21,7 @@ export default function ClosedModalContent({ onConfirm }: Props) {
     overlay.closeAll();
     Bridge.callBridgeApi('closeNova');
     Bridge.callBridgeApi('getRecordingState', false);
-    sessionStorage.setItem('hasStartedRecording', 'false');
+    // sessionStorage.setItem('hasStartedRecording', 'false');
     dispatch(setIsClosedNovaState(false));
     onConfirm && onConfirm();
   };

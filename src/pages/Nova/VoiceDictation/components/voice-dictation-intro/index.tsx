@@ -52,7 +52,7 @@ export default function VoiceDictationIntro() {
     }));
   };
 
-  function getMicrophoneStream(timeout = 10000): Promise<MicrophoneStreamResult> {
+  function getMicrophoneStream(): Promise<MicrophoneStreamResult> {
     return new Promise((resolve) => {
       let isResolved = false;
 
@@ -71,12 +71,12 @@ export default function VoiceDictationIntro() {
           }
         });
 
-      setTimeout(() => {
-        if (!isResolved) {
-          isResolved = true;
-          resolve({ success: false, error: new Error('Timeout') });
-        }
-      }, timeout);
+      // setTimeout(() => {
+      //   if (!isResolved) {
+      //     isResolved = true;
+      //     resolve({ success: false, error: new Error('Timeout') });
+      //   }
+      // }, timeout);
     });
   }
 
