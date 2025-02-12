@@ -1,4 +1,5 @@
 import { overlay } from 'overlay-kit';
+import { useVoiceDictationContext } from 'pages/Nova/VoiceDictation/provider/voice-dictation-provider';
 import Bridge from 'util/bridge';
 
 import * as S from './style';
@@ -8,12 +9,18 @@ interface Props {
 }
 
 export default function StopModalContent({ onConfirm }: Props) {
+  const { setSharedVoiceDictationInfo } = useVoiceDictationContext();
+
   const handleCancle = () => {
     overlay.closeAll();
   };
 
   const handleClose = () => {
     overlay.closeAll();
+    setSharedVoiceDictationInfo((prev) => ({
+      ...prev,
+      isVoiceRecording: false
+    }));
     Bridge.callBridgeApi('getRecordingState', false);
     onConfirm && onConfirm();
   };

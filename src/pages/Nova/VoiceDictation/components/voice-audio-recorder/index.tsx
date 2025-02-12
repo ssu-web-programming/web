@@ -8,7 +8,6 @@ import { blobToFile } from 'util/getAudioDuration';
 
 import { useVoiceDictationContext } from '../../provider/voice-dictation-provider';
 import AudioRecorder from '../audio-recorder';
-import ClosedModalContent from '../modals/closed-modal-content';
 import StopModalContent from '../modals/stop-modal-content';
 
 export default function VoiceAudioRecorder() {
