@@ -60,3 +60,9 @@ export const blobToFile = (audioBlob: Blob) => {
     lastModified: Date.now()
   });
 };
+
+export const changeFileExtension = (filename: string, extension: string) => {
+  const baseFileName = filename.substring(0, filename.lastIndexOf('.'));
+
+  return `${baseFileName}.${extension}`;
+};

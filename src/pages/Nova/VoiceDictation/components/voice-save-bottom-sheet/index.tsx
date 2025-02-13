@@ -7,6 +7,7 @@ import { overlay } from 'overlay-kit';
 import { activeLoadingSpinner } from 'store/slices/loadingSpinner';
 import { useAppDispatch } from 'store/store';
 import Bridge from 'util/bridge';
+import { changeFileExtension } from 'util/getAudioDuration';
 
 import { useVoiceDictationContext } from '../../provider/voice-dictation-provider';
 import VoiceFileModalContent from '../voice-file-modal-content';
@@ -59,7 +60,7 @@ export default function VoiceSaveBottomSheet({ isOpened, setIsOpened }: Props) {
     const { data } = result;
 
     await Bridge.callBridgeApi('downloadVoiceFile', {
-      fileName,
+      fileName: changeFileExtension(fileName, type),
       url: data.downloadUrl
     });
   };
