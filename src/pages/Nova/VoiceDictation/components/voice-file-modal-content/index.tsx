@@ -15,8 +15,8 @@ export default function VoiceFileModalContent({ onSave }: Props) {
   };
 
   const handleSave = async () => {
-    await onSave(fileType);
     handleClose();
+    await onSave(fileType);
   };
 
   return (
