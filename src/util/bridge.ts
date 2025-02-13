@@ -531,6 +531,8 @@ export const useInitBridgeListener = () => {
             dispatch(setDriveFiles([]));
             dispatch(setLoadingFile({ id: body.fileId }));
             const currentFile = await getFileInfo(body.fileId);
+            console.log('currentFile', currentFile);
+            console.log('body', body);
             dispatch(removeLoadingFile());
             dispatch(setPageStatus({ tab: selectedNovaTab, status: 'home' }));
             dispatch(setDriveFiles([currentFile]));
