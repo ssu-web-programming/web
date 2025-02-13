@@ -38,6 +38,12 @@ export default function TranslationFileResult() {
     }
   } = useTranslationContext();
 
+  console.log('originalFile-info', {
+    originalFileType,
+    originalFileName,
+    originFile
+  });
+
   const handleCompareSourceAndTranslation = async () => {
     dispatch(activeLoadingSpinner());
     await Bridge.callBridgeApi<CompareSouceAndTranslationArgs>('compareSourceAndTranslation', {
