@@ -1,10 +1,22 @@
+import { useState } from 'react';
 import { overlay } from 'overlay-kit';
 
 import * as S from './style';
 
-export default function VoiceFileModalContent() {
+interface Props {
+  onSave: (type: 'txt' | 'pdf') => Promise<void>;
+}
+
+export default function VoiceFileModalContent({ onSave }: Props) {
+  const [fileType, setFileType] = useState<'txt' | 'pdf'>('txt'); // 기본값을 'txt'로 설정
+
   const handleClose = () => {
     overlay.closeAll();
+  };
+
+  const handleSave = async () => {
+    await onSave(fileType);
+    handleClose();
   };
 
   return (
@@ -13,24 +25,33 @@ export default function VoiceFileModalContent() {
 
       <S.RadioGroup>
         <S.RadioLabel>
-          <S.RadioInput name="fileFormat" defaultChecked />
-          <S.RadioText>Word 문서(.docx)</S.RadioText>
+          <S.RadioInput
+            type="radio"
+            name="fileFormat"
+            value="txt"
+            checked={fileType === 'txt'}
+            onChange={(e) => setFileType(e.target.value as 'txt' | 'pdf')}
+          />
+          <S.RadioText>텍스트 문서(.txt)</S.RadioText>
         </S.RadioLabel>
 
         <S.RadioLabel>
-          <S.RadioInput name="fileFormat" />
-          <S.RadioText>한글 문서(.hwp)</S.RadioText>
-        </S.RadioLabel>
-
-        <S.RadioLabel>
-          <S.RadioInput name="fileFormat" />
+          <S.RadioInput
+            type="radio"
+            name="fileFormat"
+            value="pdf"
+            checked={fileType === 'pdf'}
+            onChange={(e) => setFileType(e.target.value as 'txt' | 'pdf')}
+          />
           <S.RadioText>pdf 문서(.pdf)</S.RadioText>
         </S.RadioLabel>
       </S.RadioGroup>
 
       <S.ButtonGroup>
         <S.Button onClick={handleClose}>취소</S.Button>
-        <S.Button primary>저장하기</S.Button>
+        <S.Button primary onClick={handleSave}>
+          저장하기
+        </S.Button>
       </S.ButtonGroup>
     </S.ModalContainer>
   );
