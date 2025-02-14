@@ -37,6 +37,15 @@ export const TitleWrap = styled.div`
   }
 `;
 
+export const SelectBoxWrap = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 4px;
+  padding: 12px 16px;
+`;
+
 export const VoiceContainer = styled.div<{ isSelected: boolean }>`
   position: relative;
   display: flex;

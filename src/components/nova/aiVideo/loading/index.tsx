@@ -93,6 +93,7 @@ export default function Loading() {
             tab: NOVA_TAB_TYPE.aiVideo,
             result: {
               info: {
+                ...result?.info,
                 selectedAvatar: {
                   ...result?.info?.selectedAvatar,
                   video: { ...InitVideos, id: data.video_id }
@@ -133,6 +134,7 @@ export default function Loading() {
             result: {
               link: data.video_url,
               info: {
+                ...result?.info,
                 selectedAvatar: {
                   ...result?.info?.selectedAvatar,
                   video: { data }

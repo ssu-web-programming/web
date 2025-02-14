@@ -1,25 +1,27 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useCallback, useEffect, useRef, useState } from 'react';
 import Tab from '@mui/material/Tab';
+import { result } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { css } from 'styled-components';
 
 import { AvatarInfo, Avatars, InitAvatarInfo } from '../../../../../constants/heygenTypes';
+import { NOVA_TAB_TYPE } from '../../../../../constants/novaTapTypes';
 import { ReactComponent as CheckIcon } from '../../../../../img/common/ico_check.svg';
 import CloseDarkIcon from '../../../../../img/dark/ico_nova_close.svg';
 import CloseLightIcon from '../../../../../img/light/ico_nova_close.svg';
+import { selectPageResult } from '../../../../../store/slices/nova/pageStatusSlice';
 import { screenModeSelector } from '../../../../../store/slices/screenMode';
 import { themeInfoSelector } from '../../../../../store/slices/theme';
 import { useAppSelector } from '../../../../../store/store';
 import { isMobile } from '../../../../../util/bridge';
 import Blanket from '../../../../Blanket';
 import Button from '../../../../buttons/Button';
+import { useGetAvatars } from '../../../../hooks/nova/use-get-avatars';
 
 import * as S from './styles';
 
 interface SelectAvatarProps {
-  avatarList: Avatars[];
   setIsOpen: Dispatch<SetStateAction<boolean>>;
-  selectedAvatar: AvatarInfo | null;
   changeSelectedAvatar: (avatar: Avatars) => void;
 }
 
@@ -29,21 +31,11 @@ enum ETabType {
   female
 }
 
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
-}
-
-export default function SelectAvatar({
-  avatarList,
-  setIsOpen,
-  selectedAvatar,
-  changeSelectedAvatar
-}: SelectAvatarProps) {
+export default function SelectAvatar({ setIsOpen, changeSelectedAvatar }: SelectAvatarProps) {
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const { screenMode } = useAppSelector(screenModeSelector);
   const { t } = useTranslation();
+  const result = useAppSelector(selectPageResult(NOVA_TAB_TYPE.aiVideo));
   const [tab, setTab] = useState<ETabType>(ETabType.all);
   const [tempAvatar, setTempAvatar] = useState<Avatars | null>(null);
 
@@ -51,9 +43,32 @@ export default function SelectAvatar({
     keyof typeof ETabType
   >;
 
+  const { getAvatars, hasMore, loading } = useGetAvatars();
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const lastAvatarRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
-    if (selectedAvatar) setTempAvatar(selectedAvatar.avatar);
-  }, [selectedAvatar]);
+    if (result?.info.selectedAvatar) setTempAvatar(result?.info.selectedAvatar.avatar);
+  }, [result?.info.selectedAvatar]);
+
+  useEffect(() => {
+    if (loading || !hasMore) return;
+
+    observerRef.current = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          getAvatars(ETabType[tab]);
+        }
+      },
+      { threshold: 0.5 }
+    );
+
+    if (lastAvatarRef.current) {
+      observerRef.current.observe(lastAvatarRef.current);
+    }
+
+    return () => observerRef.current?.disconnect();
+  }, [loading, hasMore, tab]);
 
   const handleChange = (event: React.SyntheticEvent, tab: ETabType) => {
     setTab(tab);
@@ -89,13 +104,22 @@ export default function SelectAvatar({
         </S.CustomTabs>
         {tabKeys.map((tabKey) => {
           const tabValue = ETabType[tabKey as keyof typeof ETabType];
+          const filteredAvatars = result?.info.avatars.filter((avatar: Avatars) => {
+            if (tab === ETabType.all) return true;
+            if (tab === ETabType.male) return avatar.gender === 'male';
+            if (tab === ETabType.female) return avatar.gender === 'female';
+            return false;
+          });
+          console.log(filteredAvatars.length);
+
           return (
             tab === tabValue && (
               <S.ListWrap role="tabpanel" hidden={tabValue !== tabValue}>
-                {avatarList.map((avatar) => (
+                {filteredAvatars?.map((avatar: Avatars, index: number) => (
                   <S.AvartarContainer
                     key={avatar.avatar_id}
-                    isSelected={tempAvatar?.avatar_id === avatar.avatar_id}>
+                    isSelected={tempAvatar?.avatar_id === avatar.avatar_id}
+                    ref={index === filteredAvatars.length - 1 ? lastAvatarRef : null}>
                     <S.OuterBorder isSelected={tempAvatar?.avatar_id === avatar.avatar_id} />
                     {tempAvatar?.avatar_id === avatar.avatar_id && (
                       <S.CheckBox>
@@ -115,7 +139,7 @@ export default function SelectAvatar({
             )
           );
         })}
-
+        {loading && <p>로딩 중...</p>}
         <S.ButtonWrap>
           <Button
             variant="purple"

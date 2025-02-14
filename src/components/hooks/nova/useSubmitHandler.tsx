@@ -25,8 +25,8 @@ import {
   NOVA_CHAT_API,
   PO_DRIVE_DOC_OPEN_STATUS
 } from '../../../api/constant';
-import { CHAT_MODES, ChatMode, getChatEngine } from '../../../constants/chatType';
 import { FileUploadState } from '../../../constants/fileTypes';
+import { SERVICE_TYPE } from '../../../constants/serviceType';
 import { appStateSelector } from '../../../store/slices/appState';
 import { DriveFileInfo } from '../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
@@ -77,7 +77,7 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
   };
 
   const createChatSubmitHandler = useCallback(
-    async (submitParam: InputBarSubmitParam, chatMode: ChatMode, isAnswer?: boolean) => {
+    async (submitParam: InputBarSubmitParam, chatMode: SERVICE_TYPE, isAnswer?: boolean) => {
       const id = v4();
       let result = '';
       const lastChat = novaHistory[novaHistory.length - 1];
@@ -312,7 +312,7 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
   );
 
   const createAIWriteSubmitHandler = useCallback(
-    async (submitParam: InputBarSubmitParam, chatMode: ChatMode, isAnswer?: boolean) => {
+    async (submitParam: InputBarSubmitParam, chatMode: SERVICE_TYPE, isAnswer?: boolean) => {
       const id = v4();
       let result = '';
       const lastChat = novaHistory[novaHistory.length - 1];
@@ -356,7 +356,7 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            engine: getChatEngine(chatMode),
+            engine: SERVICE_TYPE,
             history: [
               {
                 content: input,
@@ -378,7 +378,7 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
         setFileUploadState({ type: '', state: 'ready', progress: 0 });
 
         await streaming(res, async (contents) => {
-          if (chatMode === CHAT_MODES.PERPLEXITY) {
+          if (chatMode === SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO) {
             const contentArr = contents.split('\n');
 
             for (let index = 0; index < contentArr.length; index++) {

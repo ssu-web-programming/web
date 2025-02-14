@@ -5,11 +5,12 @@ import Lottie from 'react-lottie-player';
 import { useLocation } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import { css } from 'styled-components';
+import { SwiperSlide } from 'swiper/swiper-react';
 
 import { apiWrapper } from '../../../api/apiWrapper';
 import { NOVA_SHARE_CHAT } from '../../../api/constant';
-import { CHAT_MODES, ChatMode } from '../../../constants/chatType';
 import { FileUploadState } from '../../../constants/fileTypes';
+import { getChatGroupKey, getServiceGroupInfo, SERVICE_TYPE } from '../../../constants/serviceType';
 import ico_reading_glasses_dark from '../../../img/dark/duotone_magnifying_glass_dark.svg';
 import ico_documents_dark from '../../../img/dark/ico_documents.svg';
 import ico_image_dark from '../../../img/dark/ico_image.svg';
@@ -55,12 +56,7 @@ interface AIChatProps {
   setExpiredNOVA: (isExpired: boolean) => void;
   createChatSubmitHandler: (
     param: InputBarSubmitParam,
-    chatMode: ChatMode,
-    isAnswer: boolean
-  ) => Promise<void>;
-  createAIWriteSubmitHandler: (
-    param: InputBarSubmitParam,
-    chatMode: ChatMode,
+    chatMode: SERVICE_TYPE,
     isAnswer: boolean
   ) => Promise<void>;
   fileUploadState: FileUploadState;
@@ -70,11 +66,7 @@ const AIChat = (props: AIChatProps) => {
   const dispatch = useAppDispatch();
   const location = useLocation();
   const { t } = useTranslation();
-  const { onCopy } = useCopyText();
-  const { isLightMode } = useAppSelector(themeInfoSelector);
-  const confirm = useConfirm();
-  const { usingAI, creating, selectedNovaTab } = useAppSelector(selectTabSlice);
-  const status = useAppSelector(selectPageStatus(selectedNovaTab));
+  const { usingAI, creating } = useAppSelector(selectTabSlice);
   const novaHistory = useAppSelector(novaHistorySelector);
   const selectedItems = useAppSelector(selectedItemsSelector);
   const isShareMode = useAppSelector(isShareModeSelector);
@@ -210,41 +202,6 @@ const AIChat = (props: AIChatProps) => {
     dispatch(deselectAllItems());
   };
 
-  interface PromptExample {
-    txt: string;
-    src?: string;
-  }
-
-  const PERPLEXITY_PROMPT_EXAMPLE: PromptExample[] = [
-    {
-      txt: t(`Nova.perplexity.Guide.Example1`)
-    },
-    {
-      txt: t(`Nova.perplexity.Guide.Example2`)
-    },
-    {
-      txt: t(`Nova.perplexity.Guide.Example3`)
-    }
-  ];
-
-  const CHAT_PROMPT_EXAMPLE: PromptExample[] = [
-    {
-      src: isLightMode ? ico_reading_glasses_light : ico_reading_glasses_dark,
-      txt: t(`Nova.aiChat.Guide.Example1`)
-    },
-    {
-      src: isLightMode ? ico_image_light : ico_image_dark,
-      txt: t(`Nova.aiChat.Guide.Example2`)
-    },
-    {
-      src: isLightMode ? ico_documents_light : ico_documents_dark,
-      txt: t(`Nova.aiChat.Guide.Example3`)
-    }
-  ];
-
-  const PROMPT_EXAMPLE =
-    chatMode === CHAT_MODES.PERPLEXITY ? PERPLEXITY_PROMPT_EXAMPLE : CHAT_PROMPT_EXAMPLE;
-
   const handleChangeSelection = () => {
     if (selectedItems.length === novaHistory.length * 2) {
       dispatch(deselectAllItems());
@@ -259,15 +216,15 @@ const AIChat = (props: AIChatProps) => {
         {novaHistory.length < 1 ? (
           <>
             <Guide>
-              {PROMPT_EXAMPLE.map((item) => (
-                <S.GuideExample
-                  key={item.txt}
-                  onClick={() => setInputContents?.(item.txt)}
-                  isWithIcon={!!item.src}>
-                  {item.src && <Icon iconSrc={item.src} size="md" />}
-                  <span>{item.txt}</span>
-                </S.GuideExample>
-              ))}
+              {Array.from({ length: 3 }, (_, i) => {
+                const groupKey = getChatGroupKey(chatMode);
+                const prompt = t(`Nova.ChatModel.${groupKey}.prompt${i + 1}`);
+                return (
+                  <S.GuideExample key={i} onClick={() => setInputContents(prompt)}>
+                    <span>{prompt}</span>
+                  </S.GuideExample>
+                );
+              })}
             </Guide>
           </>
         ) : (
@@ -296,7 +253,6 @@ const AIChat = (props: AIChatProps) => {
               expiredNOVA={props.expiredNOVA}
               novaHistory={novaHistory}
               createChatSubmitHandler={props.createChatSubmitHandler}
-              createAIWriteSubmitHandler={props.createAIWriteSubmitHandler}
               onSave={onSave}
               scrollHandler={handleOnScroll}
               setImagePreview={setImagePreview}
@@ -335,11 +291,7 @@ const AIChat = (props: AIChatProps) => {
               novaHistory={novaHistory}
               disabled={creating === 'NOVA'}
               expiredNOVA={props.expiredNOVA}
-              onSubmit={
-                chatMode === CHAT_MODES.GPT_4O
-                  ? props.createChatSubmitHandler
-                  : props.createAIWriteSubmitHandler
-              }
+              onSubmit={props.createChatSubmitHandler}
               contents={inputContents}
               setContents={setInputContents}
             />

@@ -302,6 +302,90 @@
     "ASKDocEOSDesc2": "The ASK Doc service was terminated on August 22, 2024. By updating the app, you can access these features through the integrated AI service, NOVA."
   },
   "Nova": {
+    "Home": {
+      "creditGuide": "Credit Guide",
+      "chat": {
+        "title":"Chat",
+        "aiChat": "Chat",
+        "docImgQuery": "Document/Image query",
+        "imgGen": "Generate Image"
+      },
+      "tools": {
+        "title": "Tools",
+        "perplexity": "Web Search",
+        "translation": "Translation",
+        "voiceDictation": "Dictation",
+        "aiVideo": "AI Video"
+      },
+      "image": {
+        "title": "Image",
+        "removeBG": "Remove Background",
+        "improvedRes": "Improve Resolution",
+        "changeBG": "Change Background",
+        "expandImg": "Expand Image",
+        "remakeImg": "Remake Image",
+        "changeStyle": "Change Style",
+        "convert2DTo3D": "2D to 3D"
+      }
+    },
+    "ChatModel": {
+      "GPT_4O": {
+        "desc": "Great language understanding ",
+        "desc_home": "It excels at document writing by providing a wide range of information accurately.",
+        "prompt1": "Analyse the impact of AI on business",
+        "prompt2": "Create an image of the city of the future",
+        "prompt3": "Enhance the attached business plan"
+      },
+      "GPT_4": {
+        "desc": "Excellent at text generation",
+        "desc_home": "Excellent at generating various types of text and strong in creative document writing.",
+        "prompt1": "Plan content for a social media campaign",
+        "prompt2": "Write an emotional brand story for a blog post",
+        "prompt3": "Propose 3 product pitch copy suggestions"
+      },
+      "GPT_3_5": {
+        "desc": "Fast & efficient for simple tasks",
+        "desc_home": "Fast processing makes it suitable for simple tasks and efficient for basic document writing.",
+        "prompt1": "Quickly draft a meeting summary",
+        "prompt2": "Write a concise and polite email reply",
+        "prompt3": "Summarize the report in three sentences"
+      },
+      "GPT_O3_MINI": {
+        "desc": "Optimized for math, coding, science",
+        "desc_home": "Optimized for mathematics, coding, and scientific tasks, making it ideal for technical document writing.",
+        "prompt1": "Create a tutorial on quantum computing concepts",
+        "prompt2": "Create an explanation of basic calculus concepts",
+        "prompt3": "Create a paper on cosmic expansion and the Hubble law"
+      },
+      "CLOVA_X": {
+        "desc": "Effective for Korean tasks",
+        "desc_home": "Effective for Korean language tasks and strong in writing Korean documents.",
+        "prompt1": "Clean up common polite phrases in business documents",
+        "prompt2": "Write a script for a Korean presentation",
+        "prompt3": "Make edits to a report look natural and seamless"
+      },
+      "CLAUDE_3_5": {
+        "desc": "Good at creative writing",
+        "desc_home": "Strong in creating original story structures and presenting fresh ideas.",
+        "prompt1": "Creative post on future education",
+        "prompt2": "Compose an emotional brand story",
+        "prompt3": "Write a speech with a literary touch"
+      },
+      "PERPLEXITY": {
+        "desc": "Provides accurate web search info",
+        "desc_home": "Provides accurate information through web searches, making it suitable for information-based document writing.",
+        "prompt1": "Create a research report on the latest marketing trends",
+        "prompt2": "Summarize recent ESG management cases",
+        "prompt3": "Write a white paper on the latest AI technology trends"
+      },
+      "PERPLEXITY_REASONING_PRO": {
+        "desc": "Delivers clear & precise info",
+        "desc_home": "Provides more precise information than general searches, making it ideal for in-depth research document writing.",
+        "prompt1": "3-year blockchain research trend",
+        "prompt2": "A comparative analysis of global remote work policies",
+        "prompt3": "A breakdown of 5 healthcare tech papers"
+      }
+    },
     "Tabs": {
       "aiChat": "AI Chat",
       "convert2DTo3D": "2D to 3D",
@@ -479,22 +563,6 @@
     "DragAndDrop": {
       "Title": "Upload",
       "Desc": "Please drag and drop the file here to upload."
-    },
-    "CreditInfo": {
-      "Title": "Credit Guide",
-      "AIChat": {
-        "Title": "AI Chat",
-        "Chat": "Chat",
-        "DocImgQuery": "Document/Image query",
-        "ImgGen": "Generate Image"
-      },
-      "Convert2DTo3D": "2D to 3D",
-      "RemoveBG": "Remove Background",
-      "ChangeBG": "Change Background",
-      "RemakeImg": "Remake Image",
-      "ExpandImg": "Expand Image",
-      "ImprovedRes": "Improve Resolution",
-      "ChangeStyle": "Change Style"
     },
     "ActionWindow": {
       "Placeholder": "NOVA, ask anything"

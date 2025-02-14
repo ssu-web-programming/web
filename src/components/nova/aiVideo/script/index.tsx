@@ -36,6 +36,7 @@ export default function Script() {
         tab: NOVA_TAB_TYPE.aiVideo,
         result: {
           info: {
+            ...result?.info,
             selectedAvatar: {
               ...result?.info?.selectedAvatar,
               input_text: script
@@ -67,6 +68,7 @@ export default function Script() {
         variant="purple"
         width={'full'}
         height={48}
+        disable={text.length <= 0}
         cssExt={css`
           display: flex;
           gap: 4px;

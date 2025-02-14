@@ -17,10 +17,16 @@ import { init } from '@amplitude/analytics-browser';
 
 import usePostSplunkLog from '../../api/usePostSplunkLog';
 import { NOVA_TAB_TYPE } from '../../constants/novaTapTypes';
+import { SERVICE_TYPE, TAB_SERVICE_MAP } from '../../constants/serviceType';
 import { ClientStatusType } from '../../pages/Nova/Nova';
 import { initComplete } from '../../store/slices/initFlagSlice';
 import { IAnnouceInfo, setAnnounceInfo, tabTypeMap } from '../../store/slices/nova/announceSlice';
-import { setPageStatus } from '../../store/slices/nova/pageStatusSlice';
+import {
+  PageService,
+  PageStatus,
+  setPageService,
+  setPageStatus
+} from '../../store/slices/nova/pageStatusSlice';
 import { setPlatformInfo } from '../../store/slices/platformInfo';
 
 export default function useInitApp() {
@@ -89,7 +95,37 @@ export default function useInitApp() {
           success,
           data: { creditInfos }
         } = await res.json();
-        if (success) dispatch(setCreditInfo(creditInfos));
+        if (success) {
+          const filteredServices = Object.keys(NOVA_TAB_TYPE).reduce(
+            (acc, tab) => {
+              const allowedServices = TAB_SERVICE_MAP[tab as NOVA_TAB_TYPE] || [];
+
+              const services = (creditInfos || [])
+                .filter((service: any) =>
+                  allowedServices.includes(service.serviceType as SERVICE_TYPE)
+                )
+                .map((service: any) => ({
+                  serviceType: service.serviceType as SERVICE_TYPE,
+                  deductCredit: service.deductCredit
+                }));
+
+              return {
+                ...acc,
+                [tab]: services
+              };
+            },
+            {} as { [K in keyof PageStatus]: PageService }
+          );
+
+          Object.keys(NOVA_TAB_TYPE).forEach((tab) => {
+            dispatch(
+              setPageService({
+                tab: tab as NOVA_TAB_TYPE,
+                services: filteredServices[tab as keyof PageStatus] || []
+              })
+            );
+          });
+        }
       } catch (err) {
         /* empty */
       }
@@ -158,10 +194,12 @@ export default function useInitApp() {
     }
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiChat, status: 'home' }));
 
-    await initCreditInfo(headers);
-    await initUserInfo(headers);
-    await initAnnouncementInfo(headers);
-    await initNovaExpireTime(headers);
+    await Promise.all([
+      initCreditInfo(headers),
+      initUserInfo(headers),
+      initAnnouncementInfo(headers),
+      initNovaExpireTime(headers)
+    ]);
 
     dispatch(
       initComplete({

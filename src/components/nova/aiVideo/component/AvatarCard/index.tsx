@@ -18,10 +18,15 @@ import * as S from './style';
 
 interface AvatarCardProps {
   isShowOnlyCard?: boolean;
+  isHideColorPicker?: boolean;
   children?: React.ReactNode;
 }
 
-export default function AvatarCard({ isShowOnlyCard = false, children }: AvatarCardProps) {
+export default function AvatarCard({
+  isShowOnlyCard = false,
+  isHideColorPicker = false,
+  children
+}: AvatarCardProps) {
   const dispatch = useAppDispatch();
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const result = useAppSelector(selectPageResult(NOVA_TAB_TYPE.aiVideo));
@@ -32,6 +37,7 @@ export default function AvatarCard({ isShowOnlyCard = false, children }: AvatarC
         tab: NOVA_TAB_TYPE.aiVideo,
         result: {
           info: {
+            ...result?.info,
             selectedAvatar: {
               ...result?.info?.selectedAvatar,
               background_color: color
@@ -45,7 +51,7 @@ export default function AvatarCard({ isShowOnlyCard = false, children }: AvatarC
   return (
     <S.AvatarCard isCircle={result?.info.selectedAvatar?.avatar_style === 'circle'}>
       <img src={isLightMode ? HeyZenLightIcon : HeyZenDarkIcon} alt="logo" className="logo" />
-      {!isShowOnlyCard && (
+      {!isShowOnlyCard && !isHideColorPicker && (
         <ColorPicker
           title="배경 색상"
           color={result?.info.selectedAvatar?.background_color ?? ''}
@@ -71,8 +77,14 @@ export default function AvatarCard({ isShowOnlyCard = false, children }: AvatarC
       </S.PreviewWrap>
       {!isShowOnlyCard && (
         <S.AvatarInfo>
-          <span className="name">{result?.info.selectedAvatar?.voice.name}</span>
-          <span className="etc">{`${result?.info.selectedAvatar?.voice.language} | ${result?.info.selectedAvatar?.voice.gender}`}</span>
+          {result?.info.selectedAvatar?.voice.name ? (
+            <>
+              <span className="name">{result?.info.selectedAvatar?.voice.name}</span>
+              <span className="etc">{`${result?.info.selectedAvatar?.voice.language} | ${result?.info.selectedAvatar?.voice.gender}`}</span>
+            </>
+          ) : (
+            <span className="name">{'-'}</span>
+          )}
         </S.AvatarInfo>
       )}
       <>{children}</>

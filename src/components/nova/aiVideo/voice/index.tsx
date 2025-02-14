@@ -20,70 +20,56 @@ import {
 import { themeInfoSelector } from '../../../../store/slices/theme';
 import { useAppDispatch, useAppSelector } from '../../../../store/store';
 import Button from '../../../buttons/Button';
+import { useGetVoices } from '../../../hooks/nova/use-get-voices';
 import AvatarCard from '../component/AvatarCard';
 import SelectVoice from '../component/SelectVoice';
 
 import * as S from './style';
 
-interface VoiceProps {
-  activeStep: number;
-  setActiveStep: React.Dispatch<React.SetStateAction<number>>;
-}
-
-export default function Voice({ activeStep, setActiveStep }: VoiceProps) {
+export default function Voice() {
   const dispatch = useAppDispatch();
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const result = useAppSelector(selectPageResult(NOVA_TAB_TYPE.aiVideo));
-  const [voiceList, setVoiceList] = useState<Voices[]>([]);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [playingVoiceId, setPlayingVoiceId] = useState<string | null>(null);
 
   useEffect(() => {
-    getVoiceList();
-  }, []);
-
-  useEffect(() => {
-    if (result?.info.selectedAvatar.voice.voice_id === '' && voiceList.length > 0) {
+    if (result?.info.selectedAvatar.voice.voice_id === '' && result?.info.voices?.length > 0) {
       dispatch(
         updatePageResult({
           tab: NOVA_TAB_TYPE.aiVideo,
           result: {
-            info: { selectedAvatar: { ...result.info.selectedAvatar, voice: voiceList[0] } }
+            info: {
+              ...result?.info,
+              selectedAvatar: { ...result.info.selectedAvatar, voice: result.info.voices[0] }
+            }
           }
         })
       );
     }
-  }, [voiceList]);
-
-  const getVoiceList = async () => {
-    const { res } = await apiWrapper().request(NOVA_VIDEO_GET_VOICES, {
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      method: 'GET'
-    });
-
-    const { data } = await res.json();
-    setVoiceList(data.voices);
-  };
+  }, [result?.info.voices]);
 
   const changeSelectedVoice = (voice: Voices) => {
+    if (!result || !result.info.voices) return;
+
     dispatch(
       updatePageResult({
         tab: NOVA_TAB_TYPE.aiVideo,
         result: {
           info: {
+            ...result?.info,
             selectedAvatar: {
               ...result?.info?.selectedAvatar,
               voice: voice
-            }
+            },
+            voices: [
+              voice,
+              ...result.info.voices.filter((item: Voices) => item.voice_id !== voice.voice_id)
+            ]
           }
         }
       })
-    );
-    setVoiceList(
-      voice ? [voice, ...voiceList.filter((item) => item.voice_id !== voice.voice_id)] : voiceList
     );
   };
 
@@ -108,41 +94,43 @@ export default function Voice({ activeStep, setActiveStep }: VoiceProps) {
           </div>
         </S.TitleWrap>
         <S.VoiceContainer>
-          {voiceList.slice(0, 3).map((voice) => (
-            <S.VoiceItem
-              key={voice.voice_id}
-              isSelected={result?.info.selectedAvatar?.voice.voice_id === voice.voice_id}
-              onClick={() => changeSelectedVoice(voice)}>
-              <S.VoiceInfo
-                isSelected={result?.info.selectedAvatar?.voice.voice_id === voice.voice_id}>
-                <span className="name">{voice.name}</span>
-                <S.IdentifyWrap
+          {result?.info.voices &&
+            result?.info.voices.slice(0, 3).map((voice: Voices) => (
+              <S.VoiceItem
+                key={voice.voice_id}
+                isSelected={result?.info.selectedAvatar?.voice.voice_id === voice.voice_id}
+                onClick={() => changeSelectedVoice(voice)}>
+                <S.VoiceInfo
                   isSelected={result?.info.selectedAvatar?.voice.voice_id === voice.voice_id}>
-                  <img src={result?.info.selectedAvatar?.voice.flag} alt="flag" />
-                  <span>{`${result?.info.selectedAvatar?.voice.language} | ${result?.info.selectedAvatar?.voice.gender}`}</span>
-                </S.IdentifyWrap>
-              </S.VoiceInfo>
-              <img
-                src={
-                  playingVoiceId === voice.voice_id
-                    ? isLightMode
-                      ? PlayLightIcon
-                      : PlayDarkIcon
-                    : isLightMode
-                      ? SoundLightIcon
-                      : SoundDarkIcon
-                }
-                alt="play"
-                onClick={() => playVoice(voice)}
-              />
-              <audio ref={audioRef} muted={false} />
-            </S.VoiceItem>
-          ))}
+                  <span className="name">{voice.name}</span>
+                  <S.IdentifyWrap
+                    isSelected={result?.info.selectedAvatar?.voice.voice_id === voice.voice_id}>
+                    <img src={result?.info.selectedAvatar?.voice.flag} alt="flag" />
+                    <span>{`${result?.info.selectedAvatar?.voice.language} | ${result?.info.selectedAvatar?.voice.gender}`}</span>
+                  </S.IdentifyWrap>
+                </S.VoiceInfo>
+                <img
+                  src={
+                    playingVoiceId === voice.voice_id
+                      ? isLightMode
+                        ? PlayLightIcon
+                        : PlayDarkIcon
+                      : isLightMode
+                        ? SoundLightIcon
+                        : SoundDarkIcon
+                  }
+                  alt="play"
+                  onClick={() => playVoice(voice)}
+                />
+                <audio ref={audioRef} muted={false} />
+              </S.VoiceItem>
+            ))}
         </S.VoiceContainer>
         <Button
           variant="purple"
           width={'full'}
           height={48}
+          disable={true}
           cssExt={css`
             display: flex;
             gap: 4px;
@@ -152,7 +140,6 @@ export default function Voice({ activeStep, setActiveStep }: VoiceProps) {
             position: relative;
           `}
           onClick={() => {
-            setActiveStep(activeStep + 1);
             dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'script' }));
           }}>
           <span>{'AI 비디오 만들기'}</span>
@@ -162,17 +149,7 @@ export default function Voice({ activeStep, setActiveStep }: VoiceProps) {
           </S.CreditInfo>
         </Button>
       </S.Container>
-      {isOpen && (
-        <SelectVoice
-          voiceList={voiceList}
-          setIsOpen={setIsOpen}
-          changeSelectedVoice={changeSelectedVoice}
-          audioRef={audioRef}
-          playingVoiceId={playingVoiceId}
-          setPlayingVoiceId={setPlayingVoiceId}
-          playVoice={playVoice}
-        />
-      )}
+      {isOpen && <SelectVoice setIsOpen={setIsOpen} changeSelectedVoice={changeSelectedVoice} />}
     </>
   );
 }

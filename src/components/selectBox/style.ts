@@ -1,12 +1,13 @@
 import FormControl from '@mui/material/FormControl';
 import MenuItem from '@mui/material/MenuItem';
-import styled from 'styled-components';
+import Select from '@mui/material/Select';
+import styled, { FlattenSimpleInterpolation } from 'styled-components';
 
-export const Form = styled(FormControl)`
+export const Form = styled(FormControl)<{ $cssExt?: FlattenSimpleInterpolation }>`
   .MuiInputBase-root {
     svg {
-      width: 24px;
-      height: 24px;
+      width: 20px;
+      height: 20px;
       top: unset;
     }
   }
@@ -20,6 +21,7 @@ export const Form = styled(FormControl)`
   }
 
   .MuiSelect-select {
+    min-width: 90px;
     height: 29px !important;
     min-height: 29px !important;
     display: flex;
@@ -29,6 +31,7 @@ export const Form = styled(FormControl)`
     border: 1px solid ${({ theme }) => theme.color.border.gray03};
     border-radius: 8px;
     box-sizing: border-box;
+    ${(props) => props.$cssExt || ''};
 
     div {
       font-size: 14px;
@@ -40,27 +43,59 @@ export const Form = styled(FormControl)`
   }
 `;
 
-export const StyledMenuItem = styled(MenuItem)`
+export const StyledSelect = styled(Select)``;
+
+export const StyledMenuItem = styled(MenuItem)<{
+  $isSelectedHighlighted: boolean;
+  $cssExt?: FlattenSimpleInterpolation;
+}>`
   &.MuiMenuItem-root {
+    width: 100%;
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
+    gap: 6px;
+    padding: 0;
+    ${(props) => props.$cssExt || ''};
   }
 
   &.Mui-selected {
-    background-color: ${({ theme }) => theme.color.background.selected} !important;
+    background-color: ${({ theme, $isSelectedHighlighted }) =>
+      $isSelectedHighlighted ? theme.color.background.selected : 'transparent'} !important;
     border-radius: 8px;
   }
 `;
 
+export const Divider = styled.div`
+  width: 100%;
+  border-bottom: ${({ theme }) => `1px solid ${theme.color.border.gray02}`};
+`;
+
 export const ItemWrap = styled.div`
+  width: 100%;
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: space-between;
+  gap: 12px;
   font-family: Pretendard, sans-serif;
+
+  .content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    div {
+      max-width: 174px;
+    }
+    span {
+      word-break: break-word;
+      white-space: normal;
+    }
+  }
 `;
 
 export const TextWrap = styled.div<{ selected: boolean }>`
-  min-width: 175px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -88,7 +123,6 @@ export const CreditWrap = styled.div`
   align-items: center;
   justify-content: center;
   gap: 4.5px;
-  margin-left: 4px;
 
   img {
     width: 20px;

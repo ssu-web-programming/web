@@ -18,35 +18,63 @@ interface StepProps {
 export const Step = styled(Stepper).withConfig({
   shouldForwardProp: (prop) => !['isStared', 'isFinished'].includes(prop)
 })<StepProps>`
-  padding: 16px 24px 4px 24px;
-  transform: ${({ isStared, isFinished }) =>
-    isStared
-      ? 'translateX(calc(50% - 40px))'
-      : isFinished
-        ? 'translateX(calc(-1 * (50% - 40px)))'
-        : 'none'};
+  width: 100%;
+  padding: 16px 24px 4px;
 
   .MuiStep-root {
-    padding: 0;
+    height: 32px;
+    padding: 6px 8px;
+    border: 1px solid ${({ theme }) => theme.color.border.gray05};
+    border-radius: 6px;
+    background-color: ${({ theme }) => theme.color.background.gray01};
+  }
+
+  .MuiStepConnector-root {
+    width: 47px;
+    flex: none;
   }
 `;
 
 export const Label = styled(StepLabel)`
   &.MuiStepLabel-root {
     display: flex;
-    flex-direction: column;
-    gap: 4px;
+    flex-direction: row;
+    gap: 6px;
   }
 
   .MuiStepLabel-iconContainer {
-    padding: 5.5px;
+    width: 16px;
+    height: 16px;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
   }
   .MuiStepLabel-iconContainer.Mui-active {
-    padding: 4px;
+    padding: 0;
   }
 
+  .MuiStepLabel-labelContainer {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 21px;
+  }
+
+  .MuiSvgIcon-root {
+    width: 20px;
+    height: 20px;
+  }
   .MuiSvgIcon-root.Mui-active {
-    color: #6f3ad0 !important;
+    color: transparent !important;
+    border: 2px solid ${({ theme }) => theme.color.background.purple01};
+    border-radius: 99px;
+
+    text {
+      fill: ${({ theme }) => theme.color.background.purple01};
+      font-size: 1rem;
+      font-family: Pretendard, sans-serif;
+    }
   }
 `;
 

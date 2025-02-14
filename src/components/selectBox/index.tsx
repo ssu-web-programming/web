@@ -1,77 +1,115 @@
-import * as React from 'react';
 import Box from '@mui/material/Box';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { FlattenSimpleInterpolation } from 'styled-components';
 
+import { ReactComponent as ArrowDarkIcon } from '../../img/dark/ico_arrow_down_normal.svg';
 import CreditDarkIcon from '../../img/dark/ico_credit_gray.svg';
-import { ReactComponent as ArrowIcon } from '../../img/light/ico_arrow_down_normal.svg';
+import { ReactComponent as ArrowLightIcon } from '../../img/light/ico_arrow_down_normal.svg';
 import CreditLightIcon from '../../img/light/ico_credit_gray.svg';
 import { themeInfoSelector } from '../../store/slices/theme';
 import { useAppSelector } from '../../store/store';
 
 import * as S from './style';
 
-export type Item = { icon?: string; title: string; desc?: string; credit?: number };
+export type Item = { key: string; icon?: string; title: string; desc?: string; credit?: string };
 
 interface SelectBoxProps {
   placeHolder?: string;
   menuItem: Item[];
   selectedItem?: string;
   setSelectedItem: (item: string) => void;
+  minWidth?: number;
+  maxWidth?: number;
+  maxHeight?: number;
+  paddingX?: number;
+  paddingY?: number;
+  gap?: number;
+  isMenuAbove?: boolean;
+  isSelectedHighlighted?: boolean;
+  isDriver?: boolean;
+  selectBoxCssExt?: FlattenSimpleInterpolation;
+  innerBoxCssExt?: FlattenSimpleInterpolation;
 }
 
-export default function SelectBox(props: SelectBoxProps) {
-  const { menuItem, selectedItem, setSelectedItem } = props;
+export default function SelectBox({
+  placeHolder,
+  menuItem,
+  selectedItem,
+  setSelectedItem,
+  minWidth,
+  maxWidth,
+  maxHeight,
+  paddingX,
+  paddingY,
+  gap,
+  isMenuAbove = true,
+  isSelectedHighlighted = true,
+  isDriver = false,
+  selectBoxCssExt,
+  innerBoxCssExt
+}: SelectBoxProps) {
   const { isLightMode } = useAppSelector(themeInfoSelector);
 
-  const handleChange = (event: SelectChangeEvent) => {
+  const handleChange = (event: SelectChangeEvent<unknown>) => {
     setSelectedItem(event.target.value as string);
   };
 
   return (
-    <Box sx={{ minWidth: 90 }}>
-      <S.Form fullWidth>
-        <Select
-          value={selectedItem ?? props.placeHolder}
+    <Box>
+      <S.Form $cssExt={selectBoxCssExt}>
+        <S.StyledSelect
+          value={selectedItem ?? placeHolder}
           onChange={handleChange}
-          IconComponent={ArrowIcon}
+          IconComponent={isLightMode ? ArrowLightIcon : ArrowDarkIcon}
           MenuProps={{
             PaperProps: {
               sx: {
-                mt: '-8.5px',
+                mt: isMenuAbove ? '-8px' : '8px',
                 ml: '-4px',
                 boxShadow: '0px 2px 8px 0px rgba(0, 0, 0, 0.1)',
                 border: `1px solid ${isLightMode ? 'var(--gray-gray-40)' : 'var(--gray-gray-87)'}`,
+                borderRadius: '8px',
                 backgroundColor: `${isLightMode ? 'var(--white)' : 'var(--gray-gray-90)'}`
               }
             },
             anchorOrigin: {
-              vertical: 'top',
+              vertical: isMenuAbove ? 'top' : 'bottom',
               horizontal: 'left'
             },
             transformOrigin: {
-              vertical: 'bottom',
+              vertical: isMenuAbove ? 'bottom' : 'top',
               horizontal: 'left'
             },
             MenuListProps: {
               sx: {
-                p: 0.5,
-                minWidth: '290px'
+                px: `${paddingX}px`,
+                py: `${paddingY}px`,
+                minWidth: `${minWidth}px`,
+                maxWidth: `${maxWidth}px`,
+                maxHeight: `${maxHeight}px`,
+                gap: `${gap}px`
               }
             }
           }}
           renderValue={(value) => {
-            const selectedItem = menuItem.find((item) => item.title === value);
-            return selectedItem ? <div>{selectedItem.title}</div> : <div>{props.placeHolder}</div>;
+            const selectedItem = menuItem.find((item) => item.key == value);
+            return selectedItem ? <div>{selectedItem.title}</div> : <div>{placeHolder}</div>;
           }}>
           {menuItem.map((item, index) => {
             return (
-              <S.StyledMenuItem value={item.title} key={index}>
+              <S.StyledMenuItem
+                key={item.key}
+                value={item.key}
+                $isSelectedHighlighted={isSelectedHighlighted}
+                $cssExt={innerBoxCssExt}>
                 <S.ItemWrap>
-                  {item.icon && <img src={item.icon} alt="icon" />}
-                  <S.TextWrap selected={selectedItem === item.title}>
-                    <span className="title">{item.title}</span>
-                    <span className="desc">{item.desc}</span>
-                  </S.TextWrap>
+                  <div className="content">
+                    {item.icon && <img src={item.icon} alt="icon" />}
+                    <S.TextWrap selected={isSelectedHighlighted && selectedItem === item.title}>
+                      <span className="title">{item.title}</span>
+                      <span className="desc">{item.desc}</span>
+                    </S.TextWrap>
+                  </div>
                   {item.credit && (
                     <S.CreditWrap>
                       <img src={isLightMode ? CreditLightIcon : CreditDarkIcon} alt="credit" />
@@ -79,10 +117,11 @@ export default function SelectBox(props: SelectBoxProps) {
                     </S.CreditWrap>
                   )}
                 </S.ItemWrap>
+                {isDriver && index < menuItem.length - 1 && <S.Divider />}
               </S.StyledMenuItem>
             );
           })}
-        </Select>
+        </S.StyledSelect>
       </S.Form>
     </Box>
   );

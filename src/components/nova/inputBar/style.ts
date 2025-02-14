@@ -138,6 +138,8 @@ export const TextAreaWrap = styled.div`
   gap: 8px;
   border: 1px solid ${({ theme }) => theme.color.border.gray01};
   border-radius: 24px;
+  background-color: ${({ theme }) =>
+    theme.mode === 'light' ? 'var(--gray-gray-10)' : 'transparent'};
 `;
 
 export const TextArea = styled.textarea<{ value: string }>`

@@ -1,7 +1,7 @@
 export interface Avatars {
   avatar_id: string;
   avatar_name: string;
-  gender: 'female' | 'male';
+  gender: 'all' | 'female' | 'male';
   preview_image_url: string;
   preview_video_url: string;
   file?: File;
@@ -9,7 +9,7 @@ export interface Avatars {
 export const InitAvatars: Avatars = {
   avatar_id: '',
   avatar_name: '',
-  gender: 'female',
+  gender: 'all',
   preview_image_url: '',
   preview_video_url: '',
   file: undefined
@@ -18,7 +18,7 @@ export const InitAvatars: Avatars = {
 export interface Voices {
   voice_id: string;
   language: string;
-  gender: 'female' | 'male';
+  gender: 'all' | 'female' | 'male';
   name: string;
   preview_audio: string;
   flag: string;
@@ -26,7 +26,7 @@ export interface Voices {
 const InitVoices: Voices = {
   voice_id: '',
   language: '',
-  gender: 'female',
+  gender: 'all',
   name: '',
   preview_audio: '',
   flag: ''
@@ -47,7 +47,6 @@ export interface Videos {
   thumbnail_url: string;
   video_url: string;
 }
-
 export const InitVideos: Videos = {
   id: '',
   createdAt: '',

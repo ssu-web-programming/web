@@ -42,8 +42,12 @@ import { css } from 'styled-components';
 import Bridge, { ClientType, getPlatform } from 'util/bridge';
 import { getFileExtension, sliceFileName } from 'util/common';
 
-import { CHAT_MODES, ChatMode, getChatTypeList } from '../../../constants/chatType';
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
+import {
+  getMenuItemsFromServiceGroup,
+  getServiceGroupInfo,
+  SERVICE_TYPE
+} from '../../../constants/serviceType';
 import { themeInfoSelector } from '../../../store/slices/theme';
 import { setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
 import { blobToFile } from '../../../util/files';
@@ -62,12 +66,7 @@ interface ChatListProps {
   novaHistory: NovaChatType[];
   createChatSubmitHandler: (
     submitParam: InputBarSubmitParam,
-    chatMode: ChatMode,
-    isAnswer: boolean
-  ) => void;
-  createAIWriteSubmitHandler: (
-    submitParam: InputBarSubmitParam,
-    chatMode: ChatMode,
+    chatMode: SERVICE_TYPE,
     isAnswer: boolean
   ) => void;
   onSave: (history: NovaChatType) => void;
@@ -88,7 +87,6 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
   const {
     novaHistory,
     createChatSubmitHandler,
-    createAIWriteSubmitHandler,
     onSave,
     scrollHandler,
     expiredNOVA,
@@ -131,9 +129,7 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
       status: ['done', 'cancel'],
       iconSrc: isLightMode ? <RetryChatLightIcon /> : <RetryChatDarkIcon />,
       clickHandler: (history: NovaChatType) => {
-        chatMode === CHAT_MODES.GPT_4O
-          ? createChatSubmitHandler({ input: history.input, type: '' }, chatMode, false)
-          : createAIWriteSubmitHandler({ input: history.input, type: '' }, chatMode, false);
+        createChatSubmitHandler({ input: history.input, type: '' }, chatMode, false);
       }
     },
     {
@@ -179,7 +175,7 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
         }
       }}
       onScroll={(ref) => scrollHandler(ref)}
-      isPerplexity={chatMode === CHAT_MODES.PERPLEXITY}>
+      isPerplexity={chatMode === SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO}>
       {novaHistory.map((item) => (
         <S.ChatItem key={item.id}>
           <S.Question>
@@ -292,7 +288,7 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
               />
             ) : (
               <div style={{ width: '100%', maxWidth: 'calc(100% - 40px)', paddingTop: '3px' }}>
-                {item.chatType === CHAT_MODES.PERPLEXITY && (
+                {item.chatType === SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO && (
                   <Reference references={item.references || []} />
                 )}
                 <PreMarkdown text={item.output}>
@@ -348,33 +344,26 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                         !expiredNOVA &&
                         [...novaHistory].reverse().find((item) => item.isAnswer === false)?.id ===
                           item.id &&
-                        item.chatType !== CHAT_MODES.PERPLEXITY && (
+                        item.chatType !== SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO && (
                           <SelectBox
                             placeHolder={'다른 답변 보기'}
-                            menuItem={getChatTypeList(isLightMode).filter(
-                              (item) => item.title !== chatMode
+                            minWidth={290}
+                            menuItem={getMenuItemsFromServiceGroup(isLightMode).filter(
+                              (item) => item.key === chatMode
                             )}
                             setSelectedItem={(selectedItem: string) => {
-                              if ((selectedItem as ChatMode) === CHAT_MODES.GPT_4O) {
-                                createChatSubmitHandler(
-                                  {
-                                    input: item.input,
-                                    type: ''
-                                  },
-                                  selectedItem as ChatMode,
-                                  true
-                                );
-                              } else {
-                                createAIWriteSubmitHandler(
-                                  {
-                                    input: item.input,
-                                    type: ''
-                                  },
-                                  selectedItem as ChatMode,
-                                  true
-                                );
-                              }
+                              createChatSubmitHandler(
+                                {
+                                  input: item.input,
+                                  type: ''
+                                },
+                                selectedItem as SERVICE_TYPE,
+                                true
+                              );
                             }}
+                            selectBoxCssExt={css`
+                              min-height: 48px;
+                            `}
                           />
                         )}
                     </S.ChatButtonWrapper>
