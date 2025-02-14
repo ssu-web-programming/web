@@ -7,7 +7,7 @@ import { overlay } from 'overlay-kit';
 import { activeLoadingSpinner } from 'store/slices/loadingSpinner';
 import { useAppDispatch } from 'store/store';
 import Bridge from 'util/bridge';
-import { changeFileExtension } from 'util/getAudioDuration';
+import { removeFileExtension } from 'util/getAudioDuration';
 
 import { useVoiceDictationContext } from '../../provider/voice-dictation-provider';
 import VoiceFileModalContent from '../voice-file-modal-content';
@@ -25,12 +25,10 @@ export default function VoiceSaveBottomSheet({ isOpened, setIsOpened }: Props) {
     sharedVoiceDictationInfo: { voiceDictationResult, fileName }
   } = useVoiceDictationContext();
 
-  console.log('voiceDictationResult', voiceDictationResult);
-  // 호진FIXME: 임의의 음성 파일 다운로드 URL 삽입
   const handleDownloadVoiceFile = async () => {
     dispatch(activeLoadingSpinner());
     await Bridge.callBridgeApi('downloadVoiceFile', {
-      fileName,
+      fileName: removeFileExtension(fileName),
       url: voiceDictationResult?.data.voiceUrl
     });
   };
@@ -49,7 +47,6 @@ export default function VoiceSaveBottomSheet({ isOpened, setIsOpened }: Props) {
   };
 
   const handleDownloadScriptFile = async (type: 'txt' | 'pdf') => {
-    console.log('handleDownloadScriptFile');
     dispatch(activeLoadingSpinner());
     const result = await voiceDictationHttp.postVoiceDownload({
       fileType: type,
@@ -60,7 +57,7 @@ export default function VoiceSaveBottomSheet({ isOpened, setIsOpened }: Props) {
     const { data } = result;
 
     await Bridge.callBridgeApi('downloadVoiceFile', {
-      fileName: changeFileExtension(fileName, type),
+      fileName: removeFileExtension(fileName),
       url: data.downloadUrl
     });
   };

@@ -8,6 +8,7 @@ import { blobToFile } from 'util/getAudioDuration';
 
 import { useVoiceDictationContext } from '../../provider/voice-dictation-provider';
 import AudioRecorder from '../audio-recorder';
+import DesktopLangSelector from '../modals/desktop-lang-selector';
 import StopModalContent from '../modals/stop-modal-content';
 
 export default function VoiceAudioRecorder() {
@@ -36,6 +37,16 @@ export default function VoiceAudioRecorder() {
     });
   };
 
+  const openLangOverlay = () => {
+    overlay.open(({ isOpen, close }) => {
+      return (
+        <OverlayModal isOpen={isOpen} onClose={close}>
+          <DesktopLangSelector />
+        </OverlayModal>
+      );
+    });
+  };
+
   return (
     <AudioRecorder
       onRecordingComplete={async (blob) => {
@@ -51,6 +62,7 @@ export default function VoiceAudioRecorder() {
       }}
       onStopConfirm={openStopOverlay}
       selectedLangOption={selectedLangOption}
+      openLangOverlay={openLangOverlay}
     />
   );
 }

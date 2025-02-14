@@ -12,12 +12,12 @@ type Option = {
 };
 
 export const langOptions: Option[] = [
-  { value: 'KO', label: '한국어' },
-  { value: 'EN', label: '영어' },
-  { value: 'JA', label: '일본어' },
-  { value: 'ZH-HANS', label: '중국어(간체)' },
-  { value: 'ZH-HANT', label: '중국어(번체)' },
-  { value: 'KO_EN', label: '한국어+영어' }
+  { value: 'ko-KR', label: '한국어' },
+  { value: 'en-US', label: '영어' },
+  { value: 'ja', label: '일본어' },
+  { value: 'zh-cn', label: '중국어(간체)' },
+  { value: 'zh-tw', label: '중국어(번체)' },
+  { value: 'enko', label: '한국어+영어' }
 ];
 
 export default function RecognizedLang() {

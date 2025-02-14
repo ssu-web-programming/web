@@ -38,13 +38,13 @@ export default function TranslationFileResult() {
     }
   } = useTranslationContext();
 
-  console.log('originalFile-info', {
-    originalFileType,
-    originalFileName,
-    originFile
-  });
-
   const handleCompareSourceAndTranslation = async () => {
+    console.log('originalFile-info', {
+      originalFileType,
+      originalFileName,
+      originFile
+    });
+
     dispatch(activeLoadingSpinner());
     await Bridge.callBridgeApi<CompareSouceAndTranslationArgs>('compareSourceAndTranslation', {
       originalFileType,

@@ -18,6 +18,7 @@ interface AudioRecorderProps {
   onStopConfirm?: () => void | boolean | Promise<unknown>;
   startCondition?: boolean;
   selectedLangOption?: LangOptionValues;
+  openLangOverlay?: () => void;
 }
 
 interface CustomCanvasRenderingContext2D extends CanvasRenderingContext2D {
@@ -99,7 +100,8 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   onRecordingFinish,
   onStopConfirm,
   startCondition,
-  selectedLangOption
+  selectedLangOption,
+  openLangOverlay
 }) => {
   const [isRecording, setIsRecording] = useState(isInitRecording || false);
   const [isPaused, setIsPaused] = useState(false);
@@ -159,11 +161,8 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
 
   const startRecording = useCallback(async () => {
     try {
-      console.log('startRecording');
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
-      console.log('stream', stream);
 
-      // console.log('startRecording-stream', stream);
       streamRef.current = stream;
 
       const mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/mp4' });
@@ -342,7 +341,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       </S.CanvasWrapper>
 
       <S.ButtonGroup>
-        <Lang />
+        <Lang onClick={openLangOverlay} />
         {isPaused ? (
           <Play width={64} height={64} onClick={resumeRecording} />
         ) : (

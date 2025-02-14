@@ -33,7 +33,7 @@ export interface VoiceDictationResult {
   };
 }
 
-export type LangOptionValues = 'KO' | 'EN' | 'JA' | 'ZH-HANS' | 'ZH-HANT' | 'KO_EN';
+export type LangOptionValues = 'ko-KR' | 'en-US' | 'enko' | 'ja' | 'zh-cn' | 'zh-tw';
 
 interface Props {
   children: ReactNode;
@@ -74,7 +74,7 @@ export default function VoiceDictationProvider({ children }: Props) {
       audioDuration: '',
       isVoiceRecording: false,
       previousPageType: null,
-      selectedLangOption: 'KO',
+      selectedLangOption: 'ko-KR',
       fileName: ''
     });
 
@@ -92,7 +92,7 @@ export default function VoiceDictationProvider({ children }: Props) {
       audioDuration: '',
       isVoiceRecording: false,
       previousPageType: null,
-      selectedLangOption: 'KO',
+      selectedLangOption: 'ko-KR',
       fileName: ''
     });
   };
