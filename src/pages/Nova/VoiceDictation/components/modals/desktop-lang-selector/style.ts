@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const ModalContainer = styled.div`
-  background: white;
+  background: ${({ theme }) => theme.color.background.gray05};
   width: 100%;
   max-width: 400px;
   border-radius: 16px;
@@ -9,15 +9,21 @@ const ModalContainer = styled.div`
 
 const ModalTitle = styled.h2`
   font-size: 18px;
-  color: #1a1a1a;
-  margin-bottom: 24px;
+  color: ${({ theme }) => theme.color.text.gray04};
+  margin-bottom: 8px;
+`;
+
+const ModalSubTitle = styled.p`
+  margin-bottom: 16px;
+  color: ${({ theme }) => theme.color.text.gray03};
+  font-weight: 400;
 `;
 
 const RadioGroup = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  margin-bottom: 24px;
+  margin-bottom: 32px;
 `;
 
 const RadioLabel = styled.label`
@@ -28,7 +34,9 @@ const RadioLabel = styled.label`
   padding: 4px 0;
 `;
 
-const RadioInput = styled.input.attrs({ type: 'radio' })`
+const RadioInput = styled.input.attrs({ type: 'radio' })<{
+  $isLightMode: boolean;
+}>`
   appearance: none;
   width: 20px;
   height: 20px;
@@ -38,8 +46,8 @@ const RadioInput = styled.input.attrs({ type: 'radio' })`
   position: relative;
 
   &:checked {
-    border-color: #7c3aed;
-    background-color: #7c3aed;
+    border-color: ${({ theme }) => theme.color.background.purple01};
+    background: ${({ theme }) => theme.color.background.purple01};
     /* 호진FIXME: 이미지로 변경v! */
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
     background-size: 12px;
@@ -50,7 +58,7 @@ const RadioInput = styled.input.attrs({ type: 'radio' })`
 
 const RadioText = styled.span`
   font-size: 16px;
-  color: #454c53;
+  color: ${({ theme }) => theme.color.text.gray03};
 `;
 
 const ButtonGroup = styled.div`
@@ -78,19 +86,19 @@ const Button = styled.button<{ primary?: boolean }>`
   ${(props) =>
     props.primary
       ? `
-    background-color: #7c3aed;
+    background-color: ${props.theme.color.main};
     color: white;
     
     &:hover {
-      background-color: #6d28d9;
+      background-color:${props.theme.color.main};
     }
   `
       : `
-    background-color: #f3f4f6;
-    color: #4b5563;
+    background-color: ${props.theme.color.background.gray02};
+    color: ${props.theme.color.text.gray03};
     
     &:hover {
-      background-color: #e5e7eb;
+      background-color: ${props.theme.color.background.gray02};
     }
   `}
 `;
@@ -99,6 +107,7 @@ export {
   Button,
   ButtonGroup,
   ModalContainer,
+  ModalSubTitle,
   ModalTitle,
   RadioGroup,
   RadioInput,

@@ -37,7 +37,7 @@ const Title = styled.div<{ lang: string }>`
 `;
 
 const Description = styled.p`
-  color: #454c53;
+  color: ${({ theme }) => theme.color.text.gray05};
   font-size: 16px;
   margin-bottom: 12px;
   text-align: center;
@@ -54,11 +54,12 @@ const TranscriptWrapper = styled.div`
 const TranscriptContainer = styled.div`
   flex: 1;
   overflow-y: auto;
-  background: #fff;
+  background: ${({ theme }) => theme.color.background.gray01};
   padding: 16px;
   border-radius: 16px;
   height: 314px;
   margin: 0px 16px;
+  border: 1px solid ${({ theme }) => theme.color.border.gray01};
 `;
 
 const NewTranscript = styled.div`
@@ -69,11 +70,10 @@ const NewTranscript = styled.div`
   border: none;
   width: 100%;
   justify-content: space-between;
-  color: #374151;
   font-size: 0.875rem;
 
   & > span:nth-child(1) {
-    color: #454c53;
+    color: ${({ theme }) => theme.color.text.gray03};
     font-size: 16px;
     font-weight: 600;
   }
@@ -111,6 +111,7 @@ const TranscriptName = styled.div`
   font-size: 14px;
   line-height: 21px;
   font-weight: 600;
+  color: ${({ theme }) => theme.color.text.gray02};
 `;
 const TranscriptInfo = styled.div`
   display: flex;
@@ -125,7 +126,7 @@ const TranscriptTime = styled.div`
 `;
 
 const TranscriptText = styled.div`
-  color: #454c53;
+  color: ${({ theme }) => theme.color.text.gray03};
   font-size: 14px;
   margin-top: 4px;
   line-height: 21px;

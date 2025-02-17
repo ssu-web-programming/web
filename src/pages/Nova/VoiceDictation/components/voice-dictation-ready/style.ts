@@ -58,7 +58,7 @@ const CheckIcon = styled.div`
 `;
 
 const Description = styled.p`
-  color: #454c53;
+  color: ${({ theme }) => theme.color.text.gray05};
   font-size: 16px;
   margin-bottom: 24px;
   text-align: center;
@@ -68,17 +68,17 @@ const Description = styled.p`
 
 const RecordingBox = styled.div`
   width: 100%;
-  background-color: #fff;
+  background-color: ${({ theme }) => theme.color.background.gray01};
   border-radius: 8px;
   padding: 32px 16px 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  border: 1px solid #c9cdd2;
+  border: 1px solid ${({ theme }) => theme.color.border.gray01};
 `;
 
 const FileTitle = styled.span`
-  color: #454c53;
+  color: ${({ theme }) => theme.color.text.gray03};
   font-size: 16px;
   line-height: 24px;
 `;
@@ -98,7 +98,7 @@ const InputFileTitle = styled.input`
 `;
 
 const Duration = styled.span`
-  color: #9ea4aa;
+  color: ${({ theme }) => theme.color.text.gray01};
   margin-top: 4px;
   font-size: 14px;
   font-weight: 400;
@@ -110,12 +110,13 @@ const LanguageSelector = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-top: 1px solid #e8ebed;
+  border-top: 1px solid ${({ theme }) => theme.color.border.gray02};
   padding-top: 16px;
 `;
 
 const LanguageLabel = styled.span`
   color: #374151;
+  color: ${({ theme }) => theme.color.text.gray02};
 `;
 
 const LanguageValue = styled.div`

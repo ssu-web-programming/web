@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const ModalContainer = styled.div`
-  background: white;
+  background: ${({ theme }) => theme.color.background.gray05};
   width: 100%;
   max-width: 400px;
   border-radius: 16px;
@@ -9,8 +9,8 @@ const ModalContainer = styled.div`
 
 const Title = styled.p`
   font-size: 18px;
-  color: #1a1a1a;
   margin-bottom: 24px;
+  color: ${({ theme }) => theme.color.text.gray04};
 `;
 
 const SubTitle = styled.p`
@@ -19,7 +19,7 @@ const SubTitle = styled.p`
   line-height: 24px;
   text-align: left;
   margin-bottom: 36px;
-  color: #454c53;
+  color: ${({ theme }) => theme.color.text.gray04};
 `;
 
 const ButtonGroup = styled.div`
@@ -47,19 +47,19 @@ const Button = styled.button<{ primary?: boolean }>`
   ${(props) =>
     props.primary
       ? `
-    background-color: #7c3aed;
+    background-color: ${props.theme.color.main};
     color: white;
     
     &:hover {
-      background-color: #6d28d9;
+      background-color:${props.theme.color.main};
     }
   `
       : `
-    background-color: #f3f4f6;
-    color: #4b5563;
+    background-color: ${props.theme.color.background.gray02};
+    color: ${props.theme.color.text.gray03};
     
     &:hover {
-      background-color: #e5e7eb;
+      background-color: ${props.theme.color.background.gray02};
     }
   `}
 `;

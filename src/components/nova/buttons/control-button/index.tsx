@@ -33,5 +33,6 @@ export default function ControlButton({
 const S = {
   StyledButton: styled.button`
     background: transparent;
+    cursor: pointer;
   `
 };

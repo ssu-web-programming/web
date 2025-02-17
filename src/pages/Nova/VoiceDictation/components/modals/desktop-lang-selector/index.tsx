@@ -3,6 +3,8 @@ import {
   LangOptionValues,
   useVoiceDictationContext
 } from 'pages/Nova/VoiceDictation/provider/voice-dictation-provider';
+import { themeInfoSelector } from 'store/slices/theme';
+import { useAppSelector } from 'store/store';
 
 import * as S from './style';
 
@@ -11,6 +13,7 @@ export default function DesktopLangSelector() {
     sharedVoiceDictationInfo: { selectedLangOption },
     setSharedVoiceDictationInfo
   } = useVoiceDictationContext();
+  const { isLightMode } = useAppSelector(themeInfoSelector);
 
   const handleSetSelectedLangOption = (lang: LangOptionValues) => {
     setSharedVoiceDictationInfo((prev) => ({
@@ -30,10 +33,12 @@ export default function DesktopLangSelector() {
   return (
     <S.ModalContainer>
       <S.ModalTitle>인식 언어</S.ModalTitle>
+      <S.ModalSubTitle>선택한 언어로 기록합니다.</S.ModalSubTitle>
 
       <S.RadioGroup>
         <S.RadioLabel>
           <S.RadioInput
+            $isLightMode={isLightMode}
             type="radio"
             name="ko-KR"
             value="ko-KR"
@@ -45,6 +50,7 @@ export default function DesktopLangSelector() {
 
         <S.RadioLabel>
           <S.RadioInput
+            $isLightMode={isLightMode}
             type="radio"
             name="en-US"
             value="en-US"
@@ -56,6 +62,7 @@ export default function DesktopLangSelector() {
 
         <S.RadioLabel>
           <S.RadioInput
+            $isLightMode={isLightMode}
             type="radio"
             name="ja"
             value="ja"
@@ -67,6 +74,7 @@ export default function DesktopLangSelector() {
 
         <S.RadioLabel>
           <S.RadioInput
+            $isLightMode={isLightMode}
             type="radio"
             name="zh-cn"
             value="zh-cn"
@@ -78,6 +86,7 @@ export default function DesktopLangSelector() {
 
         <S.RadioLabel>
           <S.RadioInput
+            $isLightMode={isLightMode}
             type="radio"
             name="zh-tw"
             value="zh-tw"
@@ -89,6 +98,7 @@ export default function DesktopLangSelector() {
 
         <S.RadioLabel>
           <S.RadioInput
+            $isLightMode={isLightMode}
             type="radio"
             name="enko"
             value="enko"
