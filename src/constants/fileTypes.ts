@@ -110,6 +110,7 @@ export const SUPPORT_IMAGE_TYPE: SupportFileType[] = [
 export const getValidExt = (tab: NOVA_TAB_TYPE) => {
   switch (tab) {
     case 'aiChat':
+    case 'home':
       return SUPPORT_IMAGE_TYPE.filter(({ extensions }) =>
         ['.jpg', '.jpeg', '.png', '.gif'].includes(extensions)
       );
