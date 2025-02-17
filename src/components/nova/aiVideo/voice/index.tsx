@@ -1,14 +1,15 @@
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import { css } from 'styled-components';
 
-import { apiWrapper } from '../../../../api/apiWrapper';
-import { NOVA_VIDEO_GET_VOICES } from '../../../../api/constant';
-import { AvatarInfo, Avatars, InitAvatarInfo, Voices } from '../../../../constants/heygenTypes';
+import { Voices } from '../../../../constants/heygenTypes';
 import { NOVA_TAB_TYPE } from '../../../../constants/novaTapTypes';
+import InfoDarkIcon from '../../../../img/dark/ico_circle_info.svg';
 import PlayDarkIcon from '../../../../img/dark/nova/aiVideo/ico_play.svg';
 import SoundDarkIcon from '../../../../img/dark/nova/aiVideo/ico_sound.svg';
 import ArrowRightIcon from '../../../../img/light/ico_arrow_right.svg';
+import InfoLightIcon from '../../../../img/light/ico_circle_info.svg';
 import CreditColorIcon from '../../../../img/light/ico_credit_color.svg';
 import PlayLightIcon from '../../../../img/light/nova/aiVideo/ico_play.svg';
 import SoundLightIcon from '../../../../img/light/nova/aiVideo/ico_sound.svg';
@@ -19,8 +20,8 @@ import {
 } from '../../../../store/slices/nova/pageStatusSlice';
 import { themeInfoSelector } from '../../../../store/slices/theme';
 import { useAppDispatch, useAppSelector } from '../../../../store/store';
+import ArrowTooltips from '../../../ArrowTooltip';
 import Button from '../../../buttons/Button';
-import { useGetVoices } from '../../../hooks/nova/use-get-voices';
 import AvatarCard from '../component/AvatarCard';
 import SelectVoice from '../component/SelectVoice';
 
@@ -29,6 +30,7 @@ import * as S from './style';
 export default function Voice() {
   const dispatch = useAppDispatch();
   const { isLightMode } = useAppSelector(themeInfoSelector);
+  const { t } = useTranslation();
   const result = useAppSelector(selectPageResult(NOVA_TAB_TYPE.aiVideo));
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -87,7 +89,12 @@ export default function Voice() {
       <S.Container>
         <AvatarCard />
         <S.TitleWrap>
-          <span className="title">아바타 목소리</span>
+          <div className="wrap">
+            <span className="title">아바타 목소리</span>
+            <ArrowTooltips message={t('Nova.aiVideo.tooltip.selectVoice')} placement="top-start">
+              <img src={isLightMode ? InfoLightIcon : InfoDarkIcon} alt="info" />
+            </ArrowTooltips>
+          </div>
           <div className="show" onClick={() => setIsOpen(true)}>
             <span>더 보기</span>
             <img src={ArrowRightIcon} alt="show_more" />

@@ -17,6 +17,11 @@ export const TitleWrap = styled.div`
   align-items: center;
   justify-content: space-between;
 
+  .wrap {
+    display: flex;
+    gap: 4px;
+  }
+
   .title,
   .show {
     font-size: 16px;

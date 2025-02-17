@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Dispatch, SetStateAction } from 'react';
+import { useTranslation } from 'react-i18next';
 import { css } from 'styled-components';
 
 import { AvatarInfo } from '../../../../../constants/heygenTypes';
@@ -12,6 +13,7 @@ import {
 } from '../../../../../store/slices/nova/pageStatusSlice';
 import { themeInfoSelector } from '../../../../../store/slices/theme';
 import { useAppDispatch, useAppSelector } from '../../../../../store/store';
+import ArrowTooltips from '../../../../ArrowTooltip';
 import ColorPicker from '../../../../colorPicker';
 
 import * as S from './style';
@@ -28,6 +30,7 @@ export default function AvatarCard({
   children
 }: AvatarCardProps) {
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const result = useAppSelector(selectPageResult(NOVA_TAB_TYPE.aiVideo));
 
@@ -52,16 +55,19 @@ export default function AvatarCard({
     <S.AvatarCard isCircle={result?.info.selectedAvatar?.avatar_style === 'circle'}>
       <img src={isLightMode ? HeyZenLightIcon : HeyZenDarkIcon} alt="logo" className="logo" />
       {!isShowOnlyCard && !isHideColorPicker && (
-        <ColorPicker
-          title="배경 색상"
-          color={result?.info.selectedAvatar?.background_color ?? ''}
-          setColor={(color: string) => selectAvatarBackground(color)}
+        <ArrowTooltips
+          message={t('Nova.aiVideo.tooltip.colorPicker')}
           cssExt={css`
             position: absolute;
             top: 12px;
             right: 12px;
-          `}
-        />
+          `}>
+          <ColorPicker
+            title="배경 색상"
+            color={result?.info.selectedAvatar?.background_color ?? ''}
+            setColor={(color: string) => selectAvatarBackground(color)}
+          />
+        </ArrowTooltips>
       )}
       <S.PreviewWrap
         isCircle={result?.info.selectedAvatar?.avatar_style === 'circle'}

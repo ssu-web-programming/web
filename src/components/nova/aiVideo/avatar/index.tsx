@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import { css } from 'styled-components';
 
 import { Avatars, InitAvatarInfo, InitAvatars } from '../../../../constants/heygenTypes';
@@ -9,10 +10,8 @@ import CircleDarkIcon from '../../../../img/dark/ico_circle.svg';
 import CircleSelectedDarkIcon from '../../../../img/dark/ico_circle_selected.svg';
 import SqureDarkIcon from '../../../../img/dark/ico_square.svg';
 import SqureSelectedDarkIcon from '../../../../img/dark/ico_squre_selected.svg';
-import ArrowRightIcon from '../../../../img/light/ico_arrow_right.svg';
 import CircleLightIcon from '../../../../img/light/ico_circle.svg';
 import CircleSelectedLightIcon from '../../../../img/light/ico_circle_selected.svg';
-import CreditColorIcon from '../../../../img/light/ico_credit_color.svg';
 import SqureLightIcon from '../../../../img/light/ico_square.svg';
 import SqureSelectedLightIcon from '../../../../img/light/ico_square_selected.svg';
 import PlusDocLightIcon from '../../../../img/light/upload_img_plus_new.svg';
@@ -27,7 +26,6 @@ import { themeInfoSelector } from '../../../../store/slices/theme';
 import { setLocalFiles } from '../../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../../store/store';
 import Button from '../../../buttons/Button';
-import { useGetAvatars } from '../../../hooks/nova/use-get-avatars';
 import ImageUploader from '../../ImageUploader';
 import AvatarCard from '../component/AvatarCard';
 import SelectAvatar from '../component/SelectAvatar';
@@ -37,6 +35,7 @@ import * as S from './style';
 export default function Avatar() {
   const dispatch = useAppDispatch();
   const { isLightMode } = useAppSelector(themeInfoSelector);
+  const { t } = useTranslation();
   const result = useAppSelector(selectPageResult(NOVA_TAB_TYPE.aiVideo));
   const currentFile = useAppSelector(selectPageData(NOVA_TAB_TYPE.aiVideo));
 
@@ -133,7 +132,7 @@ export default function Avatar() {
             <S.TitleWrap>
               <span className="title">아바타 선택</span>
               <div className="show" onClick={() => setIsOpen(true)}>
-                <span>더 보기</span>
+                <span>{t('Nova.aiVideo.button.showMore')}</span>
               </div>
             </S.TitleWrap>
             <S.AvartarList>

@@ -54,11 +54,7 @@ import * as S from './style';
 interface AIChatProps {
   expiredNOVA: boolean;
   setExpiredNOVA: (isExpired: boolean) => void;
-  createChatSubmitHandler: (
-    param: InputBarSubmitParam,
-    chatMode: SERVICE_TYPE,
-    isAnswer: boolean
-  ) => Promise<void>;
+  createChatSubmitHandler: (param: InputBarSubmitParam, isAnswer: boolean) => Promise<void>;
   fileUploadState: FileUploadState;
 }
 

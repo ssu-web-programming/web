@@ -1,3 +1,4 @@
+import { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 
 import ChangeBGIcon from '../../img/common/nova/imgSample/bg_change_sample.png';
@@ -219,10 +220,11 @@ export const getServiceCategoryFromTab = (tab: NOVA_TAB_TYPE): SERVICE_CATEGORY 
   return null;
 };
 
-export const getMenuItemsFromServiceGroup = (isLightMode: boolean) => {
-  const { t } = useTranslation();
-  const serviceCredits = useAppSelector(selectAllServiceCredits);
-
+export const getMenuItemsFromServiceGroup = (
+  serviceCredits: Record<SERVICE_TYPE, number>,
+  isLightMode: boolean,
+  t: TFunction
+) => {
   return Object.entries(CHAT_GROUP_MAP).map(([groupKey, services]) => {
     const { icon, label } = getServiceGroupInfo(groupKey, isLightMode);
 
@@ -241,4 +243,22 @@ export const getMenuItemsFromServiceGroup = (isLightMode: boolean) => {
       credit: minCredit === maxCredit ? maxCredit.toString() : `${minCredit}~${maxCredit}`
     };
   });
+};
+
+export const getServiceEngineName = (serviceType: SERVICE_TYPE): string | undefined => {
+  const mapping: Partial<Record<SERVICE_TYPE, string>> = {
+    [SERVICE_TYPE.NOVA_CHAT_GPT4O]: 'gpt4o',
+    [SERVICE_TYPE.NOVA_IMG_GPT4O]: 'gpt4o',
+    [SERVICE_TYPE.NOVA_ASK_DOC_GPT4O]: 'gpt4o',
+    [SERVICE_TYPE.NOVA_ASK_IMG_GPT4O]: 'gpt4o',
+    [SERVICE_TYPE.WRITE_GPT4]: 'gpt4o',
+    [SERVICE_TYPE.GPT3]: 'gpt3.5',
+    [SERVICE_TYPE.WRITE_CLADE3]: 'claude',
+    [SERVICE_TYPE.WRITE_CLOVA]: 'clovax',
+    [SERVICE_TYPE.NOVA_WEBSEARCH_PERPLEXITY]: 'sonar',
+    [SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO]: 'sonar-reasoning-pro',
+    [SERVICE_TYPE.NOVA_CHAT_O3MINI]: 'o3-mini'
+  };
+
+  return mapping[serviceType] || 'unknown';
 };

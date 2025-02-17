@@ -43,11 +43,8 @@ import Bridge, { ClientType, getPlatform } from 'util/bridge';
 import { getFileExtension, sliceFileName } from 'util/common';
 
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
-import {
-  getMenuItemsFromServiceGroup,
-  getServiceGroupInfo,
-  SERVICE_TYPE
-} from '../../../constants/serviceType';
+import { getMenuItemsFromServiceGroup, SERVICE_TYPE } from '../../../constants/serviceType';
+import { selectAllServiceCredits } from '../../../store/slices/nova/pageStatusSlice';
 import { themeInfoSelector } from '../../../store/slices/theme';
 import { setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
 import { blobToFile } from '../../../util/files';
@@ -64,11 +61,7 @@ import * as S from './style';
 
 interface ChatListProps {
   novaHistory: NovaChatType[];
-  createChatSubmitHandler: (
-    submitParam: InputBarSubmitParam,
-    chatMode: SERVICE_TYPE,
-    isAnswer: boolean
-  ) => void;
+  createChatSubmitHandler: (submitParam: InputBarSubmitParam, isAnswer: boolean) => void;
   onSave: (history: NovaChatType) => void;
   scrollHandler: (e: React.UIEvent<HTMLDivElement>) => void;
   expiredNOVA: boolean;
@@ -102,6 +95,7 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
   const selectedItems = useAppSelector(selectedItemsSelector);
   const isShareMode = useAppSelector(isShareModeSelector);
   const chatMode = useAppSelector(novaChatModeSelector);
+  const serviceCredits = useAppSelector(selectAllServiceCredits);
   const { from } = useLangParameterNavigate();
   const { onCopy } = useCopyText();
   const scrollRef = useRef<HTMLDivElement | null>(null);
@@ -129,7 +123,7 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
       status: ['done', 'cancel'],
       iconSrc: isLightMode ? <RetryChatLightIcon /> : <RetryChatDarkIcon />,
       clickHandler: (history: NovaChatType) => {
-        createChatSubmitHandler({ input: history.input, type: '' }, chatMode, false);
+        createChatSubmitHandler({ input: history.input, type: '' }, false);
       }
     },
     {
@@ -348,16 +342,17 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                           <SelectBox
                             placeHolder={'다른 답변 보기'}
                             minWidth={290}
-                            menuItem={getMenuItemsFromServiceGroup(isLightMode).filter(
-                              (item) => item.key === chatMode
-                            )}
+                            menuItem={getMenuItemsFromServiceGroup(
+                              serviceCredits,
+                              isLightMode,
+                              t
+                            ).filter((item) => item.key === chatMode)}
                             setSelectedItem={(selectedItem: string) => {
                               createChatSubmitHandler(
                                 {
                                   input: item.input,
                                   type: ''
                                 },
-                                selectedItem as SERVICE_TYPE,
                                 true
                               );
                             }}

@@ -515,6 +515,16 @@
         "SubTitle": "The image has been changed to your desired style.\nSave the image or insert it into your document!"
       }
     },
+    "aiVideo": {
+      "tooltip": {
+        "colorPicker": "Change the background!",
+        "selectVoice": "The voice's nationality must match the script language.",
+        "addScript": "The voice's nationality must match the script language.\nVideo creation time varies (about 5 min per 100 characters)."
+      },
+      "button": {
+        "showMore": "View More"
+      }
+    },
     "GoBackHeader": "Go Back",
     "TimeOut": {
       "Title": "The operation has exceeded the time limit.\nPlease try again.",

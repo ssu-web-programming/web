@@ -39,10 +39,8 @@ import { sliceFileName } from 'util/common';
 import { getValidExt, SUPPORT_DOCUMENT_TYPE } from '../../../constants/fileTypes';
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import {
-  CHAT_GROUP_MAP,
   getChatGroupKey,
   getMenuItemsFromServiceGroup,
-  getServiceGroupInfo,
   SERVICE_TYPE
 } from '../../../constants/serviceType';
 import { ReactComponent as DocsIconDark } from '../../../img/dark/ico_input_upload_docs.svg';
@@ -50,6 +48,7 @@ import { ReactComponent as ImagesIconDark } from '../../../img/dark/ico_input_up
 import { ReactComponent as DocsIconLight } from '../../../img/light/ico_input_upload_docs.svg';
 import { ReactComponent as ImagesIconLight } from '../../../img/light/ico_input_upload_images.svg';
 import LoadingSpinner from '../../../img/light/spinner.webp';
+import { selectAllServiceCredits } from '../../../store/slices/nova/pageStatusSlice';
 import { selectNovaTab, selectTabSlice } from '../../../store/slices/tabSlice';
 import { themeInfoSelector } from '../../../store/slices/theme';
 import {
@@ -76,11 +75,7 @@ interface InputBarProps {
   novaHistory: NovaChatType[];
   disabled?: boolean;
   expiredNOVA?: boolean;
-  onSubmit: (
-    param: InputBarSubmitParam,
-    chatMode: SERVICE_TYPE,
-    isAnswer: boolean
-  ) => Promise<void>;
+  onSubmit: (param: InputBarSubmitParam, isAnswer: boolean) => Promise<void>;
   contents?: string;
   setContents: React.Dispatch<React.SetStateAction<string>>;
 }
@@ -89,26 +84,35 @@ export default function InputBar(props: InputBarProps) {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { disabled = false, expiredNOVA = false, contents = '', setContents } = props;
-
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const localFiles = useAppSelector(getLocalFiles);
   const driveFiles = useAppSelector(getDriveFiles);
   const loadingFile = useAppSelector(getLoadingFile);
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
   const chatMode = useAppSelector(novaChatModeSelector);
-
+  const serviceCredits = useAppSelector(selectAllServiceCredits);
   const {
     pastedImages,
     handleRemovePastedImages,
     pastedImagesAsFileType,
     handleClearPastedImages
   } = useClipboard();
-
+  const [activatedUploadBtn, setActivatedUploadBtn] = useState(false);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const inputDocsFileRef = useRef<HTMLInputElement | null>(null);
   const inputImgFileRef = useRef<HTMLInputElement | null>(null);
 
-  const [activatedUploadBtn, setActivatedUploadBtn] = useState(false);
+  useEffect(() => {
+    adjustTextareaHeight();
+  }, [contents]);
+
+  useEffect(() => {
+    if (expiredNOVA) {
+      dispatch(setLocalFiles([]));
+      dispatch(setDriveFiles([]));
+      (document.activeElement as HTMLElement)?.blur();
+    }
+  }, [expiredNOVA, dispatch]);
 
   const handleActiveUploadBtn = () => {
     setActivatedUploadBtn(true);
@@ -151,18 +155,6 @@ export default function InputBar(props: InputBarProps) {
     }
   };
 
-  useEffect(() => {
-    adjustTextareaHeight();
-  }, [contents]);
-
-  useEffect(() => {
-    if (expiredNOVA) {
-      dispatch(setLocalFiles([]));
-      dispatch(setDriveFiles([]));
-      (document.activeElement as HTMLElement)?.blur();
-    }
-  }, [expiredNOVA]);
-
   const handleOnClick = async () => {
     const hasLocalFiles = localFiles.length > 0;
     const hasDriveFiles = driveFiles.length > 0;
@@ -200,7 +192,6 @@ export default function InputBar(props: InputBarProps) {
               : [],
         type: fileType
       },
-      chatMode,
       false
     );
     textAreaRef.current?.focus();
@@ -285,7 +276,7 @@ export default function InputBar(props: InputBarProps) {
                 clickable: true
               }}
               modules={[Pagination]}>
-              {getMenuItemsFromServiceGroup(isLightMode)
+              {getMenuItemsFromServiceGroup(serviceCredits, isLightMode, t)
                 .filter((item) => item.key === chatMode)
                 .flatMap(() =>
                   Array.from({ length: 3 }, (_, i) => {
@@ -401,7 +392,7 @@ export default function InputBar(props: InputBarProps) {
         <S.ButtonWrap>
           {props.novaHistory.length <= 0 && (
             <SelectBox
-              menuItem={getMenuItemsFromServiceGroup(isLightMode)}
+              menuItem={getMenuItemsFromServiceGroup(serviceCredits, isLightMode, t)}
               minWidth={290}
               paddingX={4}
               paddingY={4}

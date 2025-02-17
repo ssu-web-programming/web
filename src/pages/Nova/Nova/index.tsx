@@ -59,13 +59,8 @@ export default function Nova() {
   const { goExpandPage } = useExpandImage();
   const { handleImprovedResolution } = useImprovedResolution();
   const { goThemePage } = useChangeStyle();
-  const { isLightMode } = useAppSelector(themeInfoSelector);
-  const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
-  const { usingAI, selectedNovaTab } = useAppSelector(selectTabSlice);
-  const status = useAppSelector(selectPageStatus(selectedNovaTab));
   const { handleAgreement } = usePrivacyConsent();
   const { loadLocalFile } = useManageFile();
-
   const chatNova = useChatNova();
   const [expiredNOVA, setExpiredNOVA] = useState<boolean>(false);
   const [fileUploadState, setFileUploadState] = useState<FileUploadState>({
@@ -78,6 +73,10 @@ export default function Nova() {
     setFileUploadState,
     setExpiredNOVA
   });
+  const { isLightMode } = useAppSelector(themeInfoSelector);
+  const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
+  const { usingAI, selectedNovaTab } = useAppSelector(selectTabSlice);
+  const status = useAppSelector(selectPageStatus(selectedNovaTab));
 
   useEffect(() => {
     if (expiredNOVA) {
@@ -149,9 +148,7 @@ export default function Nova() {
         <NovaHome
           expiredNOVA={expiredNOVA}
           setExpiredNOVA={setExpiredNOVA}
-          createChatSubmitHandler={(submitParam) =>
-            createChatSubmitHandler(submitParam, chatMode, false)
-          }
+          createChatSubmitHandler={(submitParam) => createChatSubmitHandler(submitParam, false)}
           fileUploadState={fileUploadState}
         />
       );
@@ -165,8 +162,8 @@ export default function Nova() {
           <AIChat
             expiredNOVA={expiredNOVA}
             setExpiredNOVA={setExpiredNOVA}
-            createChatSubmitHandler={(submitParam, chatMode, isAnswer) =>
-              createChatSubmitHandler(submitParam, chatMode, isAnswer)
+            createChatSubmitHandler={(submitParam, isAnswer) =>
+              createChatSubmitHandler(submitParam, isAnswer)
             }
             fileUploadState={fileUploadState}
           />

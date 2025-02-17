@@ -1,16 +1,20 @@
-import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import { css } from 'styled-components';
 
-import { AvatarInfo } from '../../../../constants/heygenTypes';
 import { NOVA_TAB_TYPE } from '../../../../constants/novaTapTypes';
+import InfoDarkIcon from '../../../../img/dark/ico_circle_info.svg';
+import InfoLightIcon from '../../../../img/light/ico_circle_info.svg';
 import CreditColorIcon from '../../../../img/light/ico_credit_color.svg';
 import {
   selectPageResult,
   setPageStatus,
   updatePageResult
 } from '../../../../store/slices/nova/pageStatusSlice';
+import { themeInfoSelector } from '../../../../store/slices/theme';
 import { useAppDispatch, useAppSelector } from '../../../../store/store';
+import ArrowTooltips from '../../../ArrowTooltip';
 import Button from '../../../buttons/Button';
 import AvatarCard from '../component/AvatarCard';
 
@@ -18,6 +22,8 @@ import * as S from './style';
 
 export default function Script() {
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
+  const { isLightMode } = useAppSelector(themeInfoSelector);
   const result = useAppSelector(selectPageResult(NOVA_TAB_TYPE.aiVideo));
   const [text, setText] = useState('');
   const [isEnabled, setIsEnabled] = useState(false);
@@ -52,7 +58,12 @@ export default function Script() {
       <AvatarCard />
       <S.VoiceContainer>
         <S.TitleWrap>
-          <span className="title">스크립트 추가</span>
+          <div className="wrap">
+            <span className="title">스크립트 추가</span>
+            <ArrowTooltips message={t('Nova.aiVideo.tooltip.addScript')} placement="top-start">
+              <img src={isLightMode ? InfoLightIcon : InfoDarkIcon} alt="info" />
+            </ArrowTooltips>
+          </div>
         </S.TitleWrap>
         <S.TextWrap isActive={isEnabled}>
           <S.TextArea

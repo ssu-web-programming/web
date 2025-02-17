@@ -57,11 +57,14 @@ const GlobalStyle = createGlobalStyle`
     --gray-gray-90-01: #26282b;
     --gray-gray-90: #2d2d2d;
     --gray-gray-89: #262626;
+    --gray-gray-89-alpha: rgba(38, 38 ,38 ,0.8);
     --gray-gray-87: #3b3b3b;
     --gray-gray-85: #282828;
     --gray-gray-80-02: #454c53;
     --gray-gray-70: #72787f;
     --gray-gray-65: #797979;
+    --gray-gray-62: #606060;
+    --gary-gray-62-alpha: rgba(96, 96, 96, 0.8);
     --gray-gray-60-03: #9ea4aa;
     --gray-gray-60: #9e9e9e;
     --gray-gray-50: #b3b8bd;
