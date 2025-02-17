@@ -1,6 +1,5 @@
-import { ReactComponent as UploadDarkIcon } from 'img/dark/ico_upload_img_plus.svg';
+import { ReactNode } from 'react';
 import CreditIcon from 'img/light/ico_credit_gray.svg';
-import { ReactComponent as UploadFileLightIcon } from 'img/light/nova/translation/file_upload.svg';
 import { themeInfoSelector } from 'store/slices/theme';
 import { userInfoSelector } from 'store/slices/userInfo';
 import { useAppSelector } from 'store/store';
@@ -11,17 +10,23 @@ interface Props {
   guideTitle: string;
   guideMsg: string;
   creditCount?: number;
+  lightIcon?: ReactNode;
+  darkIcon?: ReactNode;
 }
 
-export default function GuideBox({ guideMsg, guideTitle, creditCount = 30 }: Props) {
+export default function GuideBox({
+  guideMsg,
+  guideTitle,
+  creditCount = 30,
+  lightIcon,
+  darkIcon
+}: Props) {
   const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
   const { isLightMode } = useAppSelector(themeInfoSelector);
 
   return (
     <S.ImageBox>
-      <S.Icon disable={isAgreed === undefined}>
-        {isLightMode ? <UploadFileLightIcon /> : <UploadDarkIcon />}
-      </S.Icon>
+      <S.Icon disable={isAgreed === undefined}>{isLightMode ? lightIcon : darkIcon}</S.Icon>
 
       <S.Guide>
         <S.GuideTitle>{guideTitle}</S.GuideTitle>

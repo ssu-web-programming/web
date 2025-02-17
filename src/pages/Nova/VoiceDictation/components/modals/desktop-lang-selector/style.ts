@@ -10,14 +10,20 @@ const ModalContainer = styled.div`
 const ModalTitle = styled.h2`
   font-size: 18px;
   color: ${({ theme }) => theme.color.text.gray04};
-  margin-bottom: 24px;
+  margin-bottom: 8px;
+`;
+
+const ModalSubTitle = styled.p`
+  margin-bottom: 16px;
+  color: ${({ theme }) => theme.color.text.gray03};
+  font-weight: 400;
 `;
 
 const RadioGroup = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  margin-bottom: 24px;
+  margin-bottom: 32px;
 `;
 
 const RadioLabel = styled.label`
@@ -28,7 +34,9 @@ const RadioLabel = styled.label`
   padding: 4px 0;
 `;
 
-const RadioInput = styled.input.attrs({ type: 'radio' })`
+const RadioInput = styled.input.attrs({ type: 'radio' })<{
+  $isLightMode: boolean;
+}>`
   appearance: none;
   width: 20px;
   height: 20px;
@@ -99,6 +107,7 @@ export {
   Button,
   ButtonGroup,
   ModalContainer,
+  ModalSubTitle,
   ModalTitle,
   RadioGroup,
   RadioInput,

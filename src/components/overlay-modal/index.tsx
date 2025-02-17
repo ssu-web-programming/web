@@ -57,7 +57,7 @@ const ModalWrapper = styled.div`
 `;
 
 const ModalContent = styled.div<ModalContentProps>`
-  background-color: white;
+  background: ${({ theme }) => theme.color.background.gray05};
   padding: 20px;
   border-radius: 16px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);

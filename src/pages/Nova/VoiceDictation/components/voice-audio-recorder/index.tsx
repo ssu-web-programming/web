@@ -1,13 +1,15 @@
 import OverlayModal from 'components/overlay-modal';
 import { overlay } from 'overlay-kit';
 import { setIsMicrophoneState } from 'store/slices/appState';
+import { themeInfoSelector } from 'store/slices/theme';
 import { setLocalFiles } from 'store/slices/uploadFiles';
-import { useAppDispatch } from 'store/store';
+import { useAppDispatch, useAppSelector } from 'store/store';
 import Bridge from 'util/bridge';
 import { blobToFile } from 'util/getAudioDuration';
 
 import { useVoiceDictationContext } from '../../provider/voice-dictation-provider';
 import AudioRecorder from '../audio-recorder';
+import DesktopLangSelector from '../modals/desktop-lang-selector';
 import StopModalContent from '../modals/stop-modal-content';
 
 export default function VoiceAudioRecorder() {
@@ -15,6 +17,8 @@ export default function VoiceAudioRecorder() {
     setSharedVoiceDictationInfo,
     sharedVoiceDictationInfo: { isVoiceRecording, previousPageType, selectedLangOption }
   } = useVoiceDictationContext();
+  const { isLightMode } = useAppSelector(themeInfoSelector);
+
   const dispatch = useAppDispatch();
 
   const handleMoveToReady = async (file: File) => {
@@ -36,6 +40,16 @@ export default function VoiceAudioRecorder() {
     });
   };
 
+  const openLangOverlay = () => {
+    overlay.open(({ isOpen, close }) => {
+      return (
+        <OverlayModal isOpen={isOpen} onClose={close}>
+          <DesktopLangSelector />
+        </OverlayModal>
+      );
+    });
+  };
+
   return (
     <AudioRecorder
       onRecordingComplete={async (blob) => {
@@ -51,6 +65,8 @@ export default function VoiceAudioRecorder() {
       }}
       onStopConfirm={openStopOverlay}
       selectedLangOption={selectedLangOption}
+      openLangOverlay={openLangOverlay}
+      isLightMode={isLightMode}
     />
   );
 }

@@ -3,6 +3,8 @@ import { Guide } from 'components/nova/Guide';
 import GuideBox from 'components/nova/guide-box';
 import { NOVA_TAB_TYPE } from 'constants/novaTapTypes';
 import { MEDIA_ERROR_MESSAGES } from 'constants/voice-dictation';
+import { ReactComponent as MicDarkIcon } from 'img/dark/nova/voice-dictation/microphone.svg';
+import { ReactComponent as MicLightIcon } from 'img/light/nova/voiceDictation/microphone.svg';
 import { useTranslation } from 'react-i18next';
 import styled, { css } from 'styled-components';
 import { MediaError, MediaErrorContent } from 'types/media-error';
@@ -61,7 +63,12 @@ export default function VoiceDictationIntro() {
       `}>
       <RecognizedLang />
       <S.BoxWrapper onClick={startRecording}>
-        <GuideBox guideTitle="실시간 받아쓰기" guideMsg={'최대 30분 가능합니다.'} />
+        <GuideBox
+          guideTitle="실시간 받아쓰기"
+          guideMsg={'최대 30분 가능합니다.'}
+          lightIcon={<MicLightIcon />}
+          darkIcon={<MicDarkIcon />}
+        />
       </S.BoxWrapper>
       <AudioFileUploader
         guideMsg={t('Nova.voiceDictation.Guide.UploadGuide')}
@@ -84,7 +91,7 @@ const S = {
     height: 78px;
     padding: 16px;
     border-radius: 8px;
-    background-color: var(--white);
-    border: 1px dashed var(--gray-gray-40);
+    background: ${({ theme }) => theme.color.background.gray01};
+    border: 1px solid ${({ theme }) => theme.color.border.gray01};
   `
 };

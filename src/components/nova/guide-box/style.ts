@@ -70,20 +70,20 @@ const Guide = styled.div`
   flex-direction: column;
   gap: 4px;
   flex-grow: 1;
-  color: #454c53;
 `;
 
 const GuideTitle = styled.p`
   font-weight: 700;
   font-size: 16px;
   line-height: 24px;
+  color: ${({ theme }) => theme.color.text.gray03};
 `;
 
 const GuideSubTitle = styled.p`
   font-weight: 400;
   font-size: 12px;
   line-height: 18px;
-  color: #72787f;
+  color: ${({ theme }) => theme.color.text.gray09};
 `;
 
 export { Credit, Guide, GuideSubTitle, GuideTitle, Icon, ImageBox };

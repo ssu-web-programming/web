@@ -11,13 +11,9 @@ export default function TranslationTextResult() {
       detectedSourceLanguage,
       translateInputValue,
       translatedText,
-      sourceLang,
       targetLang
     }
   } = useTranslationContext();
-
-  console.log('detectedSourceLanguage', detectedSourceLanguage);
-  console.log('sourceLang', sourceLang);
 
   return (
     <>

@@ -1,8 +1,8 @@
 import React, { PropsWithChildren, useEffect, useRef, useState } from 'react';
+import { ReactComponent as DarkGoBackward } from 'img/dark/nova/voice-dictation/go_backward.svg';
+import { ReactComponent as DarkGoForward } from 'img/dark/nova/voice-dictation/go_forward.svg';
 import { ReactComponent as GoBackward } from 'img/light/nova/voiceDictation/go_backward.svg';
 import { ReactComponent as GoForward } from 'img/light/nova/voiceDictation/go_forward.svg';
-import { ReactComponent as Pause } from 'img/light/nova/voiceDictation/player_pause.svg';
-import { ReactComponent as Play } from 'img/light/nova/voiceDictation/player_play.svg';
 
 import * as S from './style';
 
@@ -13,6 +13,7 @@ interface AudioPlayerProps extends PropsWithChildren {
   onDurationChange?: (duration: number) => void;
   onPlay?: () => void;
   onPause?: () => void;
+  isLightMode?: boolean;
 }
 
 // 재생 속도 타입
@@ -24,7 +25,8 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
   onDurationChange,
   onPlay,
   onPause,
-  children
+  children,
+  isLightMode
 }) => {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [currentTime, setCurrentTime] = useState<number>(0);
@@ -139,14 +141,16 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
           <span>x</span>
         </S.PlaybackSpeedButton>
 
-        <S.PlayButton onClick={togglePlay}>{isPlaying ? <Pause /> : <Play />}</S.PlayButton>
+        <S.PlayButton onClick={togglePlay}>
+          {isPlaying ? <S.StyledPause /> : <S.StyledPlay />}
+        </S.PlayButton>
 
         <S.SkipButton onClick={() => handleSkip(-5)}>
-          <GoBackward />
+          {isLightMode ? <GoBackward /> : <DarkGoBackward />}
         </S.SkipButton>
 
         <S.SkipButton onClick={() => handleSkip(5)}>
-          <GoForward />
+          {isLightMode ? <GoForward /> : <DarkGoForward />}
         </S.SkipButton>
       </S.ControlsContainer>
 

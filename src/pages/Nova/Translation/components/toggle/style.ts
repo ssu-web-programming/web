@@ -18,16 +18,16 @@ const ToggleButton = styled.button<ToggleButtonProps>`
   line-height: 24px;
   cursor: pointer;
 
-  ${({ isActive }) =>
+  ${({ isActive, theme }) =>
     isActive
       ? `
-      background: #F3E8FF;
-      color: #6F3AD0;
-      border: 1px solid #c6a9ff;
+      background: ${theme.color.background.selected};
+      color: ${theme.color.background.purple01};
+      border: 1px solid ${theme.color.border.purple01};
     `
       : `
       background: transparent;
-      color: #9CA3AF;
+      color: ${theme.color.text.gray01};
     `}
 
   &:hover {
@@ -41,10 +41,10 @@ const ToggleContainer = styled.div<{
   containerStyle?: FlattenSimpleInterpolation;
 }>`
   display: inline-flex;
-  background: #f2f4f6;
+  background: ${({ theme }) => theme.color.background.gray06};
   padding: 4px;
   border-radius: 100px;
-  border: 1px solid #e8ebed;
+  border: 1px solid ${({ theme }) => theme.color.background.gray07};
 
   ${({ containerStyle }) => containerStyle && containerStyle}
 `;

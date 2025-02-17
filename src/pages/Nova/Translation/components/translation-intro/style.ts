@@ -1,3 +1,6 @@
+import { ReactComponent as ArrowIcon } from 'img/light/nova/translation/arrow_down.svg';
+import { ReactComponent as DeepL } from 'img/light/nova/translation/deepl_logo.svg';
+import { ReactComponent as Switch } from 'img/light/nova/translation/switch.svg';
 import { ReactComponent as TransFile } from 'img/light/nova/translation/trans_file.svg';
 import { ReactComponent as TransTxt } from 'img/light/nova/translation/trans_txt.svg';
 import styled from 'styled-components';
@@ -19,8 +22,8 @@ const TextAreaWrapper = styled.div`
   height: 425px;
   margin-top: 12px;
   border-radius: 8px;
-  border: 1px solid #c9cdd2;
-  background: #fff;
+  border: 1px solid ${({ theme }) => theme.color.border.gray01};
+  background: ${({ theme }) => theme.color.background.gray01};
 `;
 
 const TextAreaHeader = styled.div`
@@ -44,6 +47,7 @@ const TextAreaHeader = styled.div`
     align-items: center;
     justify-content: center;
     gap: 4px;
+    color: ${({ theme }) => theme.color.text.gray04};
   }
 
   & > div:nth-child(2) {
@@ -59,6 +63,7 @@ const TextAreaHeader = styled.div`
     align-items: center;
     justify-content: center;
     gap: 4px;
+    color: ${({ theme }) => theme.color.text.gray04};
 
     & > span {
       overflow: hidden;
@@ -76,10 +81,11 @@ const TextArea = styled.textarea`
   font-weight: 400;
   font-size: 16px;
   line-height: 24px;
-  color: #26282b;
+  color: ${({ theme }) => theme.color.text.gray04};
   padding: 12px 32px 12px 16px;
-  border-top: 1px solid #e8ebed;
-  border-bottom: 1px solid #e8ebed;
+  border-top: 1px solid ${({ theme }) => theme.color.border.gray01};
+  border-bottom: 1px solid ${({ theme }) => theme.color.border.gray01};
+  background: ${({ theme }) => theme.color.background.gray01};
 `;
 
 const TextInputWrapper = styled.div`
@@ -114,7 +120,7 @@ const StyledTransTxt = styled(TransTxt)<{
   $isActive?: boolean;
 }>`
   & path {
-    fill: ${({ $isActive }) => ($isActive ? '#6F3AD0' : '')};
+    fill: ${({ $isActive, theme }) => ($isActive ? theme.color.background.purple01 : '')};
   }
 `;
 
@@ -122,7 +128,25 @@ const StyledTransFile = styled(TransFile)<{
   $isActive?: boolean;
 }>`
   & path {
-    fill: ${({ $isActive }) => ($isActive ? '#6F3AD0' : '')};
+    fill: ${({ $isActive, theme }) => ($isActive ? theme.color.background.purple01 : '')};
+  }
+`;
+
+const StyledArrowIcon = styled(ArrowIcon)`
+  & path {
+    fill: ${({ theme }) => theme.color.text.gray03};
+  }
+`;
+
+const StyledSwitch = styled(Switch)`
+  & path {
+    fill: ${({ theme }) => theme.color.text.gray03};
+  }
+`;
+
+const StyledDeepL = styled(DeepL)`
+  & path {
+    fill: ${({ theme }) => theme.color.background.deepNavy};
   }
 `;
 
@@ -156,13 +180,16 @@ const FileUploaderWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  border-top: 1px solid #e8ebed;
-  border-bottom: 1px solid #e8ebed;
+  border-top: 1px solid ${({ theme }) => theme.color.border.gray01};
+  border-bottom: 1px solid ${({ theme }) => theme.color.border.gray01};
 `;
 
 export {
   CloseIconWrapper,
   FileUploaderWrapper,
+  StyledArrowIcon,
+  StyledDeepL,
+  StyledSwitch,
   StyledTransFile,
   StyledTransTxt,
   TextArea,

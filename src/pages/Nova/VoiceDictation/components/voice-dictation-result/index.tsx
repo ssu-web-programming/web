@@ -18,11 +18,11 @@ import VoiceSaveBottomSheet from '../voice-save-bottom-sheet';
 import * as S from './style';
 
 export default function VoiceDictationResult() {
-  const { isLightMode } = useAppSelector(themeInfoSelector);
   const {
     sharedVoiceDictationInfo: { voiceDictationResult, audioDuration }
   } = useVoiceDictationContext();
   const localFiles = useAppSelector(getLocalFiles);
+  const { isLightMode } = useAppSelector(themeInfoSelector);
 
   const { t } = useTranslation();
 
@@ -38,7 +38,7 @@ export default function VoiceDictationResult() {
         <S.Header>
           <S.Title lang={'ko'}>
             <img src={isLightMode ? CheckLightIcon : CheckDarkIcon} alt="check" />
-            <span>{'받아쓰기 완료'}</span>
+            <span>받아쓰기 완료</span>
           </S.Title>
 
           <S.Description>
@@ -74,7 +74,8 @@ export default function VoiceDictationResult() {
           audioSource={localFiles[0]}
           onPlay={() => console.log('Started playing')}
           onPause={() => console.log('Paused')}
-          onTimeUpdate={(time) => console.log('Current time:', time)}>
+          onTimeUpdate={(time) => console.log('Current time:', time)}
+          isLightMode={isLightMode}>
           {/* 호진FIXME: 아래 컴포넌트는 audio 로직과 떨어져있는게 맞는 것 같음! */}
           <S.ButtonWrapper>
             <Button

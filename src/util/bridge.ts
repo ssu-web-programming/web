@@ -535,8 +535,22 @@ export const useInitBridgeListener = () => {
             console.log('body', body);
             dispatch(removeLoadingFile());
             dispatch(setPageStatus({ tab: selectedNovaTab, status: 'home' }));
-            dispatch(setDriveFiles([currentFile]));
             dispatch(setCreating('none'));
+
+            if (selectedNovaTab === NOVA_TAB_TYPE.translation) {
+              dispatch(
+                setCurrentFile({
+                  type: 'drive',
+                  id: body.fileId,
+                  size: body.size,
+                  ext: 'drive',
+                  isSaved: true,
+                  name: currentFile.name
+                })
+              );
+            } else {
+              dispatch(setDriveFiles([currentFile]));
+            }
             break;
           }
           case 'finishDownloadImage': {

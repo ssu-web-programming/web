@@ -21,7 +21,8 @@ export interface CurrentFileInfo {
   id: string;
   size: number;
   ext: string;
-  isSaved: boolean;
+  isSaved?: boolean;
+  name?: string;
 }
 
 export interface LoadingFileInfo {

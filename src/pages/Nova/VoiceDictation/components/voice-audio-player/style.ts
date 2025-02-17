@@ -1,3 +1,5 @@
+import { ReactComponent as Pause } from 'img/light/nova/voiceDictation/player_pause.svg';
+import { ReactComponent as Play } from 'img/light/nova/voiceDictation/player_play.svg';
 import styled from 'styled-components';
 
 interface ProgressBarProps {
@@ -7,7 +9,7 @@ interface ProgressBarProps {
 // 스타일드 컴포넌트 정의
 const Container = styled.div`
   width: 100%;
-  background-color: white;
+  background-color: ${({ theme }) => theme.color.background.gray01};
   margin-top: 12px;
 `;
 
@@ -15,7 +17,7 @@ const ProgressBarContainer = styled.div`
   position: relative;
   width: 100%;
   height: 4px;
-  background-color: #e5e7eb;
+  background-color: ${({ theme }) => theme.color.background.gray02};
   border-radius: 9999px;
   margin-bottom: 8px;
   cursor: pointer;
@@ -40,7 +42,7 @@ const TimeDisplay = styled.div`
   display: flex;
   justify-content: space-between;
   font-size: 12px;
-  color: #6b7280;
+  color: ${({ theme }) => theme.color.text.gray01};
   margin: 0px 16px;
 `;
 
@@ -71,6 +73,7 @@ const PlaybackSpeedButton = styled(Button)`
   font-weight: 700;
   flex-direction: row;
   gap: 3px;
+  color: ${({ theme }) => theme.color.text.gray02};
 `;
 
 const SkipButton = styled(Button)`
@@ -87,6 +90,18 @@ const PlayButton = styled(Button)`
   }
 `;
 
+const StyledPause = styled(Pause)`
+  & path {
+    fill: ${({ theme }) => theme.color.text.gray02};
+  }
+`;
+
+const StyledPlay = styled(Play)`
+  & path {
+    fill: ${({ theme }) => theme.color.text.gray02};
+  }
+`;
+
 export {
   Container,
   ControlsContainer,
@@ -95,5 +110,7 @@ export {
   ProgressBar,
   ProgressBarContainer,
   SkipButton,
+  StyledPause,
+  StyledPlay,
   TimeDisplay
 };
