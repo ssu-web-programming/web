@@ -175,8 +175,6 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       chunksRef.current = [];
 
       mediaRecorder.ondataavailable = (event) => {
-        // console.log('event.data', event.data);
-
         if (event.data.size > 0) {
           chunksRef.current.push(event.data);
         }
@@ -281,11 +279,16 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   }, [stopTimer]);
 
   const resumeRecording = useCallback(() => {
-    if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'paused') {
+    if (
+      mediaRecorderRef.current &&
+      mediaRecorderRef.current.state === 'paused' &&
+      streamRef.current
+    ) {
       const isPaused = false;
       mediaRecorderRef.current.resume();
       setIsPaused(isPaused);
       startTimer();
+      startVisualization(streamRef.current);
 
       if (canvasRef.current && analyserRef.current) {
         const frequencyData = new Uint8Array(analyserRef.current.frequencyBinCount);
