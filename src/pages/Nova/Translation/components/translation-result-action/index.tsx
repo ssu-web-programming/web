@@ -1,8 +1,12 @@
 import IconTextButton from 'components/buttons/IconTextButton';
 import { useCopyToClipboard } from 'components/hooks/useCopyToClipboard';
+import copyDarkIcon from 'img/dark/nova/translation/copy.svg';
+import insertDarkDocIcon from 'img/dark/nova/translation/insert_docs.svg';
 import copyIcon from 'img/light/nova/translation/copy.svg';
 import insertDocIcon from 'img/light/nova/translation/insert_docs.svg';
 import { useTranslation } from 'react-i18next';
+import { themeInfoSelector } from 'store/slices/theme';
+import { useAppSelector } from 'store/store';
 import { insertDoc } from 'util/common';
 
 import * as S from './style';
@@ -22,11 +26,12 @@ export default function TranslationResultAction({
 }: Props) {
   const { t } = useTranslation();
   const { copyText } = useCopyToClipboard();
+  const { isLightMode } = useAppSelector(themeInfoSelector);
 
   const ICON_BUTTON_LIST = [
     {
       name: t('Nova.Chat.InsertDoc.Title'),
-      iconSrc: insertDocIcon,
+      iconSrc: isLightMode ? insertDocIcon : insertDarkDocIcon,
       clickHandler: async () => {
         await insertDoc(translatedValue);
         console.log('문서에 삽입!');
@@ -35,7 +40,7 @@ export default function TranslationResultAction({
     },
     {
       name: t('Nova.Chat.Copy'),
-      iconSrc: copyIcon,
+      iconSrc: isLightMode ? copyIcon : copyDarkIcon,
       clickHandler: async () => await copyText(translatedValue),
       isActive: isCopyAction
     }

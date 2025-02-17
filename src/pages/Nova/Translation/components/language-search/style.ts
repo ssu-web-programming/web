@@ -9,11 +9,11 @@ const Title = styled.p`
   font-weight: 600;
   line-height: 30px;
   text-align: left;
+  color: ${({ theme }) => theme.color.text.gray04};
 `;
 
 const InputWrapper = styled.div`
   position: relative;
-
   & > svg {
     position: absolute;
     top: 20px;
@@ -29,9 +29,9 @@ const SearchInput = styled.input`
   margin-top: 8px;
   width: 100%;
   border-radius: 8px;
-  background: #f7f8f9;
   font-family: 'Pretendard';
-  color: #9ea4aa;
+  color: ${({ theme }) => theme.color.text.gray04};
+  background: ${({ theme }) => theme.color.background.gray10};
 `;
 
 export { InputWrapper, SearchInput, Title, Wrapper };

@@ -9,6 +9,7 @@ const Title = styled.div`
   align-items: center;
   justify-content: center;
   gap: 4px;
+  color: ${({ theme }) => theme.color.text.gray04};
 `;
 
 const SubTitle = styled.div`
@@ -17,11 +18,12 @@ const SubTitle = styled.div`
   line-height: 24px;
   text-align: center;
   margin-top: 8px;
+  color: ${({ theme }) => theme.color.text.gray05};
 `;
 
 const FileItemWrapper = styled.div`
-  border: 1px solid #e8ebed;
-  background: #fff;
+  border: 1px solid ${({ theme }) => theme.color.background.gray02};
+  background: ${({ theme }) => theme.color.background.gray01};
   border-radius: 16px;
   padding: 32px 16px;
   margin-top: 40px;

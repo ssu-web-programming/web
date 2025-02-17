@@ -5,6 +5,7 @@ const Title = styled.p`
   font-size: 16px;
   font-weight: 500;
   line-height: 24px;
+  color: ${({ theme }) => theme.color.text.gray04};
 `;
 
 const Wrapper = styled.div`

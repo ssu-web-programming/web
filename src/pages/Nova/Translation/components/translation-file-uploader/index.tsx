@@ -156,7 +156,6 @@ export default function TranslationFileUploader({
             <Credit>
               <span>{creditCount}</span>
               <div className="img">
-                {/* <img src={CreditIcon} alt="credit" /> */}
                 <StyledCreditIcon />
               </div>
             </Credit>

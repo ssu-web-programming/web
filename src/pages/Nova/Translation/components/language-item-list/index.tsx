@@ -95,11 +95,11 @@ const S = {
     font-size: 16px;
     font-weight: 500;
     line-height: 24px;
-    color: #454c53;
+    color: ${({ theme }) => theme.color.text.gray04};
   `,
   LanguageNoSearch: styled.p`
     margin-top: 28px;
     text-align: center;
-    color: #9ea4aa;
+    color: ${({ theme }) => theme.color.text.gray04};
   `
 };
