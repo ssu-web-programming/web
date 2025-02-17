@@ -2,12 +2,8 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import ControlButton from 'components/nova/buttons/control-button';
 import PlayPauseButton from 'components/nova/buttons/play-pause-button';
 import { ReactComponent as DarkLang } from 'img/dark/nova/voice-dictation/lang.svg';
-import { ReactComponent as DarkPause } from 'img/dark/nova/voice-dictation/pause.svg';
-import { ReactComponent as DarkPlay } from 'img/dark/nova/voice-dictation/play.svg';
 import { ReactComponent as DarkStop } from 'img/dark/nova/voice-dictation/stop.svg';
 import { ReactComponent as Lang } from 'img/light/nova/voiceDictation/lang.svg';
-import { ReactComponent as Pause } from 'img/light/nova/voiceDictation/pause.svg';
-import { ReactComponent as Play } from 'img/light/nova/voiceDictation/play.svg';
 import { ReactComponent as Stop } from 'img/light/nova/voiceDictation/stop.svg';
 
 import { LangOptionValues } from '../../provider/voice-dictation-provider';
@@ -350,19 +346,6 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       </S.CanvasWrapper>
 
       <S.ButtonGroup>
-        {/* {isLightMode ? <Lang onClick={openLangOverlay} /> : <DarkLang onClick={openLangOverlay} />}
-        {isPaused ? (
-          isLightMode ? (
-            <Play width={64} height={64} onClick={resumeRecording} />
-          ) : (
-            <DarkPlay width={64} height={64} onClick={resumeRecording} />
-          )
-        ) : isLightMode ? (
-          <Pause width={64} height={64} onClick={pauseRecording} />
-        ) : (
-          <DarkPause width={64} height={64} onClick={pauseRecording} />
-        )}
-        {isLightMode ? <Stop onClick={stopRecording} /> : <DarkStop onClick={stopRecording} />} */}
         <ControlButton
           icon={Lang}
           darkIcon={DarkLang}

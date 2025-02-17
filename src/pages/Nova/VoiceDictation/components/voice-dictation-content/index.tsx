@@ -18,7 +18,8 @@ import VoiceDictationResult from '../voice-dictation-result';
 
 export default function VoiceDictationContent() {
   const {
-    sharedVoiceDictationInfo: { componentType }
+    sharedVoiceDictationInfo: { componentType },
+    resetVoiceInfo
   } = useVoiceDictationContext();
   const { isClosedNova } = useAppSelector(appStateSelector);
 
@@ -39,6 +40,7 @@ export default function VoiceDictationContent() {
             title={
               '잠깐! 녹음을 끝내지 않고 종료하면 녹음이 저장되지 않아요. 그래도 종료하시겠어요?'
             }
+            onConfirm={resetVoiceInfo}
           />
         </OverlayModal>
       );
