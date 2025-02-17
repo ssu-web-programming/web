@@ -143,14 +143,14 @@ const useErrorHandle = () => {
               flexDirection: 'column',
               alignItems: 'flex-start'
             }}>
-            <div style={{ marginBottom: '20px' }}>{t('Index.Alert.UnopenableDocError')}</div>
+            <div style={{ marginBottom: '20px' }}>{t('Nova.Alert.UnopenableDocError')}</div>
             {unopenable.length > 0 && (
-              <div>{`- ${t('Index.Alert.Unopenable')} : ${unopenable
+              <div>{`- ${t('Nova.Alert.Unopenable')} : ${unopenable
                 .map((item) => sliceFileName(item.filename, 10))
                 .join(', ')}`}</div>
             )}
             {password.length > 0 && (
-              <div>{`- ${t('Index.Alert.Password')} : ${password
+              <div>{`- ${t('Nova.Alert.Password')} : ${password
                 .map((item) => sliceFileName(item.filename, 10))
                 .join(', ')}`}</div>
             )}

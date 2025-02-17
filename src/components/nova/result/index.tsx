@@ -70,7 +70,7 @@ export default function Result({ children }: ResultProps) {
   const ShowExpireLinkPopup = async () => {
     confirm({
       title: '',
-      msg: t('Index.Confirm.ExpireImageLink.Msg'),
+      msg: t('Nova.Confirm.ExpireImageLink.Msg'),
       onOk: {
         text: t('OK'),
         callback: () => {

@@ -251,7 +251,7 @@ export const getMenuItemsFromServiceGroup = (
   });
 };
 
-export const getServiceEngineName = (serviceType: SERVICE_TYPE): string | undefined => {
+export const getServiceEngineName = (serviceType: SERVICE_TYPE): string => {
   const mapping: Partial<Record<SERVICE_TYPE, string>> = {
     [SERVICE_TYPE.NOVA_CHAT_GPT4O]: 'gpt4o',
     [SERVICE_TYPE.NOVA_IMG_GPT4O]: 'gpt4o',

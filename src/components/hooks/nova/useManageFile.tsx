@@ -116,7 +116,7 @@ export function useManageFile({ onFinishCallback, onClearPastedImages }: Props =
     if (files.length > maxFileUploadCntOnce) {
       await confirm({
         title: '',
-        msg: t('Index.Confirm.OverMaxFileUploadCntOnce', { max: maxFileUploadCntOnce })!,
+        msg: t('Nova.Confirm.OverMaxFileUploadCntOnce', { max: maxFileUploadCntOnce })!,
         onOk: {
           text: t('Confirm'),
           callback: () => {}
@@ -136,8 +136,8 @@ export function useManageFile({ onFinishCallback, onClearPastedImages }: Props =
       if (uploadCnt + files.length > uploadLimit) {
         await confirm({
           title: '',
-          msg: t('Index.Confirm.OverMaxFileUploadCnt', { max: uploadLimit })!,
-          onOk: { text: t('Index.Confirm.NewChat.StartNewChat'), callback: chatNova.newChat },
+          msg: t('Nova.Confirm.OverMaxFileUploadCnt', { max: uploadLimit })!,
+          onOk: { text: t('Nova.Confirm.NewChat.StartNewChat'), callback: chatNova.newChat },
           onCancel: {
             text: t('Cancel'),
             callback: () => {}
@@ -210,8 +210,8 @@ export function useManageFile({ onFinishCallback, onClearPastedImages }: Props =
       if (uploadCnt + files.length > uploadLimit) {
         await confirm({
           title: '',
-          msg: t('Index.Confirm.OverMaxFileUploadCnt', { max: uploadLimit })!,
-          onOk: { text: t('Index.Confirm.NewChat.StartNewChat'), callback: chatNova.newChat },
+          msg: t('Nova.Confirm.OverMaxFileUploadCnt', { max: uploadLimit })!,
+          onOk: { text: t('Nova.Confirm.NewChat.StartNewChat'), callback: chatNova.newChat },
           onCancel: {
             text: t('Cancel'),
             callback: () => {}
