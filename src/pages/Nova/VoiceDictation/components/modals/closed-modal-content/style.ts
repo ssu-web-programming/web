@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const ModalContainer = styled.div`
-  background: white;
+  background: ${({ theme }) => theme.color.background.gray05};
   width: 100%;
   max-width: 400px;
   border-radius: 16px;

@@ -145,6 +145,8 @@ export const FileUploader = (props: FileUploaderProps) => {
                   : SUPPORT_DOCUMENT_TYPE;
 
             element.accept = getAccept(targetType);
+
+            console.log('accept', accept);
             // #IOS-5525 ios webp 파일 단일 선택 시 특정 버전에서 error가 발생하므로, 무조건 multiple로 지원하도록 수정함
             element.multiple =
               selectedNovaTab === NOVA_TAB_TYPE.aiChat || platform === ClientType.ios;

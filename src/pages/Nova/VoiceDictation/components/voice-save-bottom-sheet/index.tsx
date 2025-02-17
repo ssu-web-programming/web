@@ -79,12 +79,14 @@ export default function VoiceSaveBottomSheet({ isOpened, setIsOpened }: Props) {
         <S.Title>저장하기</S.Title>
         <S.ItemWrapper>
           <S.Item onClick={handleDownloadVoiceFile}>
-            <Mic />
+            {/* <Mic /> */}
+            <S.StyledMic />
             <p>음성파일</p>
           </S.Item>
 
           <S.Item onClick={handleOpenSaveFileFormat}>
-            <FileImg />
+            {/* <FileImg /> */}
+            <S.StyledFileImg />
             <p>받아쓰기 파일</p>
           </S.Item>
         </S.ItemWrapper>
