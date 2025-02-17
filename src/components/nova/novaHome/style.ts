@@ -86,6 +86,7 @@ export const ImageItem = styled.div`
     font-size: 13px;
     font-weight: 500;
     line-height: 20px;
+    text-align: center;
     padding: 4px 0;
     color: ${({ theme }) => theme.color.text.gray03};
   }

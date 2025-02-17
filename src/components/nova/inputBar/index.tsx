@@ -36,14 +36,19 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { isMobile } from 'util/bridge';
 import { sliceFileName } from 'util/common';
 
-import { CHAT_MODES, ChatMode, getChatTypeList } from '../../../constants/chatType';
 import { getValidExt, SUPPORT_DOCUMENT_TYPE } from '../../../constants/fileTypes';
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
+import {
+  getChatGroupKey,
+  getMenuItemsFromServiceGroup,
+  SERVICE_TYPE
+} from '../../../constants/serviceType';
 import { ReactComponent as DocsIconDark } from '../../../img/dark/ico_input_upload_docs.svg';
 import { ReactComponent as ImagesIconDark } from '../../../img/dark/ico_input_upload_images.svg';
 import { ReactComponent as DocsIconLight } from '../../../img/light/ico_input_upload_docs.svg';
 import { ReactComponent as ImagesIconLight } from '../../../img/light/ico_input_upload_images.svg';
 import LoadingSpinner from '../../../img/light/spinner.webp';
+import { selectAllServiceCredits } from '../../../store/slices/nova/pageStatusSlice';
 import { selectNovaTab, selectTabSlice } from '../../../store/slices/tabSlice';
 import { themeInfoSelector } from '../../../store/slices/theme';
 import {
@@ -70,7 +75,7 @@ interface InputBarProps {
   novaHistory: NovaChatType[];
   disabled?: boolean;
   expiredNOVA?: boolean;
-  onSubmit: (param: InputBarSubmitParam, chatMode: ChatMode, isAnswer: boolean) => Promise<void>;
+  onSubmit: (param: InputBarSubmitParam, isAnswer: boolean) => Promise<void>;
   contents?: string;
   setContents: React.Dispatch<React.SetStateAction<string>>;
 }
@@ -79,26 +84,35 @@ export default function InputBar(props: InputBarProps) {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { disabled = false, expiredNOVA = false, contents = '', setContents } = props;
-
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const localFiles = useAppSelector(getLocalFiles);
   const driveFiles = useAppSelector(getDriveFiles);
   const loadingFile = useAppSelector(getLoadingFile);
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
   const chatMode = useAppSelector(novaChatModeSelector);
-
+  const serviceCredits = useAppSelector(selectAllServiceCredits);
   const {
     pastedImages,
     handleRemovePastedImages,
     pastedImagesAsFileType,
     handleClearPastedImages
   } = useClipboard();
-
+  const [activatedUploadBtn, setActivatedUploadBtn] = useState(false);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const inputDocsFileRef = useRef<HTMLInputElement | null>(null);
   const inputImgFileRef = useRef<HTMLInputElement | null>(null);
 
-  const [activatedUploadBtn, setActivatedUploadBtn] = useState(false);
+  useEffect(() => {
+    adjustTextareaHeight();
+  }, [contents]);
+
+  useEffect(() => {
+    if (expiredNOVA) {
+      dispatch(setLocalFiles([]));
+      dispatch(setDriveFiles([]));
+      (document.activeElement as HTMLElement)?.blur();
+    }
+  }, [expiredNOVA, dispatch]);
 
   const handleActiveUploadBtn = () => {
     setActivatedUploadBtn(true);
@@ -141,18 +155,6 @@ export default function InputBar(props: InputBarProps) {
     }
   };
 
-  useEffect(() => {
-    adjustTextareaHeight();
-  }, [contents]);
-
-  useEffect(() => {
-    if (expiredNOVA) {
-      dispatch(setLocalFiles([]));
-      dispatch(setDriveFiles([]));
-      (document.activeElement as HTMLElement)?.blur();
-    }
-  }, [expiredNOVA]);
-
   const handleOnClick = async () => {
     const hasLocalFiles = localFiles.length > 0;
     const hasDriveFiles = driveFiles.length > 0;
@@ -190,7 +192,6 @@ export default function InputBar(props: InputBarProps) {
               : [],
         type: fileType
       },
-      chatMode,
       false
     );
     textAreaRef.current?.focus();
@@ -277,22 +278,23 @@ export default function InputBar(props: InputBarProps) {
                 clickable: true
               }}
               modules={[Pagination]}>
-              {getChatTypeList(isLightMode)
-                .find((chat) => chat.title === chatMode)
-                ?.prompt?.map((prompt) => (
-                  <SwiperSlide
-                    key={prompt}
-                    onClick={() => {
-                      setContents(prompt);
-                    }}>
-                    {prompt}
-                  </SwiperSlide>
-                ))}
+              {getMenuItemsFromServiceGroup(serviceCredits, isLightMode, t)
+                .filter((item) => item.key === chatMode)
+                .flatMap(() =>
+                  Array.from({ length: 3 }, (_, i) => {
+                    const prompt = t(`Nova.ChatModel.${getChatGroupKey(chatMode)}.prompt${i + 1}`);
+                    return (
+                      <SwiperSlide key={prompt} onClick={() => setContents(prompt)}>
+                        {prompt}
+                      </SwiperSlide>
+                    );
+                  })
+                )}
             </Swiper>
           </S.PromptWrap>
         )}
         <InputWrap>
-          {chatMode === CHAT_MODES.GPT_4O &&
+          {chatMode === SERVICE_TYPE.NOVA_CHAT_GPT4O &&
             selectedNovaTab === NOVA_TAB_TYPE.aiChat &&
             props.novaHistory.length > 0 && (
               <S.DocButtonWrap>
@@ -392,21 +394,34 @@ export default function InputBar(props: InputBarProps) {
         <S.ButtonWrap>
           {props.novaHistory.length <= 0 && (
             <SelectBox
-              menuItem={getChatTypeList(isLightMode)}
+              menuItem={getMenuItemsFromServiceGroup(serviceCredits, isLightMode, t)}
+              minWidth={290}
+              paddingX={4}
+              paddingY={4}
               selectedItem={chatMode}
               setSelectedItem={(item: string) => {
-                dispatch(setChatMode(item as ChatMode));
+                dispatch(setChatMode(item.toUpperCase() as SERVICE_TYPE));
                 if (selectedNovaTab !== NOVA_TAB_TYPE.home) {
-                  if ((item as ChatMode) === CHAT_MODES.PERPLEXITY) {
+                  if (
+                    (item as SERVICE_TYPE) === SERVICE_TYPE.NOVA_WEBSEARCH_PERPLEXITY ||
+                    (item as SERVICE_TYPE) === SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO
+                  ) {
                     dispatch(selectNovaTab(NOVA_TAB_TYPE.perplexity));
                   } else {
                     dispatch(selectNovaTab(NOVA_TAB_TYPE.aiChat));
                   }
                 }
               }}
+              selectBoxCssExt={css`
+                border: 1px solid ${isLightMode ? 'var(--gray-gray-30)' : 'var(--gray-gray-87)'};
+              `}
+              innerBoxCssExt={css`
+                min-height: 58px;
+                padding: 8px 16px 8px 8px;
+              `}
             />
           )}
-          {chatMode === CHAT_MODES.GPT_4O && props.novaHistory.length <= 0 && (
+          {chatMode === SERVICE_TYPE.NOVA_CHAT_GPT4O && props.novaHistory.length <= 0 && (
             <S.DocButtonWrap>
               {UPLOAD_BTN_LIST.map((btn) => (
                 <FileUploader

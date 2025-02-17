@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { CHAT_MODES, ChatMode } from '../../../constants/chatType';
+import { SERVICE_TYPE } from '../../../constants/serviceType';
 import { RootState } from '../../store';
 
 export interface NovaFileInfo {
@@ -30,7 +30,7 @@ export type NovaChatType = {
   vsId?: string;
   threadId?: string;
   askType: '' | 'document' | 'image';
-  chatType: ChatMode;
+  chatType: SERVICE_TYPE;
   isAnswer?: boolean;
 
   res?: string;
@@ -45,7 +45,7 @@ export type NovaChatType = {
 
 export type NovaHistoryState = {
   chatHistory: NovaChatType[];
-  chatMode: ChatMode;
+  chatMode: SERVICE_TYPE;
   selectedItems: string[];
   isShareMode: boolean;
   isExporting: boolean;
@@ -53,7 +53,7 @@ export type NovaHistoryState = {
 
 const initialState: NovaHistoryState = {
   chatHistory: [],
-  chatMode: CHAT_MODES.GPT_4O,
+  chatMode: SERVICE_TYPE.NOVA_CHAT_GPT4O,
   selectedItems: [],
   isShareMode: false,
   isExporting: false
@@ -127,7 +127,7 @@ const novaHistorySlice = createSlice({
     removeChat: (state, action: PayloadAction<NovaChatType['id']>) => {
       state.chatHistory = state.chatHistory.filter((chat) => chat.id !== action.payload);
     },
-    setChatMode: (state, action: PayloadAction<ChatMode>) => {
+    setChatMode: (state, action: PayloadAction<SERVICE_TYPE>) => {
       state.chatMode = action.payload;
     },
     toggleItemSelection: (state, action: PayloadAction<string>) => {

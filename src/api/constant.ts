@@ -12,13 +12,14 @@ export const ASKDOC_MAKE_SUMMARY = '/api/1/ai/askdoc/makeSummary';
 export const ASKDOC_ALL_COMPLETE_ANALYZING = '/api/1/ai/askdoc/preAsk';
 export const ASKDCO_ASK_QUESTION = '/api/1/ai/askdoc/ask';
 
-export const NOVA_CHAT_API = '/api/v2/nova/chatFunc';
+export const NOVA_CHAT_API = '/api/v2/nova/chat';
 export const NOVA_DELETE_CONVERSATION = '/api/v2/nova/delete-conversation';
 export const NOVA_GET_USER_INFO_AGREEMENT = '/api/v2/nova/get-agreement';
 export const NOVA_SET_USER_INFO_AGREEMENT = '/api/v2/nova/set-agreement';
 export const NOVA_GET_EXPIRED_TIME = '/api/v2/nova/expired-time';
 
 export const AI_CREDIT_INFO = '/api/v2/nova/credit-info';
+export const NOVA_CREDIT_OFFER_LIST = '/api/v2/nova/consumergoods/offer/list';
 export const PO_DRIVE_LIST = '/api/v2/nova/podrive/list';
 export const PO_DRIVE_FILEINFO = '/api/v2/nova/podrive/fileinfo';
 export const PO_DRIVE_UPLOAD = '/api/v2/nova/podrive/upload';
@@ -49,6 +50,7 @@ export const NOVA_SPEECH_DOWNLOAD = '/api/v2/nova/speech/script';
 
 export const NOVA_VIDEO_GET_AVATARS = '/api/v2/nova/video/avatars';
 export const NOVA_VIDEO_GET_VOICES = '/api/v2/nova/video/voices';
+export const NOVA_VIDEO_GET_VOICES_LANG = '/api/v2/nova/video/voice/languages';
 export const NOVA_VIDEO_MAKE_AVATARS = '/api/v2/nova/video/photo/avatar';
 export const NOVA_VIDEO_MAKE_VIDEOS = '/api/v2/nova/video/generate';
 export const NOVA_VIDEO_GET_INFO = '/api/v2/nova/video/status/get';

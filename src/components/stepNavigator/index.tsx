@@ -15,8 +15,14 @@ interface StepNavigatorProps {
 }
 
 export default function StepNavigator({ activeStep, setActiveStep, steps }: StepNavigatorProps) {
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  const handleMove = (index: number) => {
+    if (index === activeStep) {
+      return;
+    } else if (index < activeStep) {
+      setActiveStep(activeStep - 1);
+    } else {
+      setActiveStep(activeStep + 1);
+    }
   };
 
   const CustomStepIcon = (props: any) => {
@@ -40,14 +46,15 @@ export default function StepNavigator({ activeStep, setActiveStep, steps }: Step
         {steps.map((step, index) => {
           const stepProps: { completed?: boolean } = {};
           return (
-            <Step key={index} {...stepProps}>
-              <S.Label StepIconComponent={CustomStepIcon} />
+            <Step key={index} {...stepProps} onClick={() => handleMove(index)}>
+              <S.Label StepIconComponent={CustomStepIcon}>
+                {activeStep === index ? step.label : index < activeStep ? '이전' : '다음'}
+              </S.Label>
             </Step>
           );
         })}
       </S.Step>
       <React.Fragment>
-        {steps[activeStep].label}
         <S.Container>{steps[activeStep].children}</S.Container>
       </React.Fragment>
     </S.StepWrap>

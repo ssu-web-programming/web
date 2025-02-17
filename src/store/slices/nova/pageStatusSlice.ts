@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
+import { SERVICE_TYPE } from '../../../constants/serviceType';
 import { RootState } from '../../store';
 
 export interface ResultImage {
@@ -37,11 +38,16 @@ export type PageStatus = {
 
 export type PageData = File | null;
 export type PageResult = ResultImage | null;
+export type PageService = {
+  serviceType: SERVICE_TYPE;
+  deductCredit: number;
+}[];
 
 export type PageStateType = {
   status: { [K in keyof PageStatus]: PageStatus[K] };
   data: { [K in keyof PageStatus]: PageData };
   result: { [K in keyof PageStatus]: PageResult };
+  service: { [K in keyof PageStatus]: PageService };
 };
 
 const initialPageState: PageStateType = {
@@ -65,6 +71,13 @@ const initialPageState: PageStateType = {
       [key as keyof PageStatus]: null
     }),
     {} as PageStateType['result']
+  ),
+  service: Object.keys(NOVA_TAB_TYPE).reduce(
+    (acc, key) => ({
+      ...acc,
+      [key as keyof PageStatus]: []
+    }),
+    {} as PageStateType['service']
   )
 };
 
@@ -103,18 +116,30 @@ const pageSlice = createSlice({
       state: PageStateType,
       action: PayloadAction<{ tab: T; result: Partial<PageResult> }>
     ) => {
-      if (state.result[action.payload.tab]) {
-        state.result[action.payload.tab] = {
-          ...state.result[action.payload.tab],
-          ...action.payload.result
-        };
-      }
+      const safeResult = action.payload.result ?? {};
+
+      state.result[action.payload.tab] = {
+        ...(state.result[action.payload.tab] ?? {}),
+        contentType: safeResult.contentType ?? state.result[action.payload.tab]?.contentType ?? '',
+        data: safeResult.data ?? state.result[action.payload.tab]?.data ?? '',
+        link: safeResult.link ?? state.result[action.payload.tab]?.link ?? '',
+        info: {
+          ...(state.result[action.payload.tab]?.info ?? {}),
+          ...safeResult.info
+        }
+      };
     },
     resetPageResult: <T extends keyof PageStatus>(
       state: PageStateType,
       action: PayloadAction<T>
     ) => {
       state.result[action.payload] = null;
+    },
+    setPageService: <T extends keyof PageStatus>(
+      state: PageStateType,
+      action: PayloadAction<{ tab: T; services: PageService }>
+    ) => {
+      state.service[action.payload.tab] = action.payload.services;
     }
   }
 });
@@ -126,7 +151,8 @@ export const {
   resetPageData,
   setPageResult,
   updatePageResult,
-  resetPageResult
+  resetPageResult,
+  setPageService
 } = pageSlice.actions;
 
 export const selectPageStatus =
@@ -143,5 +169,22 @@ export const selectPageResult =
   <T extends keyof PageStatus>(tab: T) =>
   (state: RootState): PageResult =>
     state.pageStatusSlice.result[tab] ?? null;
+
+export const selectPageService =
+  <T extends keyof PageStatus>(tab: T) =>
+  (state: RootState): PageService =>
+    state.pageStatusSlice.service[tab] ?? null;
+
+export const selectAllServiceCredits = (state: RootState): Record<SERVICE_TYPE, number> => {
+  return Object.values(state.pageStatusSlice.service)
+    .flat()
+    .reduce(
+      (acc, service) => {
+        acc[service.serviceType] = service.deductCredit;
+        return acc;
+      },
+      {} as Record<SERVICE_TYPE, number>
+    );
+};
 
 export default pageSlice.reducer;

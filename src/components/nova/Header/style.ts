@@ -1,7 +1,6 @@
 import styled, { css } from 'styled-components';
 
 import { ReactComponent as IconConvertDark } from '../../../img/dark/nova/tab/convert_Img.svg';
-import { ReactComponent as CreditLineIcon } from '../../../img/light/ico_credit_line.svg';
 import { ReactComponent as IconConvertLight } from '../../../img/light/nova/tab/convert_Img.svg';
 import Header from '../../layout/Header';
 
@@ -45,28 +44,6 @@ export const ButtonWrapper = styled.div`
 
   ${flexCenter};
   flex-direction: row;
-`;
-
-export const CreditIcon = styled(CreditLineIcon)<{
-  $isInit: boolean;
-}>`
-  path {
-    fill: ${({ $isInit, theme }) =>
-      $isInit
-        ? theme.mode === 'light'
-          ? 'var(--gray-gray-80-02)'
-          : 'var(--gray-gray-25)'
-        : '#454c5380'};
-  }
-
-  circle {
-    stroke: ${({ $isInit, theme }) =>
-      $isInit
-        ? theme.mode === 'light'
-          ? 'var(--gray-gray-80-02)'
-          : 'var(--gray-gray-25)'
-        : '#454c5380'};
-  }
 `;
 
 export const StyledIconConvertLight = styled(IconConvertLight)`

@@ -83,6 +83,7 @@ export const CustomTabs = styled(Tabs)`
     width: 100%;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+    overflow-x: hidden;
   }
 
   .MuiTab-root {

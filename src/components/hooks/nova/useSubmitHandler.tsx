@@ -7,6 +7,7 @@ import {
   addChatOutputRes,
   appendChatOutput,
   appendChatRecommendedQuestions,
+  novaChatModeSelector,
   NovaChatType,
   NovaFileInfo,
   novaHistorySelector,
@@ -25,8 +26,8 @@ import {
   NOVA_CHAT_API,
   PO_DRIVE_DOC_OPEN_STATUS
 } from '../../../api/constant';
-import { CHAT_MODES, ChatMode, getChatEngine } from '../../../constants/chatType';
 import { FileUploadState } from '../../../constants/fileTypes';
+import { SERVICE_TYPE } from '../../../constants/serviceType';
 import { appStateSelector } from '../../../store/slices/appState';
 import { DriveFileInfo } from '../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
@@ -47,6 +48,7 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
   const dispatch = useAppDispatch();
   const novaHistory = useAppSelector(novaHistorySelector);
   const { novaExpireTime } = useAppSelector(appStateSelector);
+  const chatMode = useAppSelector(novaChatModeSelector);
   const { getReferences } = useGetChatReferences();
   const errorHandle = useErrorHandle();
   const showCreditToast = useShowCreditToast();
@@ -77,7 +79,7 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
   };
 
   const createChatSubmitHandler = useCallback(
-    async (submitParam: InputBarSubmitParam, chatMode: ChatMode, isAnswer?: boolean) => {
+    async (submitParam: InputBarSubmitParam, isAnswer?: boolean) => {
       const id = v4();
       let result = '';
       const lastChat = novaHistory[novaHistory.length - 1];
@@ -85,6 +87,7 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
       const { input, files = [], type } = submitParam;
       let splunk = null;
       let timer = null;
+      let citations: string[] = [];
 
       try {
         dispatch(setCreating('NOVA'));
@@ -151,6 +154,7 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
         formData.append('type', type);
         formData.append('vsId', vsId);
         formData.append('threadId', threadId);
+        formData.append('history', JSON.stringify(novaHistory.length ? novaHistory : []));
 
         dispatch(
           pushChat({
@@ -239,6 +243,21 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
                           .join(', ')
                       })}`;
                     }
+                    case 'citations': {
+                      const ref = JSON.parse(json.data);
+                      citations = ref.citations;
+                      return '';
+                    }
+                    case 'recommended_questions': {
+                      const ref = JSON.parse(json.data);
+                      dispatch(
+                        appendChatRecommendedQuestions({
+                          id,
+                          recommendedQuestions: ref.recommended_questions
+                        })
+                      );
+                      return '';
+                    }
                     default:
                       return '';
                   }
@@ -263,177 +282,6 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
               callback: () => {}
             }
           });
-        } else {
-          dispatch(removeChat(id));
-          errorHandle(err);
-        }
-
-        dispatch(setUsingAI(false));
-      } finally {
-        dispatch(setCreating('none'));
-        setFileUploadState({ type: '', state: 'ready', progress: 0 });
-
-        try {
-          if (splunk) {
-            splunk({
-              dp: 'ai.nova',
-              el: vsId || type !== '' ? 'nova_document_or_image' : 'nova_chating',
-              gpt_ver: vsId || type !== '' ? 'NOVA_ASK_DOC_GPT4O' : 'NOVA_CHAT_GPT4O'
-            });
-            if (type) {
-              splunk({
-                dp: 'ai.nova',
-                el: 'upload_file',
-                file_type: type
-              });
-            }
-          }
-          track('click_nova_chating', { is_document: files.length > 0 });
-        } catch (err) {
-          /*empty*/
-        }
-
-        expireTimer.current = setTimeout(() => {
-          setExpiredNOVA(true);
-        }, novaExpireTime);
-
-        const html = await markdownToHtml(result);
-        if (html) {
-          const $ = load(html);
-          const $image = $('img');
-          if ($image.length > 0) {
-            const image = $image[0] as cheerio.TagElement;
-            dispatch(addChatOutputRes({ id, res: image.attribs.src }));
-          }
-        }
-      }
-    },
-    [dispatch, errorHandle, novaHistory, setFileUploadState, showCreditToast, t, confirm]
-  );
-
-  const createAIWriteSubmitHandler = useCallback(
-    async (submitParam: InputBarSubmitParam, chatMode: ChatMode, isAnswer?: boolean) => {
-      const id = v4();
-      let result = '';
-      const lastChat = novaHistory[novaHistory.length - 1];
-      const { vsId = '', threadId = '' } = lastChat || {};
-      const { input, files = [], type } = submitParam;
-      let splunk = null;
-      const timer = null;
-      let citations: string[] = [];
-
-      try {
-        dispatch(setCreating('NOVA'));
-        dispatch(setUsingAI(true));
-
-        if (expireTimer.current) clearTimeout(expireTimer.current);
-
-        const formData = new FormData();
-        const role = 'user';
-        formData.append('content', input);
-        formData.append('role', role);
-        formData.append('type', type);
-        formData.append('vsId', vsId);
-        formData.append('threadId', threadId);
-
-        dispatch(
-          pushChat({
-            id,
-            input,
-            type,
-            role,
-            vsId,
-            threadId,
-            chatType: chatMode,
-            output: '',
-            isAnswer: isAnswer
-          })
-        );
-
-        requestor.current = apiWrapper();
-        const { res, logger } = await requestor.current.request(AI_WRITE_RESPONSE_STREAM_API, {
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            engine: getChatEngine(chatMode),
-            history: [
-              {
-                content: input,
-                role: 'user'
-              }
-            ]
-          }),
-          method: 'POST'
-        });
-        splunk = logger;
-
-        if (timer) clearTimeout(timer);
-
-        const resVsId = res.headers.get('X-PO-AI-NOVA-API-VSID') || '';
-        const resThreadId = res.headers.get('X-PO-AI-NOVA-API-TID') || '';
-        const askType = res.headers.get('X-PO-AI-NOVA-API-ASK-TYPE') || '';
-        const expiredTime = res.headers.get('X-PO-AI-NOVA-API-EXPIRED-TIME') || '';
-
-        setFileUploadState({ type: '', state: 'ready', progress: 0 });
-
-        await streaming(res, async (contents) => {
-          if (chatMode === CHAT_MODES.PERPLEXITY) {
-            const contentArr = contents.split('\n');
-
-            for (let index = 0; index < contentArr.length; index++) {
-              const content = contentArr[index];
-              try {
-                const parsed = JSON.parse(content.trim());
-
-                dispatch(
-                  appendChatOutput({
-                    id,
-                    output: parsed.content,
-                    vsId: resVsId,
-                    threadId: resThreadId,
-                    askType: askType as NovaChatType['askType'],
-                    expiredTime: parseInt(expiredTime, 10)
-                  })
-                );
-                result += parsed.content;
-
-                if (parsed.recommended_questions.length > 0) {
-                  dispatch(
-                    appendChatRecommendedQuestions({
-                      id,
-                      recommendedQuestions: parsed.recommended_questions
-                    })
-                  );
-                }
-
-                if (parsed.citations.length > 0) {
-                  citations = parsed.citations;
-                }
-              } catch (error) {
-                /* do nothing */
-              }
-            }
-          } else {
-            dispatch(
-              appendChatOutput({
-                id,
-                output: contents,
-                vsId: resVsId,
-                threadId: resThreadId,
-                askType: askType as NovaChatType['askType'],
-                expiredTime: parseInt(expiredTime, 10)
-              })
-            );
-            result += contents;
-          }
-        });
-
-        dispatch(updateChatStatus({ id, status: 'done' }));
-      } catch (err) {
-        if (timer) clearTimeout(timer);
-        if (requestor.current?.isAborted() === true) {
-          dispatch(updateChatStatus({ id, status: 'cancel' }));
         } else {
           dispatch(removeChat(id));
           errorHandle(err);
@@ -471,12 +319,22 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
         expireTimer.current = setTimeout(() => {
           setExpiredNOVA(true);
         }, novaExpireTime);
+
+        const html = await markdownToHtml(result);
+        if (html) {
+          const $ = load(html);
+          const $image = $('img');
+          if ($image.length > 0) {
+            const image = $image[0] as cheerio.TagElement;
+            dispatch(addChatOutputRes({ id, res: image.attribs.src }));
+          }
+        }
       }
     },
     [dispatch, errorHandle, novaHistory, setFileUploadState, showCreditToast, t, confirm]
   );
 
-  return { createChatSubmitHandler, createAIWriteSubmitHandler };
+  return { createChatSubmitHandler };
 };
 
 export default useSubmitHandler;

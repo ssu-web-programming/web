@@ -30,9 +30,9 @@ import Result from '../../../components/nova/result/index';
 import Theme from '../../../components/nova/Theme';
 import TimeOut from '../../../components/nova/TimeOut';
 import Uploading from '../../../components/nova/Uploading';
-import { CHAT_MODES } from '../../../constants/chatType';
 import { FileUploadState } from '../../../constants/fileTypes';
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
+import { SERVICE_TYPE } from '../../../constants/serviceType';
 import { ReactComponent as UploadDarkIcon } from '../../../img/dark/ico_upload_img_plus.svg';
 import CreditIcon from '../../../img/light/ico_credit_gray.svg';
 import { ReactComponent as UploadLightIcon } from '../../../img/light/ico_upload_img_plus.svg';
@@ -59,13 +59,8 @@ export default function Nova() {
   const { goExpandPage } = useExpandImage();
   const { handleImprovedResolution } = useImprovedResolution();
   const { goThemePage } = useChangeStyle();
-  const { isLightMode } = useAppSelector(themeInfoSelector);
-  const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
-  const { usingAI, selectedNovaTab } = useAppSelector(selectTabSlice);
-  const status = useAppSelector(selectPageStatus(selectedNovaTab));
   const { handleAgreement } = usePrivacyConsent();
   const { loadLocalFile } = useManageFile();
-
   const chatNova = useChatNova();
   const [expiredNOVA, setExpiredNOVA] = useState<boolean>(false);
   const [fileUploadState, setFileUploadState] = useState<FileUploadState>({
@@ -74,10 +69,14 @@ export default function Nova() {
     progress: 0
   });
   const chatMode = useAppSelector(novaChatModeSelector);
-  const { createChatSubmitHandler, createAIWriteSubmitHandler } = useSubmitHandler({
+  const { createChatSubmitHandler } = useSubmitHandler({
     setFileUploadState,
     setExpiredNOVA
   });
+  const { isLightMode } = useAppSelector(themeInfoSelector);
+  const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
+  const { usingAI, selectedNovaTab } = useAppSelector(selectTabSlice);
+  const status = useAppSelector(selectPageStatus(selectedNovaTab));
 
   useEffect(() => {
     if (expiredNOVA) {
@@ -149,11 +148,7 @@ export default function Nova() {
         <NovaHome
           expiredNOVA={expiredNOVA}
           setExpiredNOVA={setExpiredNOVA}
-          createChatSubmitHandler={
-            chatMode === CHAT_MODES.GPT_4O
-              ? (submitParam) => createChatSubmitHandler(submitParam, chatMode, false)
-              : (submitParam) => createAIWriteSubmitHandler(submitParam, chatMode, false)
-          }
+          createChatSubmitHandler={(submitParam) => createChatSubmitHandler(submitParam, false)}
           fileUploadState={fileUploadState}
         />
       );
@@ -167,11 +162,8 @@ export default function Nova() {
           <AIChat
             expiredNOVA={expiredNOVA}
             setExpiredNOVA={setExpiredNOVA}
-            createChatSubmitHandler={(submitParam, chatMode, isAnswer) =>
-              createChatSubmitHandler(submitParam, chatMode, isAnswer)
-            }
-            createAIWriteSubmitHandler={(submitParam, chatMode, isAnswer) =>
-              createAIWriteSubmitHandler(submitParam, chatMode, isAnswer)
+            createChatSubmitHandler={(submitParam, isAnswer) =>
+              createChatSubmitHandler(submitParam, isAnswer)
             }
             fileUploadState={fileUploadState}
           />

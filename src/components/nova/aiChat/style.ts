@@ -10,11 +10,12 @@ export const Wrap = styled(Container)`
   flex-direction: column;
 `;
 
-export const GuideExample = styled.div<{ isWithIcon: boolean }>`
+export const GuideExample = styled.div`
+  width: 100%;
   height: 45px;
   display: flex;
   align-items: center;
-  justify-content: ${({ isWithIcon }) => (isWithIcon ? 'flex-start' : 'center')};
+  justify-content: center;
   gap: 8px;
   padding: 12px;
   border: 1px solid ${({ theme }) => theme.color.border.gray01};
@@ -24,6 +25,7 @@ export const GuideExample = styled.div<{ isWithIcon: boolean }>`
   span {
     font-size: 14px;
     line-height: 21px;
+    text-align: center;
     color: ${({ theme }) => theme.color.text.gray03};
   }
 
