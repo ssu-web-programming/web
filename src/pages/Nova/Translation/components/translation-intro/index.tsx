@@ -1,9 +1,6 @@
 import { useState } from 'react';
 import ButtonWithCredit from 'components/buttons/button-with-credit';
 import { ReactComponent as CloseLightIcon } from 'img/light/ico_nova_close.svg';
-import { ReactComponent as ArrowIcon } from 'img/light/nova/translation/arrow_down.svg';
-import { ReactComponent as DeepL } from 'img/light/nova/translation/deepl_logo.svg';
-import { ReactComponent as Switch } from 'img/light/nova/translation/switch.svg';
 import { useTranslation } from 'react-i18next';
 import { activeToast } from 'store/slices/toastSlice';
 import { useAppDispatch } from 'store/store';
@@ -75,14 +72,14 @@ export default function TranslationIntro() {
         <S.TextAreaHeader>
           <div>
             <span>{getLangFromLangCode('source', sourceLang)}</span>
-            <ArrowIcon onClick={() => handleOpenLangSearch('source')} />
+            <S.StyledArrowIcon onClick={() => handleOpenLangSearch('source')} />
           </div>
           <div>
-            <Switch onClick={handleSwitchLang} />
+            <S.StyledSwitch onClick={handleSwitchLang} />
           </div>
           <div>
             <span>{getLangFromLangCode('target', targetLang)}</span>
-            <ArrowIcon onClick={() => handleOpenLangSearch('target')} />
+            <S.StyledArrowIcon onClick={() => handleOpenLangSearch('source')} />
           </div>
         </S.TextAreaHeader>
         {type === 'TEXT' ? (
@@ -117,7 +114,7 @@ export default function TranslationIntro() {
         )}
 
         <S.TextAreaBottom>
-          <DeepL />
+          <S.StyledDeepL />
           {type === 'TEXT' && <span>{translateInputValue.length}자/10,000자</span>}
         </S.TextAreaBottom>
       </S.TextAreaWrapper>

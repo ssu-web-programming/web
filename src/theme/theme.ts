@@ -26,7 +26,8 @@ export const lightTheme = {
       purple01: 'var(--ai-purple-50-main)',
       mainBg: 'var(--ai-purple-99-bg-light)',
       selected: 'var(--ai-purple-97-list-over)',
-      dimBg: 'var(--white-alpha)'
+      dimBg: 'var(--white-alpha)',
+      deepNavy: 'var(--deep-navy)'
     },
     border: {
       gray01: 'var(--gray-gray-40)',
@@ -103,7 +104,8 @@ export const darkTheme = {
       purple01: 'var(--ai-purple-90)',
       mainBg: 'var(--ai-purple-50-main-alpha)',
       selected: 'var(--ai-purple-50-main-alpha)',
-      dimBg: 'var(--black-alpha)'
+      dimBg: 'var(--black-alpha)',
+      deepNavy: 'var(--gray-gray-25)'
     },
     border: {
       gray01: 'var(--gray-gray-35)',

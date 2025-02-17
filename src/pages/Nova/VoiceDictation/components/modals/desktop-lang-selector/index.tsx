@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { overlay } from 'overlay-kit';
 import {
   LangOptionValues,
@@ -8,8 +7,6 @@ import {
 import * as S from './style';
 
 export default function DesktopLangSelector() {
-  // const [fileType, setFileType] = useState<'txt' | 'pdf'>('txt'); // 기본값을 'txt'로 설정
-
   const {
     sharedVoiceDictationInfo: { selectedLangOption },
     setSharedVoiceDictationInfo

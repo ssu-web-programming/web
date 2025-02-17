@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { FileUploader } from 'components/nova/FileUploader';
 import { SUPPORT_IMAGE_TYPE } from 'constants/fileTypes';
 import { ReactComponent as UploadDarkIcon } from 'img/dark/ico_upload_img_plus.svg';
-import CreditIcon from 'img/light/ico_credit_gray.svg';
+import { ReactComponent as CreditIcon } from 'img/light/ico_credit_gray.svg';
 import { ReactComponent as UploadFileLightIcon } from 'img/light/nova/translation/file_upload.svg';
 import { selectPageData } from 'store/slices/nova/pageStatusSlice';
 import { themeInfoSelector } from 'store/slices/theme';
@@ -47,14 +47,15 @@ const Icon = styled.div<{ disable: boolean }>`
     height: 48px;
 
     cursor: ${(props) => (props.disable ? 'initial' : 'pointer')};
-    color: ${(props) => (props.disable ? '#454c5380' : 'var(--gray-gray-80-02)')};
+    color: ${(props) =>
+      props.disable ? props.theme.color.text.gray03 : props.theme.color.text.gray03};
   }
 
   span {
     font-size: 16px;
     font-weight: 700;
     line-height: 24px;
-    color: ${({ theme }) => theme.color.text.subGray03};
+    color: ${({ theme }) => theme.color.text.gray03};
   }
 `;
 
@@ -84,7 +85,13 @@ const Credit = styled.div`
     font-size: 16px;
     font-weight: 700;
     padding-bottom: 2px;
-    color: ${({ theme }) => theme.color.text.subGray03};
+    color: ${({ theme }) => theme.color.text.gray03};
+  }
+`;
+
+const StyledCreditIcon = styled(CreditIcon)`
+  & path {
+    fill: ${({ theme }) => theme.color.text.gray02};
   }
 `;
 
@@ -149,7 +156,8 @@ export default function TranslationFileUploader({
             <Credit>
               <span>{creditCount}</span>
               <div className="img">
-                <img src={CreditIcon} alt="credit" />
+                {/* <img src={CreditIcon} alt="credit" /> */}
+                <StyledCreditIcon />
               </div>
             </Credit>
             <Guide>{guideMsg}</Guide>
