@@ -47,7 +47,6 @@ import IconButton from '../../buttons/IconButton';
 import { useConfirm } from '../../Confirm';
 import useClipboard from '../../hooks/nova/use-clipboard';
 import { useChatNova } from '../../hooks/useChatNova';
-import Tooltip from '../../Tooltip';
 import CreditInfo from '../creditInfo';
 import { ScreenChangeButton } from '../ScreenChangeButton';
 
@@ -74,7 +73,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
 
   const {
     resetVoiceInfo,
-    sharedVoiceDictationInfo: { isVoiceRecording }
+    sharedVoiceDictationInfo: { isVoiceRecording, componentType }
   } = useVoiceDictationContext();
 
   const newChat = async (isBack = false) => {
@@ -123,10 +122,19 @@ export default function NovaHeader(props: NovaHeaderProps) {
     return t(`Nova.Home.${category?.toLowerCase()}.${tab}`);
   };
   const openClosedModal = async () => {
+    const isReadyStatus = componentType === 'VOICE_READY' || componentType === 'FILE_READY';
     const result = await overlay.openAsync(({ isOpen, close }) => {
       return (
         <OverlayModal isOpen={isOpen} onClose={() => close(false)}>
-          <ClosedModalContent onConfirm={() => close(true)} />
+          <ClosedModalContent
+            onConfirm={() => close(true)}
+            title={
+              isReadyStatus
+                ? '잠깐! 뒤로가면 녹음이 저장되지 않아요. 그래도 뒤로가시겠어요?'
+                : '잠깐! 녹음을 끝내지 않고 뒤로가면 녹음이 저장되지 않아요. 그래도 뒤로가시겠어요?'
+            }
+            confirmTxt="뒤로가기"
+          />
         </OverlayModal>
       );
     });
@@ -158,7 +166,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
       creating != 'NOVA'
     ) {
       // 녹음중 상태이면 아래 팝업을 열어여한다.
-      if (isVoiceRecording) {
+      if (isVoiceRecording || componentType === 'VOICE_READY' || componentType === 'FILE_READY') {
         const result = await openClosedModal();
         if (!result) return;
       }

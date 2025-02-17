@@ -58,9 +58,9 @@ export default function VoiceAudioRecorder() {
       }}
       isInitRecording={isVoiceRecording}
       startCondition={isVoiceRecording && previousPageType === 'AUDIO_RECORDER'}
-      onRecordingFinish={() => {
+      onRecordingFinish={async () => {
         dispatch(setIsMicrophoneState(null));
-        Bridge.callBridgeApi('getRecordingState', false);
+        await Bridge.callBridgeApi('getRecordingState', false);
         // sessionStorage.setItem('hasStartedRecording', 'false');
       }}
       onStopConfirm={openStopOverlay}

@@ -7,9 +7,17 @@ import * as S from './style';
 
 interface Props {
   onConfirm?: () => void;
+  title: string;
+  closeTxt?: string;
+  confirmTxt?: string;
 }
 
-export default function ClosedModalContent({ onConfirm }: Props) {
+export default function ClosedModalContent({
+  onConfirm,
+  title,
+  closeTxt = '취소',
+  confirmTxt = '종료하기'
+}: Props) {
   const dispatch = useAppDispatch();
 
   const handleCancle = () => {
@@ -17,10 +25,10 @@ export default function ClosedModalContent({ onConfirm }: Props) {
     dispatch(setIsClosedNovaState(false));
   };
 
-  const handleClose = () => {
+  const handleClose = async () => {
     overlay.closeAll();
-    Bridge.callBridgeApi('closeNova');
-    Bridge.callBridgeApi('getRecordingState', false);
+    await Bridge.callBridgeApi('closeNova');
+    await Bridge.callBridgeApi('getRecordingState', false);
     // sessionStorage.setItem('hasStartedRecording', 'false');
     dispatch(setIsClosedNovaState(false));
     onConfirm && onConfirm();
@@ -29,13 +37,11 @@ export default function ClosedModalContent({ onConfirm }: Props) {
   return (
     <>
       <S.ModalContainer>
-        <S.SubTitle>
-          잠깐! 녹음을 끝내지 않고 종료하면 녹음이 저장되지 않아요. 그래도 종료하시겠어요?
-        </S.SubTitle>
+        <S.SubTitle>{title}</S.SubTitle>
         <S.ButtonGroup>
-          <S.Button onClick={handleCancle}>취소</S.Button>
+          <S.Button onClick={handleCancle}>{closeTxt}</S.Button>
           <S.Button primary onClick={handleClose}>
-            종료하기
+            {confirmTxt}
           </S.Button>
         </S.ButtonGroup>
       </S.ModalContainer>

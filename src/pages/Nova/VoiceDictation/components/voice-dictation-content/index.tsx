@@ -35,7 +35,11 @@ export default function VoiceDictationContent() {
     overlay.open(({ isOpen, close }) => {
       return (
         <OverlayModal isOpen={isOpen} onClose={close}>
-          <ClosedModalContent />
+          <ClosedModalContent
+            title={
+              '잠깐! 녹음을 끝내지 않고 종료하면 녹음이 저장되지 않아요. 그래도 종료하시겠어요?'
+            }
+          />
         </OverlayModal>
       );
     });
