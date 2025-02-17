@@ -163,6 +163,7 @@ export const FileUploader = (props: FileUploaderProps) => {
         icon: { src: CameraLightIcon },
         onClick: () => {
           const element = getCurrentFileInput()?.current;
+          console.log('카메라-element', element);
           if (element) {
             element.accept = 'camera';
             element.multiple = selectedNovaTab === NOVA_TAB_TYPE.aiChat;
