@@ -52,8 +52,8 @@ const S = {
     display: inline-block;
     margin: 0 auto;
     padding: 7.5px 7.5px 7.5px 16px;
-    border: 1px solid #c9cdd2;
-    background: white;
+    border: 1px solid ${({ theme }) => theme.color.border.gray01};
+    background: ${({ theme }) => theme.color.background.gray01};
     border-radius: 8px;
     margin-bottom: 32px;
   `

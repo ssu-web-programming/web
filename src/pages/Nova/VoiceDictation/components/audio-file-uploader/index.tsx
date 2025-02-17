@@ -76,7 +76,12 @@ export default function AudioFileUploader({
           await audioDuration(files[0]);
           onNext?.();
         }}>
-        <GuideBox guideMsg={guideMsg} guideTitle="음성 녹음 파일 업로드" />
+        <GuideBox
+          guideMsg={guideMsg}
+          guideTitle="음성 녹음 파일 업로드"
+          lightIcon={<UploadFileLightIcon />}
+          darkIcon={<UploadDarkIcon />}
+        />
       </FileButton>
     </S.Wrap>
   );

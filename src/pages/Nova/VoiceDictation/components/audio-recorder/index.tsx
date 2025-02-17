@@ -1,4 +1,10 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import ControlButton from 'components/nova/buttons/control-button';
+import PlayPauseButton from 'components/nova/buttons/play-pause-button';
+import { ReactComponent as DarkLang } from 'img/dark/nova/voice-dictation/lang.svg';
+import { ReactComponent as DarkPause } from 'img/dark/nova/voice-dictation/pause.svg';
+import { ReactComponent as DarkPlay } from 'img/dark/nova/voice-dictation/play.svg';
+import { ReactComponent as DarkStop } from 'img/dark/nova/voice-dictation/stop.svg';
 import { ReactComponent as Lang } from 'img/light/nova/voiceDictation/lang.svg';
 import { ReactComponent as Pause } from 'img/light/nova/voiceDictation/pause.svg';
 import { ReactComponent as Play } from 'img/light/nova/voiceDictation/play.svg';
@@ -19,6 +25,7 @@ interface AudioRecorderProps {
   startCondition?: boolean;
   selectedLangOption?: LangOptionValues;
   openLangOverlay?: () => void;
+  isLightMode?: boolean;
 }
 
 interface CustomCanvasRenderingContext2D extends CanvasRenderingContext2D {
@@ -55,7 +62,8 @@ const draw = (
   canvas: HTMLCanvasElement,
   barWidth: number,
   gap: number,
-  isPaused: boolean
+  isPaused: boolean,
+  isLightMode = true
 ): void => {
   const ctx = canvas.getContext('2d') as CustomCanvasRenderingContext2D;
   if (!ctx) return;
@@ -64,7 +72,7 @@ const draw = (
   const amp = canvas.height / 2;
 
   // background color 색을 width , height만큼 채우는 코드
-  ctx.fillStyle = '#f7f8f9';
+  ctx.fillStyle = isLightMode ? '#f7f8f9' : '#282828';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   const gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
@@ -101,7 +109,8 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   onStopConfirm,
   startCondition,
   selectedLangOption,
-  openLangOverlay
+  openLangOverlay,
+  isLightMode
 }) => {
   const [isRecording, setIsRecording] = useState(isInitRecording || false);
   const [isPaused, setIsPaused] = useState(false);
@@ -152,7 +161,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
 
       const data = calculateBarData(frequencyData, canvasRef.current.width, barWidth, gap);
 
-      draw(data, canvasRef.current, barWidth, gap, isPaused);
+      draw(data, canvasRef.current, barWidth, gap, isPaused, isLightMode);
       animationFrameRef.current = requestAnimationFrame(animate);
     };
 
@@ -265,7 +274,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
         const frequencyData = new Uint8Array(analyserRef.current.frequencyBinCount);
         analyserRef.current.getByteFrequencyData(frequencyData);
         const data = calculateBarData(frequencyData, canvasRef.current.width, barWidth, gap);
-        draw(data, canvasRef.current, barWidth, gap, isPaused);
+        draw(data, canvasRef.current, barWidth, gap, isPaused, isLightMode);
       }
 
       // 애니메이션 중지
@@ -286,7 +295,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
         const frequencyData = new Uint8Array(analyserRef.current.frequencyBinCount);
         analyserRef.current.getByteFrequencyData(frequencyData);
         const data = calculateBarData(frequencyData, canvasRef.current.width, barWidth, gap);
-        draw(data, canvasRef.current, barWidth, gap, isPaused);
+        draw(data, canvasRef.current, barWidth, gap, isPaused, isLightMode);
       }
     }
   }, [startTimer]);
@@ -341,13 +350,34 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       </S.CanvasWrapper>
 
       <S.ButtonGroup>
-        <Lang onClick={openLangOverlay} />
+        {/* {isLightMode ? <Lang onClick={openLangOverlay} /> : <DarkLang onClick={openLangOverlay} />}
         {isPaused ? (
-          <Play width={64} height={64} onClick={resumeRecording} />
-        ) : (
+          isLightMode ? (
+            <Play width={64} height={64} onClick={resumeRecording} />
+          ) : (
+            <DarkPlay width={64} height={64} onClick={resumeRecording} />
+          )
+        ) : isLightMode ? (
           <Pause width={64} height={64} onClick={pauseRecording} />
+        ) : (
+          <DarkPause width={64} height={64} onClick={pauseRecording} />
         )}
-        <Stop onClick={stopRecording} />
+        {isLightMode ? <Stop onClick={stopRecording} /> : <DarkStop onClick={stopRecording} />} */}
+        <ControlButton
+          icon={Lang}
+          darkIcon={DarkLang}
+          onClick={openLangOverlay}
+          width={40}
+          height={40}
+        />
+        <PlayPauseButton isPaused={isPaused} onPlay={resumeRecording} onPause={pauseRecording} />
+        <ControlButton
+          icon={Stop}
+          darkIcon={DarkStop}
+          onClick={stopRecording}
+          width={40}
+          height={40}
+        />
       </S.ButtonGroup>
     </S.Container>
   );
