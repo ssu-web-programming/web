@@ -126,7 +126,13 @@ export default function NovaHeader(props: NovaHeaderProps) {
     const result = await overlay.openAsync(({ isOpen, close }) => {
       return (
         <OverlayModal isOpen={isOpen} onClose={() => close(false)}>
-          <ClosedModalContent onConfirm={() => close(true)} />
+          <ClosedModalContent
+            onConfirm={() => close(true)}
+            title={
+              '잠깐! 녹음을 끝내지 않고 뒤로가면 녹음이 저장되지 않아요. 그래도 뒤로가시겠어요?'
+            }
+            confirmTxt="뒤로가기"
+          />
         </OverlayModal>
       );
     });
