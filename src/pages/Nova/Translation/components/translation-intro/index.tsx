@@ -107,7 +107,7 @@ export default function TranslationIntro() {
               <TranslationFileUploader
                 guideMsg={t('Nova.Translate.UploadGuide')}
                 creditCount={20}
-                curTab={NOVA_TAB_TYPE.convert2DTo3D}
+                curTab={NOVA_TAB_TYPE.voiceDictation}
               />
             </DragAndDrop>
           </S.FileUploaderWrapper>

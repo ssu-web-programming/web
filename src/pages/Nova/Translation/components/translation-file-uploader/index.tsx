@@ -129,6 +129,9 @@ export default function TranslationFileUploader({
     return currentFile || null;
   };
 
+  console.log('curTab', curTab);
+  console.log('getActiveFile', getActiveFile());
+
   return (
     <Wrap>
       {getActiveFile() ? (
