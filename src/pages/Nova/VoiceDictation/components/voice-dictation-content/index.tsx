@@ -5,6 +5,7 @@ import { overlay } from 'overlay-kit';
 import BgContainer from 'pages/Nova/Translation/components/bg-container';
 import { appStateSelector } from 'store/slices/appState';
 import { useAppSelector } from 'store/store';
+import Bridge from 'util/bridge';
 
 import {
   useVoiceDictationContext,
@@ -32,6 +33,11 @@ export default function VoiceDictationContent() {
     RESULT: <VoiceDictationResult />
   };
 
+  const handleResetVoiceInfo = async () => {
+    await Bridge.callBridgeApi('closeNova');
+    resetVoiceInfo();
+  };
+
   const openClosedModal = () => {
     overlay.open(({ isOpen, close }) => {
       return (
@@ -40,7 +46,7 @@ export default function VoiceDictationContent() {
             title={
               '잠깐! 녹음을 끝내지 않고 종료하면 녹음이 저장되지 않아요. 그래도 종료하시겠어요?'
             }
-            onConfirm={resetVoiceInfo}
+            onConfirm={handleResetVoiceInfo}
           />
         </OverlayModal>
       );

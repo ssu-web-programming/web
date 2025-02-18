@@ -1,13 +1,13 @@
-import { NOVA_TAB_TYPE } from 'constants/novaTapTypes';
-import { selectPageData } from 'store/slices/nova/pageStatusSlice';
-import { getDriveFiles, getLocalFiles } from 'store/slices/uploadFiles';
+import useManageFile from 'components/hooks/nova/useManageFile';
+import { getCurrentFile, getDriveFiles, getLocalFiles } from 'store/slices/uploadFiles';
 import { useAppSelector } from 'store/store';
 import { downloadFiles } from 'util/files';
 
 export default function useSanitizedDrive() {
   const localFiles = useAppSelector(getLocalFiles);
   const driveFiles = useAppSelector(getDriveFiles);
-  const currentFile = useAppSelector(selectPageData(NOVA_TAB_TYPE.translation));
+  const currentFile = useAppSelector(getCurrentFile);
+  const { getFileInfo } = useManageFile();
 
   const convertFileObject = async () => {
     // driveFiles의 경우에는 id를 파일객체로 변환해야함
@@ -16,15 +16,17 @@ export default function useSanitizedDrive() {
       return results[0].file;
     }
 
-    if (currentFile) {
-      return currentFile;
+    if (currentFile.id !== '') {
+      const convertFileObj = await getFileInfo(currentFile.id);
+      console.log('convertFileObj', convertFileObj);
+      return convertFileObj;
     }
     return localFiles[0];
   };
 
   const sanitizedOriginFile = async () => {
     const isDriveFiles = driveFiles.length;
-    const isCurrentFile = currentFile;
+    const isCurrentFile = currentFile.id === '' ? false : true;
     const isLocalFiles = localFiles[0];
 
     if (isDriveFiles) {
@@ -55,6 +57,6 @@ export default function useSanitizedDrive() {
   return {
     sanitizedOriginFile,
     convertFileObject,
-    isDriveActive: localFiles.length > 0 || driveFiles.length > 0 || !!currentFile
+    isDriveActive: localFiles.length > 0 || driveFiles.length > 0 || currentFile.id !== ''
   };
 }
