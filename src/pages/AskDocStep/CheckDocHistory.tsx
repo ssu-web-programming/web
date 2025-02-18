@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import AskDocButton from '../../components/buttons/AskDocButton';
-import CheckBox from '../../components/CheckBox';
+import CheckBox from '../../components/checkbox';
 import useLangParameterNavigate from '../../components/hooks/useLangParameterNavigate';
 import { filesSelector, setFiles } from '../../store/slices/askDocAnalyzeFiesSlice';
 import { useAppDispatch, useAppSelector } from '../../store/store';

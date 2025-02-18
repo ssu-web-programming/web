@@ -39,7 +39,7 @@ import { activeToast } from '../../../store/slices/toastSlice';
 import Bridge from '../../../util/bridge';
 import { downloadImage } from '../../../util/downloadImage';
 import IconButton from '../../buttons/IconButton';
-import CheckBox from '../../CheckBox';
+import CheckBox from '../../checkbox';
 import { useConfirm } from '../../Confirm';
 import useCopyText from '../../hooks/copyText';
 import Icon from '../../Icon';
@@ -54,7 +54,11 @@ import * as S from './style';
 interface AIChatProps {
   expiredNOVA: boolean;
   setExpiredNOVA: (isExpired: boolean) => void;
-  createChatSubmitHandler: (param: InputBarSubmitParam, isAnswer: boolean) => Promise<void>;
+  createChatSubmitHandler: (
+    param: InputBarSubmitParam,
+    isAnswer: boolean,
+    chatType?: SERVICE_TYPE
+  ) => Promise<void>;
   fileUploadState: FileUploadState;
 }
 

@@ -8,7 +8,7 @@ import { setCookie } from '../util/common';
 
 import Button from './buttons/Button';
 import Blanket from './Blanket';
-import CheckBox from './CheckBox';
+import CheckBox from './checkbox';
 
 export const ConfirmBox = styled.div`
   display: flex;

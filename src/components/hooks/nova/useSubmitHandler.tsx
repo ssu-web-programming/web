@@ -79,7 +79,7 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
   };
 
   const createChatSubmitHandler = useCallback(
-    async (submitParam: InputBarSubmitParam, isAnswer?: boolean) => {
+    async (submitParam: InputBarSubmitParam, isAnswer?: boolean, chatType?: SERVICE_TYPE) => {
       const id = v4();
       let result = '';
       const lastChat = novaHistory[novaHistory.length - 1];
@@ -165,7 +165,7 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
             role,
             vsId,
             threadId,
-            chatType: chatMode,
+            chatType: chatType ?? chatMode,
             output: '',
             files: fileInfo,
             isAnswer: isAnswer
@@ -197,7 +197,7 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
         if (timer) clearTimeout(timer);
 
         const resVsId = res.headers.get('X-PO-AI-NOVA-API-VSID') || '';
-        const resThreadId = res.headers.get('X-PO-AI-NOVA-API-TID') || '';
+        const resThreadId = res.headers.get('X-PO-AI-NOVA-API-THREAD-ID') || '';
         const askType = res.headers.get('X-PO-AI-NOVA-API-ASK-TYPE') || '';
         const expiredTime = res.headers.get('X-PO-AI-NOVA-API-EXPIRED-TIME') || '';
 

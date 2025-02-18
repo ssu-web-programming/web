@@ -9,6 +9,7 @@ import ReactPlayer from 'react-player';
 import { setOnlineStatus } from 'store/slices/network';
 import { css } from 'styled-components';
 
+import { apiWrapper } from '../../../api/apiWrapper';
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import CheckDarkIcon from '../../../img/dark/nova/check_purple.svg';
 import CreditColorIcon from '../../../img/light/ico_credit_color.svg';
@@ -19,6 +20,7 @@ import {
   resetPageResult,
   selectPageCreditReceived,
   selectPageResult,
+  selectPageService,
   setPageStatus
 } from '../../../store/slices/nova/pageStatusSlice';
 import { selectTabSlice } from '../../../store/slices/tabSlice';
@@ -27,12 +29,14 @@ import { activeToast } from '../../../store/slices/toastSlice';
 import { getCurrentFile, setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
 import Bridge, { ClientType, getPlatform } from '../../../util/bridge';
+import { getCookie } from '../../../util/common';
 import { base64ToBlob } from '../../../util/files';
 import Button from '../../buttons/Button';
 import { useConfirm } from '../../Confirm';
 import { useChangeBackground } from '../../hooks/nova/useChangeBackground';
 import { useInsertDocsHandler } from '../../hooks/nova/useInsertDocsHandler';
 import { useRemakeImage } from '../../hooks/nova/useRemakeImage';
+import useErrorHandle from '../../hooks/useErrorHandle';
 import OverlayModal from '../../overlay-modal';
 import SurveyModalContent from '../satisfactionSurvey/survey-modal-content';
 
@@ -79,20 +83,19 @@ export default function Result({ children }: ResultProps) {
     console.log('curNovaTab: ', selectedNovaTab);
     console.log('isCreditRecieved: ', isCreditRecieved);
     // 만족도 이벤트
-    if (!isCreditRecieved) {
+    if (!isCreditRecieved && !getCookie('dontShowSurvey')) {
       overlay.closeAll();
 
       overlay.open(({ isOpen, close }) => {
         return (
-          <OverlayModal isOpen={isOpen} onClose={close}>
+          <OverlayModal isOpen={isOpen} onClose={close} padding={'24px'}>
             <SurveyModalContent />
           </OverlayModal>
         );
       });
       // show poptup
     }
-  }),
-    [];
+  }, []);
 
   const ShowExpireLinkPopup = async () => {
     confirm({

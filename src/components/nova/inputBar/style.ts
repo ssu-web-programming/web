@@ -120,6 +120,27 @@ export const PromptWrap = styled.div`
   }
 `;
 
+export const NovaRecentChat = styled.div`
+  width: 100%;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 4px;
+  padding: 6px 12px;
+  background-color: ${({ theme }) => theme.color.background.mainBg};
+  border: 1px solid var(--ai-purple-90);
+  border-radius: 8px;
+  cursor: pointer;
+
+  span {
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 19.5px;
+    color: ${({ theme }) => theme.color.text.main};
+  }
+`;
+
 export const InputWrap = styled.div`
   width: 100%;
   height: 48px;

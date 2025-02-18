@@ -45,10 +45,16 @@ import {
 } from '../../../constants/serviceType';
 import { ReactComponent as DocsIconDark } from '../../../img/dark/ico_input_upload_docs.svg';
 import { ReactComponent as ImagesIconDark } from '../../../img/dark/ico_input_upload_images.svg';
+import NovaLogoDarkIcon from '../../../img/dark/nova/ico_logo_nova.svg';
 import { ReactComponent as DocsIconLight } from '../../../img/light/ico_input_upload_docs.svg';
 import { ReactComponent as ImagesIconLight } from '../../../img/light/ico_input_upload_images.svg';
+import NovaLogoLightIcon from '../../../img/light/nova/ico_logo_nova.svg';
 import LoadingSpinner from '../../../img/light/spinner.webp';
-import { selectAllServiceCredits } from '../../../store/slices/nova/pageStatusSlice';
+import {
+  selectAllServiceCredits,
+  selectPageStatus,
+  setPageStatus
+} from '../../../store/slices/nova/pageStatusSlice';
 import { selectNovaTab, selectTabSlice } from '../../../store/slices/tabSlice';
 import { themeInfoSelector } from '../../../store/slices/theme';
 import {
@@ -89,6 +95,7 @@ export default function InputBar(props: InputBarProps) {
   const driveFiles = useAppSelector(getDriveFiles);
   const loadingFile = useAppSelector(getLoadingFile);
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
+  const status = useAppSelector(selectPageStatus(selectedNovaTab));
   const chatMode = useAppSelector(novaChatModeSelector);
   const serviceCredits = useAppSelector(selectAllServiceCredits);
   const {
@@ -212,6 +219,17 @@ export default function InputBar(props: InputBarProps) {
     }
   ];
 
+  const handleMoveChat = () => {
+    if (
+      chatMode === SERVICE_TYPE.NOVA_WEBSEARCH_PERPLEXITY ||
+      chatMode === SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO
+    ) {
+      dispatch(selectNovaTab(NOVA_TAB_TYPE.perplexity));
+    } else {
+      dispatch(selectNovaTab(NOVA_TAB_TYPE.aiChat));
+    }
+  };
+
   return (
     <S.InputBarBase disabled={disabled || expiredNOVA}>
       {pastedImages.length > 0 && (
@@ -267,28 +285,35 @@ export default function InputBar(props: InputBarProps) {
         </S.FileListViewer>
       )}
       <S.InputTxtWrapper hasValue={!!contents}>
-        {selectedNovaTab === NOVA_TAB_TYPE.home && props.novaHistory.length <= 0 && (
+        {selectedNovaTab === NOVA_TAB_TYPE.home && (
           <S.PromptWrap>
-            <Swiper
-              slidesPerView={'auto'}
-              spaceBetween={6}
-              pagination={{
-                clickable: true
-              }}
-              modules={[Pagination]}>
-              {getMenuItemsFromServiceGroup(serviceCredits, isLightMode, t)
-                .filter((item) => item.key === chatMode)
-                .flatMap(() =>
-                  Array.from({ length: 3 }, (_, i) => {
-                    const prompt = t(`Nova.ChatModel.${getChatGroupKey(chatMode)}.prompt${i + 1}`);
-                    return (
-                      <SwiperSlide key={prompt} onClick={() => setContents(prompt)}>
-                        {prompt}
-                      </SwiperSlide>
-                    );
-                  })
-                )}
-            </Swiper>
+            {props.novaHistory.length <= 0 ? (
+              <Swiper
+                slidesPerView={'auto'}
+                spaceBetween={6}
+                pagination={{ clickable: true }}
+                modules={[Pagination]}>
+                {getMenuItemsFromServiceGroup(serviceCredits, isLightMode, t)
+                  .filter((item) => item.key === chatMode)
+                  .flatMap(() =>
+                    Array.from({ length: 3 }, (_, i) => {
+                      const prompt = t(
+                        `Nova.ChatModel.${getChatGroupKey(chatMode)}.prompt${i + 1}`
+                      );
+                      return (
+                        <SwiperSlide key={prompt} onClick={() => setContents(prompt)}>
+                          {prompt}
+                        </SwiperSlide>
+                      );
+                    })
+                  )}
+              </Swiper>
+            ) : (
+              <S.NovaRecentChat onClick={handleMoveChat}>
+                <img src={isLightMode ? NovaLogoLightIcon : NovaLogoDarkIcon} alt="logo" />
+                <span>NOVA와의 최근 대화</span>
+              </S.NovaRecentChat>
+            )}
           </S.PromptWrap>
         )}
         <InputWrap>
@@ -390,7 +415,7 @@ export default function InputBar(props: InputBarProps) {
           </S.TextAreaWrap>
         </InputWrap>
         <S.ButtonWrap>
-          {props.novaHistory.length <= 0 && (
+          {selectedNovaTab === NOVA_TAB_TYPE.home && (
             <SelectBox
               menuItem={getMenuItemsFromServiceGroup(serviceCredits, isLightMode, t)}
               minWidth={290}
@@ -419,7 +444,7 @@ export default function InputBar(props: InputBarProps) {
               `}
             />
           )}
-          {chatMode === SERVICE_TYPE.NOVA_CHAT_GPT4O && props.novaHistory.length <= 0 && (
+          {chatMode === SERVICE_TYPE.NOVA_CHAT_GPT4O && selectedNovaTab === NOVA_TAB_TYPE.home && (
             <S.DocButtonWrap>
               {UPLOAD_BTN_LIST.map((btn) => (
                 <FileUploader
