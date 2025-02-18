@@ -255,7 +255,7 @@ const callApi = (api: ApiType, arg?: string | number | object | boolean) => {
             break;
           }
           case 'getRecordingState': {
-            console.log('getRecordingState 전달되는 값!', arg);
+            console.log('getRecordingState 전달되는 값22!', arg);
             if (window.webkit.messageHandlers.getRecordingState) {
               window.webkit.messageHandlers.getRecordingState.postMessage(arg);
             }
@@ -809,14 +809,12 @@ const Bridge = {
   ) => {
     let apiArg: any;
 
-    if (arg) {
-      if (arg instanceof Blob) {
-        apiArg = await fileToString(arg);
-      } else if (typeof arg === 'object') {
-        apiArg = JSON.stringify(arg);
-      } else {
-        apiArg = arg;
-      }
+    if (arg instanceof Blob) {
+      apiArg = await fileToString(arg);
+    } else if (typeof arg === 'object') {
+      apiArg = JSON.stringify(arg);
+    } else {
+      apiArg = arg;
     }
 
     callApi(api, apiArg);
