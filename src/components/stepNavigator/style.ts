@@ -23,9 +23,9 @@ export const Step = styled(Stepper).withConfig({
   padding: 16px 24px 4px;
   transform: ${({ isStared, isFinished }) =>
     isStared
-      ? 'translateX(calc(50% - 70px))'
+      ? 'translateX(calc(50% - 77px))'
       : isFinished
-        ? 'translateX(calc(-1 * (50% - 70px)))'
+        ? 'translateX(calc(-1 * (50% - 77px)))'
         : 'none'};
 
   .MuiStep-root {

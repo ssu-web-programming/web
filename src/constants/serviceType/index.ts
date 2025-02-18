@@ -52,10 +52,7 @@ export enum SERVICE_TYPE {
   NOVA_REIMAGE_CLIPDROP = 'NOVA_REIMAGE_CLIPDROP', // 10
   NOVA_UNCROP_CLIPDROP = 'NOVA_UNCROP_CLIPDROP', // 10
   NOVA_PO_STYLE_TRANSFER = 'NOVA_PO_STYLE_TRANSFER', // 10
-  NOVA_ANIMATION_3D_IMMERSITY = 'NOVA_ANIMATION_3D_IMMERSITY', // 10
-
-  //Voice
-  NOVA_VOICE_DICTATION = 'NOVA_VOICE_DICTATION'
+  NOVA_ANIMATION_3D_IMMERSITY = 'NOVA_ANIMATION_3D_IMMERSITY' // 10
 }
 
 export const TAB_SERVICE_MAP: Record<NOVA_TAB_TYPE, SERVICE_TYPE[]> = {
@@ -139,8 +136,7 @@ export const CHAT_GROUP_MAP: Record<string, SERVICE_TYPE[] | SERVICE_TYPE> = {
   CLOVA_X: SERVICE_TYPE.WRITE_CLOVA,
   CLAUDE_3_5: SERVICE_TYPE.WRITE_CLADE3,
   PERPLEXITY: SERVICE_TYPE.NOVA_WEBSEARCH_PERPLEXITY,
-  PERPLEXITY_REASONING_PRO: SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO,
-  NOVA_VOICE_DICTATION: SERVICE_TYPE.NOVA_VOICE_DICTATION
+  PERPLEXITY_REASONING_PRO: SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO
 };
 
 export const getChatGroupKey = (serviceType: SERVICE_TYPE): string => {
@@ -152,7 +148,10 @@ export const getChatGroupKey = (serviceType: SERVICE_TYPE): string => {
   return matchedKey || 'UNKNOWN';
 };
 
-const GROUP_INFO_MAP: Record<string, { label: string; icon: (isLightMode: boolean) => string }> = {
+const CHAT_GROUP_DETAIL_MAP: Record<
+  string,
+  { label: string; icon: (isLightMode: boolean) => string }
+> = {
   GPT_4O: {
     label: 'GPT-4o',
     icon: (isLightMode) => (isLightMode ? GPTLogoLightIcon : GPTLogoDarkIcon)
@@ -184,10 +183,6 @@ const GROUP_INFO_MAP: Record<string, { label: string; icon: (isLightMode: boolea
   PERPLEXITY_REASONING_PRO: {
     label: 'Perplexity Reasoning Pro',
     icon: (isLightMode) => (isLightMode ? PerplexityLogoLightIcon : PerplexityLogoDarkIcon)
-  },
-  NOVA_VOICE_DICTATION: {
-    label: '받아쓰기',
-    icon: (isLightMode) => (isLightMode ? VoiceDictationIcon : VoiceDictationIcon)
   }
 };
 
@@ -208,7 +203,7 @@ export const iconMap: Record<NOVA_TAB_TYPE, string> = {
 };
 
 export const getServiceGroupInfo = (groupKey: string, isLightMode: boolean) => {
-  const group = GROUP_INFO_MAP[groupKey];
+  const group = CHAT_GROUP_DETAIL_MAP[groupKey];
 
   return group
     ? { label: group.label, icon: group.icon(isLightMode) }

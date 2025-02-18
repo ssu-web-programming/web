@@ -90,7 +90,7 @@ export default function SelectVoice({ setIsOpen, changeSelectedVoice }: SelectAv
   };
 
   const handleGenderChange = (gender: string) => {
-    const selected = genderMenu.find((item) => item.title === gender);
+    const selected = genderMenu.find((item) => item.key === gender);
     if (selected) setSelectedGender(selected.value);
   };
 
@@ -118,7 +118,7 @@ export default function SelectVoice({ setIsOpen, changeSelectedVoice }: SelectAv
         <S.SelectBoxWrap>
           <SelectBox
             menuItem={genderMenu}
-            selectedItem={genderMenu.find((item) => item.value === selectedGender)?.title}
+            selectedItem={selectedGender}
             setSelectedItem={handleGenderChange}
             placeHolder={'성별'}
             isMenuAbove={false}

@@ -9,6 +9,12 @@ export const Container = styled.div`
   justify-content: center;
   gap: 24px;
   padding: 0 16px;
+
+  .logo {
+    position: absolute;
+    right: 16px;
+    bottom: 24px;
+  }
 `;
 
 export const TitleWrap = styled.div`

@@ -109,6 +109,7 @@ export default function Loading() {
       }
     } catch (error) {
       errorHandle(error);
+      stopTimer();
       dispatch(resetPageData(NOVA_TAB_TYPE.aiVideo));
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'home' }));
     }
@@ -129,11 +130,6 @@ export default function Loading() {
         stopTimer();
         setProgress(100);
 
-        if (pollingRef.current) {
-          clearInterval(pollingRef.current);
-          pollingRef.current = null;
-        }
-
         dispatch(
           updatePageResult({
             tab: NOVA_TAB_TYPE.aiVideo,
@@ -150,13 +146,10 @@ export default function Loading() {
           })
         );
         dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'done' }));
-      } else {
-        if (data.status === EVideoStatus.failed) {
-          // dispatch(activeToast({ type: 'error', '요청을 처리하는 중 오류가 발생했습니다.' }));
-        }
       }
     } catch (error) {
       errorHandle(error);
+      stopTimer();
     }
   };
 

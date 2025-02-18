@@ -5,8 +5,10 @@ import { css } from 'styled-components';
 
 import { NOVA_TAB_TYPE } from '../../../../constants/novaTapTypes';
 import InfoDarkIcon from '../../../../img/dark/ico_circle_info.svg';
+import HeyzenLogoDarkIcon from '../../../../img/dark/nova/logo/ico_heygen_name_logo.svg';
 import InfoLightIcon from '../../../../img/light/ico_circle_info.svg';
 import CreditColorIcon from '../../../../img/light/ico_credit_color.svg';
+import HeyzenLogoLightIcon from '../../../../img/light/nova/logo/ico_heygen_name_logo.svg';
 import {
   selectPageResult,
   setPageStatus,
@@ -98,6 +100,11 @@ export default function Script() {
           <span>10</span>
         </S.CreditInfo>
       </Button>
+      <img
+        src={isLightMode ? HeyzenLogoLightIcon : HeyzenLogoDarkIcon}
+        alt="logo"
+        className="logo"
+      />
     </S.Container>
   );
 }
