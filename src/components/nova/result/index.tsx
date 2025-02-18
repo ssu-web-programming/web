@@ -63,7 +63,10 @@ export default function Result({ children }: ResultProps) {
     Bridge.callSyncBridgeApiWithCallback({
       api: 'getClientStatus',
       callback: async (status: ClientStatusType) => {
-        if (selectedNovaTab === NOVA_TAB_TYPE.convert2DTo3D) {
+        if (
+          selectedNovaTab === NOVA_TAB_TYPE.convert2DTo3D ||
+          selectedNovaTab === NOVA_TAB_TYPE.aiVideo
+        ) {
           setShowInsertDocBtn(status !== 'home' && isPC && currentFile.ext === 'pptx');
         } else {
           setShowInsertDocBtn(status !== 'home' || isMobile);

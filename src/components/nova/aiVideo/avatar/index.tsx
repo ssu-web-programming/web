@@ -1,10 +1,10 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { css } from 'styled-components';
 
 import { apiWrapper } from '../../../../api/apiWrapper';
-import { NOVA_VIDEO_GET_AVATARS, NOVA_VIDEO_MAKE_AVATARS } from '../../../../api/constant';
+import { NOVA_VIDEO_MAKE_AVATARS } from '../../../../api/constant';
 import { Avatars, InitAvatarInfo, InitAvatars } from '../../../../constants/heygenTypes';
 import { NOVA_TAB_TYPE } from '../../../../constants/novaTapTypes';
 import { ReactComponent as CheckIcon } from '../../../../img/common/ico_check.svg';
@@ -12,10 +12,12 @@ import CircleDarkIcon from '../../../../img/dark/ico_circle.svg';
 import CircleSelectedDarkIcon from '../../../../img/dark/ico_circle_selected.svg';
 import SqureDarkIcon from '../../../../img/dark/ico_square.svg';
 import SqureSelectedDarkIcon from '../../../../img/dark/ico_squre_selected.svg';
+import HeyzenLogoDarkIcon from '../../../../img/dark/nova/logo/ico_heygen_name_logo.svg';
 import CircleLightIcon from '../../../../img/light/ico_circle.svg';
 import CircleSelectedLightIcon from '../../../../img/light/ico_circle_selected.svg';
 import SqureLightIcon from '../../../../img/light/ico_square.svg';
 import SqureSelectedLightIcon from '../../../../img/light/ico_square_selected.svg';
+import HeyzenLogoLightIcon from '../../../../img/light/nova/logo/ico_heygen_name_logo.svg';
 import PlusDocLightIcon from '../../../../img/light/upload_img_plus_new.svg';
 import {
   resetPageData,
@@ -245,6 +247,11 @@ export default function Avatar() {
           }}>
           <span>{'AI 비디오 만들기'}</span>
         </Button>
+        <img
+          src={isLightMode ? HeyzenLogoLightIcon : HeyzenLogoDarkIcon}
+          alt="logo"
+          className="logo"
+        />
       </S.Container>
 
       {isOpen && <SelectAvatar setIsOpen={setIsOpen} changeSelectedAvatar={changeSelectedAvatar} />}
