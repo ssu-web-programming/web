@@ -126,7 +126,7 @@ export default function TranslationFileUploader({
     if (localFiles.length > 0) return localFiles[0];
     if (driveFiles.length > 0) return driveFiles[0];
 
-    return currentFile || null;
+    return currentFile.id === '' ? null : currentFile;
   };
 
   console.log('currentFile', currentFile);
