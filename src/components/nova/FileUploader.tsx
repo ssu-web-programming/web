@@ -146,7 +146,6 @@ export const FileUploader = (props: FileUploaderProps) => {
 
             element.accept = getAccept(targetType);
 
-            console.log('accept', accept);
             // #IOS-5525 ios webp 파일 단일 선택 시 특정 버전에서 error가 발생하므로, 무조건 multiple로 지원하도록 수정함
             element.multiple =
               selectedNovaTab === NOVA_TAB_TYPE.aiChat || platform === ClientType.ios;
@@ -163,7 +162,6 @@ export const FileUploader = (props: FileUploaderProps) => {
         icon: { src: CameraLightIcon },
         onClick: () => {
           const element = getCurrentFileInput()?.current;
-          console.log('카메라-element', element);
           if (element) {
             element.accept = 'camera';
             element.multiple = selectedNovaTab === NOVA_TAB_TYPE.aiChat;

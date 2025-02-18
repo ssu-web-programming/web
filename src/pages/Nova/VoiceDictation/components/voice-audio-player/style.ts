@@ -73,7 +73,7 @@ const PlaybackSpeedButton = styled(Button)`
   font-weight: 700;
   flex-direction: row;
   gap: 3px;
-  color: ${({ theme }) => theme.color.text.gray02};
+  color: ${({ theme }) => theme.color.text.gray03};
 `;
 
 const SkipButton = styled(Button)`
@@ -92,13 +92,13 @@ const PlayButton = styled(Button)`
 
 const StyledPause = styled(Pause)`
   & path {
-    fill: ${({ theme }) => theme.color.text.gray02};
+    fill: ${({ theme }) => theme.color.text.gray03};
   }
 `;
 
 const StyledPlay = styled(Play)`
   & path {
-    fill: ${({ theme }) => theme.color.text.gray02};
+    fill: ${({ theme }) => theme.color.text.gray03};
   }
 `;
 

@@ -1,5 +1,5 @@
 import { TFunction } from 'i18next';
-import { useTranslation } from 'react-i18next';
+import VoiceDictationIcon from 'img/common/nova/imgSample/voice_dictation_sample.svg';
 
 import ChangeBGIcon from '../../img/common/nova/imgSample/bg_change_sample.png';
 import RemoveBGIcon from '../../img/common/nova/imgSample/bg_delete_sample.png';
@@ -18,9 +18,6 @@ import ClaudeLogoLightIcon from '../../img/light/nova/logo/ico_claude_logo.svg';
 import ClovaLogoLightIcon from '../../img/light/nova/logo/ico_clova_logo.svg';
 import GPTLogoLightIcon from '../../img/light/nova/logo/ico_gpt_logo.svg';
 import PerplexityLogoLightIcon from '../../img/light/nova/logo/ico_perplexity_logo.svg';
-import VoiceDictationIcon from '../../img/light/nova/voiceDictation/ico_voice_dictation.svg';
-import { selectAllServiceCredits } from '../../store/slices/nova/pageStatusSlice';
-import { useAppSelector } from '../../store/store';
 import { NOVA_TAB_TYPE } from '../novaTapTypes';
 
 export enum SERVICE_CATEGORY {
@@ -55,7 +52,10 @@ export enum SERVICE_TYPE {
   NOVA_REIMAGE_CLIPDROP = 'NOVA_REIMAGE_CLIPDROP', // 10
   NOVA_UNCROP_CLIPDROP = 'NOVA_UNCROP_CLIPDROP', // 10
   NOVA_PO_STYLE_TRANSFER = 'NOVA_PO_STYLE_TRANSFER', // 10
-  NOVA_ANIMATION_3D_IMMERSITY = 'NOVA_ANIMATION_3D_IMMERSITY' // 10
+  NOVA_ANIMATION_3D_IMMERSITY = 'NOVA_ANIMATION_3D_IMMERSITY', // 10
+
+  //Voice
+  NOVA_VOICE_DICTATION = 'NOVA_VOICE_DICTATION'
 }
 
 export const TAB_SERVICE_MAP: Record<NOVA_TAB_TYPE, SERVICE_TYPE[]> = {
@@ -139,7 +139,8 @@ export const CHAT_GROUP_MAP: Record<string, SERVICE_TYPE[] | SERVICE_TYPE> = {
   CLOVA_X: SERVICE_TYPE.WRITE_CLOVA,
   CLAUDE_3_5: SERVICE_TYPE.WRITE_CLADE3,
   PERPLEXITY: SERVICE_TYPE.NOVA_WEBSEARCH_PERPLEXITY,
-  PERPLEXITY_REASONING_PRO: SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO
+  PERPLEXITY_REASONING_PRO: SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO,
+  NOVA_VOICE_DICTATION: SERVICE_TYPE.NOVA_VOICE_DICTATION
 };
 
 export const getChatGroupKey = (serviceType: SERVICE_TYPE): string => {
@@ -183,6 +184,10 @@ const GROUP_INFO_MAP: Record<string, { label: string; icon: (isLightMode: boolea
   PERPLEXITY_REASONING_PRO: {
     label: 'Perplexity Reasoning Pro',
     icon: (isLightMode) => (isLightMode ? PerplexityLogoLightIcon : PerplexityLogoDarkIcon)
+  },
+  NOVA_VOICE_DICTATION: {
+    label: '받아쓰기',
+    icon: (isLightMode) => (isLightMode ? VoiceDictationIcon : VoiceDictationIcon)
   }
 };
 
@@ -204,6 +209,7 @@ export const iconMap: Record<NOVA_TAB_TYPE, string> = {
 
 export const getServiceGroupInfo = (groupKey: string, isLightMode: boolean) => {
   const group = GROUP_INFO_MAP[groupKey];
+
   return group
     ? { label: group.label, icon: group.icon(isLightMode) }
     : { label: 'Unknown', icon: '' };

@@ -305,7 +305,7 @@
     "Home": {
       "creditGuide": "크레딧 안내",
       "chat": {
-        "title":"AI 채팅",
+        "title": "AI 채팅",
         "aiChat": "AI 채팅",
         "chat": "일반 채팅",
         "docImgQuery": "문서/이미지 질의",
@@ -385,6 +385,9 @@
         "prompt1": "최근 3년 블록체인 기술 연구 동향 알려줘",
         "prompt2": "세계 원격 근무 정책 비교 분석해 줘",
         "prompt3": "헬스케어 기술 5가지 연구 논문으로 정리해 줘"
+      },
+      "NOVA_VOICE_DICTATION": {
+        "desc_home": "녹음 또는 파일 업로드로 \n 음성 기록을 만들어보세요."
       }
     },
     "Tabs": {

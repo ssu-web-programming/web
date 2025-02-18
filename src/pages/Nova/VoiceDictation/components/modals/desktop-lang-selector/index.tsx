@@ -1,10 +1,14 @@
+import { ChangeEvent } from 'react';
 import { overlay } from 'overlay-kit';
 import {
   LangOptionValues,
   useVoiceDictationContext
 } from 'pages/Nova/VoiceDictation/provider/voice-dictation-provider';
 import { themeInfoSelector } from 'store/slices/theme';
-import { useAppSelector } from 'store/store';
+import { activeToast } from 'store/slices/toastSlice';
+import { useAppDispatch, useAppSelector } from 'store/store';
+
+import { langOptions } from '../../recognized-lang';
 
 import * as S from './style';
 
@@ -14,6 +18,20 @@ export default function DesktopLangSelector() {
     setSharedVoiceDictationInfo
   } = useVoiceDictationContext();
   const { isLightMode } = useAppSelector(themeInfoSelector);
+  const dispatch = useAppDispatch();
+
+  const findLabelByLangOptions = (lang: LangOptionValues) => {
+    return langOptions.find((langOption) => langOption.value === lang)?.label;
+  };
+
+  const openToastPopup = (lang: LangOptionValues) => {
+    dispatch(
+      activeToast({
+        type: 'info',
+        msg: `인식 언어가 ${findLabelByLangOptions(lang)}로 변경되었어요!`
+      })
+    );
+  };
 
   const handleSetSelectedLangOption = (lang: LangOptionValues) => {
     setSharedVoiceDictationInfo((prev) => ({
@@ -22,11 +40,18 @@ export default function DesktopLangSelector() {
     }));
   };
 
+  const handleChangeLang = (e: ChangeEvent<HTMLInputElement>) => {
+    const lang = e.target.value as LangOptionValues;
+
+    handleSetSelectedLangOption(lang);
+  };
+
   const handleClose = () => {
     overlay.closeAll();
   };
 
   const handleSave = async () => {
+    openToastPopup(selectedLangOption);
     handleClose();
   };
 
@@ -43,7 +68,7 @@ export default function DesktopLangSelector() {
             name="ko-KR"
             value="ko-KR"
             checked={selectedLangOption === 'ko-KR'}
-            onChange={(e) => handleSetSelectedLangOption(e.target.value as LangOptionValues)}
+            onChange={handleChangeLang}
           />
           <S.RadioText>한국어</S.RadioText>
         </S.RadioLabel>
@@ -55,7 +80,7 @@ export default function DesktopLangSelector() {
             name="en-US"
             value="en-US"
             checked={selectedLangOption === 'en-US'}
-            onChange={(e) => handleSetSelectedLangOption(e.target.value as LangOptionValues)}
+            onChange={handleChangeLang}
           />
           <S.RadioText>영어</S.RadioText>
         </S.RadioLabel>
@@ -67,7 +92,7 @@ export default function DesktopLangSelector() {
             name="ja"
             value="ja"
             checked={selectedLangOption === 'ja'}
-            onChange={(e) => handleSetSelectedLangOption(e.target.value as LangOptionValues)}
+            onChange={handleChangeLang}
           />
           <S.RadioText>일본어</S.RadioText>
         </S.RadioLabel>
@@ -79,7 +104,7 @@ export default function DesktopLangSelector() {
             name="zh-cn"
             value="zh-cn"
             checked={selectedLangOption === 'zh-cn'}
-            onChange={(e) => handleSetSelectedLangOption(e.target.value as LangOptionValues)}
+            onChange={handleChangeLang}
           />
           <S.RadioText>중국어(간체)</S.RadioText>
         </S.RadioLabel>
@@ -91,7 +116,7 @@ export default function DesktopLangSelector() {
             name="zh-tw"
             value="zh-tw"
             checked={selectedLangOption === 'zh-tw'}
-            onChange={(e) => handleSetSelectedLangOption(e.target.value as LangOptionValues)}
+            onChange={handleChangeLang}
           />
           <S.RadioText>중국어(번체)</S.RadioText>
         </S.RadioLabel>
@@ -103,7 +128,7 @@ export default function DesktopLangSelector() {
             name="enko"
             value="enko"
             checked={selectedLangOption === 'enko'}
-            onChange={(e) => handleSetSelectedLangOption(e.target.value as LangOptionValues)}
+            onChange={handleChangeLang}
           />
           <S.RadioText>한국어+영어</S.RadioText>
         </S.RadioLabel>

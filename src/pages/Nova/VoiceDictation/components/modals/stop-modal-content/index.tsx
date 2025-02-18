@@ -1,6 +1,5 @@
 import { overlay } from 'overlay-kit';
 import { useVoiceDictationContext } from 'pages/Nova/VoiceDictation/provider/voice-dictation-provider';
-import Bridge from 'util/bridge';
 
 import * as S from './style';
 

@@ -1,4 +1,5 @@
 import Button from 'components/buttons/Button';
+import OverlayModal from 'components/overlay-modal';
 import { VOICE_COLOR } from 'constants/voice-dictation';
 import CheckDarkIcon from 'img/dark/nova/check_purple.svg';
 import DownloadIcon from 'img/light/ico_download_white.svg';
@@ -12,7 +13,8 @@ import { css } from 'styled-components';
 import { formatMilliseconds } from 'util/getAudioDuration';
 
 import { useVoiceDictationContext } from '../../provider/voice-dictation-provider';
-import AudioPlayer from '../voice-audio-player';
+import PlaybackSpeedModalContent from '../modals/playback-speed-modal-content';
+import AudioPlayer, { PlaybackSpeed } from '../voice-audio-player';
 import VoiceSaveBottomSheet from '../voice-save-bottom-sheet';
 
 import * as S from './style';
@@ -29,6 +31,22 @@ export default function VoiceDictationResult() {
   const handleOpenSaveOverlay = () => {
     overlay.open(({ isOpen, close }) => {
       return <VoiceSaveBottomSheet isOpened={isOpen} setIsOpened={close} />;
+    });
+  };
+
+  const handleOpenPlaybackSpeed = (
+    handleChangeSpeedOtions: (nextSpeed: PlaybackSpeed) => void,
+    currentSpeed: PlaybackSpeed // 추가
+  ) => {
+    overlay.open(({ isOpen, close }) => {
+      return (
+        <OverlayModal isOpen={isOpen} onClose={close}>
+          <PlaybackSpeedModalContent
+            onChangeSpeedOptions={handleChangeSpeedOtions}
+            currentSpeed={currentSpeed} // 현재 속도 전달
+          />
+        </OverlayModal>
+      );
     });
   };
 
@@ -75,7 +93,8 @@ export default function VoiceDictationResult() {
           onPlay={() => console.log('Started playing')}
           onPause={() => console.log('Paused')}
           onTimeUpdate={(time) => console.log('Current time:', time)}
-          isLightMode={isLightMode}>
+          isLightMode={isLightMode}
+          openSpeedbackPopup={handleOpenPlaybackSpeed}>
           {/* 호진FIXME: 아래 컴포넌트는 audio 로직과 떨어져있는게 맞는 것 같음! */}
           <S.ButtonWrapper>
             <Button
