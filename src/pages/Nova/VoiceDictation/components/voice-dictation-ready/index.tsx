@@ -1,5 +1,6 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 import voiceDictationHttp from 'api/voice-dictation';
+import Select from 'components/select';
 import CheckDarkIcon from 'img/dark/nova/check_purple.svg';
 import CreditColorIcon from 'img/light/ico_credit_color_outline.svg';
 import CheckLightIcon from 'img/light/nova/check_purple.svg';
@@ -11,15 +12,17 @@ import { getLocalFiles } from 'store/slices/uploadFiles';
 import { useAppSelector } from 'store/store';
 
 import {
+  LangOptionValues,
   useVoiceDictationContext,
   VoiceDictationResult
 } from '../../provider/voice-dictation-provider';
+import { langOptions } from '../recognized-lang';
 
 import * as S from './style';
 
 export default function VoiceDictationReady() {
   const {
-    sharedVoiceDictationInfo: { componentType, audioDuration, fileName },
+    sharedVoiceDictationInfo: { componentType, audioDuration, fileName, selectedLangOption },
     setSharedVoiceDictationInfo,
     triggerLoading
   } = useVoiceDictationContext();
@@ -89,10 +92,17 @@ export default function VoiceDictationReady() {
             <S.LanguageSelector>
               <S.LanguageLabel>인식 언어</S.LanguageLabel>
               <S.LanguageValue>
-                한국어
-                <svg width="16" height="16" viewBox="0 0 24 24" style={{ marginLeft: '4px' }}>
-                  <path fill="currentColor" d="M7 10l5 5 5-5z" />
-                </svg>
+                <Select<LangOptionValues>
+                  options={langOptions}
+                  value={selectedLangOption}
+                  onChange={(result) => {
+                    setSharedVoiceDictationInfo((prev) => ({
+                      ...prev,
+                      selectedLangOption: result
+                    }));
+                  }}
+                  direction="up"
+                />
               </S.LanguageValue>
             </S.LanguageSelector>
           </S.RecordingBox>

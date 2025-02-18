@@ -86,6 +86,7 @@ const TextArea = styled.textarea`
   border-top: 1px solid ${({ theme }) => theme.color.border.gray01};
   border-bottom: 1px solid ${({ theme }) => theme.color.border.gray01};
   background: ${({ theme }) => theme.color.background.gray01};
+  white-space: pre-line;
 `;
 
 const TextInputWrapper = styled.div`

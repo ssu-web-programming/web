@@ -106,6 +106,7 @@ const useTranslationIntro = (translateInputValue: string) => {
   };
 
   const handleOpenLangSearch = (type: LangType) => {
+    console.log('type', type);
     overlay.open(({ isOpen, close }) => (
       <LanguageSearch
         isOpen={isOpen}

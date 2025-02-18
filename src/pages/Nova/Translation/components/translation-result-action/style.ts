@@ -43,6 +43,7 @@ const TextArea = styled.textarea`
   text-align: left;
   background: ${({ theme }) => theme.color.background.gray01};
   color: ${({ theme }) => theme.color.text.gray04};
+  white-space: pre-line;
 `;
 
 export { Header, IconWrapper, TextArea, Wrapper };

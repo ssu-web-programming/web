@@ -1,5 +1,4 @@
 import { useCallback } from 'react';
-import { useVoiceDictationContext } from 'pages/Nova/VoiceDictation/provider/voice-dictation-provider';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { initLoadingSpinner } from 'store/slices/loadingSpinner';
@@ -617,11 +616,21 @@ export const useInitBridgeListener = () => {
           case 'finishDownloadFile': {
             dispatch(setFileState({ type: body.translation, isSaved: body.isSaved }));
             dispatch(initLoadingSpinner());
+
+            if (body.isSaved) {
+              dispatch(activeToast({ type: 'info', msg: '성공적으로 저장되었어요!' }));
+            } else {
+              dispatch(activeToast({ type: 'error', msg: '저장 실패' }));
+            }
             break;
           }
           case 'finishDownloadVoiceFile': {
             dispatch(initLoadingSpinner());
-            console.log('finishDownloadVoiceFile 호출 완료!');
+            if (body.isSaved) {
+              dispatch(activeToast({ type: 'info', msg: '성공적으로 저장되었어요!' }));
+            } else {
+              dispatch(activeToast({ type: 'error', msg: '저장 실패' }));
+            }
             break;
           }
           // 전화 여부를 판단하는 로직!
@@ -642,7 +651,6 @@ export const useInitBridgeListener = () => {
           // AOS 오디오 접근 권한 확인 로직
           case 'audioPermissionState': {
             dispatch(initLoadingSpinner());
-            console.log('AOS 권한', body);
             dispatch(setIsMicrophoneState(body.isMicrophonePermission));
             break;
           }

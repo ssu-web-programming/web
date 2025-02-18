@@ -33,8 +33,7 @@ export default function TranslationResultAction({
       name: t('Nova.Chat.InsertDoc.Title'),
       iconSrc: isLightMode ? insertDocIcon : insertDarkDocIcon,
       clickHandler: async () => {
-        await insertDoc(translatedValue);
-        console.log('문서에 삽입!');
+        await insertDoc(translatedValue.replace(/\n/g, '<br>'));
       },
       isActive: isInsertDocAction
     },

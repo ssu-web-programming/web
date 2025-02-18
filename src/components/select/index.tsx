@@ -33,6 +33,7 @@ interface SelectProps<T extends string> extends StyledProps {
   placeholder?: string;
   width?: string;
   component?: ReactNode;
+  direction?: 'up' | 'down';
 
   // 스타일 관련 옵션
   $stylesSelectedOption?: boolean;
@@ -52,6 +53,7 @@ export default function Select<T extends string>({
   onChange,
   placeholder,
   width,
+  direction = 'down',
   $containerStyle,
   $selectButtonStyle,
   $stylesSelectedOption = false,
@@ -116,7 +118,10 @@ export default function Select<T extends string>({
       </S.SelectButton>
 
       {isOpen && (
-        <S.OptionsContainer role="listbox" $optionContainerStyle={$optionContainerStyle}>
+        <S.OptionsContainer
+          role="listbox"
+          $optionContainerStyle={$optionContainerStyle}
+          $direction={direction}>
           {options.map((option, index) => (
             <S.Option
               key={option.value}

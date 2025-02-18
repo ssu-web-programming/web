@@ -68,9 +68,19 @@ const IconWrapper = styled.span<{ isOpen: boolean; $iconStyles?: FlattenSimpleIn
   ${({ $iconStyles }) => $iconStyles && $iconStyles}
 `;
 
-const OptionsContainer = styled.div<{ $optionContainerStyle?: FlattenSimpleInterpolation }>`
+const OptionsContainer = styled.div<{
+  $optionContainerStyle?: FlattenSimpleInterpolation;
+  $direction?: 'up' | 'down';
+}>`
   position: absolute;
-  top: calc(100% + 9px);
+  ${({ $direction }) =>
+    $direction === 'up'
+      ? css`
+          bottom: calc(100% + 9px);
+        `
+      : css`
+          top: calc(100% + 9px);
+        `}
   right: 0;
   z-index: 10;
   max-height: 240px;

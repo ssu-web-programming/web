@@ -79,7 +79,7 @@ export default function TranslationIntro() {
           </div>
           <div>
             <span>{getLangFromLangCode('target', targetLang)}</span>
-            <S.StyledArrowIcon onClick={() => handleOpenLangSearch('source')} />
+            <S.StyledArrowIcon onClick={() => handleOpenLangSearch('target')} />
           </div>
         </S.TextAreaHeader>
         {type === 'TEXT' ? (
