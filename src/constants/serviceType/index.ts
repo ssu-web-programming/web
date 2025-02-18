@@ -9,6 +9,7 @@ import ExpandImgIcon from '../../img/common/nova/imgSample/image_expand_sample.p
 import RemakeImgIcon from '../../img/common/nova/imgSample/image_remake_sample.png';
 import ChangeStyleIcon from '../../img/common/nova/imgSample/image_style_sample.png';
 import ImprovedResIcon from '../../img/common/nova/imgSample/image_upscaling_sample.png';
+import VoiceDictationIcon from '../../img/common/nova/imgSample/voice_dictation_sample.svg';
 import ClaudeLogoDarkIcon from '../../img/dark/nova/logo/ico_claude_logo.svg';
 import ClovaLogoDarkIcon from '../../img/dark/nova/logo/ico_clova_logo.svg';
 import GPTLogoDarkIcon from '../../img/dark/nova/logo/ico_gpt_logo.svg';
@@ -17,7 +18,6 @@ import ClaudeLogoLightIcon from '../../img/light/nova/logo/ico_claude_logo.svg';
 import ClovaLogoLightIcon from '../../img/light/nova/logo/ico_clova_logo.svg';
 import GPTLogoLightIcon from '../../img/light/nova/logo/ico_gpt_logo.svg';
 import PerplexityLogoLightIcon from '../../img/light/nova/logo/ico_perplexity_logo.svg';
-import VoiceDictationIcon from '../../img/light/nova/voiceDictation/ico_voice_dictation.svg';
 import { NOVA_TAB_TYPE } from '../novaTapTypes';
 
 export enum SERVICE_CATEGORY {
