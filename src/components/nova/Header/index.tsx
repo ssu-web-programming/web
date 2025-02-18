@@ -9,6 +9,7 @@ import { overlay } from 'overlay-kit';
 import ClosedModalContent from 'pages/Nova/VoiceDictation/components/modals/closed-modal-content';
 import { useVoiceDictationContext } from 'pages/Nova/VoiceDictation/provider/voice-dictation-provider';
 import { Trans, useTranslation } from 'react-i18next';
+import { clearError } from 'store/slices/errorSlice';
 import { initFlagSelector } from 'store/slices/initFlagSlice';
 
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
@@ -153,6 +154,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
     dispatch(setPageData({ tab: selectedNovaTab, data: null }));
     dispatch(setPageResult({ tab: selectedNovaTab, result: null }));
     dispatch(selectNovaTab(NOVA_TAB_TYPE.home));
+    dispatch(clearError());
     resetVoiceInfo();
     Bridge.callBridgeApi('curNovaTab', NOVA_TAB_TYPE.home);
   };
