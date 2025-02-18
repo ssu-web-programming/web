@@ -14,10 +14,11 @@ interface AudioPlayerProps extends PropsWithChildren {
   onPlay?: () => void;
   onPause?: () => void;
   isLightMode?: boolean;
+  openSpeedbackPopup?: (handleChangeSpeedOptions: (nextSpeed: PlaybackSpeed) => void) => void;
 }
 
 // 재생 속도 타입
-type PlaybackSpeed = 0.8 | 1.0 | 1.2 | 1.5 | 1.8 | 2.0;
+export type PlaybackSpeed = 0.8 | 1.0 | 1.2 | 1.5 | 1.8 | 2.0;
 
 const AudioPlayer: React.FC<AudioPlayerProps> = ({
   audioSource,
@@ -26,7 +27,8 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
   onPlay,
   onPause,
   children,
-  isLightMode
+  isLightMode,
+  openSpeedbackPopup
 }) => {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [currentTime, setCurrentTime] = useState<number>(0);
@@ -89,14 +91,15 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
     }
   };
 
-  const handlePlaybackSpeedChange = (): void => {
+  const handleChangeSpeedOtions = (nextSpeed: PlaybackSpeed) => {
     if (audioRef.current) {
-      const speeds: PlaybackSpeed[] = [0.8, 1.0, 1.2, 1.5, 1.8, 2.0];
-      const currentIndex = speeds.indexOf(playbackSpeed);
-      const nextSpeed = speeds[(currentIndex + 1) % speeds.length];
       setPlaybackSpeed(nextSpeed);
       audioRef.current.playbackRate = nextSpeed;
     }
+  };
+
+  const handlePlaybackSpeedChange = (): void => {
+    openSpeedbackPopup?.(handleChangeSpeedOtions);
   };
 
   const progress = duration ? (currentTime / duration) * 100 : 0;
