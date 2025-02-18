@@ -54,7 +54,10 @@ export default function VoiceDictationReady() {
   const translationVoiceDictation = async () => {
     triggerLoading();
 
-    const result = await voiceDictationHttp.postSpeechRecognize({ file: localFiles[0] });
+    const result = await voiceDictationHttp.postSpeechRecognize({
+      file: localFiles[0],
+      lang: selectedLangOption
+    });
 
     handleMoveToResult(result);
   };
