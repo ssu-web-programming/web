@@ -34,11 +34,17 @@ export default function VoiceDictationResult() {
     });
   };
 
-  const handleOpenPlaybackSpeed = (handleChangeSpeedOtions: (nextSpeed: PlaybackSpeed) => void) => {
+  const handleOpenPlaybackSpeed = (
+    handleChangeSpeedOtions: (nextSpeed: PlaybackSpeed) => void,
+    currentSpeed: PlaybackSpeed // 추가
+  ) => {
     overlay.open(({ isOpen, close }) => {
       return (
         <OverlayModal isOpen={isOpen} onClose={close}>
-          <PlaybackSpeedModalContent onChangeSpeedOptions={handleChangeSpeedOtions} />
+          <PlaybackSpeedModalContent
+            onChangeSpeedOptions={handleChangeSpeedOtions}
+            currentSpeed={currentSpeed} // 현재 속도 전달
+          />
         </OverlayModal>
       );
     });

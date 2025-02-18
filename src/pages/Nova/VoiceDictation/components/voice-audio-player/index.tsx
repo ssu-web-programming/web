@@ -14,7 +14,10 @@ interface AudioPlayerProps extends PropsWithChildren {
   onPlay?: () => void;
   onPause?: () => void;
   isLightMode?: boolean;
-  openSpeedbackPopup?: (handleChangeSpeedOptions: (nextSpeed: PlaybackSpeed) => void) => void;
+  openSpeedbackPopup?: (
+    handleChangeSpeedOptions: (nextSpeed: PlaybackSpeed) => void,
+    currentSpeed: PlaybackSpeed
+  ) => void;
 }
 
 // 재생 속도 타입
@@ -99,7 +102,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
   };
 
   const handlePlaybackSpeedChange = (): void => {
-    openSpeedbackPopup?.(handleChangeSpeedOtions);
+    openSpeedbackPopup?.(handleChangeSpeedOtions, playbackSpeed);
   };
 
   const progress = duration ? (currentTime / duration) * 100 : 0;

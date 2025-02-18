@@ -7,10 +7,11 @@ import * as S from './style';
 
 interface Props {
   onChangeSpeedOptions: (nextSpeed: PlaybackSpeed) => void;
+  currentSpeed: PlaybackSpeed;
 }
 
-export default function PlaybackSpeedModalContent({ onChangeSpeedOptions }: Props) {
-  const [selectedSpeed, setSelectedSpeed] = useState<PlaybackSpeed>(1.0);
+export default function PlaybackSpeedModalContent({ onChangeSpeedOptions, currentSpeed }: Props) {
+  const [selectedSpeed, setSelectedSpeed] = useState<PlaybackSpeed>(currentSpeed);
 
   const speeds: PlaybackSpeed[] = [0.8, 1.0, 1.2, 1.5, 1.8, 2.0];
 
