@@ -1,3 +1,4 @@
+import NovaHeader from 'components/nova/Header';
 import CreditColorIcon from 'img/light/ico_credit_color_outline.svg';
 import { clearError, errorSelector } from 'store/slices/errorSlice';
 import { useAppDispatch, useAppSelector } from 'store/store';
@@ -12,8 +13,16 @@ const Container = styled.div`
   width: 100vw;
   height: 100vh;
   display: flex;
+  flex-direction: column; // 세로 방향으로 배치
   z-index: 9999;
   background-color: rgb(244, 246, 248);
+`;
+
+const ContentContainer = styled.div`
+  flex: 1; // 남은 공간 모두 차지
+  overflow-y: auto; // 내용이 많을 경우 스크롤 가능
+  display: flex;
+  flex-direction: column;
 `;
 const Wrap = styled.div`
   width: 100%;
@@ -82,16 +91,21 @@ export default function RetryComponent() {
 
   return (
     <Container>
-      <Wrap>
-        <ContentWrap>
-          <BangIcon />
-          <Title>{errorTitle}</Title>
-        </ContentWrap>
-        <ButtonWrap onClick={handleRetry}>
-          <span>재시도</span>
-          <img src={CreditColorIcon} alt="credit" />
-        </ButtonWrap>
-      </Wrap>
+      <NovaHeader /> {/* Header는 최상단에 고정 */}
+      <ContentContainer>
+        {' '}
+        {/* 나머지 컨텐츠는 스크롤 가능한 영역에 배치 */}
+        <Wrap>
+          <ContentWrap>
+            <BangIcon />
+            <Title>{errorTitle}</Title>
+          </ContentWrap>
+          <ButtonWrap onClick={handleRetry}>
+            <span>재시도</span>
+            <img src={CreditColorIcon} alt="credit" />
+          </ButtonWrap>
+        </Wrap>
+      </ContentContainer>
     </Container>
   );
 }
