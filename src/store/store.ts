@@ -11,6 +11,7 @@ import askDocSummary from './slices/askDocSummary';
 import chatHistory from './slices/chatHistorySlice';
 import confirm from './slices/confirm';
 import creditInfo from './slices/creditInfo';
+import errorSlice from './slices/errorSlice';
 import initFlagSlice from './slices/initFlagSlice';
 import loadingSpinner from './slices/loadingSpinner';
 import network from './slices/network';
@@ -60,7 +61,8 @@ const store = configureStore({
     platformInfo,
     screenMode,
     theme,
-    fileStateSlice
+    fileStateSlice,
+    errorSlice
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }).concat(shareAnswerState),

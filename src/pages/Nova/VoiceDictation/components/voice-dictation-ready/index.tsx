@@ -7,9 +7,10 @@ import CheckLightIcon from 'img/light/nova/check_purple.svg';
 import { ReactComponent as AudioFile } from 'img/light/nova/voiceDictation/audio_file.svg';
 import { ReactComponent as EditIcon } from 'img/light/nova/voiceDictation/edit.svg';
 import { useTranslation } from 'react-i18next';
+import { setError } from 'store/slices/errorSlice';
 import { themeInfoSelector } from 'store/slices/theme';
 import { getLocalFiles } from 'store/slices/uploadFiles';
-import { useAppSelector } from 'store/store';
+import { useAppDispatch, useAppSelector } from 'store/store';
 
 import {
   LangOptionValues,
@@ -27,6 +28,7 @@ export default function VoiceDictationReady() {
     triggerLoading
   } = useVoiceDictationContext();
   const { isLightMode } = useAppSelector(themeInfoSelector);
+  const dispatch = useAppDispatch();
   const { t } = useTranslation();
 
   const [isEditMode, setIsEditMode] = useState(false);
@@ -51,17 +53,35 @@ export default function VoiceDictationReady() {
     }));
   };
 
+  const handleErrorTrigger = () => {
+    dispatch(
+      setError({
+        title:
+          '변환된 받아쓰기 내용이 없어요.\n 음성 파일에 대화가 포함되어 있는지, 설정한 인식 언어가 음성과 같은 언어인지 확인해주세요.',
+        onRetry: translationVoiceDictation // 재시도 시 실행할 함수 전달
+      })
+    );
+  };
+
   const translationVoiceDictation = async () => {
     triggerLoading();
 
-    const result = await voiceDictationHttp.postSpeechRecognize({
-      file: localFiles[0],
-      lang: selectedLangOption
-    });
+    try {
+      const result = await voiceDictationHttp.postSpeechRecognize({
+        file: localFiles[0],
+        lang: selectedLangOption
+      });
 
-    handleMoveToResult(result);
+      if (result.data.segments.length === 0) {
+        handleErrorTrigger();
+        return;
+      }
+
+      handleMoveToResult(result);
+    } catch (error) {
+      handleErrorTrigger();
+    }
   };
-
   useEffect(() => {
     if (localFiles.length) {
       setSharedVoiceDictationInfo((prev) => ({

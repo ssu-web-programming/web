@@ -6,6 +6,8 @@ import { MEDIA_ERROR_MESSAGES } from 'constants/voice-dictation';
 import { ReactComponent as MicDarkIcon } from 'img/dark/nova/voice-dictation/microphone.svg';
 import { ReactComponent as MicLightIcon } from 'img/light/nova/voiceDictation/microphone.svg';
 import { useTranslation } from 'react-i18next';
+import { setError } from 'store/slices/errorSlice';
+import { useAppDispatch } from 'store/store';
 import styled, { css } from 'styled-components';
 import { MediaError, MediaErrorContent } from 'types/media-error';
 import Bridge from 'util/bridge';
@@ -18,6 +20,7 @@ export default function VoiceDictationIntro() {
   const { t } = useTranslation();
   const { setSharedVoiceDictationInfo } = useVoiceDictationContext();
   const confirm = useConfirm();
+  const dispatch = useAppDispatch();
 
   const errorTrigger = (errorMesaage: MediaErrorContent) => {
     confirm({
@@ -56,6 +59,7 @@ export default function VoiceDictationIntro() {
       await Bridge.callBridgeApi('getRecordingState', false);
     }
   };
+
   return (
     <Guide
       $guideTitleStyle={css`
