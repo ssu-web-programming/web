@@ -1,13 +1,11 @@
 import voiceDictationHttp from 'api/voice-dictation';
 import ModalSheet from 'components/modalSheet';
 import OverlayModal from 'components/overlay-modal';
-import { ReactComponent as FileImg } from 'img/light/nova/voiceDictation/file.svg';
-import { ReactComponent as Mic } from 'img/light/nova/voiceDictation/mic.svg';
 import { overlay } from 'overlay-kit';
 import { activeLoadingSpinner } from 'store/slices/loadingSpinner';
 import { useAppDispatch } from 'store/store';
 import Bridge from 'util/bridge';
-import { removeFileExtension } from 'util/getAudioDuration';
+import { changeFileExtension } from 'util/getAudioDuration';
 
 import { useVoiceDictationContext } from '../../provider/voice-dictation-provider';
 import VoiceFileModalContent from '../voice-file-modal-content';
@@ -26,9 +24,10 @@ export default function VoiceSaveBottomSheet({ isOpened, setIsOpened }: Props) {
   } = useVoiceDictationContext();
 
   const handleDownloadVoiceFile = async () => {
+    console.log('voice-fileName', fileName);
     dispatch(activeLoadingSpinner());
     await Bridge.callBridgeApi('downloadVoiceFile', {
-      fileName: removeFileExtension(fileName),
+      fileName,
       url: voiceDictationResult?.data.voiceUrl
     });
   };
@@ -47,6 +46,9 @@ export default function VoiceSaveBottomSheet({ isOpened, setIsOpened }: Props) {
   };
 
   const handleDownloadScriptFile = async (type: 'txt' | 'pdf') => {
+    console.log('fileName', fileName);
+    console.log('changeFileExtension', changeFileExtension(fileName, type));
+
     dispatch(activeLoadingSpinner());
     const result = await voiceDictationHttp.postVoiceDownload({
       fileType: type,
@@ -57,7 +59,7 @@ export default function VoiceSaveBottomSheet({ isOpened, setIsOpened }: Props) {
     const { data } = result;
 
     await Bridge.callBridgeApi('downloadVoiceFile', {
-      fileName: removeFileExtension(fileName),
+      fileName: changeFileExtension(fileName, type),
       url: data.downloadUrl
     });
   };
@@ -79,13 +81,11 @@ export default function VoiceSaveBottomSheet({ isOpened, setIsOpened }: Props) {
         <S.Title>저장하기</S.Title>
         <S.ItemWrapper>
           <S.Item onClick={handleDownloadVoiceFile}>
-            {/* <Mic /> */}
             <S.StyledMic />
             <p>음성파일</p>
           </S.Item>
 
           <S.Item onClick={handleOpenSaveFileFormat}>
-            {/* <FileImg /> */}
             <S.StyledFileImg />
             <p>받아쓰기 파일</p>
           </S.Item>

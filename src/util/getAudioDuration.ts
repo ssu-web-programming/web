@@ -61,8 +61,8 @@ export const blobToFile = (audioBlob: Blob) => {
   });
 };
 
-export const removeFileExtension = (filename: string) => {
+export const changeFileExtension = (filename: string, extension: string) => {
   const baseFileName = filename.substring(0, filename.lastIndexOf('.'));
 
-  return `${baseFileName}`;
+  return `${baseFileName}.${extension}`;
 };

@@ -1,5 +1,4 @@
 import { useCallback } from 'react';
-import { prev } from 'cheerio/dist/commonjs/api/traversing';
 import { useVoiceDictationContext } from 'pages/Nova/VoiceDictation/provider/voice-dictation-provider';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
