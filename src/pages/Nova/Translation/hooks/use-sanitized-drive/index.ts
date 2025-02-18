@@ -1,13 +1,11 @@
-import useManageFile from 'components/hooks/nova/useManageFile';
 import { getCurrentFile, getDriveFiles, getLocalFiles } from 'store/slices/uploadFiles';
 import { useAppSelector } from 'store/store';
-import { downloadFiles } from 'util/files';
+import { currentFileToFileObj, downloadFiles } from 'util/files';
 
 export default function useSanitizedDrive() {
   const localFiles = useAppSelector(getLocalFiles);
   const driveFiles = useAppSelector(getDriveFiles);
   const currentFile = useAppSelector(getCurrentFile);
-  const { getFileInfo } = useManageFile();
 
   const convertFileObject = async () => {
     // driveFiles의 경우에는 id를 파일객체로 변환해야함
@@ -17,7 +15,12 @@ export default function useSanitizedDrive() {
     }
 
     if (currentFile.id !== '') {
-      const convertFileObj = await getFileInfo(currentFile.id);
+      const convertFileObj = await currentFileToFileObj(
+        currentFile.id,
+        currentFile.name!,
+        currentFile.type
+      );
+
       console.log('convertFileObj', convertFileObj);
       return convertFileObj;
     }
