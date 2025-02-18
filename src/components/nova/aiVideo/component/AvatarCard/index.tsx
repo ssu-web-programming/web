@@ -53,7 +53,6 @@ export default function AvatarCard({
 
   return (
     <S.AvatarCard isCircle={result?.info.selectedAvatar?.avatar_style === 'circle'}>
-      <img src={isLightMode ? HeyZenLightIcon : HeyZenDarkIcon} alt="logo" className="logo" />
       {!isShowOnlyCard && !isHideColorPicker && (
         <ArrowTooltips
           message={t('Nova.aiVideo.tooltip.colorPicker')}

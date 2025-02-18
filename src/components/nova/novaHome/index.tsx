@@ -94,8 +94,6 @@ const NovaHome = (props: NovaHomeProps) => {
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'avatar' }));
     } else if (tab === NOVA_TAB_TYPE.perplexity) {
       dispatch(setChatMode(SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO));
-    } else if (tab === NOVA_TAB_TYPE.voiceDictation) {
-      dispatch(setChatMode(SERVICE_TYPE.NOVA_VOICE_DICTATION));
     }
   };
 

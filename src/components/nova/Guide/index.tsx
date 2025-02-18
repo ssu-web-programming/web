@@ -3,7 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { FlattenSimpleInterpolation } from 'styled-components';
 
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
-import { getChatGroupKey, getServiceGroupInfo, iconMap } from '../../../constants/serviceType';
+import {
+  getChatGroupKey,
+  getServiceCategoryFromTab,
+  getServiceGroupInfo,
+  iconMap
+} from '../../../constants/serviceType';
 import { announceInfoSelector } from '../../../store/slices/nova/announceSlice';
 import { novaChatModeSelector } from '../../../store/slices/nova/novaHistorySlice';
 import { selectTabSlice } from '../../../store/slices/tabSlice';
@@ -25,6 +30,8 @@ export const Guide = (props: GuideProps) => {
   const announceInfo = useAppSelector(announceInfoSelector(selectedNovaTab));
   const chatMode = useAppSelector(novaChatModeSelector);
   const { isLightMode } = useAppSelector(themeInfoSelector);
+  const isChat =
+    selectedNovaTab === NOVA_TAB_TYPE.aiChat || selectedNovaTab === NOVA_TAB_TYPE.perplexity;
 
   const getIcon = () => {
     // TODO: 로고도 함께 관리하도록 수정 필요
@@ -54,9 +61,17 @@ export const Guide = (props: GuideProps) => {
             }
           />
           <div className="title">
-            <p>{getServiceGroupInfo(getChatGroupKey(chatMode), isLightMode).label}</p>
+            <p>
+              {isChat
+                ? getServiceGroupInfo(getChatGroupKey(chatMode), isLightMode).label
+                : t(`Nova.${selectedNovaTab}.Guide.Title`)}
+            </p>
           </div>
-          <p className="desc">{t(`Nova.ChatModel.${getChatGroupKey(chatMode)}.desc_home`)}</p>
+          <p className="desc">
+            {isChat
+              ? t(`Nova.ChatModel.${getChatGroupKey(chatMode)}.desc_home`)
+              : t(`Nova.${selectedNovaTab}.Guide.SubTitle`)}
+          </p>
         </S.GuideTitle>
         <S.GuideBody>{props.children}</S.GuideBody>
       </S.GuideWrapper>
