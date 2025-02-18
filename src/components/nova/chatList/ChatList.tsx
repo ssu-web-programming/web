@@ -119,7 +119,7 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
 
   const CHAT_BUTTON_LIST: ChatButtonType[] = [
     {
-      name: t('Index.Index.Remake'),
+      name: t('Nova.Result.Remake'),
       status: ['done', 'cancel'],
       iconSrc: isLightMode ? <RetryChatLightIcon /> : <RetryChatDarkIcon />,
       clickHandler: (history: NovaChatType) => {
@@ -127,19 +127,19 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
       }
     },
     {
-      name: t('Index.Chat.Copy'),
+      name: t('Nova.Chat.Copy'),
       status: ['done'],
       iconSrc: isLightMode ? <CopyChatLightIcon /> : <CopyChatDarkIcon />,
       clickHandler: (history: NovaChatType) => onCopy(history.output)
     },
     {
-      name: t('Index.Index.InsertDoc'),
+      name: t('Nova.Result.InsertDoc'),
       status: ['done'],
       iconSrc: isLightMode ? <InsertDocsLightIcon /> : <InsertDocsDarkIcon />,
       clickHandler: (history: NovaChatType) => insertDocsHandler(history)
     },
     {
-      name: t('Index.Index.Share'),
+      name: t('Nova.Result.Share'),
       status: ['done'],
       iconSrc: isLightMode ? <ShareChatLightIcon /> : <ShareChatDarkIcon />,
       clickHandler: () => {
@@ -211,7 +211,7 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                                 default: {
                                   confirm({
                                     title: '',
-                                    msg: t('Index.Chat.FailOpenDoc'),
+                                    msg: t('Nova.Chat.FailOpenDoc'),
                                     onOk: {
                                       text: t('Confirm'),
                                       callback: () => {}
@@ -342,11 +342,13 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                           <SelectBox
                             placeHolder={'다른 답변 보기'}
                             minWidth={290}
+                            paddingX={4}
+                            paddingY={4}
                             menuItem={getMenuItemsFromServiceGroup(
                               serviceCredits,
                               isLightMode,
                               t
-                            ).filter((item) => item.key === chatMode)}
+                            ).filter((item) => item.key !== chatMode)}
                             setSelectedItem={(selectedItem: string) => {
                               createChatSubmitHandler(
                                 {
@@ -357,7 +359,12 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                               );
                             }}
                             selectBoxCssExt={css`
-                              min-height: 48px;
+                              border: 1px solid
+                                ${isLightMode ? 'var(--gray-gray-30)' : 'var(--gray-gray-87)'};
+                            `}
+                            innerBoxCssExt={css`
+                              min-height: 58px;
+                              padding: 8px 16px 8px 8px;
                             `}
                           />
                         )}

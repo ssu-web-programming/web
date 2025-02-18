@@ -542,6 +542,10 @@
       },
       "button": {
         "showMore": "더보기"
+      },
+      "Done": {
+        "Title": "비디오 생성 완료",
+        "SubTitle": "AI 아바타 비디오가 완성되었어요!\n비디오를 저장해 다양하게 활용해 보세요!"
       }
     },
     "GoBackHeader": "돌아가기",

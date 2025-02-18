@@ -1,18 +1,20 @@
 export interface Avatars {
   avatar_id: string;
+  talking_photo_id?: string;
   avatar_name: string;
   gender: 'all' | 'female' | 'male';
   preview_image_url: string;
   preview_video_url: string;
-  file?: File;
+  talking_photo_url?: string;
 }
 export const InitAvatars: Avatars = {
   avatar_id: '',
+  talking_photo_id: '',
   avatar_name: '',
   gender: 'all',
   preview_image_url: '',
   preview_video_url: '',
-  file: undefined
+  talking_photo_url: ''
 };
 
 export interface Voices {

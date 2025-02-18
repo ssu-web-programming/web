@@ -19,29 +19,36 @@ export const AvatarCard = styled.div<{ isCircle: boolean }>`
 `;
 
 export const PreviewWrap = styled.div<{ isCircle: boolean; bgColor: string }>`
-  width: ${({ isCircle }) => (isCircle ? '180px' : '246px')};
-  height: ${({ isCircle }) => (isCircle ? '180px' : '142px')};
+  width: ${({ isCircle }) => (isCircle ? '180px' : '100%')};
+  height: ${({ isCircle }) => (isCircle ? '180px' : '100%')};
   display: flex;
   align-items: center;
   justify-content: center;
   background: ${({ bgColor }) => bgColor};
-  border-radius: ${({ isCircle }) => (isCircle ? '99px' : '12px 12px 0 0')};
+  border-radius: ${({ isCircle }) => (isCircle ? '99px' : '12px')};
+  margin-bottom: ${({ isCircle }) => (isCircle ? '37px' : '0')};
 
   img {
-    width: 100%;
-    height: 100%;
+    width: ${({ isCircle }) => (isCircle ? '180px' : '100%')};
+    height: ${({ isCircle }) => (isCircle ? '180px' : '100%')};
     object-fit: contain;
-    border-radius: ${({ isCircle }) => (isCircle ? '99px' : '12px 12px 0 0')};
+    border-radius: ${({ isCircle }) => (isCircle ? '99px' : '12px')};
   }
 `;
 
-export const AvatarInfo = styled.div`
+export const AvatarInfo = styled.div<{ isCircle: boolean }>`
+  width: 100%;
   height: 37px;
+  position: absolute;
+  bottom: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background-color: transparent;
+  background-color: ${({ isCircle, theme }) =>
+    isCircle ? 'transparent' : theme.color.background.gray01};
+  border-bottom-right-radius: 12px;
+  border-bottom-left-radius: 12px;
 
   .name {
     font-size: 14px;

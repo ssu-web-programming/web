@@ -1,9 +1,9 @@
 import { LinearProgress } from '@mui/material';
 import styled from 'styled-components';
 
-export const Container = styled.div`
+export const Container = styled.div<{ isCircle: boolean }>`
   width: 100%;
-  height: 100%;
+  height: ${({ isCircle }) => (isCircle ? '233px' : '180px')};
   position: absolute;
   top: 0;
   left: 0;

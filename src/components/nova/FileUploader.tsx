@@ -109,10 +109,10 @@ export const FileUploader = (props: FileUploaderProps) => {
             setIsOpen(false);
             await confirm({
               title: '',
-              msg: t('Index.Confirm.OverMaxFileUploadCnt', {
+              msg: t('Nova.Confirm.OverMaxFileUploadCnt', {
                 max: getAvailableFileCnt(selectedNovaTab)
               })!,
-              onOk: { text: t('Index.Confirm.NewChat.StartNewChat'), callback: chatNova.newChat },
+              onOk: { text: t('Nova.Confirm.NewChat.StartNewChat'), callback: chatNova.newChat },
               onCancel: {
                 text: t('Cancel'),
                 callback: () => {}
@@ -195,7 +195,7 @@ export const FileUploader = (props: FileUploaderProps) => {
     if (platform === ClientType.windows) {
       await confirm({
         title: '',
-        msg: t('Index.Confirm.UpdateVersionWindows.Msg'),
+        msg: t('Nova.Confirm.UpdateVersionWindows.Msg'),
         onOk: {
           text: t('Ok'),
           callback: () => {}
@@ -204,15 +204,15 @@ export const FileUploader = (props: FileUploaderProps) => {
     } else {
       await confirm({
         title: '',
-        msg: t('Index.Confirm.UpdateVersion.Msg'),
+        msg: t('Nova.Confirm.UpdateVersion.Msg'),
         onOk: {
-          text: t('Index.Confirm.UpdateVersion.Ok'),
+          text: t('Nova.Confirm.UpdateVersion.Ok'),
           callback: () => {
             Bridge.callBridgeApi('openWindow', url);
           }
         },
         onCancel: {
-          text: t('Index.Confirm.UpdateVersion.Cancel'),
+          text: t('Nova.Confirm.UpdateVersion.Cancel'),
           callback: () => {}
         }
       });

@@ -27,7 +27,7 @@ import {
   PO_DRIVE_DOC_OPEN_STATUS
 } from '../../../api/constant';
 import { FileUploadState } from '../../../constants/fileTypes';
-import { SERVICE_TYPE } from '../../../constants/serviceType';
+import { getServiceEngineName, SERVICE_TYPE } from '../../../constants/serviceType';
 import { appStateSelector } from '../../../store/slices/appState';
 import { DriveFileInfo } from '../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
@@ -154,6 +154,7 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
         formData.append('type', type);
         formData.append('vsId', vsId);
         formData.append('threadId', threadId);
+        formData.append('model', getServiceEngineName(chatMode));
         formData.append('history', JSON.stringify(novaHistory.length ? novaHistory : []));
 
         dispatch(
@@ -237,23 +238,21 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
                     }
                     case 'annotations': {
                       const ref = JSON.parse(json.data);
-                      return `\n\n${t('Index.Chat.ReferFile', {
+                      return `\n\n${t('Nova.Chat.ReferFile', {
                         file: ref
                           .map((r: string) => (r.length > 20 ? `${r.slice(0, 20)}...` : r))
                           .join(', ')
                       })}`;
                     }
                     case 'citations': {
-                      const ref = JSON.parse(json.data);
-                      citations = ref.citations;
+                      citations = json.data;
                       return '';
                     }
-                    case 'recommended_questions': {
-                      const ref = JSON.parse(json.data);
+                    case 'related_questions': {
                       dispatch(
                         appendChatRecommendedQuestions({
                           id,
-                          recommendedQuestions: ref.recommended_questions
+                          recommendedQuestions: json.data
                         })
                       );
                       return '';

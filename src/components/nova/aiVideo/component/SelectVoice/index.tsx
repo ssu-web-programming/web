@@ -51,7 +51,7 @@ export default function SelectVoice({ setIsOpen, changeSelectedVoice }: SelectAv
 
   const { getVoices, hasMore, loading } = useGetVoices();
   const observerRef = useRef<IntersectionObserver | null>(null);
-  const lastAvatarRef = useRef<HTMLDivElement | null>(null);
+  const lastVoiceRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (result?.info.selectedAvatar.voice_id != '') {
@@ -71,8 +71,8 @@ export default function SelectVoice({ setIsOpen, changeSelectedVoice }: SelectAv
       { threshold: 0.5 }
     );
 
-    if (lastAvatarRef.current) {
-      observerRef.current.observe(lastAvatarRef.current);
+    if (lastVoiceRef.current) {
+      observerRef.current.observe(lastVoiceRef.current);
     }
 
     return () => observerRef.current?.disconnect();
@@ -92,24 +92,15 @@ export default function SelectVoice({ setIsOpen, changeSelectedVoice }: SelectAv
   const handleGenderChange = (gender: string) => {
     const selected = genderMenu.find((item) => item.title === gender);
     if (selected) setSelectedGender(selected.value);
-    // if (
-    //   result?.info.voices.filter(
-    //     (voice: Voices) => voice.gender != 'all' && voice.gender === selectedGender
-    //   ).length < 10
-    // ) {
-    //   getVoices(selectedGender, selectedLanguage);
-    // }
   };
 
   const handleLanguageChange = (language: string) => {
     setSelectedLanguage(language);
-    // if (
-    //   result?.info.voices.filter(
-    //     (voice: Voices) => voice.language != 'all' && voice.language === selectedGender
-    //   ).length < 10
-    // ) {
-    //   getVoices(selectedGender, selectedLanguage);
-    // }
+
+    const voiceList = result?.info.voices.filter((voice: Voices) => voice.language === language);
+    if (voiceList.length <= 0) {
+      getVoices(selectedGender, language);
+    }
   };
 
   return (
@@ -150,9 +141,9 @@ export default function SelectVoice({ setIsOpen, changeSelectedVoice }: SelectAv
           />
           {result?.info.languages && (
             <SelectBox
-              menuItem={result?.info.languages?.map((lang: string[]) => ({
-                key: lang,
-                title: lang
+              menuItem={result?.info.languages?.map((lang: { id: string; name: string }) => ({
+                key: lang.id,
+                title: lang.name
               }))}
               selectedItem={selectedLanguage}
               setSelectedItem={handleLanguageChange}
@@ -190,7 +181,8 @@ export default function SelectVoice({ setIsOpen, changeSelectedVoice }: SelectAv
               <S.VoiceContainer
                 key={voice.voice_id}
                 isSelected={tempVoice?.voice_id === voice.voice_id}
-                onClick={() => handleVoiceClick(voice)}>
+                onClick={() => handleVoiceClick(voice)}
+                ref={lastVoiceRef}>
                 <S.VoiceInfoWrap>
                   <img
                     src={

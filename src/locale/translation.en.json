@@ -523,6 +523,10 @@
       },
       "button": {
         "showMore": "View More"
+      },
+      "Done": {
+        "Title": "Video creation completed",
+        "SubTitle": "Your AI avatar video is ready!\nSave it and use it in various ways!"
       }
     },
     "GoBackHeader": "Go Back",

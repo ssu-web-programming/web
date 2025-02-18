@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import {
   AI_CREDIT_INFO,
+  NOVA_CREDIT_OFFER_LIST,
   NOVA_GET_ANNOUNCEMENT_LIST,
   NOVA_GET_EXPIRED_TIME,
   NOVA_GET_USER_INFO_AGREEMENT
@@ -17,6 +18,7 @@ import { init } from '@amplitude/analytics-browser';
 
 import usePostSplunkLog from '../../api/usePostSplunkLog';
 import { NOVA_TAB_TYPE } from '../../constants/novaTapTypes';
+import { IOfferCredit } from '../../constants/offerCredit';
 import { SERVICE_TYPE, TAB_SERVICE_MAP } from '../../constants/serviceType';
 import { ClientStatusType } from '../../pages/Nova/Nova';
 import { initComplete } from '../../store/slices/initFlagSlice';
@@ -24,6 +26,7 @@ import { IAnnouceInfo, setAnnounceInfo, tabTypeMap } from '../../store/slices/no
 import {
   PageService,
   PageStatus,
+  setPageCreditReceivedByServiceType,
   setPageService,
   setPageStatus
 } from '../../store/slices/nova/pageStatusSlice';
@@ -168,6 +171,33 @@ export default function useInitApp() {
     [dispatch]
   );
 
+  const initOfferList = useCallback(
+    async (headers: HeadersInit) => {
+      try {
+        const res = await fetch(NOVA_CREDIT_OFFER_LIST, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...headers
+          },
+          body: JSON.stringify({ creditType: 'AI_NOVA_FUNC_SATISFACTION_SURVEY' })
+        });
+        const {
+          data: { offerCreditList }
+        } = await res.json();
+        offerCreditList.forEach((offerCredit: IOfferCredit) => {
+          const description = offerCredit.description;
+          dispatch(
+            setPageCreditReceivedByServiceType({ serviceType: description as SERVICE_TYPE })
+          );
+        });
+      } catch (err) {
+        /* empty */
+      }
+    },
+    [dispatch]
+  );
+
   return async () => {
     const resSession = await Bridge.checkSession('app init');
     if (!resSession || !resSession.success) {
@@ -192,11 +222,11 @@ export default function useInitApp() {
     if (platform != ClientType.unknown && version) {
       dispatch(setPlatformInfo({ platform: platform, device: device, version: version }));
     }
-    dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiChat, status: 'home' }));
 
     await Promise.all([
       initCreditInfo(headers),
       initUserInfo(headers),
+      initOfferList(headers),
       initAnnouncementInfo(headers),
       initNovaExpireTime(headers)
     ]);

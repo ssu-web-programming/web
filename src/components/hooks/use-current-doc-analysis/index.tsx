@@ -63,10 +63,10 @@ export default function useCurrentDocAnalysis() {
     await confirm({
       msg:
         platform === ClientType.web || platform === 'unknown'
-          ? t('Index.Confirm.NotSavedFileInWeb.Msg')
-          : t('Index.Confirm.NotSavedFile.Msg'),
+          ? t('Nova.Confirm.NotSavedFileInWeb.Msg')
+          : t('Nova.Confirm.NotSavedFile.Msg'),
       onOk: {
-        text: t('Index.Confirm.NotSavedFile.Ok'),
+        text: t('Nova.Confirm.NotSavedFile.Ok'),
         callback: () => {
           dispatch(setPageStatus({ tab: selectedNovaTab, status: 'progress' }));
           Bridge.callBridgeApi('uploadFile');
@@ -82,7 +82,7 @@ export default function useCurrentDocAnalysis() {
             }
           }
         : {
-            text: t('Index.Confirm.NotSavedFile.Cancel'),
+            text: t('Nova.Confirm.NotSavedFile.Cancel'),
             callback: async () => {
               dispatch(setCreating('NOVA'));
               dispatch(setLocalFiles([]));

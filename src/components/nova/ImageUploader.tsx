@@ -71,22 +71,20 @@ export default function ImageUploader({
   };
 
   const handleFileProcessing = async () => {
-    dispatch(setPageStatus({ tab: curTab, status: 'progress' }));
-
     const selectedFile = await getSelectedFile();
     if (!selectedFile) {
-      dispatch(setPageStatus({ tab: curTab, status: 'home' }));
       return;
     }
 
     try {
+      dispatch(setPageStatus({ tab: curTab, status: 'progress' }));
       let fileData: File = selectedFile;
 
       if (isSpecificFormat(selectedFile)) {
         if (await isPixelLimitExceeded(selectedFile, curTab)) {
           await confirm({
             title: '',
-            msg: `${t('Index.Confirm.OverMaxFilePixel')}\n\n${t(
+            msg: `${t('Nova.Confirm.OverMaxFilePixel')}\n\n${t(
               `Nova.${NOVA_TAB_TYPE.removeBG}.AllowImageSize`
             )}`,
             onOk: {

@@ -74,15 +74,15 @@ export default function AvatarCard({
         bgColor={result?.info.selectedAvatar?.background_color ?? ''}>
         <img
           src={
-            result?.info.selectedAvatar?.avatar.file
-              ? URL.createObjectURL(result?.info.selectedAvatar.avatar.file)
-              : result?.info.selectedAvatar?.avatar.preview_image_url
+            result?.info.selectedAvatar?.avatar.avatar_id != ''
+              ? result?.info.selectedAvatar?.avatar.preview_image_url
+              : result?.info.selectedAvatar?.avatar.talking_photo_url
           }
           alt="preview_img"
         />
       </S.PreviewWrap>
       {!isShowOnlyCard && (
-        <S.AvatarInfo>
+        <S.AvatarInfo isCircle={result?.info.selectedAvatar?.avatar_style === 'circle'}>
           {result?.info.selectedAvatar?.voice.name ? (
             <>
               <span className="name">{result?.info.selectedAvatar?.voice.name}</span>

@@ -3,6 +3,8 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { css } from 'styled-components';
 
+import { apiWrapper } from '../../../../api/apiWrapper';
+import { NOVA_VIDEO_GET_AVATARS, NOVA_VIDEO_MAKE_AVATARS } from '../../../../api/constant';
 import { Avatars, InitAvatarInfo, InitAvatars } from '../../../../constants/heygenTypes';
 import { NOVA_TAB_TYPE } from '../../../../constants/novaTapTypes';
 import { ReactComponent as CheckIcon } from '../../../../img/common/ico_check.svg';
@@ -26,6 +28,7 @@ import { themeInfoSelector } from '../../../../store/slices/theme';
 import { setLocalFiles } from '../../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../../store/store';
 import Button from '../../../buttons/Button';
+import useErrorHandle from '../../../hooks/useErrorHandle';
 import ImageUploader from '../../ImageUploader';
 import AvatarCard from '../component/AvatarCard';
 import SelectAvatar from '../component/SelectAvatar';
@@ -38,6 +41,7 @@ export default function Avatar() {
   const { t } = useTranslation();
   const result = useAppSelector(selectPageResult(NOVA_TAB_TYPE.aiVideo));
   const currentFile = useAppSelector(selectPageData(NOVA_TAB_TYPE.aiVideo));
+  const errorHandle = useErrorHandle();
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -56,6 +60,30 @@ export default function Avatar() {
       );
     }
   }, [result?.info.avatars]);
+
+  const makeAvatars = async () => {
+    if (!currentFile) return;
+
+    const formData = new FormData();
+    formData.append('file', currentFile);
+
+    try {
+      const { res } = await apiWrapper().request(NOVA_VIDEO_MAKE_AVATARS, {
+        headers: { 'Content-Type': 'application/json' },
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await res.json();
+      changeSelectedAvatar({
+        ...InitAvatars,
+        talking_photo_id: data.data.talking_photo_id,
+        talking_photo_url: data.data.talking_photo_url
+      });
+    } catch (error) {
+      errorHandle(error);
+    }
+  };
 
   const changeSelectedAvatar = (avatar: Avatars) => {
     if (!result || !result.info.avatars) return;
@@ -116,10 +144,12 @@ export default function Avatar() {
 
   const handleUploadedImage = () => {
     if (currentFile) {
-      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'avatar' }));
-      changeSelectedAvatar({ ...InitAvatars, file: currentFile });
-      dispatch(resetPageData(NOVA_TAB_TYPE.aiVideo));
-      dispatch(setLocalFiles([]));
+      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'progress' }));
+      makeAvatars().then(() => {
+        dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'avatar' }));
+        dispatch(resetPageData(NOVA_TAB_TYPE.aiVideo));
+        dispatch(setLocalFiles([]));
+      });
     }
   };
 
@@ -153,9 +183,7 @@ export default function Avatar() {
                       </S.CheckBox>
                     )}
                     <S.Image
-                      src={
-                        avatar?.file ? URL.createObjectURL(avatar.file) : avatar?.preview_image_url
-                      }
+                      src={avatar?.preview_image_url || avatar.talking_photo_url}
                       alt="avatar"
                     />
                   </S.AvartarContainer>

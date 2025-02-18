@@ -110,7 +110,6 @@ export default function SelectAvatar({ setIsOpen, changeSelectedAvatar }: Select
             if (tab === ETabType.female) return avatar.gender === 'female';
             return false;
           });
-          console.log(filteredAvatars.length);
 
           return (
             tab === tabValue && (
@@ -127,9 +126,7 @@ export default function SelectAvatar({ setIsOpen, changeSelectedAvatar }: Select
                       </S.CheckBox>
                     )}
                     <S.Image
-                      src={
-                        avatar.file ? URL.createObjectURL(avatar.file) : avatar.preview_image_url
-                      }
+                      src={avatar?.preview_image_url || avatar.talking_photo_url}
                       alt={'avatar'}
                       onClick={() => handleImageClick(avatar)}
                     />

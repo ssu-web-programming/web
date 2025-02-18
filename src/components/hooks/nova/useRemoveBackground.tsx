@@ -5,6 +5,7 @@ import { NOVA_REMOVE_BACKGROUND } from '../../../api/constant';
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import {
   resetPageData,
+  selectPageCreditReceived,
   selectPageData,
   setPageResult,
   setPageStatus
@@ -66,6 +67,8 @@ export const useRemoveBackground = () => {
 
         const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
         showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');
+
+        // 만족도 이벤트
       } else {
         const { leftCredit } = calLeftCredit(res.headers);
         handleRemoveBGError(response.error.code, Number(leftCredit));

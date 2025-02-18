@@ -1,5 +1,4 @@
 import { TFunction } from 'i18next';
-import VoiceDictationIcon from 'img/common/nova/imgSample/voice_dictation_sample.svg';
 
 import ChangeBGIcon from '../../img/common/nova/imgSample/bg_change_sample.png';
 import RemoveBGIcon from '../../img/common/nova/imgSample/bg_delete_sample.png';
@@ -18,6 +17,7 @@ import ClaudeLogoLightIcon from '../../img/light/nova/logo/ico_claude_logo.svg';
 import ClovaLogoLightIcon from '../../img/light/nova/logo/ico_clova_logo.svg';
 import GPTLogoLightIcon from '../../img/light/nova/logo/ico_gpt_logo.svg';
 import PerplexityLogoLightIcon from '../../img/light/nova/logo/ico_perplexity_logo.svg';
+import VoiceDictationIcon from '../../img/light/nova/voiceDictation/ico_voice_dictation.svg';
 import { NOVA_TAB_TYPE } from '../novaTapTypes';
 
 export enum SERVICE_CATEGORY {
@@ -251,7 +251,7 @@ export const getMenuItemsFromServiceGroup = (
   });
 };
 
-export const getServiceEngineName = (serviceType: SERVICE_TYPE): string | undefined => {
+export const getServiceEngineName = (serviceType: SERVICE_TYPE): string => {
   const mapping: Partial<Record<SERVICE_TYPE, string>> = {
     [SERVICE_TYPE.NOVA_CHAT_GPT4O]: 'gpt4o',
     [SERVICE_TYPE.NOVA_IMG_GPT4O]: 'gpt4o',
