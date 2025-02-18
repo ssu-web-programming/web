@@ -334,9 +334,7 @@ export const useInitBridgeListener = () => {
   const confirm = useConfirm();
 
   const { getFileInfo, loadLocalFile } = useManageFile();
-  const { setSharedVoiceDictationInfo } = useVoiceDictationContext();
 
-  // const movePage = useMoveChatTab();
   const getPath = useCallback((cmd: PanelOpenCmd) => {
     switch (cmd) {
       case 'openAiTools':
@@ -535,9 +533,10 @@ export const useInitBridgeListener = () => {
             dispatch(setCreating('none'));
 
             if (selectedNovaTab === NOVA_TAB_TYPE.translation) {
+              console.log('여기를 들어왔자나 맞지 제발!');
               dispatch(
                 setCurrentFile({
-                  type: 'drive',
+                  type: 'local',
                   id: body.fileId,
                   size: body.size,
                   ext: 'drive',
