@@ -194,6 +194,34 @@ export const convertDriveFileToFile = async (file: File | DriveFileInfo): Promis
   }
 };
 
+export const downloadFileIdToBlob = async (fileId: string): Promise<Blob> => {
+  const requester = apiWrapper();
+
+  try {
+    const { res } = await requester.request(PO_DRIVE_DOWNLOAD, {
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ fileId }),
+      method: 'POST'
+    });
+    return await res.blob();
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const currentFileToFileObj = async (
+  fileId: string,
+  fileName: string,
+  type: string
+): Promise<File> => {
+  try {
+    const blob = await downloadFileIdToBlob(fileId);
+    return new File([blob], fileName, { type });
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const fileToBase64 = async (file: File): Promise<{ contentType: string; data: string }> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
