@@ -1,6 +1,7 @@
 import { ReactNode, useEffect } from 'react';
 import Loading from 'components/nova/Loading';
 import OverlayModal from 'components/overlay-modal';
+import RetryComponent from 'components/retry-component';
 import { overlay } from 'overlay-kit';
 import BgContainer from 'pages/Nova/Translation/components/bg-container';
 import { appStateSelector } from 'store/slices/appState';

@@ -1,9 +1,11 @@
 import { useEffect } from 'react';
 import useInitApp from 'components/hooks/useInitApp';
+import RetryComponent from 'components/retry-component';
 import { OverlayProvider } from 'overlay-kit';
 import Nova from 'pages/Nova/Nova';
 import Translation from 'pages/Nova/Translation';
 import { Route, Routes } from 'react-router-dom';
+import { errorSelector } from 'store/slices/errorSlice';
 import { ThemeProvider } from 'styled-components';
 
 import Confirm from './components/Confirm';
@@ -106,6 +108,7 @@ function App() {
           <Toast />
           <Spinner />
           <Confirm />
+          <RetryComponent />
         </>
       </OverlayProvider>
     </ThemeProvider>

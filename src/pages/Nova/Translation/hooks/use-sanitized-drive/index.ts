@@ -21,7 +21,6 @@ export default function useSanitizedDrive() {
         currentFile.type
       );
 
-      console.log('convertFileObj', convertFileObj);
       return convertFileObj;
     }
     return localFiles[0];
