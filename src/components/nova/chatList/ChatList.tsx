@@ -342,11 +342,13 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                           <SelectBox
                             placeHolder={'다른 답변 보기'}
                             minWidth={290}
+                            paddingX={4}
+                            paddingY={4}
                             menuItem={getMenuItemsFromServiceGroup(
                               serviceCredits,
                               isLightMode,
                               t
-                            ).filter((item) => item.key === chatMode)}
+                            ).filter((item) => item.key !== chatMode)}
                             setSelectedItem={(selectedItem: string) => {
                               createChatSubmitHandler(
                                 {
@@ -357,7 +359,12 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                               );
                             }}
                             selectBoxCssExt={css`
-                              min-height: 48px;
+                              border: 1px solid
+                                ${isLightMode ? 'var(--gray-gray-30)' : 'var(--gray-gray-87)'};
+                            `}
+                            innerBoxCssExt={css`
+                              min-height: 58px;
+                              padding: 8px 16px 8px 8px;
                             `}
                           />
                         )}

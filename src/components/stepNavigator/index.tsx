@@ -3,8 +3,7 @@ import Button from '@mui/material/Button';
 import Step from '@mui/material/Step';
 import StepIcon from '@mui/material/StepIcon';
 
-import { ReactComponent as CircleArrowLeftIcon } from '../../img/light/circle_arrow_left.svg';
-import { ReactComponent as CircleArrowRightIcon } from '../../img/light/circle_arrow_right.svg';
+import { ReactComponent as ArrowLightIcon } from '../../img/light/ico_arrow_down_normal.svg';
 
 import * as S from './style';
 
@@ -28,11 +27,11 @@ export default function StepNavigator({ activeStep, setActiveStep, steps }: Step
   const CustomStepIcon = (props: any) => {
     const { active, completed, className } = props;
     if (completed) {
-      return <CircleArrowLeftIcon className={className} width={22} height={22} />;
+      return <ArrowLightIcon className={className} width={22} height={22} />;
     } else if (active) {
       return <StepIcon {...props} />;
     } else {
-      return <CircleArrowRightIcon className={className} />;
+      return <ArrowLightIcon className={className} />;
     }
   };
 

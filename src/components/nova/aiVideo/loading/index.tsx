@@ -5,11 +5,14 @@ import { NOVA_VIDEO_GET_INFO, NOVA_VIDEO_MAKE_VIDEOS } from '../../../../api/con
 import { AvatarInfo, EVideoStatus, InitVideos, Videos } from '../../../../constants/heygenTypes';
 import { NOVA_TAB_TYPE } from '../../../../constants/novaTapTypes';
 import {
+  resetPageData,
   selectPageResult,
   setPageStatus,
   updatePageResult
 } from '../../../../store/slices/nova/pageStatusSlice';
+import { activeToast } from '../../../../store/slices/toastSlice';
 import { useAppDispatch, useAppSelector } from '../../../../store/store';
+import useErrorHandle from '../../../hooks/useErrorHandle';
 import AvatarCard from '../component/AvatarCard';
 import Progress from '../component/Progress';
 
@@ -19,6 +22,7 @@ const POLLING_INTERVAL = 3000;
 
 export default function Loading() {
   const dispatch = useAppDispatch();
+  const errorHandle = useErrorHandle();
   const result = useAppSelector(selectPageResult(NOVA_TAB_TYPE.aiVideo));
   const [progress, setProgress] = useState(0);
   const pollingRef = useRef<NodeJS.Timeout | null>(null);
@@ -53,7 +57,7 @@ export default function Loading() {
 
     timerRef.current.interval = setInterval(() => {
       const elapsedSeconds = Math.floor((Date.now() - timerRef.current.startTime!) / 1000);
-      const expectedDuration = (result?.info.selectedAvatar.input_text.length || 0) * 15;
+      const expectedDuration = (result?.info.selectedAvatar.input_text.length || 0) * 60;
 
       setProgress(Math.floor(Math.min((elapsedSeconds / expectedDuration) * 100, 99)));
     }, 1000);
@@ -104,7 +108,9 @@ export default function Loading() {
         );
       }
     } catch (error) {
-      console.error('Video creation failed:', error);
+      errorHandle(error);
+      dispatch(resetPageData(NOVA_TAB_TYPE.aiVideo));
+      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'home' }));
     }
   };
 
@@ -119,7 +125,7 @@ export default function Loading() {
       });
 
       const { data } = await res.json();
-      if (data.status === EVideoStatus.completed || data.status === EVideoStatus.failed) {
+      if (data.status === EVideoStatus.completed) {
         stopTimer();
         setProgress(100);
 
@@ -144,9 +150,13 @@ export default function Loading() {
           })
         );
         dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'done' }));
+      } else {
+        if (data.status === EVideoStatus.failed) {
+          // dispatch(activeToast({ type: 'error', '요청을 처리하는 중 오류가 발생했습니다.' }));
+        }
       }
     } catch (error) {
-      console.error('Polling error:', error);
+      errorHandle(error);
     }
   };
 

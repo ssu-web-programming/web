@@ -3,6 +3,7 @@ import InsertDocsDarkIcon from 'img/dark/ico_insert_docs.svg';
 import DownloadIcon from 'img/light/ico_download_white.svg';
 import InsertDocsLightIcon from 'img/light/ico_insert_docs.svg';
 import { lang } from 'locale';
+import { overlay } from 'overlay-kit';
 import { useTranslation } from 'react-i18next';
 import ReactPlayer from 'react-player';
 import { setOnlineStatus } from 'store/slices/network';
@@ -16,6 +17,7 @@ import { ClientStatusType } from '../../../pages/Nova/Nova';
 import {
   resetPageData,
   resetPageResult,
+  selectPageCreditReceived,
   selectPageResult,
   setPageStatus
 } from '../../../store/slices/nova/pageStatusSlice';
@@ -31,6 +33,8 @@ import { useConfirm } from '../../Confirm';
 import { useChangeBackground } from '../../hooks/nova/useChangeBackground';
 import { useInsertDocsHandler } from '../../hooks/nova/useInsertDocsHandler';
 import { useRemakeImage } from '../../hooks/nova/useRemakeImage';
+import OverlayModal from '../../overlay-modal';
+import SurveyModalContent from '../satisfactionSurvey/survey-modal-content';
 
 import * as S from './style';
 
@@ -49,6 +53,7 @@ export default function Result({ children }: ResultProps) {
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
   const currentFile = useAppSelector(getCurrentFile);
   const result = useAppSelector(selectPageResult(selectedNovaTab));
+  const isCreditRecieved = useAppSelector(selectPageCreditReceived(selectedNovaTab));
   const { insertDocsHandler } = useInsertDocsHandler();
   const { handleChangeBackground } = useChangeBackground();
   const { handleRemakeImage } = useRemakeImage();
@@ -66,6 +71,25 @@ export default function Result({ children }: ResultProps) {
       }
     });
   }, [selectedNovaTab]);
+
+  useEffect(() => {
+    console.log('curNovaTab: ', selectedNovaTab);
+    console.log('isCreditRecieved: ', isCreditRecieved);
+    // 만족도 이벤트
+    if (!isCreditRecieved) {
+      overlay.closeAll();
+
+      overlay.open(({ isOpen, close }) => {
+        return (
+          <OverlayModal isOpen={isOpen} onClose={close}>
+            <SurveyModalContent />
+          </OverlayModal>
+        );
+      });
+      // show poptup
+    }
+  }),
+    [];
 
   const ShowExpireLinkPopup = async () => {
     confirm({

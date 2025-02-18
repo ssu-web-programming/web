@@ -71,15 +71,13 @@ export default function ImageUploader({
   };
 
   const handleFileProcessing = async () => {
-    dispatch(setPageStatus({ tab: curTab, status: 'progress' }));
-
     const selectedFile = await getSelectedFile();
     if (!selectedFile) {
-      dispatch(setPageStatus({ tab: curTab, status: 'home' }));
       return;
     }
 
     try {
+      dispatch(setPageStatus({ tab: curTab, status: 'progress' }));
       let fileData: File = selectedFile;
 
       if (isSpecificFormat(selectedFile)) {

@@ -15,6 +15,7 @@ import { useGetAvatars } from '../../hooks/nova/use-get-avatars';
 import { useGetLanguages } from '../../hooks/nova/use-get-languages';
 import { useGetVoices } from '../../hooks/nova/use-get-voices';
 import StepNavigator from '../../stepNavigator';
+import Progress from '../Progress';
 import Result from '../result/index';
 
 import AvatarCard from './component/AvatarCard';
@@ -32,17 +33,6 @@ export default function AIVideo() {
   const { getAvatars } = useGetAvatars();
   const { getVoices } = useGetVoices();
   const { getLanguages } = useGetLanguages();
-
-  useEffect(() => {
-    const stepMap: Record<string, number> = {
-      avatar: 0,
-      voice: 1,
-      script: 2
-    };
-    if (status in stepMap) {
-      setActiveStep(stepMap[status]);
-    }
-  }, [status]);
 
   const fetchInitialData = async () => {
     if (!result?.info.avatars) {
@@ -72,24 +62,27 @@ export default function AIVideo() {
       return <Loading />;
     } else {
       return (
-        <StepNavigator
-          activeStep={activeStep}
-          setActiveStep={setActiveStep}
-          steps={[
-            {
-              label: <S.Label>아바타 선택</S.Label>,
-              children: <Avatar />
-            },
-            {
-              label: <S.Label>목소리 선택</S.Label>,
-              children: <Voice />
-            },
-            {
-              label: <S.Label>스크립트 추가</S.Label>,
-              children: <Script />
-            }
-          ]}
-        />
+        <>
+          {status === 'progress' && <Progress />}
+          <StepNavigator
+            activeStep={activeStep}
+            setActiveStep={setActiveStep}
+            steps={[
+              {
+                label: <S.Label>아바타 선택</S.Label>,
+                children: <Avatar />
+              },
+              {
+                label: <S.Label>목소리 선택</S.Label>,
+                children: <Voice />
+              },
+              {
+                label: <S.Label>스크립트 추가</S.Label>,
+                children: <Script />
+              }
+            ]}
+          />
+        </>
       );
     }
   };

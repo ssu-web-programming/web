@@ -48,6 +48,7 @@ export type PageStateType = {
   data: { [K in keyof PageStatus]: PageData };
   result: { [K in keyof PageStatus]: PageResult };
   service: { [K in keyof PageStatus]: PageService };
+  isCreditReceived: { [K in keyof PageStatus]: boolean };
 };
 
 const initialPageState: PageStateType = {
@@ -78,6 +79,13 @@ const initialPageState: PageStateType = {
       [key as keyof PageStatus]: []
     }),
     {} as PageStateType['service']
+  ),
+  isCreditReceived: Object.keys(NOVA_TAB_TYPE).reduce(
+    (acc, key) => ({
+      ...acc,
+      [key as keyof boolean]: false
+    }),
+    {} as PageStateType['isCreditReceived']
   )
 };
 
@@ -89,6 +97,7 @@ const pageSlice = createSlice({
       state: PageStateType,
       action: PayloadAction<{ tab: T; status: PageStatus[T] }>
     ) => {
+      console.log(action.payload.tab, ': ', action.payload.status);
       state.status[action.payload.tab] = action.payload.status;
     },
     resetPageStatus: <T extends keyof PageStatus>(
@@ -140,6 +149,27 @@ const pageSlice = createSlice({
       action: PayloadAction<{ tab: T; services: PageService }>
     ) => {
       state.service[action.payload.tab] = action.payload.services;
+    },
+    setPageCreditReceived: <T extends keyof PageStatus>(
+      state: PageStateType,
+      action: PayloadAction<{ tab: T; isCreditReceived: boolean }>
+    ) => {
+      state.isCreditReceived[action.payload.tab] = action.payload.isCreditReceived;
+    },
+    setPageCreditReceivedByServiceType: (
+      state: PageStateType,
+      action: PayloadAction<{ serviceType: SERVICE_TYPE }>
+    ) => {
+      const { serviceType } = action.payload;
+      const matchedTab = Object.keys(state.service).find((tab) =>
+        state.service[tab as keyof PageStatus].some(
+          (service) => service.serviceType === serviceType
+        )
+      ) as keyof PageStatus | undefined;
+
+      if (matchedTab) {
+        state.isCreditReceived[matchedTab] = true;
+      }
     }
   }
 });
@@ -152,7 +182,9 @@ export const {
   setPageResult,
   updatePageResult,
   resetPageResult,
-  setPageService
+  setPageService,
+  setPageCreditReceived,
+  setPageCreditReceivedByServiceType
 } = pageSlice.actions;
 
 export const selectPageStatus =
@@ -186,5 +218,10 @@ export const selectAllServiceCredits = (state: RootState): Record<SERVICE_TYPE, 
       {} as Record<SERVICE_TYPE, number>
     );
 };
+
+export const selectPageCreditReceived =
+  <T extends keyof PageStatus>(tab: T) =>
+  (state: RootState): boolean =>
+    state.pageStatusSlice.isCreditReceived[tab] ?? false;
 
 export default pageSlice.reducer;
