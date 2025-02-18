@@ -127,10 +127,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
       return (
         <OverlayModal isOpen={isOpen} onClose={() => close(false)}>
           <ClosedModalContent
-            onConfirm={async () => {
-              await Bridge.callBridgeApi('getRecordingState', false);
-              close(true);
-            }}
+            onConfirm={() => close(true)}
             title={
               isReadyStatus
                 ? '잠깐! 뒤로가면 녹음이 저장되지 않아요. 그래도 뒤로가시겠어요?'
@@ -142,7 +139,6 @@ export default function NovaHeader(props: NovaHeaderProps) {
       );
     });
 
-    console.log('녹음 종료여부 - result', result);
     return result;
   };
 

@@ -255,7 +255,7 @@ const callApi = (api: ApiType, arg?: string | number | object | boolean) => {
             break;
           }
           case 'getRecordingState': {
-            console.log('getRecordingState 전달되는 값!', arg);
+            console.log('getRecordingState 전달되는 값22!', arg);
             if (window.webkit.messageHandlers.getRecordingState) {
               window.webkit.messageHandlers.getRecordingState.postMessage(arg);
             }
@@ -334,9 +334,7 @@ export const useInitBridgeListener = () => {
   const confirm = useConfirm();
 
   const { getFileInfo, loadLocalFile } = useManageFile();
-  const { setSharedVoiceDictationInfo } = useVoiceDictationContext();
 
-  // const movePage = useMoveChatTab();
   const getPath = useCallback((cmd: PanelOpenCmd) => {
     switch (cmd) {
       case 'openAiTools':
@@ -535,9 +533,10 @@ export const useInitBridgeListener = () => {
             dispatch(setCreating('none'));
 
             if (selectedNovaTab === NOVA_TAB_TYPE.translation) {
+              console.log('여기를 들어왔자나 맞지 제발!');
               dispatch(
                 setCurrentFile({
-                  type: 'drive',
+                  type: 'local',
                   id: body.fileId,
                   size: body.size,
                   ext: 'drive',
@@ -809,14 +808,12 @@ const Bridge = {
   ) => {
     let apiArg: any;
 
-    if (arg) {
-      if (arg instanceof Blob) {
-        apiArg = await fileToString(arg);
-      } else if (typeof arg === 'object') {
-        apiArg = JSON.stringify(arg);
-      } else {
-        apiArg = arg;
-      }
+    if (arg instanceof Blob) {
+      apiArg = await fileToString(arg);
+    } else if (typeof arg === 'object') {
+      apiArg = JSON.stringify(arg);
+    } else {
+      apiArg = arg;
     }
 
     callApi(api, apiArg);
