@@ -122,6 +122,8 @@ export default function TranslationFileUploader({
   const driveFiles = useAppSelector(getDriveFiles);
   const currentFile = useAppSelector(getCurrentFile);
 
+  console.log('currentFile', currentFile);
+
   const getActiveFile = () => {
     if (localFiles.length > 0) return localFiles[0];
     if (driveFiles.length > 0) return driveFiles[0];
