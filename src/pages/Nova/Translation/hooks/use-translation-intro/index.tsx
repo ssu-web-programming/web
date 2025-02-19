@@ -6,6 +6,8 @@ import translationHttp, {
 import { useShowCreditToast } from 'components/hooks/useShowCreditToast';
 import { usePolling } from 'hooks/use-polling';
 import { overlay } from 'overlay-kit';
+import { setError } from 'store/slices/errorSlice';
+import { useAppDispatch } from 'store/store';
 import { calLeftCredit } from 'util/common';
 
 import LanguageSearch from '../../components/language-search';
@@ -24,6 +26,7 @@ const useTranslationIntro = (translateInputValue: string) => {
     triggerLoading,
     sharedTranslationInfo: { sourceLang, targetLang, isSwitchActive }
   } = useTranslationContext();
+  const dispatch = useAppDispatch();
 
   // 데이터 정제 작업을 위한 Hook
   const { convertFileObject, isDriveActive, sanitizedOriginFile } = useSanitizedDrive();
@@ -91,8 +94,11 @@ const useTranslationIntro = (translateInputValue: string) => {
 
   const submitFileTranslate = async () => {
     triggerLoading();
-
-    await translationRequest({ file: await convertFileObject(), sourceLang, targetLang });
+    try {
+      await translationRequest({ file: await convertFileObject(), sourceLang, targetLang });
+    } catch (e) {
+      handleErrorTrigger({ title: '오류가 발생했습니다. 잠시 후 다시 시작해주세요.' });
+    }
   };
 
   const handleSwitchLang = () => {
@@ -114,6 +120,15 @@ const useTranslationIntro = (translateInputValue: string) => {
         setSharedTranslationInfo={setSharedTranslationInfo}
       />
     ));
+  };
+
+  const handleErrorTrigger = ({ title, onRetry }: { title: string; onRetry?: () => void }) => {
+    dispatch(
+      setError({
+        title,
+        onRetry // 재시도 시 실행할 함수 전달
+      })
+    );
   };
 
   return {

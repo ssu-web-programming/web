@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ButtonWithCredit from 'components/buttons/button-with-credit';
+import { useConfirm } from 'components/Confirm';
 import { ReactComponent as CloseLightIcon } from 'img/light/ico_nova_close.svg';
 import { useTranslation } from 'react-i18next';
 import { activeToast } from 'store/slices/toastSlice';
@@ -21,6 +22,7 @@ type TranslateType = 'TEXT' | 'FILE';
 export default function TranslationIntro() {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const confirm = useConfirm();
   const [type, setType] = useState<TranslateType>('TEXT');
   const [translateInputValue, setTranslateInputValue] = useState('');
 
@@ -53,6 +55,17 @@ export default function TranslationIntro() {
     // File 번역일때 타는 로직!
     submitFileTranslate();
   };
+
+  useEffect(() => {
+    if (sourceLang === targetLang) {
+      confirm({
+        msg: '원본 언어와 번역될 언어가 동일합니다. 다른 언어를 선택해 주세요.',
+        onOk: {
+          text: t('Confirm')
+        }
+      });
+    }
+  }, [sourceLang, targetLang]);
 
   return (
     <>
@@ -88,14 +101,16 @@ export default function TranslationIntro() {
               placeholder="번역할 내용을 입력하세요."
               value={translateInputValue}
               onChange={(e) => {
-                if (e.target.value.length > 10000) {
+                const newValue = e.target.value;
+                if (newValue.length > 10000) {
                   dispatch(
                     activeToast({ type: 'error', msg: '최대 10,000자까지만 입력이 가능합니다.' })
                   );
+                  setTranslateInputValue(newValue.slice(0, 10000));
+                  return;
                 }
-                setTranslateInputValue(e.target.value);
+                setTranslateInputValue(newValue);
               }}
-              maxLength={10000}
             />
             <S.CloseIconWrapper onClick={() => setTranslateInputValue('')}>
               <CloseLightIcon width={24} height={24} />
@@ -115,7 +130,7 @@ export default function TranslationIntro() {
 
         <S.TextAreaBottom>
           <S.StyledDeepL />
-          {type === 'TEXT' && <span>{translateInputValue.length}자/10,000자</span>}
+          {type === 'TEXT' && <span>{translateInputValue.length.toLocaleString()}자/10,000자</span>}
         </S.TextAreaBottom>
       </S.TextAreaWrapper>
 
