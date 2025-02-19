@@ -162,8 +162,8 @@ export default function Nova() {
           <AIChat
             expiredNOVA={expiredNOVA}
             setExpiredNOVA={setExpiredNOVA}
-            createChatSubmitHandler={(submitParam, isAnswer) =>
-              createChatSubmitHandler(submitParam, isAnswer)
+            createChatSubmitHandler={(submitParam, isAnswer, chatType?: SERVICE_TYPE) =>
+              createChatSubmitHandler(submitParam, isAnswer, chatType)
             }
             fileUploadState={fileUploadState}
           />

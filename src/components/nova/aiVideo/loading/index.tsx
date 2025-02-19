@@ -1,8 +1,8 @@
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { apiWrapper } from '../../../../api/apiWrapper';
 import { NOVA_VIDEO_GET_INFO, NOVA_VIDEO_MAKE_VIDEOS } from '../../../../api/constant';
-import { AvatarInfo, EVideoStatus, InitVideos, Videos } from '../../../../constants/heygenTypes';
+import { EVideoStatus, InitVideos } from '../../../../constants/heygenTypes';
 import { NOVA_TAB_TYPE } from '../../../../constants/novaTapTypes';
 import {
   resetPageData,
@@ -10,7 +10,6 @@ import {
   setPageStatus,
   updatePageResult
 } from '../../../../store/slices/nova/pageStatusSlice';
-import { activeToast } from '../../../../store/slices/toastSlice';
 import { useAppDispatch, useAppSelector } from '../../../../store/store';
 import useErrorHandle from '../../../hooks/useErrorHandle';
 import AvatarCard from '../component/AvatarCard';
@@ -18,7 +17,7 @@ import Progress from '../component/Progress';
 
 import * as S from './style';
 
-const POLLING_INTERVAL = 3000;
+const POLLING_INTERVAL = 8000;
 
 export default function Loading() {
   const dispatch = useAppDispatch();
@@ -60,7 +59,7 @@ export default function Loading() {
       const expectedDuration = (result?.info.selectedAvatar.input_text.length || 0) * 60;
 
       setProgress(Math.floor(Math.min((elapsedSeconds / expectedDuration) * 100, 99)));
-    }, 1000);
+    }, POLLING_INTERVAL);
   };
 
   const stopTimer = () => {
@@ -150,6 +149,8 @@ export default function Loading() {
     } catch (error) {
       errorHandle(error);
       stopTimer();
+      dispatch(resetPageData(NOVA_TAB_TYPE.aiVideo));
+      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'home' }));
     }
   };
 

@@ -1,5 +1,5 @@
-import DarkLogo from '../img/dark/nova/ico_logo_nova.svg';
-import LightLogo from '../img/light/nova/ico_logo_nova.svg';
+import DarkLogo from '../img/dark/nova/ico_logo_nova_with_text.svg';
+import LightLogo from '../img/light/nova/ico_logo_nova_with_text.svg';
 import { ThemeType } from '../store/slices/theme';
 import { ClientType, getPlatform } from '../util/bridge';
 

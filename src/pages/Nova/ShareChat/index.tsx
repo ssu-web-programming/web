@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import NovaLogoDarkIcon from 'img/dark/nova/ico_logo_nova.svg';
-import NovaLogoLightIcon from 'img/light/nova/ico_logo_nova.svg';
+import NovaLogoDarkIcon from 'img/dark/nova/ico_logo_nova_with_text.svg';
+import NovaLogoLightIcon from 'img/light/nova/ico_logo_nova_with_text.svg';
 import { marked } from 'marked';
 import { useTranslation } from 'react-i18next';
 import Lottie from 'react-lottie-player';

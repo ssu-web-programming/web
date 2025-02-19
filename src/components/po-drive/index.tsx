@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import CheckBox from 'components/CheckBox';
+import CheckBox from 'components/checkbox';
 import useManageFile from 'components/hooks/nova/useManageFile';
 import useUserInfoUtils from 'components/hooks/useUserInfoUtils';
 import Icon from 'components/Icon';

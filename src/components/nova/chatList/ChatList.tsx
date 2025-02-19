@@ -43,12 +43,17 @@ import Bridge, { ClientType, getPlatform } from 'util/bridge';
 import { getFileExtension, sliceFileName } from 'util/common';
 
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
-import { getMenuItemsFromServiceGroup, SERVICE_TYPE } from '../../../constants/serviceType';
+import {
+  getChatGroupKey,
+  getMenuItemsFromServiceGroup,
+  getServiceGroupInfo,
+  SERVICE_TYPE
+} from '../../../constants/serviceType';
 import { selectAllServiceCredits } from '../../../store/slices/nova/pageStatusSlice';
 import { themeInfoSelector } from '../../../store/slices/theme';
 import { setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
 import { blobToFile } from '../../../util/files';
-import CheckBox from '../../CheckBox';
+import CheckBox from '../../checkbox';
 import useCopyText from '../../hooks/copyText';
 import { useInsertDocsHandler } from '../../hooks/nova/useInsertDocsHandler';
 import SelectBox from '../../selectBox';
@@ -61,7 +66,11 @@ import * as S from './style';
 
 interface ChatListProps {
   novaHistory: NovaChatType[];
-  createChatSubmitHandler: (submitParam: InputBarSubmitParam, isAnswer: boolean) => void;
+  createChatSubmitHandler: (
+    submitParam: InputBarSubmitParam,
+    isAnswer: boolean,
+    chatType?: SERVICE_TYPE
+  ) => void;
   onSave: (history: NovaChatType) => void;
   scrollHandler: (e: React.UIEvent<HTMLDivElement>) => void;
   expiredNOVA: boolean;
@@ -316,6 +325,18 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                       </S.MakeNewImageGuide>
                     )}
                     <S.ChatButtonWrapper>
+                      {creating != 'NOVA' && !expiredNOVA && item.isAnswer && (
+                        <S.ChatMode>
+                          <span>
+                            {item.chatType === SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO
+                              ? 'Perplexity R-Pro'
+                              : getServiceGroupInfo(
+                                  getChatGroupKey(item.chatType) || '',
+                                  isLightMode
+                                ).label}
+                          </span>
+                        </S.ChatMode>
+                      )}
                       {chatButtonList
                         .filter((btn) => btn.status.includes(item.status))
                         .map((btn) => (
@@ -338,7 +359,8 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                         !expiredNOVA &&
                         [...novaHistory].reverse().find((item) => item.isAnswer === false)?.id ===
                           item.id &&
-                        item.chatType !== SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO && (
+                        item.chatType !== SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO &&
+                        item.chatType !== SERVICE_TYPE.NOVA_WEBSEARCH_PERPLEXITY && (
                           <SelectBox
                             placeHolder={'다른 답변 보기'}
                             minWidth={290}
@@ -349,14 +371,25 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                               isLightMode,
                               t
                             ).filter((item) => item.key !== chatMode)}
-                            setSelectedItem={(selectedItem: string) => {
-                              createChatSubmitHandler(
-                                {
-                                  input: item.input,
-                                  type: ''
-                                },
-                                true
-                              );
+                            setSelectedItem={(selectedItem) => {
+                              if (
+                                Object.values(SERVICE_TYPE).includes(selectedItem as SERVICE_TYPE)
+                              ) {
+                                console.log(selectedItem);
+                                console.log(selectedItem as SERVICE_TYPE);
+                              }
+                              if (
+                                Object.values(SERVICE_TYPE).includes(selectedItem as SERVICE_TYPE)
+                              ) {
+                                createChatSubmitHandler(
+                                  {
+                                    input: item.input,
+                                    type: ''
+                                  },
+                                  true,
+                                  selectedItem as SERVICE_TYPE
+                                );
+                              }
                             }}
                             selectBoxCssExt={css`
                               border: 1px solid

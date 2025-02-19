@@ -67,11 +67,25 @@ export const ChatButtonWrapper = styled.div`
   flex-direction: row;
   align-items: center;
   gap: 12px;
-  margin-top: 12px;
+  margin-top: 8px;
 
   button > div {
     gap: 4px;
   }
+`;
+
+export const ChatMode = styled.div`
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 6px;
+  background: ${({ theme }) => theme.color.background.gray09};
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+  color: ${({ theme }) => theme.color.text.highlight01};
 `;
 
 export const FileItem = styled.div`

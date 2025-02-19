@@ -8,11 +8,13 @@ interface OverlayModalProps {
   children: React.ReactNode;
   width?: string;
   height?: string;
+  padding?: string;
 }
 
 interface ModalContentProps {
   width: string;
   height: string;
+  padding: string;
 }
 
 const OverlayModal: React.FC<OverlayModalProps> = ({
@@ -20,7 +22,8 @@ const OverlayModal: React.FC<OverlayModalProps> = ({
   onClose,
   children,
   width = '500px',
-  height = 'auto'
+  height = 'auto',
+  padding = '20px'
 }) => {
   useEffect(() => {
     if (isOpen) {
@@ -35,7 +38,11 @@ const OverlayModal: React.FC<OverlayModalProps> = ({
 
   return createPortal(
     <ModalWrapper onClick={onClose}>
-      <ModalContent onClick={(e) => e.stopPropagation()} width={width} height={height}>
+      <ModalContent
+        onClick={(e) => e.stopPropagation()}
+        width={width}
+        height={height}
+        padding={padding}>
         {children}
       </ModalContent>
     </ModalWrapper>,
@@ -57,8 +64,9 @@ const ModalWrapper = styled.div`
 `;
 
 const ModalContent = styled.div<ModalContentProps>`
+  position: relative;
   background: ${({ theme }) => theme.color.background.gray05};
-  padding: 20px;
+  padding: ${(props) => props.padding};
   border-radius: 16px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   width: ${(props) => props.width};

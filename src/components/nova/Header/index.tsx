@@ -52,7 +52,6 @@ import CreditInfo from '../creditInfo';
 import { ScreenChangeButton } from '../ScreenChangeButton';
 
 import * as S from './style';
-import { ChatMode } from './style';
 
 export interface NovaHeaderProps {
   setInputContents?: React.Dispatch<React.SetStateAction<string>>;
@@ -144,10 +143,6 @@ export default function NovaHeader(props: NovaHeaderProps) {
   };
 
   const resetPage = async () => {
-    if (selectedNovaTab === NOVA_TAB_TYPE.aiChat && novaHistory.length > 0) {
-      await newChat(true);
-    }
-
     dispatch(setLocalFiles([]));
     dispatch(setDriveFiles([]));
     dispatch(setPageStatus({ tab: selectedNovaTab, status: 'home' }));
@@ -218,13 +213,13 @@ export default function NovaHeader(props: NovaHeaderProps) {
             )}
             {(selectedNovaTab === NOVA_TAB_TYPE.aiChat ||
               selectedNovaTab === NOVA_TAB_TYPE.perplexity) && (
-              <ChatMode>
+              <S.ChatMode>
                 <span>
                   {chatMode === SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO
                     ? 'Perplexity R-Pro'
                     : getServiceGroupInfo(getChatGroupKey(chatMode) || '', isLightMode).label}
                 </span>
-              </ChatMode>
+              </S.ChatMode>
             )}
           </S.TitleWrapper>
           <S.ButtonWrapper>
@@ -235,21 +230,23 @@ export default function NovaHeader(props: NovaHeaderProps) {
               }}>
               theme
             </button>
-            {novaHistory.length > 0 && selectedNovaTab === NOVA_TAB_TYPE.aiChat && (
-              <IconButton
-                iconComponent={
-                  creating != 'NOVA'
-                    ? isLightMode
-                      ? MessagePlusLightIcon
-                      : MessagePlusDarkIcon
-                    : MessagePlusDisabledIcon
-                }
-                onClick={() => newChat()}
-                iconSize="lg"
-                width={32}
-                height={32}
-              />
-            )}
+            {novaHistory.length > 0 &&
+              (selectedNovaTab === NOVA_TAB_TYPE.aiChat ||
+                selectedNovaTab === NOVA_TAB_TYPE.perplexity) && (
+                <IconButton
+                  iconComponent={
+                    creating != 'NOVA'
+                      ? isLightMode
+                        ? MessagePlusLightIcon
+                        : MessagePlusDarkIcon
+                      : MessagePlusDisabledIcon
+                  }
+                  onClick={() => newChat()}
+                  iconSize="lg"
+                  width={32}
+                  height={32}
+                />
+              )}
             <CreditInfo />
             <ScreenChangeButton></ScreenChangeButton>
             {isDesktop && (
