@@ -5,6 +5,8 @@ import { ReactComponent as DarkLang } from 'img/dark/nova/voice-dictation/lang.s
 import { ReactComponent as DarkStop } from 'img/dark/nova/voice-dictation/stop.svg';
 import { ReactComponent as Lang } from 'img/light/nova/voiceDictation/lang.svg';
 import { ReactComponent as Stop } from 'img/light/nova/voiceDictation/stop.svg';
+import { ClientType, getPlatform } from 'util/bridge';
+import { getSupportedMimeType } from 'util/getAudioDuration';
 
 import { LangOptionValues } from '../../provider/voice-dictation-provider';
 import { langOptions } from '../recognized-lang';
@@ -170,7 +172,11 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
 
       streamRef.current = stream;
 
-      const mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/mp4' });
+      const mimeType = getSupportedMimeType();
+      console.log('window 가능한 type', mimeType);
+      const mediaRecorder = new MediaRecorder(stream, {
+        mimeType: getPlatform() === ClientType.windows ? 'audio/webm' : 'video/mp4'
+      });
       mediaRecorderRef.current = mediaRecorder;
       chunksRef.current = [];
 
