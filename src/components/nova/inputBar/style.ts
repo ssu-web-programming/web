@@ -153,7 +153,7 @@ export const NovaRecentChat = styled.div`
 
 export const InputWrap = styled.div`
   width: 100%;
-  height: 48px;
+  min-height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
