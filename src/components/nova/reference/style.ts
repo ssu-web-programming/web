@@ -102,7 +102,6 @@ export const SheetWrap = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: center;
   gap: 8px;
   padding: 0 0 16px 0;
   overflow-y: auto;
