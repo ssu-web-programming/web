@@ -53,7 +53,6 @@ export default function VoiceAudioRecorder() {
   return (
     <AudioRecorder
       onRecordingComplete={async (blob) => {
-        console.log('Recording completed:', blob);
         handleMoveToReady(blobToFile(blob));
       }}
       isInitRecording={isVoiceRecording}

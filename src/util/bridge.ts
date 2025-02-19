@@ -120,7 +120,6 @@ const callApi = (api: ApiType, arg?: string | number | object | boolean) => {
     const platform = getPlatform();
     switch (platform) {
       case ClientType.android: {
-        console.log('Android Bridge 호출', api);
         window.Native[api](arg);
         break;
       }
@@ -254,7 +253,6 @@ const callApi = (api: ApiType, arg?: string | number | object | boolean) => {
             break;
           }
           case 'getRecordingState': {
-            console.log('getRecordingState 전달되는 값22!', arg);
             if (window.webkit.messageHandlers.getRecordingState) {
               window.webkit.messageHandlers.getRecordingState.postMessage(arg);
             }
@@ -522,18 +520,15 @@ export const useInitBridgeListener = () => {
           }
           case 'finishUploadFile': {
             // dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiChat, status: 'home' }));
-            console.log('selectedNovaTab', selectedNovaTab);
             dispatch(setLocalFiles([]));
             dispatch(setDriveFiles([]));
             dispatch(setLoadingFile({ id: body.fileId }));
             const currentFile = await getFileInfo(body.fileId);
-            console.log('finishUploadFile-currentFile', currentFile);
             dispatch(removeLoadingFile());
             dispatch(setPageStatus({ tab: selectedNovaTab, status: 'home' }));
             dispatch(setCreating('none'));
 
             if (selectedNovaTab === NOVA_TAB_TYPE.translation) {
-              console.log('여기를 들어왔자나 맞지 제발!');
               dispatch(
                 setCurrentFile({
                   type: 'local',

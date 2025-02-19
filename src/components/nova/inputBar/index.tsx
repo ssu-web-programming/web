@@ -212,8 +212,6 @@ export default function InputBar(props: InputBarProps) {
     }
   ];
 
-  console.log('selectedNovaTab', getValidExt(selectedNovaTab));
-
   return (
     <S.InputBarBase disabled={disabled || expiredNOVA}>
       {pastedImages.length > 0 && (

@@ -66,3 +66,8 @@ export const changeFileExtension = (filename: string, extension: string) => {
 
   return `${baseFileName}.${extension}`;
 };
+
+export const getSupportedMimeType = () => {
+  const types = ['audio/webm', 'audio/mp4', 'audio/ogg', 'audio/wav', 'audio/webm;codecs=opus'];
+  return types.find((type) => MediaRecorder.isTypeSupported(type)) || '';
+};
