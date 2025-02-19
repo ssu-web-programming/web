@@ -79,3 +79,78 @@ export const getSupportedMimeType = () => {
   const types = ['audio/webm', 'audio/mp4', 'audio/ogg', 'audio/wav', 'audio/webm;codecs=opus'];
   return types.find((type) => MediaRecorder.isTypeSupported(type)) || '';
 };
+
+export const convertWebmToWavFile = async (webmBlob: Blob): Promise<File> => {
+  try {
+    // WebM을 AudioBuffer로 변환
+    const arrayBuffer = await webmBlob.arrayBuffer();
+    const audioContext = new AudioContext();
+    const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+
+    // AudioBuffer를 WAV로 변환
+    const wavBuffer = audioBufferToWav(audioBuffer);
+    const wavFile = new File([wavBuffer], `audio_${Date.now()}.wav`, {
+      type: 'audio/wav',
+      lastModified: Date.now()
+    });
+
+    return wavFile;
+  } catch (error) {
+    console.error('Error converting audio to WAV:', error);
+    throw error;
+  }
+};
+
+// WAV 변환을 위한 유틸리티 함수들
+const audioBufferToWav = (buffer: AudioBuffer): ArrayBuffer => {
+  const numChannels = buffer.numberOfChannels;
+  const sampleRate = buffer.sampleRate;
+  const format = 1; // PCM
+  const bitDepth = 16;
+
+  const blockAlign = (numChannels * bitDepth) / 8;
+  const byteRate = sampleRate * blockAlign;
+  const dataSize = buffer.length * blockAlign;
+
+  const headerSize = 44;
+  const wav = new ArrayBuffer(headerSize + dataSize);
+  const view = new DataView(wav);
+
+  // WAV 헤더 작성
+  writeString(view, 0, 'RIFF');
+  view.setUint32(4, 36 + dataSize, true);
+  writeString(view, 8, 'WAVE');
+  writeString(view, 12, 'fmt ');
+  view.setUint32(16, 16, true);
+  view.setUint16(20, format, true);
+  view.setUint16(22, numChannels, true);
+  view.setUint32(24, sampleRate, true);
+  view.setUint32(28, byteRate, true);
+  view.setUint16(32, blockAlign, true);
+  view.setUint16(34, bitDepth, true);
+  writeString(view, 36, 'data');
+  view.setUint32(40, dataSize, true);
+
+  // 오디오 데이터 작성
+  const offset = 44;
+  const channels = [];
+  for (let i = 0; i < numChannels; i++) {
+    channels.push(buffer.getChannelData(i));
+  }
+
+  for (let i = 0; i < buffer.length; i++) {
+    for (let channel = 0; channel < numChannels; channel++) {
+      const sample = Math.max(-1, Math.min(1, channels[channel][i]));
+      const value = sample < 0 ? sample * 0x8000 : sample * 0x7fff;
+      view.setInt16(offset + i * blockAlign + (channel * bitDepth) / 8, value, true);
+    }
+  }
+
+  return wav;
+};
+
+const writeString = (view: DataView, offset: number, string: string): void => {
+  for (let i = 0; i < string.length; i++) {
+    view.setUint8(offset + i, string.charCodeAt(i));
+  }
+};

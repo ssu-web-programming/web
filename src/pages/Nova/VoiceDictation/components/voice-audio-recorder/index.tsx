@@ -5,7 +5,7 @@ import { themeInfoSelector } from 'store/slices/theme';
 import { setLocalFiles } from 'store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import Bridge, { ClientType, getPlatform } from 'util/bridge';
-import { blobToFile, windowBlobToFile } from 'util/getAudioDuration';
+import { blobToFile, convertWebmToWavFile, windowBlobToFile } from 'util/getAudioDuration';
 
 import { useVoiceDictationContext } from '../../provider/voice-dictation-provider';
 import AudioRecorder from '../audio-recorder';
@@ -54,9 +54,9 @@ export default function VoiceAudioRecorder() {
     <AudioRecorder
       onRecordingComplete={async (blob) => {
         console.log('완료된 blob', blob);
-        console.log('파일객체로 변환된 blob', windowBlobToFile(blob));
+        console.log('파일객체로 변환된 blob', await convertWebmToWavFile(blob));
         handleMoveToReady(
-          getPlatform() === ClientType.windows ? windowBlobToFile(blob) : blobToFile(blob)
+          getPlatform() === ClientType.windows ? await convertWebmToWavFile(blob) : blobToFile(blob)
         );
       }}
       isInitRecording={isVoiceRecording}
