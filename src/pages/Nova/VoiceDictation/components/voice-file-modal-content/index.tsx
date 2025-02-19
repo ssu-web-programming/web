@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { overlay } from 'overlay-kit';
+import { useTranslation } from 'react-i18next';
 
 import * as S from './style';
 
@@ -9,7 +10,7 @@ interface Props {
 
 export default function VoiceFileModalContent({ onSave }: Props) {
   const [fileType, setFileType] = useState<'txt' | 'pdf'>('txt'); // 기본값을 'txt'로 설정
-
+  const { t } = useTranslation();
   const handleClose = () => {
     overlay.closeAll();
   };
@@ -21,7 +22,7 @@ export default function VoiceFileModalContent({ onSave }: Props) {
 
   return (
     <S.ModalContainer>
-      <S.ModalTitle>어떤 파일 형식으로 저장할까요?</S.ModalTitle>
+      <S.ModalTitle>{t('Nova.voiceDictation.Alert.FileFormatSelection')}</S.ModalTitle>
 
       <S.RadioGroup>
         <S.RadioLabel>
@@ -32,7 +33,7 @@ export default function VoiceFileModalContent({ onSave }: Props) {
             checked={fileType === 'txt'}
             onChange={(e) => setFileType(e.target.value as 'txt' | 'pdf')}
           />
-          <S.RadioText>텍스트 문서(.txt)</S.RadioText>
+          <S.RadioText>{t('Nova.voiceDictation.FileFormat.Options.Text')}</S.RadioText>
         </S.RadioLabel>
 
         <S.RadioLabel>
@@ -43,14 +44,14 @@ export default function VoiceFileModalContent({ onSave }: Props) {
             checked={fileType === 'pdf'}
             onChange={(e) => setFileType(e.target.value as 'txt' | 'pdf')}
           />
-          <S.RadioText>pdf 문서(.pdf)</S.RadioText>
+          <S.RadioText>{t('Nova.voiceDictation.FileFormat.Options.Pdf')}</S.RadioText>
         </S.RadioLabel>
       </S.RadioGroup>
 
       <S.ButtonGroup>
-        <S.Button onClick={handleClose}>취소</S.Button>
+        <S.Button onClick={handleClose}>{t('Nova.voiceDictation.Button.Cancel')}</S.Button>
         <S.Button primary onClick={handleSave}>
-          저장하기
+          {t('Nova.voiceDictation.Button.Save')}
         </S.Button>
       </S.ButtonGroup>
     </S.ModalContainer>

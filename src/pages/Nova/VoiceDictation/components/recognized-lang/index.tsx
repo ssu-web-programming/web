@@ -1,4 +1,6 @@
 import Select from 'components/select';
+import { TFunction } from 'i18next';
+import { useTranslation } from 'react-i18next';
 import styled, { css } from 'styled-components';
 
 import {
@@ -20,16 +22,28 @@ export const langOptions: Option[] = [
   { value: 'enko', label: '한국어+영어' }
 ];
 
+export const getLangOptions = (t: TFunction) =>
+  [
+    { value: 'ko-KR', label: t('Nova.voiceDictation.LanguageSelector.Options.Korean') },
+    { value: 'en-US', label: t('Nova.voiceDictation.LanguageSelector.Options.English') },
+    { value: 'ja', label: t('Nova.voiceDictation.LanguageSelector.Options.Japanese') },
+    { value: 'zh-cn', label: t('Nova.voiceDictation.LanguageSelector.Options.Chinese1') },
+    { value: 'zh-tw', label: t('Nova.voiceDictation.LanguageSelector.Options.Chinese2') },
+    { value: 'enko', label: t('Nova.voiceDictation.LanguageSelector.Options.KoEn') }
+  ] as Option[];
+
 export default function RecognizedLang() {
   const {
     setSharedVoiceDictationInfo,
     sharedVoiceDictationInfo: { selectedLangOption }
   } = useVoiceDictationContext();
+  const { t } = useTranslation();
+  const options = getLangOptions(t);
 
   return (
     <S.SelectWrapper>
       <Select<LangOptionValues>
-        options={langOptions}
+        options={options}
         value={selectedLangOption}
         onChange={(result) => {
           setSharedVoiceDictationInfo((prev) => ({

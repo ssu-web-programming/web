@@ -68,8 +68,8 @@ export default function VoiceDictationIntro() {
       <RecognizedLang />
       <S.BoxWrapper onClick={startRecording}>
         <GuideBox
-          guideTitle="실시간 받아쓰기"
-          guideMsg={'최대 30분 가능합니다.'}
+          guideTitle={t(`Nova.voiceDictation.Button.LiveDictation`)}
+          guideMsg={t('Nova.voiceDictation.Guide.TimeLimit')}
           lightIcon={<MicLightIcon />}
           darkIcon={<MicDarkIcon />}
         />

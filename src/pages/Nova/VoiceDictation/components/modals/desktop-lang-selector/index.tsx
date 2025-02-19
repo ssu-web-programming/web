@@ -4,6 +4,7 @@ import {
   LangOptionValues,
   useVoiceDictationContext
 } from 'pages/Nova/VoiceDictation/provider/voice-dictation-provider';
+import { useTranslation } from 'react-i18next';
 import { themeInfoSelector } from 'store/slices/theme';
 import { activeToast } from 'store/slices/toastSlice';
 import { useAppDispatch, useAppSelector } from 'store/store';
@@ -19,6 +20,7 @@ export default function DesktopLangSelector() {
   } = useVoiceDictationContext();
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
 
   const findLabelByLangOptions = (lang: LangOptionValues) => {
     return langOptions.find((langOption) => langOption.value === lang)?.label;
@@ -58,7 +60,7 @@ export default function DesktopLangSelector() {
   return (
     <S.ModalContainer>
       <S.ModalTitle>인식 언어</S.ModalTitle>
-      <S.ModalSubTitle>선택한 언어로 기록합니다.</S.ModalSubTitle>
+      <S.ModalSubTitle>{t('Nova.voiceDictation.Guide.LanguageConversion')}</S.ModalSubTitle>
 
       <S.RadioGroup>
         <S.RadioLabel>
@@ -70,7 +72,7 @@ export default function DesktopLangSelector() {
             checked={selectedLangOption === 'ko-KR'}
             onChange={handleChangeLang}
           />
-          <S.RadioText>한국어</S.RadioText>
+          <S.RadioText>{t('Nova.voiceDictation.LanguageSelector.Options.Korean')}</S.RadioText>
         </S.RadioLabel>
 
         <S.RadioLabel>
@@ -82,7 +84,7 @@ export default function DesktopLangSelector() {
             checked={selectedLangOption === 'en-US'}
             onChange={handleChangeLang}
           />
-          <S.RadioText>영어</S.RadioText>
+          <S.RadioText>{t('Nova.voiceDictation.LanguageSelector.Options.English')}</S.RadioText>
         </S.RadioLabel>
 
         <S.RadioLabel>
@@ -94,7 +96,7 @@ export default function DesktopLangSelector() {
             checked={selectedLangOption === 'ja'}
             onChange={handleChangeLang}
           />
-          <S.RadioText>일본어</S.RadioText>
+          <S.RadioText>{t('Nova.voiceDictation.LanguageSelector.Options.Japanese')}</S.RadioText>
         </S.RadioLabel>
 
         <S.RadioLabel>
@@ -106,7 +108,7 @@ export default function DesktopLangSelector() {
             checked={selectedLangOption === 'zh-cn'}
             onChange={handleChangeLang}
           />
-          <S.RadioText>중국어(간체)</S.RadioText>
+          <S.RadioText>{t('Nova.voiceDictation.LanguageSelector.Options.Chinese1')}</S.RadioText>
         </S.RadioLabel>
 
         <S.RadioLabel>
@@ -118,7 +120,7 @@ export default function DesktopLangSelector() {
             checked={selectedLangOption === 'zh-tw'}
             onChange={handleChangeLang}
           />
-          <S.RadioText>중국어(번체)</S.RadioText>
+          <S.RadioText>{t('Nova.voiceDictation.LanguageSelector.Options.Chinese2')}</S.RadioText>
         </S.RadioLabel>
 
         <S.RadioLabel>
@@ -130,14 +132,14 @@ export default function DesktopLangSelector() {
             checked={selectedLangOption === 'enko'}
             onChange={handleChangeLang}
           />
-          <S.RadioText>한국어+영어</S.RadioText>
+          <S.RadioText>{t('Nova.voiceDictation.LanguageSelector.Options.KoEn')}</S.RadioText>
         </S.RadioLabel>
       </S.RadioGroup>
 
       <S.ButtonGroup>
-        <S.Button onClick={handleClose}>취소</S.Button>
+        <S.Button onClick={handleClose}>{t('Nova.voiceDictation.Button.Cancel')}</S.Button>
         <S.Button primary onClick={handleSave}>
-          확인
+          {t('Nova.voiceDictation.Button.Confirm')}
         </S.Button>
       </S.ButtonGroup>
     </S.ModalContainer>
