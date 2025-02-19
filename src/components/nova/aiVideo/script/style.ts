@@ -58,11 +58,20 @@ export const TextWrap = styled.div<{ isActive: boolean }>`
   align-items: center;
   justify-content: space-between;
   padding: 8px;
-  gap: 10px;
+  gap: 8px;
   border: 1px solid
     ${({ isActive, theme }) => (isActive ? 'var(--ai-purple-50-main)' : theme.color.border.gray01)};
   border-radius: 8px;
   background: ${({ theme }) => (theme.mode === 'light' ? 'var(--white)' : 'none')};
+
+  .length {
+    width: 100%;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 14.32px;
+    text-align: left;
+    color: ${({ theme }) => theme.color.text.gray09};
+  }
 `;
 
 export const TextArea = styled.textarea<{ isEnabled: boolean }>`

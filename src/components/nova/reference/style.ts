@@ -105,6 +105,7 @@ export const SheetWrap = styled.div`
   justify-content: center;
   gap: 8px;
   padding: 0 0 16px 0;
+  overflow-y: auto;
 `;
 
 export const SheetHeader = styled.div`
