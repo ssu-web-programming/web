@@ -26,6 +26,8 @@ export default function VoiceSaveBottomSheet({ isOpened, setIsOpened }: Props) {
   } = useVoiceDictationContext();
 
   const handleDownloadVoiceFile = async () => {
+    overlay.closeAll();
+
     dispatch(activeLoadingSpinner());
     await Bridge.callBridgeApi('downloadVoiceFile', {
       fileName,
