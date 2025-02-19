@@ -313,7 +313,7 @@
       },
       "tools": {
         "title": "도구",
-        "perplexity": "AI 채팅",
+        "perplexity": "웹 검색",
         "translation": "번역",
         "voiceDictation": "받아쓰기",
         "aiVideo": "AI 비디오"

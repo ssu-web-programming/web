@@ -36,9 +36,10 @@ export const AIToolWrap = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 8px;
 
   div {
+    flex: 1;
     min-width: 76px;
     display: flex;
     flex-direction: column;
@@ -50,7 +51,7 @@ export const AIToolWrap = styled.div`
 
   img {
     width: 56px;
-    height: 56px;
+    height: 49px;
   }
 
   span {
@@ -64,7 +65,7 @@ export const AIToolWrap = styled.div`
 export const AIImageWrap = styled.div`
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(93px, auto));
   gap: 8px;
 `;
 
