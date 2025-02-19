@@ -521,6 +521,7 @@ export const useInitBridgeListener = () => {
                 isSaved: body.isSaved
               })
             );
+
             break;
           }
           case 'finishUploadFile': {
