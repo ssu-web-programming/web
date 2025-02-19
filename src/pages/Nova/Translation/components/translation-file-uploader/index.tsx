@@ -126,14 +126,10 @@ export default function TranslationFileUploader({
     if (localFiles.length > 0) return localFiles[0];
     if (driveFiles.length > 0) return driveFiles[0];
 
-    const isExistCurrentFile = currentFile.id === '' || (currentFile.id as any) === 0;
+    const isNotExistCurrentFile = currentFile.id === '' || (currentFile.id as any) === 0;
 
-    return isExistCurrentFile ? null : currentFile;
+    return isNotExistCurrentFile ? null : currentFile;
   };
-
-  console.log('currentFile', currentFile);
-  console.log('curTab', curTab);
-  console.log('getActiveFile', getActiveFile());
 
   return (
     <Wrap>

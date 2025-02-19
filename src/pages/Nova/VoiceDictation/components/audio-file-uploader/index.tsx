@@ -33,14 +33,8 @@ export default function AudioFileUploader({
   creditCount = 10,
   onNext
 }: ImageUploaderProps) {
-  const { isLightMode } = useAppSelector(themeInfoSelector);
-  const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
   const { setSharedVoiceDictationInfo } = useVoiceDictationContext();
   const dispatch = useAppDispatch();
-
-  const localFiles = useAppSelector(getLocalFiles);
-
-  console.log('localFiles', localFiles);
 
   const target = 'nova-voice-dictation';
   const inputRef = useRef<HTMLInputElement | null>(null);

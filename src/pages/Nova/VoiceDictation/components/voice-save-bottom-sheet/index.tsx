@@ -24,7 +24,6 @@ export default function VoiceSaveBottomSheet({ isOpened, setIsOpened }: Props) {
   } = useVoiceDictationContext();
 
   const handleDownloadVoiceFile = async () => {
-    console.log('voice-fileName', fileName);
     dispatch(activeLoadingSpinner());
     await Bridge.callBridgeApi('downloadVoiceFile', {
       fileName,
@@ -46,9 +45,6 @@ export default function VoiceSaveBottomSheet({ isOpened, setIsOpened }: Props) {
   };
 
   const handleDownloadScriptFile = async (type: 'txt' | 'pdf') => {
-    console.log('fileName', fileName);
-    console.log('changeFileExtension', changeFileExtension(fileName, type));
-
     dispatch(activeLoadingSpinner());
     const result = await voiceDictationHttp.postVoiceDownload({
       fileType: type,
