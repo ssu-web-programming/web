@@ -35,6 +35,7 @@ import { selectNovaTab, setCreating } from '../store/slices/tabSlice';
 import { activeToast } from '../store/slices/toastSlice';
 import { updateT2ICurItemIndex, updateT2ICurListId } from '../store/slices/txt2imgHistory';
 import {
+  removeCurrentFile,
   removeLoadingFile,
   setCurrentFile,
   setDriveFiles,
@@ -431,6 +432,10 @@ export const useInitBridgeListener = () => {
 
             if (body.openTab in NOVA_TAB_TYPE) {
               const tab = body.openTab;
+              if (tab === NOVA_TAB_TYPE.translation) {
+                console.log('여기 들어옴!');
+                removeCurrentFile();
+              }
               dispatch(resetPageData(tab));
               dispatch(setDriveFiles([]));
               dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.home, status: 'home' }));
@@ -512,6 +517,7 @@ export const useInitBridgeListener = () => {
             break;
           }
           case 'getFileInfo': {
+            console.log('getFileInfo 동작함!');
             dispatch(
               setCurrentFile({
                 type: body.type,
