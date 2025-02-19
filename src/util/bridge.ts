@@ -11,6 +11,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { useConfirm } from '../components/Confirm';
 import useManageFile from '../components/hooks/nova/useManageFile';
 import { NOVA_TAB_TYPE } from '../constants/novaTapTypes';
+import { SERVICE_TYPE } from '../constants/serviceType';
 import gI18n, { convertLangFromLangCode } from '../locale';
 import {
   setIsClosedNovaState,
@@ -21,6 +22,7 @@ import {
 import { AskDocStatus, setSrouceId, setStatus } from '../store/slices/askDoc';
 import { setFiles } from '../store/slices/askDocAnalyzeFiesSlice';
 import { initConfirm } from '../store/slices/confirm';
+import { setChatMode } from '../store/slices/nova/novaHistorySlice';
 import {
   resetPageData,
   resetPageResult,
@@ -434,6 +436,9 @@ export const useInitBridgeListener = () => {
               dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.home, status: 'home' }));
               dispatch(setLocalFiles([]));
               dispatch(selectNovaTab(NOVA_TAB_TYPE[body.openTab as keyof typeof NOVA_TAB_TYPE]));
+              if (body.openTab === NOVA_TAB_TYPE.perplexity) {
+                dispatch(setChatMode(SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO));
+              }
               const isBlob = body.image instanceof Blob && body.image.size > 0;
               const isBase64 = typeof body.image === 'string' && body.image.startsWith('data:');
               const showCreditGuide =

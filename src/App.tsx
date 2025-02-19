@@ -69,7 +69,7 @@ function App() {
   useEffect(() => {
     const fetchInit = async () => {
       if (getPlatform() === ClientType.windows || getPlatform() === ClientType.mac) {
-        dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiChat, status: 'progress' }));
+        dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.home, status: 'progress' }));
       }
 
       if (!location.pathname.toLowerCase().startsWith('/nova/share')) {

@@ -97,7 +97,6 @@ const pageSlice = createSlice({
       state: PageStateType,
       action: PayloadAction<{ tab: T; status: PageStatus[T] }>
     ) => {
-      console.log(action.payload.tab, ': ', action.payload.status);
       state.status[action.payload.tab] = action.payload.status;
     },
     resetPageStatus: <T extends keyof PageStatus>(
