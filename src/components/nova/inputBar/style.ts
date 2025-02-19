@@ -123,6 +123,7 @@ export const PromptWrap = styled.div`
 export const NovaRecentChat = styled.div`
   width: 100%;
   height: 36px;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -138,6 +139,15 @@ export const NovaRecentChat = styled.div`
     font-weight: 500;
     line-height: 19.5px;
     color: ${({ theme }) => theme.color.text.main};
+  }
+
+  .close {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: 7px;
+    right: 12px;
+    cursor: pointer;
   }
 `;
 

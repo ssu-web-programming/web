@@ -45,9 +45,11 @@ import {
 } from '../../../constants/serviceType';
 import { ReactComponent as DocsIconDark } from '../../../img/dark/ico_input_upload_docs.svg';
 import { ReactComponent as ImagesIconDark } from '../../../img/dark/ico_input_upload_images.svg';
+import CloseDarkIcon from '../../../img/dark/ico_nova_close.svg';
 import NovaLogoDarkIcon from '../../../img/dark/nova/ico_logo_nova.svg';
 import { ReactComponent as DocsIconLight } from '../../../img/light/ico_input_upload_docs.svg';
 import { ReactComponent as ImagesIconLight } from '../../../img/light/ico_input_upload_images.svg';
+import CloseLightIcon from '../../../img/light/ico_nova_close.svg';
 import NovaLogoLightIcon from '../../../img/light/nova/ico_logo_nova.svg';
 import LoadingSpinner from '../../../img/light/spinner.webp';
 import {
@@ -67,6 +69,8 @@ import {
   setDriveFiles,
   setLocalFiles
 } from '../../../store/slices/uploadFiles';
+import { useConfirm } from '../../Confirm';
+import { useChatNova } from '../../hooks/useChatNova';
 import SelectBox from '../../selectBox';
 import { FileUploader } from '../FileUploader';
 
@@ -89,6 +93,8 @@ interface InputBarProps {
 export default function InputBar(props: InputBarProps) {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const confirm = useConfirm();
+  const chatNova = useChatNova();
   const { disabled = false, expiredNOVA = false, contents = '', setContents } = props;
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const localFiles = useAppSelector(getLocalFiles);
@@ -230,6 +236,32 @@ export default function InputBar(props: InputBarProps) {
     }
   };
 
+  const handleCloseChat = async (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+
+    const ret = await confirm({
+      title: '',
+      msg: '잠깐! NOVA와의 최근 대화를 종료하시겠어요?',
+      onCancel: {
+        text: t(`Cancel`)!,
+        callback: () => {}
+      },
+      onOk: {
+        text: '종료하기',
+        callback: () => {}
+      },
+      direction: 'row'
+    });
+
+    if (ret) {
+      await chatNova.newChat();
+      handleClearPastedImages();
+      setContents('');
+      dispatch(setLocalFiles([]));
+      dispatch(setDriveFiles([]));
+    }
+  };
+
   return (
     <S.InputBarBase disabled={disabled || expiredNOVA}>
       {pastedImages.length > 0 && (
@@ -312,6 +344,12 @@ export default function InputBar(props: InputBarProps) {
               <S.NovaRecentChat onClick={handleMoveChat}>
                 <img src={isLightMode ? NovaLogoLightIcon : NovaLogoDarkIcon} alt="logo" />
                 <span>NOVA와의 최근 대화</span>
+                <img
+                  src={isLightMode ? CloseLightIcon : CloseDarkIcon}
+                  alt="close"
+                  className="close"
+                  onClick={handleCloseChat}
+                />
               </S.NovaRecentChat>
             )}
           </S.PromptWrap>
