@@ -428,7 +428,7 @@ export const useInitBridgeListener = () => {
               })
             );
 
-            if (body.isStartedByRibbon) dispatch(setIsExternal(body.isStartedByRibbon));
+            if (body.isExternal) dispatch(setIsExternal(body.isExternal));
 
             if (body.openTab in NOVA_TAB_TYPE) {
               const tab = body.openTab;
