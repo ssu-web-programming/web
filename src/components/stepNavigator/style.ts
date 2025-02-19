@@ -105,11 +105,12 @@ export const Label = styled(StepLabel)`
       font-weight: 600;
       line-height: 20px;
       font-family: Pretendard, sans-serif;
-      color: ${({ theme }) => theme.color.text.gray03};
+      color: ${({ theme }) => theme.color.text.gray04} !important;
     }
 
     div {
       padding: 0;
+      color: ${({ theme }) => theme.color.text.gray04};
     }
   }
 

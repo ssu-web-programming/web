@@ -5,11 +5,12 @@ import { css } from 'styled-components';
 
 import { Voices } from '../../../../constants/heygenTypes';
 import { NOVA_TAB_TYPE } from '../../../../constants/novaTapTypes';
+import ArrowRightDarkIcon from '../../../../img/dark/ico_arrow_right.svg';
 import InfoDarkIcon from '../../../../img/dark/ico_circle_info.svg';
 import PlayDarkIcon from '../../../../img/dark/nova/aiVideo/ico_play.svg';
 import SoundDarkIcon from '../../../../img/dark/nova/aiVideo/ico_sound.svg';
 import HeyzenLogoDarkIcon from '../../../../img/dark/nova/logo/ico_heygen_name_logo.svg';
-import ArrowRightIcon from '../../../../img/light/ico_arrow_right.svg';
+import ArrowRightLightIcon from '../../../../img/light/ico_arrow_right.svg';
 import InfoLightIcon from '../../../../img/light/ico_circle_info.svg';
 import CreditColorIcon from '../../../../img/light/ico_credit_color.svg';
 import PlayLightIcon from '../../../../img/light/nova/aiVideo/ico_play.svg';
@@ -92,14 +93,14 @@ export default function Voice() {
         <AvatarCard />
         <S.TitleWrap>
           <div className="wrap">
-            <span className="title">아바타 목소리</span>
+            <span className="title">{t('Nova.aiVideo.selectVoice.title')}</span>
             <ArrowTooltips message={t('Nova.aiVideo.tooltip.selectVoice')} placement="top-start">
               <img src={isLightMode ? InfoLightIcon : InfoDarkIcon} alt="info" />
             </ArrowTooltips>
           </div>
           <div className="show" onClick={() => setIsOpen(true)}>
-            <span>더 보기</span>
-            <img src={ArrowRightIcon} alt="show_more" />
+            <span>{t('Nova.aiVideo.button.showMore')}</span>
+            <img src={isLightMode ? ArrowRightLightIcon : ArrowRightDarkIcon} alt="show_more" />
           </div>
         </S.TitleWrap>
         <S.VoiceContainer>
@@ -151,7 +152,7 @@ export default function Voice() {
           onClick={() => {
             dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'script' }));
           }}>
-          <span>{'AI 비디오 만들기'}</span>
+          <span>{t('Nova.aiVideo.button.makeVideo')}</span>
           <S.CreditInfo>
             <img src={CreditColorIcon} alt="credit" />
             <span>10</span>

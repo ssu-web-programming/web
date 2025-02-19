@@ -362,7 +362,7 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                         item.chatType !== SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO &&
                         item.chatType !== SERVICE_TYPE.NOVA_WEBSEARCH_PERPLEXITY && (
                           <SelectBox
-                            placeHolder={'다른 답변 보기'}
+                            placeHolder={t('Nova.perplexity.button.anotherAnswer') || ''}
                             minWidth={290}
                             paddingX={4}
                             paddingY={4}

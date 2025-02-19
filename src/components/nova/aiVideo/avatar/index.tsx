@@ -8,13 +8,17 @@ import { NOVA_VIDEO_MAKE_AVATARS } from '../../../../api/constant';
 import { Avatars, InitAvatarInfo, InitAvatars } from '../../../../constants/heygenTypes';
 import { NOVA_TAB_TYPE } from '../../../../constants/novaTapTypes';
 import { ReactComponent as CheckIcon } from '../../../../img/common/ico_check.svg';
+import ArrowRightDarkIcon from '../../../../img/dark/ico_arrow_right.svg';
 import CircleDarkIcon from '../../../../img/dark/ico_circle.svg';
 import CircleSelectedDarkIcon from '../../../../img/dark/ico_circle_selected.svg';
 import SqureDarkIcon from '../../../../img/dark/ico_square.svg';
 import SqureSelectedDarkIcon from '../../../../img/dark/ico_squre_selected.svg';
 import HeyzenLogoDarkIcon from '../../../../img/dark/nova/logo/ico_heygen_name_logo.svg';
+import PlusDocDarkIcon from '../../../../img/dark/upload_img_plus_new.svg';
+import ArrowRightLightIcon from '../../../../img/light/ico_arrow_right.svg';
 import CircleLightIcon from '../../../../img/light/ico_circle.svg';
 import CircleSelectedLightIcon from '../../../../img/light/ico_circle_selected.svg';
+import CreditColorIcon from '../../../../img/light/ico_credit_color.svg';
 import SqureLightIcon from '../../../../img/light/ico_square.svg';
 import SqureSelectedLightIcon from '../../../../img/light/ico_square_selected.svg';
 import HeyzenLogoLightIcon from '../../../../img/light/nova/logo/ico_heygen_name_logo.svg';
@@ -162,9 +166,10 @@ export default function Avatar() {
         <S.ContentWrap>
           <S.AvatarSelectBox>
             <S.TitleWrap>
-              <span className="title">아바타 선택</span>
+              <span className="title">{t('Nova.aiVideo.selectAvatar.title')}</span>
               <div className="show" onClick={() => setIsOpen(true)}>
                 <span>{t('Nova.aiVideo.button.showMore')}</span>
+                <img src={isLightMode ? ArrowRightLightIcon : ArrowRightDarkIcon} alt="show_more" />
               </div>
             </S.TitleWrap>
             <S.AvartarList>
@@ -195,16 +200,18 @@ export default function Avatar() {
               curTab={NOVA_TAB_TYPE.aiVideo}
               handleUploadComplete={handleUploadedImage}>
               <S.UploadInner>
-                <img src={PlusDocLightIcon} alt="doc_plus" />
+                <img src={isLightMode ? PlusDocLightIcon : PlusDocDarkIcon} alt="doc_plus" />
                 <S.ImageUploadGuide>
-                  <span className="title">나만의 아바타 만들기</span>
-                  <span className="desc">JPG, PNG 형식, 최대 50MB 지원</span>
+                  <span className="title">
+                    {t('Nova.aiVideo.selectAvatar.imageUploader.title')}
+                  </span>
+                  <span className="desc">{t('Nova.aiVideo.selectAvatar.imageUploader.desc')}</span>
                 </S.ImageUploadGuide>
               </S.UploadInner>
             </ImageUploader>
           </S.AvatarSelectBox>
           <S.TitleWrap>
-            <span className="title">이미지 형태</span>
+            <span className="title">{t('Nova.aiVideo.selectAvatar.imageShape.title')}</span>
             <S.ButtonWrap>
               {['normal', 'circle'].map((shape) => (
                 <Button
@@ -223,7 +230,11 @@ export default function Avatar() {
                   `}
                   onClick={() => selectAvatarStyle(shape as 'circle' | 'normal')}>
                   <img src={getShapeIcon(shape as 'circle' | 'normal')} alt={shape} />
-                  <span>{shape === 'normal' ? '사각형' : '원형'}</span>
+                  <span>
+                    {shape === 'normal'
+                      ? t('Nova.aiVideo.selectAvatar.imageShape.square')
+                      : t('Nova.aiVideo.selectAvatar.imageShape.circle')}
+                  </span>
                 </Button>
               ))}
             </S.ButtonWrap>
@@ -245,7 +256,11 @@ export default function Avatar() {
           onClick={() => {
             dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'voice' }));
           }}>
-          <span>{'AI 비디오 만들기'}</span>
+          <span>{t('Nova.aiVideo.button.makeVideo')}</span>
+          <S.CreditInfo>
+            <img src={CreditColorIcon} alt="credit" />
+            <span>10</span>
+          </S.CreditInfo>
         </Button>
         <img
           src={isLightMode ? HeyzenLogoLightIcon : HeyzenLogoDarkIcon}

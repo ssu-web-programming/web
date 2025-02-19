@@ -46,7 +46,7 @@ export const TitleWrap = styled.div`
     font-size: 16px;
     font-weight: 500;
     line-height: 24px;
-    color: #454c53;
+    color: ${({ theme }) => theme.color.text.gray04};
   }
 
   .show {
@@ -97,7 +97,7 @@ export const OuterBorder = styled.div<{ isSelected: boolean }>`
 export const Image = styled.img`
   width: 76px;
   height: 76px;
-  border: 1.27px solid #e8ebed;
+  border: 1.27px solid ${({ theme }) => theme.color.border.gray01};
   border-radius: 4px;
   object-fit: cover;
   cursor: pointer;
@@ -134,13 +134,13 @@ export const ImageUploadGuide = styled.div`
     font-size: 14px;
     font-weight: 500;
     line-height: 21px;
-    color: #454c53;
+    color: ${({ theme }) => theme.color.text.gray04};
   }
   .desc {
     font-size: 12px;
     font-weight: 500;
     line-height: 18px;
-    color: #9ea4aa;
+    color: ${({ theme }) => theme.color.text.gray07};
   }
 `;
 

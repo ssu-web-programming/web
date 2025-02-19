@@ -241,13 +241,13 @@ export default function InputBar(props: InputBarProps) {
 
     const ret = await confirm({
       title: '',
-      msg: '잠깐! NOVA와의 최근 대화를 종료하시겠어요?',
+      msg: t('Nova.Confirm.CloseChat.Msg'),
       onCancel: {
         text: t(`Cancel`)!,
         callback: () => {}
       },
       onOk: {
-        text: '종료하기',
+        text: t('Nova.Confirm.CloseChat.Ok'),
         callback: () => {}
       },
       direction: 'row'
@@ -343,7 +343,7 @@ export default function InputBar(props: InputBarProps) {
             ) : (
               <S.NovaRecentChat onClick={handleMoveChat}>
                 <img src={isLightMode ? NovaLogoLightIcon : NovaLogoDarkIcon} alt="logo" />
-                <span>NOVA와의 최근 대화</span>
+                <span>{t('Nova.Home.novaRecentChat')}</span>
                 <img
                   src={isLightMode ? CloseLightIcon : CloseDarkIcon}
                   alt="close"

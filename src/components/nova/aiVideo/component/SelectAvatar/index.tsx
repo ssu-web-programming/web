@@ -1,19 +1,16 @@
 import React, { Dispatch, SetStateAction, useCallback, useEffect, useRef, useState } from 'react';
 import Tab from '@mui/material/Tab';
-import { result } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import Lottie from 'react-lottie-player';
 import { css } from 'styled-components';
 
-import { AvatarInfo, Avatars, InitAvatarInfo } from '../../../../../constants/heygenTypes';
+import { Avatars } from '../../../../../constants/heygenTypes';
 import { NOVA_TAB_TYPE } from '../../../../../constants/novaTapTypes';
 import { ReactComponent as CheckIcon } from '../../../../../img/common/ico_check.svg';
 import CloseDarkIcon from '../../../../../img/dark/ico_nova_close.svg';
 import SkeletonDark from '../../../../../img/dark/nova/aiVideo/skeleton_thumbnail_avatar.json';
-import SpinnerDark from '../../../../../img/dark/nova/nova_spinner.json';
 import CloseLightIcon from '../../../../../img/light/ico_nova_close.svg';
 import SkeletonLight from '../../../../../img/light/nova/aiVideo/skeleton_thumbnail_avatar.json';
-import SpinnerLight from '../../../../../img/light/nova/nova_spinner.json';
 import { selectPageResult } from '../../../../../store/slices/nova/pageStatusSlice';
 import { screenModeSelector } from '../../../../../store/slices/screenMode';
 import { themeInfoSelector } from '../../../../../store/slices/theme';
@@ -95,7 +92,7 @@ export default function SelectAvatar({ setIsOpen, changeSelectedAvatar }: Select
       <Blanket />
       <S.Container $isMobile={isMobile} $isMin={screenMode === 'min'}>
         <S.TitleWrap>
-          <div>아바타 선택</div>
+          <div>{t('Nova.aiVideo.selectAvatar.title')}</div>
           <img
             src={isLightMode ? CloseLightIcon : CloseDarkIcon}
             alt="close"
@@ -103,9 +100,9 @@ export default function SelectAvatar({ setIsOpen, changeSelectedAvatar }: Select
           />
         </S.TitleWrap>
         <S.CustomTabs value={tab} onChange={handleChange}>
-          <Tab label="전체" value={ETabType.all} />
-          <Tab label="남성" value={ETabType.male} />
-          <Tab label="여성" value={ETabType.female} />
+          <Tab label={t('Nova.aiVideo.selectAvatar.tabs.all')} value={ETabType.all} />
+          <Tab label={t('Nova.aiVideo.selectAvatar.tabs.male')} value={ETabType.male} />
+          <Tab label={t('Nova.aiVideo.selectAvatar.tabs.female')} value={ETabType.female} />
         </S.CustomTabs>
         {tabKeys.map((tabKey) => {
           const tabValue = ETabType[tabKey as keyof typeof ETabType];
@@ -166,7 +163,7 @@ export default function SelectAvatar({ setIsOpen, changeSelectedAvatar }: Select
               position: relative;
             `}
             onClick={handleSelectAvatar}>
-            <span>{'선택하기'}</span>
+            <span>{t('Nova.aiVideo.button.select')}</span>
           </Button>
         </S.ButtonWrap>
       </S.Container>

@@ -8,7 +8,7 @@ export const AvatarCard = styled.div<{ isCircle: boolean }>`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 1px solid #c9cdd2;
+  border: 1px solid ${({ theme }) => theme.color.border.gray01};
   border-radius: 12px;
 
   .logo {
