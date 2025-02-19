@@ -33,7 +33,7 @@ export const TitleWrap = styled.div`
     font-size: 16px;
     font-weight: 500;
     line-height: 24px;
-    color: #454c53;
+    color: ${({ theme }) => theme.color.text.gray04};
   }
 
   .show {

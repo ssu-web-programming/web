@@ -4,7 +4,10 @@ import Step from '@mui/material/Step';
 import StepIcon from '@mui/material/StepIcon';
 import { useTranslation } from 'react-i18next';
 
+import { ReactComponent as ArrowDarkIcon } from '../../img/dark/ico_arrow_down_normal.svg';
 import { ReactComponent as ArrowLightIcon } from '../../img/light/ico_arrow_down_normal.svg';
+import { themeInfoSelector } from '../../store/slices/theme';
+import { useAppSelector } from '../../store/store';
 
 import * as S from './style';
 
@@ -16,6 +19,7 @@ interface StepNavigatorProps {
 
 export default function StepNavigator({ activeStep, setActiveStep, steps }: StepNavigatorProps) {
   const { t } = useTranslation();
+  const { isLightMode } = useAppSelector(themeInfoSelector);
 
   const handleMove = (index: number) => {
     if (index === activeStep) {
@@ -30,11 +34,19 @@ export default function StepNavigator({ activeStep, setActiveStep, steps }: Step
   const CustomStepIcon = (props: any) => {
     const { active, completed, className } = props;
     if (completed) {
-      return <ArrowLightIcon className={className} width={22} height={22} />;
+      return isLightMode ? (
+        <ArrowLightIcon className={className} width={22} height={22} />
+      ) : (
+        <ArrowDarkIcon className={className} width={22} height={22} />
+      );
     } else if (active) {
       return <StepIcon {...props} />;
     } else {
-      return <ArrowLightIcon className={className} />;
+      return isLightMode ? (
+        <ArrowLightIcon className={className} width={22} height={22} />
+      ) : (
+        <ArrowDarkIcon className={className} width={22} height={22} />
+      );
     }
   };
 

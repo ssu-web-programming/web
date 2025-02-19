@@ -30,6 +30,7 @@ export const TitleWrap = styled.div`
   justify-content: space-between;
   padding: 10px 16px;
   border-bottom: 1px solid ${({ theme }) => theme.color.border.gray01};
+  color: ${({ theme }) => theme.color.text.gray04};
 
   img {
     width: 28px;
