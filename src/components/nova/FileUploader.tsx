@@ -174,7 +174,7 @@ export const FileUploader = (props: FileUploaderProps) => {
     const supportedExtensions = SUPPORT_DOCUMENT_TYPE.flatMap((type) => type.extensions);
 
     if (
-      (target === 'nova-file' || 'nova-translation') &&
+      (target === 'nova-file' || target === 'nova-translation') &&
       (currentFile.type === 'notSupported' ||
         (['drive', 'local'].includes(currentFile.type) &&
           supportedExtensions.includes(`.${currentFile.ext}`)))
