@@ -61,6 +61,14 @@ export const blobToFile = (audioBlob: Blob) => {
   });
 };
 
+export const windowBlobToFile = (audioBlob: Blob) => {
+  const filename = `recording_${new Date().getTime()}.mp3`;
+  return new File([audioBlob], filename, {
+    type: 'audio/wav',
+    lastModified: Date.now()
+  });
+};
+
 export const changeFileExtension = (filename: string, extension: string) => {
   const baseFileName = filename.substring(0, filename.lastIndexOf('.'));
 
