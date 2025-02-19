@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ButtonWithCredit from 'components/buttons/button-with-credit';
+import { useConfirm } from 'components/Confirm';
 import { ReactComponent as CloseLightIcon } from 'img/light/ico_nova_close.svg';
 import { useTranslation } from 'react-i18next';
 import { activeToast } from 'store/slices/toastSlice';
@@ -21,6 +22,7 @@ type TranslateType = 'TEXT' | 'FILE';
 export default function TranslationIntro() {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const confirm = useConfirm();
   const [type, setType] = useState<TranslateType>('TEXT');
   const [translateInputValue, setTranslateInputValue] = useState('');
 
@@ -53,6 +55,17 @@ export default function TranslationIntro() {
     // File 번역일때 타는 로직!
     submitFileTranslate();
   };
+
+  useEffect(() => {
+    if (sourceLang === targetLang) {
+      confirm({
+        msg: '원본 언어와 번역될 언어가 동일합니다. 다른 언어를 선택해 주세요.',
+        onOk: {
+          text: t('Confirm')
+        }
+      });
+    }
+  }, [sourceLang, targetLang]);
 
   return (
     <>
