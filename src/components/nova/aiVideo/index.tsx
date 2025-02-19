@@ -41,7 +41,9 @@ export default function AIVideo() {
     if (!result?.info.voices) {
       await getVoices('all', 'all');
     }
-    getLanguages();
+    if (!result?.info.languages) {
+      getLanguages();
+    }
   };
 
   useEffect(() => {

@@ -12,6 +12,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { clearError } from 'store/slices/errorSlice';
 import { initFlagSelector } from 'store/slices/initFlagSlice';
 
+import { apiWrapper } from '../../../api/apiWrapper';
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import {
   getChatGroupKey,
@@ -70,6 +71,9 @@ export default function NovaHeader(props: NovaHeaderProps) {
   const { isExternal } = useAppSelector(appStateSelector);
   const chatMode = useAppSelector(novaChatModeSelector);
   const { handleClearPastedImages } = useClipboard();
+
+  const isDisableBack =
+    status !== 'progress' && status !== 'saving' && status !== 'loading' && creating != 'NOVA';
 
   const {
     resetVoiceInfo,
@@ -155,12 +159,11 @@ export default function NovaHeader(props: NovaHeaderProps) {
   };
 
   const handleGoHome = async () => {
-    if (
-      status !== 'progress' &&
-      status !== 'saving' &&
-      status !== 'loading' &&
-      creating != 'NOVA'
-    ) {
+    if (status === 'progress' && selectedNovaTab === NOVA_TAB_TYPE.aiVideo) {
+      await resetPage();
+    }
+
+    if (isDisableBack) {
       // 녹음중 상태이면 아래 팝업을 열어여한다.
       if (isVoiceRecording || componentType === 'VOICE_READY' || componentType === 'FILE_READY') {
         const result = await openClosedModal();
@@ -193,10 +196,8 @@ export default function NovaHeader(props: NovaHeaderProps) {
               <>
                 <img
                   src={
-                    status !== 'progress' &&
-                    status !== 'saving' &&
-                    status !== 'loading' &&
-                    creating != 'NOVA'
+                    isDisableBack ||
+                    (status === 'progress' && selectedNovaTab === NOVA_TAB_TYPE.aiVideo)
                       ? isLightMode
                         ? ArrowLeftLightIcon
                         : ArrowLeftDarkIcon
