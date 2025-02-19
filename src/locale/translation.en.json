@@ -651,6 +651,128 @@
       },
       "Loading": "Converting to text"
     },
+    "translation": {
+      "Menu": {
+        "Title": "Translation",
+        "RecentLanguages": "Recent languages"
+      },
+      "Button": {
+        "TextTranslation": "Text translation",
+        "FileTranslation": "File translation",
+        "Translate": "Translate",
+        "LanguageSearch": "Language Search",
+        "TranslationComplete": "File translation complete",
+        "ProceedWithoutChanges": "Proceed without changes",
+        "SaveNow": "Save now"
+      },
+      "Input": {
+        "Placeholder": "Enter the content to be translated.",
+        "CharacterCount": "0 characters / 10,000 characters"
+      },
+      "Guide": {
+        "MaxCharacters": "You can only enter up to 10,000 characters.",
+        "SameLanguage": "The source language and the target language are the same. Please select another language.",
+        "NoResults": "No results"
+      },
+      "Language": {
+        "Source": "Source language",
+        "Target": "Language to be translated",
+        "List": {
+          "Title": "Source language",
+          "Arabic": "Arabic",
+          "Estonian": "Estonian",
+          "English": "English",
+          "Ukrainian": "Ukrainian",
+          "Italian": "Italian",
+          "Indonesian": "Indonesian",
+          "Japanese": "Japanese",
+          "Chinese": "Chinese",
+          "Czech": "Czech",
+          "Turkish": "Turkish",
+          "Polish": "Polish",
+          "Portuguese": "Portuguese",
+          "French": "French",
+          "Finnish": "Finnish",
+          "Hungarian": "Hungarian",
+          "Greek": "Greek",
+          "Dutch": "Dutch",
+          "NorwegianBokmal": "Norwegian Bokmål",
+          "Danish": "Danish",
+          "German": "German",
+          "Latvian": "Latvian",
+          "Russian": "Russian",
+          "Romanian": "Romanian",
+          "Lithuanian": "Lithuanian",
+          "Bulgarian": "Bulgarian",
+          "Slovak": "Slovak",
+          "Slovenian": "Slovenian",
+          "Swedish": "Swedish",
+          "Spanish": "Spanish",
+          "Korean": "Korean"
+        },
+        "TargetList": {
+          "Title": "Language to be translated",
+          "Greek": "Greek",
+          "Dutch": "Dutch",
+          "NorwegianBokmal": "Norwegian Bokmål",
+          "Danish": "Danish",
+          "German": "German",
+          "Latvian": "Latvian",
+          "Russian": "Russian",
+          "Romanian": "Romanian",
+          "Lithuanian": "Lithuanian",
+          "Moslovenian": "Moslovenian",
+          "Bulgarian": "Bulgarian",
+          "Swedish": "Swedish",
+          "Spanish": "Spanish",
+          "Slovak": "Slovak",
+          "Slovenian": "Slovenian",
+          "Arabic": "Arabic",
+          "Estonian": "Estonian",
+          "EnglishUK": "English (UK)",
+          "EnglishUS": "English (US)",
+          "Ukrainian": "Ukrainian",
+          "Italian": "Italian",
+          "Indonesian": "Indonesian",
+          "Japanese": "Japanese",
+          "ChineseSimplified": "Chinese (Simplified)",
+          "ChineseTraditional": "Chinese (Traditional)",
+          "Czech": "Czech",
+          "Turkish": "Turkish",
+          "Polish": "Polish",
+          "Portuguese": "Portuguese",
+          "PortugueseBrazil": "Portuguese (Brazil)",
+          "French": "French",
+          "Finnish": "Finnish",
+          "Hungarian": "Hungarian"
+        }
+      },
+      "Status": {
+        "Translating": "Translating text…",
+        "FileTranslating": "Translating file…",
+        "FileTranslated": "File translated",
+        "TranslationCompleted": "The translation to your desired language is completed!",
+        "SaveAndCheck": "Save and check the translated content right away!"
+      },
+      "Alert": {
+        "UnsavedChanges": "Unsaved changes won't be in the translation.",
+        "SaveBeforeAnalysis": "Save first to analyze. Save now?",
+        "SaveToPolarisDrive": "Save to Polaris Drive to analyze. Save now?",
+        "FileSizeLimit": "The file size is too large. Please select only files less than 30 MB in size.",
+        "UnsupportedFormat": "This file format is not supported. Please check again.",
+        "CharacterLimit": "Exceeds limit. Reduce text and retry.",
+        "EncryptedDocument": "Encrypted documents cannot be queried. Please check the document again.",
+        "DamagedDocument": "Damaged documents cannot be queried. Please check the document again."
+      },
+      "FileUpload": {
+        "Guide": {
+          "Title": "Upload File",
+          "Description": "Translates PDF, DOCX, and PPTX documents.",
+          "SizeLimit": "Supported Capacity: Up to 30 MB",
+          "CharacterLimit": "Number of characters supported: Up to 50,000 characters"
+        }
+      }
+    },
     "GoBackHeader": "Go Back",
     "TimeOut": {
       "Title": "The operation has exceeded the time limit.\nPlease try again.",

@@ -2,6 +2,7 @@ import IconTextButton from 'components/buttons/IconTextButton';
 import { ReactComponent as CheckLightIcon } from 'img/light/nova/check_purple.svg';
 import compareViewerIcon from 'img/light/nova/translation/book.svg';
 import downloadIcon from 'img/light/nova/translation/download.svg';
+import { useTranslation } from 'react-i18next';
 import { activeLoadingSpinner } from 'store/slices/loadingSpinner';
 import { useAppDispatch } from 'store/store';
 import { css } from 'styled-components';
@@ -27,6 +28,7 @@ interface DownloadFileArgs {
 
 export default function TranslationFileResult() {
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
 
   const {
     sharedTranslationInfo: {
@@ -62,11 +64,11 @@ export default function TranslationFileResult() {
     <S.Container>
       <S.Title>
         <CheckLightIcon />
-        <span>파일 번역 완료</span>
+        <span>{t('Nova.translation.Status.FileTranslated')}</span>
       </S.Title>
       <S.SubTitle>
-        <p>원하는 언어로 번역이 완료되었어요!</p>
-        <p>저장하고 바로 번역된 내용을 확인해보세요!</p>
+        <p>{t('Nova.translation.Status.TranslationCompleted')}</p>
+        <p>{t('Nova.translation.Status.SaveAndCheck')}</p>
       </S.SubTitle>
       <S.FileItemWrapper>
         <FileItem fileName={translationFileName} />
@@ -85,7 +87,7 @@ export default function TranslationFileResult() {
               border-radius: 8px;
               font-size: 15px;
             `}>
-            원본-번역 비교 보기
+            원본-번역 비교보기
           </IconTextButton>
         )}
 
@@ -103,7 +105,7 @@ export default function TranslationFileResult() {
             background: #6f3ad0;
             color: #fff;
           `}>
-          저장
+          {t('Nova.translation.Button.SaveNow')}
         </IconTextButton>
       </S.ButtonGroup>
     </S.Container>

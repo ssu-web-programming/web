@@ -5,7 +5,7 @@ import { themeInfoSelector } from 'store/slices/theme';
 import { setLocalFiles } from 'store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import Bridge, { ClientType, getPlatform } from 'util/bridge';
-import { blobToFile, convertWebmToWavFile, windowBlobToFile } from 'util/getAudioDuration';
+import { blobToFile, convertWebmToWavFile } from 'util/getAudioDuration';
 
 import { useVoiceDictationContext } from '../../provider/voice-dictation-provider';
 import AudioRecorder from '../audio-recorder';

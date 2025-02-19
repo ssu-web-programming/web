@@ -651,6 +651,127 @@
       },
       "Loading": "テキスト変換する"
     },
+    "translation": {
+      "Menu": {
+        "Title": "翻訳",
+        "RecentLanguages": "最近の言語"
+      },
+      "Button": {
+        "TextTranslation": "テキスト翻訳",
+        "FileTranslation": "ファイル翻訳",
+        "Translate": "翻訳",
+        "LanguageSearch": "言語検索",
+        "TranslationComplete": "ファイルの翻訳が完了しました",
+        "ProceedWithoutChanges": "変更せずに進む",
+        "SaveNow": "今すぐ保存"
+      },
+      "Input": {
+        "Placeholder": "翻訳するコンテンツを入力してください。",
+        "CharacterCount": "0文字 / 10,000文字"
+      },
+      "Guide": {
+        "MaxCharacters": "入力できる文字数は最大10,000文字です。",
+        "SameLanguage": "ソース言語とターゲット言語が同じです。別の言語を選択してください。",
+        "NoResults": "結果なし"
+      },
+      "Language": {
+        "Source": "ソース言語",
+        "Target": "翻訳対象言語",
+        "List": {
+          "Title": "ソース言語",
+          "Arabic": "アラビア語",
+          "Estonian": "エストニア語",
+          "English": "英語",
+          "Ukrainian": "ウクライナ語",
+          "Italian": "イタリア語",
+          "Indonesian": "インドネシア語",
+          "Japanese": "日本語",
+          "Chinese": "中国語",
+          "Czech": "チェコ語",
+          "Turkish": "トルコ語",
+          "Polish": "ポーランド語",
+          "Portuguese": "ポルトガル語",
+          "French": "フランス語",
+          "Finnish": "フィンランド語",
+          "Hungarian": "ハンガリー語",
+          "Greek": "ギリシャ語",
+          "Dutch": "オランダ語",
+          "NorwegianBokmal": "ノルウェー語(ブークモール)",
+          "Danish": "デンマーク語",
+          "German": "ドイツ語",
+          "Latvian": "ラトビア語",
+          "Russian": "ロシア語",
+          "Romanian": "ルーマニア語",
+          "Lithuanian": "リトアニア語",
+          "Bulgarian": "ブルガリア語",
+          "Slovak": "スロバキア語",
+          "Slovenian": "スロベニア語",
+          "Swedish": "スウェーデン語",
+          "Spanish": "スペイン語"
+        },
+        "TargetList": {
+          "Title": "翻訳対象言語",
+          "Greek": "ギリシャ語",
+          "Dutch": "オランダ語",
+          "NorwegianBokmal": "ノルウェー語(ブークモール)",
+          "Danish": "デンマーク語",
+          "German": "ドイツ語",
+          "Latvian": "ラトビア語",
+          "Russian": "ロシア語",
+          "Romanian": "ルーマニア語",
+          "Lithuanian": "リトアニア語",
+          "Moslovenian": "モスロベニア語",
+          "Bulgarian": "ブルガリア語",
+          "Swedish": "スウェーデン語",
+          "Spanish": "スペイン語",
+          "Slovak": "スロバキア語",
+          "Slovenian": "スロベニア語",
+          "Arabic": "アラビア語",
+          "Estonian": "エストニア語",
+          "EnglishUK": "英語(イギリス)",
+          "EnglishUS": "英語(アメリカ)",
+          "Ukrainian": "ウクライナ語",
+          "Italian": "イタリア語",
+          "Indonesian": "インドネシア語",
+          "Japanese": "日本語",
+          "ChineseSimplified": "中国語(簡体)",
+          "ChineseTraditional": "中国語(繁体)",
+          "Czech": "チェコ語",
+          "Turkish": "トルコ語",
+          "Polish": "ポーランド語",
+          "Portuguese": "ポルトガル語",
+          "PortugueseBrazil": "ポルトガル語(ブラジル)",
+          "French": "フランス語",
+          "Finnish": "フィンランド語",
+          "Hungarian": "ハンガリー語"
+        }
+      },
+      "Status": {
+        "Translating": "テキストを翻訳中…",
+        "FileTranslating": "ファイルを翻訳中...",
+        "FileTranslated": "ファイル翻訳完了",
+        "TranslationCompleted": "ご希望の言語への翻訳が完了しました！",
+        "SaveAndCheck": "翻訳されたコンテンツをすぐに保存して確認してください！"
+      },
+      "Alert": {
+        "UnsavedChanges": "保存しないと翻訳に反映されません。",
+        "SaveBeforeAnalysis": "分析には保存が必要です。今すぐ保存しますか？",
+        "SaveToPolarisDrive": "分析にはPolaris Driveへの保存が必要です。今すぐ保存しますか？",
+        "FileSizeLimit": "ファイルサイズが大きすぎます。サイズが30 MB未満のファイルのみを選択してください。",
+        "UnsupportedFormat": "サポートされないファイルです。もう一度ご確認ください。",
+        "CharacterLimit": "制限超過。文字を減らして再試行。",
+        "EncryptedDocument": "暗号化されたドキュメントは照会できません。もう一度ドキュメントを確認してください。",
+        "DamagedDocument": "破損した文書は照会できません。もう一度ドキュメントを確認してください。"
+      },
+      "FileUpload": {
+        "Guide": {
+          "Title": "ファイルをアップロード",
+          "Description": "PDF、DOCX、PPTXドキュメントを翻訳します。",
+          "SizeLimit": "サポートされる容量：最大30MB",
+          "CharacterLimit": "サポートされる文字数：最大50,000文字"
+        }
+      }
+    },
     "GoBackHeader": "戻る",
     "TimeOut": {
       "Title": "操作が時間制限を超えました。\nもう一度やり直してください。",

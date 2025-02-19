@@ -4,6 +4,7 @@ import OverlayModal from 'components/overlay-modal';
 import RetryComponent from 'components/retry-component';
 import { overlay } from 'overlay-kit';
 import BgContainer from 'pages/Nova/Translation/components/bg-container';
+import { useTranslation } from 'react-i18next';
 import { appStateSelector } from 'store/slices/appState';
 import { useAppSelector } from 'store/store';
 import Bridge from 'util/bridge';
@@ -24,7 +25,7 @@ export default function VoiceDictationContent() {
     resetVoiceInfo
   } = useVoiceDictationContext();
   const { isClosedNova } = useAppSelector(appStateSelector);
-
+  const { t } = useTranslation();
   const componentMap: Record<VoiceDictationComponentType, ReactNode> = {
     LOADING: <Loading />,
     INTRO: <VoiceDictationIntro />,
@@ -44,9 +45,7 @@ export default function VoiceDictationContent() {
       return (
         <OverlayModal isOpen={isOpen} onClose={close}>
           <ClosedModalContent
-            title={
-              '잠깐! 녹음을 끝내지 않고 종료하면 녹음이 저장되지 않아요. 그래도 종료하시겠어요?'
-            }
+            title={t('Nova.voiceDictation.Alert.UnsavedRecording')}
             onConfirm={handleResetVoiceInfo}
           />
         </OverlayModal>

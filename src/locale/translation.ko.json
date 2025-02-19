@@ -426,9 +426,6 @@
         "MovePOPage": "폴라리스 오피스 바로가기"
       }
     },
-    "translation": {
-      "Loading": "텍스트를 번역하고 있어요"
-    },
     "perplexity": {
       "source": "출처",
       "recommendQuestion": "이런 질문은 어때요?",
@@ -687,6 +684,133 @@
         "Title": "변환 준비 완료"
       },
       "Loading": "텍스트로 변환하고 있어요"
+    },
+    "translation": {
+      "Loading": "텍스트를 번역하고 있어요",
+      "Menu": {
+        "Title": "번역",
+        "RecentLanguages": "최근에 사용한 언어"
+      },
+      "Button": {
+        "TextTranslation": "텍스트 번역",
+        "FileTranslation": "파일 번역",
+        "Translate": "번역하기",
+        "LanguageSearch": "언어 검색",
+        "TranslationComplete": "번역 완료",
+        "ProceedWithoutChanges": "변경 없이 진행",
+        "SaveNow": "지금 저장"
+      },
+      "Input": {
+        "Placeholder": "번역할 내용을 입력하세요",
+        "CharacterCount": "0자 / 10,000자"
+      },
+      "Guide": {
+        "MaxCharacters": "최대 10,000자까지만 입력이 가능합니다.",
+        "SameLanguage": "원본 언어와 도착 언어가 동일합니다. 다른 언어를 선택해 주세요.",
+        "NoResults": "결과 없음"
+      },
+      "Language": {
+        "Source": "원본 언어",
+        "Target": "번역될 언어",
+        "List": {
+          "Title": "원본 언어",
+          "Arabic": "아랍어",
+          "Estonian": "에스토니아어",
+          "English": "영어",
+          "Ukrainian": "우크라이나어",
+          "Italian": "이탈리아어",
+          "Indonesian": "인도네시아어",
+          "Japanese": "일본어",
+          "Chinese": "중국어",
+          "Czech": "체코어",
+          "Turkish": "터키어",
+          "Polish": "폴란드어",
+          "Portuguese": "포르투갈어",
+          "French": "프랑스어",
+          "Finnish": "핀란드어",
+          "Hungarian": "헝가리어",
+          "Greek": "그리스어",
+          "Dutch": "네덜란드어",
+          "NorwegianBokmal": "노르웨이어 보크몰",
+          "Danish": "덴마크어",
+          "German": "독일어",
+          "Latvian": "라트비아어",
+          "Russian": "러시아어",
+          "Romanian": "루마니아어",
+          "Lithuanian": "리투아니아어",
+          "Bulgarian": "불가리아어",
+          "Slovak": "슬로바키아어",
+          "Slovenian": "슬로베니아어",
+          "Swedish": "스웨덴어",
+          "Spanish": "스페인어",
+          "EnglishAll": "영어 (모든 영어 변형)",
+          "PortugueseAll": "포르투갈어 (모든 포르투갈어 변형)",
+          "ChineseAll": "중국어 (모든 중국어 변형)",
+          "Korean": "한국어"
+        },
+        "TargetList": {
+          "Title": "번역될 언어",
+          "Greek": "그리스어",
+          "Dutch": "네덜란드어",
+          "NorwegianBokmal": "노르웨이어 보크몰",
+          "Danish": "덴마크어",
+          "German": "독일어",
+          "Latvian": "라트비아어",
+          "Russian": "러시아어",
+          "Romanian": "루마니아어",
+          "Lithuanian": "리투아니아어",
+          "Moslovenian": "모슬로베니아어",
+          "Bulgarian": "불가리아어",
+          "Swedish": "스웨덴어",
+          "Spanish": "스페인어",
+          "Slovak": "슬로바키아어",
+          "Slovenian": "슬로베니아어",
+          "Arabic": "아랍어",
+          "Estonian": "에스토니아어",
+          "EnglishUK": "영어(영국)",
+          "EnglishUS": "영어(미국)",
+          "Ukrainian": "우크라이나어",
+          "Italian": "이탈리아어",
+          "Indonesian": "인도네시아어",
+          "Japanese": "일본어",
+          "ChineseSimplified": "중국어(간체)",
+          "ChineseTraditional": "중국어(번체)",
+          "Czech": "체코어",
+          "Turkish": "터키어",
+          "Polish": "폴란드어",
+          "Portuguese": "포르투갈어",
+          "PortugueseBrazil": "포르투갈어(브라질)",
+          "French": "프랑스어",
+          "Finnish": "핀란드어",
+          "Hungarian": "헝가리어",
+          "Korean": "한국어"
+        }
+      },
+      "Status": {
+        "Translating": "텍스트를 번역하고 있어요",
+        "FileTranslating": "파일을 번역하고 있어요",
+        "FileTranslated": "파일 번역 완료",
+        "TranslationCompleted": "원하는 언어로 번역이 완료되었어요!",
+        "SaveAndCheck": "저장하고 바로 번역된 내용을 확인해 보세요!"
+      },
+      "Alert": {
+        "UnsavedChanges": "수정한 내용이 아직 저장되지 않았어요. 저장하지 않으면 수정한 내용이 파일 번역에 반영되지 않아요.",
+        "SaveBeforeAnalysis": "현재 문서를 분석하기위해 먼저 문서를 저장해야 해요. 지금 저장하시겠어요?",
+        "SaveToPolarisDrive": "문서를 분석하려면 폴라리스드라이브에 저장해야합니다. 지금 저장하시겠어요?",
+        "FileSizeLimit": "파일의 크기가 너무 큽니다. 30MB 이하의 파일만 선택해 주세요.",
+        "UnsupportedFormat": "지원하지 않는 파일 형식입니다. 다시 한 번 확인해 주세요.",
+        "CharacterLimit": "글자 수가 지원 가능한 최대 글자 수를 초과했습니다. 글자 수를 줄여 다시 시도해주세요.",
+        "EncryptedDocument": "암호화된 문서는 문서질의를 할 수 없습니다. 문서를 다시 확인해 주세요.",
+        "DamagedDocument": "손상된 문서는 문서질의를 할 수 없습니다. 문서를 다시 확인해 주세요."
+      },
+      "FileUpload": {
+        "Guide": {
+          "Title": "파일 업로드",
+          "Description": "PDF, DOCX, PPTX 문서를 번역합니다.",
+          "SizeLimit": "지원 용량: 최대 30MB",
+          "CharacterLimit": "지원 글자수: 최대 50,000자"
+        }
+      }
     },
     "Prompt": {
       "Placeholder": "바꾸고 싶은 배경을 설명해 주세요.",

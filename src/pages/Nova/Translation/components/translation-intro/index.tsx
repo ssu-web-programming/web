@@ -41,10 +41,14 @@ export default function TranslationIntro() {
   const options: ToggleOption<TranslateType>[] = [
     {
       id: 'TEXT',
-      label: '텍스트 번역',
+      label: t('Nova.translation.Button.TextTranslation'),
       icon: <S.StyledTransTxt $isActive={type === 'TEXT'} />
     },
-    { id: 'FILE', label: '파일 번역', icon: <S.StyledTransFile $isActive={type === 'FILE'} /> }
+    {
+      id: 'FILE',
+      label: t('Nova.translation.Button.FileTranslation'),
+      icon: <S.StyledTransFile $isActive={type === 'FILE'} />
+    }
   ];
 
   const handleTranslate = () => {
@@ -59,7 +63,7 @@ export default function TranslationIntro() {
   useEffect(() => {
     if (sourceLang === targetLang) {
       confirm({
-        msg: '원본 언어와 번역될 언어가 동일합니다. 다른 언어를 선택해 주세요.',
+        msg: t('Nova.translation.Guide.SameLanguage'),
         onOk: {
           text: t('Confirm')
         }
@@ -98,13 +102,13 @@ export default function TranslationIntro() {
         {type === 'TEXT' ? (
           <S.TextInputWrapper>
             <S.TextArea
-              placeholder="번역할 내용을 입력하세요."
+              placeholder={t('Nova.translation.Input.Placeholder') as string}
               value={translateInputValue}
               onChange={(e) => {
                 const newValue = e.target.value;
                 if (newValue.length > 10000) {
                   dispatch(
-                    activeToast({ type: 'error', msg: '최대 10,000자까지만 입력이 가능합니다.' })
+                    activeToast({ type: 'error', msg: t('Nova.translation.Guide.MaxCharacters') })
                   );
                   setTranslateInputValue(newValue.slice(0, 10000));
                   return;
@@ -130,12 +134,14 @@ export default function TranslationIntro() {
 
         <S.TextAreaBottom>
           <S.StyledDeepL />
-          {type === 'TEXT' && <span>{translateInputValue.length.toLocaleString()}자/10,000자</span>}
+          {type === 'TEXT' && (
+            <span>{`${translateInputValue.length.toLocaleString()}${t('Nova.translation.Input.CharacterCount')}`}</span>
+          )}
         </S.TextAreaBottom>
       </S.TextAreaWrapper>
 
       <ButtonWithCredit
-        text="번역하기"
+        text={t('Nova.translation.Button.Translate')}
         isActive={translateInputValue.length > 0 || isTranslateActive}
         onClick={handleTranslate}
       />
