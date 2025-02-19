@@ -62,6 +62,6 @@ export default function useSanitizedDrive() {
     isDriveActive:
       localFiles.length > 0 ||
       driveFiles.length > 0 ||
-      (currentFile.id !== '' && (currentFile.id as any) !== 0)
+      (currentFile.id !== '' && (currentFile.id as any) !== 0 && currentFile.id !== undefined)
   };
 }
