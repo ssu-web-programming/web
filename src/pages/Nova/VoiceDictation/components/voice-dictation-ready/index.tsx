@@ -53,12 +53,11 @@ export default function VoiceDictationReady() {
     }));
   };
 
-  const handleErrorTrigger = () => {
+  const handleErrorTrigger = ({ title, onRetry }: { title: string; onRetry?: () => void }) => {
     dispatch(
       setError({
-        title:
-          '변환된 받아쓰기 내용이 없어요.\n 음성 파일에 대화가 포함되어 있는지, 설정한 인식 언어가 음성과 같은 언어인지 확인해주세요.',
-        onRetry: translationVoiceDictation // 재시도 시 실행할 함수 전달
+        title,
+        onRetry // 재시도 시 실행할 함수 전달
       })
     );
   };
@@ -73,13 +72,17 @@ export default function VoiceDictationReady() {
       });
 
       if (result.data.segments.length === 0) {
-        handleErrorTrigger();
+        handleErrorTrigger({
+          title:
+            '변환된 받아쓰기 내용이 없어요.\n 음성 파일에 대화가 포함되어 있는지, 설정한 인식 언어가 음성과 같은 언어인지 확인해주세요.',
+          onRetry: translationVoiceDictation
+        });
         return;
       }
 
       handleMoveToResult(result);
     } catch (error) {
-      handleErrorTrigger();
+      handleErrorTrigger({ title: '오류가 발생했습니다. 잠시 후 다시 시작해주세요.' });
     }
   };
   useEffect(() => {

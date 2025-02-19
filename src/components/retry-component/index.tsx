@@ -13,7 +13,7 @@ const Container = styled.div`
   width: 100vw;
   height: 100vh;
   display: flex;
-  flex-direction: column; // 세로 방향으로 배치
+  flex-direction: column;
   z-index: 9999;
   background-color: rgb(244, 246, 248);
 `;
@@ -91,19 +91,19 @@ export default function RetryComponent() {
 
   return (
     <Container>
-      <NovaHeader /> {/* Header는 최상단에 고정 */}
+      <NovaHeader />
       <ContentContainer>
-        {' '}
-        {/* 나머지 컨텐츠는 스크롤 가능한 영역에 배치 */}
         <Wrap>
           <ContentWrap>
             <BangIcon />
             <Title>{errorTitle}</Title>
           </ContentWrap>
-          <ButtonWrap onClick={handleRetry}>
-            <span>재시도</span>
-            <img src={CreditColorIcon} alt="credit" />
-          </ButtonWrap>
+          {onRetry && (
+            <ButtonWrap onClick={handleRetry}>
+              <span>재시도</span>
+              <img src={CreditColorIcon} alt="credit" />
+            </ButtonWrap>
+          )}
         </Wrap>
       </ContentContainer>
     </Container>
