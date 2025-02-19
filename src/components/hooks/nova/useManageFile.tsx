@@ -11,7 +11,8 @@ import {
   isValidFileSize,
   MIN_FILE_UPLOAD_SIZE_KB,
   SUPPORT_DOCUMENT_TYPE,
-  SupportFileType
+  SupportFileType,
+  TRANSLATION_SUPPORT_TYPE
 } from '../../../constants/fileTypes';
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import { novaHistorySelector } from '../../../store/slices/nova/novaHistorySlice';
@@ -153,7 +154,12 @@ export function useManageFile({ onFinishCallback, onClearPastedImages }: Props =
             ...SUPPORT_DOCUMENT_TYPE.flatMap((type) => type.extensions),
             ...getValidExt(selectedNovaTab).flatMap((type) => type.extensions)
           ]
-        : [...getValidExt(selectedNovaTab).flatMap((type) => type.extensions)];
+        : selectedNovaTab === 'translation'
+          ? [
+              ...TRANSLATION_SUPPORT_TYPE.flatMap((type) => type.extensions),
+              ...getValidExt(selectedNovaTab).flatMap((type) => type.extensions)
+            ]
+          : [...getValidExt(selectedNovaTab).flatMap((type) => type.extensions)];
 
     const invalidFiles = files.filter((file) => {
       const fileExtension = `.${file.name.split('.').pop()?.toLowerCase()}`;

@@ -702,7 +702,7 @@
       },
       "Input": {
         "Placeholder": "번역할 내용을 입력하세요",
-        "CharacterCount": "0자 / 10,000자"
+        "CharacterCount": "자 / 10,000자"
       },
       "Guide": {
         "MaxCharacters": "최대 10,000자까지만 입력이 가능합니다.",
