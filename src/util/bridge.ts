@@ -432,10 +432,6 @@ export const useInitBridgeListener = () => {
 
             if (body.openTab in NOVA_TAB_TYPE) {
               const tab = body.openTab;
-              if (tab === NOVA_TAB_TYPE.translation) {
-                console.log('여기 들어옴!');
-                removeCurrentFile();
-              }
               dispatch(resetPageData(tab));
               dispatch(setDriveFiles([]));
               dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.home, status: 'home' }));
@@ -508,7 +504,11 @@ export const useInitBridgeListener = () => {
                 })
               );
             }
-            Bridge.callBridgeApi('analyzeCurFile');
+
+            console.log('어디가 열렸니?', body.openTab);
+            if (body.openTab !== NOVA_TAB_TYPE.translation) {
+              Bridge.callBridgeApi('analyzeCurFile');
+            }
 
             break;
           }
