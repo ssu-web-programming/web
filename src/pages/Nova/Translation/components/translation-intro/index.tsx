@@ -88,14 +88,16 @@ export default function TranslationIntro() {
               placeholder="번역할 내용을 입력하세요."
               value={translateInputValue}
               onChange={(e) => {
-                if (e.target.value.length > 10000) {
+                const newValue = e.target.value;
+                if (newValue.length > 10000) {
                   dispatch(
                     activeToast({ type: 'error', msg: '최대 10,000자까지만 입력이 가능합니다.' })
                   );
+                  setTranslateInputValue(newValue.slice(0, 10000));
+                  return;
                 }
-                setTranslateInputValue(e.target.value);
+                setTranslateInputValue(newValue);
               }}
-              maxLength={10000}
             />
             <S.CloseIconWrapper onClick={() => setTranslateInputValue('')}>
               <CloseLightIcon width={24} height={24} />
@@ -115,7 +117,7 @@ export default function TranslationIntro() {
 
         <S.TextAreaBottom>
           <S.StyledDeepL />
-          {type === 'TEXT' && <span>{translateInputValue.length}자/10,000자</span>}
+          {type === 'TEXT' && <span>{translateInputValue.length.toLocaleString()}자/10,000자</span>}
         </S.TextAreaBottom>
       </S.TextAreaWrapper>
 
