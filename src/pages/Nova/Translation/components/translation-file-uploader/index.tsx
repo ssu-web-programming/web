@@ -128,7 +128,7 @@ export default function TranslationFileUploader({
     if (localFiles.length > 0) return localFiles[0];
     if (driveFiles.length > 0) return driveFiles[0];
 
-    const isNotExistCurrentFile = currentFile.id === '' || (currentFile.id as any) === 0;
+    const isNotExistCurrentFile = !currentFile.id;
 
     return isNotExistCurrentFile ? null : currentFile;
   };
