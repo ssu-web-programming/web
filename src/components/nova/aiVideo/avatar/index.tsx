@@ -162,7 +162,7 @@ export default function Avatar() {
         <S.ContentWrap>
           <S.AvatarSelectBox>
             <S.TitleWrap>
-              <span className="title">아바타 선택</span>
+              <span className="title">{t('Nova.aiVideo.selectAvatar.title')}</span>
               <div className="show" onClick={() => setIsOpen(true)}>
                 <span>{t('Nova.aiVideo.button.showMore')}</span>
               </div>
@@ -197,14 +197,16 @@ export default function Avatar() {
               <S.UploadInner>
                 <img src={PlusDocLightIcon} alt="doc_plus" />
                 <S.ImageUploadGuide>
-                  <span className="title">나만의 아바타 만들기</span>
-                  <span className="desc">JPG, PNG 형식, 최대 50MB 지원</span>
+                  <span className="title">
+                    {t('Nova.aiVideo.selectAvatar.imageUploader.title')}
+                  </span>
+                  <span className="desc">{t('Nova.aiVideo.selectAvatar.imageUploader.desc')}</span>
                 </S.ImageUploadGuide>
               </S.UploadInner>
             </ImageUploader>
           </S.AvatarSelectBox>
           <S.TitleWrap>
-            <span className="title">이미지 형태</span>
+            <span className="title">{t('Nova.aiVideo.selectAvatar.imageShape.title')}</span>
             <S.ButtonWrap>
               {['normal', 'circle'].map((shape) => (
                 <Button
@@ -223,7 +225,11 @@ export default function Avatar() {
                   `}
                   onClick={() => selectAvatarStyle(shape as 'circle' | 'normal')}>
                   <img src={getShapeIcon(shape as 'circle' | 'normal')} alt={shape} />
-                  <span>{shape === 'normal' ? '사각형' : '원형'}</span>
+                  <span>
+                    {shape === 'normal'
+                      ? t('Nova.aiVideo.selectAvatar.imageShape.square')
+                      : t('Nova.aiVideo.selectAvatar.imageShape.circle')}
+                  </span>
                 </Button>
               ))}
             </S.ButtonWrap>
@@ -245,7 +251,7 @@ export default function Avatar() {
           onClick={() => {
             dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'voice' }));
           }}>
-          <span>{'AI 비디오 만들기'}</span>
+          <span>{t('Nova.aiVideo.button.makeVideo')}</span>
         </Button>
         <img
           src={isLightMode ? HeyzenLogoLightIcon : HeyzenLogoDarkIcon}

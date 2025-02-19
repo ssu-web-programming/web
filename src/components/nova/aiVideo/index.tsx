@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { apiWrapper } from '../../../api/apiWrapper';
 import { NOVA_VIDEO_GET_AVATARS, NOVA_VIDEO_GET_VOICES } from '../../../api/constant';
@@ -27,6 +28,7 @@ import Voice from './voice';
 
 export default function AIVideo() {
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
   const status = useAppSelector(selectPageStatus(NOVA_TAB_TYPE.aiVideo));
   const [activeStep, setActiveStep] = useState<number>(0);
   const result = useAppSelector(selectPageResult(NOVA_TAB_TYPE.aiVideo));
@@ -71,15 +73,15 @@ export default function AIVideo() {
             setActiveStep={setActiveStep}
             steps={[
               {
-                label: <S.Label>아바타 선택</S.Label>,
+                label: <S.Label>{t('Nova.aiVideo.selectAvatar.stepTitle')}</S.Label>,
                 children: <Avatar />
               },
               {
-                label: <S.Label>목소리 선택</S.Label>,
+                label: <S.Label>{t('Nova.aiVideo.selectVoice.stepTitle')}</S.Label>,
                 children: <Voice />
               },
               {
-                label: <S.Label>스크립트 추가</S.Label>,
+                label: <S.Label>{t('Nova.aiVideo.addScript.stepTitle')}</S.Label>,
                 children: <Script />
               }
             ]}

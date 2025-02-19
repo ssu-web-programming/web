@@ -224,13 +224,16 @@ export default function NovaHeader(props: NovaHeaderProps) {
             )}
           </S.TitleWrapper>
           <S.ButtonWrapper>
-            <button
-              onClick={() => {
-                const theme = curTheme === ThemeType.light ? ThemeType.dark : ThemeType.light;
-                dispatch(setThemeInfo(theme));
-              }}>
-              theme
-            </button>
+            {/*다크 모드 개발 편의를 위한 버튼*/}
+            {process.env.NODE_ENV == 'development' && (
+              <button
+                onClick={() => {
+                  const theme = curTheme === ThemeType.light ? ThemeType.dark : ThemeType.light;
+                  dispatch(setThemeInfo(theme));
+                }}>
+                theme
+              </button>
+            )}
             {novaHistory.length > 0 &&
               (selectedNovaTab === NOVA_TAB_TYPE.aiChat ||
                 selectedNovaTab === NOVA_TAB_TYPE.perplexity) && (

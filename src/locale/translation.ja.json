@@ -326,7 +326,8 @@
         "remakeImg": "画像を再編集",
         "changeStyle": "スタイルを変更",
         "convert2DTo3D": "2Dから3Dへ"
-      }
+      },
+      "novaRecentChat": "NOVAとの最近の会話"
     },
     "ChatModel": {
       "GPT_4O": {
@@ -416,6 +417,15 @@
         "ExpiryDate": "※ このリンクは7日間のみ有効です。",
         "NotValidPage": "このページは現在利用できません。",
         "MovePOPage": "Polaris Officeに移動"
+      }
+    },
+    "perplexity": {
+      "source": "ソース",
+      "recommendQuestion": "このような質問はどうでしょうか？",
+      "button": {
+        "viewMore": "もっと見る",
+        "countMore": "その他{{count}}件のアイテム",
+        "anotherAnswer": "他の回答を見る"
       }
     },
     "convert2DTo3D": {
@@ -521,8 +531,43 @@
         "selectVoice": " 声の国籍と言語を一致させてください。",
         "addScript": " 声の国籍と言語を一致させてください。\n動画生成時間は文字数で変わります（100文字約5分）。"
       },
+      "selectAvatar": {
+        "stepTitle": "アバターを選択",
+        "title": "アバターを選択",
+        "imageUploader": {
+          "title": "アバターを作成",
+          "desc": "最大50MBのJPG形式およびPNG形式をサポート"
+        },
+        "imageShape": {
+          "title": "画像フォーマット",
+          "square": "四角形",
+          "circle": "円"
+        },
+        "tabs": {
+          "all": "全て",
+          "male": "男性",
+          "female": "女性"
+        }
+      },
+      "selectVoice": {
+        "stepTitle": "音声を選択",
+        "title": "아바타 목소리",
+        "selectBox": {
+          "gender": "성별",
+          "country": "국가"
+        }
+      },
+      "addScript": {
+        "title": "スクリプトを追加",
+        "stepTitle": "スクリプトを追加",
+        "textAreaPlaceHolder": "アバターに言わせるセリフをここに記入します"
+      },
       "button": {
-        "showMore": "もっと見る"
+        "showMore": "もっと見る",
+        "makeVideo": "AIビデオを作成する",
+        "next": "다음",
+        "prev": "이전",
+        "select": "選択"
       },
       "Done": {
         "Title": "ビデオ作成が完了しました",
@@ -653,6 +698,10 @@
       "ResetChat": {
         "Msg": "戻るを押すと、NOVAとの会話がリセットされます。戻りますか？",
         "Ok": "戻る"
+      },
+      "CloseChat": {
+        "Msg": "待って！NOVAとの最近の会話を終了しますか？",
+        "Ok": "終了する"
       },
       "PersonalInfo": {
         "Title": "個人情報の収集および利用同意（必須）",

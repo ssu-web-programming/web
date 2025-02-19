@@ -326,7 +326,8 @@
         "remakeImg": "Remake Image",
         "changeStyle": "Change Style",
         "convert2DTo3D": "2D to 3D"
-      }
+      },
+      "novaRecentChat": "Recent Conversations with NOVA"
     },
     "ChatModel": {
       "GPT_4O": {
@@ -416,6 +417,15 @@
         "ExpiryDate": "※ This link is only valid for 7 days.",
         "NotValidPage": "This page is currently unavailable.",
         "MovePOPage": "Go to Polaris Office"
+      }
+    },
+    "perplexity": {
+      "source": "Source",
+      "recommendQuestion": "How about a question like this?",
+      "button": {
+        "viewMore": "View More",
+        "countMore": "{{count}} More Items",
+        "anotherAnswer": "See Other Answers"
       }
     },
     "convert2DTo3D": {
@@ -521,8 +531,43 @@
         "selectVoice": "The voice's nationality must match the script language.",
         "addScript": "The voice's nationality must match the script language.\nVideo creation time varies (about 5 min per 100 characters)."
       },
+      "selectAvatar": {
+        "stepTitle": "Select Avatar",
+        "title": "Select Avatar",
+        "imageUploader": {
+          "title": "Create your own avatar",
+          "desc": "Supports JPG and PNG formats, up to 50 MB"
+        },
+        "imageShape": {
+          "title": "Image format",
+          "square": "Rectangle",
+          "circle": "Pie"
+        },
+        "tabs": {
+          "all": "All",
+          "male": "Male",
+          "female": "Female"
+        }
+      },
+      "selectVoice": {
+        "stepTitle": "Select voice",
+        "title": "아바타 목소리",
+        "selectBox": {
+          "gender": "성별",
+          "country": "국가"
+        }
+      },
+      "addScript": {
+        "title": "Add script",
+        "stepTitle": "Add script",
+        "textAreaPlaceHolder": "Write the script you want the avatar to speak here"
+      },
       "button": {
-        "showMore": "View More"
+        "showMore": "View More",
+        "makeVideo": "Create AI video",
+        "next": "다음",
+        "prev": "이전",
+        "select": "Select"
       },
       "Done": {
         "Title": "Video creation completed",
@@ -662,6 +707,10 @@
       "ResetChat": {
         "Msg": "If you go back, your conversation with NOVA will be reset. Do you want to proceed?",
         "Ok": "Go Back"
+      },
+      "CloseChat": {
+        "Msg": "Wait! Do you want to end your last conversation with NOVA?",
+        "Ok": "Exit"
       },
       "PersonalInfo": {
         "Title": "Consent to Collection and Use of Personal Information (Required)",

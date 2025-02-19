@@ -2,6 +2,7 @@ import * as React from 'react';
 import Button from '@mui/material/Button';
 import Step from '@mui/material/Step';
 import StepIcon from '@mui/material/StepIcon';
+import { useTranslation } from 'react-i18next';
 
 import { ReactComponent as ArrowLightIcon } from '../../img/light/ico_arrow_down_normal.svg';
 
@@ -14,6 +15,8 @@ interface StepNavigatorProps {
 }
 
 export default function StepNavigator({ activeStep, setActiveStep, steps }: StepNavigatorProps) {
+  const { t } = useTranslation();
+
   const handleMove = (index: number) => {
     if (index === activeStep) {
       return;
@@ -47,7 +50,11 @@ export default function StepNavigator({ activeStep, setActiveStep, steps }: Step
           return (
             <Step key={index} {...stepProps} onClick={() => handleMove(index)}>
               <S.Label StepIconComponent={CustomStepIcon}>
-                {activeStep === index ? step.label : index < activeStep ? '이전' : '다음'}
+                {activeStep === index
+                  ? step.label
+                  : index < activeStep
+                    ? t('Nova.aiVideo.button.prev')
+                    : t('Nova.aiVideo.button.next')}
               </S.Label>
             </Step>
           );

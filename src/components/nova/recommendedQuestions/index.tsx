@@ -1,4 +1,5 @@
 import React, { Dispatch } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import PlusIcon from '../../../img/common/ico_plus_cyan.svg';
 
@@ -13,9 +14,11 @@ export default function RecommendedQuestions({
   questions,
   setInputContents
 }: recommendedQuestionsProps) {
+  const { t } = useTranslation();
+
   return (
     <S.Container>
-      <S.Title>이런 질문은 어때요?</S.Title>
+      <S.Title>{t('Nova.perplexity.recommendQuestion')}</S.Title>
       <S.Questions>
         {questions.map((question, index) => (
           <>

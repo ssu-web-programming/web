@@ -92,13 +92,13 @@ export default function Voice() {
         <AvatarCard />
         <S.TitleWrap>
           <div className="wrap">
-            <span className="title">아바타 목소리</span>
+            <span className="title">{t('Nova.aiVideo.selectVoice.title')}</span>
             <ArrowTooltips message={t('Nova.aiVideo.tooltip.selectVoice')} placement="top-start">
               <img src={isLightMode ? InfoLightIcon : InfoDarkIcon} alt="info" />
             </ArrowTooltips>
           </div>
           <div className="show" onClick={() => setIsOpen(true)}>
-            <span>더 보기</span>
+            <span>{t('Nova.aiVideo.button.showMore')}</span>
             <img src={ArrowRightIcon} alt="show_more" />
           </div>
         </S.TitleWrap>
@@ -151,7 +151,7 @@ export default function Voice() {
           onClick={() => {
             dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'script' }));
           }}>
-          <span>{'AI 비디오 만들기'}</span>
+          <span>{t('Nova.aiVideo.button.makeVideo')}</span>
           <S.CreditInfo>
             <img src={CreditColorIcon} alt="credit" />
             <span>10</span>

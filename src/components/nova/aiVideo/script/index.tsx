@@ -61,7 +61,7 @@ export default function Script() {
       <S.VoiceContainer>
         <S.TitleWrap>
           <div className="wrap">
-            <span className="title">스크립트 추가</span>
+            <span className="title">{t('Nova.aiVideo.addScript.title')}</span>
             <ArrowTooltips message={t('Nova.aiVideo.tooltip.addScript')} placement="top-start">
               <img src={isLightMode ? InfoLightIcon : InfoDarkIcon} alt="info" />
             </ArrowTooltips>
@@ -70,7 +70,7 @@ export default function Script() {
         <S.TextWrap isActive={isEnabled}>
           <S.TextArea
             maxLength={100}
-            placeholder={'아바타가 이야기해 주었으면 하는 스크립트를 이곳에 작성 해 보세요'}
+            placeholder={t('Nova.aiVideo.addScript.textAreaPlaceHolder') || ''}
             onChange={handleChange}
             value={text}
             isEnabled={isEnabled}
@@ -95,7 +95,7 @@ export default function Script() {
           dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'loading' }));
           selectAvatarScript(text);
         }}>
-        <span>{'AI 비디오 만들기'}</span>
+        <span>{t('Nova.aiVideo.button.makeVideo')}</span>
         <S.CreditInfo>
           <img src={CreditColorIcon} alt="credit" />
           <span>10</span>

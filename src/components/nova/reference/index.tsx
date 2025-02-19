@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Lottie from 'react-lottie-player';
 
 import ArrowDownDarkIcon from '../../../img/dark/ico_arrow_down_accordion.svg';
@@ -23,6 +24,7 @@ interface referenceProps {
 
 export default function Reference({ references }: referenceProps) {
   const { isLightMode } = useAppSelector(themeInfoSelector);
+  const { t } = useTranslation();
 
   const [isExpanded, setIsExpanded] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -44,10 +46,10 @@ export default function Reference({ references }: referenceProps) {
   return (
     <S.Container>
       <S.Header>
-        <span>출처</span>
+        <span>{t('Nova.perplexity.source')}</span>
         {!isMobile && references.length > 4 && (
           <S.StyledButton onClick={toggleExpanded} isExpanded={isExpanded}>
-            {isExpanded ? '접기' : '더보기'}
+            {isExpanded ? '접기' : t('Nova.perplexity.button.viewMore')}
             <img src={isLightMode ? ArrowDownLightIcon : ArrowDownDarkIcon} alt="arrow" />
           </S.StyledButton>
         )}
@@ -77,12 +79,12 @@ export default function Reference({ references }: referenceProps) {
               }}
               isMobile={isMobile}
               className="more">
-              <span>{`+${references.length - 3}개 더`}</span>
+              <span>{t(`Nova.perplexity.button.countMore`, { count: references.length - 3 })}</span>
             </S.Item>
           )}
           <ModalSheet isOpen={isOpen} setIsOpen={setIsOpen} detent="content-height">
             <S.SheetWrap>
-              <S.SheetHeader>출처</S.SheetHeader>
+              <S.SheetHeader>{t('Nova.perplexity.source')}</S.SheetHeader>
               <S.SheetContent>
                 {references.map((ref, idx) => (
                   <React.Fragment key={idx}>

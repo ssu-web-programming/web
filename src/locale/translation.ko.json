@@ -327,7 +327,8 @@
         "remakeImg": "이미지 리메이크",
         "changeStyle": "스타일 변환",
         "convert2DTo3D": "2D <img/> 3D 변환"
-      }
+      },
+      "novaRecentChat": "NOVA와의 최근 대화"
     },
     "ChatModel": {
       "GPT_4O": {
@@ -429,12 +430,12 @@
       "Loading": "텍스트를 번역하고 있어요"
     },
     "perplexity": {
-      "Guide": {
-        "Title": "웹 검색",
-        "SubTitle": "",
-        "Example1": "서류 합격을 위한 자기소개서 초안을 작성해줘",
-        "Example2": "AI를 주제로 한 이미지를 만들어줘",
-        "Example3": "2024년 전기차 시장의 성장 전망을 알려줘"
+      "source": "출처",
+      "recommendQuestion": "이런 질문은 어때요?",
+      "button": {
+        "viewMore": "더 보기",
+        "countMore": "{{count}}개 더",
+        "anotherAnswer": "다른 답변 보기"
       }
     },
     "convert2DTo3D": {
@@ -540,8 +541,43 @@
         "selectVoice": "선택한 목소리의 국적과 스크립트 입력 언어가 일치해야 영상 생성이 가능합니다.",
         "addScript": "선택한 목소리의 국적과 스크립트 입력 언어가 일치해야 영상 생성이 가능합니다.\n입력한 스크립트 양에 따라 영상 생성 시간이 달라질 수 있습니다. (100자당 약 5분 소요)"
       },
+      "selectAvatar": {
+        "stepTitle": "아바타 선택",
+        "title": "아바타 선택",
+        "imageUploader": {
+          "title": "나만의 아바타 만들기",
+          "desc": "JPG, PNG 형식, 최대 50MB 지원"
+        },
+        "imageShape": {
+          "title": "이미지 형태",
+          "square": "사각형",
+          "circle": "원형"
+        },
+        "tabs": {
+          "all": "전체",
+          "male": "남성",
+          "female": "여성"
+        }
+      },
+      "selectVoice": {
+        "stepTitle": "목소리 선택",
+        "title": "아바타 목소리",
+        "selectBox": {
+          "gender": "성별",
+          "country": "국가"
+        }
+      },
+      "addScript": {
+        "title": "스크립트 추가",
+        "stepTitle": "스크립트 추가",
+        "textAreaPlaceHolder": "아바타가 이야기해 주었으면 하는 스크립트를 이곳에 작성 해 보세요"
+      },
       "button": {
-        "showMore": "더보기"
+        "showMore": "더보기",
+        "makeVideo": "AI 비디오 만들기",
+        "next": "다음",
+        "prev": "이전",
+        "select": "선택하기"
       },
       "Done": {
         "Title": "비디오 생성 완료",
@@ -695,6 +731,10 @@
       "ResetChat": {
         "Msg": "뒤로가기를 하시면 NOVA와의 대화가 초기화됩니다. 뒤로가기를 진행하시겠습니까?",
         "Ok": "뒤로가기"
+      },
+      "CloseChat": {
+        "Msg": "잠깐! NOVA와의 최근 대화를 종료하시겠어요?",
+        "Ok": "종료하기"
       },
       "PersonalInfo": {
         "Title": "개인정보 수집 및 이용동의 (필수)",
