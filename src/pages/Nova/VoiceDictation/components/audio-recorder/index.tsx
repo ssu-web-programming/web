@@ -175,7 +175,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       const mimeType = getSupportedMimeType();
       console.log('window 가능한 type', mimeType);
       const mediaRecorder = new MediaRecorder(stream, {
-        mimeType: getPlatform() === ClientType.windows ? 'audio/webm' : 'video/mp4'
+        mimeType: getPlatform() === ClientType.windows ? 'video/webm;codecs=vp8' : 'video/mp4'
       });
       mediaRecorderRef.current = mediaRecorder;
       chunksRef.current = [];
@@ -215,7 +215,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
 
       mediaRecorder.onstop = async () => {
         const blob = new Blob(chunksRef.current, {
-          type: getPlatform() === ClientType.windows ? 'audio/ogg' : 'audio/mpeg'
+          type: 'audio/mpeg'
         });
         const url = URL.createObjectURL(blob);
         setAudioUrl(url);
