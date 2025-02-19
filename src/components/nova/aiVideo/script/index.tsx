@@ -69,12 +69,13 @@ export default function Script() {
         </S.TitleWrap>
         <S.TextWrap isActive={isEnabled}>
           <S.TextArea
-            maxLength={400}
+            maxLength={100}
             placeholder={'아바타가 이야기해 주었으면 하는 스크립트를 이곳에 작성 해 보세요'}
             onChange={handleChange}
             value={text}
             isEnabled={isEnabled}
           />
+          <span className="length">{text.length}/100</span>
         </S.TextWrap>
       </S.VoiceContainer>
       <Button
