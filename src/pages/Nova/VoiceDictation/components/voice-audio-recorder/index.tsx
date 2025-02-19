@@ -4,8 +4,8 @@ import { setIsMicrophoneState } from 'store/slices/appState';
 import { themeInfoSelector } from 'store/slices/theme';
 import { setLocalFiles } from 'store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from 'store/store';
-import Bridge from 'util/bridge';
-import { blobToFile } from 'util/getAudioDuration';
+import Bridge, { ClientType, getPlatform } from 'util/bridge';
+import { blobToFile, windowBlobToFile } from 'util/getAudioDuration';
 
 import { useVoiceDictationContext } from '../../provider/voice-dictation-provider';
 import AudioRecorder from '../audio-recorder';
@@ -53,7 +53,11 @@ export default function VoiceAudioRecorder() {
   return (
     <AudioRecorder
       onRecordingComplete={async (blob) => {
-        handleMoveToReady(blobToFile(blob));
+        console.log('완료된 blob', blob);
+        console.log('파일객체로 변환된 blob', windowBlobToFile(blob));
+        handleMoveToReady(
+          getPlatform() === ClientType.windows ? windowBlobToFile(blob) : blobToFile(blob)
+        );
       }}
       isInitRecording={isVoiceRecording}
       startCondition={isVoiceRecording && previousPageType === 'AUDIO_RECORDER'}
