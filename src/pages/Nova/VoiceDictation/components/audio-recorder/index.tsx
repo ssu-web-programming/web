@@ -214,7 +214,9 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       };
 
       mediaRecorder.onstop = async () => {
-        const blob = new Blob(chunksRef.current, { type: 'audio/mpeg' });
+        const blob = new Blob(chunksRef.current, {
+          type: getPlatform() === ClientType.windows ? 'audio/ogg' : 'audio/mpeg'
+        });
         const url = URL.createObjectURL(blob);
         setAudioUrl(url);
         await checkAudioDuration(blob);
