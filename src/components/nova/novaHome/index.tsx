@@ -4,20 +4,15 @@ import { useLocation } from 'react-router-dom';
 
 import { FileUploadState } from '../../../constants/fileTypes';
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
-import { SERVICE_TYPE } from '../../../constants/serviceType';
-import ChangeBGIcon from '../../../img/common/nova/imgSample/bg_change_sample.png';
-import RemoveBGIcon from '../../../img/common/nova/imgSample/bg_delete_sample.png';
-import Convert2DTo3DIcon from '../../../img/common/nova/imgSample/convert_2dto3d_smaple.gif';
-import AIVideoIcon from '../../../img/common/nova/imgSample/ico_ai_video.svg';
-import PerplexityIcon from '../../../img/common/nova/imgSample/ico_perplexity.svg';
-import TranslationIcon from '../../../img/common/nova/imgSample/ico_translation.svg';
-import ExpandImgIcon from '../../../img/common/nova/imgSample/image_expand_sample.png';
-import RemakeImgIcon from '../../../img/common/nova/imgSample/image_remake_sample.png';
-import ChangeStyleIcon from '../../../img/common/nova/imgSample/image_style_sample.png';
-import improveImgIcon from '../../../img/common/nova/imgSample/image_upscaling_sample.png';
+import {
+  findTabByService,
+  iconMap,
+  SERVICE_CATEGORY,
+  SERVICE_GROUP_MAP,
+  SERVICE_TYPE
+} from '../../../constants/serviceType';
 import { ReactComponent as IconConvertDark } from '../../../img/dark/nova/tab/convert_Img.svg';
 import { ReactComponent as IconConvertLight } from '../../../img/light/nova/tab/convert_Img.svg';
-import VoiceDictationIcon from '../../../img/light/nova/voiceDictation/ico_voice_dictation.svg';
 import { setIsExternal } from '../../../store/slices/appState';
 import { novaHistorySelector, setChatMode } from '../../../store/slices/nova/novaHistorySlice';
 import { setPageStatus } from '../../../store/slices/nova/pageStatusSlice';
@@ -30,35 +25,6 @@ import { FileUploading } from '../FileUploading';
 import InputBar, { InputBarSubmitParam } from '../inputBar';
 
 import * as S from './style';
-
-const AI_TOOLS = [
-  { icon: PerplexityIcon, alt: 'perplexity', tab: NOVA_TAB_TYPE.perplexity },
-  { icon: TranslationIcon, alt: 'translation', tab: NOVA_TAB_TYPE.translation },
-  {
-    icon: VoiceDictationIcon,
-    alt: 'voice dictation',
-    tab: NOVA_TAB_TYPE.voiceDictation
-  },
-  { icon: AIVideoIcon, alt: 'ai video', tab: NOVA_TAB_TYPE.aiVideo }
-];
-
-const AI_IMAGES = [
-  { icon: RemoveBGIcon, alt: 'removeBG', tab: NOVA_TAB_TYPE.removeBG },
-  { icon: improveImgIcon, alt: 'improveRes', tab: NOVA_TAB_TYPE.improvedRes },
-  { icon: ChangeBGIcon, alt: 'changeBG', tab: NOVA_TAB_TYPE.changeBG },
-  { icon: RemakeImgIcon, alt: 'remakeImg', tab: NOVA_TAB_TYPE.remakeImg },
-  { icon: ExpandImgIcon, alt: 'expandImg', tab: NOVA_TAB_TYPE.expandImg },
-  {
-    icon: ChangeStyleIcon,
-    alt: 'changeStyle',
-    tab: NOVA_TAB_TYPE.changeStyle
-  },
-  {
-    icon: Convert2DTo3DIcon,
-    alt: 'convert2DTo3D',
-    tab: NOVA_TAB_TYPE.convert2DTo3D
-  }
-];
 
 interface NovaHomeProps {
   expiredNOVA: boolean;
@@ -119,23 +85,33 @@ const NovaHome = (props: NovaHomeProps) => {
         <S.ToolWrap>
           <S.ToolTitle>{t('Nova.Home.tools.title')}</S.ToolTitle>
           <S.AIToolWrap>
-            {AI_TOOLS.map((tool, index) => (
-              <div key={index} onClick={() => handleMovePage(tool.tab)}>
-                <img src={tool.icon} alt={tool.alt} />
-                <span>{t(`Nova.Home.tools.${tool.tab}`)}</span>
-              </div>
-            ))}
+            {Object.entries(SERVICE_GROUP_MAP[SERVICE_CATEGORY.TOOLS]).map(([key, services]) => {
+              const tab = findTabByService(services[0]);
+              if (!tab) return null;
+
+              return (
+                <div key={key} onClick={() => handleMovePage(tab)}>
+                  <img src={iconMap[tab] || ''} alt={key} />
+                  <span>{t(`Nova.Home.tools.${tab}`)}</span>
+                </div>
+              );
+            })}
           </S.AIToolWrap>
         </S.ToolWrap>
         <S.ToolWrap>
           <S.ToolTitle>{t('Nova.Home.image.title')}</S.ToolTitle>
           <S.AIImageWrap>
-            {AI_IMAGES.map((tool, index) => (
-              <S.ImageItem key={index} onClick={() => handleMovePage(tool.tab)}>
-                <img src={tool.icon} alt={tool.alt} />
-                <span>{getTabTranslationKey(tool.tab)}</span>
-              </S.ImageItem>
-            ))}
+            {Object.entries(SERVICE_GROUP_MAP[SERVICE_CATEGORY.IMAGE]).map(([key, services]) => {
+              const tab = findTabByService(services[0]);
+              if (!tab) return null;
+
+              return (
+                <S.ImageItem key={key} onClick={() => handleMovePage(tab)}>
+                  <img src={iconMap[tab] || ''} alt={key} />
+                  <span>{getTabTranslationKey(tab)}</span>
+                </S.ImageItem>
+              );
+            })}
           </S.AIImageWrap>
         </S.ToolWrap>
       </S.Body>

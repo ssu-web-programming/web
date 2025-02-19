@@ -3,13 +3,14 @@ import { TFunction } from 'i18next';
 import ChangeBGIcon from '../../img/common/nova/imgSample/bg_change_sample.png';
 import RemoveBGIcon from '../../img/common/nova/imgSample/bg_delete_sample.png';
 import Convert2DTo3DIcon from '../../img/common/nova/imgSample/convert_2dto3d_smaple.gif';
-import AIVideoIcon from '../../img/common/nova/imgSample/ico_ai_video.svg';
-import TranslationIcon from '../../img/common/nova/imgSample/ico_translation.svg';
+import AIVideoIcon from '../../img/common/nova/imgSample/ico_ai_video.png';
+import PerplexityIcon from '../../img/common/nova/imgSample/ico_perplexity.png';
+import TranslationIcon from '../../img/common/nova/imgSample/ico_translation.png';
+import VoiceDictationIcon from '../../img/common/nova/imgSample/ico_voice_dictation.png';
 import ExpandImgIcon from '../../img/common/nova/imgSample/image_expand_sample.png';
 import RemakeImgIcon from '../../img/common/nova/imgSample/image_remake_sample.png';
 import ChangeStyleIcon from '../../img/common/nova/imgSample/image_style_sample.png';
 import ImprovedResIcon from '../../img/common/nova/imgSample/image_upscaling_sample.png';
-import VoiceDictationIcon from '../../img/common/nova/imgSample/voice_dictation_sample.svg';
 import ClaudeLogoDarkIcon from '../../img/dark/nova/logo/ico_claude_logo.svg';
 import ClovaLogoDarkIcon from '../../img/dark/nova/logo/ico_clova_logo.svg';
 import GPTLogoDarkIcon from '../../img/dark/nova/logo/ico_gpt_logo.svg';
@@ -189,7 +190,7 @@ const CHAT_GROUP_DETAIL_MAP: Record<
 export const iconMap: Record<NOVA_TAB_TYPE, string> = {
   home: '',
   aiChat: '',
-  perplexity: '',
+  perplexity: PerplexityIcon,
   convert2DTo3D: Convert2DTo3DIcon,
   removeBG: RemoveBGIcon,
   changeBG: ChangeBGIcon,
@@ -262,4 +263,10 @@ export const getServiceEngineName = (serviceType: SERVICE_TYPE): string => {
   };
 
   return mapping[serviceType] || 'unknown';
+};
+
+export const findTabByService = (serviceType: SERVICE_TYPE): NOVA_TAB_TYPE => {
+  return Object.entries(TAB_SERVICE_MAP).find(([, services]) =>
+    services.includes(serviceType)
+  )?.[0] as NOVA_TAB_TYPE;
 };
