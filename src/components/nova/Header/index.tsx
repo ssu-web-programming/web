@@ -165,7 +165,10 @@ export default function NovaHeader(props: NovaHeaderProps) {
 
     if (isDisableBack) {
       // 녹음중 상태이면 아래 팝업을 열어여한다.
-      if (isVoiceRecording || componentType === 'VOICE_READY' || componentType === 'FILE_READY') {
+      if (
+        (isVoiceRecording || componentType === 'VOICE_READY' || componentType === 'FILE_READY') &&
+        selectedNovaTab === NOVA_TAB_TYPE.voiceDictation
+      ) {
         const result = await openClosedModal();
         if (!result) return;
       }
