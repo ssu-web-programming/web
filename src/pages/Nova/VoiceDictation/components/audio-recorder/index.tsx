@@ -67,10 +67,11 @@ const draw = (
   const amp = canvas.height / 2;
 
   // background color 색을 width , height만큼 채우는 코드
+  ctx.clearRect(0, 0, canvas.clientWidth, canvas.height);
   ctx.fillStyle = 'transparent';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillRect(0, 0, canvas.clientWidth, canvas.height);
 
-  const gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
+  const gradient = ctx.createLinearGradient(0, 0, canvas.clientWidth, 0);
   if (isPaused) {
     gradient.addColorStop(0, '#c9cdd2');
   } else {
@@ -79,7 +80,7 @@ const draw = (
     gradient.addColorStop(1, '#7741d3'); // 밝은 보라
   }
 
-  const totalBars = Math.floor(canvas.width / (barWidth + gap));
+  const totalBars = Math.floor(canvas.clientWidth / (barWidth + gap));
 
   for (let i = 0; i < totalBars; i++) {
     ctx.fillStyle = gradient;
@@ -141,10 +142,6 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
     if (!canvasRef.current) return;
 
     const container = canvasRef.current.parentElement;
-
-    console.log(container?.clientWidth);
-    console.log('width', canvasRef.current.width);
-    console.log('자신', canvasRef.current.clientWidth);
 
     audioContextRef.current = new AudioContext();
     const source = audioContextRef.current.createMediaStreamSource(stream);
@@ -277,7 +274,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       if (canvasRef.current && analyserRef.current) {
         const frequencyData = new Uint8Array(analyserRef.current.frequencyBinCount);
         analyserRef.current.getByteFrequencyData(frequencyData);
-        const data = calculateBarData(frequencyData, canvasRef.current.width, barWidth, gap);
+        const data = calculateBarData(frequencyData, canvasRef.current.clientWidth, barWidth, gap);
         draw(data, canvasRef.current, barWidth, gap, isPaused);
       }
 
@@ -287,8 +284,6 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       }
     }
   }, [stopTimer]);
-
-  console.log('canvasRef', canvasRef.current?.width);
 
   const resumeRecording = useCallback(() => {
     if (
@@ -305,7 +300,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       if (canvasRef.current && analyserRef.current) {
         const frequencyData = new Uint8Array(analyserRef.current.frequencyBinCount);
         analyserRef.current.getByteFrequencyData(frequencyData);
-        const data = calculateBarData(frequencyData, canvasRef.current.width, barWidth, gap);
+        const data = calculateBarData(frequencyData, canvasRef.current.clientWidth, barWidth, gap);
         draw(data, canvasRef.current, barWidth, gap, isPaused);
       }
     }
