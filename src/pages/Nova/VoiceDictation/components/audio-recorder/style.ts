@@ -7,6 +7,7 @@ const Container = styled.div`
   padding: 16px;
 `;
 const CanvasWrapper = styled.div`
+  width: 100%;
   position: absolute;
   top: 45%;
   left: 50%;
@@ -23,6 +24,7 @@ const StatusText = styled.p<{ $isPaused: boolean }>`
 `;
 
 const Canvas = styled.canvas`
+  width: 100%;
   height: 200px;
 `;
 

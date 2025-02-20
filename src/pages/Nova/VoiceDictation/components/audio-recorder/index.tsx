@@ -7,10 +7,9 @@ import { ReactComponent as Lang } from 'img/light/nova/voiceDictation/lang.svg';
 import { ReactComponent as Stop } from 'img/light/nova/voiceDictation/stop.svg';
 import { useTranslation } from 'react-i18next';
 import { ClientType, getPlatform } from 'util/bridge';
-import { getSupportedMimeType } from 'util/getAudioDuration';
 
 import { LangOptionValues } from '../../provider/voice-dictation-provider';
-import { getLangOptions, langOptions } from '../recognized-lang';
+import { getLangOptions } from '../recognized-lang';
 
 import * as S from './style';
 
