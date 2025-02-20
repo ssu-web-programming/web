@@ -551,10 +551,10 @@
       },
       "selectVoice": {
         "stepTitle": "Select voice",
-        "title": "아바타 목소리",
+        "title": "Avatar Voice",
         "selectBox": {
-          "gender": "성별",
-          "country": "국가"
+          "gender": "Gender",
+          "country": "Country"
         }
       },
       "addScript": {
@@ -564,9 +564,10 @@
       },
       "button": {
         "showMore": "View More",
+        "collapse": "Collapse",
         "makeVideo": "Create AI video",
-        "next": "다음",
-        "prev": "이전",
+        "next": "Next",
+        "prev": "Previous",
         "select": "Select"
       },
       "Done": {

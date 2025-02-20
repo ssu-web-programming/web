@@ -571,6 +571,7 @@
       },
       "button": {
         "showMore": "더보기",
+        "collapse": "접기",
         "makeVideo": "AI 비디오 만들기",
         "next": "다음",
         "prev": "이전",
