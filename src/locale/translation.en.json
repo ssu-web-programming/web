@@ -305,7 +305,7 @@
     "Home": {
       "creditGuide": "Credit Guide",
       "chat": {
-        "title":"Chat",
+        "title": "Chat",
         "aiChat": "Chat",
         "docImgQuery": "Document/Image query",
         "imgGen": "Generate Image"
@@ -574,6 +574,205 @@
         "SubTitle": "Your AI avatar video is ready!\nSave it and use it in various ways!"
       }
     },
+    "voiceDictation": {
+      "Guide": {
+        "Title": "Dictation",
+        "SubTitle": "Record or upload a file.",
+        "UploadGuide": "Supports .m4a, .mp3, .aac, .amr, and .wav files, up to 1GB and about 30 minutes.",
+        "TimeLimit": "Up to 30 minutes available.",
+        "NetworkError": "Service connection is unstable. Please check your network status.",
+        "LanguageConversion": "Converted to the selected recognition language."
+      },
+      "Button": {
+        "LiveDictation": "Live dictation",
+        "UploadFile": "Upload a Voice Recording File",
+        "Cancel": "Cancel",
+        "GoBack": "Go back",
+        "AllowMic": "Allow",
+        "DenyMic": "Don't allow",
+        "StopRecording": "Stop recording",
+        "Convert": "Convert",
+        "NewDictation": "New transcription",
+        "Save": "Save",
+        "VoiceFile": "Voice file",
+        "DictationFile": "Dictation file",
+        "SeeDetails": "See details",
+        "DontShowAgain": "Don't show again",
+        "Confirm": "OK"
+      },
+      "Status": {
+        "RecognizingKorean": "Recognizing Korean",
+        "OnPause": "On pause",
+        "Recording": "Recording…",
+        "MovingToDictation": "Go to dictation",
+        "Converting": "Converting to text",
+        "NoContent": "There is no converted voice transcribed content.",
+        "Completed": "Dictation completed",
+        "ConversionSuccess": "The voice conversation has been converted to text.\nSave your conversations and use them freely!",
+        "Participant": "Attendee",
+        "Recognizing": "Recognizing"
+      },
+      "Alert": {
+        "MicPermission": "Polaris Office wants to \naccess the microphone.",
+        "MicPermissionDetail": "Allow Polaris Office to\nrecord audio for transcription?",
+        "AudioPermissionRequired": "Allow audio permission to start recording!",
+        "UnsavedRecording": "Wait! If you go back without finishing the recording, \nit won't be saved. Do you still want to go back?",
+        "StopRecordingConfirm": "Do you want to stop the recording?",
+        "ConversionNotice": "When the recording stops, \n Nova will convert the voice to text.",
+        "UnsavedGoBack": "Wait! If you go back, the recording will not be saved. \nDo you still want to go back?",
+        "LanguageCheck": "Please check if the voice file contains a conversation and\nif the set recognition language matches the voice language.",
+        "Downloading": "Downloading voice file. (NN%)",
+        "FileFormatSelection": "What file format would you like to save it as?",
+        "iPhoneGuideTitle": "Guide to finding iPhone recording files",
+        "iPhoneGuideContent": "Files recorded with the default iPhone recorder\ncan only be uploaded if saved to\n'iCloud Drive' or 'On My iPhone'.",
+        "FileSizeError": "The file size is too large.\nPlease select only files less than 1GB in size.",
+        "NotFoundMic": "Microphone device not found",
+        "NotFoundMicDetail": "No available microphone has been detected. To ensure accurate dictation, please connect a microphone or enable it in your device settings."
+      },
+      "LanguageSelector": {
+        "Options": {
+          "Korean": "Korean",
+          "English": "English",
+          "Japanese": "Japanese",
+          "Chinese1": "Chinese (Simplified)",
+          "Chinese2": "Chinese (Traditional)",
+          "KoEn": "Korean & English"
+        },
+        "ChangeNotice": "The recognition language has been changed to []!"
+      },
+      "FileFormat": {
+        "Options": {
+          "Text": "Text document(.txt)",
+          "Pdf": "PDF file(.pdf)"
+        }
+      },
+      "Done": {
+        "Title": "Conversion ready"
+      },
+      "Loading": "Converting to text"
+    },
+    "translation": {
+      "Menu": {
+        "Title": "Translation",
+        "RecentLanguages": "Recent languages"
+      },
+      "Button": {
+        "TextTranslation": "Text translation",
+        "FileTranslation": "File translation",
+        "Translate": "Translate",
+        "LanguageSearch": "Language Search",
+        "TranslationComplete": "File translation complete",
+        "ProceedWithoutChanges": "Proceed without changes",
+        "SaveNow": "Save now"
+      },
+      "Input": {
+        "Placeholder": "Enter the content to be translated.",
+        "CharacterCount": "0 characters / 10,000 characters"
+      },
+      "Guide": {
+        "MaxCharacters": "You can only enter up to 10,000 characters.",
+        "SameLanguage": "The source language and the target language are the same. Please select another language.",
+        "NoResults": "No results"
+      },
+      "Language": {
+        "Source": "Source language",
+        "Target": "Language to be translated",
+        "List": {
+          "Title": "Source language",
+          "Arabic": "Arabic",
+          "Estonian": "Estonian",
+          "English": "English",
+          "Ukrainian": "Ukrainian",
+          "Italian": "Italian",
+          "Indonesian": "Indonesian",
+          "Japanese": "Japanese",
+          "Chinese": "Chinese",
+          "Czech": "Czech",
+          "Turkish": "Turkish",
+          "Polish": "Polish",
+          "Portuguese": "Portuguese",
+          "French": "French",
+          "Finnish": "Finnish",
+          "Hungarian": "Hungarian",
+          "Greek": "Greek",
+          "Dutch": "Dutch",
+          "NorwegianBokmal": "Norwegian Bokmål",
+          "Danish": "Danish",
+          "German": "German",
+          "Latvian": "Latvian",
+          "Russian": "Russian",
+          "Romanian": "Romanian",
+          "Lithuanian": "Lithuanian",
+          "Bulgarian": "Bulgarian",
+          "Slovak": "Slovak",
+          "Slovenian": "Slovenian",
+          "Swedish": "Swedish",
+          "Spanish": "Spanish",
+          "Korean": "Korean"
+        },
+        "TargetList": {
+          "Title": "Language to be translated",
+          "Greek": "Greek",
+          "Dutch": "Dutch",
+          "NorwegianBokmal": "Norwegian Bokmål",
+          "Danish": "Danish",
+          "German": "German",
+          "Latvian": "Latvian",
+          "Russian": "Russian",
+          "Romanian": "Romanian",
+          "Lithuanian": "Lithuanian",
+          "Moslovenian": "Moslovenian",
+          "Bulgarian": "Bulgarian",
+          "Swedish": "Swedish",
+          "Spanish": "Spanish",
+          "Slovak": "Slovak",
+          "Slovenian": "Slovenian",
+          "Arabic": "Arabic",
+          "Estonian": "Estonian",
+          "EnglishUK": "English (UK)",
+          "EnglishUS": "English (US)",
+          "Ukrainian": "Ukrainian",
+          "Italian": "Italian",
+          "Indonesian": "Indonesian",
+          "Japanese": "Japanese",
+          "ChineseSimplified": "Chinese (Simplified)",
+          "ChineseTraditional": "Chinese (Traditional)",
+          "Czech": "Czech",
+          "Turkish": "Turkish",
+          "Polish": "Polish",
+          "Portuguese": "Portuguese",
+          "PortugueseBrazil": "Portuguese (Brazil)",
+          "French": "French",
+          "Finnish": "Finnish",
+          "Hungarian": "Hungarian"
+        }
+      },
+      "Status": {
+        "Translating": "Translating text…",
+        "FileTranslating": "Translating file…",
+        "FileTranslated": "File translated",
+        "TranslationCompleted": "The translation to your desired language is completed!",
+        "SaveAndCheck": "Save and check the translated content right away!"
+      },
+      "Alert": {
+        "UnsavedChanges": "Unsaved changes won't be in the translation.",
+        "SaveBeforeAnalysis": "Save first to analyze. Save now?",
+        "SaveToPolarisDrive": "Save to Polaris Drive to analyze. Save now?",
+        "FileSizeLimit": "The file size is too large. Please select only files less than 30 MB in size.",
+        "UnsupportedFormat": "This file format is not supported. Please check again.",
+        "CharacterLimit": "Exceeds limit. Reduce text and retry.",
+        "EncryptedDocument": "Encrypted documents cannot be queried. Please check the document again.",
+        "DamagedDocument": "Damaged documents cannot be queried. Please check the document again."
+      },
+      "FileUpload": {
+        "Guide": {
+          "Title": "Upload File",
+          "Description": "Translates PDF, DOCX, and PPTX documents.",
+          "SizeLimit": "Supported Capacity: Up to 30 MB",
+          "CharacterLimit": "Number of characters supported: Up to 50,000 characters"
+        }
+      }
+    },
     "GoBackHeader": "Go Back",
     "TimeOut": {
       "Title": "The operation has exceeded the time limit.\nPlease try again.",
@@ -617,7 +816,7 @@
       "Remake": "Regenerate",
       "InsertDoc": "Insert into document",
       "Save": "Save",
-      "Share" : "Share"
+      "Share": "Share"
     },
     "DragAndDrop": {
       "Title": "Upload",

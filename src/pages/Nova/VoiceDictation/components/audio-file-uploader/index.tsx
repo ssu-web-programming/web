@@ -7,6 +7,7 @@ import { NOVA_TAB_TYPE } from 'constants/novaTapTypes';
 import { ReactComponent as UploadDarkIcon } from 'img/dark/ico_upload_img_plus.svg';
 import CreditIcon from 'img/light/ico_credit_gray.svg';
 import { ReactComponent as UploadFileLightIcon } from 'img/light/nova/translation/file_upload.svg';
+import { useTranslation } from 'react-i18next';
 import { themeInfoSelector } from 'store/slices/theme';
 import { getLocalFiles, setLocalFiles } from 'store/slices/uploadFiles';
 import { userInfoSelector } from 'store/slices/userInfo';
@@ -38,6 +39,7 @@ export default function AudioFileUploader({
 
   const target = 'nova-voice-dictation';
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const { t } = useTranslation();
 
   const handleClickFileUpload = () => {
     // IOS는 팝업을 넣어야함!
@@ -72,7 +74,7 @@ export default function AudioFileUploader({
         }}>
         <GuideBox
           guideMsg={guideMsg}
-          guideTitle="음성 녹음 파일 업로드"
+          guideTitle={t('Nova.voiceDictation.Button.UploadFile')}
           lightIcon={<UploadFileLightIcon />}
           darkIcon={<UploadDarkIcon />}
         />

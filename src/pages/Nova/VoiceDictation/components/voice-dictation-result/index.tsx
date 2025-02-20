@@ -56,18 +56,15 @@ export default function VoiceDictationResult() {
         <S.Header>
           <S.Title lang={'ko'}>
             <img src={isLightMode ? CheckLightIcon : CheckDarkIcon} alt="check" />
-            <span>받아쓰기 완료</span>
+            <span>{t('Nova.voiceDictation.Status.Completed')}</span>
           </S.Title>
 
-          <S.Description>
-            음성 대화를 텍스트로 변환했어요. <br />
-            대화 내용을 저장해, 자유롭게 활용해 보세요!
-          </S.Description>
+          <S.Description>{t('Nova.voiceDictation.Status.ConversionSuccess')}</S.Description>
         </S.Header>
 
         <S.TranscriptContainer>
           <S.NewTranscript>
-            <span>새로운 받아쓰기</span>
+            <span>{t('Nova.voiceDictation.Button.NewDictation')}</span>
             <span>오늘 오후 10:57 · {audioDuration}</span>
           </S.NewTranscript>
 
@@ -78,7 +75,10 @@ export default function VoiceDictationResult() {
               </S.TranscriptIcon>
               <S.TranscriptContent>
                 <S.TranscriptInfo>
-                  <S.TranscriptName>참석자{transcript.speaker.name}</S.TranscriptName>
+                  <S.TranscriptName>
+                    {t('Nova.voiceDictation.Status.Participant')}
+                    {transcript.speaker.name}
+                  </S.TranscriptName>
                   <S.TranscriptTime>{formatMilliseconds(transcript.end)}</S.TranscriptTime>
                 </S.TranscriptInfo>
                 <S.TranscriptText>{transcript.text}</S.TranscriptText>

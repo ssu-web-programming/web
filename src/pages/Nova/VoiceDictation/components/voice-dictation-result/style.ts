@@ -44,6 +44,7 @@ const Description = styled.p`
   font-weight: 500;
   line-height: 24px;
   margin-top: 8px;
+  white-space: pre-wrap;
 `;
 
 const TranscriptWrapper = styled.div`

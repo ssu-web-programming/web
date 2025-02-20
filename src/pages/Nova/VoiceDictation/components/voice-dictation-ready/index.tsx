@@ -17,7 +17,7 @@ import {
   useVoiceDictationContext,
   VoiceDictationResult
 } from '../../provider/voice-dictation-provider';
-import { langOptions } from '../recognized-lang';
+import { getLangOptions } from '../recognized-lang';
 
 import * as S from './style';
 
@@ -33,6 +33,7 @@ export default function VoiceDictationReady() {
 
   const [isEditMode, setIsEditMode] = useState(false);
   const localFiles = useAppSelector(getLocalFiles);
+  const langOptions = getLangOptions(t);
 
   const handleChangeEditMode = () => {
     setIsEditMode(!isEditMode);
@@ -150,7 +151,7 @@ export default function VoiceDictationReady() {
         )}
 
         <S.ButtonWrap onClick={translationVoiceDictation}>
-          <span>변환하기</span>
+          <span>{t('Nova.voiceDictation.Button.Convert')}</span>
           <div>
             <img src={CreditColorIcon} alt="credit" width={20} height={20} />
             <span>30</span>

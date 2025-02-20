@@ -1,11 +1,13 @@
 import OverlayModal from 'components/overlay-modal';
+import { NOVA_TAB_TYPE } from 'constants/novaTapTypes';
 import { overlay } from 'overlay-kit';
 import { setIsMicrophoneState } from 'store/slices/appState';
+import { selectNovaTab } from 'store/slices/tabSlice';
 import { themeInfoSelector } from 'store/slices/theme';
 import { setLocalFiles } from 'store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import Bridge, { ClientType, getPlatform } from 'util/bridge';
-import { blobToFile, convertWebmToWavFile, windowBlobToFile } from 'util/getAudioDuration';
+import { blobToFile, convertWebmToWavFile } from 'util/getAudioDuration';
 
 import { useVoiceDictationContext } from '../../provider/voice-dictation-provider';
 import AudioRecorder from '../audio-recorder';
@@ -51,25 +53,29 @@ export default function VoiceAudioRecorder() {
   };
 
   return (
-    <AudioRecorder
-      onRecordingComplete={async (blob) => {
-        console.log('완료된 blob', blob);
-        console.log('파일객체로 변환된 blob', await convertWebmToWavFile(blob));
-        handleMoveToReady(
-          getPlatform() === ClientType.windows ? await convertWebmToWavFile(blob) : blobToFile(blob)
-        );
-      }}
-      isInitRecording={isVoiceRecording}
-      startCondition={isVoiceRecording && previousPageType === 'AUDIO_RECORDER'}
-      onRecordingFinish={async () => {
-        dispatch(setIsMicrophoneState(null));
-        await Bridge.callBridgeApi('getRecordingState', false);
-        // sessionStorage.setItem('hasStartedRecording', 'false');
-      }}
-      onStopConfirm={openStopOverlay}
-      selectedLangOption={selectedLangOption}
-      openLangOverlay={openLangOverlay}
-      isLightMode={isLightMode}
-    />
+    <>
+      <AudioRecorder
+        onRecordingComplete={async (blob) => {
+          console.log('완료된 blob', blob);
+          console.log('파일객체로 변환된 blob', await convertWebmToWavFile(blob));
+          handleMoveToReady(
+            getPlatform() === ClientType.windows
+              ? await convertWebmToWavFile(blob)
+              : blobToFile(blob)
+          );
+        }}
+        isInitRecording={isVoiceRecording}
+        startCondition={isVoiceRecording && previousPageType === 'AUDIO_RECORDER'}
+        onRecordingFinish={async () => {
+          dispatch(setIsMicrophoneState(null));
+          await Bridge.callBridgeApi('getRecordingState', false);
+          // sessionStorage.setItem('hasStartedRecording', 'false');
+        }}
+        onStopConfirm={openStopOverlay}
+        selectedLangOption={selectedLangOption}
+        openLangOverlay={openLangOverlay}
+        isLightMode={isLightMode}
+      />
+    </>
   );
 }

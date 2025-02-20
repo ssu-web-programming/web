@@ -3,6 +3,7 @@ import {
   SOURCE_LANGUAGES_WITH_LANG_CODE,
   TARGET_LANGUAGES_WITH_LANG_CODE
 } from 'constants/translation-text';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { LangType, SharedTranslation } from '../../provider/translation-provider';
@@ -32,6 +33,7 @@ export default function LanguageItemList({
   setSharedTranslationInfo,
   close
 }: Props) {
+  const { t } = useTranslation();
   const findLatestLangList = () => {
     return latestLangList?.map((latestLang) => {
       const baseCode = latestLang.toUpperCase();
@@ -60,13 +62,13 @@ export default function LanguageItemList({
   };
 
   if (!langList.length) {
-    return <S.LanguageNoSearch>결과 없음</S.LanguageNoSearch>;
+    return <S.LanguageNoSearch>{t('Nova.translation.Guide.NoResults')}</S.LanguageNoSearch>;
   }
 
   return (
     <>
       {/* 시간이 좀 오래걸려서 UX적인 처리가 필요할듯 */}
-      <S.LanguageTitle>최근에 사용한 언어</S.LanguageTitle>
+      <S.LanguageTitle>{t('Nova.translation.Menu.RecentLanguages')}</S.LanguageTitle>
       <S.LanguageItem>{findLatestLangList()}</S.LanguageItem>
 
       <S.LanguageTitle>모든 언어</S.LanguageTitle>

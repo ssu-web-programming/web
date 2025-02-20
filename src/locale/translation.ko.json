@@ -426,9 +426,6 @@
         "MovePOPage": "폴라리스 오피스 바로가기"
       }
     },
-    "translation": {
-      "Loading": "텍스트를 번역하고 있어요"
-    },
     "perplexity": {
       "source": "출처",
       "recommendQuestion": "이런 질문은 어때요?",
@@ -615,12 +612,205 @@
       "Guide": {
         "Title": "받아쓰기",
         "SubTitle": "녹음 또는 파일 업로드로 \n 음성 기록을 만들어보세요.",
-        "UploadGuide": "최대 1GB 용량, 최대 길이 약 30분의 .m4a, .mp3, .aac, .amr, .wav 파일을 지원합니다."
+        "UploadGuide": "최대 1GB 용량, 최대 길이 약 30분의 .m4a, .mp3, .aac, .amr, .wav 파일을 지원합니다.",
+        "TimeLimit": "최대 30분 가능합니다.",
+        "NetworkError": "서비스 접속이 원활하지 않습니다. \n사용 중인 네크워크 상태를 확인해주세요.",
+        "LanguageConversion": "선택한 인식 언어로 변환됩니다."
+      },
+      "Button": {
+        "LiveDictation": "실시간 받아쓰기",
+        "UploadFile": "음성 녹음 파일 업로드",
+        "Cancel": "취소",
+        "GoBack": "뒤로가기",
+        "AllowMic": "허용",
+        "DenyMic": "허용 안함",
+        "StopRecording": "녹음 종료",
+        "Convert": "변환하기",
+        "NewDictation": "새로운 받아쓰기",
+        "Save": "저장하기",
+        "VoiceFile": "음성 파일",
+        "DictationFile": "받아쓰기 파일",
+        "SeeDetails": "자세히 보기",
+        "DontShowAgain": "다시 보지 않기",
+        "Confirm": "확인"
+      },
+      "Status": {
+        "RecognizingKorean": "한국어 인식 중",
+        "OnPause": "일시정지 중",
+        "Recording": "녹음 중",
+        "MovingToDictation": "받아쓰기로 이동",
+        "Converting": "텍스트로 변환하고 있어요",
+        "NoContent": "변환된 음성 받아쓰기 내용이 없어요",
+        "Completed": "받아쓰기 완료",
+        "ConversionSuccess": "음성 대화를 텍스트로 변환했어요\n대화 내용을 저장해, 자유롭게 활용해 보세요!",
+        "Participant": "참석자",
+        "Recognizing": "인식 중"
+      },
+      "Alert": {
+        "MicPermission": "'Polaris Office'이(가) 마이크에 \n접근하려고 합니다.",
+        "MicPermissionDetail": "Polaris office에서 받아쓰기를 위한 오디오를\n녹음하도록 허용하시겠습니까?",
+        "AudioPermissionRequired": "녹음을 시작하려면 오디오 권한을 허욯해 주세요!",
+        "UnsavedRecording": "잠깐! 녹음을 끝내지 않고 뒤로가면 \n녹음이 저장되지 않아요. 그래도 뒤로가시겠어요?",
+        "StopRecordingConfirm": "녹음을 종료할까요?",
+        "ConversionNotice": "녹음이 종료되면 NOVA가 \n 음성을 텍스트로 변환합니다.",
+        "UnsavedGoBack": "잠깐! 뒤로가면 녹음이 저장되지 않아요. \n그래도 뒤로가시겠어요?",
+        "LanguageCheck": "음성 파일에 대화가 포함되어 있는지\n설정한 인식 언어가 음성과 같은 언어인지 확인해주세요.",
+        "Downloading": "음성 파일을 다운로드 중입니다. (NN%)",
+        "FileFormatSelection": "어떤 파일 형식으로 저장할까요?",
+        "iPhoneGuideTitle": "아이폰 녹음 파일 찾기 안내",
+        "iPhoneGuideContent": "아이폰 기본 녹음기로 녹음한 파일은\n'iCloud Drive' 혹은 '나의 iPhone'에\n저장한 경우에만 업로드 할 수 있습니다.",
+        "FileSizeError": "파일의 크기가 너무 큽니다.\n1GB 이하의 파일만 선택해 주세요.",
+        "NotFoundMic": "마이크 장치를 찾을 수 없습니다.",
+        "NotFoundMicDetail": "현재 사용 가능한 마이크가 감지되지 않았습니다. 정확한 받아쓰기를 위해 마이크를 연결하거나, 장치 설정에서 활성화해 주세요."
+      },
+      "LanguageSelector": {
+        "Options": {
+          "Korean": "한국어",
+          "English": "영어",
+          "Japanese": "일본어",
+          "Chinese1": "중국어(간체)",
+          "Chinese2": "중국어(번체)",
+          "KoEn": "한국어 + 영어"
+        },
+        "ChangeNotice": "인식 언어가 []로 변경되었어요!"
+      },
+      "FileFormat": {
+        "Options": {
+          "Text": "텍스트 문서(.txt)",
+          "Pdf": "pdf 문서(.pdf)"
+        }
       },
       "Done": {
         "Title": "변환 준비 완료"
       },
-      "Loading": "텍스트로 변환하고 있어요."
+      "Loading": "텍스트로 변환하고 있어요"
+    },
+    "translation": {
+      "Loading": "텍스트를 번역하고 있어요",
+      "Menu": {
+        "Title": "번역",
+        "RecentLanguages": "최근에 사용한 언어"
+      },
+      "Button": {
+        "TextTranslation": "텍스트 번역",
+        "FileTranslation": "파일 번역",
+        "Translate": "번역하기",
+        "LanguageSearch": "언어 검색",
+        "TranslationComplete": "번역 완료",
+        "ProceedWithoutChanges": "변경 없이 진행",
+        "SaveNow": "지금 저장"
+      },
+      "Input": {
+        "Placeholder": "번역할 내용을 입력하세요",
+        "CharacterCount": "자 / 10,000자"
+      },
+      "Guide": {
+        "MaxCharacters": "최대 10,000자까지만 입력이 가능합니다.",
+        "SameLanguage": "원본 언어와 도착 언어가 동일합니다. 다른 언어를 선택해 주세요.",
+        "NoResults": "결과 없음"
+      },
+      "Language": {
+        "Source": "원본 언어",
+        "Target": "번역될 언어",
+        "List": {
+          "Title": "원본 언어",
+          "Arabic": "아랍어",
+          "Estonian": "에스토니아어",
+          "English": "영어",
+          "Ukrainian": "우크라이나어",
+          "Italian": "이탈리아어",
+          "Indonesian": "인도네시아어",
+          "Japanese": "일본어",
+          "Chinese": "중국어",
+          "Czech": "체코어",
+          "Turkish": "터키어",
+          "Polish": "폴란드어",
+          "Portuguese": "포르투갈어",
+          "French": "프랑스어",
+          "Finnish": "핀란드어",
+          "Hungarian": "헝가리어",
+          "Greek": "그리스어",
+          "Dutch": "네덜란드어",
+          "NorwegianBokmal": "노르웨이어 보크몰",
+          "Danish": "덴마크어",
+          "German": "독일어",
+          "Latvian": "라트비아어",
+          "Russian": "러시아어",
+          "Romanian": "루마니아어",
+          "Lithuanian": "리투아니아어",
+          "Bulgarian": "불가리아어",
+          "Slovak": "슬로바키아어",
+          "Slovenian": "슬로베니아어",
+          "Swedish": "스웨덴어",
+          "Spanish": "스페인어",
+          "EnglishAll": "영어 (모든 영어 변형)",
+          "PortugueseAll": "포르투갈어 (모든 포르투갈어 변형)",
+          "ChineseAll": "중국어 (모든 중국어 변형)",
+          "Korean": "한국어"
+        },
+        "TargetList": {
+          "Title": "번역될 언어",
+          "Greek": "그리스어",
+          "Dutch": "네덜란드어",
+          "NorwegianBokmal": "노르웨이어 보크몰",
+          "Danish": "덴마크어",
+          "German": "독일어",
+          "Latvian": "라트비아어",
+          "Russian": "러시아어",
+          "Romanian": "루마니아어",
+          "Lithuanian": "리투아니아어",
+          "Moslovenian": "모슬로베니아어",
+          "Bulgarian": "불가리아어",
+          "Swedish": "스웨덴어",
+          "Spanish": "스페인어",
+          "Slovak": "슬로바키아어",
+          "Slovenian": "슬로베니아어",
+          "Arabic": "아랍어",
+          "Estonian": "에스토니아어",
+          "EnglishUK": "영어(영국)",
+          "EnglishUS": "영어(미국)",
+          "Ukrainian": "우크라이나어",
+          "Italian": "이탈리아어",
+          "Indonesian": "인도네시아어",
+          "Japanese": "일본어",
+          "ChineseSimplified": "중국어(간체)",
+          "ChineseTraditional": "중국어(번체)",
+          "Czech": "체코어",
+          "Turkish": "터키어",
+          "Polish": "폴란드어",
+          "Portuguese": "포르투갈어",
+          "PortugueseBrazil": "포르투갈어(브라질)",
+          "French": "프랑스어",
+          "Finnish": "핀란드어",
+          "Hungarian": "헝가리어",
+          "Korean": "한국어"
+        }
+      },
+      "Status": {
+        "Translating": "텍스트를 번역하고 있어요",
+        "FileTranslating": "파일을 번역하고 있어요",
+        "FileTranslated": "파일 번역 완료",
+        "TranslationCompleted": "원하는 언어로 번역이 완료되었어요!",
+        "SaveAndCheck": "저장하고 바로 번역된 내용을 확인해 보세요!"
+      },
+      "Alert": {
+        "UnsavedChanges": "수정한 내용이 아직 저장되지 않았어요. 저장하지 않으면 수정한 내용이 파일 번역에 반영되지 않아요.",
+        "SaveBeforeAnalysis": "현재 문서를 분석하기위해 먼저 문서를 저장해야 해요. 지금 저장하시겠어요?",
+        "SaveToPolarisDrive": "문서를 분석하려면 폴라리스드라이브에 저장해야합니다. 지금 저장하시겠어요?",
+        "FileSizeLimit": "파일의 크기가 너무 큽니다. 30MB 이하의 파일만 선택해 주세요.",
+        "UnsupportedFormat": "지원하지 않는 파일 형식입니다. 다시 한 번 확인해 주세요.",
+        "CharacterLimit": "글자 수가 지원 가능한 최대 글자 수를 초과했습니다. 글자 수를 줄여 다시 시도해주세요.",
+        "EncryptedDocument": "암호화된 문서는 문서질의를 할 수 없습니다. 문서를 다시 확인해 주세요.",
+        "DamagedDocument": "손상된 문서는 문서질의를 할 수 없습니다. 문서를 다시 확인해 주세요."
+      },
+      "FileUpload": {
+        "Guide": {
+          "Title": "파일 업로드",
+          "Description": "PDF, DOCX, PPTX 문서를 번역합니다.",
+          "SizeLimit": "지원 용량: 최대 30MB",
+          "CharacterLimit": "지원 글자수: 최대 50,000자"
+        }
+      }
     },
     "Prompt": {
       "Placeholder": "바꾸고 싶은 배경을 설명해 주세요.",

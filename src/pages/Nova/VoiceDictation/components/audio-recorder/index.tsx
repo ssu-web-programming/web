@@ -5,11 +5,12 @@ import { ReactComponent as DarkLang } from 'img/dark/nova/voice-dictation/lang.s
 import { ReactComponent as DarkStop } from 'img/dark/nova/voice-dictation/stop.svg';
 import { ReactComponent as Lang } from 'img/light/nova/voiceDictation/lang.svg';
 import { ReactComponent as Stop } from 'img/light/nova/voiceDictation/stop.svg';
+import { useTranslation } from 'react-i18next';
 import { ClientType, getPlatform } from 'util/bridge';
 import { getSupportedMimeType } from 'util/getAudioDuration';
 
 import { LangOptionValues } from '../../provider/voice-dictation-provider';
-import { langOptions } from '../recognized-lang';
+import { getLangOptions, langOptions } from '../recognized-lang';
 
 import * as S from './style';
 
@@ -110,6 +111,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   openLangOverlay,
   isLightMode
 }) => {
+  const { t } = useTranslation();
   const [isRecording, setIsRecording] = useState(isInitRecording || false);
   const [isPaused, setIsPaused] = useState(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
@@ -316,7 +318,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   };
 
   const filteredSelectedLangOptions = () => {
-    return langOptions.find((langOption) => langOption.value === selectedLangOption);
+    return getLangOptions(t).find((langOption) => langOption.value === selectedLangOption);
   };
 
   useEffect(() => {
@@ -350,7 +352,9 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
     <S.Container>
       <S.CanvasWrapper>
         <S.StatusText $isPaused={isPaused}>
-          {isPaused ? `일시정지 중` : `${filteredSelectedLangOptions()?.label} 인식 중`}
+          {isPaused
+            ? t('Nova.voiceDictation.Status.OnPause')
+            : `${filteredSelectedLangOptions()?.label} ${t('Nova.voiceDictation.Status.Recognizing')}`}
         </S.StatusText>
 
         <S.Canvas ref={canvasRef} />

@@ -5,6 +5,7 @@ import {
   TARGET_LANGUAGES_WITH_LANG_CODE
 } from 'constants/translation-text';
 import { ReactComponent as SearchIcon } from 'img/light/nova/translation/search.svg';
+import { useTranslation } from 'react-i18next';
 import getInitialConsonant from 'util/getInitialConsonant';
 
 import useLangSearch from '../../hooks/use-lang-search';
@@ -31,6 +32,7 @@ export default function LanguageSearch({
   langType,
   setSharedTranslationInfo
 }: Props) {
+  const { t } = useTranslation();
   const initialLanguages =
     langType === 'source' ? SOURCE_LANGUAGES_WITH_LANG_CODE : TARGET_LANGUAGES_WITH_LANG_CODE;
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -70,9 +72,17 @@ export default function LanguageSearch({
   return (
     <ModalSheet isOpen={isOpen} setIsOpen={close} snapPoints={[0.8]} initialSnap={0}>
       <S.Wrapper>
-        <S.Title>{langType === 'source' ? '원본 언어' : '번역될 언어'}</S.Title>
+        <S.Title>
+          {langType === 'source'
+            ? t('Nova.translation.Language.Source')
+            : t('Nova.translation.Language.Target')}
+        </S.Title>
         <S.InputWrapper>
-          <S.SearchInput placeholder="언어 검색" value={searchTerm} onChange={handleSearch} />
+          <S.SearchInput
+            placeholder={t('Nova.translation.Button.LanguageSearch') as string}
+            value={searchTerm}
+            onChange={handleSearch}
+          />
           <SearchIcon />
         </S.InputWrapper>
 

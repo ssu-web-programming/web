@@ -2,6 +2,7 @@ import voiceDictationHttp from 'api/voice-dictation';
 import ModalSheet from 'components/modalSheet';
 import OverlayModal from 'components/overlay-modal';
 import { overlay } from 'overlay-kit';
+import { useTranslation } from 'react-i18next';
 import { activeLoadingSpinner } from 'store/slices/loadingSpinner';
 import { useAppDispatch } from 'store/store';
 import Bridge from 'util/bridge';
@@ -19,11 +20,14 @@ interface Props {
 
 export default function VoiceSaveBottomSheet({ isOpened, setIsOpened }: Props) {
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
   const {
     sharedVoiceDictationInfo: { voiceDictationResult, fileName }
   } = useVoiceDictationContext();
 
   const handleDownloadVoiceFile = async () => {
+    overlay.closeAll();
+
     dispatch(activeLoadingSpinner());
     await Bridge.callBridgeApi('downloadVoiceFile', {
       fileName,
@@ -74,16 +78,16 @@ export default function VoiceSaveBottomSheet({ isOpened, setIsOpened }: Props) {
   return (
     <ModalSheet isOpen={isOpened} setIsOpen={setIsOpened} detent="content-height">
       <S.Container>
-        <S.Title>저장하기</S.Title>
+        <S.Title>{t('Nova.voiceDictation.Button.Save')}</S.Title>
         <S.ItemWrapper>
           <S.Item onClick={handleDownloadVoiceFile}>
             <S.StyledMic />
-            <p>음성파일</p>
+            <p>{t('Nova.voiceDictation.Button.VoiceFile')}</p>
           </S.Item>
 
           <S.Item onClick={handleOpenSaveFileFormat}>
             <S.StyledFileImg />
-            <p>받아쓰기 파일</p>
+            <p>{t('Nova.voiceDictation.Button.DictationFile')}</p>
           </S.Item>
         </S.ItemWrapper>
       </S.Container>
