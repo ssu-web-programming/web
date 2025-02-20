@@ -1,6 +1,6 @@
 import { getCurrentFile, getDriveFiles, getLocalFiles } from 'store/slices/uploadFiles';
 import { useAppSelector } from 'store/store';
-import { currentFileToFileObj, downloadFiles } from 'util/files';
+import { downloadFiles } from 'util/files';
 
 export default function useSanitizedDrive() {
   const localFiles = useAppSelector(getLocalFiles);
@@ -8,14 +8,18 @@ export default function useSanitizedDrive() {
   const currentFile = useAppSelector(getCurrentFile);
 
   const convertFileObject = async () => {
-    if (currentFile.id !== '') {
-      const convertFileObj = await currentFileToFileObj(
-        currentFile.id,
-        currentFile.name!,
-        currentFile.type
-      );
+    console.log('convertFileObject', currentFile);
 
-      return convertFileObj;
+    if (currentFile.id) {
+      // const convertFileObj = await currentFileToFileObj(
+      //   currentFile.id,
+      //   currentFile.name!,
+      //   currentFile.type
+      // );
+
+      // return convertFileObj;
+      const results = await downloadFiles(driveFiles);
+      return results[0].file;
     }
 
     // driveFiles의 경우에는 id를 파일객체로 변환해야함

@@ -42,6 +42,10 @@ const useTranslationIntro = (translateInputValue: string) => {
     onPollingSuccess: (result) => {
       const { downloadUrl } = result;
       handleMoveToFileResult({ downloadUrl });
+    },
+    onError: (error) => {
+      console.log('error', error);
+      handleErrorTrigger({ title: '오류가 발생했습니다. 잠시 후 다시 시작해주세요.' });
     }
   });
 
@@ -94,6 +98,8 @@ const useTranslationIntro = (translateInputValue: string) => {
 
   const submitFileTranslate = async () => {
     triggerLoading();
+
+    console.log('await convertFileObject()', await convertFileObject());
     try {
       await translationRequest({ file: await convertFileObject(), sourceLang, targetLang });
     } catch (e) {
