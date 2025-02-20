@@ -49,7 +49,9 @@ export default function Reference({ references }: referenceProps) {
         <span>{t('Nova.perplexity.source')}</span>
         {!isMobile && references.length > 4 && (
           <S.StyledButton onClick={toggleExpanded} isExpanded={isExpanded}>
-            {isExpanded ? '접기' : t('Nova.perplexity.button.viewMore')}
+            {isExpanded
+              ? t('Nova.perplexity.button.collapse')
+              : t('Nova.perplexity.button.viewMore')}
             <img src={isLightMode ? ArrowDownLightIcon : ArrowDownDarkIcon} alt="arrow" />
           </S.StyledButton>
         )}
