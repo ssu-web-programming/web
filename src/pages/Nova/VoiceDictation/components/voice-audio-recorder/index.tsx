@@ -54,8 +54,6 @@ export default function VoiceAudioRecorder() {
     <>
       <AudioRecorder
         onRecordingComplete={async (blob) => {
-          console.log('완료된 blob', blob);
-          console.log('파일객체로 변환된 blob', await convertWebmToWavFile(blob));
           handleMoveToReady(
             getPlatform() === ClientType.windows
               ? await convertWebmToWavFile(blob)

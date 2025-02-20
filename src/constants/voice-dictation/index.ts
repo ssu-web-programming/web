@@ -12,11 +12,11 @@ export const VOICE_COLOR = {
 export const MEDIA_ERROR_MESSAGES: MediaErrorMessages = {
   NotAllowedError: {
     title: '마이크 접근이 거부되었습니다. ',
-    msg: '설정에서 권한을 허용해주세요.'
+    msg: '녹음을 시작하려면 오디오 권한을 허용해 주세요!'
   },
   PermissionDeniedError: {
     title: '마이크 접근이 거부되었습니다.',
-    msg: '설정에서 권한을 허용해주세요.'
+    msg: '녹음을 시작하려면 오디오 권한을 허용해 주세요!'
   },
   NotFoundError: {
     title: '마이크 장치를 찾을 수 없습니다',

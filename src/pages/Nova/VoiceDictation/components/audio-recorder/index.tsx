@@ -174,8 +174,6 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
 
       streamRef.current = stream;
 
-      const mimeType = getSupportedMimeType();
-      console.log('window 가능한 type', mimeType);
       const mediaRecorder = new MediaRecorder(stream, {
         mimeType: getPlatform() === ClientType.windows ? 'video/webm;codecs=vp8' : 'video/mp4'
       });
