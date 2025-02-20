@@ -7,6 +7,8 @@ import { ReactComponent as MicDarkIcon } from 'img/dark/nova/voice-dictation/mic
 import { ReactComponent as MicLightIcon } from 'img/light/nova/voiceDictation/microphone.svg';
 import { ReactComponent as Clova } from 'img/light/nova/voiceDictation/uses_clova_api.svg';
 import { useTranslation } from 'react-i18next';
+import { activeToast } from 'store/slices/toastSlice';
+import { useAppDispatch } from 'store/store';
 import styled, { css } from 'styled-components';
 import { MediaError, MediaErrorContent } from 'types/media-error';
 import Bridge from 'util/bridge';
@@ -18,6 +20,7 @@ import RecognizedLang from '../recognized-lang';
 export default function VoiceDictationIntro() {
   const { t } = useTranslation();
   const { setSharedVoiceDictationInfo } = useVoiceDictationContext();
+  const dispatch = useAppDispatch();
   const confirm = useConfirm();
 
   const errorTrigger = (errorMesaage: MediaErrorContent) => {
@@ -51,8 +54,16 @@ export default function VoiceDictationIntro() {
       const mediaError = error as MediaError;
       const errorMesaage = MEDIA_ERROR_MESSAGES[mediaError.name];
       // 에러 타입에 맞는 팝업을 띄우면 된다.
-      console.log(mediaError);
-      errorTrigger(errorMesaage);
+      if (mediaError.name === 'NotAllowedError' || mediaError.name === 'PermissionDeniedError') {
+        dispatch(
+          activeToast({
+            type: 'error',
+            msg: errorMesaage.msg
+          })
+        );
+      } else {
+        errorTrigger(errorMesaage);
+      }
 
       await Bridge.callBridgeApi('getRecordingState', false);
     }
@@ -71,13 +82,14 @@ export default function VoiceDictationIntro() {
             guideMsg={t('Nova.voiceDictation.Guide.TimeLimit')}
             lightIcon={<MicLightIcon />}
             darkIcon={<MicDarkIcon />}
+            creditCount={50}
           />
         </S.BoxWrapper>
         <AudioFileUploader
           guideMsg={t('Nova.voiceDictation.Guide.UploadGuide')}
           curTab={NOVA_TAB_TYPE.voiceDictation}
           handleUploadComplete={() => console.log('123')}
-          creditCount={30}
+          creditCount={50}
           onNext={handleMoveToFileReady}
         />
       </Guide>

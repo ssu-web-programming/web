@@ -17,7 +17,6 @@ export default function VoiceAudioRecorder() {
     setSharedVoiceDictationInfo,
     sharedVoiceDictationInfo: { isVoiceRecording, previousPageType, selectedLangOption }
   } = useVoiceDictationContext();
-  const { isLightMode } = useAppSelector(themeInfoSelector);
 
   const dispatch = useAppDispatch();
 
@@ -54,8 +53,6 @@ export default function VoiceAudioRecorder() {
     <>
       <AudioRecorder
         onRecordingComplete={async (blob) => {
-          console.log('완료된 blob', blob);
-          console.log('파일객체로 변환된 blob', await convertWebmToWavFile(blob));
           handleMoveToReady(
             getPlatform() === ClientType.windows
               ? await convertWebmToWavFile(blob)
@@ -63,7 +60,6 @@ export default function VoiceAudioRecorder() {
           );
         }}
         isInitRecording={isVoiceRecording}
-        startCondition={isVoiceRecording && previousPageType === 'AUDIO_RECORDER'}
         onRecordingFinish={async () => {
           dispatch(setIsMicrophoneState(null));
           await Bridge.callBridgeApi('getRecordingState', false);
@@ -72,7 +68,6 @@ export default function VoiceAudioRecorder() {
         onStopConfirm={openStopOverlay}
         selectedLangOption={selectedLangOption}
         openLangOverlay={openLangOverlay}
-        isLightMode={isLightMode}
       />
     </>
   );

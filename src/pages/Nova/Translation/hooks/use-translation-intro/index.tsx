@@ -99,7 +99,6 @@ const useTranslationIntro = (translateInputValue: string) => {
   const submitFileTranslate = async () => {
     triggerLoading();
 
-    console.log('await convertFileObject()', await convertFileObject());
     try {
       await translationRequest({ file: await convertFileObject(), sourceLang, targetLang });
     } catch (e) {

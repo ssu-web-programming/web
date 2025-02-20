@@ -20,13 +20,19 @@ const voiceDictationHttp = {
     formData.append('language', lang);
 
     const { res } = await apiWrapper().request(NOVA_SPEECH_RECOGNIZE, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
       method: 'POST',
       body: formData
     });
 
     const response = await res.json();
 
-    console.log('voice-response', response);
+    if (!response.success) {
+      throw response.error;
+    }
+
     return response;
   },
   postVoiceDownload: async ({ file, fileType, requestId }: PostVoiceDownload) => {

@@ -7,10 +7,9 @@ import { ReactComponent as Lang } from 'img/light/nova/voiceDictation/lang.svg';
 import { ReactComponent as Stop } from 'img/light/nova/voiceDictation/stop.svg';
 import { useTranslation } from 'react-i18next';
 import { ClientType, getPlatform } from 'util/bridge';
-import { getSupportedMimeType } from 'util/getAudioDuration';
 
 import { LangOptionValues } from '../../provider/voice-dictation-provider';
-import { getLangOptions, langOptions } from '../recognized-lang';
+import { getLangOptions } from '../recognized-lang';
 
 import * as S from './style';
 
@@ -21,10 +20,8 @@ interface AudioRecorderProps {
   isInitRecording?: boolean;
   onRecordingFinish?: () => void;
   onStopConfirm?: () => void | boolean | Promise<unknown>;
-  startCondition?: boolean;
   selectedLangOption?: LangOptionValues;
   openLangOverlay?: () => void;
-  isLightMode?: boolean;
 }
 
 interface CustomCanvasRenderingContext2D extends CanvasRenderingContext2D {
@@ -61,8 +58,7 @@ const draw = (
   canvas: HTMLCanvasElement,
   barWidth: number,
   gap: number,
-  isPaused: boolean,
-  isLightMode = true
+  isPaused: boolean
 ): void => {
   const ctx = canvas.getContext('2d') as CustomCanvasRenderingContext2D;
   if (!ctx) return;
@@ -71,10 +67,11 @@ const draw = (
   const amp = canvas.height / 2;
 
   // background color 색을 width , height만큼 채우는 코드
-  ctx.fillStyle = isLightMode ? '#f7f8f9' : '#282828';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0, 0, canvas.clientWidth, canvas.height);
+  ctx.fillStyle = 'transparent';
+  ctx.fillRect(0, 0, canvas.clientWidth, canvas.height);
 
-  const gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
+  const gradient = ctx.createLinearGradient(0, 0, canvas.clientWidth, 0);
   if (isPaused) {
     gradient.addColorStop(0, '#c9cdd2');
   } else {
@@ -83,7 +80,7 @@ const draw = (
     gradient.addColorStop(1, '#7741d3'); // 밝은 보라
   }
 
-  const totalBars = Math.floor(canvas.width / (barWidth + gap));
+  const totalBars = Math.floor(canvas.clientWidth / (barWidth + gap));
 
   for (let i = 0; i < totalBars; i++) {
     ctx.fillStyle = gradient;
@@ -106,10 +103,8 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   isInitRecording = false,
   onRecordingFinish,
   onStopConfirm,
-  startCondition,
   selectedLangOption,
-  openLangOverlay,
-  isLightMode
+  openLangOverlay
 }) => {
   const { t } = useTranslation();
   const [isRecording, setIsRecording] = useState(isInitRecording || false);
@@ -159,9 +154,9 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       const frequencyData = new Uint8Array(analyserRef.current.frequencyBinCount);
       analyserRef.current.getByteFrequencyData(frequencyData);
 
-      const data = calculateBarData(frequencyData, canvasRef.current.width, barWidth, gap);
+      const data = calculateBarData(frequencyData, canvasRef.current.clientWidth, barWidth, gap);
 
-      draw(data, canvasRef.current, barWidth, gap, isPaused, isLightMode);
+      draw(data, canvasRef.current, barWidth, gap, isPaused);
       animationFrameRef.current = requestAnimationFrame(animate);
     };
 
@@ -174,8 +169,6 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
 
       streamRef.current = stream;
 
-      const mimeType = getSupportedMimeType();
-      console.log('window 가능한 type', mimeType);
       const mediaRecorder = new MediaRecorder(stream, {
         mimeType: getPlatform() === ClientType.windows ? 'video/webm;codecs=vp8' : 'video/mp4'
       });
@@ -279,8 +272,8 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       if (canvasRef.current && analyserRef.current) {
         const frequencyData = new Uint8Array(analyserRef.current.frequencyBinCount);
         analyserRef.current.getByteFrequencyData(frequencyData);
-        const data = calculateBarData(frequencyData, canvasRef.current.width, barWidth, gap);
-        draw(data, canvasRef.current, barWidth, gap, isPaused, isLightMode);
+        const data = calculateBarData(frequencyData, canvasRef.current.clientWidth, barWidth, gap);
+        draw(data, canvasRef.current, barWidth, gap, isPaused);
       }
 
       // 애니메이션 중지
@@ -305,8 +298,8 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       if (canvasRef.current && analyserRef.current) {
         const frequencyData = new Uint8Array(analyserRef.current.frequencyBinCount);
         analyserRef.current.getByteFrequencyData(frequencyData);
-        const data = calculateBarData(frequencyData, canvasRef.current.width, barWidth, gap);
-        draw(data, canvasRef.current, barWidth, gap, isPaused, isLightMode);
+        const data = calculateBarData(frequencyData, canvasRef.current.clientWidth, barWidth, gap);
+        draw(data, canvasRef.current, barWidth, gap, isPaused);
       }
     }
   }, [startTimer]);
@@ -350,18 +343,19 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
 
   return (
     <S.Container>
-      <S.CanvasWrapper>
-        <S.StatusText $isPaused={isPaused}>
-          {isPaused
-            ? t('Nova.voiceDictation.Status.OnPause')
-            : `${filteredSelectedLangOptions()?.label} ${t('Nova.voiceDictation.Status.Recognizing')}`}
-        </S.StatusText>
+      <S.Background>
+        <S.CanvasWrapper>
+          <S.StatusText $isPaused={isPaused}>
+            {isPaused
+              ? t('Nova.voiceDictation.Status.OnPause')
+              : `${filteredSelectedLangOptions()?.label} ${t('Nova.voiceDictation.Status.Recognizing')}`}
+          </S.StatusText>
 
-        <S.Canvas ref={canvasRef} />
+          <S.Canvas ref={canvasRef} />
 
-        <S.DurationText>{formatDuration(recordingTime)}</S.DurationText>
-      </S.CanvasWrapper>
-
+          <S.DurationText>{formatDuration(recordingTime)}</S.DurationText>
+        </S.CanvasWrapper>
+      </S.Background>
       <S.ButtonGroup>
         <ControlButton
           icon={Lang}
