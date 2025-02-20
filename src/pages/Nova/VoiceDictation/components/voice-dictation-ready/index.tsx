@@ -1,5 +1,6 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 import voiceDictationHttp from 'api/voice-dictation';
+import useErrorHandle from 'components/hooks/useErrorHandle';
 import Select from 'components/select';
 import CheckDarkIcon from 'img/dark/nova/check_purple.svg';
 import CreditColorIcon from 'img/light/ico_credit_color_outline.svg';
@@ -29,6 +30,7 @@ export default function VoiceDictationReady() {
   } = useVoiceDictationContext();
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const dispatch = useAppDispatch();
+  const errorHandle = useErrorHandle();
   const { t } = useTranslation();
 
   const [isEditMode, setIsEditMode] = useState(false);
@@ -83,7 +85,11 @@ export default function VoiceDictationReady() {
 
       handleMoveToResult(result);
     } catch (error) {
-      handleErrorTrigger({ title: '오류가 발생했습니다. 잠시 후 다시 시작해주세요.' });
+      setSharedVoiceDictationInfo((prev) => ({
+        ...prev,
+        componentType: 'VOICE_READY'
+      }));
+      errorHandle(error);
     }
   };
   useEffect(() => {
@@ -154,7 +160,7 @@ export default function VoiceDictationReady() {
           <span>{t('Nova.voiceDictation.Button.Convert')}</span>
           <div>
             <img src={CreditColorIcon} alt="credit" width={20} height={20} />
-            <span>30</span>
+            <span>50</span>
           </div>
         </S.ButtonWrap>
       </S.Container>

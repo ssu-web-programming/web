@@ -141,8 +141,6 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   const startVisualization = useCallback((stream: MediaStream) => {
     if (!canvasRef.current) return;
 
-    const container = canvasRef.current.parentElement;
-
     audioContextRef.current = new AudioContext();
     const source = audioContextRef.current.createMediaStreamSource(stream);
     const analyser = audioContextRef.current.createAnalyser();

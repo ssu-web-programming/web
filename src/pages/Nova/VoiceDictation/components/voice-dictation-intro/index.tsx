@@ -82,13 +82,14 @@ export default function VoiceDictationIntro() {
             guideMsg={t('Nova.voiceDictation.Guide.TimeLimit')}
             lightIcon={<MicLightIcon />}
             darkIcon={<MicDarkIcon />}
+            creditCount={50}
           />
         </S.BoxWrapper>
         <AudioFileUploader
           guideMsg={t('Nova.voiceDictation.Guide.UploadGuide')}
           curTab={NOVA_TAB_TYPE.voiceDictation}
           handleUploadComplete={() => console.log('123')}
-          creditCount={30}
+          creditCount={50}
           onNext={handleMoveToFileReady}
         />
       </Guide>

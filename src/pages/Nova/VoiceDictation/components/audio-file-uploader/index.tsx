@@ -77,6 +77,7 @@ export default function AudioFileUploader({
           guideTitle={t('Nova.voiceDictation.Button.UploadFile')}
           lightIcon={<UploadFileLightIcon />}
           darkIcon={<UploadDarkIcon />}
+          creditCount={50}
         />
       </FileButton>
     </S.Wrap>
