@@ -160,7 +160,8 @@ const AIChat = (props: AIChatProps) => {
           id,
           type: resultType,
           content: content,
-          files: files
+          files: files,
+          llm: historyItem.chatType
         };
       });
     });
@@ -183,10 +184,12 @@ const AIChat = (props: AIChatProps) => {
       const { res } = await apiWrapper().request(NOVA_SHARE_CHAT, {
         body: JSON.stringify({
           threadId: novaHistory[novaHistory.length - 1].threadId,
-          list: groupedResult
+          list: groupedResult,
+          mainLlm: chatMode
         }),
         method: 'POST'
       });
+      console.log(chatMode);
       const response = await res.json();
       const url = {
         text: `${window.location.origin}/Nova/share/${response.data.shareId}?lang=${lang}`

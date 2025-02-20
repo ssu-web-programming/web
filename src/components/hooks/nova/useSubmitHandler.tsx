@@ -21,11 +21,7 @@ import { v4 } from 'uuid';
 
 import { track } from '@amplitude/analytics-browser';
 
-import {
-  AI_WRITE_RESPONSE_STREAM_API,
-  NOVA_CHAT_API,
-  PO_DRIVE_DOC_OPEN_STATUS
-} from '../../../api/constant';
+import { NOVA_CHAT_API, PO_DRIVE_DOC_OPEN_STATUS } from '../../../api/constant';
 import { FileUploadState } from '../../../constants/fileTypes';
 import { getServiceEngineName, SERVICE_TYPE } from '../../../constants/serviceType';
 import { appStateSelector } from '../../../store/slices/appState';
@@ -154,7 +150,7 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
         formData.append('type', type);
         formData.append('vsId', vsId);
         formData.append('threadId', threadId);
-        formData.append('model', getServiceEngineName(chatMode));
+        formData.append('model', getServiceEngineName(chatType ?? chatMode));
         formData.append('history', JSON.stringify(novaHistory.length ? novaHistory : []));
 
         dispatch(
@@ -197,7 +193,7 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
         if (timer) clearTimeout(timer);
 
         const resVsId = res.headers.get('X-PO-AI-NOVA-API-VSID') || '';
-        const resThreadId = res.headers.get('X-PO-AI-NOVA-API-THREAD-ID') || '';
+        const resThreadId = res.headers.get('X-PO-AI-NOVA-API-TID') || '';
         const askType = res.headers.get('X-PO-AI-NOVA-API-ASK-TYPE') || '';
         const expiredTime = res.headers.get('X-PO-AI-NOVA-API-EXPIRED-TIME') || '';
 

@@ -375,12 +375,6 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                               if (
                                 Object.values(SERVICE_TYPE).includes(selectedItem as SERVICE_TYPE)
                               ) {
-                                console.log(selectedItem);
-                                console.log(selectedItem as SERVICE_TYPE);
-                              }
-                              if (
-                                Object.values(SERVICE_TYPE).includes(selectedItem as SERVICE_TYPE)
-                              ) {
                                 createChatSubmitHandler(
                                   {
                                     input: item.input,

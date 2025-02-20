@@ -79,8 +79,13 @@ export default function Loading() {
         },
         method: 'POST',
         body: JSON.stringify({
-          avatar_type: result?.info.selectedAvatar?.avatar.file ? 'taking_photo' : 'avatar',
-          avatar_id: result?.info.selectedAvatar.avatar.avatar_id,
+          avatar_type: result?.info.selectedAvatar?.avatar.talking_photo_id
+            ? 'talking_photo'
+            : 'avatar',
+          avatar_id:
+            result?.info.selectedAvatar.avatar.avatar_id === ''
+              ? result?.info.selectedAvatar.avatar.talking_photo_id
+              : result?.info.selectedAvatar.avatar.avatar_id,
           avatar_style: result?.info.selectedAvatar.avatar_style,
           voice_id: result?.info.selectedAvatar.voice.voice_id,
           input_text: result?.info.selectedAvatar.input_text,
