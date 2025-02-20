@@ -17,7 +17,6 @@ export default function VoiceAudioRecorder() {
     setSharedVoiceDictationInfo,
     sharedVoiceDictationInfo: { isVoiceRecording, previousPageType, selectedLangOption }
   } = useVoiceDictationContext();
-  const { isLightMode } = useAppSelector(themeInfoSelector);
 
   const dispatch = useAppDispatch();
 
@@ -61,7 +60,6 @@ export default function VoiceAudioRecorder() {
           );
         }}
         isInitRecording={isVoiceRecording}
-        startCondition={isVoiceRecording && previousPageType === 'AUDIO_RECORDER'}
         onRecordingFinish={async () => {
           dispatch(setIsMicrophoneState(null));
           await Bridge.callBridgeApi('getRecordingState', false);
@@ -70,7 +68,6 @@ export default function VoiceAudioRecorder() {
         onStopConfirm={openStopOverlay}
         selectedLangOption={selectedLangOption}
         openLangOverlay={openLangOverlay}
-        isLightMode={isLightMode}
       />
     </>
   );

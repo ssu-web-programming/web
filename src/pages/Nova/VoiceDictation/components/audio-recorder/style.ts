@@ -1,3 +1,5 @@
+import BlurDarkIcon from 'img/dark/nova/ico_bg_blur_loading.svg';
+import BlurLightIcon from 'img/light/nova/ico_bg_blur_loading.png';
 import styled from 'styled-components';
 
 const Container = styled.div`
@@ -6,10 +8,25 @@ const Container = styled.div`
   height: 100%;
   padding: 16px;
 `;
+
+const Background = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-image: ${({ theme }) =>
+    `url(${theme.mode === 'light' ? BlurLightIcon : BlurDarkIcon})`};
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+`;
+
 const CanvasWrapper = styled.div`
   width: 100%;
   position: absolute;
-  top: 45%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 `;
@@ -44,4 +61,4 @@ const DurationText = styled.p`
   text-align: center;
 `;
 
-export { ButtonGroup, Canvas, CanvasWrapper, Container, DurationText, StatusText };
+export { Background, ButtonGroup, Canvas, CanvasWrapper, Container, DurationText, StatusText };
