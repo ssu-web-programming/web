@@ -39,6 +39,26 @@ export const Header = styled.div`
   gap: 20px;
 `;
 
+export const LogoWrap = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const ChatMode = styled.div`
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 6px;
+  background: ${({ theme }) => theme.color.background.gray09};
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 16.5px;
+  color: ${({ theme }) => theme.color.text.highlight01};
+`;
+
 export const DateWithGuide = styled.div`
   width: 100%;
   display: flex;
@@ -120,6 +140,7 @@ export const Detail = styled.div`
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
+  gap: 8px;
 `;
 
 export const FileItem = styled.div`
