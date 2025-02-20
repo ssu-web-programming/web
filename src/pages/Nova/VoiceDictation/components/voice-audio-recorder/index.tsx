@@ -1,8 +1,6 @@
 import OverlayModal from 'components/overlay-modal';
-import { NOVA_TAB_TYPE } from 'constants/novaTapTypes';
 import { overlay } from 'overlay-kit';
 import { setIsMicrophoneState } from 'store/slices/appState';
-import { selectNovaTab } from 'store/slices/tabSlice';
 import { themeInfoSelector } from 'store/slices/theme';
 import { setLocalFiles } from 'store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from 'store/store';

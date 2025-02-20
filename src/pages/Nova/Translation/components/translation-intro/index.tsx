@@ -11,7 +11,6 @@ import { getLangFromLangCode } from 'util/translation';
 import { NOVA_TAB_TYPE } from '../../../../../constants/novaTapTypes';
 import useTranslationIntro from '../../hooks/use-translation-intro';
 import { useTranslationContext } from '../../provider/translation-provider';
-import DragAndDrop from '../drag-and-drop';
 import Toggle, { ToggleOption } from '../toggle';
 import TranslationFileUploader from '../translation-file-uploader';
 
@@ -122,13 +121,11 @@ export default function TranslationIntro() {
           </S.TextInputWrapper>
         ) : (
           <S.FileUploaderWrapper>
-            <DragAndDrop onDrop={() => console.log('여기!')}>
-              <TranslationFileUploader
-                guideMsg={t('Nova.Translate.UploadGuide')}
-                creditCount={20}
-                curTab={NOVA_TAB_TYPE.translation}
-              />
-            </DragAndDrop>
+            <TranslationFileUploader
+              guideMsg={t('Nova.Translate.UploadGuide')}
+              creditCount={20}
+              curTab={NOVA_TAB_TYPE.translation}
+            />
           </S.FileUploaderWrapper>
         )}
 

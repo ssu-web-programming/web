@@ -1,8 +1,8 @@
 import { ReactComponent as ArrowIcon } from 'img/light/nova/translation/arrow_down.svg';
-import { ReactComponent as DeepL } from 'img/light/nova/translation/deepl_logo.svg';
 import { ReactComponent as Switch } from 'img/light/nova/translation/switch.svg';
 import { ReactComponent as TransFile } from 'img/light/nova/translation/trans_file.svg';
 import { ReactComponent as TransTxt } from 'img/light/nova/translation/trans_txt.svg';
+import { ReactComponent as DeepL } from 'img/light/nova/translation/uses_deepl_logo.svg';
 import styled from 'styled-components';
 
 const TranslationWrapper = styled.div`

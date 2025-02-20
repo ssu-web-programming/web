@@ -5,9 +5,8 @@ import { NOVA_TAB_TYPE } from 'constants/novaTapTypes';
 import { MEDIA_ERROR_MESSAGES } from 'constants/voice-dictation';
 import { ReactComponent as MicDarkIcon } from 'img/dark/nova/voice-dictation/microphone.svg';
 import { ReactComponent as MicLightIcon } from 'img/light/nova/voiceDictation/microphone.svg';
+import { ReactComponent as Clova } from 'img/light/nova/voiceDictation/uses_clova_api.svg';
 import { useTranslation } from 'react-i18next';
-import { setError } from 'store/slices/errorSlice';
-import { useAppDispatch } from 'store/store';
 import styled, { css } from 'styled-components';
 import { MediaError, MediaErrorContent } from 'types/media-error';
 import Bridge from 'util/bridge';
@@ -20,7 +19,6 @@ export default function VoiceDictationIntro() {
   const { t } = useTranslation();
   const { setSharedVoiceDictationInfo } = useVoiceDictationContext();
   const confirm = useConfirm();
-  const dispatch = useAppDispatch();
 
   const errorTrigger = (errorMesaage: MediaErrorContent) => {
     confirm({
@@ -61,27 +59,31 @@ export default function VoiceDictationIntro() {
   };
 
   return (
-    <Guide
-      $guideTitleStyle={css`
-        margin-bottom: 16px;
-      `}>
-      <RecognizedLang />
-      <S.BoxWrapper onClick={startRecording}>
-        <GuideBox
-          guideTitle={t(`Nova.voiceDictation.Button.LiveDictation`)}
-          guideMsg={t('Nova.voiceDictation.Guide.TimeLimit')}
-          lightIcon={<MicLightIcon />}
-          darkIcon={<MicDarkIcon />}
+    <>
+      <Guide
+        $guideTitleStyle={css`
+          margin-bottom: 16px;
+        `}>
+        <RecognizedLang />
+        <S.BoxWrapper onClick={startRecording}>
+          <GuideBox
+            guideTitle={t(`Nova.voiceDictation.Button.LiveDictation`)}
+            guideMsg={t('Nova.voiceDictation.Guide.TimeLimit')}
+            lightIcon={<MicLightIcon />}
+            darkIcon={<MicDarkIcon />}
+          />
+        </S.BoxWrapper>
+        <AudioFileUploader
+          guideMsg={t('Nova.voiceDictation.Guide.UploadGuide')}
+          curTab={NOVA_TAB_TYPE.voiceDictation}
+          handleUploadComplete={() => console.log('123')}
+          creditCount={30}
+          onNext={handleMoveToFileReady}
         />
-      </S.BoxWrapper>
-      <AudioFileUploader
-        guideMsg={t('Nova.voiceDictation.Guide.UploadGuide')}
-        curTab={NOVA_TAB_TYPE.voiceDictation}
-        handleUploadComplete={() => console.log('123')}
-        creditCount={30}
-        onNext={handleMoveToFileReady}
-      />
-    </Guide>
+      </Guide>
+
+      <S.StyledClova />
+    </>
   );
 }
 
@@ -97,5 +99,13 @@ const S = {
     border-radius: 8px;
     background: ${({ theme }) => theme.color.background.gray01};
     border: 1px solid ${({ theme }) => theme.color.border.gray01};
+  `,
+  StyledClova: styled(Clova)`
+    position: absolute;
+    bottom: 34px;
+    right: 16px;
+    & path {
+      fill: ${({ theme }) => theme.color.text.gray04};
+    }
   `
 };
