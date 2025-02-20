@@ -8,12 +8,6 @@ export default function useSanitizedDrive() {
   const currentFile = useAppSelector(getCurrentFile);
 
   const convertFileObject = async () => {
-    // driveFiles의 경우에는 id를 파일객체로 변환해야함
-    if (driveFiles.length) {
-      const results = await downloadFiles(driveFiles);
-      return results[0].file;
-    }
-
     if (currentFile.id !== '') {
       const convertFileObj = await currentFileToFileObj(
         currentFile.id,
@@ -23,6 +17,13 @@ export default function useSanitizedDrive() {
 
       return convertFileObj;
     }
+
+    // driveFiles의 경우에는 id를 파일객체로 변환해야함
+    if (driveFiles.length) {
+      const results = await downloadFiles(driveFiles);
+      return results[0].file;
+    }
+
     return localFiles[0];
   };
 
@@ -31,19 +32,22 @@ export default function useSanitizedDrive() {
     const isCurrentFile = currentFile.id === '' ? false : true;
     const isLocalFiles = localFiles[0];
 
-    if (isDriveFiles) {
-      return {
-        originalFileType: 'drive',
-        originalFileName: (await convertFileObject()).name,
-        originFile: driveFiles[0].fileId
-      };
-    }
+    console.log('sanitizedOriginFile--currentFile', currentFile);
+    console.log('(await convertFileObject()).name', (await convertFileObject()).name);
 
     if (isCurrentFile) {
       return {
         originalFileType: 'currentDoc',
         originalFileName: (await convertFileObject()).name,
         originFile: ''
+      };
+    }
+
+    if (isDriveFiles) {
+      return {
+        originalFileType: 'drive',
+        originalFileName: (await convertFileObject()).name,
+        originFile: driveFiles[0].fileId
       };
     }
 

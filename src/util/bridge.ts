@@ -505,10 +505,7 @@ export const useInitBridgeListener = () => {
               );
             }
 
-            console.log('어디가 열렸니?', body.openTab);
-            if (body.openTab !== NOVA_TAB_TYPE.translation) {
-              Bridge.callBridgeApi('analyzeCurFile');
-            }
+            Bridge.callBridgeApi('analyzeCurFile');
 
             break;
           }
@@ -517,7 +514,6 @@ export const useInitBridgeListener = () => {
             break;
           }
           case 'getFileInfo': {
-            console.log('getFileInfo 동작함!');
             dispatch(
               setCurrentFile({
                 type: body.type,
