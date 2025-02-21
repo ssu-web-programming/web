@@ -49,6 +49,20 @@ export default function LanguageItemList({
     const langTypeWithCode =
       langType === 'source' ? TARGET_LANGUAGES_WITH_LANG_CODE : SOURCE_LANGUAGES_WITH_LANG_CODE;
 
+    // EN 관련 특수 케이스 처리
+    if (langType === 'source' && langCode === 'EN') {
+      // source가 EN인 경우, target에 EN-US나 EN-GB가 있는지 확인
+      return !!TARGET_LANGUAGES_WITH_LANG_CODE.find(
+        (lang) => lang.langCode === 'EN-US' || lang.langCode === 'EN-GB'
+      );
+    }
+
+    if (langType === 'target' && (langCode === 'EN-US' || langCode === 'EN-GB')) {
+      // target이 EN-US나 EN-GB인 경우, source에 EN이 있는지 확인
+      return !!SOURCE_LANGUAGES_WITH_LANG_CODE.find((lang) => lang.langCode === 'EN');
+    }
+
+    // 그 외의 경우는 기존 로직대로 처리
     return !!langTypeWithCode.find((targetLang) => targetLang.langCode === langCode);
   };
 
@@ -56,6 +70,10 @@ export default function LanguageItemList({
     setSharedTranslationInfo((prev) => ({
       ...prev,
       [langType === 'source' ? 'sourceLang' : 'targetLang']: langCode,
+      // 영어 변형 코드 저장 추가
+      ...(langType === 'target' && (langCode === 'EN-US' || langCode === 'EN-GB')
+        ? { previousEnglishVariant: langCode }
+        : {}),
       isSwitchActive: checkSwitchState(langCode)
     }));
     close();

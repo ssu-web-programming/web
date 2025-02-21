@@ -19,8 +19,11 @@ export interface SharedTranslation extends TranslateResult {
   originFile: any;
   translationFileName: string;
   translationFileUrl: string;
+
+  // 번역 코드 관리를 위한 로직
   sourceLang: string;
   targetLang: string;
+  previousEnglishVariant?: string;
   LangType: LangType;
   isSwitchActive: boolean;
 }
@@ -64,6 +67,7 @@ export function TranslationProvider({ children }: Props) {
     // 언어 BottomSheet
     sourceLang: 'KO',
     targetLang: 'EN-US',
+    previousEnglishVariant: 'EN-US',
     // 필요없으면 제거해도 괜찮을 것 같음
     LangType: 'source',
     isSwitchActive: true

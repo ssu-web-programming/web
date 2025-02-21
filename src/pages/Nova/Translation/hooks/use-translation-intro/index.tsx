@@ -106,12 +106,50 @@ const useTranslationIntro = (translateInputValue: string) => {
     }
   };
 
+  // const convertTargetLang = (targetLang: string) => {
+  //   if (targetLang === 'EN-US' || targetLang === 'EN-GB') {
+  //     return 'EN';
+  //   }
+
+  //   return targetLang;
+  // };
+
+  // const convertSourceLang = (sourceLang: string) => {
+  //   return sourceLang;
+  // };
+
+  const isEnglishVariant = (lang: string): boolean => {
+    return lang === 'EN-US' || lang === 'EN-GB';
+  };
+
+  const getNewSourceLang = (targetLang: string): string => {
+    console.log('targetLang', targetLang);
+    return isEnglishVariant(targetLang) ? 'EN' : targetLang;
+  };
+
+  const getNewTargetLang = (sourceLang: string, previousVariant: string | undefined): string => {
+    console.log('sourceLang', sourceLang);
+    return sourceLang === 'EN' ? previousVariant || 'EN-US' : sourceLang;
+  };
+
+  const getPreviousEnglishVariant = (
+    currentTargetLang: string,
+    currentPreviousVariant: string | undefined
+  ): string | undefined => {
+    return isEnglishVariant(currentTargetLang) ? currentTargetLang : currentPreviousVariant;
+  };
+
   const handleSwitchLang = () => {
+    console.log('isSwitchActive', isSwitchActive);
     if (isSwitchActive) {
       setSharedTranslationInfo((prev) => ({
         ...prev,
-        sourceLang: targetLang,
-        targetLang: sourceLang
+        sourceLang: getNewSourceLang(prev.targetLang),
+        targetLang: getNewTargetLang(prev.sourceLang, prev.previousEnglishVariant),
+        previousEnglishVariant: getPreviousEnglishVariant(
+          prev.targetLang,
+          prev.previousEnglishVariant
+        )
       }));
     }
   };
