@@ -18,6 +18,32 @@ import {
 } from '../../provider/translation-provider';
 import useSanitizedDrive from '../use-sanitized-drive';
 
+export const LANGUAGE_VARIANTS = {
+  EN: ['EN-US', 'EN-GB'],
+  ZH: ['ZH-HANS', 'ZH-HANT'],
+  PT: ['PT-BR', 'PT-PT']
+} as const;
+
+// 타입 정의
+export type EnglishVariant = (typeof LANGUAGE_VARIANTS.EN)[number];
+export type ChineseVariant = (typeof LANGUAGE_VARIANTS.ZH)[number];
+export type PortugueseVariant = (typeof LANGUAGE_VARIANTS.PT)[number];
+
+export const isLanguageVariant = (lang: string): boolean => {
+  return [...LANGUAGE_VARIANTS.EN, ...LANGUAGE_VARIANTS.ZH, ...LANGUAGE_VARIANTS.PT].includes(
+    lang as any
+  );
+};
+
+export const getBaseLanguage = (variant: string): string | null => {
+  if (LANGUAGE_VARIANTS.EN.includes(variant as EnglishVariant)) return 'EN';
+  if (LANGUAGE_VARIANTS.ZH.includes(variant as ChineseVariant)) return 'ZH';
+  if (LANGUAGE_VARIANTS.PT.includes(variant as PortugueseVariant)) return 'PT';
+  return null;
+};
+
+export type LanguageVariant = EnglishVariant | ChineseVariant | PortugueseVariant;
+
 const useTranslationIntro = (translateInputValue: string) => {
   const showCreditToast = useShowCreditToast();
   // 전역상태의 번역 Context!
@@ -118,25 +144,28 @@ const useTranslationIntro = (translateInputValue: string) => {
   //   return sourceLang;
   // };
 
-  const isEnglishVariant = (lang: string): boolean => {
-    return lang === 'EN-US' || lang === 'EN-GB';
-  };
-
   const getNewSourceLang = (targetLang: string): string => {
-    console.log('targetLang', targetLang);
-    return isEnglishVariant(targetLang) ? 'EN' : targetLang;
+    const baseLang = getBaseLanguage(targetLang);
+    return baseLang || targetLang;
   };
 
   const getNewTargetLang = (sourceLang: string, previousVariant: string | undefined): string => {
-    console.log('sourceLang', sourceLang);
-    return sourceLang === 'EN' ? previousVariant || 'EN-US' : sourceLang;
+    switch (sourceLang) {
+      case 'EN':
+        return previousVariant || 'EN-US';
+      case 'ZH':
+        return previousVariant || 'ZH-HANS';
+      case 'PT':
+        return previousVariant || 'PT-BR';
+      default:
+        return sourceLang;
+    }
   };
-
-  const getPreviousEnglishVariant = (
+  const getPreviousVariant = (
     currentTargetLang: string,
     currentPreviousVariant: string | undefined
   ): string | undefined => {
-    return isEnglishVariant(currentTargetLang) ? currentTargetLang : currentPreviousVariant;
+    return isLanguageVariant(currentTargetLang) ? currentTargetLang : currentPreviousVariant;
   };
 
   const handleSwitchLang = () => {
@@ -146,10 +175,7 @@ const useTranslationIntro = (translateInputValue: string) => {
         ...prev,
         sourceLang: getNewSourceLang(prev.targetLang),
         targetLang: getNewTargetLang(prev.sourceLang, prev.previousEnglishVariant),
-        previousEnglishVariant: getPreviousEnglishVariant(
-          prev.targetLang,
-          prev.previousEnglishVariant
-        )
+        previousEnglishVariant: getPreviousVariant(prev.targetLang, prev.previousEnglishVariant)
       }));
     }
   };

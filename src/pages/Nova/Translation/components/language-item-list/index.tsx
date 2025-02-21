@@ -6,6 +6,14 @@ import {
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
+import {
+  ChineseVariant,
+  EnglishVariant,
+  getBaseLanguage,
+  isLanguageVariant,
+  LANGUAGE_VARIANTS,
+  PortugueseVariant
+} from '../../hooks/use-translation-intro';
 import { LangType, SharedTranslation } from '../../provider/translation-provider';
 import { Language } from '../language-search';
 
@@ -49,17 +57,31 @@ export default function LanguageItemList({
     const langTypeWithCode =
       langType === 'source' ? TARGET_LANGUAGES_WITH_LANG_CODE : SOURCE_LANGUAGES_WITH_LANG_CODE;
 
-    // EN 관련 특수 케이스 처리
-    if (langType === 'source' && langCode === 'EN') {
-      // source가 EN인 경우, target에 EN-US나 EN-GB가 있는지 확인
-      return !!TARGET_LANGUAGES_WITH_LANG_CODE.find(
-        (lang) => lang.langCode === 'EN-US' || lang.langCode === 'EN-GB'
-      );
+    // source 언어가 기본 형태(EN, ZH, PT)인 경우
+    if (langType === 'source') {
+      if (langCode === 'EN') {
+        return !!TARGET_LANGUAGES_WITH_LANG_CODE.find((lang) =>
+          LANGUAGE_VARIANTS.EN.includes(lang.langCode as EnglishVariant)
+        );
+      }
+      if (langCode === 'ZH') {
+        return !!TARGET_LANGUAGES_WITH_LANG_CODE.find((lang) =>
+          LANGUAGE_VARIANTS.ZH.includes(lang.langCode as ChineseVariant)
+        );
+      }
+      if (langCode === 'PT') {
+        return !!TARGET_LANGUAGES_WITH_LANG_CODE.find((lang) =>
+          LANGUAGE_VARIANTS.PT.includes(lang.langCode as PortugueseVariant)
+        );
+      }
     }
 
-    if (langType === 'target' && (langCode === 'EN-US' || langCode === 'EN-GB')) {
-      // target이 EN-US나 EN-GB인 경우, source에 EN이 있는지 확인
-      return !!SOURCE_LANGUAGES_WITH_LANG_CODE.find((lang) => lang.langCode === 'EN');
+    // target 언어가 변형(EN-US/GB, ZH-HANS/HANT, PT-BR/PT)인 경우
+    if (langType === 'target') {
+      const baseLang = getBaseLanguage(langCode);
+      if (baseLang) {
+        return !!SOURCE_LANGUAGES_WITH_LANG_CODE.find((lang) => lang.langCode === baseLang);
+      }
     }
 
     // 그 외의 경우는 기존 로직대로 처리
@@ -70,9 +92,9 @@ export default function LanguageItemList({
     setSharedTranslationInfo((prev) => ({
       ...prev,
       [langType === 'source' ? 'sourceLang' : 'targetLang']: langCode,
-      // 영어 변형 코드 저장 추가
-      ...(langType === 'target' && (langCode === 'EN-US' || langCode === 'EN-GB')
-        ? { previousEnglishVariant: langCode }
+      // 언어 변형 코드 저장
+      ...(langType === 'target' && isLanguageVariant(langCode)
+        ? { previousVariant: langCode }
         : {}),
       isSwitchActive: checkSwitchState(langCode)
     }));
