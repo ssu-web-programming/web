@@ -1,7 +1,10 @@
 import { Dispatch, SetStateAction } from 'react';
 import { useConfirm } from 'components/Confirm';
+import { useTranslationContext } from 'pages/Nova/Translation/provider/translation-provider';
 import { useTranslation } from 'react-i18next';
+import { activeLoadingSpinner, initLoadingSpinner } from 'store/slices/loadingSpinner';
 import Bridge from 'util/bridge';
+import { uploadFiles } from 'util/files';
 
 import { apiWrapper } from '../../../api/apiWrapper';
 import { PO_DRIVE_FILEINFO, PO_DRIVE_LIST } from '../../../api/constant';
@@ -21,14 +24,12 @@ import { selectTabSlice } from '../../../store/slices/tabSlice';
 import { DriveFileInfo, setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { getFileExtension } from '../../../util/common';
-import useCurrentDocAnalysis from '../use-current-doc-analysis';
 import { useChatNova } from '../useChatNova';
 import useUserInfoUtils from '../useUserInfoUtils';
 
 interface Props {
   onFinishCallback?: () => void;
   onClearPastedImages?: () => void;
-  analysisCurDoc?: () => Promise<void>;
 }
 
 interface ValidationResult {
@@ -42,11 +43,7 @@ interface ValidationResult {
   };
 }
 
-export function useManageFile({
-  onFinishCallback,
-  onClearPastedImages,
-  analysisCurDoc
-}: Props = {}) {
+export function useManageFile({ onFinishCallback, onClearPastedImages }: Props = {}) {
   const { t } = useTranslation();
   const chatNova = useChatNova();
   const confirm = useConfirm();
@@ -54,7 +51,6 @@ export function useManageFile({
   const novaHistory = useAppSelector(novaHistorySelector);
   const { getMaxFilesPerUpload, getAvailableFileCnt } = useUserInfoUtils();
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
-  // const { analysisCurDoc } = useCurrentDocAnalysis();
 
   const validateFiles = (files: File[], maxFileSize: number): ValidationResult => {
     const result: ValidationResult = {
@@ -94,6 +90,26 @@ export function useManageFile({
     return result;
   };
 
+  const confirmTranslationUploadFile = async (files: File[]) => {
+    await confirm({
+      msg: t('Nova.Confirm.AnalyzeFile.Msg'),
+      onOk: {
+        text: t('Nova.Confirm.UploadFile.Ok'),
+        callback: async () => {
+          dispatch(activeLoadingSpinner());
+          const result = await uploadFiles(files);
+          const file = result[0].data;
+          dispatch(initLoadingSpinner());
+          dispatch(setDriveFiles([{ ...file, name: file.fileName }]));
+        }
+      },
+      onCancel: {
+        text: t('Nova.Confirm.UploadFile.Cancel'),
+        callback: () => {}
+      }
+    });
+  };
+
   const validateFileUpload = async (files: File[], maxFileSize: number) => {
     const validation = validateFiles(files, maxFileSize);
 
@@ -112,8 +128,12 @@ export function useManageFile({
       return;
     }
 
-    await analysisCurDoc?.();
     // dispatch(setLocalFiles(files));
+  };
+
+  const uploadTranslationFile = async (files: File[], maxFileSize: number) => {
+    await validateFileUpload(files, maxFileSize);
+    await confirmTranslationUploadFile(files);
   };
 
   const loadLocalFile = async (files: File[]) => {
@@ -330,7 +350,8 @@ export function useManageFile({
     loadDriveFile,
     getFileList,
     getFileInfo,
-    validateFileUpload
+    validateFileUpload,
+    uploadTranslationFile
   };
 }
 

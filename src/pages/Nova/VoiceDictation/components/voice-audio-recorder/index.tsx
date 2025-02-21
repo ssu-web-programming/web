@@ -15,7 +15,7 @@ import StopModalContent from '../modals/stop-modal-content';
 export default function VoiceAudioRecorder() {
   const {
     setSharedVoiceDictationInfo,
-    sharedVoiceDictationInfo: { isVoiceRecording, previousPageType, selectedLangOption }
+    sharedVoiceDictationInfo: { isVoiceRecording, selectedLangOption }
   } = useVoiceDictationContext();
 
   const dispatch = useAppDispatch();

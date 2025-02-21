@@ -1,12 +1,11 @@
 import { useRef } from 'react';
 import { FileUploader } from 'components/nova/FileUploader';
-import { SUPPORT_IMAGE_TYPE } from 'constants/fileTypes';
+import { TRANSLATION_SUPPORT_TYPE } from 'constants/fileTypes';
 import { ReactComponent as UploadDarkIcon } from 'img/dark/ico_upload_img_plus.svg';
 import { ReactComponent as CreditIcon } from 'img/light/ico_credit_gray.svg';
 import { ReactComponent as UploadFileLightIcon } from 'img/light/nova/translation/file_upload.svg';
-import { selectPageData } from 'store/slices/nova/pageStatusSlice';
 import { themeInfoSelector } from 'store/slices/theme';
-import { getCurrentFile, getDriveFiles, getLocalFiles } from 'store/slices/uploadFiles';
+import { getDriveFiles, getLocalFiles } from 'store/slices/uploadFiles';
 import { userInfoSelector } from 'store/slices/userInfo';
 import { useAppSelector } from 'store/store';
 import styled from 'styled-components';
@@ -120,7 +119,6 @@ export default function TranslationFileUploader({
   const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
   const localFiles = useAppSelector(getLocalFiles);
   const driveFiles = useAppSelector(getDriveFiles);
-  const currentFile = useAppSelector(getCurrentFile);
 
   const { setSharedTranslationInfo } = useTranslationContext();
 
@@ -130,9 +128,6 @@ export default function TranslationFileUploader({
       originalFileType: type
     }));
   };
-
-  console.log('currentFile', currentFile);
-  console.log('driveFiles', driveFiles);
 
   const getActiveFile = () => {
     if (localFiles.length > 0) return localFiles[0];
@@ -150,7 +145,7 @@ export default function TranslationFileUploader({
           type="file"
           key={'nova-translation'}
           target={'nova-translation'}
-          accept={SUPPORT_IMAGE_TYPE}
+          accept={TRANSLATION_SUPPORT_TYPE}
           inputRef={inputImgFileRef}
           tooltipStyle={{
             minWidth: '165px',

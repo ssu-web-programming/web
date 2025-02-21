@@ -86,10 +86,9 @@ export const FileUploader = (props: FileUploaderProps) => {
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
 
   const { analysisCurDoc } = useCurrentDocAnalysis();
-  const { loadLocalFile, validateFileUpload } = useManageFile({
+  const { loadLocalFile, uploadTranslationFile } = useManageFile({
     onFinishCallback: onFinish,
-    onClearPastedImages,
-    analysisCurDoc
+    onClearPastedImages
   });
 
   const toggleDriveConfirm = () => {
@@ -279,8 +278,7 @@ export const FileUploader = (props: FileUploaderProps) => {
             target={target}
             accept={getAccept(accept)}
             handleOnChange={(files) => {
-              console.log('여기가 완료 시점이지?', files);
-              type === 'file' ? validateFileUpload(files, maxFileSize) : loadLocalFile(files);
+              type === 'file' ? uploadTranslationFile(files, maxFileSize) : loadLocalFile(files);
             }}
             ref={inputRef}>
             {children}

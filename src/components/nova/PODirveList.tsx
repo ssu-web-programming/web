@@ -1,5 +1,7 @@
 import { useState } from 'react';
+import { useConfirm } from 'components/Confirm';
 import PoDrive from 'components/po-drive';
+import { ALLOWED_MIME_TYPES, TRANSLATION_SUPPORT_TYPE } from 'constants/fileTypes';
 import { useTranslation } from 'react-i18next';
 
 import { NOVA_TAB_TYPE } from '../../constants/novaTapTypes';
@@ -25,6 +27,7 @@ export default function PODriveList(props: PODriveListProps) {
   const { loadDriveFile } = useManageFile({ onClearPastedImages });
   const [selectedFiles, setSelectedFiles] = useState<DriveFileInfo[]>([]);
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
+  const confirm = useConfirm();
 
   const toggleDriveConfirm = () => {
     setIsOpen(!isOpen);
@@ -33,6 +36,39 @@ export default function PODriveList(props: PODriveListProps) {
   const handleDriveCancel = () => {
     toggleDriveConfirm();
     setUploadTarget('');
+  };
+
+  const validateTranslationFile = async (files: DriveFileInfo[]) => {
+    const supporType = [...TRANSLATION_SUPPORT_TYPE.flatMap((type) => type.extensions)];
+    if (!ALLOWED_MIME_TYPES.includes(files[0].type)) {
+      await confirm({
+        title: '',
+        msg:
+          selectedNovaTab === 'aiChat'
+            ? t('Nova.Alert.CommonUnsupportFile')
+            : t(`Nova.Alert.CommonUnsupportImage`, {
+                support: supporType
+              }),
+        onOk: {
+          text: t('Confirm'),
+          callback: () => {
+            return;
+          }
+        }
+      });
+
+      return false;
+    }
+
+    if (files[0].size > 30 * 1024 * 1024) {
+      await confirm({
+        msg: `파일의 크기가 너무 큽니다. 30MB 이하의 파일만 선택해주세요.`
+      });
+
+      return false;
+    }
+
+    return true;
   };
 
   return (
@@ -53,7 +89,14 @@ export default function PODriveList(props: PODriveListProps) {
       }
       onOk={{
         text: selectedFiles.length > 0 ? t('SelectionComplete') : t('Select'),
-        callback: () => {
+        callback: async () => {
+          if (uploadTarget === 'nova-translation') {
+            const isValid = await validateTranslationFile(selectedFiles);
+            if (!isValid) {
+              return;
+            }
+          }
+
           toggleDriveConfirm();
           loadDriveFile(selectedFiles);
         },
