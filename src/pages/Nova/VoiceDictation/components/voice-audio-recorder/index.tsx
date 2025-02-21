@@ -1,6 +1,7 @@
 import OverlayModal from 'components/overlay-modal';
 import { overlay } from 'overlay-kit';
 import { setIsMicrophoneState } from 'store/slices/appState';
+import { platformInfoSelector } from 'store/slices/platformInfo';
 import { themeInfoSelector } from 'store/slices/theme';
 import { setLocalFiles } from 'store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from 'store/store';
@@ -13,6 +14,8 @@ import DesktopLangSelector from '../modals/desktop-lang-selector';
 import StopModalContent from '../modals/stop-modal-content';
 
 export default function VoiceAudioRecorder() {
+  const { platform } = useAppSelector(platformInfoSelector);
+
   const {
     setSharedVoiceDictationInfo,
     sharedVoiceDictationInfo: { isVoiceRecording, selectedLangOption }
@@ -54,9 +57,7 @@ export default function VoiceAudioRecorder() {
       <AudioRecorder
         onRecordingComplete={async (blob) => {
           handleMoveToReady(
-            getPlatform() === ClientType.windows
-              ? await convertWebmToWavFile(blob)
-              : blobToFile(blob)
+            platform === ClientType.windows ? await convertWebmToWavFile(blob) : blobToFile(blob)
           );
         }}
         isInitRecording={isVoiceRecording}
