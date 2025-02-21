@@ -1,4 +1,5 @@
 import React from 'react';
+import { TranslationProvider } from 'pages/Nova/Translation/provider/translation-provider';
 import VoiceDictationProvider from 'pages/Nova/VoiceDictation/provider/voice-dictation-provider';
 import ReactDOM from 'react-dom/client';
 import { HelmetProvider } from 'react-helmet-async';
@@ -30,13 +31,15 @@ function Root() {
   return (
     <Provider store={store}>
       <VoiceDictationProvider>
-        <QueryClientProvider client={queryClient}>
-          <BrowserRouter>
-            <HelmetProvider>
-              <App />
-            </HelmetProvider>
-          </BrowserRouter>
-        </QueryClientProvider>
+        <TranslationProvider>
+          <QueryClientProvider client={queryClient}>
+            <BrowserRouter>
+              <HelmetProvider>
+                <App />
+              </HelmetProvider>
+            </BrowserRouter>
+          </QueryClientProvider>
+        </TranslationProvider>
       </VoiceDictationProvider>
     </Provider>
   );

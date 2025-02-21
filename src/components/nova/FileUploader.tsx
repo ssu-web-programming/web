@@ -1,5 +1,9 @@
 import React, { RefObject, useState } from 'react';
 import useCurrentDocAnalysis from 'components/hooks/use-current-doc-analysis';
+import {
+  OriginalFileType,
+  useTranslationContext
+} from 'pages/Nova/Translation/provider/translation-provider';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -51,6 +55,7 @@ type FileUploaderProps = {
   onClearPastedImages?: () => void;
   type?: 'image' | 'file';
   maxFileSize?: number;
+  onChangeTranslationFileType?: (type: OriginalFileType) => void;
 };
 
 export const FileUploader = (props: FileUploaderProps) => {
@@ -63,15 +68,9 @@ export const FileUploader = (props: FileUploaderProps) => {
     onFinish,
     onClearPastedImages,
     type = 'image',
-    maxFileSize = 30 * 1024 * 1024
+    maxFileSize = 30 * 1024 * 1024,
+    onChangeTranslationFileType
   } = props;
-
-  const { loadLocalFile, validateFileUpload } = useManageFile({
-    onFinishCallback: onFinish,
-    onClearPastedImages
-  });
-
-  const { analysisCurDoc } = useCurrentDocAnalysis();
 
   const { t } = useTranslation();
   const { isLightMode } = useAppSelector(themeInfoSelector);
@@ -85,6 +84,13 @@ export const FileUploader = (props: FileUploaderProps) => {
   const [uploadTarget, setUploadTarget] = useState<string>('');
   const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
+
+  const { analysisCurDoc } = useCurrentDocAnalysis();
+  const { loadLocalFile, validateFileUpload } = useManageFile({
+    onFinishCallback: onFinish,
+    onClearPastedImages,
+    analysisCurDoc
+  });
 
   const toggleDriveConfirm = () => {
     setIsOpen(!isOpen);
@@ -100,6 +106,7 @@ export const FileUploader = (props: FileUploaderProps) => {
         name: t(`Nova.UploadTooltip.PolarisDrive`),
         icon: { src: LogoPOIcon },
         onClick: async () => {
+          onChangeTranslationFileType?.('drive');
           if (isAgreed || selectedNovaTab !== 'aiChat') {
             setUploadTarget(target);
             toggleDriveConfirm();
@@ -135,6 +142,7 @@ export const FileUploader = (props: FileUploaderProps) => {
                 : PCDarkIcon
         },
         onClick: () => {
+          onChangeTranslationFileType?.('local');
           const element = inputRef?.current;
           if (element) {
             const targetType =
@@ -183,6 +191,7 @@ export const FileUploader = (props: FileUploaderProps) => {
         name: t(`Nova.UploadTooltip.CurrentFile`),
         icon: { src: isLightMode ? InsertDocsLightIcon : InsertDocsDarkIcon },
         onClick: async () => {
+          onChangeTranslationFileType?.('currentDoc');
           await analysisCurDoc();
         }
       });
@@ -270,6 +279,7 @@ export const FileUploader = (props: FileUploaderProps) => {
             target={target}
             accept={getAccept(accept)}
             handleOnChange={(files) => {
+              console.log('여기가 완료 시점이지?', files);
               type === 'file' ? validateFileUpload(files, maxFileSize) : loadLocalFile(files);
             }}
             ref={inputRef}>

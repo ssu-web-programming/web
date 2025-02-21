@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
 import { useConfirm } from 'components/Confirm';
 import { useTranslation } from 'react-i18next';
+import Bridge from 'util/bridge';
 
 import { apiWrapper } from '../../../api/apiWrapper';
 import { PO_DRIVE_FILEINFO, PO_DRIVE_LIST } from '../../../api/constant';
@@ -20,12 +21,14 @@ import { selectTabSlice } from '../../../store/slices/tabSlice';
 import { DriveFileInfo, setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { getFileExtension } from '../../../util/common';
+import useCurrentDocAnalysis from '../use-current-doc-analysis';
 import { useChatNova } from '../useChatNova';
 import useUserInfoUtils from '../useUserInfoUtils';
 
 interface Props {
   onFinishCallback?: () => void;
   onClearPastedImages?: () => void;
+  analysisCurDoc?: () => Promise<void>;
 }
 
 interface ValidationResult {
@@ -39,7 +42,11 @@ interface ValidationResult {
   };
 }
 
-export function useManageFile({ onFinishCallback, onClearPastedImages }: Props = {}) {
+export function useManageFile({
+  onFinishCallback,
+  onClearPastedImages,
+  analysisCurDoc
+}: Props = {}) {
   const { t } = useTranslation();
   const chatNova = useChatNova();
   const confirm = useConfirm();
@@ -47,6 +54,7 @@ export function useManageFile({ onFinishCallback, onClearPastedImages }: Props =
   const novaHistory = useAppSelector(novaHistorySelector);
   const { getMaxFilesPerUpload, getAvailableFileCnt } = useUserInfoUtils();
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
+  // const { analysisCurDoc } = useCurrentDocAnalysis();
 
   const validateFiles = (files: File[], maxFileSize: number): ValidationResult => {
     const result: ValidationResult = {
@@ -104,8 +112,8 @@ export function useManageFile({ onFinishCallback, onClearPastedImages }: Props =
       return;
     }
 
-    // 성공했을때는 localFiles에 넣는다.
-    dispatch(setLocalFiles(files));
+    await analysisCurDoc?.();
+    // dispatch(setLocalFiles(files));
   };
 
   const loadLocalFile = async (files: File[]) => {
