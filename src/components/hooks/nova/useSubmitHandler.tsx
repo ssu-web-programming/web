@@ -15,7 +15,7 @@ import {
   removeChat,
   updateChatStatus
 } from 'store/slices/nova/novaHistorySlice';
-import { setCreating, setUsingAI } from 'store/slices/tabSlice';
+import { selectNovaTab, selectTabSlice, setCreating, setUsingAI } from 'store/slices/tabSlice';
 import { getFileExtension, getFileName, markdownToHtml } from 'util/common';
 import { v4 } from 'uuid';
 
@@ -23,8 +23,10 @@ import { track } from '@amplitude/analytics-browser';
 
 import { NOVA_CHAT_API, PO_DRIVE_DOC_OPEN_STATUS } from '../../../api/constant';
 import { FileUploadState } from '../../../constants/fileTypes';
+import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import { getServiceEngineName, SERVICE_TYPE } from '../../../constants/serviceType';
 import { appStateSelector } from '../../../store/slices/appState';
+import { setPageStatus } from '../../../store/slices/nova/pageStatusSlice';
 import { DriveFileInfo } from '../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { convertFiles, downloadFiles, fileToBase64, uploadFiles } from '../../../util/files';
@@ -45,6 +47,7 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
   const novaHistory = useAppSelector(novaHistorySelector);
   const { novaExpireTime } = useAppSelector(appStateSelector);
   const chatMode = useAppSelector(novaChatModeSelector);
+  const { selectedNovaTab } = useAppSelector(selectTabSlice);
   const { getReferences } = useGetChatReferences();
   const errorHandle = useErrorHandle();
   const showCreditToast = useShowCreditToast();
@@ -88,6 +91,14 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
       try {
         dispatch(setCreating('NOVA'));
         dispatch(setUsingAI(true));
+
+        const curTab =
+          chatType === SERVICE_TYPE.NOVA_WEBSEARCH_PERPLEXITY ||
+          chatType === SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO
+            ? NOVA_TAB_TYPE.perplexity
+            : NOVA_TAB_TYPE.aiChat;
+        dispatch(selectNovaTab(curTab));
+        dispatch(setPageStatus({ tab: curTab, status: 'chat' }));
 
         const fileInfo: NovaChatType['files'] = [];
         if (expireTimer.current) clearTimeout(expireTimer.current);
