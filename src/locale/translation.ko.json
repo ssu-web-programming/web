@@ -744,9 +744,9 @@
           "Slovenian": "슬로베니아어",
           "Swedish": "스웨덴어",
           "Spanish": "스페인어",
-          "EnglishAll": "영어 (모든 영어 변형)",
-          "PortugueseAll": "포르투갈어 (모든 포르투갈어 변형)",
-          "ChineseAll": "중국어 (모든 중국어 변형)",
+          "EnglishAll": "영어",
+          "PortugueseAll": "포르투갈어",
+          "ChineseAll": "중국어",
           "Korean": "한국어"
         },
         "TargetList": {
@@ -779,8 +779,8 @@
           "Czech": "체코어",
           "Turkish": "터키어",
           "Polish": "폴란드어",
-          "Portuguese": "포르투갈어",
-          "PortugueseBrazil": "포르투갈어(브라질)",
+          "Portuguese": "브라질 제외 포르투갈어",
+          "PortugueseBrazil": "브라질 포르투갈어",
           "French": "프랑스어",
           "Finnish": "핀란드어",
           "Hungarian": "헝가리어",

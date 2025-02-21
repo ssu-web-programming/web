@@ -12,6 +12,7 @@ import { useAppSelector } from 'store/store';
 import styled from 'styled-components';
 
 import { NOVA_TAB_TYPE } from '../../../../../constants/novaTapTypes';
+import { OriginalFileType, useTranslationContext } from '../../provider/translation-provider';
 import FileItem from '../file-item';
 
 const Wrap = styled.div`
@@ -112,7 +113,6 @@ interface ImageUploaderProps {
 
 export default function TranslationFileUploader({
   guideMsg,
-  curTab,
   creditCount = 10
 }: ImageUploaderProps) {
   const inputImgFileRef = useRef<HTMLInputElement | null>(null);
@@ -121,6 +121,15 @@ export default function TranslationFileUploader({
   const localFiles = useAppSelector(getLocalFiles);
   const driveFiles = useAppSelector(getDriveFiles);
   const currentFile = useAppSelector(getCurrentFile);
+
+  const { setSharedTranslationInfo } = useTranslationContext();
+
+  const handleChangeOriginalFileType = (type: OriginalFileType) => {
+    setSharedTranslationInfo((prev) => ({
+      ...prev,
+      originalFileType: type
+    }));
+  };
 
   console.log('currentFile', currentFile);
   console.log('driveFiles', driveFiles);
@@ -150,7 +159,8 @@ export default function TranslationFileUploader({
             right: 'unset',
             bottom: 'unset',
             padding: '12px 16px'
-          }}>
+          }}
+          onChangeTranslationFileType={handleChangeOriginalFileType}>
           <ImageBox>
             <Icon disable={isAgreed === undefined}>
               {isLightMode ? <UploadFileLightIcon /> : <UploadDarkIcon />}

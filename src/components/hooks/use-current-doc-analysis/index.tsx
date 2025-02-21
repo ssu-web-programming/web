@@ -1,4 +1,5 @@
 import { useConfirm } from 'components/Confirm';
+import { useTranslationContext } from 'pages/Nova/Translation/provider/translation-provider';
 import { useTranslation } from 'react-i18next';
 import { setPageStatus } from 'store/slices/nova/pageStatusSlice';
 import { platformInfoSelector } from 'store/slices/platformInfo';
@@ -25,8 +26,12 @@ export default function useCurrentDocAnalysis() {
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
   const { getFileInfo } = useManageFile({});
   const { getAvailableFileCnt } = useUserInfoUtils();
+  const {
+    sharedTranslationInfo: { originalFileType }
+  } = useTranslationContext();
 
   const analysisCurDoc = async () => {
+    console.log('currentFile 호출됐니?', currentFile);
     if (currentFile.type === 'notSupported') {
       await confirm({
         msg: t('Nova.Alert.UnopenableDocError', { max: getAvailableFileCnt(selectedNovaTab) })!,
@@ -54,7 +59,11 @@ export default function useCurrentDocAnalysis() {
       } else {
         await confirmSaveDoc(false);
       }
-    } else if (currentFile.type === 'local') {
+    } else if (currentFile.type === 'local' || currentFile.type === 'unknown') {
+      if (originalFileType === 'local') {
+        await confirmTranslationUploadFile();
+        return;
+      }
       await confirmUploadFile();
     }
   };
@@ -108,6 +117,23 @@ export default function useCurrentDocAnalysis() {
           dispatch(setPageStatus({ tab: selectedNovaTab, status: 'progress' }));
           Bridge.callBridgeApi('uploadFile');
         }
+      }
+    });
+  };
+
+  const confirmTranslationUploadFile = async () => {
+    await confirm({
+      msg: t('Nova.Confirm.UploadFile.Msg'),
+      onOk: {
+        text: t('Nova.Confirm.UploadFile.Ok'),
+        callback: () => {
+          dispatch(setPageStatus({ tab: selectedNovaTab, status: 'progress' }));
+          Bridge.callBridgeApi('uploadFile');
+        }
+      },
+      onCancel: {
+        text: t('Nova.Confirm.UploadFile.Cancel'),
+        callback: () => {}
       }
     });
   };

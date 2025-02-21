@@ -18,6 +18,32 @@ import {
 } from '../../provider/translation-provider';
 import useSanitizedDrive from '../use-sanitized-drive';
 
+export const LANGUAGE_VARIANTS = {
+  EN: ['EN-US', 'EN-GB'],
+  ZH: ['ZH-HANS', 'ZH-HANT'],
+  PT: ['PT-BR', 'PT-PT']
+} as const;
+
+// 타입 정의
+export type EnglishVariant = (typeof LANGUAGE_VARIANTS.EN)[number];
+export type ChineseVariant = (typeof LANGUAGE_VARIANTS.ZH)[number];
+export type PortugueseVariant = (typeof LANGUAGE_VARIANTS.PT)[number];
+
+export const isLanguageVariant = (lang: string): boolean => {
+  return [...LANGUAGE_VARIANTS.EN, ...LANGUAGE_VARIANTS.ZH, ...LANGUAGE_VARIANTS.PT].includes(
+    lang as any
+  );
+};
+
+export const getBaseLanguage = (variant: string): string | null => {
+  if (LANGUAGE_VARIANTS.EN.includes(variant as EnglishVariant)) return 'EN';
+  if (LANGUAGE_VARIANTS.ZH.includes(variant as ChineseVariant)) return 'ZH';
+  if (LANGUAGE_VARIANTS.PT.includes(variant as PortugueseVariant)) return 'PT';
+  return null;
+};
+
+export type LanguageVariant = EnglishVariant | ChineseVariant | PortugueseVariant;
+
 const useTranslationIntro = (translateInputValue: string) => {
   const showCreditToast = useShowCreditToast();
   // 전역상태의 번역 Context!
@@ -106,13 +132,60 @@ const useTranslationIntro = (translateInputValue: string) => {
     }
   };
 
+  const getNewSourceLang = (targetLang: string): string => {
+    // 예: EN-US -> EN, ZH-HANS -> ZH, PT-BR -> PT
+    return getBaseLanguage(targetLang) || targetLang;
+  };
+
+  const getNewTargetLang = (
+    sourceLang: string,
+    previousVariant: Record<string, string>
+  ): string => {
+    // 현재 source 언어에 해당하는 이전 변형이 있으면 사용
+    if (previousVariant[sourceLang]) {
+      return previousVariant[sourceLang];
+    }
+
+    // 없으면 기본값 반환
+    switch (sourceLang) {
+      case 'EN':
+        return 'EN-US';
+      case 'ZH':
+        return 'ZH-HANS';
+      case 'PT':
+        return 'PT-BR';
+      default:
+        return sourceLang;
+    }
+  };
+
+  const getPreviousVariant = (
+    currentTargetLang: string,
+    currentPreviousVariant: Record<string, string> = {}
+  ): Record<string, string> => {
+    const baseLang = getBaseLanguage(currentTargetLang);
+    if (baseLang && isLanguageVariant(currentTargetLang)) {
+      return {
+        ...currentPreviousVariant,
+        [baseLang]: currentTargetLang
+      };
+    }
+    return currentPreviousVariant;
+  };
+
   const handleSwitchLang = () => {
     if (isSwitchActive) {
-      setSharedTranslationInfo((prev) => ({
-        ...prev,
-        sourceLang: targetLang,
-        targetLang: sourceLang
-      }));
+      setSharedTranslationInfo((prev) => {
+        const newSourceLang = getNewSourceLang(prev.targetLang);
+        const newTargetLang = getNewTargetLang(prev.sourceLang, prev.previousVariant);
+
+        return {
+          ...prev,
+          sourceLang: newSourceLang,
+          targetLang: newTargetLang,
+          previousVariant: getPreviousVariant(prev.targetLang, prev.previousVariant)
+        };
+      });
     }
   };
 
