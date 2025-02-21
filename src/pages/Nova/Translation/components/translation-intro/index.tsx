@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { activeToast } from 'store/slices/toastSlice';
 import { useAppDispatch } from 'store/store';
 import { css } from 'styled-components';
+import { getDevice, getPlatform } from 'util/bridge';
 import { getLangFromLangCode } from 'util/translation';
 
 import { NOVA_TAB_TYPE } from '../../../../../constants/novaTapTypes';
