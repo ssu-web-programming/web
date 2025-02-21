@@ -132,51 +132,60 @@ const useTranslationIntro = (translateInputValue: string) => {
     }
   };
 
-  // const convertTargetLang = (targetLang: string) => {
-  //   if (targetLang === 'EN-US' || targetLang === 'EN-GB') {
-  //     return 'EN';
-  //   }
-
-  //   return targetLang;
-  // };
-
-  // const convertSourceLang = (sourceLang: string) => {
-  //   return sourceLang;
-  // };
-
   const getNewSourceLang = (targetLang: string): string => {
-    const baseLang = getBaseLanguage(targetLang);
-    return baseLang || targetLang;
+    // 예: EN-US -> EN, ZH-HANS -> ZH, PT-BR -> PT
+    return getBaseLanguage(targetLang) || targetLang;
   };
 
-  const getNewTargetLang = (sourceLang: string, previousVariant: string | undefined): string => {
+  const getNewTargetLang = (
+    sourceLang: string,
+    previousVariant: Record<string, string>
+  ): string => {
+    // 현재 source 언어에 해당하는 이전 변형이 있으면 사용
+    if (previousVariant[sourceLang]) {
+      return previousVariant[sourceLang];
+    }
+
+    // 없으면 기본값 반환
     switch (sourceLang) {
       case 'EN':
-        return previousVariant || 'EN-US';
+        return 'EN-US';
       case 'ZH':
-        return previousVariant || 'ZH-HANS';
+        return 'ZH-HANS';
       case 'PT':
-        return previousVariant || 'PT-BR';
+        return 'PT-BR';
       default:
         return sourceLang;
     }
   };
+
   const getPreviousVariant = (
     currentTargetLang: string,
-    currentPreviousVariant: string | undefined
-  ): string | undefined => {
-    return isLanguageVariant(currentTargetLang) ? currentTargetLang : currentPreviousVariant;
+    currentPreviousVariant: Record<string, string> = {}
+  ): Record<string, string> => {
+    const baseLang = getBaseLanguage(currentTargetLang);
+    if (baseLang && isLanguageVariant(currentTargetLang)) {
+      return {
+        ...currentPreviousVariant,
+        [baseLang]: currentTargetLang
+      };
+    }
+    return currentPreviousVariant;
   };
 
   const handleSwitchLang = () => {
-    console.log('isSwitchActive', isSwitchActive);
     if (isSwitchActive) {
-      setSharedTranslationInfo((prev) => ({
-        ...prev,
-        sourceLang: getNewSourceLang(prev.targetLang),
-        targetLang: getNewTargetLang(prev.sourceLang, prev.previousEnglishVariant),
-        previousEnglishVariant: getPreviousVariant(prev.targetLang, prev.previousEnglishVariant)
-      }));
+      setSharedTranslationInfo((prev) => {
+        const newSourceLang = getNewSourceLang(prev.targetLang);
+        const newTargetLang = getNewTargetLang(prev.sourceLang, prev.previousVariant);
+
+        return {
+          ...prev,
+          sourceLang: newSourceLang,
+          targetLang: newTargetLang,
+          previousVariant: getPreviousVariant(prev.targetLang, prev.previousVariant)
+        };
+      });
     }
   };
 

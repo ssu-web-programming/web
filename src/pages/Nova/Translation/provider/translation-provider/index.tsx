@@ -24,6 +24,7 @@ export interface SharedTranslation extends TranslateResult {
   sourceLang: string;
   targetLang: string;
   previousEnglishVariant?: string;
+  previousVariant: any;
   LangType: LangType;
   isSwitchActive: boolean;
 }
@@ -68,6 +69,7 @@ export function TranslationProvider({ children }: Props) {
     sourceLang: 'KO',
     targetLang: 'EN-US',
     previousEnglishVariant: 'EN-US',
+    previousVariant: {},
     // 필요없으면 제거해도 괜찮을 것 같음
     LangType: 'source',
     isSwitchActive: true
