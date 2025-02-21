@@ -242,7 +242,11 @@ export const getMenuItemsFromServiceGroup = (
       key: Array.isArray(services) ? services[0] : services,
       title: label,
       desc: t(`Nova.ChatModel.${groupKey}.desc`),
-      credit: minCredit === maxCredit ? maxCredit.toString() : `${minCredit}~${maxCredit}`
+      credit: Number.isFinite(minCredit)
+        ? minCredit === maxCredit
+          ? maxCredit.toString()
+          : `${minCredit}~${maxCredit}`
+        : '-1'
     };
   });
 };

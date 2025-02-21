@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Button from '@mui/material/Button';
 import Step from '@mui/material/Step';
 import StepIcon from '@mui/material/StepIcon';
@@ -6,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ReactComponent as ArrowDarkIcon } from '../../img/dark/ico_arrow_down_normal.svg';
 import { ReactComponent as ArrowLightIcon } from '../../img/light/ico_arrow_down_normal.svg';
+import { lang } from '../../locale';
 import { themeInfoSelector } from '../../store/slices/theme';
 import { useAppSelector } from '../../store/store';
 
@@ -20,6 +22,14 @@ interface StepNavigatorProps {
 export default function StepNavigator({ activeStep, setActiveStep, steps }: StepNavigatorProps) {
   const { t } = useTranslation();
   const { isLightMode } = useAppSelector(themeInfoSelector);
+  const selectedStepRef = useRef<HTMLDivElement>(null);
+  const [selectedStepWidth, setSelectedStepWidth] = useState<number>(0);
+
+  useEffect(() => {
+    if (selectedStepRef.current) {
+      setSelectedStepWidth(selectedStepRef.current.offsetWidth);
+    }
+  }, []);
 
   const handleMove = (index: number) => {
     if (index === activeStep) {
@@ -56,11 +66,17 @@ export default function StepNavigator({ activeStep, setActiveStep, steps }: Step
         activeStep={activeStep}
         connector={<S.StepLine />}
         isStared={activeStep === 0}
-        isFinished={activeStep === steps.length - 1}>
+        isFinished={activeStep === steps.length - 1}
+        width={selectedStepWidth}
+        isWide={lang != 'ko'}>
         {steps.map((step, index) => {
           const stepProps: { completed?: boolean } = {};
           return (
-            <Step key={index} {...stepProps} onClick={() => handleMove(index)}>
+            <Step
+              key={index}
+              {...stepProps}
+              onClick={() => handleMove(index)}
+              ref={activeStep === index ? selectedStepRef : null}>
               <S.Label StepIconComponent={CustomStepIcon}>
                 {activeStep === index
                   ? step.label
