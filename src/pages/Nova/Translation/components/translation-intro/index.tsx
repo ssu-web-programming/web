@@ -50,7 +50,23 @@ export default function TranslationIntro() {
     }
   ];
 
+  const validateLang = () => {
+    if (sourceLang === targetLang) {
+      confirm({
+        msg: t('Nova.translation.Guide.SameLanguage'),
+        onOk: {
+          text: t('Confirm')
+        }
+      });
+      return false;
+    }
+    return true;
+  };
+
   const handleTranslate = () => {
+    const validate = validateLang();
+    if (!validate) return;
+
     if (type === 'TEXT') {
       submitTextTranslate();
       return;
@@ -60,14 +76,7 @@ export default function TranslationIntro() {
   };
 
   useEffect(() => {
-    if (sourceLang === targetLang) {
-      confirm({
-        msg: t('Nova.translation.Guide.SameLanguage'),
-        onOk: {
-          text: t('Confirm')
-        }
-      });
-    }
+    validateLang();
   }, [sourceLang, targetLang]);
 
   return (
