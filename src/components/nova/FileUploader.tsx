@@ -279,7 +279,6 @@ export const FileUploader = (props: FileUploaderProps) => {
             target={target}
             accept={getAccept(accept)}
             handleOnChange={(files) => {
-              console.log('여기가 완료 시점이지?', files);
               type === 'file' ? validateFileUpload(files, maxFileSize) : loadLocalFile(files);
             }}
             ref={inputRef}>

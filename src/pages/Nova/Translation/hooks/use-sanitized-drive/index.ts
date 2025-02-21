@@ -18,7 +18,6 @@ export default function useSanitizedDrive() {
   };
 
   const sanitizedOriginFile = async () => {
-    const isLocalFiles = localFiles[0];
     const targetFile = await convertFileObject();
 
     if (originalFileType === 'currentDoc') {
@@ -37,13 +36,11 @@ export default function useSanitizedDrive() {
       };
     }
 
-    if (isLocalFiles) {
-      return {
-        originalFileType,
-        originalFileName: (await convertFileObject()).name,
-        originFile: new Blob([targetFile], { type: targetFile.type })
-      };
-    }
+    return {
+      originalFileType,
+      originalFileName: targetFile.name,
+      originFile: new Blob([targetFile], { type: targetFile.type })
+    };
   };
 
   return {

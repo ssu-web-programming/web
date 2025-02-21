@@ -1,7 +1,10 @@
 import { Dispatch, SetStateAction } from 'react';
 import { useConfirm } from 'components/Confirm';
+import { useTranslationContext } from 'pages/Nova/Translation/provider/translation-provider';
 import { useTranslation } from 'react-i18next';
+import { activeLoadingSpinner, initLoadingSpinner } from 'store/slices/loadingSpinner';
 import Bridge from 'util/bridge';
+import { uploadFiles } from 'util/files';
 
 import { apiWrapper } from '../../../api/apiWrapper';
 import { PO_DRIVE_FILEINFO, PO_DRIVE_LIST } from '../../../api/constant';
@@ -54,6 +57,9 @@ export function useManageFile({
   const novaHistory = useAppSelector(novaHistorySelector);
   const { getMaxFilesPerUpload, getAvailableFileCnt } = useUserInfoUtils();
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
+  const {
+    sharedTranslationInfo: { originalFileType }
+  } = useTranslationContext();
   // const { analysisCurDoc } = useCurrentDocAnalysis();
 
   const validateFiles = (files: File[], maxFileSize: number): ValidationResult => {
@@ -94,6 +100,26 @@ export function useManageFile({
     return result;
   };
 
+  const confirmTranslationUploadFile = async (files: File[]) => {
+    await confirm({
+      msg: t('Nova.Confirm.AnalyzeFile.Msg'),
+      onOk: {
+        text: t('Nova.Confirm.UploadFile.Ok'),
+        callback: async () => {
+          dispatch(activeLoadingSpinner());
+          const result = await uploadFiles(files);
+          const file = result[0].data;
+          dispatch(initLoadingSpinner());
+          dispatch(setDriveFiles([{ ...file, name: file.fileName }]));
+        }
+      },
+      onCancel: {
+        text: t('Nova.Confirm.UploadFile.Cancel'),
+        callback: () => {}
+      }
+    });
+  };
+
   const validateFileUpload = async (files: File[], maxFileSize: number) => {
     const validation = validateFiles(files, maxFileSize);
 
@@ -112,7 +138,8 @@ export function useManageFile({
       return;
     }
 
-    await analysisCurDoc?.();
+    await confirmTranslationUploadFile(files);
+
     // dispatch(setLocalFiles(files));
   };
 
