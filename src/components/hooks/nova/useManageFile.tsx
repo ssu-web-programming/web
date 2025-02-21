@@ -24,14 +24,12 @@ import { selectTabSlice } from '../../../store/slices/tabSlice';
 import { DriveFileInfo, setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { getFileExtension } from '../../../util/common';
-import useCurrentDocAnalysis from '../use-current-doc-analysis';
 import { useChatNova } from '../useChatNova';
 import useUserInfoUtils from '../useUserInfoUtils';
 
 interface Props {
   onFinishCallback?: () => void;
   onClearPastedImages?: () => void;
-  analysisCurDoc?: () => Promise<void>;
 }
 
 interface ValidationResult {
@@ -45,11 +43,7 @@ interface ValidationResult {
   };
 }
 
-export function useManageFile({
-  onFinishCallback,
-  onClearPastedImages,
-  analysisCurDoc
-}: Props = {}) {
+export function useManageFile({ onFinishCallback, onClearPastedImages }: Props = {}) {
   const { t } = useTranslation();
   const chatNova = useChatNova();
   const confirm = useConfirm();
@@ -57,10 +51,6 @@ export function useManageFile({
   const novaHistory = useAppSelector(novaHistorySelector);
   const { getMaxFilesPerUpload, getAvailableFileCnt } = useUserInfoUtils();
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
-  const {
-    sharedTranslationInfo: { originalFileType }
-  } = useTranslationContext();
-  // const { analysisCurDoc } = useCurrentDocAnalysis();
 
   const validateFiles = (files: File[], maxFileSize: number): ValidationResult => {
     const result: ValidationResult = {
@@ -138,9 +128,12 @@ export function useManageFile({
       return;
     }
 
-    await confirmTranslationUploadFile(files);
-
     // dispatch(setLocalFiles(files));
+  };
+
+  const uploadTranslationFile = async (files: File[], maxFileSize: number) => {
+    await validateFileUpload(files, maxFileSize);
+    await confirmTranslationUploadFile(files);
   };
 
   const loadLocalFile = async (files: File[]) => {
@@ -357,7 +350,8 @@ export function useManageFile({
     loadDriveFile,
     getFileList,
     getFileInfo,
-    validateFileUpload
+    validateFileUpload,
+    uploadTranslationFile
   };
 }
 
