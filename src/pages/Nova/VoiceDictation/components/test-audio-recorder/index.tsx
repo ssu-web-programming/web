@@ -31,7 +31,6 @@ const TestAudioRecorder: React.FC<AudioRecorderProps> = ({
 }) => {
   const { t } = useTranslation();
   const {
-    isRecording,
     isPaused,
     recordingTime,
     startRecording,
@@ -71,7 +70,7 @@ const TestAudioRecorder: React.FC<AudioRecorderProps> = ({
         startVisualization(mediaRecorderRef.current.stream);
       }
     }
-  }, [isInitRecording, startRecording]);
+  }, [isInitRecording]);
 
   return (
     <S.Container>

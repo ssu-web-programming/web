@@ -4,28 +4,17 @@ import OverlayModal from 'components/overlay-modal';
 import { NOVA_TAB_TYPE } from 'constants/novaTapTypes';
 import { overlay } from 'overlay-kit';
 import { setIsMicrophoneState } from 'store/slices/appState';
-import { platformInfoSelector } from 'store/slices/platformInfo';
 import { selectNovaTab } from 'store/slices/tabSlice';
-import { themeInfoSelector } from 'store/slices/theme';
-import { setLocalFiles } from 'store/slices/uploadFiles';
-import { useAppDispatch, useAppSelector } from 'store/store';
-import { ClientType, getPlatform } from 'util/bridge';
+import { useAppDispatch } from 'store/store';
 import Bridge from 'util/bridge';
-import { blobToFile, convertWebmToWavFile } from 'util/getAudioDuration';
 
 import { useVoiceDictationContext } from '../../provider/voice-dictation-provider';
-// import AudioRecorder from '../audio-recorder';
 import DesktopLangSelector from '../modals/desktop-lang-selector';
 import StopModalContent from '../modals/stop-modal-content';
 import TestAudioRecorder from '../test-audio-recorder';
 
-// import { AudioRecorderProvider } from './AudioRecorderContext';
-
 export default function VoiceAudioRecorder() {
-  const { platform } = useAppSelector(platformInfoSelector);
-
   const {
-    setSharedVoiceDictationInfo,
     sharedVoiceDictationInfo: { isVoiceRecording, selectedLangOption }
   } = useVoiceDictationContext();
 
