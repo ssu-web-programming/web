@@ -4,7 +4,6 @@ import translationHttp, {
   TranslateDocumentResponse
 } from 'api/translation';
 import useErrorHandle from 'components/hooks/useErrorHandle';
-import { useShowCreditToast } from 'components/hooks/useShowCreditToast';
 import { usePolling } from 'hooks/use-polling';
 import { overlay } from 'overlay-kit';
 import { setError } from 'store/slices/errorSlice';
@@ -47,7 +46,6 @@ export const getBaseLanguage = (variant: string): string | null => {
 export type LanguageVariant = EnglishVariant | ChineseVariant | PortugueseVariant;
 
 const useTranslationIntro = (translateInputValue: string, type: TranslateType) => {
-  const showCreditToast = useShowCreditToast();
   // 전역상태의 번역 Context!
   const {
     setSharedTranslationInfo,
@@ -115,9 +113,6 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
       const {
         result: { detectedSourceLanguage, translatedText }
       } = response;
-
-      const { deductionCredit, leftCredit } = calLeftCredit(headers);
-      showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'nova');
 
       handleMoveToTextResult({
         detectedSourceLanguage: detectedSourceLanguage.toUpperCase(),

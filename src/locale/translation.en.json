@@ -425,6 +425,7 @@
       "button": {
         "viewMore": "View More",
         "countMore": "{{count}} More Items",
+        "collapse": "畳む",
         "anotherAnswer": "See Other Answers"
       }
     },

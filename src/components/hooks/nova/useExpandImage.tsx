@@ -15,10 +15,8 @@ import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { calLeftCredit } from '../../../util/common';
 import { createFormDataFromFiles, fileToBase64 } from '../../../util/files';
 import useErrorHandle from '../useErrorHandle';
-import { useShowCreditToast } from '../useShowCreditToast';
 
 export const useExpandImage = () => {
-  const showCreditToast = useShowCreditToast();
   const errorHandle = useErrorHandle();
   const dispatch = useAppDispatch();
   const currentFile = useAppSelector(selectPageData(NOVA_TAB_TYPE.expandImg));
@@ -111,9 +109,6 @@ export const useExpandImage = () => {
           gpt_ver: 'clipdrop'
         });
         track('click_nova_image', { image_name: 'NOVA_UNCROP_CLIPDROP' });
-
-        const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
-        showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');
       } else {
         const { leftCredit } = calLeftCredit(res.headers);
         handleExpandError(response.error.code, Number(leftCredit), {

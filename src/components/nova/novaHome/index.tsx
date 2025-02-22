@@ -64,18 +64,14 @@ const NovaHome = (props: NovaHomeProps) => {
   };
 
   const getTabTranslationKey = (tab: NOVA_TAB_TYPE) => {
-    if (tab === NOVA_TAB_TYPE.convert2DTo3D) {
-      return (
-        <Trans
-          i18nKey={`Nova.Home.image.${tab}`}
-          components={{
-            img: isLightMode ? <IconConvertLight /> : <IconConvertDark />
-          }}
-        />
-      );
-    }
-
-    return t(`Nova.Home.image.${tab}`);
+    return (
+      <Trans
+        i18nKey={`Nova.Home.image.${tab}`}
+        components={{
+          img: isLightMode ? <IconConvertLight /> : <IconConvertDark />
+        }}
+      />
+    );
   };
 
   return (

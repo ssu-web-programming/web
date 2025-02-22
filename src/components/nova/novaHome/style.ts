@@ -84,6 +84,10 @@ export const ImageItem = styled.div`
   }
 
   span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6.5px;
     font-size: 13px;
     font-weight: 500;
     line-height: 20px;

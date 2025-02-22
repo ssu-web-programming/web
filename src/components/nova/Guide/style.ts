@@ -34,10 +34,16 @@ export const GuideTitle = styled.div<{ $guideTitleStyle?: FlattenSimpleInterpola
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 6.5px;
     font-size: 24px;
     font-weight: 700;
     line-height: 36px;
     color: ${({ theme }) => theme.color.text.gray04};
+
+    svg {
+      width: 19px;
+      height: 21px;
+    }
   }
 
   p.desc {

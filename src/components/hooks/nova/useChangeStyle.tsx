@@ -15,10 +15,8 @@ import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { calLeftCredit } from '../../../util/common';
 import { createFormDataFromFiles, fileToBase64 } from '../../../util/files';
 import useErrorHandle from '../useErrorHandle';
-import { useShowCreditToast } from '../useShowCreditToast';
 
 export const useChangeStyle = () => {
-  const showCreditToast = useShowCreditToast();
   const errorHandle = useErrorHandle();
   const dispatch = useAppDispatch();
   const currentFile = useAppSelector(selectPageData(NOVA_TAB_TYPE.changeStyle));
@@ -100,9 +98,6 @@ export const useChangeStyle = () => {
           gpt_ver: 'NOVA_PO_STYLE_TRANSFER'
         });
         track('click_nova_image', { image_name: 'NOVA_PO_STYLE_TRANSFER' });
-
-        const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
-        showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');
       } else {
         const { leftCredit } = calLeftCredit(res.headers);
         handleChangeStyleError(response.error.code, Number(leftCredit), style);

@@ -15,10 +15,8 @@ import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { calLeftCredit } from '../../../util/common';
 import { createFormDataFromFiles } from '../../../util/files';
 import useErrorHandle from '../useErrorHandle';
-import { useShowCreditToast } from '../useShowCreditToast';
 
 export const useRemoveBackground = () => {
-  const showCreditToast = useShowCreditToast();
   const errorHandle = useErrorHandle();
   const dispatch = useAppDispatch();
   const currentFile = useAppSelector(selectPageData(NOVA_TAB_TYPE.removeBG));
@@ -64,9 +62,6 @@ export const useRemoveBackground = () => {
           gpt_ver: 'remove_bg'
         });
         track('click_nova_image', { image_name: 'NOVA_REMOVE_BG' });
-
-        const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
-        showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');
 
         // 만족도 이벤트
       } else {
