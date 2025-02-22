@@ -432,6 +432,7 @@
       "button": {
         "viewMore": "더 보기",
         "countMore": "{{count}}개 더",
+        "collapse": "접기",
         "anotherAnswer": "다른 답변 보기"
       }
     },

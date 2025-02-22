@@ -425,6 +425,7 @@
       "button": {
         "viewMore": "もっと見る",
         "countMore": "その他{{count}}件のアイテム",
+        "collapse": "Collapse",
         "anotherAnswer": "他の回答を見る"
       }
     },
