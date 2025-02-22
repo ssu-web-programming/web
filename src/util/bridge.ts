@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import { overlay } from 'overlay-kit';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { initLoadingSpinner } from 'store/slices/loadingSpinner';
@@ -426,7 +427,7 @@ export const useInitBridgeListener = () => {
                 }
               })
             );
-
+            overlay.closeAll();
             if (body.isExternal) dispatch(setIsExternal(body.isExternal));
 
             if (body.openTab in NOVA_TAB_TYPE) {
