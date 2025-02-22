@@ -14,15 +14,15 @@ export function useGetVoices() {
   const dispatch = useAppDispatch();
   const result = useAppSelector(selectPageResult(NOVA_TAB_TYPE.aiVideo));
 
-  const [hasMore, setHasMore] = useState(true);
+  const [hasMoreMap, setHasMoreMap] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState(false);
 
   const getVoices = async (gender: string, lang: string) => {
-    if (loading || !hasMore) return;
+    if (loading || hasMoreMap[lang] === false) return;
     setLoading(true);
 
     try {
-      const currentPage = result?.info.voicePage ?? 1;
+      const currentPage = result?.info.voicePage?.[lang] ?? 1;
       const { res } = await apiWrapper().request(
         `${NOVA_VIDEO_GET_VOICES}?page=${currentPage}&limit=10&gender=${gender}&language=${lang}`,
         {
@@ -39,22 +39,25 @@ export function useGetVoices() {
             result: {
               info: {
                 ...result?.info,
-                voicePage: currentPage + 1,
+                voicePage: {
+                  ...(result?.info?.voicePage ?? {}),
+                  [lang]: currentPage + 1
+                },
                 voices: [...(result?.info?.voices ?? []), ...data.voices]
               }
             }
           })
         );
       } else {
-        setHasMore(false);
+        setHasMoreMap((prev) => ({ ...prev, [lang]: false }));
       }
     } catch (error) {
       console.error('목소리 불러오기 실패:', error);
-      setHasMore(false);
+      setHasMoreMap((prev) => ({ ...prev, [lang]: false }));
     } finally {
       setLoading(false);
     }
   };
 
-  return { getVoices, hasMore, loading };
+  return { getVoices, hasMore: (lang: string) => hasMoreMap[lang] ?? true, loading };
 }
