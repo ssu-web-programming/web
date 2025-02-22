@@ -463,6 +463,8 @@ export default function InputBar(props: InputBarProps) {
                 selectedItem={chatMode}
                 setSelectedItem={(item: string) => {
                   dispatch(setChatMode(item.toUpperCase() as SERVICE_TYPE));
+                  dispatch(setLocalFiles([]));
+                  dispatch(setDriveFiles([]));
                   if (selectedNovaTab !== NOVA_TAB_TYPE.home) {
                     if (
                       (item as SERVICE_TYPE) === SERVICE_TYPE.NOVA_WEBSEARCH_PERPLEXITY ||
