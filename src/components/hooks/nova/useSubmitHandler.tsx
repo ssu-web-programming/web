@@ -236,7 +236,10 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
         if (timer) clearTimeout(timer);
 
         const resVsId = res.headers.get('X-PO-AI-NOVA-API-VSID') || '';
-        const resThreadId = res.headers.get('X-PO-AI-NOVA-API-TID') || '';
+        const resThreadId =
+          res.headers.get('X-PO-AI-NOVA-API-TID') ||
+          res.headers.get('X-PO-AI-NOVA-API-THREAD-ID') ||
+          '';
         const askType = res.headers.get('X-PO-AI-NOVA-API-ASK-TYPE') || '';
         const expiredTime = res.headers.get('X-PO-AI-NOVA-API-EXPIRED-TIME') || '';
 
