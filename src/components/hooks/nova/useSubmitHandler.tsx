@@ -16,17 +16,24 @@ import {
   updateChatStatus
 } from 'store/slices/nova/novaHistorySlice';
 import { selectNovaTab, selectTabSlice, setCreating, setUsingAI } from 'store/slices/tabSlice';
-import { getFileExtension, getFileName, markdownToHtml } from 'util/common';
+import { getCookie, getFileExtension, getFileName, markdownToHtml } from 'util/common';
 import { v4 } from 'uuid';
 
 import { track } from '@amplitude/analytics-browser';
 
-import { NOVA_CHAT_API, PO_DRIVE_DOC_OPEN_STATUS } from '../../../api/constant';
+import {
+  NOVA_CHAT_API,
+  NOVA_GET_CREDIT_USE_COUNT,
+  PO_DRIVE_DOC_OPEN_STATUS
+} from '../../../api/constant';
 import { FileUploadState } from '../../../constants/fileTypes';
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import { getServiceEngineName, SERVICE_TYPE } from '../../../constants/serviceType';
 import { appStateSelector } from '../../../store/slices/appState';
-import { setPageStatus } from '../../../store/slices/nova/pageStatusSlice';
+import {
+  selectPageCreditReceived,
+  setPageStatus
+} from '../../../store/slices/nova/pageStatusSlice';
 import { DriveFileInfo } from '../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { convertFiles, downloadFiles, fileToBase64, uploadFiles } from '../../../util/files';
@@ -48,6 +55,7 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
   const { novaExpireTime } = useAppSelector(appStateSelector);
   const chatMode = useAppSelector(novaChatModeSelector);
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
+  const isCreditRecieved = useAppSelector(selectPageCreditReceived(NOVA_TAB_TYPE.aiChat));
   const { getReferences } = useGetChatReferences();
   const errorHandle = useErrorHandle();
   const showCreditToast = useShowCreditToast();
@@ -75,6 +83,30 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
 
     const results = await Promise.all(promises);
     return results;
+  };
+
+  const showSurveyModal = async () => {
+    // 만족도 이벤트
+    if (!isCreditRecieved && !getCookie('dontShowSurvey')) {
+      try {
+        const { res } = await apiWrapper().request(NOVA_GET_CREDIT_USE_COUNT, {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            serviceTypes: [SERVICE_TYPE.NOVA_CHAT_GPT4O],
+            startTime: '1740182400000',
+            endTime: '1740528000000'
+          }),
+          method: 'POST'
+        });
+
+        const response = await res.json();
+        console.log(response);
+      } catch (error) {
+        errorHandle(error);
+      }
+    }
   };
 
   const createChatSubmitHandler = useCallback(
@@ -302,6 +334,7 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
           if (citations.length > 0) {
             await getReferences(citations, id);
           }
+          await showSurveyModal();
 
           if (splunk) {
             splunk({

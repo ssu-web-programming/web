@@ -64,6 +64,13 @@ export default function Result({ children }: ResultProps) {
   const [showInsertDocBtn, setShowInsertDocBtn] = useState(true);
 
   useEffect(() => {
+    // aiVideo는 결과 페이지 진입 시 자동 저장
+    if (selectedNovaTab === NOVA_TAB_TYPE.aiVideo) {
+      OnSave();
+    }
+  }, []);
+
+  useEffect(() => {
     Bridge.callSyncBridgeApiWithCallback({
       api: 'getClientStatus',
       callback: async (status: ClientStatusType) => {
@@ -80,8 +87,6 @@ export default function Result({ children }: ResultProps) {
   }, [selectedNovaTab]);
 
   useEffect(() => {
-    console.log('curNovaTab: ', selectedNovaTab);
-    console.log('isCreditRecieved: ', isCreditRecieved);
     // 만족도 이벤트
     if (!isCreditRecieved && !getCookie('dontShowSurvey')) {
       overlay.closeAll();
