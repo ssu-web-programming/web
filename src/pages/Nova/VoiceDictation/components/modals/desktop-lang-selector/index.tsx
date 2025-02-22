@@ -1,4 +1,4 @@
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { overlay } from 'overlay-kit';
 import {
   LangOptionValues,
@@ -22,6 +22,8 @@ export default function DesktopLangSelector() {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
 
+  const [tempSelectedLang, setTempSelectedLang] = useState<LangOptionValues>(selectedLangOption);
+
   const findLabelByLangOptions = (lang: LangOptionValues) => {
     return langOptions.find((langOption) => langOption.value === lang)?.label;
   };
@@ -44,8 +46,7 @@ export default function DesktopLangSelector() {
 
   const handleChangeLang = (e: ChangeEvent<HTMLInputElement>) => {
     const lang = e.target.value as LangOptionValues;
-
-    handleSetSelectedLangOption(lang);
+    setTempSelectedLang(lang);
   };
 
   const handleClose = () => {
@@ -53,7 +54,8 @@ export default function DesktopLangSelector() {
   };
 
   const handleSave = async () => {
-    openToastPopup(selectedLangOption);
+    handleSetSelectedLangOption(tempSelectedLang);
+    openToastPopup(tempSelectedLang);
     handleClose();
   };
 
@@ -69,7 +71,7 @@ export default function DesktopLangSelector() {
             type="radio"
             name="ko-KR"
             value="ko-KR"
-            checked={selectedLangOption === 'ko-KR'}
+            checked={tempSelectedLang === 'ko-KR'}
             onChange={handleChangeLang}
           />
           <S.RadioText>{t('Nova.voiceDictation.LanguageSelector.Options.Korean')}</S.RadioText>
@@ -81,7 +83,7 @@ export default function DesktopLangSelector() {
             type="radio"
             name="en-US"
             value="en-US"
-            checked={selectedLangOption === 'en-US'}
+            checked={tempSelectedLang === 'en-US'}
             onChange={handleChangeLang}
           />
           <S.RadioText>{t('Nova.voiceDictation.LanguageSelector.Options.English')}</S.RadioText>
@@ -93,7 +95,7 @@ export default function DesktopLangSelector() {
             type="radio"
             name="ja"
             value="ja"
-            checked={selectedLangOption === 'ja'}
+            checked={tempSelectedLang === 'ja'}
             onChange={handleChangeLang}
           />
           <S.RadioText>{t('Nova.voiceDictation.LanguageSelector.Options.Japanese')}</S.RadioText>
@@ -105,7 +107,7 @@ export default function DesktopLangSelector() {
             type="radio"
             name="zh-cn"
             value="zh-cn"
-            checked={selectedLangOption === 'zh-cn'}
+            checked={tempSelectedLang === 'zh-cn'}
             onChange={handleChangeLang}
           />
           <S.RadioText>{t('Nova.voiceDictation.LanguageSelector.Options.Chinese1')}</S.RadioText>
@@ -117,7 +119,7 @@ export default function DesktopLangSelector() {
             type="radio"
             name="zh-tw"
             value="zh-tw"
-            checked={selectedLangOption === 'zh-tw'}
+            checked={tempSelectedLang === 'zh-tw'}
             onChange={handleChangeLang}
           />
           <S.RadioText>{t('Nova.voiceDictation.LanguageSelector.Options.Chinese2')}</S.RadioText>
@@ -129,7 +131,7 @@ export default function DesktopLangSelector() {
             type="radio"
             name="enko"
             value="enko"
-            checked={selectedLangOption === 'enko'}
+            checked={tempSelectedLang === 'enko'}
             onChange={handleChangeLang}
           />
           <S.RadioText>{t('Nova.voiceDictation.LanguageSelector.Options.KoEn')}</S.RadioText>
