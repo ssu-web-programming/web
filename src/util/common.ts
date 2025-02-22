@@ -64,11 +64,14 @@ th
 
 export const markdownToHtml = async (markdown: string) => {
   try {
-    const converted = await marked(markdown);
+    const converted = marked.parse(markdown);
     const $ = load(htmlBody);
     const body = $('body');
 
     body.html(converted);
+    $('a').each((_, el) => {
+      $(el).attr('target', '_blank').attr('rel', 'noopener noreferrer');
+    });
 
     return $.html();
   } catch (err) {
