@@ -39,36 +39,36 @@ export const SOURCE_LANGUAGES = [
 ];
 
 export const SOURCE_LANGUAGES_WITH_LANG_CODE = [
-  { langCode: 'AR', lang: i18n.t('Nova.translation.Language.List.Arabic') },
-  { langCode: 'BG', lang: i18n.t('Nova.translation.Language.List.Bulgarian') },
-  { langCode: 'CS', lang: i18n.t('Nova.translation.Language.List.Czech') },
-  { langCode: 'DA', lang: i18n.t('Nova.translation.Language.List.Danish') },
-  { langCode: 'DE', lang: i18n.t('Nova.translation.Language.List.German') },
-  { langCode: 'EL', lang: i18n.t('Nova.translation.Language.List.Greek') },
-  { langCode: 'EN', lang: i18n.t('Nova.translation.Language.List.EnglishAll') },
-  { langCode: 'ES', lang: i18n.t('Nova.translation.Language.List.Spanish') },
-  { langCode: 'ET', lang: i18n.t('Nova.translation.Language.List.Estonian') },
-  { langCode: 'FI', lang: i18n.t('Nova.translation.Language.List.Finnish') },
-  { langCode: 'FR', lang: i18n.t('Nova.translation.Language.List.French') },
-  { langCode: 'HU', lang: i18n.t('Nova.translation.Language.List.Hungarian') },
-  { langCode: 'ID', lang: i18n.t('Nova.translation.Language.List.Indonesian') },
-  { langCode: 'IT', lang: i18n.t('Nova.translation.Language.List.Italian') },
-  { langCode: 'JA', lang: i18n.t('Nova.translation.Language.List.Japanese') },
+  { langCode: 'EL', lang: i18n.t('Nova.translation.Language.List.Greek') }, // 그리스어
+  { langCode: 'NL', lang: i18n.t('Nova.translation.Language.List.Dutch') }, // 네덜란드어
+  { langCode: 'NB', lang: i18n.t('Nova.translation.Language.List.NorwegianBokmal') }, // 노르웨이어
+  { langCode: 'DA', lang: i18n.t('Nova.translation.Language.List.Danish') }, // 덴마크어
+  { langCode: 'DE', lang: i18n.t('Nova.translation.Language.List.German') }, // 독일어
+  { langCode: 'LV', lang: i18n.t('Nova.translation.Language.List.Latvian') }, // 라트비아어
+  { langCode: 'RU', lang: i18n.t('Nova.translation.Language.List.Russian') }, // 러시아어
+  { langCode: 'RO', lang: i18n.t('Nova.translation.Language.List.Romanian') }, // 루마니아어
+  { langCode: 'LT', lang: i18n.t('Nova.translation.Language.List.Lithuanian') }, // 리투아니아어
+  { langCode: 'BG', lang: i18n.t('Nova.translation.Language.List.Bulgarian') }, // 불가리아어
+  { langCode: 'SK', lang: i18n.t('Nova.translation.Language.List.Slovak') }, // 슬로바키아어
+  { langCode: 'SL', lang: i18n.t('Nova.translation.Language.List.Slovenian') }, // 슬로베니아어
+  { langCode: 'SV', lang: i18n.t('Nova.translation.Language.List.Swedish') }, // 스웨덴어
+  { langCode: 'ES', lang: i18n.t('Nova.translation.Language.List.Spanish') }, // 스페인어
+  { langCode: 'AR', lang: i18n.t('Nova.translation.Language.List.Arabic') }, // 아랍어
+  { langCode: 'ET', lang: i18n.t('Nova.translation.Language.List.Estonian') }, // 에스토니아어
+  { langCode: 'EN', lang: i18n.t('Nova.translation.Language.List.EnglishAll') }, // 영어
+  { langCode: 'UK', lang: i18n.t('Nova.translation.Language.List.Ukrainian') }, // 우크라이나어
+  { langCode: 'IT', lang: i18n.t('Nova.translation.Language.List.Italian') }, // 이탈리아어
+  { langCode: 'ID', lang: i18n.t('Nova.translation.Language.List.Indonesian') }, // 인도네시아어
+  { langCode: 'JA', lang: i18n.t('Nova.translation.Language.List.Japanese') }, // 일본어
+  { langCode: 'ZH', lang: i18n.t('Nova.translation.Language.List.ChineseAll') }, // 중국어
+  { langCode: 'CS', lang: i18n.t('Nova.translation.Language.List.Czech') }, // 체코어
+  { langCode: 'TR', lang: i18n.t('Nova.translation.Language.List.Turkish') }, // 터키어
+  { langCode: 'PL', lang: i18n.t('Nova.translation.Language.List.Polish') }, // 폴란드어
+  { langCode: 'PT', lang: i18n.t('Nova.translation.Language.List.PortugueseAll') }, // 포르투갈어
+  { langCode: 'FI', lang: i18n.t('Nova.translation.Language.List.Finnish') }, // 핀란드어
+  { langCode: 'FR', lang: i18n.t('Nova.translation.Language.List.French') }, // 프랑스어
   { langCode: 'KO', lang: i18n.t('Nova.translation.Language.List.Korean') },
-  { langCode: 'LT', lang: i18n.t('Nova.translation.Language.List.Lithuanian') },
-  { langCode: 'LV', lang: i18n.t('Nova.translation.Language.List.Latvian') },
-  { langCode: 'NB', lang: i18n.t('Nova.translation.Language.List.NorwegianBokmal') },
-  { langCode: 'NL', lang: i18n.t('Nova.translation.Language.List.Dutch') },
-  { langCode: 'PL', lang: i18n.t('Nova.translation.Language.List.Polish') },
-  { langCode: 'PT', lang: i18n.t('Nova.translation.Language.List.PortugueseAll') },
-  { langCode: 'RO', lang: i18n.t('Nova.translation.Language.List.Romanian') },
-  { langCode: 'RU', lang: i18n.t('Nova.translation.Language.List.Russian') },
-  { langCode: 'SK', lang: i18n.t('Nova.translation.Language.List.Slovak') },
-  { langCode: 'SL', lang: i18n.t('Nova.translation.Language.List.Slovenian') },
-  { langCode: 'SV', lang: i18n.t('Nova.translation.Language.List.Swedish') },
-  { langCode: 'TR', lang: i18n.t('Nova.translation.Language.List.Turkish') },
-  { langCode: 'UK', lang: i18n.t('Nova.translation.Language.List.Ukrainian') },
-  { langCode: 'ZH', lang: i18n.t('Nova.translation.Language.List.ChineseAll') }
+  { langCode: 'HU', lang: i18n.t('Nova.translation.Language.List.Hungarian') } // 헝가리어
 ];
 
 export const TARGET_LANGUAGES = [
@@ -108,34 +108,72 @@ export const TARGET_LANGUAGES = [
 ];
 
 export const TARGET_LANGUAGES_WITH_LANG_CODE = [
-  { langCode: 'AR', lang: i18n.t('Nova.translation.Language.TargetList.Arabic') },
-  { langCode: 'BG', lang: i18n.t('Nova.translation.Language.TargetList.Bulgarian') },
-  { langCode: 'CS', lang: i18n.t('Nova.translation.Language.TargetList.Czech') },
-  { langCode: 'DA', lang: i18n.t('Nova.translation.Language.TargetList.Danish') },
-  { langCode: 'DE', lang: i18n.t('Nova.translation.Language.TargetList.German') },
-  { langCode: 'EL', lang: i18n.t('Nova.translation.Language.TargetList.Greek') },
-  { langCode: 'EN-US', lang: i18n.t('Nova.translation.Language.TargetList.EnglishUS') },
-  { langCode: 'ES', lang: i18n.t('Nova.translation.Language.TargetList.Spanish') },
-  { langCode: 'ET', lang: i18n.t('Nova.translation.Language.TargetList.Estonian') },
-  { langCode: 'FI', lang: i18n.t('Nova.translation.Language.TargetList.Finnish') },
-  { langCode: 'FR', lang: i18n.t('Nova.translation.Language.TargetList.French') },
-  { langCode: 'HU', lang: i18n.t('Nova.translation.Language.TargetList.Hungarian') },
-  { langCode: 'ID', lang: i18n.t('Nova.translation.Language.TargetList.Indonesian') },
-  { langCode: 'IT', lang: i18n.t('Nova.translation.Language.TargetList.Italian') },
-  { langCode: 'JA', lang: i18n.t('Nova.translation.Language.TargetList.Japanese') },
-  { langCode: 'KO', lang: i18n.t('Nova.translation.Language.TargetList.Korean') },
-  { langCode: 'LT', lang: i18n.t('Nova.translation.Language.TargetList.Lithuanian') },
-  { langCode: 'LV', lang: i18n.t('Nova.translation.Language.TargetList.Latvian') },
-  { langCode: 'NB', lang: i18n.t('Nova.translation.Language.TargetList.NorwegianBokmal') },
-  { langCode: 'NL', lang: i18n.t('Nova.translation.Language.TargetList.Dutch') },
-  { langCode: 'PL', lang: i18n.t('Nova.translation.Language.TargetList.Polish') },
-  { langCode: 'PT-PT', lang: i18n.t('Nova.translation.Language.TargetList.Portuguese') },
-  { langCode: 'RO', lang: i18n.t('Nova.translation.Language.TargetList.Romanian') },
-  { langCode: 'RU', lang: i18n.t('Nova.translation.Language.TargetList.Russian') },
-  { langCode: 'SK', lang: i18n.t('Nova.translation.Language.TargetList.Slovak') },
-  { langCode: 'SL', lang: i18n.t('Nova.translation.Language.TargetList.Slovenian') },
-  { langCode: 'SV', lang: i18n.t('Nova.translation.Language.TargetList.Swedish') },
-  { langCode: 'TR', lang: i18n.t('Nova.translation.Language.TargetList.Turkish') },
-  { langCode: 'UK', lang: i18n.t('Nova.translation.Language.TargetList.Ukrainian') },
-  { langCode: 'ZH-HANS', lang: i18n.t('Nova.translation.Language.TargetList.ChineseSimplified') }
+  { langCode: 'EL', lang: i18n.t('Nova.translation.Language.TargetList.Greek') }, // 그리스어
+  { langCode: 'NL', lang: i18n.t('Nova.translation.Language.TargetList.Dutch') }, // 네덜란드어
+  { langCode: 'NB', lang: i18n.t('Nova.translation.Language.TargetList.NorwegianBokmal') }, // 노르웨이어
+  { langCode: 'DA', lang: i18n.t('Nova.translation.Language.TargetList.Danish') }, // 덴마크어
+  { langCode: 'DE', lang: i18n.t('Nova.translation.Language.TargetList.German') }, // 독일어
+  { langCode: 'LV', lang: i18n.t('Nova.translation.Language.TargetList.Latvian') }, // 라트비아어
+  { langCode: 'RU', lang: i18n.t('Nova.translation.Language.TargetList.Russian') }, // 러시아어
+  { langCode: 'RO', lang: i18n.t('Nova.translation.Language.TargetList.Romanian') }, // 루마니아어
+  { langCode: 'LT', lang: i18n.t('Nova.translation.Language.TargetList.Lithuanian') }, // 리투아니아어
+  { langCode: 'BG', lang: i18n.t('Nova.translation.Language.TargetList.Bulgarian') }, // 불가리아어
+  { langCode: 'PT-BR', lang: i18n.t('Nova.translation.Language.TargetList.PortugueseBrazil') }, // 브라질 포르투갈어
+  { langCode: 'PT-PT', lang: i18n.t('Nova.translation.Language.TargetList.Portuguese') }, // 브라질 포르투갈어
+  { langCode: 'SV', lang: i18n.t('Nova.translation.Language.TargetList.Swedish') }, // 스웨덴어
+  { langCode: 'ES', lang: i18n.t('Nova.translation.Language.TargetList.Spanish') }, // 스페인어
+  { langCode: 'SK', lang: i18n.t('Nova.translation.Language.TargetList.Slovak') }, // 슬로바키아어
+  { langCode: 'SL', lang: i18n.t('Nova.translation.Language.TargetList.Slovenian') }, // 슬로베니아어
+  { langCode: 'AR', lang: i18n.t('Nova.translation.Language.TargetList.Arabic') }, // 아랍어
+  { langCode: 'ET', lang: i18n.t('Nova.translation.Language.TargetList.Estonian') }, // 에스토니아어
+  { langCode: 'EN-GB', lang: i18n.t('Nova.translation.Language.TargetList.EnglishUK') }, // 영어(영국)
+  { langCode: 'EN-US', lang: i18n.t('Nova.translation.Language.TargetList.EnglishUS') }, // 영어(미국)
+  { langCode: 'UK', lang: i18n.t('Nova.translation.Language.TargetList.Ukrainian') }, // 우크라이나어
+  { langCode: 'IT', lang: i18n.t('Nova.translation.Language.TargetList.Italian') }, // 이탈리아어
+  { langCode: 'ID', lang: i18n.t('Nova.translation.Language.TargetList.Indonesian') }, // 인도네시아어
+  { langCode: 'JA', lang: i18n.t('Nova.translation.Language.TargetList.Japanese') }, // 일본어
+  { langCode: 'ZH-HANS', lang: i18n.t('Nova.translation.Language.TargetList.ChineseSimplified') }, // 중국어
+  { langCode: 'ZH-HANT', lang: i18n.t('Nova.translation.Language.TargetList.ChineseTraditional') }, // 중국어
+  { langCode: 'CS', lang: i18n.t('Nova.translation.Language.TargetList.Czech') }, // 체코어
+  { langCode: 'TR', lang: i18n.t('Nova.translation.Language.TargetList.Turkish') }, // 터키어
+  { langCode: 'PL', lang: i18n.t('Nova.translation.Language.TargetList.Polish') }, // 폴란드어
+  { langCode: 'FI', lang: i18n.t('Nova.translation.Language.TargetList.Finnish') }, // 핀란드어
+  { langCode: 'FR', lang: i18n.t('Nova.translation.Language.TargetList.French') }, // 프랑스어
+  { langCode: 'KO', lang: i18n.t('Nova.translation.Language.TargetList.Korean') }, // 한국어
+  { langCode: 'HU', lang: i18n.t('Nova.translation.Language.TargetList.Hungarian') } // 헝가리어
+];
+
+// 파일번역일때만 아랍어와 중국어 번체를 제거하도록 변경
+export const FILE_TARGET_LANGUAGES_WITH_LANG_CODE = [
+  { langCode: 'EL', lang: i18n.t('Nova.translation.Language.TargetList.Greek') }, // 그리스어
+  { langCode: 'NL', lang: i18n.t('Nova.translation.Language.TargetList.Dutch') }, // 네덜란드어
+  { langCode: 'NB', lang: i18n.t('Nova.translation.Language.TargetList.NorwegianBokmal') }, // 노르웨이어
+  { langCode: 'DA', lang: i18n.t('Nova.translation.Language.TargetList.Danish') }, // 덴마크어
+  { langCode: 'DE', lang: i18n.t('Nova.translation.Language.TargetList.German') }, // 독일어
+  { langCode: 'LV', lang: i18n.t('Nova.translation.Language.TargetList.Latvian') }, // 라트비아어
+  { langCode: 'RU', lang: i18n.t('Nova.translation.Language.TargetList.Russian') }, // 러시아어
+  { langCode: 'RO', lang: i18n.t('Nova.translation.Language.TargetList.Romanian') }, // 루마니아어
+  { langCode: 'LT', lang: i18n.t('Nova.translation.Language.TargetList.Lithuanian') }, // 리투아니아어
+  { langCode: 'BG', lang: i18n.t('Nova.translation.Language.TargetList.Bulgarian') }, // 불가리아어
+  { langCode: 'PT-BR', lang: i18n.t('Nova.translation.Language.TargetList.PortugueseBrazil') }, // 브라질 포르투갈어
+  { langCode: 'PT-PT', lang: i18n.t('Nova.translation.Language.TargetList.Portuguese') }, // 브라질 포르투갈어
+  { langCode: 'SV', lang: i18n.t('Nova.translation.Language.TargetList.Swedish') }, // 스웨덴어
+  { langCode: 'ES', lang: i18n.t('Nova.translation.Language.TargetList.Spanish') }, // 스페인어
+  { langCode: 'SK', lang: i18n.t('Nova.translation.Language.TargetList.Slovak') }, // 슬로바키아어
+  { langCode: 'SL', lang: i18n.t('Nova.translation.Language.TargetList.Slovenian') }, // 슬로베니아어
+  { langCode: 'ET', lang: i18n.t('Nova.translation.Language.TargetList.Estonian') }, // 에스토니아어
+  { langCode: 'EN-GB', lang: i18n.t('Nova.translation.Language.TargetList.EnglishUK') }, // 영어(영국)
+  { langCode: 'EN-US', lang: i18n.t('Nova.translation.Language.TargetList.EnglishUS') }, // 영어(미국)
+  { langCode: 'UK', lang: i18n.t('Nova.translation.Language.TargetList.Ukrainian') }, // 우크라이나어
+  { langCode: 'IT', lang: i18n.t('Nova.translation.Language.TargetList.Italian') }, // 이탈리아어
+  { langCode: 'ID', lang: i18n.t('Nova.translation.Language.TargetList.Indonesian') }, // 인도네시아어
+  { langCode: 'JA', lang: i18n.t('Nova.translation.Language.TargetList.Japanese') }, // 일본어
+  { langCode: 'ZH-HANS', lang: i18n.t('Nova.translation.Language.TargetList.ChineseSimplified') }, // 중국어
+  { langCode: 'CS', lang: i18n.t('Nova.translation.Language.TargetList.Czech') }, // 체코어
+  { langCode: 'TR', lang: i18n.t('Nova.translation.Language.TargetList.Turkish') }, // 터키어
+  { langCode: 'PL', lang: i18n.t('Nova.translation.Language.TargetList.Polish') }, // 폴란드어
+  { langCode: 'FI', lang: i18n.t('Nova.translation.Language.TargetList.Finnish') }, // 핀란드어
+  { langCode: 'FR', lang: i18n.t('Nova.translation.Language.TargetList.French') }, // 프랑스어
+  { langCode: 'KO', lang: i18n.t('Nova.translation.Language.TargetList.Korean') }, // 한국어
+  { langCode: 'HU', lang: i18n.t('Nova.translation.Language.TargetList.Hungarian') } // 헝가리어
 ];

@@ -744,9 +744,9 @@
           "Slovenian": "슬로베니아어",
           "Swedish": "스웨덴어",
           "Spanish": "스페인어",
-          "EnglishAll": "영어 (모든 영어 변형)",
-          "PortugueseAll": "포르투갈어 (모든 포르투갈어 변형)",
-          "ChineseAll": "중국어 (모든 중국어 변형)",
+          "EnglishAll": "영어",
+          "PortugueseAll": "포르투갈어",
+          "ChineseAll": "중국어",
           "Korean": "한국어"
         },
         "TargetList": {
@@ -779,8 +779,8 @@
           "Czech": "체코어",
           "Turkish": "터키어",
           "Polish": "폴란드어",
-          "Portuguese": "포르투갈어",
-          "PortugueseBrazil": "포르투갈어(브라질)",
+          "Portuguese": "브라질 제외 포르투갈어",
+          "PortugueseBrazil": "브라질 포르투갈어",
           "French": "프랑스어",
           "Finnish": "핀란드어",
           "Hungarian": "헝가리어",
@@ -802,7 +802,8 @@
         "UnsupportedFormat": "지원하지 않는 파일 형식입니다. 다시 한 번 확인해 주세요.",
         "CharacterLimit": "글자 수가 지원 가능한 최대 글자 수를 초과했습니다. 글자 수를 줄여 다시 시도해주세요.",
         "EncryptedDocument": "암호화된 문서는 문서질의를 할 수 없습니다. 문서를 다시 확인해 주세요.",
-        "DamagedDocument": "손상된 문서는 문서질의를 할 수 없습니다. 문서를 다시 확인해 주세요."
+        "DamagedDocument": "손상된 문서는 문서질의를 할 수 없습니다. 문서를 다시 확인해 주세요.",
+        "CommonUnsupportFile": "이 파일 형식은 지원되지 않습니다.\n첨부 가능한 파일 형식을 확인한 뒤 다시 시도해 주세요.\n- 파일 : docx, pptx, pdf"
       },
       "FileUpload": {
         "Guide": {
@@ -967,6 +968,9 @@
         "Msg": "문서를 분석하려면 폴라리스 드라이브에 저장해야 합니다. 지금 저장하시겠어요?",
         "Ok": "지금 저장",
         "Cancel": "취소"
+      },
+      "AnalyzeFile": {
+        "Msg": "문서를 번역하려면 폴라리스 드라이브에 저장해야 합니다. 지금 저장하시겠어요?"
       },
       "UpdateVersion": {
         "Msg": "2D→3D 변환 기능은 최신 버전에서만 사용할 수 있어요. 지금 바로 업데이트 하고, 새로운 기능을 만나보세요!",

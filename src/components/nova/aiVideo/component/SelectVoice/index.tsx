@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import Lottie from 'react-lottie-player';
 import { css } from 'styled-components';
 
 import { Voices } from '../../../../../constants/heygenTypes';
@@ -9,10 +10,14 @@ import CircleSelectedDarkIcon from '../../../../../img/dark/ico_check_circle.svg
 import CircleDarkIcon from '../../../../../img/dark/ico_circle.svg';
 import CloseDarkIcon from '../../../../../img/dark/ico_nova_close.svg';
 import SoundDarkIcon from '../../../../../img/dark/nova/aiVideo/ico_sound.svg';
+import SkeletonDark from '../../../../../img/dark/nova/aiVideo/skeleton_voice.json';
+import SpinnerDark from '../../../../../img/dark/nova/nova_spinner.json';
 import CircleSelectedLightIcon from '../../../../../img/light/ico_check_circle.svg';
 import CircleLightIcon from '../../../../../img/light/ico_circle.svg';
 import CloseLightIcon from '../../../../../img/light/ico_nova_close.svg';
 import SoundLightIcon from '../../../../../img/light/nova/aiVideo/ico_sound.svg';
+import SkeletonLight from '../../../../../img/light/nova/aiVideo/skeleton_voice.json';
+import SpinnerLight from '../../../../../img/light/nova/nova_spinner.json';
 import { selectPageResult } from '../../../../../store/slices/nova/pageStatusSlice';
 import { screenModeSelector } from '../../../../../store/slices/screenMode';
 import { themeInfoSelector } from '../../../../../store/slices/theme';
@@ -166,45 +171,64 @@ export default function SelectVoice({ setIsOpen, changeSelectedVoice }: SelectAv
           )}
         </S.SelectBoxWrap>
         <S.ListWrap>
-          {result?.info.voices
-            .filter(
-              (voice: Voices) =>
-                (selectedGender === 'all' || voice.gender.toLowerCase() === selectedGender) &&
-                (selectedLanguage === 'all' ||
-                  voice.language?.toLowerCase() === selectedLanguage?.toLowerCase())
-            )
-            .map((voice: Voices) => (
-              <S.VoiceContainer
-                key={voice.voice_id}
-                isSelected={tempVoice?.voice_id === voice.voice_id}
-                onClick={() => handleVoiceClick(voice)}
-                ref={lastVoiceRef}>
-                <S.VoiceInfoWrap>
-                  <img
-                    src={
-                      tempVoice?.voice_id === voice.voice_id
-                        ? isLightMode
-                          ? CircleSelectedLightIcon
-                          : CircleSelectedDarkIcon
-                        : isLightMode
-                          ? CircleLightIcon
-                          : CircleDarkIcon
-                    }
-                    alt="play"
-                    className="radio"
-                  />
-                  <S.VoiceInfo>
-                    <span className="name">{voice.name}</span>
-                    <S.IdentifyWrap>
-                      <img src={voice?.flag} alt="flag" />
-                      <span>{`${voice?.language} | ${voice?.gender}`}</span>
-                    </S.IdentifyWrap>
-                  </S.VoiceInfo>
-                </S.VoiceInfoWrap>
-                <img src={isLightMode ? SoundLightIcon : SoundDarkIcon} alt="play" />
-              </S.VoiceContainer>
-            ))}
+          {result?.info?.voices ? (
+            (() => {
+              const filteredVoices = result.info.voices.filter(
+                (voice: Voices) =>
+                  (selectedGender === 'all' || voice.gender.toLowerCase() === selectedGender) &&
+                  (selectedLanguage === 'all' ||
+                    voice.language?.toLowerCase() === selectedLanguage?.toLowerCase())
+              );
+
+              return filteredVoices.length > 0
+                ? filteredVoices.map((voice: Voices) => (
+                    <S.VoiceContainer
+                      key={voice.voice_id}
+                      isSelected={tempVoice?.voice_id === voice.voice_id}
+                      onClick={() => handleVoiceClick(voice)}
+                      ref={lastVoiceRef}>
+                      <S.VoiceInfoWrap>
+                        <img
+                          src={
+                            tempVoice?.voice_id === voice.voice_id
+                              ? isLightMode
+                                ? CircleSelectedLightIcon
+                                : CircleSelectedDarkIcon
+                              : isLightMode
+                                ? CircleLightIcon
+                                : CircleDarkIcon
+                          }
+                          alt="play"
+                          className="radio"
+                        />
+                        <S.VoiceInfo>
+                          <span className="name">{voice.name}</span>
+                          <S.IdentifyWrap>
+                            <img src={voice?.flag} alt="flag" />
+                            <span>{`${voice?.language} | ${voice?.gender}`}</span>
+                          </S.IdentifyWrap>
+                        </S.VoiceInfo>
+                      </S.VoiceInfoWrap>
+                      <img src={isLightMode ? SoundLightIcon : SoundDarkIcon} alt="play" />
+                    </S.VoiceContainer>
+                  ))
+                : Array.from({ length: 10 }).map((_, index) => (
+                    <Lottie
+                      key={index}
+                      animationData={isLightMode ? SkeletonLight : SkeletonDark}
+                      loop
+                      play
+                    />
+                  ));
+            })()
+          ) : (
+            <></>
+          )}
+          {loading && (
+            <Lottie animationData={isLightMode ? SkeletonLight : SkeletonDark} loop play />
+          )}
         </S.ListWrap>
+
         <S.ButtonWrap>
           <Button
             variant="purple"

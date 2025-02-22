@@ -453,49 +453,51 @@ export default function InputBar(props: InputBarProps) {
           </S.TextAreaWrap>
         </InputWrap>
         <S.ButtonWrap>
-          {selectedNovaTab === NOVA_TAB_TYPE.home && (
-            <SelectBox
-              menuItem={getMenuItemsFromServiceGroup(serviceCredits, isLightMode, t)}
-              minWidth={290}
-              paddingX={4}
-              paddingY={4}
-              selectedItem={chatMode}
-              setSelectedItem={(item: string) => {
-                dispatch(setChatMode(item.toUpperCase() as SERVICE_TYPE));
-                if (selectedNovaTab !== NOVA_TAB_TYPE.home) {
-                  if (
-                    (item as SERVICE_TYPE) === SERVICE_TYPE.NOVA_WEBSEARCH_PERPLEXITY ||
-                    (item as SERVICE_TYPE) === SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO
-                  ) {
-                    dispatch(selectNovaTab(NOVA_TAB_TYPE.perplexity));
-                  } else {
-                    dispatch(selectNovaTab(NOVA_TAB_TYPE.aiChat));
+          {status === 'home' && (
+            <>
+              <SelectBox
+                menuItem={getMenuItemsFromServiceGroup(serviceCredits, isLightMode, t)}
+                minWidth={290}
+                paddingX={4}
+                paddingY={4}
+                selectedItem={chatMode}
+                setSelectedItem={(item: string) => {
+                  dispatch(setChatMode(item.toUpperCase() as SERVICE_TYPE));
+                  if (selectedNovaTab !== NOVA_TAB_TYPE.home) {
+                    if (
+                      (item as SERVICE_TYPE) === SERVICE_TYPE.NOVA_WEBSEARCH_PERPLEXITY ||
+                      (item as SERVICE_TYPE) === SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO
+                    ) {
+                      dispatch(selectNovaTab(NOVA_TAB_TYPE.perplexity));
+                    } else {
+                      dispatch(selectNovaTab(NOVA_TAB_TYPE.aiChat));
+                    }
                   }
-                }
-              }}
-              selectBoxCssExt={css`
-                border: 1px solid ${isLightMode ? 'var(--gray-gray-30)' : 'var(--gray-gray-87)'};
-              `}
-              innerBoxCssExt={css`
-                min-height: 58px;
-                padding: 8px 16px 8px 8px;
-              `}
-            />
-          )}
-          {chatMode === SERVICE_TYPE.NOVA_CHAT_GPT4O && selectedNovaTab === NOVA_TAB_TYPE.home && (
-            <S.DocButtonWrap>
-              {UPLOAD_BTN_LIST.map((btn) => (
-                <FileUploader
-                  key={btn.target}
-                  target={btn.target}
-                  accept={btn.accept}
-                  inputRef={btn.ref}
-                  tooltipStyle={{ padding: '12px 16px' }}
-                  onClearPastedImages={handleClearPastedImages}>
-                  {btn.children}
-                </FileUploader>
-              ))}
-            </S.DocButtonWrap>
+                }}
+                selectBoxCssExt={css`
+                  border: 1px solid ${isLightMode ? 'var(--gray-gray-30)' : 'var(--gray-gray-87)'};
+                `}
+                innerBoxCssExt={css`
+                  min-height: 58px;
+                  padding: 8px 16px 8px 8px;
+                `}
+              />
+              {chatMode === SERVICE_TYPE.NOVA_CHAT_GPT4O && (
+                <S.DocButtonWrap>
+                  {UPLOAD_BTN_LIST.map((btn) => (
+                    <FileUploader
+                      key={btn.target}
+                      target={btn.target}
+                      accept={btn.accept}
+                      inputRef={btn.ref}
+                      tooltipStyle={{ padding: '12px 16px' }}
+                      onClearPastedImages={handleClearPastedImages}>
+                      {btn.children}
+                    </FileUploader>
+                  ))}
+                </S.DocButtonWrap>
+              )}
+            </>
           )}
         </S.ButtonWrap>
       </S.InputTxtWrapper>

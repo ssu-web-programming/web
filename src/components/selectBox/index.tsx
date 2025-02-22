@@ -1,11 +1,14 @@
+import React from 'react';
 import Box from '@mui/material/Box';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Lottie from 'react-lottie-player';
 import { FlattenSimpleInterpolation } from 'styled-components';
 
 import { ReactComponent as ArrowDarkIcon } from '../../img/dark/ico_arrow_down_normal.svg';
 import CreditDarkIcon from '../../img/dark/ico_credit_gray.svg';
 import { ReactComponent as ArrowLightIcon } from '../../img/light/ico_arrow_down_normal.svg';
 import CreditLightIcon from '../../img/light/ico_credit_gray.svg';
+import Spinner from '../../img/light/spinner.webp';
 import { themeInfoSelector } from '../../store/slices/theme';
 import { useAppSelector } from '../../store/store';
 
@@ -111,10 +114,16 @@ export default function SelectBox({
                     </S.TextWrap>
                   </div>
                   {item.credit && (
-                    <S.CreditWrap>
-                      <img src={isLightMode ? CreditLightIcon : CreditDarkIcon} alt="credit" />
-                      <span>{item.credit}</span>
-                    </S.CreditWrap>
+                    <>
+                      {item.credit === '-1' ? (
+                        <img src={Spinner} alt="spinner" width={24} height={24} />
+                      ) : (
+                        <S.CreditWrap>
+                          <img src={isLightMode ? CreditLightIcon : CreditDarkIcon} alt="credit" />
+                          <span>{item.credit}</span>
+                        </S.CreditWrap>
+                      )}
+                    </>
                   )}
                 </S.ItemWrap>
                 {isDriver && index < menuItem.length - 1 && <S.Divider />}

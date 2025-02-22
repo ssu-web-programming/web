@@ -4,9 +4,11 @@ import OverlayModal from 'components/overlay-modal';
 import { NOVA_TAB_TYPE } from 'constants/novaTapTypes';
 import { overlay } from 'overlay-kit';
 import { setIsMicrophoneState } from 'store/slices/appState';
+import { platformInfoSelector } from 'store/slices/platformInfo';
 import { selectNovaTab } from 'store/slices/tabSlice';
+import { themeInfoSelector } from 'store/slices/theme';
 import { setLocalFiles } from 'store/slices/uploadFiles';
-import { useAppDispatch } from 'store/store';
+import { useAppDispatch, useAppSelector } from 'store/store';
 import { ClientType, getPlatform } from 'util/bridge';
 import Bridge from 'util/bridge';
 import { blobToFile, convertWebmToWavFile } from 'util/getAudioDuration';
@@ -20,7 +22,10 @@ import TestAudioRecorder from '../test-audio-recorder';
 // import { AudioRecorderProvider } from './AudioRecorderContext';
 
 export default function VoiceAudioRecorder() {
+  const { platform } = useAppSelector(platformInfoSelector);
+
   const {
+    setSharedVoiceDictationInfo,
     sharedVoiceDictationInfo: { isVoiceRecording, selectedLangOption }
   } = useVoiceDictationContext();
 
@@ -55,7 +60,13 @@ export default function VoiceAudioRecorder() {
         }}>
         이동해봐라!
       </button>
+      {/* <TestAudioRecorder */}
       <TestAudioRecorder
+        // onRecordingComplete={async (blob) => {
+        //   handleMoveToReady(
+        //     platform === ClientType.windows ? await convertWebmToWavFile(blob) : blobToFile(blob)
+        //   );
+        // }}
         isInitRecording={isVoiceRecording}
         onRecordingFinish={handleRecordingFinish}
         onStopConfirm={openStopOverlay as any}

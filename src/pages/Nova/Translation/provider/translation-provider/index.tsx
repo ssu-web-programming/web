@@ -19,8 +19,12 @@ export interface SharedTranslation extends TranslateResult {
   originFile: any;
   translationFileName: string;
   translationFileUrl: string;
+
+  // 번역 코드 관리를 위한 로직
   sourceLang: string;
   targetLang: string;
+  previousEnglishVariant?: string;
+  previousVariant: any;
   LangType: LangType;
   isSwitchActive: boolean;
 }
@@ -46,6 +50,29 @@ export const useTranslationContext = () => {
 
 // 호진FIXME: 아래 하나의 state로 관리되는 부분을 hook을 통해 관심사별로 분리하면 좋을 듯
 export function TranslationProvider({ children }: Props) {
+  const searchParams = new URLSearchParams(window.location.search);
+  const lang = searchParams.get('lang');
+
+  const getSourceLang = () => {
+    if (lang === 'ja') {
+      return 'JA';
+    }
+    if (lang === 'ko') {
+      return 'KO';
+    }
+    return 'EN';
+  };
+
+  const getTargetLang = () => {
+    if (lang === 'ja') {
+      return 'EN-US';
+    }
+    if (lang === 'ko') {
+      return 'EN-US';
+    }
+    return 'ES';
+  };
+
   // 비슷한 조건별로 state를 쪼게면 좋을 듯
   const [sharedTranslationInfo, setSharedTranslationInfo] = useState<SharedTranslation>({
     componentType: 'INTRO',
@@ -62,8 +89,10 @@ export function TranslationProvider({ children }: Props) {
     translationFileName: '',
     translationFileUrl: '',
     // 언어 BottomSheet
-    sourceLang: 'KO',
-    targetLang: 'EN-US',
+    sourceLang: getSourceLang(),
+    targetLang: getTargetLang(),
+    previousEnglishVariant: 'EN-US',
+    previousVariant: {},
     // 필요없으면 제거해도 괜찮을 것 같음
     LangType: 'source',
     isSwitchActive: true

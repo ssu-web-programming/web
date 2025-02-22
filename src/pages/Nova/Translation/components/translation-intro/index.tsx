@@ -16,7 +16,7 @@ import TranslationFileUploader from '../translation-file-uploader';
 
 import * as S from './style';
 
-type TranslateType = 'TEXT' | 'FILE';
+export type TranslateType = 'TEXT' | 'FILE';
 
 export default function TranslationIntro() {
   const { t } = useTranslation();
@@ -35,7 +35,7 @@ export default function TranslationIntro() {
     isTranslateActive,
     submitTextTranslate,
     submitFileTranslate
-  } = useTranslationIntro(translateInputValue);
+  } = useTranslationIntro(translateInputValue, type);
 
   const options: ToggleOption<TranslateType>[] = [
     {
@@ -50,6 +50,17 @@ export default function TranslationIntro() {
     }
   ];
 
+  const validateLang = () => {
+    if (sourceLang === targetLang) {
+      confirm({
+        msg: t('Nova.translation.Guide.SameLanguage'),
+        onOk: {
+          text: t('Confirm')
+        }
+      });
+    }
+  };
+
   const handleTranslate = () => {
     if (type === 'TEXT') {
       submitTextTranslate();
@@ -60,14 +71,7 @@ export default function TranslationIntro() {
   };
 
   useEffect(() => {
-    if (sourceLang === targetLang) {
-      confirm({
-        msg: t('Nova.translation.Guide.SameLanguage'),
-        onOk: {
-          text: t('Confirm')
-        }
-      });
-    }
+    validateLang();
   }, [sourceLang, targetLang]);
 
   return (
@@ -139,7 +143,9 @@ export default function TranslationIntro() {
 
       <ButtonWithCredit
         text={t('Nova.translation.Button.Translate')}
-        isActive={translateInputValue.length > 0 || isTranslateActive}
+        isActive={
+          (translateInputValue.length > 0 || isTranslateActive) && sourceLang !== targetLang
+        }
         onClick={handleTranslate}
       />
     </>

@@ -84,9 +84,6 @@ export const ItemWrap = styled.div`
     align-items: center;
     gap: 8px;
 
-    div {
-      max-width: 174px;
-    }
     span {
       word-break: break-word;
       white-space: normal;

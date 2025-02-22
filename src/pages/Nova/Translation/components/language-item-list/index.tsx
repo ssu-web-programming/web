@@ -6,6 +6,14 @@ import {
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
+import {
+  ChineseVariant,
+  EnglishVariant,
+  getBaseLanguage,
+  isLanguageVariant,
+  LANGUAGE_VARIANTS,
+  PortugueseVariant
+} from '../../hooks/use-translation-intro';
 import { LangType, SharedTranslation } from '../../provider/translation-provider';
 import { Language } from '../language-search';
 
@@ -40,8 +48,7 @@ export default function LanguageItemList({
       const langTypeWithCode =
         langType === 'source' ? SOURCE_LANGUAGES_WITH_LANG_CODE : TARGET_LANGUAGES_WITH_LANG_CODE;
       const findLang = langTypeWithCode.find((item) => item.langCode === baseCode);
-
-      return findLang?.lang;
+      return findLang;
     });
   };
 
@@ -49,6 +56,34 @@ export default function LanguageItemList({
     const langTypeWithCode =
       langType === 'source' ? TARGET_LANGUAGES_WITH_LANG_CODE : SOURCE_LANGUAGES_WITH_LANG_CODE;
 
+    // source 언어가 기본 형태(EN, ZH, PT)인 경우
+    if (langType === 'source') {
+      if (langCode === 'EN') {
+        return !!TARGET_LANGUAGES_WITH_LANG_CODE.find((lang) =>
+          LANGUAGE_VARIANTS.EN.includes(lang.langCode as EnglishVariant)
+        );
+      }
+      if (langCode === 'ZH') {
+        return !!TARGET_LANGUAGES_WITH_LANG_CODE.find((lang) =>
+          LANGUAGE_VARIANTS.ZH.includes(lang.langCode as ChineseVariant)
+        );
+      }
+      if (langCode === 'PT') {
+        return !!TARGET_LANGUAGES_WITH_LANG_CODE.find((lang) =>
+          LANGUAGE_VARIANTS.PT.includes(lang.langCode as PortugueseVariant)
+        );
+      }
+    }
+
+    // target 언어가 변형(EN-US/GB, ZH-HANS/HANT, PT-BR/PT)인 경우
+    if (langType === 'target') {
+      const baseLang = getBaseLanguage(langCode);
+      if (baseLang) {
+        return !!SOURCE_LANGUAGES_WITH_LANG_CODE.find((lang) => lang.langCode === baseLang);
+      }
+    }
+
+    // 그 외의 경우는 기존 로직대로 처리
     return !!langTypeWithCode.find((targetLang) => targetLang.langCode === langCode);
   };
 
@@ -56,6 +91,10 @@ export default function LanguageItemList({
     setSharedTranslationInfo((prev) => ({
       ...prev,
       [langType === 'source' ? 'sourceLang' : 'targetLang']: langCode,
+      // 언어 변형 코드 저장
+      ...(langType === 'target' && isLanguageVariant(langCode)
+        ? { previousVariant: langCode }
+        : {}),
       isSwitchActive: checkSwitchState(langCode)
     }));
     close();
@@ -69,7 +108,12 @@ export default function LanguageItemList({
     <>
       {/* 시간이 좀 오래걸려서 UX적인 처리가 필요할듯 */}
       <S.LanguageTitle>{t('Nova.translation.Menu.RecentLanguages')}</S.LanguageTitle>
-      <S.LanguageItem>{findLatestLangList()}</S.LanguageItem>
+
+      {findLatestLangList()?.map((lang, idx) => (
+        <S.LanguageItem key={idx} onClick={() => handleSetLangCode(lang!.langCode)}>
+          {lang?.lang}
+        </S.LanguageItem>
+      ))}
 
       <S.LanguageTitle>모든 언어</S.LanguageTitle>
       {langList.map((lang, idx) => (

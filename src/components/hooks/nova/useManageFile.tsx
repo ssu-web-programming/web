@@ -1,6 +1,10 @@
 import { Dispatch, SetStateAction } from 'react';
 import { useConfirm } from 'components/Confirm';
+import { useTranslationContext } from 'pages/Nova/Translation/provider/translation-provider';
 import { useTranslation } from 'react-i18next';
+import { activeLoadingSpinner, initLoadingSpinner } from 'store/slices/loadingSpinner';
+import Bridge from 'util/bridge';
+import { uploadFiles } from 'util/files';
 
 import { apiWrapper } from '../../../api/apiWrapper';
 import { PO_DRIVE_FILEINFO, PO_DRIVE_LIST } from '../../../api/constant';
@@ -86,26 +90,51 @@ export function useManageFile({ onFinishCallback, onClearPastedImages }: Props =
     return result;
   };
 
+  const confirmTranslationUploadFile = async (files: File[]) => {
+    await confirm({
+      msg: t('Nova.Confirm.AnalyzeFile.Msg'),
+      onOk: {
+        text: t('Nova.Confirm.UploadFile.Ok'),
+        callback: async () => {
+          dispatch(activeLoadingSpinner());
+          const result = await uploadFiles(files);
+          const file = result[0].data;
+          dispatch(initLoadingSpinner());
+          dispatch(setDriveFiles([{ ...file, name: file.fileName }]));
+        }
+      },
+      onCancel: {
+        text: t('Nova.Confirm.UploadFile.Cancel'),
+        callback: () => {}
+      }
+    });
+  };
+
   const validateFileUpload = async (files: File[], maxFileSize: number) => {
     const validation = validateFiles(files, maxFileSize);
 
     // 실패했을때 나오는 팝업!
     if (validation.invalidReason.type.length > 0) {
       await confirm({
-        msg: '지원하지 않는 파일 형식입니다. 다시 한 번 확인해 주세요.'
+        msg: t('Nova.translation.Alert.UnsupportedFormat')
       });
-      return;
+      return false;
     }
 
     if (validation.invalidReason.size.length > 0) {
       await confirm({
-        msg: `파일의 크기가 너무 큽니다. 30MB 이하의 파일만 선택해주세요.`
+        msg: t('Nova.translation.Alert.FileSizeLimit')
       });
-      return;
+      return false;
     }
 
-    // 성공했을때는 localFiles에 넣는다.
-    dispatch(setLocalFiles(files));
+    return true;
+  };
+
+  const uploadTranslationFile = async (files: File[], maxFileSize: number) => {
+    const isValid = await validateFileUpload(files, maxFileSize);
+    if (!isValid) return;
+    await confirmTranslationUploadFile(files);
   };
 
   const loadLocalFile = async (files: File[]) => {
@@ -322,7 +351,8 @@ export function useManageFile({ onFinishCallback, onClearPastedImages }: Props =
     loadDriveFile,
     getFileList,
     getFileInfo,
-    validateFileUpload
+    validateFileUpload,
+    uploadTranslationFile
   };
 }
 

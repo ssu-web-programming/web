@@ -14,22 +14,27 @@ export const StepWrap = styled.div`
 interface StepProps {
   isStared?: boolean;
   isFinished?: boolean;
+  width: number;
+  isWide: boolean;
 }
 
 export const Step = styled(Stepper).withConfig({
-  shouldForwardProp: (prop) => !['isStared', 'isFinished'].includes(prop)
+  shouldForwardProp: (prop) =>
+    !(['isStared', 'isFinished', 'width', 'isWide'] as (keyof StepProps)[]).includes(
+      prop as keyof StepProps
+    )
 })<StepProps>`
   width: 100%;
   padding: 16px 24px 4px;
-  transform: ${({ isStared, isFinished }) =>
+  transform: ${({ isStared, isFinished, width }) =>
     isStared
-      ? 'translateX(calc(50% - 77px))'
+      ? `translateX(calc(50% - ${width / 2}px - 16px))`
       : isFinished
-        ? 'translateX(calc(-1 * (50% - 77px)))'
+        ? `translateX(calc(-1 * (50% - ${width / 2}px - 16px)))`
         : 'none'};
 
   .MuiStep-root {
-    width: 120px;
+    width: ${({ isWide }) => (isWide ? '148px' : '120px')};
     height: 32px;
     display: flex;
     align-items: center;
@@ -41,7 +46,7 @@ export const Step = styled(Stepper).withConfig({
   }
   .MuiStep-root:has(.Mui-disabled),
   .MuiStep-root:has(.Mui-completed) {
-    width: 63px;
+    width: ${({ isWide }) => (isWide ? '66px' : '63px')};
   }
 
   .MuiStepConnector-root {

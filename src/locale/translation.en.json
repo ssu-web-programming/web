@@ -567,7 +567,7 @@
         "collapse": "Collapse",
         "makeVideo": "Create AI video",
         "next": "Next",
-        "prev": "Previous",
+        "prev": "Prev",
         "select": "Select"
       },
       "Done": {
@@ -709,7 +709,10 @@
           "Slovenian": "Slovenian",
           "Swedish": "Swedish",
           "Spanish": "Spanish",
-          "Korean": "Korean"
+          "Korean": "Korean",
+          "EnglishAll": "English",
+          "ChineseAll": "Chinese",
+          "PortugueseAll": "Portuguese"
         },
         "TargetList": {
           "Title": "Language to be translated",
@@ -745,7 +748,8 @@
           "PortugueseBrazil": "Portuguese (Brazil)",
           "French": "French",
           "Finnish": "Finnish",
-          "Hungarian": "Hungarian"
+          "Hungarian": "Hungarian",
+          "Korean": "Korean"
         }
       },
       "Status": {
@@ -763,7 +767,8 @@
         "UnsupportedFormat": "This file format is not supported. Please check again.",
         "CharacterLimit": "Exceeds limit. Reduce text and retry.",
         "EncryptedDocument": "Encrypted documents cannot be queried. Please check the document again.",
-        "DamagedDocument": "Damaged documents cannot be queried. Please check the document again."
+        "DamagedDocument": "Damaged documents cannot be queried. Please check the document again.",
+        "CommonUnsupportFile": "This file format is not supported.\nPlease check the supported file formats and try again.\n\n- Documents : docx, pptx, pdf"
       },
       "FileUpload": {
         "Guide": {

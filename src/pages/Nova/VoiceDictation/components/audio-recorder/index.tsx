@@ -6,6 +6,8 @@ import { ReactComponent as DarkStop } from 'img/dark/nova/voice-dictation/stop.s
 import { ReactComponent as Lang } from 'img/light/nova/voiceDictation/lang.svg';
 import { ReactComponent as Stop } from 'img/light/nova/voiceDictation/stop.svg';
 import { useTranslation } from 'react-i18next';
+import { platformInfoSelector } from 'store/slices/platformInfo';
+import { useAppSelector } from 'store/store';
 import { ClientType, getPlatform } from 'util/bridge';
 
 import { LangOptionValues } from '../../provider/voice-dictation-provider';
@@ -122,6 +124,8 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   const analyserRef = useRef<AnalyserNode | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
 
+  const { platform } = useAppSelector(platformInfoSelector);
+
   const startTimer = useCallback(() => {
     if (intervalRef.current) return;
     (intervalRef.current as any) = setInterval(() => {
@@ -169,8 +173,9 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
 
       streamRef.current = stream;
 
+      console.log('platform', platform);
       const mediaRecorder = new MediaRecorder(stream, {
-        mimeType: getPlatform() === ClientType.windows ? 'video/webm;codecs=vp8' : 'video/mp4'
+        mimeType: platform === ClientType.windows ? 'video/webm;codecs=vp8' : 'video/mp4'
       });
       mediaRecorderRef.current = mediaRecorder;
       chunksRef.current = [];

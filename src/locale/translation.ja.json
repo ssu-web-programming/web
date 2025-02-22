@@ -708,7 +708,11 @@
           "Slovak": "スロバキア語",
           "Slovenian": "スロベニア語",
           "Swedish": "スウェーデン語",
-          "Spanish": "スペイン語"
+          "Spanish": "スペイン語",
+          "PortugueseAll": "ポーランド語",
+          "EnglishAll": "英語",
+          "ChineseAll": "中国語",
+          "Korean": "韓国語"
         },
         "TargetList": {
           "Title": "翻訳対象言語",
@@ -744,7 +748,8 @@
           "PortugueseBrazil": "ポルトガル語(ブラジル)",
           "French": "フランス語",
           "Finnish": "フィンランド語",
-          "Hungarian": "ハンガリー語"
+          "Hungarian": "ハンガリー語",
+          "Korean": "韓国語"
         }
       },
       "Status": {
@@ -762,7 +767,8 @@
         "UnsupportedFormat": "サポートされないファイルです。もう一度ご確認ください。",
         "CharacterLimit": "制限超過。文字を減らして再試行。",
         "EncryptedDocument": "暗号化されたドキュメントは照会できません。もう一度ドキュメントを確認してください。",
-        "DamagedDocument": "破損した文書は照会できません。もう一度ドキュメントを確認してください。"
+        "DamagedDocument": "破損した文書は照会できません。もう一度ドキュメントを確認してください。",
+        "CommonUnsupportFile": "このファイル形式はサポートされていません。\n添付可能なファイル形式を確認して、再度お試しください。\n\n- 文書 : docx, pptx, pdf"
       },
       "FileUpload": {
         "Guide": {

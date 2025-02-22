@@ -2,54 +2,45 @@ import { getCurrentFile, getDriveFiles, getLocalFiles } from 'store/slices/uploa
 import { useAppSelector } from 'store/store';
 import { downloadFiles } from 'util/files';
 
+import { useTranslationContext } from '../../provider/translation-provider';
+
 export default function useSanitizedDrive() {
   const localFiles = useAppSelector(getLocalFiles);
   const driveFiles = useAppSelector(getDriveFiles);
-  const currentFile = useAppSelector(getCurrentFile);
+
+  const {
+    sharedTranslationInfo: { originalFileType }
+  } = useTranslationContext();
 
   const convertFileObject = async () => {
-    if (localFiles.length > 0) {
-      return localFiles[0];
-    }
-
-    if (currentFile.id) {
-      const results = await downloadFiles(driveFiles);
-      return results[0].file;
-    }
-
-    // driveFiles의 경우에는 id를 파일객체로 변환해야함
     const results = await downloadFiles(driveFiles);
     return results[0].file;
   };
 
   const sanitizedOriginFile = async () => {
-    const isDriveFiles = driveFiles.length;
-    const isCurrentFile = currentFile.id === '' ? false : true;
-    const isLocalFiles = localFiles[0];
+    const targetFile = await convertFileObject();
 
-    if (isCurrentFile) {
+    if (originalFileType === 'currentDoc') {
       return {
-        originalFileType: 'currentDoc',
-        originalFileName: (await convertFileObject()).name,
+        originalFileType,
+        originalFileName: targetFile.name,
         originFile: ''
       };
     }
 
-    if (isDriveFiles) {
+    if (originalFileType === 'drive') {
       return {
-        originalFileType: 'drive',
-        originalFileName: (await convertFileObject()).name,
+        originalFileType,
+        originalFileName: targetFile.name,
         originFile: driveFiles[0].fileId
       };
     }
 
-    if (isLocalFiles) {
-      return {
-        originalFileType: 'local',
-        originalFileName: (await convertFileObject()).name,
-        originFile: new Blob([localFiles[0]], { type: localFiles[0].type })
-      };
-    }
+    return {
+      originalFileType,
+      originalFileName: targetFile.name,
+      originFile: new Blob([targetFile], { type: targetFile.type })
+    };
   };
 
   return {

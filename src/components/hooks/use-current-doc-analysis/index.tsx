@@ -1,4 +1,5 @@
 import { useConfirm } from 'components/Confirm';
+import { useTranslationContext } from 'pages/Nova/Translation/provider/translation-provider';
 import { useTranslation } from 'react-i18next';
 import { setPageStatus } from 'store/slices/nova/pageStatusSlice';
 import { platformInfoSelector } from 'store/slices/platformInfo';
@@ -54,7 +55,7 @@ export default function useCurrentDocAnalysis() {
       } else {
         await confirmSaveDoc(false);
       }
-    } else if (currentFile.type === 'local') {
+    } else if (currentFile.type === 'local' || currentFile.type === 'unknown') {
       await confirmUploadFile();
     }
   };
