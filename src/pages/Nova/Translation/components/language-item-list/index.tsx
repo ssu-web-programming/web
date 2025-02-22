@@ -48,8 +48,7 @@ export default function LanguageItemList({
       const langTypeWithCode =
         langType === 'source' ? SOURCE_LANGUAGES_WITH_LANG_CODE : TARGET_LANGUAGES_WITH_LANG_CODE;
       const findLang = langTypeWithCode.find((item) => item.langCode === baseCode);
-
-      return findLang?.lang;
+      return findLang;
     });
   };
 
@@ -109,7 +108,12 @@ export default function LanguageItemList({
     <>
       {/* 시간이 좀 오래걸려서 UX적인 처리가 필요할듯 */}
       <S.LanguageTitle>{t('Nova.translation.Menu.RecentLanguages')}</S.LanguageTitle>
-      <S.LanguageItem>{findLatestLangList()}</S.LanguageItem>
+
+      {findLatestLangList()?.map((lang, idx) => (
+        <S.LanguageItem key={idx} onClick={() => handleSetLangCode(lang!.langCode)}>
+          {lang?.lang}
+        </S.LanguageItem>
+      ))}
 
       <S.LanguageTitle>모든 언어</S.LanguageTitle>
       {langList.map((lang, idx) => (
