@@ -3,17 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { FlattenSimpleInterpolation } from 'styled-components';
 
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
-import {
-  getChatGroupKey,
-  getServiceCategoryFromTab,
-  getServiceGroupInfo,
-  iconMap
-} from '../../../constants/serviceType';
+import { getChatGroupKey, getServiceGroupInfo, iconMap } from '../../../constants/serviceType';
 import { announceInfoSelector } from '../../../store/slices/nova/announceSlice';
 import { novaChatModeSelector } from '../../../store/slices/nova/novaHistorySlice';
-import { selectNovaTab, selectTabSlice } from '../../../store/slices/tabSlice';
+import { selectTabSlice } from '../../../store/slices/tabSlice';
 import { themeInfoSelector } from '../../../store/slices/theme';
-import { useAppDispatch, useAppSelector } from '../../../store/store';
+import { useAppSelector } from '../../../store/store';
 import Announcement from '../../Announcement';
 
 import * as S from './style';
@@ -30,7 +25,6 @@ export const Guide = (props: GuideProps) => {
   const announceInfo = useAppSelector(announceInfoSelector(selectedNovaTab));
   const chatMode = useAppSelector(novaChatModeSelector);
   const { isLightMode } = useAppSelector(themeInfoSelector);
-  const dispatch = useAppDispatch();
   const isChat =
     selectedNovaTab === NOVA_TAB_TYPE.aiChat || selectedNovaTab === NOVA_TAB_TYPE.perplexity;
 
@@ -48,12 +42,6 @@ export const Guide = (props: GuideProps) => {
   return (
     <S.Container>
       <S.GuideWrapper>
-        <button
-          onClick={() => {
-            dispatch(selectNovaTab(NOVA_TAB_TYPE.voiceDictation));
-          }}>
-          음성파일로 이동!
-        </button>
         {announceInfo.status && <Announcement content={announceInfo.content} />}
         <S.GuideTitle $guideTitleStyle={props.$guideTitleStyle}>
           <S.GuideImage
