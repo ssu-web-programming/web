@@ -2,7 +2,12 @@ import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
 import { ReactComponent as CloseIcon } from '../img/light/ico_nova_close.svg';
-import { announceInfoSelector, setAnnounceInfo } from '../store/slices/nova/announceSlice';
+import {
+  announceInfoSelector,
+  IAnnouceInfo,
+  setAnnounceInfo
+} from '../store/slices/nova/announceSlice';
+import { novaChatModeSelector } from '../store/slices/nova/novaHistorySlice';
 import { selectTabSlice } from '../store/slices/tabSlice';
 import { useAppSelector } from '../store/store';
 
@@ -10,10 +15,10 @@ const AnnouncementWrap = styled.div`
   width: 100%;
   height: fit-content;
   position: sticky;
-  top: 0;
+  margin-top: 16px;
   padding: 0 16px;
   pointer-events: all;
-  margin-bottom: 40px;
+  background-color: transparent;
 `;
 
 const Content = styled.div`
@@ -47,22 +52,25 @@ const Content = styled.div`
 `;
 
 interface AnnouncementProps {
-  content: string;
+  announcement: IAnnouceInfo;
 }
 
 export default function Announcement(props: AnnouncementProps) {
-  const { content } = props;
+  const { announcement } = props;
   const dispatch = useDispatch();
-  const { selectedNovaTab } = useAppSelector(selectTabSlice);
-  const announceInfo = useAppSelector(announceInfoSelector(selectedNovaTab));
+  const chatMode = useAppSelector(novaChatModeSelector);
+  const announcementList = useAppSelector(announceInfoSelector);
 
   return (
     <AnnouncementWrap>
       <Content>
-        <div dangerouslySetInnerHTML={{ __html: content }} />
+        <div dangerouslySetInnerHTML={{ __html: announcement.content }} />
         <CloseIcon
           onClick={() => {
-            dispatch(setAnnounceInfo({ tab: selectedNovaTab, info: { ...announceInfo } }));
+            const updatedAnnouncements = announcementList.map((item) =>
+              item.type === chatMode ? { ...item, isShow: false } : item
+            );
+            dispatch(setAnnounceInfo(updatedAnnouncements));
           }}
         />
       </Content>

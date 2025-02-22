@@ -9,7 +9,6 @@ import {
 import { ERR_INVALID_SESSION } from 'error/error';
 import { lang, langFormatCode } from 'locale';
 import { setNovaExpireTime } from 'store/slices/appState';
-import { setCreditInfo } from 'store/slices/creditInfo';
 import { setNovaAgreement, setUserInfo } from 'store/slices/userInfo';
 import { useAppDispatch } from 'store/store';
 import Bridge, { ClientType, getDevice, getPlatform, getVersion } from 'util/bridge';
@@ -22,13 +21,12 @@ import { IOfferCredit } from '../../constants/offerCredit';
 import { SERVICE_TYPE, TAB_SERVICE_MAP } from '../../constants/serviceType';
 import { ClientStatusType } from '../../pages/Nova/Nova';
 import { initComplete } from '../../store/slices/initFlagSlice';
-import { IAnnouceInfo, setAnnounceInfo, tabTypeMap } from '../../store/slices/nova/announceSlice';
+import { setAnnounceInfo } from '../../store/slices/nova/announceSlice';
 import {
   PageService,
   PageStatus,
   setPageCreditReceivedByServiceType,
-  setPageService,
-  setPageStatus
+  setPageService
 } from '../../store/slices/nova/pageStatusSlice';
 import { setPlatformInfo } from '../../store/slices/platformInfo';
 
@@ -150,20 +148,7 @@ export default function useInitApp() {
         const {
           data: { announcementInfos }
         } = await res.json();
-        announcementInfos.forEach((announcement: IAnnouceInfo) => {
-          const { type } = announcement;
-          const tab = Object.keys(tabTypeMap).find(
-            (key) => tabTypeMap[key as keyof typeof tabTypeMap] === type
-          );
-          if (tab) {
-            dispatch(
-              setAnnounceInfo({
-                tab: tab,
-                info: { ...announcement }
-              })
-            );
-          }
-        });
+        dispatch(setAnnounceInfo(announcementInfos));
       } catch (err) {
         /* empty */
       }

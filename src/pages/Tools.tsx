@@ -52,6 +52,7 @@ export default function Tools() {
     <Wrapper>
       <Header title={t('AITools')} subTitle={'AI Write'}></Header>
       <Body>
+        hat
         <AIWriteTab options={writeOptions} setOptions={setWriteOptions} />
       </Body>
     </Wrapper>

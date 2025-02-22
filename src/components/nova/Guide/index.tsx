@@ -6,7 +6,7 @@ import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import { getChatGroupKey, getServiceGroupInfo, iconMap } from '../../../constants/serviceType';
 import { ReactComponent as IconConvertDark } from '../../../img/dark/nova/tab/convert_Img.svg';
 import { ReactComponent as IconConvertLight } from '../../../img/light/nova/tab/convert_Img.svg';
-import { announceInfoSelector } from '../../../store/slices/nova/announceSlice';
+import { announceInfoSelector, IAnnouceInfo } from '../../../store/slices/nova/announceSlice';
 import { novaChatModeSelector } from '../../../store/slices/nova/novaHistorySlice';
 import { selectTabSlice } from '../../../store/slices/tabSlice';
 import { themeInfoSelector } from '../../../store/slices/theme';
@@ -24,7 +24,6 @@ interface GuideProps {
 export const Guide = (props: GuideProps) => {
   const { t } = useTranslation();
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
-  const announceInfo = useAppSelector(announceInfoSelector(selectedNovaTab));
   const chatMode = useAppSelector(novaChatModeSelector);
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const isChat =
@@ -43,7 +42,6 @@ export const Guide = (props: GuideProps) => {
   return (
     <S.Container>
       <S.GuideWrapper>
-        {announceInfo.status && <Announcement content={announceInfo.content} />}
         <S.GuideTitle $guideTitleStyle={props.$guideTitleStyle}>
           <S.GuideImage
             src={getIcon()}

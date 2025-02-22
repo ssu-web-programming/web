@@ -15,8 +15,8 @@ export const Body = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: ${({ theme }) => theme.color.bg};
   overflow: auto;
+  background-color: ${({ theme }) => theme.color.background.bg};
 `;
 
 export const ImageBox = styled.div`
