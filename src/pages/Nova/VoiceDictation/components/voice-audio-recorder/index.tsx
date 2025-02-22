@@ -43,19 +43,7 @@ export default function VoiceAudioRecorder() {
 
   return (
     <>
-      <button
-        onClick={() => {
-          dispatch(selectNovaTab(NOVA_TAB_TYPE.removeBG));
-        }}>
-        이동해봐라!
-      </button>
-      {/* <TestAudioRecorder */}
       <TestAudioRecorder
-        // onRecordingComplete={async (blob) => {
-        //   handleMoveToReady(
-        //     platform === ClientType.windows ? await convertWebmToWavFile(blob) : blobToFile(blob)
-        //   );
-        // }}
         isInitRecording={isVoiceRecording}
         onRecordingFinish={handleRecordingFinish}
         onStopConfirm={openStopOverlay as any}

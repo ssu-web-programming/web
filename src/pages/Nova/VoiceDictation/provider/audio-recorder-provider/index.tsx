@@ -3,7 +3,7 @@ import { platformInfoSelector } from 'store/slices/platformInfo';
 import { setLocalFiles } from 'store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import { ClientType } from 'util/bridge';
-import { blobToFile } from 'util/files';
+import { blobToFile } from 'util/getAudioDuration';
 import { convertWebmToWavFile } from 'util/getAudioDuration';
 
 import { useVoiceDictationContext } from '../voice-dictation-provider';
@@ -24,6 +24,7 @@ interface AudioRecorderContextType {
   analyserRef: React.MutableRefObject<AnalyserNode | null>;
   audioContextRef: React.MutableRefObject<AudioContext | null>;
   startVisualization: any;
+  initializingRecording: () => void;
 }
 
 const AudioRecorderContext = createContext<AudioRecorderContextType | null>(null);
@@ -233,6 +234,8 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({
       };
 
       mediaRecorder.onstop = async () => {
+        console.log('여기가 호출되는거 같아');
+
         const blob = new Blob(chunksRef.current, {
           type: platform === ClientType.windows ? 'audio/wav' : 'audio/mpeg'
         });
@@ -240,7 +243,6 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({
         const url = URL.createObjectURL(blob);
         setAudioUrl(url);
         await checkAudioDuration(blob);
-        console.log('blob', blob);
         onRecordingComplete?.(blob);
 
         if (streamRef.current) {
@@ -270,6 +272,8 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({
 
         if (shouldStop) {
           mediaRecorderRef.current.stop();
+          mediaRecorderRef.current = null;
+
           if (streamRef.current) {
             streamRef.current.getTracks().forEach((track) => track.stop());
             streamRef.current = null;
@@ -322,6 +326,26 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({
     }
   }, [startTimer, startVisualization]);
 
+  const initializingRecording = () => {
+    if (mediaRecorderRef.current) {
+      mediaRecorderRef.current.onstop = null;
+      mediaRecorderRef.current.stop();
+      mediaRecorderRef.current = null;
+
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach((track) => track.stop());
+        streamRef.current = null;
+      }
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+      setIsRecording(false);
+      setIsPaused(false);
+      stopTimer();
+      setRecordingTime(0);
+    }
+  };
+
   return (
     <AudioRecorderContext.Provider
       value={{
@@ -339,7 +363,8 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({
         canvasRef,
         analyserRef,
         audioContextRef,
-        startVisualization
+        startVisualization,
+        initializingRecording
       }}>
       {children}
     </AudioRecorderContext.Provider>

@@ -52,6 +52,7 @@ const TestAudioRecorder: React.FC<AudioRecorderProps> = ({
     await stopRecording(async () => {
       const confirmed = await onStopConfirm?.();
       if (confirmed) {
+        console.log('여기가 동작함?', confirmed);
         onRecordingFinish?.();
       }
       return !!confirmed;
