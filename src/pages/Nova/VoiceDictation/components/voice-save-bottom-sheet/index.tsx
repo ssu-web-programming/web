@@ -6,9 +6,12 @@ import { useTranslation } from 'react-i18next';
 import { activeLoadingSpinner } from 'store/slices/loadingSpinner';
 import { useAppDispatch } from 'store/store';
 import Bridge from 'util/bridge';
-import { changeFileExtension } from 'util/getAudioDuration';
+import { changeFileExtension, formatMilliseconds } from 'util/getAudioDuration';
 
-import { useVoiceDictationContext } from '../../provider/voice-dictation-provider';
+import {
+  useVoiceDictationContext,
+  VoiceDictationResult
+} from '../../provider/voice-dictation-provider';
 import VoiceFileModalContent from '../voice-file-modal-content';
 
 import * as S from './style';
@@ -34,12 +37,27 @@ export default function VoiceSaveBottomSheet({ isOpened, setIsOpened }: Props) {
       url: voiceDictationResult?.data.voiceUrl
     });
   };
-  const parseJsonToText = () => {
-    return voiceDictationResult?.data.segments.map((segment) => segment.text).join('');
+
+  const parseJsonToText = (): string => {
+    // 1. segments를 시간순으로 정렬
+    const sortedSegments = [...voiceDictationResult!.data.segments].sort((a, b) => a.end - b.end);
+
+    // 2. 각 segment를 포맷팅된 문자열로 변환
+    const formattedText = sortedSegments
+      .map((segment) => {
+        const speaker = `참석자 ${segment.speaker.name}`;
+        const endTime = formatMilliseconds(segment.end);
+        const text = segment.text.trim();
+
+        return `[${speaker}] ${endTime}\n${text}\n`;
+      })
+      .join('\n');
+
+    return formattedText;
   };
 
   const convertJsonToTxt = () => {
-    const text = parseJsonToText() as string;
+    const text = parseJsonToText();
 
     const file = new File([text], fileName, {
       type: 'text/plain;charset=utf-8'

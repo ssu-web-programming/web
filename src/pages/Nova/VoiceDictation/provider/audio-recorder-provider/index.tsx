@@ -1,36 +1,44 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import ControlButton from 'components/nova/buttons/control-button';
-import PlayPauseButton from 'components/nova/buttons/play-pause-button';
-import { ReactComponent as DarkLang } from 'img/dark/nova/voice-dictation/lang.svg';
-import { ReactComponent as DarkStop } from 'img/dark/nova/voice-dictation/stop.svg';
-import { ReactComponent as Lang } from 'img/light/nova/voiceDictation/lang.svg';
-import { ReactComponent as Stop } from 'img/light/nova/voiceDictation/stop.svg';
-import { useTranslation } from 'react-i18next';
+import React, { createContext, useCallback, useContext, useRef, useState } from 'react';
 import { platformInfoSelector } from 'store/slices/platformInfo';
-import { useAppSelector } from 'store/store';
-import { ClientType, getPlatform } from 'util/bridge';
+import { setLocalFiles } from 'store/slices/uploadFiles';
+import { useAppDispatch, useAppSelector } from 'store/store';
+import { ClientType } from 'util/bridge';
+import { blobToFile } from 'util/getAudioDuration';
+import { convertWebmToWavFile } from 'util/getAudioDuration';
 
-import { LangOptionValues } from '../../provider/voice-dictation-provider';
-import { getLangOptions } from '../recognized-lang';
+import { useVoiceDictationContext } from '../voice-dictation-provider';
 
-import * as S from './style';
+interface AudioRecorderContextType {
+  isRecording: boolean;
+  isPaused: boolean;
+  recordingTime: number;
+  audioUrl: string | null;
+  audioDuration: number | null;
+  startRecording: () => Promise<void>;
+  stopRecording: (onConfirm?: () => Promise<boolean>) => Promise<void>;
+  pauseRecording: () => void;
+  resumeRecording: () => void;
+  mediaRecorderRef: React.MutableRefObject<MediaRecorder | null>;
+  streamRef: React.MutableRefObject<MediaStream | null>;
+  canvasRef: React.MutableRefObject<HTMLCanvasElement | null>;
+  analyserRef: React.MutableRefObject<AnalyserNode | null>;
+  audioContextRef: React.MutableRefObject<AudioContext | null>;
+  startVisualization: any;
+  initializingRecording: () => void;
+}
 
-interface AudioRecorderProps {
-  onRecordingComplete?: (blob: Blob) => void;
-  barWidth?: number;
-  gap?: number;
-  isInitRecording?: boolean;
-  onRecordingFinish?: () => void;
-  onStopConfirm?: () => void | boolean | Promise<unknown>;
-  selectedLangOption?: LangOptionValues;
-  openLangOverlay?: () => void;
+const AudioRecorderContext = createContext<AudioRecorderContextType | null>(null);
+
+interface AudioRecorderProviderProps {
+  children: React.ReactNode;
+  // onRecordingComplete?: (blob: Blob) => void;
 }
 
 interface CustomCanvasRenderingContext2D extends CanvasRenderingContext2D {
   roundRect: (x: number, y: number, w: number, h: number, radius: number) => void;
 }
 
-export const calculateBarData = (
+const calculateBarData = (
   frequencyData: Uint8Array,
   width: number,
   barWidth: number,
@@ -55,7 +63,7 @@ export const calculateBarData = (
   return data;
 };
 
-export const draw = (
+const draw = (
   data: number[],
   canvas: HTMLCanvasElement,
   barWidth: number,
@@ -98,18 +106,11 @@ export const draw = (
   }
 };
 
-const AudioRecorder: React.FC<AudioRecorderProps> = ({
-  onRecordingComplete,
-  barWidth = 2,
-  gap = 5,
-  isInitRecording = false,
-  onRecordingFinish,
-  onStopConfirm,
-  selectedLangOption,
-  openLangOverlay
+export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({
+  children
+  // onRecordingComplete
 }) => {
-  const { t } = useTranslation();
-  const [isRecording, setIsRecording] = useState(isInitRecording || false);
+  const [isRecording, setIsRecording] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [audioDuration, setAudioDuration] = useState<number | null>(null);
@@ -119,18 +120,34 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   const chunksRef = useRef<Blob[]>([]);
   const streamRef = useRef<MediaStream | null>(null);
   const intervalRef = useRef<number | null>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const animationFrameRef = useRef<number | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
 
+  // 호진 FIXME: 아래 로직은 걷어내고 싶음
+  const dispatch = useAppDispatch();
+  const { setSharedVoiceDictationInfo } = useVoiceDictationContext();
   const { platform } = useAppSelector(platformInfoSelector);
+
+  const handleMoveToReady = async (file: File) => {
+    dispatch(setLocalFiles([file]));
+    setSharedVoiceDictationInfo((prev) => ({
+      ...prev,
+      componentType: 'VOICE_READY'
+    }));
+  };
+
+  const onRecordingComplete = async (blob: Blob) => {
+    const file =
+      platform === ClientType.windows ? await convertWebmToWavFile(blob) : blobToFile(blob);
+    console.log('file', file);
+    handleMoveToReady(file);
+  };
 
   const startTimer = useCallback(() => {
     if (intervalRef.current) return;
-    (intervalRef.current as any) = setInterval(() => {
-      // console.log('mediaRecorderRef', mediaRecorderRef);
-      // console.log('chunksRef', chunksRef.current);
+    intervalRef.current = window.setInterval(() => {
       setRecordingTime((prev) => prev + 0.1);
     }, 100);
   }, []);
@@ -143,40 +160,43 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   }, []);
 
   const startVisualization = useCallback((stream: MediaStream) => {
-    if (!canvasRef.current) return;
+    if (!canvasRef.current || !stream.active) return;
 
-    audioContextRef.current = new AudioContext();
-    const source = audioContextRef.current.createMediaStreamSource(stream);
-    const analyser = audioContextRef.current.createAnalyser();
+    try {
+      audioContextRef.current = new window.AudioContext();
+      const source = audioContextRef.current.createMediaStreamSource(stream);
+      const analyser = audioContextRef.current.createAnalyser();
 
-    source.connect(analyser);
-    analyserRef.current = analyser;
+      source.connect(analyser);
+      analyserRef.current = analyser;
 
-    const animate = () => {
-      if (!canvasRef.current || !analyserRef.current) return;
+      const animate = () => {
+        if (!canvasRef.current || !analyserRef.current) return;
 
-      const frequencyData = new Uint8Array(analyserRef.current.frequencyBinCount);
-      analyserRef.current.getByteFrequencyData(frequencyData);
+        const frequencyData = new Uint8Array(analyserRef.current.frequencyBinCount);
+        analyserRef.current.getByteFrequencyData(frequencyData);
 
-      const data = calculateBarData(frequencyData, canvasRef.current.clientWidth, barWidth, gap);
+        const data = calculateBarData(frequencyData, canvasRef.current.clientWidth, 2, 5);
 
-      draw(data, canvasRef.current, barWidth, gap, isPaused);
-      animationFrameRef.current = requestAnimationFrame(animate);
-    };
+        draw(data, canvasRef.current, 2, 5, isPaused);
+        animationFrameRef.current = requestAnimationFrame(animate);
+      };
 
-    animate();
+      animate();
+    } catch (error) {
+      console.error('Error starting visualization:', error);
+    }
   }, []);
 
   const startRecording = useCallback(async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
-
       streamRef.current = stream;
 
-      console.log('platform', platform);
       const mediaRecorder = new MediaRecorder(stream, {
         mimeType: platform === ClientType.windows ? 'video/webm;codecs=vp8' : 'video/mp4'
       });
+
       mediaRecorderRef.current = mediaRecorder;
       chunksRef.current = [];
 
@@ -214,9 +234,10 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       };
 
       mediaRecorder.onstop = async () => {
-        console.log('onstop-chunksRef.current', chunksRef.current);
+        console.log('여기가 호출되는거 같아');
+
         const blob = new Blob(chunksRef.current, {
-          type: getPlatform() === ClientType.windows ? 'audio/wav' : 'audio/mpeg'
+          type: platform === ClientType.windows ? 'audio/wav' : 'audio/mpeg'
         });
 
         const url = URL.createObjectURL(blob);
@@ -242,29 +263,33 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
     }
   }, [onRecordingComplete, startTimer, startVisualization]);
 
-  const stopRecording = useCallback(async () => {
-    if (mediaRecorderRef.current && isRecording) {
-      pauseRecording();
-      // stop했을때 confirm 창을 띄워서 확인하는 로직!
-      const confirmResult = await onStopConfirm?.();
+  const stopRecording = useCallback(
+    async (onConfirm?: () => Promise<boolean>) => {
+      if (mediaRecorderRef.current && isRecording) {
+        pauseRecording();
 
-      if (confirmResult) {
-        mediaRecorderRef.current.stop();
-        if (streamRef.current) {
-          streamRef.current.getTracks().forEach((track) => track.stop());
-          streamRef.current = null;
+        const shouldStop = onConfirm ? await onConfirm() : true;
+
+        if (shouldStop) {
+          mediaRecorderRef.current.stop();
+          mediaRecorderRef.current = null;
+
+          if (streamRef.current) {
+            streamRef.current.getTracks().forEach((track) => track.stop());
+            streamRef.current = null;
+          }
+          if (animationFrameRef.current) {
+            cancelAnimationFrame(animationFrameRef.current);
+          }
+          setIsRecording(false);
+          setIsPaused(false);
+          stopTimer();
+          setRecordingTime(0);
         }
-        if (animationFrameRef.current) {
-          cancelAnimationFrame(animationFrameRef.current);
-        }
-        setIsRecording(false);
-        setIsPaused(false);
-        stopTimer();
-        setRecordingTime(0);
-        onRecordingFinish?.();
       }
-    }
-  }, [isRecording, stopTimer]);
+    },
+    [isRecording, stopTimer]
+  );
 
   const pauseRecording = useCallback(() => {
     if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
@@ -277,8 +302,8 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       if (canvasRef.current && analyserRef.current) {
         const frequencyData = new Uint8Array(analyserRef.current.frequencyBinCount);
         analyserRef.current.getByteFrequencyData(frequencyData);
-        const data = calculateBarData(frequencyData, canvasRef.current.clientWidth, barWidth, gap);
-        draw(data, canvasRef.current, barWidth, gap, isPaused);
+        const data = calculateBarData(frequencyData, canvasRef.current.clientWidth, 2, 5);
+        draw(data, canvasRef.current, 2, 5, isPaused);
       }
 
       // 애니메이션 중지
@@ -294,92 +319,62 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       mediaRecorderRef.current.state === 'paused' &&
       streamRef.current
     ) {
-      const isPaused = false;
       mediaRecorderRef.current.resume();
-      setIsPaused(isPaused);
+      setIsPaused(false);
       startTimer();
       startVisualization(streamRef.current);
-
-      if (canvasRef.current && analyserRef.current) {
-        const frequencyData = new Uint8Array(analyserRef.current.frequencyBinCount);
-        analyserRef.current.getByteFrequencyData(frequencyData);
-        const data = calculateBarData(frequencyData, canvasRef.current.clientWidth, barWidth, gap);
-        draw(data, canvasRef.current, barWidth, gap, isPaused);
-      }
     }
-  }, [startTimer]);
+  }, [startTimer, startVisualization]);
 
-  const formatDuration = (seconds: number): string => {
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-  };
+  const initializingRecording = () => {
+    if (mediaRecorderRef.current) {
+      mediaRecorderRef.current.onstop = null;
+      mediaRecorderRef.current.stop();
+      mediaRecorderRef.current = null;
 
-  const filteredSelectedLangOptions = () => {
-    return getLangOptions(t).find((langOption) => langOption.value === selectedLangOption);
-  };
-
-  useEffect(() => {
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach((track) => track.stop());
+        streamRef.current = null;
       }
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
-    };
-  }, []);
-
-  // useEffect(() => {
-  //   // 맨 처음 최초 진입했을때만 실행하고 이후에는 절대 실행하면 안됨
-  //   const hasStarted = sessionStorage.getItem('hasStartedRecording') === 'true';
-  //   console.log('hasStarted', hasStarted);
-  //   if (!hasStarted) {
-  //     startRecording();
-  //     sessionStorage.setItem('hasStartedRecording', 'true');
-  //   }
-  // }, []);
-
-  useEffect(() => {
-    if (isInitRecording) {
-      startRecording();
+      setIsRecording(false);
+      setIsPaused(false);
+      stopTimer();
+      setRecordingTime(0);
     }
-  }, []);
+  };
 
   return (
-    <S.Container>
-      <S.Background>
-        <S.CanvasWrapper>
-          <S.StatusText $isPaused={isPaused}>
-            {isPaused
-              ? t('Nova.voiceDictation.Status.OnPause')
-              : `${filteredSelectedLangOptions()?.label} ${t('Nova.voiceDictation.Status.Recognizing')}`}
-          </S.StatusText>
-
-          <S.Canvas ref={canvasRef} />
-
-          <S.DurationText>{formatDuration(recordingTime)}</S.DurationText>
-        </S.CanvasWrapper>
-      </S.Background>
-      <S.ButtonGroup>
-        <ControlButton
-          icon={Lang}
-          darkIcon={DarkLang}
-          onClick={openLangOverlay}
-          width={40}
-          height={40}
-        />
-        <PlayPauseButton isPaused={isPaused} onPlay={resumeRecording} onPause={pauseRecording} />
-        <ControlButton
-          icon={Stop}
-          darkIcon={DarkStop}
-          onClick={stopRecording}
-          width={40}
-          height={40}
-        />
-      </S.ButtonGroup>
-    </S.Container>
+    <AudioRecorderContext.Provider
+      value={{
+        isRecording,
+        isPaused,
+        recordingTime,
+        audioUrl,
+        audioDuration,
+        startRecording,
+        stopRecording,
+        pauseRecording,
+        resumeRecording,
+        mediaRecorderRef,
+        streamRef,
+        canvasRef,
+        analyserRef,
+        audioContextRef,
+        startVisualization,
+        initializingRecording
+      }}>
+      {children}
+    </AudioRecorderContext.Provider>
   );
 };
 
-export default AudioRecorder;
+export const useAudioRecorder = () => {
+  const context = useContext(AudioRecorderContext);
+  if (!context) {
+    throw new Error('useAudioRecorder must be used within an AudioRecorderProvider');
+  }
+  return context;
+};
