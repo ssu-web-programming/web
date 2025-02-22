@@ -802,7 +802,8 @@
         "UnsupportedFormat": "지원하지 않는 파일 형식입니다. 다시 한 번 확인해 주세요.",
         "CharacterLimit": "글자 수가 지원 가능한 최대 글자 수를 초과했습니다. 글자 수를 줄여 다시 시도해주세요.",
         "EncryptedDocument": "암호화된 문서는 문서질의를 할 수 없습니다. 문서를 다시 확인해 주세요.",
-        "DamagedDocument": "손상된 문서는 문서질의를 할 수 없습니다. 문서를 다시 확인해 주세요."
+        "DamagedDocument": "손상된 문서는 문서질의를 할 수 없습니다. 문서를 다시 확인해 주세요.",
+        "CommonUnsupportFile": "이 파일 형식은 지원되지 않습니다.\n첨부 가능한 파일 형식을 확인한 뒤 다시 시도해 주세요.\n- 파일 : docx, pptx, pdf"
       },
       "FileUpload": {
         "Guide": {
