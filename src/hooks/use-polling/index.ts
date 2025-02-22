@@ -167,7 +167,7 @@ export function usePolling<T, R, P>({
           status: 'error',
           error: error instanceof Error ? error : new Error(String(error))
         }));
-        onError?.(error instanceof Error ? error : new Error(String(error)));
+        onError?.(error as Error);
       }
     },
     [initialFn, startPolling, onInitialSuccess, onError, getPollingId]

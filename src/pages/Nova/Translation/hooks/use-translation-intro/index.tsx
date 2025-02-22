@@ -3,6 +3,7 @@ import translationHttp, {
   PostTranslateDocument,
   TranslateDocumentResponse
 } from 'api/translation';
+import useErrorHandle from 'components/hooks/useErrorHandle';
 import { useShowCreditToast } from 'components/hooks/useShowCreditToast';
 import { usePolling } from 'hooks/use-polling';
 import { overlay } from 'overlay-kit';
@@ -54,6 +55,7 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
     sharedTranslationInfo: { sourceLang, targetLang, isSwitchActive }
   } = useTranslationContext();
   const dispatch = useAppDispatch();
+  const errorHandle = useErrorHandle();
 
   // 데이터 정제 작업을 위한 Hook
   const { convertFileObject, isDriveActive, sanitizedOriginFile } = useSanitizedDrive();
@@ -71,8 +73,11 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
       handleMoveToFileResult({ downloadUrl });
     },
     onError: (error) => {
-      console.log('error', error);
-      handleErrorTrigger({ title: '오류가 발생했습니다. 잠시 후 다시 시작해주세요.' });
+      setSharedTranslationInfo((prev) => ({
+        ...prev,
+        componentType: 'INTRO'
+      }));
+      errorHandle(error);
     }
   });
 
@@ -119,7 +124,11 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
         translatedText
       });
     } catch (e) {
-      console.log('e', e);
+      setSharedTranslationInfo((prev) => ({
+        ...prev,
+        componentType: 'INTRO'
+      }));
+      errorHandle(e);
     }
   };
 

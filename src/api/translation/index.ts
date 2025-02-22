@@ -39,6 +39,10 @@ const translationHttp = {
     });
 
     const response = await res.json();
+    if (!response.success) {
+      throw response.error;
+    }
+
     return { response: response.data, headers: res.headers };
   },
   postTranslateDocument: async ({ file, sourceLang, targetLang }: PostTranslateDocument) => {
@@ -53,6 +57,9 @@ const translationHttp = {
     });
 
     const response = await res.json();
+    if (!response.success) {
+      throw response.error;
+    }
 
     return response.data;
   },
@@ -66,6 +73,9 @@ const translationHttp = {
     });
 
     const response = await res.json();
+    if (!response.success) {
+      throw response.error;
+    }
 
     return response.data;
   },
@@ -78,6 +88,9 @@ const translationHttp = {
       method: 'POST'
     });
     const response = await res.json();
+    if (!response.success) {
+      throw response.error;
+    }
 
     return response;
   }
