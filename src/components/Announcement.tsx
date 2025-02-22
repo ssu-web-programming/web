@@ -1,6 +1,7 @@
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
+import { NOVA_TAB_TYPE } from '../constants/novaTapTypes';
 import { ReactComponent as CloseIcon } from '../img/light/ico_nova_close.svg';
 import {
   announceInfoSelector,
