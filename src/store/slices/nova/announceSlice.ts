@@ -1,17 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import { RootState } from '../../store';
-
-export const tabTypeMap = {
-  [NOVA_TAB_TYPE.aiChat]: 'NOVA_CHAT_GPT4O',
-  [NOVA_TAB_TYPE.removeBG]: 'NOVA_REMOVE_BG',
-  [NOVA_TAB_TYPE.changeBG]: 'NOVA_REPLACE_BG_CLIPDROP',
-  [NOVA_TAB_TYPE.remakeImg]: 'NOVA_REIMAGE_CLIPDROP',
-  [NOVA_TAB_TYPE.expandImg]: 'NOVA_UNCROP_CLIPDROP',
-  [NOVA_TAB_TYPE.improvedRes]: 'NOVA_PO_RESOLUTION',
-  [NOVA_TAB_TYPE.changeStyle]: 'NOVA_PO_STYLE_TRANSFER'
-} as const;
 
 export type IAnnouceInfo = {
   id: string;
@@ -20,45 +9,36 @@ export type IAnnouceInfo = {
   endDate: string;
   status: boolean;
   content: string;
+  isShow?: boolean;
 };
 
-export type AnnounceState = Record<string, IAnnouceInfo>;
-
-const initialAnnounceInfo: IAnnouceInfo = {
-  id: '',
-  type: '',
-  startDate: '',
-  endDate: '',
-  status: false,
-  content: ''
-};
-
-const initialState: AnnounceState = {};
+export type InitAnnounceInfo = { announcementList: IAnnouceInfo[] };
+const initialState: InitAnnounceInfo = { announcementList: [] };
 
 const announceInfoSlice = createSlice({
   name: 'announceInfo',
   initialState,
   reducers: {
-    initAnnounceInfo: (state, action: PayloadAction<string>) => {
-      const tab = action.payload;
-      state[tab] = { ...initialAnnounceInfo };
+    initAnnounceInfo: (state) => {
+      state.announcementList = [];
     },
-    setAnnounceInfo: (state, action: PayloadAction<{ tab: string; info: IAnnouceInfo }>) => {
-      const { tab, info } = action.payload;
-      state[tab] = { ...info };
+    setAnnounceInfo: (state, action: PayloadAction<IAnnouceInfo[]>) => {
+      state.announcementList = action.payload.map((announce) => ({
+        ...announce,
+        isShow: announce.isShow ?? true
+      }));
     },
     resetAnnounceInfo: (state, action: PayloadAction<string>) => {
-      const tab = action.payload;
-      delete state[tab];
+      state.announcementList = state.announcementList.filter(
+        (announce) => announce.id !== action.payload
+      );
     }
   }
 });
 
 export const { initAnnounceInfo, setAnnounceInfo, resetAnnounceInfo } = announceInfoSlice.actions;
 
-export const announceInfoSelector =
-  (tab: string) =>
-  (state: RootState): IAnnouceInfo =>
-    state.announceInfoSlice[tab] || initialAnnounceInfo;
+export const announceInfoSelector = (state: RootState): IAnnouceInfo[] =>
+  state.announceInfoSlice.announcementList ?? [];
 
 export default announceInfoSlice.reducer;

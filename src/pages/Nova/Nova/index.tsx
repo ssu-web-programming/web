@@ -1,7 +1,8 @@
-import { Suspense, useCallback, useEffect, useState } from 'react';
+import React, { Suspense, useCallback, useEffect, useState } from 'react';
 import { FileWithPath, useDropzone } from 'react-dropzone';
 import { useTranslation } from 'react-i18next';
 
+import Announcement from '../../../components/Announcement';
 import { useConfirm } from '../../../components/Confirm';
 import { useChangeBackground } from '../../../components/hooks/nova/useChangeBackground';
 import { useChangeStyle } from '../../../components/hooks/nova/useChangeStyle';
@@ -16,6 +17,7 @@ import useSubmitHandler from '../../../components/hooks/nova/useSubmitHandler';
 import { useChatNova } from '../../../components/hooks/useChatNova';
 import AIChat from '../../../components/nova/aiChat';
 import AIVideo from '../../../components/nova/aiVideo';
+import Banner from '../../../components/nova/banner';
 import Convert from '../../../components/nova/Convert';
 import Expand from '../../../components/nova/Expand';
 import { Guide } from '../../../components/nova/Guide';
@@ -36,12 +38,13 @@ import { SERVICE_TYPE } from '../../../constants/serviceType';
 import { ReactComponent as UploadDarkIcon } from '../../../img/dark/ico_upload_img_plus.svg';
 import CreditIcon from '../../../img/light/ico_credit_gray.svg';
 import { ReactComponent as UploadLightIcon } from '../../../img/light/ico_upload_img_plus.svg';
+import { announceInfoSelector } from '../../../store/slices/nova/announceSlice';
 import { novaChatModeSelector } from '../../../store/slices/nova/novaHistorySlice';
-import { selectPageStatus } from '../../../store/slices/nova/pageStatusSlice';
+import { selectPageService, selectPageStatus } from '../../../store/slices/nova/pageStatusSlice';
 import { selectTabSlice } from '../../../store/slices/tabSlice';
 import { themeInfoSelector } from '../../../store/slices/theme';
 import { userInfoSelector } from '../../../store/slices/userInfo';
-import { useAppSelector } from '../../../store/store';
+import { useAppDispatch, useAppSelector } from '../../../store/store';
 import Translation from '../Translation';
 import VoiceDictation from '../VoiceDictation';
 
@@ -52,6 +55,7 @@ export type ClientStatusType = 'home' | 'doc_edit_mode' | 'doc_view_mode';
 export default function Nova() {
   const { t } = useTranslation();
   const confirm = useConfirm();
+  const announcementList = useAppSelector(announceInfoSelector);
   const { goConvertPage } = useConvert2DTo3D();
   const { goPromptPage } = useChangeBackground();
   const { handleRemoveBackground } = useRemoveBackground();
@@ -77,6 +81,7 @@ export default function Nova() {
   const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
   const { usingAI, selectedNovaTab } = useAppSelector(selectTabSlice);
   const status = useAppSelector(selectPageStatus(selectedNovaTab));
+  const service = useAppSelector(selectPageService(selectedNovaTab));
 
   useEffect(() => {
     if (expiredNOVA) {
@@ -226,11 +231,25 @@ export default function Nova() {
 
   return (
     <>
-      <S.Wrapper {...getRootProps()} isScroll={selectedNovaTab != 'aiChat'}>
+      <S.Wrapper {...getRootProps()} isScroll={selectedNovaTab != NOVA_TAB_TYPE.aiChat}>
         {(usingAI || status === 'home') && isDragActive && <Uploading />}
         <NovaHeader />
         {(status === 'progress' || status === 'saving') && <Progress />}
-        <S.Body>{renderContent()}</S.Body>
+        <S.Body>
+          {selectedNovaTab === NOVA_TAB_TYPE.home && <Banner />}
+          {announcementList
+            .filter(
+              (info) =>
+                (service.some((s) => s.serviceType === info.type) ||
+                  (selectedNovaTab === NOVA_TAB_TYPE.home && info.type === 'PO_NOVA_MAIN')) &&
+                info.status &&
+                info.isShow
+            )
+            .map((info) => {
+              return <Announcement key={info.id} announcement={info} />;
+            })}
+          {renderContent()}
+        </S.Body>
         <Suspense fallback={<Overlay />}>
           <Modals />
         </Suspense>

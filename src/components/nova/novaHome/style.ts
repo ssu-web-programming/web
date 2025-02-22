@@ -8,7 +8,7 @@ export const Body = styled.div`
   align-items: center;
   justify-content: flex-start;
   gap: 16px;
-  padding: 24px 12px;
+  padding: 16px;
   overflow: auto;
 `;
 

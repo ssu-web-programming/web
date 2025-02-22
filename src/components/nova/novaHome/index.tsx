@@ -20,7 +20,6 @@ import { selectNovaTab, selectTabSlice } from '../../../store/slices/tabSlice';
 import { themeInfoSelector } from '../../../store/slices/theme';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
 import Bridge from '../../../util/bridge';
-import Banner from '../banner';
 import { FileUploading } from '../FileUploading';
 import InputBar, { InputBarSubmitParam } from '../inputBar';
 
@@ -76,7 +75,6 @@ const NovaHome = (props: NovaHomeProps) => {
 
   return (
     <>
-      <Banner />
       <S.Body>
         <S.ToolWrap>
           <S.ToolTitle>{t('Nova.Home.tools.title')}</S.ToolTitle>
