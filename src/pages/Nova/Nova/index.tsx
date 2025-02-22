@@ -72,7 +72,6 @@ export default function Nova() {
     state: 'ready',
     progress: 0
   });
-  const chatMode = useAppSelector(novaChatModeSelector);
   const { createChatSubmitHandler } = useSubmitHandler({
     setFileUploadState,
     setExpiredNOVA

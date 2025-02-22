@@ -1,6 +1,7 @@
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
+import { NOVA_TAB_TYPE } from '../constants/novaTapTypes';
 import { ReactComponent as CloseIcon } from '../img/light/ico_nova_close.svg';
 import {
   announceInfoSelector,
@@ -8,6 +9,7 @@ import {
   setAnnounceInfo
 } from '../store/slices/nova/announceSlice';
 import { novaChatModeSelector } from '../store/slices/nova/novaHistorySlice';
+import { selectPageService } from '../store/slices/nova/pageStatusSlice';
 import { selectTabSlice } from '../store/slices/tabSlice';
 import { useAppSelector } from '../store/store';
 
@@ -58,7 +60,8 @@ interface AnnouncementProps {
 export default function Announcement(props: AnnouncementProps) {
   const { announcement } = props;
   const dispatch = useDispatch();
-  const chatMode = useAppSelector(novaChatModeSelector);
+  const { selectedNovaTab } = useAppSelector(selectTabSlice);
+  const service = useAppSelector(selectPageService(selectedNovaTab));
   const announcementList = useAppSelector(announceInfoSelector);
 
   return (
@@ -68,7 +71,10 @@ export default function Announcement(props: AnnouncementProps) {
         <CloseIcon
           onClick={() => {
             const updatedAnnouncements = announcementList.map((item) =>
-              item.type === chatMode ? { ...item, isShow: false } : item
+              service.some((s) => s.serviceType === item.type) ||
+              (selectedNovaTab === NOVA_TAB_TYPE.home && item.type === 'PO_NOVA_MAIN')
+                ? { ...item, isShow: false }
+                : item
             );
             dispatch(setAnnounceInfo(updatedAnnouncements));
           }}
