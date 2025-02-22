@@ -30,7 +30,7 @@ interface CustomCanvasRenderingContext2D extends CanvasRenderingContext2D {
   roundRect: (x: number, y: number, w: number, h: number, radius: number) => void;
 }
 
-const calculateBarData = (
+export const calculateBarData = (
   frequencyData: Uint8Array,
   width: number,
   barWidth: number,
@@ -55,7 +55,7 @@ const calculateBarData = (
   return data;
 };
 
-const draw = (
+export const draw = (
   data: number[],
   canvas: HTMLCanvasElement,
   barWidth: number,

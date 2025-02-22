@@ -1,0 +1,112 @@
+// AudioRecorder.tsx
+import React, { useEffect } from 'react';
+import ControlButton from 'components/nova/buttons/control-button';
+import PlayPauseButton from 'components/nova/buttons/play-pause-button';
+import { ReactComponent as DarkLang } from 'img/dark/nova/voice-dictation/lang.svg';
+import { ReactComponent as DarkStop } from 'img/dark/nova/voice-dictation/stop.svg';
+import { ReactComponent as Lang } from 'img/light/nova/voiceDictation/lang.svg';
+import { ReactComponent as Stop } from 'img/light/nova/voiceDictation/stop.svg';
+import { useTranslation } from 'react-i18next';
+
+import { useAudioRecorder } from '../../provider/audio-recorder-provider';
+import { LangOptionValues } from '../../provider/voice-dictation-provider';
+import { getLangOptions } from '../recognized-lang';
+
+import * as S from './style';
+
+interface AudioRecorderProps {
+  isInitRecording?: boolean;
+  onRecordingFinish?: () => void;
+  onStopConfirm?: () => Promise<boolean>;
+  selectedLangOption?: LangOptionValues;
+  openLangOverlay?: () => void;
+}
+
+const TestAudioRecorder: React.FC<AudioRecorderProps> = ({
+  isInitRecording = false,
+  onRecordingFinish,
+  onStopConfirm,
+  selectedLangOption,
+  openLangOverlay
+}) => {
+  const { t } = useTranslation();
+  const {
+    isRecording,
+    isPaused,
+    recordingTime,
+    startRecording,
+    stopRecording,
+    pauseRecording,
+    resumeRecording,
+    canvasRef,
+    mediaRecorderRef,
+    startVisualization
+  } = useAudioRecorder();
+
+  const formatDuration = (seconds: number): string => {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const handleStopRecording = async () => {
+    await stopRecording(async () => {
+      const confirmed = await onStopConfirm?.();
+      if (confirmed) {
+        onRecordingFinish?.();
+      }
+      return !!confirmed;
+    });
+  };
+
+  const filteredSelectedLangOptions = () => {
+    return getLangOptions(t).find((langOption) => langOption.value === selectedLangOption);
+  };
+
+  useEffect(() => {
+    if (isInitRecording) {
+      if (!mediaRecorderRef.current) {
+        startRecording();
+      } else {
+        startVisualization(mediaRecorderRef.current.stream);
+      }
+    }
+  }, [isInitRecording, startRecording]);
+
+  return (
+    <S.Container>
+      <S.Background>
+        <S.CanvasWrapper>
+          <S.StatusText $isPaused={isPaused}>
+            {isPaused
+              ? t('Nova.voiceDictation.Status.OnPause')
+              : `${filteredSelectedLangOptions()?.label} ${t('Nova.voiceDictation.Status.Recognizing')}`}
+          </S.StatusText>
+
+          <S.Canvas ref={canvasRef} />
+
+          <S.DurationText>{formatDuration(recordingTime)}</S.DurationText>
+        </S.CanvasWrapper>
+      </S.Background>
+      <S.ButtonGroup>
+        <ControlButton
+          icon={Lang}
+          darkIcon={DarkLang}
+          onClick={openLangOverlay}
+          width={40}
+          height={40}
+        />
+        <PlayPauseButton isPaused={isPaused} onPlay={resumeRecording} onPause={pauseRecording} />
+        <ControlButton
+          icon={Stop}
+          darkIcon={DarkStop}
+          onClick={handleStopRecording}
+          width={40}
+          height={40}
+        />
+      </S.ButtonGroup>
+    </S.Container>
+  );
+};
+
+export default TestAudioRecorder;
