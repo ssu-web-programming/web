@@ -15,10 +15,8 @@ import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { calLeftCredit } from '../../../util/common';
 import { createFormDataFromFiles } from '../../../util/files';
 import useErrorHandle from '../useErrorHandle';
-import { useShowCreditToast } from '../useShowCreditToast';
 
 export const useImprovedResolution = () => {
-  const showCreditToast = useShowCreditToast();
   const errorHandle = useErrorHandle();
   const dispatch = useAppDispatch();
   const currentFile = useAppSelector(selectPageData(NOVA_TAB_TYPE.improvedRes));
@@ -71,9 +69,6 @@ export const useImprovedResolution = () => {
           gpt_ver: 'NOVA_PO_RESOLUTION'
         });
         track('click_nova_image', { image_name: 'NOVA_PO_RESOLUTION' });
-
-        const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
-        showCreditToast(deductionCredit ?? '', leftCredit ?? '', 'credit');
       } else {
         const { leftCredit } = calLeftCredit(res.headers);
         handleImprovedResError(response.error.code, Number(leftCredit));

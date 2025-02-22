@@ -40,7 +40,6 @@ import { convertFiles, downloadFiles, fileToBase64, uploadFiles } from '../../..
 import { useConfirm } from '../../Confirm';
 import { InputBarSubmitParam } from '../../nova/inputBar';
 import useErrorHandle from '../useErrorHandle';
-import { useShowCreditToast } from '../useShowCreditToast';
 
 import useGetChatReferences from './useGetChatReferences';
 
@@ -58,7 +57,6 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
   const isCreditRecieved = useAppSelector(selectPageCreditReceived(NOVA_TAB_TYPE.aiChat));
   const { getReferences } = useGetChatReferences();
   const errorHandle = useErrorHandle();
-  const showCreditToast = useShowCreditToast();
   const { t } = useTranslation();
   const confirm = useConfirm();
   const expireTimer = useRef<NodeJS.Timeout | null>(null);
@@ -274,8 +272,8 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
                       return json.data;
                     }
                     case 'credit': {
-                      const { deductCredit, remainCredit } = json.data;
-                      showCreditToast(`${deductCredit}`, `${remainCredit}`, 'nova');
+                      // #svr-5601 credit 사용 toast 제거
+                      // const { deductCredit, remainCredit } = json.data;
                       return '';
                     }
                     case 'annotations': {
@@ -373,7 +371,7 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
         }
       }
     },
-    [dispatch, errorHandle, novaHistory, setFileUploadState, showCreditToast, t, confirm]
+    [dispatch, errorHandle, novaHistory, setFileUploadState, t, confirm]
   );
 
   return { createChatSubmitHandler };
