@@ -154,7 +154,6 @@ export default function NovaHeader(props: NovaHeaderProps) {
     dispatch(setPageResult({ tab: selectedNovaTab, result: null }));
     dispatch(selectNovaTab(NOVA_TAB_TYPE.home));
     dispatch(clearError());
-    resetVoiceInfo();
     Bridge.callBridgeApi('curNovaTab', NOVA_TAB_TYPE.home);
   };
 
@@ -177,6 +176,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
       }
 
       await resetPage();
+      resetVoiceInfo();
     }
   };
 
