@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 import { activeToast } from 'store/slices/toastSlice';
 import { useAppDispatch } from 'store/store';
 import { css } from 'styled-components';
-import { getDevice, getPlatform } from 'util/bridge';
 import { getLangFromLangCode } from 'util/translation';
 
 import { NOVA_TAB_TYPE } from '../../../../../constants/novaTapTypes';
@@ -59,15 +58,10 @@ export default function TranslationIntro() {
           text: t('Confirm')
         }
       });
-      return false;
     }
-    return true;
   };
 
   const handleTranslate = () => {
-    const validate = validateLang();
-    if (!validate) return;
-
     if (type === 'TEXT') {
       submitTextTranslate();
       return;
@@ -149,7 +143,9 @@ export default function TranslationIntro() {
 
       <ButtonWithCredit
         text={t('Nova.translation.Button.Translate')}
-        isActive={translateInputValue.length > 0 || isTranslateActive}
+        isActive={
+          (translateInputValue.length > 0 || isTranslateActive) && sourceLang !== targetLang
+        }
         onClick={handleTranslate}
       />
     </>
