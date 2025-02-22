@@ -31,7 +31,6 @@ const TestAudioRecorder: React.FC<AudioRecorderProps> = ({
 }) => {
   const { t } = useTranslation();
   const {
-    isRecording,
     isPaused,
     recordingTime,
     startRecording,

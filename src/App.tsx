@@ -1,10 +1,15 @@
 import { useEffect } from 'react';
 import useInitApp from 'components/hooks/useInitApp';
+import OverlayModal from 'components/overlay-modal';
 import RetryComponent from 'components/retry-component';
-import { OverlayProvider } from 'overlay-kit';
+import { overlay, OverlayProvider } from 'overlay-kit';
 import Nova from 'pages/Nova/Nova';
 import Translation from 'pages/Nova/Translation';
+import ClosedModalContent from 'pages/Nova/VoiceDictation/components/modals/closed-modal-content';
+import { useVoiceDictationContext } from 'pages/Nova/VoiceDictation/provider/voice-dictation-provider';
+import { useTranslation } from 'react-i18next';
 import { Route, Routes } from 'react-router-dom';
+import { appStateSelector } from 'store/slices/appState';
 import { errorSelector } from 'store/slices/errorSlice';
 import { ThemeProvider } from 'styled-components';
 
@@ -32,13 +37,16 @@ import { setThemeInfo, themeInfoSelector, ThemeType } from './store/slices/theme
 import { useAppDispatch, useAppSelector } from './store/store';
 import GlobalStyle from './style/globalStyle';
 import { selectTheme } from './theme/theme';
-import { ClientType, getPlatform, useInitBridgeListener } from './util/bridge';
+import Bridge, { ClientType, getPlatform, useInitBridgeListener } from './util/bridge';
 
 function App() {
   const initBridgeListener = useInitBridgeListener();
   const initApp = useInitApp();
   const dispatch = useAppDispatch();
   const { curTheme } = useAppSelector(themeInfoSelector);
+  const { isClosedNova } = useAppSelector(appStateSelector);
+  const { t } = useTranslation();
+  const { resetVoiceInfo } = useVoiceDictationContext();
 
   useEffect(() => {
     const detectTheme = () => {
@@ -80,6 +88,31 @@ function App() {
 
     fetchInit();
   }, []);
+
+  const handleResetVoiceInfo = async () => {
+    await Bridge.callBridgeApi('closeNova');
+    resetVoiceInfo();
+  };
+
+  const openClosedModal = () => {
+    overlay.open(({ isOpen, close }) => {
+      return (
+        <OverlayModal isOpen={isOpen} onClose={close}>
+          <ClosedModalContent
+            title={t('Nova.voiceDictation.Alert.UnsavedRecording')}
+            onConfirm={handleResetVoiceInfo}
+          />
+        </OverlayModal>
+      );
+    });
+  };
+
+  useEffect(() => {
+    // client에서 nova 닫는 요청이 들어올때 해당 closed 버튼을 통해 팝업을 띄우고 닫는다.
+    if (isClosedNova) {
+      openClosedModal();
+    }
+  }, [isClosedNova]);
 
   return (
     <ThemeProvider theme={selectTheme(curTheme)}>
