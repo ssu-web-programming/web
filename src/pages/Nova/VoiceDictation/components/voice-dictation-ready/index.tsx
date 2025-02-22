@@ -75,6 +75,11 @@ export default function VoiceDictationReady() {
       });
 
       if (result.data.segments.length === 0) {
+        setSharedVoiceDictationInfo((prev) => ({
+          ...prev,
+          voiceDictationResult: result
+        }));
+
         handleErrorTrigger({
           title:
             '변환된 받아쓰기 내용이 없어요.\n 음성 파일에 대화가 포함되어 있는지, 설정한 인식 언어가 음성과 같은 언어인지 확인해주세요.',

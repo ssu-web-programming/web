@@ -72,13 +72,13 @@ export default function NovaHeader(props: NovaHeaderProps) {
   const chatMode = useAppSelector(novaChatModeSelector);
   const { handleClearPastedImages } = useClipboard();
 
-  const isDisableBack =
-    status !== 'progress' && status !== 'saving' && status !== 'loading' && creating != 'NOVA';
-
   const {
     resetVoiceInfo,
-    sharedVoiceDictationInfo: { isVoiceRecording, componentType }
+    sharedVoiceDictationInfo: { isVoiceRecording, componentType, voiceDictationResult }
   } = useVoiceDictationContext();
+
+  const isDisableBack =
+    status !== 'progress' && status !== 'saving' && status !== 'loading' && creating != 'NOVA';
 
   const newChat = async (isBack = false) => {
     if (creating === 'NOVA') return;
@@ -164,11 +164,14 @@ export default function NovaHeader(props: NovaHeaderProps) {
     }
 
     if (isDisableBack) {
+      const isClosedModalCondition =
+        isVoiceRecording || componentType === 'VOICE_READY' || componentType === 'FILE_READY';
       // 녹음중 상태이면 아래 팝업을 열어여한다.
-      if (
-        (isVoiceRecording || componentType === 'VOICE_READY' || componentType === 'FILE_READY') &&
-        selectedNovaTab === NOVA_TAB_TYPE.voiceDictation
-      ) {
+      if (componentType === 'LOADING' && voiceDictationResult === null) {
+        return;
+      }
+
+      if (isClosedModalCondition && selectedNovaTab === NOVA_TAB_TYPE.voiceDictation) {
         const result = await openClosedModal();
         if (!result) return;
       }
