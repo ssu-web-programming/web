@@ -158,6 +158,8 @@ export default function NovaHeader(props: NovaHeaderProps) {
   };
 
   const handleGoHome = async () => {
+    console.log('componentType', componentType);
+
     if (status === 'progress' && selectedNovaTab === NOVA_TAB_TYPE.aiVideo) {
       await resetPage();
     }
