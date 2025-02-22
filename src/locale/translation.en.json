@@ -709,7 +709,10 @@
           "Slovenian": "Slovenian",
           "Swedish": "Swedish",
           "Spanish": "Spanish",
-          "Korean": "Korean"
+          "Korean": "Korean",
+          "EnglishAll": "English",
+          "ChineseAll": "Chinese",
+          "PortugueseAll": "Portuguese"
         },
         "TargetList": {
           "Title": "Language to be translated",
@@ -745,7 +748,8 @@
           "PortugueseBrazil": "Portuguese (Brazil)",
           "French": "French",
           "Finnish": "Finnish",
-          "Hungarian": "Hungarian"
+          "Hungarian": "Hungarian",
+          "Korean": "Korean"
         }
       },
       "Status": {

@@ -708,7 +708,11 @@
           "Slovak": "スロバキア語",
           "Slovenian": "スロベニア語",
           "Swedish": "スウェーデン語",
-          "Spanish": "スペイン語"
+          "Spanish": "スペイン語",
+          "PortugueseAll": "ポーランド語",
+          "EnglishAll": "英語",
+          "ChineseAll": "中国語",
+          "Korean": "韓国語"
         },
         "TargetList": {
           "Title": "翻訳対象言語",
@@ -744,7 +748,8 @@
           "PortugueseBrazil": "ポルトガル語(ブラジル)",
           "French": "フランス語",
           "Finnish": "フィンランド語",
-          "Hungarian": "ハンガリー語"
+          "Hungarian": "ハンガリー語",
+          "Korean": "韓国語"
         }
       },
       "Status": {
