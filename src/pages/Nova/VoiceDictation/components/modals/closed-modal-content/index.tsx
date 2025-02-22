@@ -1,4 +1,5 @@
 import { overlay } from 'overlay-kit';
+import { useAudioRecorder } from 'pages/Nova/VoiceDictation/provider/audio-recorder-provider';
 import { setIsClosedNovaState } from 'store/slices/appState';
 import { useAppDispatch } from 'store/store';
 import Bridge from 'util/bridge';
@@ -19,6 +20,7 @@ export default function ClosedModalContent({
   confirmTxt = '종료하기'
 }: Props) {
   const dispatch = useAppDispatch();
+  const { initializingRecording } = useAudioRecorder();
 
   const handleCancle = () => {
     overlay.closeAll();
@@ -27,7 +29,7 @@ export default function ClosedModalContent({
 
   const handleClose = async () => {
     await Bridge.callBridgeApi('getRecordingState', false);
-    // sessionStorage.setItem('hasStartedRecording', 'false');
+    initializingRecording();
     dispatch(setIsClosedNovaState(false));
     onConfirm && onConfirm();
   };

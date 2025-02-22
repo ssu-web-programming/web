@@ -261,6 +261,8 @@ export const base64ToBlob = (base64: string, mimeType: string): Blob => {
 export const blobToFile = (blob: Blob): File => {
   const fileType = SUPPORT_IMAGE_TYPE.find((type) => type.mimeType === blob.type);
   const ext = fileType ? fileType.extensions : '.png';
+
+  console.log('ext', ext);
   return new File([blob], `image${ext}`, { type: blob.type });
 };
 

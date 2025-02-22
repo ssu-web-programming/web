@@ -1,11 +1,11 @@
 import React, { createContext, useCallback, useContext, useRef, useState } from 'react';
+import { platformInfoSelector } from 'store/slices/platformInfo';
 import { setLocalFiles } from 'store/slices/uploadFiles';
-import { useAppDispatch } from 'store/store';
-import { ClientType, getPlatform } from 'util/bridge';
-import { blobToFile } from 'util/files';
+import { useAppDispatch, useAppSelector } from 'store/store';
+import { ClientType } from 'util/bridge';
+import { blobToFile } from 'util/getAudioDuration';
 import { convertWebmToWavFile } from 'util/getAudioDuration';
 
-import { calculateBarData, draw } from '../../components/audio-recorder';
 import { useVoiceDictationContext } from '../voice-dictation-provider';
 
 interface AudioRecorderContextType {
@@ -24,6 +24,7 @@ interface AudioRecorderContextType {
   analyserRef: React.MutableRefObject<AnalyserNode | null>;
   audioContextRef: React.MutableRefObject<AudioContext | null>;
   startVisualization: any;
+  initializingRecording: () => void;
 }
 
 const AudioRecorderContext = createContext<AudioRecorderContextType | null>(null);
@@ -32,6 +33,78 @@ interface AudioRecorderProviderProps {
   children: React.ReactNode;
   // onRecordingComplete?: (blob: Blob) => void;
 }
+
+interface CustomCanvasRenderingContext2D extends CanvasRenderingContext2D {
+  roundRect: (x: number, y: number, w: number, h: number, radius: number) => void;
+}
+
+const calculateBarData = (
+  frequencyData: Uint8Array,
+  width: number,
+  barWidth: number,
+  gap: number
+): number[] => {
+  let units = width / (barWidth + gap);
+  let step = Math.floor(frequencyData.length / units);
+
+  if (units > frequencyData.length) {
+    units = frequencyData.length;
+    step = 1;
+  }
+
+  const data: number[] = [];
+  for (let i = 0; i < units; i++) {
+    let sum = 0;
+    for (let j = 0; j < step && i * step + j < frequencyData.length; j++) {
+      sum += frequencyData[i * step + j];
+    }
+    data.push(sum / step);
+  }
+  return data;
+};
+
+const draw = (
+  data: number[],
+  canvas: HTMLCanvasElement,
+  barWidth: number,
+  gap: number,
+  isPaused: boolean
+): void => {
+  const ctx = canvas.getContext('2d') as CustomCanvasRenderingContext2D;
+  if (!ctx) return;
+
+  const baseHeight = 40;
+  const amp = canvas.height / 2;
+
+  // background color 색을 width , height만큼 채우는 코드
+  ctx.clearRect(0, 0, canvas.clientWidth, canvas.height);
+  ctx.fillStyle = 'transparent';
+  ctx.fillRect(0, 0, canvas.clientWidth, canvas.height);
+
+  const gradient = ctx.createLinearGradient(0, 0, canvas.clientWidth, 0);
+  if (isPaused) {
+    gradient.addColorStop(0, '#c9cdd2');
+  } else {
+    gradient.addColorStop(0, '#a56ae9'); // 보라색 계열 시작
+    gradient.addColorStop(0.5, '#9057df'); // 중간 톤의 보라
+    gradient.addColorStop(1, '#7741d3'); // 밝은 보라
+  }
+
+  const totalBars = Math.floor(canvas.clientWidth / (barWidth + gap));
+
+  for (let i = 0; i < totalBars; i++) {
+    ctx.fillStyle = gradient;
+    const x = i * (barWidth + gap);
+    const value = data[i] || 0;
+    const dynamicHeight = baseHeight + value / 2;
+    const y = amp - dynamicHeight / 2;
+    const h = dynamicHeight;
+
+    ctx.beginPath();
+    ctx.fillRect(x, y, barWidth, h);
+    ctx.fill();
+  }
+};
 
 export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({
   children
@@ -55,6 +128,7 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({
   // 호진 FIXME: 아래 로직은 걷어내고 싶음
   const dispatch = useAppDispatch();
   const { setSharedVoiceDictationInfo } = useVoiceDictationContext();
+  const { platform } = useAppSelector(platformInfoSelector);
 
   const handleMoveToReady = async (file: File) => {
     dispatch(setLocalFiles([file]));
@@ -66,7 +140,8 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({
 
   const onRecordingComplete = async (blob: Blob) => {
     const file =
-      getPlatform() === ClientType.windows ? await convertWebmToWavFile(blob) : blobToFile(blob);
+      platform === ClientType.windows ? await convertWebmToWavFile(blob) : blobToFile(blob);
+    console.log('file', file);
     handleMoveToReady(file);
   };
 
@@ -84,50 +159,42 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({
     }
   }, []);
 
-  const startVisualization = useCallback(
-    (stream: MediaStream) => {
-      if (!canvasRef.current || !stream.active) return;
+  const startVisualization = useCallback((stream: MediaStream) => {
+    if (!canvasRef.current || !stream.active) return;
 
-      try {
-        // 기존 AudioContext가 있다면 닫기
-        if (audioContextRef.current) {
-          audioContextRef.current.close();
-        }
+    try {
+      audioContextRef.current = new window.AudioContext();
+      const source = audioContextRef.current.createMediaStreamSource(stream);
+      const analyser = audioContextRef.current.createAnalyser();
 
-        audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
-        const source = audioContextRef.current.createMediaStreamSource(stream);
-        const analyser = audioContextRef.current.createAnalyser();
-        analyser.fftSize = 2048;
+      source.connect(analyser);
+      analyserRef.current = analyser;
 
-        source.connect(analyser);
-        analyserRef.current = analyser;
+      const animate = () => {
+        if (!canvasRef.current || !analyserRef.current) return;
 
-        const animate = () => {
-          if (!canvasRef.current || !analyserRef.current) return;
+        const frequencyData = new Uint8Array(analyserRef.current.frequencyBinCount);
+        analyserRef.current.getByteFrequencyData(frequencyData);
 
-          const frequencyData = new Uint8Array(analyserRef.current.frequencyBinCount);
-          analyserRef.current.getByteFrequencyData(frequencyData);
+        const data = calculateBarData(frequencyData, canvasRef.current.clientWidth, 2, 5);
 
-          const data = calculateBarData(frequencyData, canvasRef.current.clientWidth, 2, 5);
-          draw(data, canvasRef.current, 2, 5, isPaused);
+        draw(data, canvasRef.current, 2, 5, isPaused);
+        animationFrameRef.current = requestAnimationFrame(animate);
+      };
 
-          animationFrameRef.current = requestAnimationFrame(animate);
-        };
+      animate();
+    } catch (error) {
+      console.error('Error starting visualization:', error);
+    }
+  }, []);
 
-        animate();
-      } catch (error) {
-        console.error('Error starting visualization:', error);
-      }
-    },
-    [isPaused]
-  );
   const startRecording = useCallback(async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
       streamRef.current = stream;
 
       const mediaRecorder = new MediaRecorder(stream, {
-        mimeType: getPlatform() === ClientType.windows ? 'video/webm;codecs=vp8' : 'video/mp4'
+        mimeType: platform === ClientType.windows ? 'video/webm;codecs=vp8' : 'video/mp4'
       });
 
       mediaRecorderRef.current = mediaRecorder;
@@ -139,13 +206,43 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({
         }
       };
 
+      const checkAudioDuration = async (blob: Blob) => {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = function () {
+            const arrayBuffer = reader.result as ArrayBuffer;
+            const audioContext = new AudioContext();
+
+            audioContext.decodeAudioData(
+              arrayBuffer,
+              function (buffer) {
+                setAudioDuration(buffer.duration);
+                resolve(buffer.duration);
+              },
+              function (error) {
+                reject('Audio decoding failed: ' + error);
+              }
+            );
+          };
+
+          reader.onerror = function (error) {
+            reject('File reading failed: ' + error);
+          };
+
+          reader.readAsArrayBuffer(blob);
+        });
+      };
+
       mediaRecorder.onstop = async () => {
+        console.log('여기가 호출되는거 같아');
+
         const blob = new Blob(chunksRef.current, {
-          type: getPlatform() === ClientType.windows ? 'audio/wav' : 'audio/mpeg'
+          type: platform === ClientType.windows ? 'audio/wav' : 'audio/mpeg'
         });
 
         const url = URL.createObjectURL(blob);
         setAudioUrl(url);
+        await checkAudioDuration(blob);
         onRecordingComplete?.(blob);
 
         if (streamRef.current) {
@@ -175,6 +272,8 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({
 
         if (shouldStop) {
           mediaRecorderRef.current.stop();
+          mediaRecorderRef.current = null;
+
           if (streamRef.current) {
             streamRef.current.getTracks().forEach((track) => track.stop());
             streamRef.current = null;
@@ -194,10 +293,20 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({
 
   const pauseRecording = useCallback(() => {
     if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
+      const isPaused = true;
       mediaRecorderRef.current.pause();
-      setIsPaused(true);
+      setIsPaused(isPaused);
       stopTimer();
 
+      // 현재 상태의 마지막 프레임을 회색으로 다시 그리기
+      if (canvasRef.current && analyserRef.current) {
+        const frequencyData = new Uint8Array(analyserRef.current.frequencyBinCount);
+        analyserRef.current.getByteFrequencyData(frequencyData);
+        const data = calculateBarData(frequencyData, canvasRef.current.clientWidth, 2, 5);
+        draw(data, canvasRef.current, 2, 5, isPaused);
+      }
+
+      // 애니메이션 중지
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
@@ -217,6 +326,26 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({
     }
   }, [startTimer, startVisualization]);
 
+  const initializingRecording = () => {
+    if (mediaRecorderRef.current) {
+      mediaRecorderRef.current.onstop = null;
+      mediaRecorderRef.current.stop();
+      mediaRecorderRef.current = null;
+
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach((track) => track.stop());
+        streamRef.current = null;
+      }
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+      setIsRecording(false);
+      setIsPaused(false);
+      stopTimer();
+      setRecordingTime(0);
+    }
+  };
+
   return (
     <AudioRecorderContext.Provider
       value={{
@@ -234,7 +363,8 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({
         canvasRef,
         analyserRef,
         audioContextRef,
-        startVisualization
+        startVisualization,
+        initializingRecording
       }}>
       {children}
     </AudioRecorderContext.Provider>

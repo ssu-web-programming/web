@@ -3,16 +3,14 @@ import React from 'react';
 import OverlayModal from 'components/overlay-modal';
 import { overlay } from 'overlay-kit';
 import { setIsMicrophoneState } from 'store/slices/appState';
+import { selectNovaTab } from 'store/slices/tabSlice';
 import { useAppDispatch } from 'store/store';
 import Bridge from 'util/bridge';
 
 import { useVoiceDictationContext } from '../../provider/voice-dictation-provider';
-// import AudioRecorder from '../audio-recorder';
 import DesktopLangSelector from '../modals/desktop-lang-selector';
 import StopModalContent from '../modals/stop-modal-content';
 import TestAudioRecorder from '../test-audio-recorder';
-
-// import { AudioRecorderProvider } from './AudioRecorderContext';
 
 export default function VoiceAudioRecorder() {
   const {

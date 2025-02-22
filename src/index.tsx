@@ -32,8 +32,8 @@ function Root() {
   return (
     <Provider store={store}>
       <VoiceDictationProvider>
-        <AudioRecorderProvider>
-          <TranslationProvider>
+        <TranslationProvider>
+          <AudioRecorderProvider>
             <QueryClientProvider client={queryClient}>
               <BrowserRouter>
                 <HelmetProvider>
@@ -41,8 +41,8 @@ function Root() {
                 </HelmetProvider>
               </BrowserRouter>
             </QueryClientProvider>
-          </TranslationProvider>
-        </AudioRecorderProvider>
+          </AudioRecorderProvider>
+        </TranslationProvider>
       </VoiceDictationProvider>
     </Provider>
   );
