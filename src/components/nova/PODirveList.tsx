@@ -39,16 +39,10 @@ export default function PODriveList(props: PODriveListProps) {
   };
 
   const validateTranslationFile = async (files: DriveFileInfo[]) => {
-    const supporType = [...TRANSLATION_SUPPORT_TYPE.flatMap((type) => type.extensions)];
     if (!ALLOWED_MIME_TYPES.includes(files[0].type)) {
       await confirm({
         title: '',
-        msg:
-          selectedNovaTab === 'aiChat'
-            ? t('Nova.Alert.CommonUnsupportFile')
-            : t(`Nova.Alert.CommonUnsupportImage`, {
-                support: supporType
-              }),
+        msg: t(`Nova.translation.Alert.CommonUnsupportFile`),
         onOk: {
           text: t('Confirm'),
           callback: () => {

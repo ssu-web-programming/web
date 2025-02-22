@@ -3,6 +3,7 @@ import translationHttp, {
   PostTranslateDocument,
   TranslateDocumentResponse
 } from 'api/translation';
+import useErrorHandle from 'components/hooks/useErrorHandle';
 import { useShowCreditToast } from 'components/hooks/useShowCreditToast';
 import { usePolling } from 'hooks/use-polling';
 import { overlay } from 'overlay-kit';
@@ -11,6 +12,7 @@ import { useAppDispatch } from 'store/store';
 import { calLeftCredit } from 'util/common';
 
 import LanguageSearch from '../../components/language-search';
+import { TranslateType } from '../../components/translation-intro';
 import {
   LangType,
   TranslateResult,
@@ -44,7 +46,7 @@ export const getBaseLanguage = (variant: string): string | null => {
 
 export type LanguageVariant = EnglishVariant | ChineseVariant | PortugueseVariant;
 
-const useTranslationIntro = (translateInputValue: string) => {
+const useTranslationIntro = (translateInputValue: string, type: TranslateType) => {
   const showCreditToast = useShowCreditToast();
   // 전역상태의 번역 Context!
   const {
@@ -53,6 +55,7 @@ const useTranslationIntro = (translateInputValue: string) => {
     sharedTranslationInfo: { sourceLang, targetLang, isSwitchActive }
   } = useTranslationContext();
   const dispatch = useAppDispatch();
+  const errorHandle = useErrorHandle();
 
   // 데이터 정제 작업을 위한 Hook
   const { convertFileObject, isDriveActive, sanitizedOriginFile } = useSanitizedDrive();
@@ -70,8 +73,11 @@ const useTranslationIntro = (translateInputValue: string) => {
       handleMoveToFileResult({ downloadUrl });
     },
     onError: (error) => {
-      console.log('error', error);
-      handleErrorTrigger({ title: '오류가 발생했습니다. 잠시 후 다시 시작해주세요.' });
+      setSharedTranslationInfo((prev) => ({
+        ...prev,
+        componentType: 'INTRO'
+      }));
+      errorHandle(error);
     }
   });
 
@@ -118,7 +124,11 @@ const useTranslationIntro = (translateInputValue: string) => {
         translatedText
       });
     } catch (e) {
-      console.log('e', e);
+      setSharedTranslationInfo((prev) => ({
+        ...prev,
+        componentType: 'INTRO'
+      }));
+      errorHandle(e);
     }
   };
 
@@ -189,13 +199,14 @@ const useTranslationIntro = (translateInputValue: string) => {
     }
   };
 
-  const handleOpenLangSearch = (type: LangType) => {
+  const handleOpenLangSearch = (langType: LangType) => {
     overlay.open(({ isOpen, close }) => (
       <LanguageSearch
         isOpen={isOpen}
         close={close}
-        langType={type}
+        langType={langType}
         setSharedTranslationInfo={setSharedTranslationInfo}
+        btnType={type}
       />
     ));
   };

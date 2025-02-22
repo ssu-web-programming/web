@@ -1,6 +1,7 @@
-import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
+import { Dispatch, SetStateAction, useMemo, useState } from 'react';
 import ModalSheet from 'components/modalSheet';
 import {
+  FILE_TARGET_LANGUAGES_WITH_LANG_CODE,
   SOURCE_LANGUAGES_WITH_LANG_CODE,
   TARGET_LANGUAGES_WITH_LANG_CODE
 } from 'constants/translation-text';
@@ -11,6 +12,7 @@ import getInitialConsonant from 'util/getInitialConsonant';
 import useLangSearch from '../../hooks/use-lang-search';
 import { LangType, SharedTranslation } from '../../provider/translation-provider';
 import LanguageItemList from '../language-item-list';
+import { TranslateType } from '../translation-intro';
 
 import * as S from './style';
 
@@ -19,6 +21,7 @@ interface Props {
   close: () => void;
   langType: LangType;
   setSharedTranslationInfo: Dispatch<SetStateAction<SharedTranslation>>;
+  btnType: TranslateType;
 }
 
 export interface Language {
@@ -30,11 +33,17 @@ export default function LanguageSearch({
   isOpen,
   close,
   langType,
-  setSharedTranslationInfo
+  setSharedTranslationInfo,
+  btnType
 }: Props) {
   const { t } = useTranslation();
   const initialLanguages =
-    langType === 'source' ? SOURCE_LANGUAGES_WITH_LANG_CODE : TARGET_LANGUAGES_WITH_LANG_CODE;
+    langType === 'source'
+      ? SOURCE_LANGUAGES_WITH_LANG_CODE
+      : btnType === 'FILE'
+        ? FILE_TARGET_LANGUAGES_WITH_LANG_CODE
+        : TARGET_LANGUAGES_WITH_LANG_CODE;
+
   const [searchTerm, setSearchTerm] = useState<string>('');
   const { latestLangList } = useLangSearch(langType);
 

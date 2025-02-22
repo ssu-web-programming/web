@@ -767,7 +767,8 @@
         "UnsupportedFormat": "サポートされないファイルです。もう一度ご確認ください。",
         "CharacterLimit": "制限超過。文字を減らして再試行。",
         "EncryptedDocument": "暗号化されたドキュメントは照会できません。もう一度ドキュメントを確認してください。",
-        "DamagedDocument": "破損した文書は照会できません。もう一度ドキュメントを確認してください。"
+        "DamagedDocument": "破損した文書は照会できません。もう一度ドキュメントを確認してください。",
+        "CommonUnsupportFile": "このファイル形式はサポートされていません。\n添付可能なファイル形式を確認して、再度お試しください。\n\n- 文書 : docx, pptx, pdf"
       },
       "FileUpload": {
         "Guide": {

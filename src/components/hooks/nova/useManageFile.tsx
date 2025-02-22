@@ -116,23 +116,24 @@ export function useManageFile({ onFinishCallback, onClearPastedImages }: Props =
     // 실패했을때 나오는 팝업!
     if (validation.invalidReason.type.length > 0) {
       await confirm({
-        msg: '지원하지 않는 파일 형식입니다. 다시 한 번 확인해 주세요.'
+        msg: t('Nova.translation.Alert.UnsupportedFormat')
       });
-      return;
+      return false;
     }
 
     if (validation.invalidReason.size.length > 0) {
       await confirm({
-        msg: `파일의 크기가 너무 큽니다. 30MB 이하의 파일만 선택해주세요.`
+        msg: t('Nova.translation.Alert.FileSizeLimit')
       });
-      return;
+      return false;
     }
 
-    // dispatch(setLocalFiles(files));
+    return true;
   };
 
   const uploadTranslationFile = async (files: File[], maxFileSize: number) => {
-    await validateFileUpload(files, maxFileSize);
+    const isValid = await validateFileUpload(files, maxFileSize);
+    if (!isValid) return;
     await confirmTranslationUploadFile(files);
   };
 
