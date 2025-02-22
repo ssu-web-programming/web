@@ -11,6 +11,7 @@ import { useAppDispatch } from 'store/store';
 import { calLeftCredit } from 'util/common';
 
 import LanguageSearch from '../../components/language-search';
+import { TranslateType } from '../../components/translation-intro';
 import {
   LangType,
   TranslateResult,
@@ -44,7 +45,7 @@ export const getBaseLanguage = (variant: string): string | null => {
 
 export type LanguageVariant = EnglishVariant | ChineseVariant | PortugueseVariant;
 
-const useTranslationIntro = (translateInputValue: string) => {
+const useTranslationIntro = (translateInputValue: string, type: TranslateType) => {
   const showCreditToast = useShowCreditToast();
   // 전역상태의 번역 Context!
   const {
@@ -189,13 +190,14 @@ const useTranslationIntro = (translateInputValue: string) => {
     }
   };
 
-  const handleOpenLangSearch = (type: LangType) => {
+  const handleOpenLangSearch = (langType: LangType) => {
     overlay.open(({ isOpen, close }) => (
       <LanguageSearch
         isOpen={isOpen}
         close={close}
-        langType={type}
+        langType={langType}
         setSharedTranslationInfo={setSharedTranslationInfo}
+        btnType={type}
       />
     ));
   };

@@ -16,7 +16,7 @@ import TranslationFileUploader from '../translation-file-uploader';
 
 import * as S from './style';
 
-type TranslateType = 'TEXT' | 'FILE';
+export type TranslateType = 'TEXT' | 'FILE';
 
 export default function TranslationIntro() {
   const { t } = useTranslation();
@@ -35,7 +35,7 @@ export default function TranslationIntro() {
     isTranslateActive,
     submitTextTranslate,
     submitFileTranslate
-  } = useTranslationIntro(translateInputValue);
+  } = useTranslationIntro(translateInputValue, type);
 
   const options: ToggleOption<TranslateType>[] = [
     {
