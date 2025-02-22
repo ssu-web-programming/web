@@ -44,9 +44,12 @@ import { getFileExtension, sliceFileName } from 'util/common';
 
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import {
+  findTabByService,
   getChatGroupKey,
   getMenuItemsFromServiceGroup,
   getServiceGroupInfo,
+  SERVICE_CATEGORY,
+  SERVICE_GROUP_MAP,
   SERVICE_TYPE
 } from '../../../constants/serviceType';
 import { selectAllServiceCredits } from '../../../store/slices/nova/pageStatusSlice';
@@ -108,8 +111,10 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
   const { from } = useLangParameterNavigate();
   const { onCopy } = useCopyText();
   const scrollRef = useRef<HTMLDivElement | null>(null);
-  const tabValues: NOVA_TAB_TYPE[] = Object.values(NOVA_TAB_TYPE);
-  const filteredTabValues = tabValues.filter((tab) => tab !== NOVA_TAB_TYPE.aiChat);
+  const filteredTabValues = Object.values(SERVICE_GROUP_MAP[SERVICE_CATEGORY.IMAGE])
+    .flat()
+    .map(findTabByService)
+    .filter((tab, index, self) => self.indexOf(tab) === index);
 
   const handleToggleItemSelection = (id: string) => {
     dispatch(toggleItemSelection(id));
