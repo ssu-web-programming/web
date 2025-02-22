@@ -150,6 +150,10 @@ export const Item = styled.div`
   justify-content: space-between;
 
   span {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6.5px;
     font-size: 14px;
     font-weight: 400;
     line-height: 21px;

@@ -33,18 +33,14 @@ export default function CreditInfo() {
   };
 
   const getTabTranslationKey = (tab: string, group: string) => {
-    if (group === 'convert2DTo3D') {
-      return (
-        <Trans
-          i18nKey={`Nova.Home.${tab}.${group}`}
-          components={{
-            img: isLightMode ? <IconConvertLight /> : <IconConvertDark />
-          }}
-        />
-      );
-    }
-
-    return t(`Nova.Home.${tab}.${group}`);
+    return (
+      <Trans
+        i18nKey={`Nova.Home.${tab}.${group}`}
+        components={{
+          img: isLightMode ? <IconConvertLight /> : <IconConvertDark />
+        }}
+      />
+    );
   };
 
   return (

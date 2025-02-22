@@ -1,14 +1,11 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { FlattenSimpleInterpolation } from 'styled-components';
 
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
-import {
-  getChatGroupKey,
-  getServiceCategoryFromTab,
-  getServiceGroupInfo,
-  iconMap
-} from '../../../constants/serviceType';
+import { getChatGroupKey, getServiceGroupInfo, iconMap } from '../../../constants/serviceType';
+import { ReactComponent as IconConvertDark } from '../../../img/dark/nova/tab/convert_Img.svg';
+import { ReactComponent as IconConvertLight } from '../../../img/light/nova/tab/convert_Img.svg';
 import { announceInfoSelector } from '../../../store/slices/nova/announceSlice';
 import { novaChatModeSelector } from '../../../store/slices/nova/novaHistorySlice';
 import { selectTabSlice } from '../../../store/slices/tabSlice';
@@ -34,7 +31,6 @@ export const Guide = (props: GuideProps) => {
     selectedNovaTab === NOVA_TAB_TYPE.aiChat || selectedNovaTab === NOVA_TAB_TYPE.perplexity;
 
   const getIcon = () => {
-    // TODO: 로고도 함께 관리하도록 수정 필요
     if (selectedNovaTab === NOVA_TAB_TYPE.aiChat || selectedNovaTab === NOVA_TAB_TYPE.perplexity) {
       const groupKey = getChatGroupKey(chatMode);
       const info = getServiceGroupInfo(groupKey, isLightMode);
@@ -61,11 +57,16 @@ export const Guide = (props: GuideProps) => {
             }
           />
           <div className="title">
-            <p>
-              {isChat
-                ? getServiceGroupInfo(getChatGroupKey(chatMode), isLightMode).label
-                : t(`Nova.${selectedNovaTab}.Guide.Title`)}
-            </p>
+            {isChat ? (
+              getServiceGroupInfo(getChatGroupKey(chatMode), isLightMode).label
+            ) : (
+              <Trans
+                i18nKey={t(`Nova.${selectedNovaTab}.Guide.Title`)}
+                components={{
+                  img: isLightMode ? <IconConvertLight /> : <IconConvertDark />
+                }}
+              />
+            )}
           </div>
           <p className="desc">
             {isChat
