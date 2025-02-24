@@ -155,7 +155,7 @@ export default function VoiceDictationReady() {
         </S.Header>
 
         <S.Description>
-          녹음 파일을 번환할 준비가 완료되었어요.
+          녹음 파일을 변환할 준비가 완료되었어요.
           <br />
           변환하기 버튼을 눌러 텍스트로 변환해보세요.
         </S.Description>
