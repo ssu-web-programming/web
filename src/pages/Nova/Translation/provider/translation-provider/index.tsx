@@ -1,5 +1,5 @@
 import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState } from 'react';
-import { lang, langCode, langFormatCode } from 'locale';
+import { lang } from 'locale';
 
 export type ComponentType = 'INTRO' | 'TEXT_RESULT' | 'FILE_RESULT' | 'LOADING';
 export type LangType = 'source' | 'target';
@@ -51,16 +51,6 @@ export const useTranslationContext = () => {
 
 // 호진FIXME: 아래 하나의 state로 관리되는 부분을 hook을 통해 관심사별로 분리하면 좋을 듯
 export function TranslationProvider({ children }: Props) {
-  // const searchParams = new URLSearchParams(window.location.search);
-
-  console.log('window params', window);
-
-  // const lang = searchParams.get('lang');
-
-  console.log('langCode', langCode);
-  console.log('lang', lang);
-  console.log('langFormatCode', langFormatCode);
-
   const getSourceLang = () => {
     if (lang === 'ja') {
       return 'JA';

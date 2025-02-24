@@ -48,7 +48,6 @@ const voiceDictationHttp = {
 
     const response = await res.json();
 
-    console.log('postVoiceDownload-response', response);
     return response;
   }
 };

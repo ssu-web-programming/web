@@ -181,7 +181,6 @@ const useErrorHandle = () => {
         }
       });
     } else {
-      console.log('너 들어오냐??');
       let msg: string | React.ReactNode = '';
       switch (error.message) {
         case ERR_NOT_ONLINE: {
