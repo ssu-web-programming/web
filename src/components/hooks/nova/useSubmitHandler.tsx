@@ -2,6 +2,7 @@ import { useCallback, useRef } from 'react';
 import { apiWrapper, streaming } from 'api/apiWrapper';
 import { load } from 'cheerio';
 import { DocUnopenableError, ExceedPoDriveLimitError } from 'error/error';
+import { overlay } from 'overlay-kit';
 import { useTranslation } from 'react-i18next';
 import {
   addChatOutputRes,
@@ -39,6 +40,8 @@ import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { convertFiles, downloadFiles, fileToBase64, uploadFiles } from '../../../util/files';
 import { useConfirm } from '../../Confirm';
 import { InputBarSubmitParam } from '../../nova/inputBar';
+import SurveyModalContent from '../../nova/satisfactionSurvey/survey-modal-content';
+import OverlayModal from '../../overlay-modal';
 import useErrorHandle from '../useErrorHandle';
 
 import useGetChatReferences from './useGetChatReferences';
@@ -53,7 +56,6 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
   const novaHistory = useAppSelector(novaHistorySelector);
   const { novaExpireTime } = useAppSelector(appStateSelector);
   const chatMode = useAppSelector(novaChatModeSelector);
-  const { selectedNovaTab } = useAppSelector(selectTabSlice);
   const isCreditRecieved = useAppSelector(selectPageCreditReceived(NOVA_TAB_TYPE.aiChat));
   const { getReferences } = useGetChatReferences();
   const errorHandle = useErrorHandle();
@@ -99,8 +101,18 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
           method: 'POST'
         });
 
-        const response = await res.json();
-        console.log(response);
+        const { data } = await res.json();
+        if (data.creditUsecount >= 3) {
+          overlay.closeAll();
+
+          overlay.open(({ isOpen, close }) => {
+            return (
+              <OverlayModal isOpen={isOpen} onClose={close} padding={'24px'}>
+                <SurveyModalContent />
+              </OverlayModal>
+            );
+          });
+        }
       } catch (error) {
         errorHandle(error);
       }

@@ -7,9 +7,16 @@ import useErrorHandle from 'components/hooks/useErrorHandle';
 import { usePolling } from 'hooks/use-polling';
 import { overlay } from 'overlay-kit';
 import { setError } from 'store/slices/errorSlice';
-import { useAppDispatch } from 'store/store';
-import { calLeftCredit } from 'util/common';
+import { useAppDispatch, useAppSelector } from 'store/store';
+import { calLeftCredit, getCookie } from 'util/common';
 
+import { apiWrapper } from '../../../../../api/apiWrapper';
+import { NOVA_GET_CREDIT_USE_COUNT } from '../../../../../api/constant';
+import SurveyModalContent from '../../../../../components/nova/satisfactionSurvey/survey-modal-content';
+import OverlayModal from '../../../../../components/overlay-modal';
+import { NOVA_TAB_TYPE } from '../../../../../constants/novaTapTypes';
+import { SERVICE_TYPE } from '../../../../../constants/serviceType';
+import { selectPageCreditReceived } from '../../../../../store/slices/nova/pageStatusSlice';
 import LanguageSearch from '../../components/language-search';
 import { TranslateType } from '../../components/translation-intro';
 import {
@@ -54,6 +61,7 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
   } = useTranslationContext();
   const dispatch = useAppDispatch();
   const errorHandle = useErrorHandle();
+  const isCreditRecieved = useAppSelector(selectPageCreditReceived(NOVA_TAB_TYPE.translation));
 
   // 데이터 정제 작업을 위한 Hook
   const { convertFileObject, isDriveActive, sanitizedOriginFile } = useSanitizedDrive();
@@ -88,7 +96,11 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
     }
   });
 
-  const handleMoveToTextResult = ({ detectedSourceLanguage, translatedText }: TranslateResult) => {
+  const handleMoveToTextResult = async ({
+    detectedSourceLanguage,
+    translatedText
+  }: TranslateResult) => {
+    await showSurveyModal();
     setSharedTranslationInfo((prevSharedTranslationInfo) => ({
       ...prevSharedTranslationInfo,
       componentType: 'TEXT_RESULT',
@@ -99,8 +111,8 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
   };
 
   const handleMoveToFileResult = async ({ downloadUrl }: { downloadUrl: string }) => {
+    await showSurveyModal();
     const sanitizedFile = (await sanitizedOriginFile()) as any;
-
     setSharedTranslationInfo((prevSharedTranslationInfo) => ({
       ...prevSharedTranslationInfo,
       componentType: 'FILE_RESULT',
@@ -108,6 +120,43 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
       translationFileUrl: downloadUrl,
       translationFileName: sanitizedFile.originalFileName
     }));
+  };
+
+  const showSurveyModal = async () => {
+    // 만족도 이벤트
+    if (!isCreditRecieved && !getCookie('dontShowSurvey')) {
+      try {
+        const { res } = await apiWrapper().request(NOVA_GET_CREDIT_USE_COUNT, {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            serviceTypes: [
+              SERVICE_TYPE.NOVA_TRANSLATION_DEEPL,
+              SERVICE_TYPE.NOVA_TRANSLATION_DEEPL_FILE
+            ],
+            startTime: '1740182400000',
+            endTime: '1740528000000'
+          }),
+          method: 'POST'
+        });
+
+        const { data } = await res.json();
+        if (data.creditUsecount >= 1) {
+          overlay.closeAll();
+
+          overlay.open(({ isOpen, close }) => {
+            return (
+              <OverlayModal isOpen={isOpen} onClose={close} padding={'24px'}>
+                <SurveyModalContent />
+              </OverlayModal>
+            );
+          });
+        }
+      } catch (error) {
+        errorHandle(error);
+      }
+    }
   };
 
   const submitTextTranslate = async () => {
@@ -122,7 +171,6 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
       const {
         result: { detectedSourceLanguage, translatedText }
       } = response;
-
       handleMoveToTextResult({
         detectedSourceLanguage: detectedSourceLanguage.toUpperCase(),
         translatedText

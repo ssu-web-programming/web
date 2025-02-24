@@ -62,8 +62,6 @@ export const useRemoveBackground = () => {
           gpt_ver: 'remove_bg'
         });
         track('click_nova_image', { image_name: 'NOVA_REMOVE_BG' });
-
-        // 만족도 이벤트
       } else {
         const { leftCredit } = calLeftCredit(res.headers);
         handleRemoveBGError(response.error.code, Number(leftCredit));
