@@ -234,8 +234,6 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({
       };
 
       mediaRecorder.onstop = async () => {
-        console.log('여기가 호출되는거 같아');
-
         const blob = new Blob(chunksRef.current, {
           type: platform === ClientType.windows ? 'audio/wav' : 'audio/mpeg'
         });

@@ -77,8 +77,10 @@ const TestAudioRecorder: React.FC<AudioRecorderProps> = ({
 
   useEffect(() => {
     if (isRecordState === 'pause') {
+      console.log('isRecordState-pause', isRecordState);
       pauseRecording();
     } else if (isRecordState === 'start') {
+      console.log('isRecordState-start', isRecordState);
       resumeRecording();
     }
   }, [isRecordState]);

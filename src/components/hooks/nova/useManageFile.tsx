@@ -1,9 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
 import { useConfirm } from 'components/Confirm';
-import { useTranslationContext } from 'pages/Nova/Translation/provider/translation-provider';
 import { useTranslation } from 'react-i18next';
 import { activeLoadingSpinner, initLoadingSpinner } from 'store/slices/loadingSpinner';
-import Bridge from 'util/bridge';
 import { uploadFiles } from 'util/files';
 
 import { apiWrapper } from '../../../api/apiWrapper';
@@ -68,6 +66,7 @@ export function useManageFile({ onFinishCallback, onClearPastedImages }: Props =
 
       // 파일 타입 검사
       if (!ALLOWED_MIME_TYPES.includes(file.type)) {
+        console.log('file', file.type);
         isFileValid = false;
         result.invalidReason.type.push(file);
       }
@@ -112,6 +111,7 @@ export function useManageFile({ onFinishCallback, onClearPastedImages }: Props =
 
   const validateFileUpload = async (files: File[], maxFileSize: number) => {
     const validation = validateFiles(files, maxFileSize);
+    console.log('validation', validation);
 
     // 실패했을때 나오는 팝업!
     if (validation.invalidReason.type.length > 0) {
@@ -133,6 +133,7 @@ export function useManageFile({ onFinishCallback, onClearPastedImages }: Props =
 
   const uploadTranslationFile = async (files: File[], maxFileSize: number) => {
     const isValid = await validateFileUpload(files, maxFileSize);
+    console.log('isValid', isValid);
     if (!isValid) return;
     await confirmTranslationUploadFile(files);
   };
