@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { SERVICE_CATEGORY, SERVICE_GROUP_MAP } from '../../../constants/serviceType';
@@ -21,6 +21,7 @@ export default function CreditInfo() {
   const serviceCredits = useAppSelector(selectAllServiceCredits);
   const [isOpen, setIsOpen] = useState(false);
   const [tab, setTab] = useState<SERVICE_CATEGORY>(SERVICE_CATEGORY.CHAT);
+  const tooltipRef = useRef<HTMLDivElement>(null);
 
   const toggleTooltip = () => {
     if (!isInit) return;
@@ -31,6 +32,24 @@ export default function CreditInfo() {
   const handleChange = (event: React.SyntheticEvent, tab: SERVICE_CATEGORY) => {
     setTab(tab);
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (tooltipRef.current && !tooltipRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen]);
 
   const getTabTranslationKey = (tab: string, group: string) => {
     return (
@@ -47,7 +66,7 @@ export default function CreditInfo() {
     <S.TooltipContainer>
       <S.CreditIcon $isInit={isInit} onClick={toggleTooltip} />
       {isOpen && (
-        <S.TooltipWrap $isWide={lang != 'ko'}>
+        <S.TooltipWrap ref={tooltipRef} $isWide={lang != 'ko'}>
           <S.Title>{t('Nova.Home.creditGuide')}</S.Title>
           <S.Content>
             <S.CustomTabs value={tab} onChange={handleChange}>
