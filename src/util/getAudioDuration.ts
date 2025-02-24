@@ -158,3 +158,20 @@ const writeString = (view: DataView, offset: number, string: string): void => {
     view.setUint8(offset + i, string.charCodeAt(i));
   }
 };
+
+export function formatCurrentTime() {
+  const now = new Date();
+  const hours = now.getHours();
+  const minutes = now.getMinutes();
+
+  // 오전/오후 구분
+  const period = hours < 12 ? '오전' : '오후';
+
+  // 12시간제로 변환
+  const formattedHours = hours % 12 || 12;
+
+  // 분이 한 자리 수일 경우 앞에 0 붙이기
+  const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+
+  return `오늘 ${period} ${formattedHours}:${formattedMinutes}`;
+}

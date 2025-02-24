@@ -51,6 +51,7 @@ export default function AudioFileUploader({
   const audioDuration = async (file: File) => {
     try {
       const duration = await getAudioDuration(file);
+
       setSharedVoiceDictationInfo((prev) => ({
         ...prev,
         audioDuration: formatDuration(duration)

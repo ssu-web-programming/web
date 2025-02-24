@@ -13,6 +13,7 @@ import { setError } from 'store/slices/errorSlice';
 import { themeInfoSelector } from 'store/slices/theme';
 import { getLocalFiles } from 'store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from 'store/store';
+import { formatCurrentTime } from 'util/getAudioDuration';
 
 import SurveyModalContent from '../../../../../components/nova/satisfactionSurvey/survey-modal-content';
 import OverlayModal from '../../../../../components/overlay-modal';
@@ -30,7 +31,13 @@ import * as S from './style';
 
 export default function VoiceDictationReady() {
   const {
-    sharedVoiceDictationInfo: { componentType, audioDuration, fileName, selectedLangOption },
+    sharedVoiceDictationInfo: {
+      componentType,
+      audioDuration,
+      fileName,
+      selectedLangOption,
+      currentTime
+    },
     setSharedVoiceDictationInfo,
     triggerLoading
   } = useVoiceDictationContext();
@@ -60,7 +67,8 @@ export default function VoiceDictationReady() {
     setSharedVoiceDictationInfo((prev) => ({
       ...prev,
       componentType: 'RESULT',
-      voiceDictationResult: result
+      voiceDictationResult: result,
+      currentTime: formatCurrentTime()
     }));
   };
 
@@ -142,6 +150,8 @@ export default function VoiceDictationReady() {
     }
   }, [localFiles]);
 
+  console.log('audioDuration', audioDuration);
+
   return (
     <S.Wrapper>
       <S.Container>
@@ -193,7 +203,9 @@ export default function VoiceDictationReady() {
                 </>
               )}
             </S.InputFileWrapper>
-            <S.Duration>오늘 오후 10:57 · {audioDuration}</S.Duration>
+            <S.Duration>
+              {currentTime} · {audioDuration}
+            </S.Duration>
           </S.RecordingBox>
         )}
 
