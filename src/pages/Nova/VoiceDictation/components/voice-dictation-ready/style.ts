@@ -125,7 +125,7 @@ const LanguageValue = styled.div`
   color: #7c3aed;
 `;
 
-const ButtonWrap = styled.div`
+const ButtonWrap = styled.button<{ disabled?: boolean }>`
   width: 100%;
   height: 48px;
   min-height: 48px;
@@ -134,16 +134,27 @@ const ButtonWrap = styled.div`
   align-items: center;
   justify-content: center;
   margin: 24px 0;
-  background: #6f3ad0;
+  background: ${({ disabled, theme }) =>
+    disabled ? theme.color.background.gray02 : theme.color.background.purple01};
+  border: none; // 버튼 기본 테두리 제거
   border-radius: 8px;
-  cursor: pointer;
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+
+  // button 요소의 기본 스타일 초기화
+  padding: 0;
+  outline: none;
+
+  &:focus-visible {
+    outline: 2px solid #6f3ad0;
+    outline-offset: 2px;
+  }
 
   & > span {
     font-size: 16px;
     font-weight: 500;
     line-height: 24px;
-    color: white;
+    color: ${({ disabled }) => (disabled ? '#999999' : 'white')};
   }
 
   div {
@@ -155,7 +166,7 @@ const ButtonWrap = styled.div`
 
     & > span {
       font-size: 14px;
-      color: white;
+      color: ${({ disabled }) => (disabled ? '#999999' : 'white')};
     }
   }
 `;

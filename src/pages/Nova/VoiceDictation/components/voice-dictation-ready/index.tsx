@@ -1,10 +1,9 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 import voiceDictationHttp from 'api/voice-dictation';
-import { useConfirm } from 'components/Confirm';
+import ButtonWithCredit from 'components/buttons/button-with-credit';
 import useErrorHandle from 'components/hooks/useErrorHandle';
 import Select from 'components/select';
 import CheckDarkIcon from 'img/dark/nova/check_purple.svg';
-import CreditColorIcon from 'img/light/ico_credit_color_outline.svg';
 import CheckLightIcon from 'img/light/nova/check_purple.svg';
 import { ReactComponent as AudioFile } from 'img/light/nova/voiceDictation/audio_file.svg';
 import { ReactComponent as EditIcon } from 'img/light/nova/voiceDictation/edit.svg';
@@ -38,7 +37,6 @@ export default function VoiceDictationReady() {
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const dispatch = useAppDispatch();
   const errorHandle = useErrorHandle();
-  const confirm = useConfirm();
   const { t } = useTranslation();
   const isCreditRecieved = useAppSelector(selectPageCreditReceived(NOVA_TAB_TYPE.translation));
 
@@ -199,13 +197,12 @@ export default function VoiceDictationReady() {
           </S.RecordingBox>
         )}
 
-        <S.ButtonWrap onClick={translationVoiceDictation}>
-          <span>{t('Nova.voiceDictation.Button.Convert')}</span>
-          <div>
-            <img src={CreditColorIcon} alt="credit" width={20} height={20} />
-            <span>50</span>
-          </div>
-        </S.ButtonWrap>
+        <ButtonWithCredit
+          onClick={translationVoiceDictation}
+          text={t('Nova.voiceDictation.Button.Convert')}
+          isActive={fileName.length !== 0}
+          creditAmount={50}
+        />
       </S.Container>
     </S.Wrapper>
   );
