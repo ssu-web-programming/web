@@ -963,6 +963,9 @@
         "Ok": "Save now",
         "Cancel": "Cancel"
       },
+      "AnalyzeFile": {
+        "Msg": "Save to Polaris Drive to analyze. Save now?"
+      },
       "UpdateVersion": {
         "Msg": "2D to 3D conversion is available only in the latest version. Update now to explore this new feature!",
         "Ok": "Update now",
