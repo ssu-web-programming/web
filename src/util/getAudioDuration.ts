@@ -197,3 +197,21 @@ export function formatCurrentTime() {
 
   return `오늘 ${period} ${formattedHours}:${formattedMinutes}`;
 }
+
+export function getCurrentDateFormatted() {
+  const today = new Date();
+
+  // 연도 가져오기
+  const year = today.getFullYear();
+
+  // 월 가져오기 (0부터 시작하므로 1을 더함)
+  // padStart로 한 자리 수인 경우 앞에 0을 붙임
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+
+  // 일 가져오기
+  // padStart로 한 자리 수인 경우 앞에 0을 붙임
+  const day = String(today.getDate()).padStart(2, '0');
+
+  // YYYY-MM-DD 형태로 조합
+  return `(${year}-${month}-${day})`;
+}

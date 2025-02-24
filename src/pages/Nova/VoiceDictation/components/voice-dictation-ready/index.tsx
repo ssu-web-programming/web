@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import voiceDictationHttp from 'api/voice-dictation';
 import ButtonWithCredit from 'components/buttons/button-with-credit';
 import useErrorHandle from 'components/hooks/useErrorHandle';
@@ -48,6 +48,7 @@ export default function VoiceDictationReady() {
   const isCreditRecieved = useAppSelector(selectPageCreditReceived(NOVA_TAB_TYPE.translation));
 
   const [isEditMode, setIsEditMode] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null); // input에 대한 ref 추가
   const localFiles = useAppSelector(getLocalFiles);
   const langOptions = getLangOptions(t);
 
@@ -141,6 +142,8 @@ export default function VoiceDictationReady() {
       }
     }
   };
+
+  // localFiles가 변경될 때 파일 이름 업데이트
   useEffect(() => {
     if (localFiles.length) {
       setSharedVoiceDictationInfo((prev) => ({
@@ -149,6 +152,13 @@ export default function VoiceDictationReady() {
       }));
     }
   }, [localFiles]);
+
+  // isEditMode가 변경될 때 focus 설정
+  useEffect(() => {
+    if (isEditMode && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isEditMode]);
 
   return (
     <S.Wrapper>
@@ -193,7 +203,11 @@ export default function VoiceDictationReady() {
             <AudioFile />
             <S.InputFileWrapper>
               {isEditMode ? (
-                <S.InputFileTitle value={fileName} onChange={handleChangeInputValue} />
+                <S.InputFileTitle
+                  ref={inputRef}
+                  value={fileName}
+                  onChange={handleChangeInputValue}
+                />
               ) : (
                 <>
                   <S.FileTitle>{fileName}</S.FileTitle>
