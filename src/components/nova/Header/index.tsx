@@ -10,9 +10,7 @@ import ClosedModalContent from 'pages/Nova/VoiceDictation/components/modals/clos
 import { useVoiceDictationContext } from 'pages/Nova/VoiceDictation/provider/voice-dictation-provider';
 import { Trans, useTranslation } from 'react-i18next';
 import { clearError } from 'store/slices/errorSlice';
-import { initFlagSelector } from 'store/slices/initFlagSlice';
 
-import { apiWrapper } from '../../../api/apiWrapper';
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import {
   getChatGroupKey,
@@ -22,12 +20,8 @@ import {
 } from '../../../constants/serviceType';
 import ArrowLeftDisableIcon from '../../../img/common/ico_arrow_left_disabled.svg';
 import ArrowLeftDarkIcon from '../../../img/dark/ico_arrow_left.svg';
-import { ReactComponent as IconConvertDark } from '../../../img/dark/nova/tab/convert_Img.svg';
 import ArrowLeftLightIcon from '../../../img/light/ico_arrow_left.svg';
-import ico_credit from '../../../img/light/ico_credit_gray.svg';
-import { ReactComponent as IconConvertLight } from '../../../img/light/nova/tab/convert_Img.svg';
 import { appStateSelector } from '../../../store/slices/appState';
-import { creditInfoSelector, InitialState } from '../../../store/slices/creditInfo';
 import {
   isShareModeSelector,
   novaChatModeSelector,
@@ -158,8 +152,6 @@ export default function NovaHeader(props: NovaHeaderProps) {
   };
 
   const handleGoHome = async () => {
-    console.log('componentType', componentType);
-
     if (status === 'progress' && selectedNovaTab === NOVA_TAB_TYPE.aiVideo) {
       await resetPage();
     }

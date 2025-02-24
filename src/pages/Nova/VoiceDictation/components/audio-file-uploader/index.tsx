@@ -5,14 +5,10 @@ import GuideBox from 'components/nova/guide-box';
 import { AUDIO_SUPPORT_TYPE } from 'constants/fileTypes';
 import { NOVA_TAB_TYPE } from 'constants/novaTapTypes';
 import { ReactComponent as UploadDarkIcon } from 'img/dark/ico_upload_img_plus.svg';
-import CreditIcon from 'img/light/ico_credit_gray.svg';
 import { ReactComponent as UploadFileLightIcon } from 'img/light/nova/translation/file_upload.svg';
 import { useTranslation } from 'react-i18next';
-import { themeInfoSelector } from 'store/slices/theme';
-import { getLocalFiles, setLocalFiles } from 'store/slices/uploadFiles';
-import { userInfoSelector } from 'store/slices/userInfo';
-import { useAppDispatch, useAppSelector } from 'store/store';
-import styled from 'styled-components';
+import { setLocalFiles } from 'store/slices/uploadFiles';
+import { useAppDispatch } from 'store/store';
 import { formatDuration, getAudioDuration } from 'util/getAudioDuration';
 
 import { useVoiceDictationContext } from '../../provider/voice-dictation-provider';

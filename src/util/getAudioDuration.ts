@@ -1,20 +1,24 @@
-export const getAudioDuration = (audioFile: File): Promise<number> => {
+export const getAudioDuration = async (audioFile: File): Promise<number> => {
   return new Promise((resolve, reject) => {
-    const audioObj = new Audio();
-    audioObj.src = URL.createObjectURL(audioFile);
+    // AudioContext 생성 시 타입 에러 없이 사용 가능
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    console.log('audioContext', audioContext);
+    const reader = new FileReader();
 
-    // 메타데이터가 로드된 후에 duration을 얻을 수 있습니다
-    audioObj.addEventListener('loadedmetadata', () => {
-      const duration = audioObj.duration;
-      URL.revokeObjectURL(audioObj.src); // 메모리 누수 방지
-      resolve(duration);
-    });
+    reader.onload = async (event) => {
+      try {
+        const arrayBuffer = event.target?.result as ArrayBuffer;
+        const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
 
-    // 에러 처리
-    audioObj.addEventListener('error', (error) => {
-      URL.revokeObjectURL(audioObj.src);
-      reject(error);
-    });
+        resolve(audioBuffer.duration);
+        audioContext.close();
+      } catch (error) {
+        reject(error);
+      }
+    };
+
+    reader.onerror = (error) => reject(error);
+    reader.readAsArrayBuffer(audioFile);
   });
 };
 
