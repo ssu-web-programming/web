@@ -261,12 +261,6 @@ const callApi = (api: ApiType, arg?: string | number | object | boolean) => {
             }
             break;
           }
-          case 'getAudioPermission': {
-            if (window.webkit.messageHandlers.getAudioPermission) {
-              window.webkit.messageHandlers.getAudioPermission.postMessage(arg);
-            }
-            break;
-          }
           case 'closeNova': {
             if (window.webkit.messageHandlers.closeNova) {
               window.webkit.messageHandlers.closeNova.postMessage(arg);
@@ -650,12 +644,6 @@ export const useInitBridgeListener = () => {
             );
             break;
           }
-          // AOS 오디오 접근 권한 확인 로직
-          case 'audioPermissionState': {
-            dispatch(initLoadingSpinner());
-            dispatch(setIsMicrophoneState(body.isMicrophonePermission));
-            break;
-          }
 
           case 'closeNova': {
             dispatch(setIsClosedNovaState(true));
@@ -753,7 +741,6 @@ type ApiType =
   | 'downloadFile'
   | 'downloadVoiceFile'
   | 'getRecordingState'
-  | 'getAudioPermission'
   | 'closeNova';
 
 const Bridge = {

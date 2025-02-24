@@ -147,6 +147,7 @@ export default function TranslationIntro() {
           (translateInputValue.length > 0 || isTranslateActive) && sourceLang !== targetLang
         }
         onClick={handleTranslate}
+        creditAmount={type === 'TEXT' ? 20 : 100}
       />
     </>
   );

@@ -15,7 +15,8 @@ import {
   INVALID_PROMPT,
   NoCreditError,
   NoFileInDrive,
-  NovaNoCreditError
+  NovaNoCreditError,
+  TIME_OUT_ERROR
 } from '../../error/error';
 import { setOnlineStatus } from '../../store/slices/network';
 import { activeToast } from '../../store/slices/toastSlice';

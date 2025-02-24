@@ -49,11 +49,15 @@ export default function AudioFileUploader({
   };
 
   const audioDuration = async (file: File) => {
-    const duration = await getAudioDuration(file);
-    setSharedVoiceDictationInfo((prev) => ({
-      ...prev,
-      audioDuration: formatDuration(duration)
-    }));
+    try {
+      const duration = await getAudioDuration(file);
+      setSharedVoiceDictationInfo((prev) => ({
+        ...prev,
+        audioDuration: formatDuration(duration)
+      }));
+    } catch (e) {
+      console.log('터짐', e);
+    }
   };
 
   return (
