@@ -28,6 +28,7 @@ export default function ClosedModalContent({
   };
 
   const handleClose = async () => {
+    overlay.closeAll();
     await Bridge.callBridgeApi('getRecordingState', false);
     initializingRecording();
     dispatch(setIsClosedNovaState(false));
