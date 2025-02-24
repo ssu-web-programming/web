@@ -127,7 +127,7 @@ export default function TranslationIntro() {
           <S.FileUploaderWrapper>
             <TranslationFileUploader
               guideMsg={t('Nova.Translate.UploadGuide')}
-              creditCount={20}
+              creditCount={100}
               curTab={NOVA_TAB_TYPE.translation}
             />
           </S.FileUploaderWrapper>
