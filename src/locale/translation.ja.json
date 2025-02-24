@@ -658,6 +658,7 @@
     },
     "translation": {
       "Loading": "テキスト変換する",
+      "FileLoading": "ファイルを翻訳中...",
       "Menu": {
         "Title": "翻訳",
         "RecentLanguages": "最近の言語"

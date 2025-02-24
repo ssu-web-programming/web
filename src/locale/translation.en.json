@@ -658,6 +658,7 @@
     },
     "translation": {
       "Loading": "Converting to text",
+      "FileLoading": "Translating file…",
       "Menu": {
         "Title": "Translation",
         "RecentLanguages": "Recent languages"
