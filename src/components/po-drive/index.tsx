@@ -318,7 +318,9 @@ export default function PoDrive(props: PoDriveProps) {
             )}
             <span>
               {t('Nova.PoDrive.NoFile', {
-                type: t(`${props.target === 'nova-file' ? 'document' : 'image'}`)
+                type: t(
+                  `${props.target === 'nova-file' || props.target === 'nova-translation' ? 'document' : 'image'}`
+                )
               })}
             </span>
           </S.NoFile>
