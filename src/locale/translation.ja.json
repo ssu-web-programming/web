@@ -532,6 +532,9 @@
         "selectVoice": " 声の国籍と言語を一致させてください。",
         "addScript": " 声の国籍と言語を一致させてください。\n動画生成時間は文字数で変わります（100文字約5分）。"
       },
+      "ColorPicker": {
+        "bgColor": "背景色"
+      },
       "selectAvatar": {
         "stepTitle": "アバターを選択",
         "title": "アバターを選択",
