@@ -7,12 +7,18 @@ import CreditColorIcon from 'img/light/ico_credit_color_outline.svg';
 import CheckLightIcon from 'img/light/nova/check_purple.svg';
 import { ReactComponent as AudioFile } from 'img/light/nova/voiceDictation/audio_file.svg';
 import { ReactComponent as EditIcon } from 'img/light/nova/voiceDictation/edit.svg';
+import { overlay } from 'overlay-kit';
 import { useTranslation } from 'react-i18next';
 import { setError } from 'store/slices/errorSlice';
 import { themeInfoSelector } from 'store/slices/theme';
 import { getLocalFiles } from 'store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from 'store/store';
 
+import SurveyModalContent from '../../../../../components/nova/satisfactionSurvey/survey-modal-content';
+import OverlayModal from '../../../../../components/overlay-modal';
+import { NOVA_TAB_TYPE } from '../../../../../constants/novaTapTypes';
+import { selectPageCreditReceived } from '../../../../../store/slices/nova/pageStatusSlice';
+import { getCookie } from '../../../../../util/common';
 import {
   LangOptionValues,
   useVoiceDictationContext,
@@ -32,6 +38,7 @@ export default function VoiceDictationReady() {
   const dispatch = useAppDispatch();
   const errorHandle = useErrorHandle();
   const { t } = useTranslation();
+  const isCreditRecieved = useAppSelector(selectPageCreditReceived(NOVA_TAB_TYPE.translation));
 
   const [isEditMode, setIsEditMode] = useState(false);
   const localFiles = useAppSelector(getLocalFiles);
@@ -48,12 +55,28 @@ export default function VoiceDictationReady() {
     }));
   };
 
-  const handleMoveToResult = (result: VoiceDictationResult) => {
+  const handleMoveToResult = async (result: VoiceDictationResult) => {
+    await showSurveyModal();
     setSharedVoiceDictationInfo((prev) => ({
       ...prev,
       componentType: 'RESULT',
       voiceDictationResult: result
     }));
+  };
+
+  const showSurveyModal = async () => {
+    // 만족도 이벤트
+    if (!isCreditRecieved && !getCookie('dontShowSurvey')) {
+      overlay.closeAll();
+
+      overlay.open(({ isOpen, close }) => {
+        return (
+          <OverlayModal isOpen={isOpen} onClose={close} padding={'24px'}>
+            <SurveyModalContent />
+          </OverlayModal>
+        );
+      });
+    }
   };
 
   const handleErrorTrigger = ({ title, onRetry }: { title: string; onRetry?: () => void }) => {
@@ -88,7 +111,7 @@ export default function VoiceDictationReady() {
         return;
       }
 
-      handleMoveToResult(result);
+      await handleMoveToResult(result);
     } catch (error: any) {
       setSharedVoiceDictationInfo((prev) => ({
         ...prev,

@@ -9,7 +9,6 @@ import ReactPlayer from 'react-player';
 import { setOnlineStatus } from 'store/slices/network';
 import { css } from 'styled-components';
 
-import { apiWrapper } from '../../../api/apiWrapper';
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import CheckDarkIcon from '../../../img/dark/nova/check_purple.svg';
 import CreditColorIcon from '../../../img/light/ico_credit_color.svg';
@@ -20,7 +19,6 @@ import {
   resetPageResult,
   selectPageCreditReceived,
   selectPageResult,
-  selectPageService,
   setPageStatus
 } from '../../../store/slices/nova/pageStatusSlice';
 import { selectTabSlice } from '../../../store/slices/tabSlice';
