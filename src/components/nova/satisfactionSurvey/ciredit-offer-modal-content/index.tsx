@@ -21,7 +21,7 @@ export default function CreditOfferContent() {
   };
 
   const handleBuyCredit = () => {
-    Bridge.callBridgeApi('openWindow', '');
+    Bridge.callBridgeApi('openWindow', 'https://www.polarisoffice.com/ko/store');
   };
 
   return (
