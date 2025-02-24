@@ -70,12 +70,21 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
       const { downloadUrl } = result;
       handleMoveToFileResult({ downloadUrl });
     },
-    onError: (error) => {
+    onError: (error: any) => {
       setSharedTranslationInfo((prev) => ({
         ...prev,
         componentType: 'INTRO'
       }));
-      errorHandle(error);
+
+      if (error.code === 'Timeout') {
+        handleErrorTrigger({
+          title: '작업 시간이 초과되었습니다. \n 다시 시도해 주세요.',
+          onRetry: async () =>
+            await translationRequest({ file: await convertFileObject(), sourceLang, targetLang })
+        });
+      } else {
+        errorHandle(error);
+      }
     }
   });
 
@@ -104,7 +113,7 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
   const submitTextTranslate = async () => {
     triggerLoading();
     try {
-      const { response, headers } = await translationHttp.postTranslateText({
+      const { response } = await translationHttp.postTranslateText({
         text: translateInputValue,
         sourceLang,
         targetLang

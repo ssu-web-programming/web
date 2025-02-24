@@ -741,7 +741,6 @@ type ApiType =
   | 'downloadFile'
   | 'downloadVoiceFile'
   | 'getRecordingState'
-  | 'getAudioPermission'
   | 'closeNova';
 
 const Bridge = {

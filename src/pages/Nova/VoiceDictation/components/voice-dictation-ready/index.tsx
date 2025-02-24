@@ -89,12 +89,19 @@ export default function VoiceDictationReady() {
       }
 
       handleMoveToResult(result);
-    } catch (error) {
+    } catch (error: any) {
       setSharedVoiceDictationInfo((prev) => ({
         ...prev,
         componentType: 'VOICE_READY'
       }));
-      errorHandle(error);
+      if (error.code === 'Timeout') {
+        handleErrorTrigger({
+          title: '작업 시간이 초과되었습니다. \n 다시 시도해 주세요.',
+          onRetry: translationVoiceDictation
+        });
+      } else {
+        errorHandle(error);
+      }
     }
   };
   useEffect(() => {
