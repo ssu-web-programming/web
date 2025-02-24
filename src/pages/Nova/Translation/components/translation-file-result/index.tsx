@@ -4,10 +4,11 @@ import compareViewerIcon from 'img/light/nova/translation/book.svg';
 import downloadIcon from 'img/light/nova/translation/download.svg';
 import { useTranslation } from 'react-i18next';
 import { activeLoadingSpinner } from 'store/slices/loadingSpinner';
-import { useAppDispatch } from 'store/store';
+import { useAppDispatch, useAppSelector } from 'store/store';
 import { css } from 'styled-components';
 import Bridge, { ClientType, fileToString, getPlatform } from 'util/bridge';
 
+import { platformInfoSelector } from '../../../../../store/slices/platformInfo';
 import { useTranslationContext } from '../../provider/translation-provider';
 import FileItem from '../file-item';
 
@@ -29,6 +30,7 @@ interface DownloadFileArgs {
 export default function TranslationFileResult() {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
+  const { platform } = useAppSelector(platformInfoSelector);
 
   const {
     sharedTranslationInfo: {
@@ -74,7 +76,7 @@ export default function TranslationFileResult() {
         <FileItem fileName={translationFileName} />
       </S.FileItemWrapper>
       <S.ButtonGroup>
-        {(getPlatform() === ClientType.windows || getPlatform() === ClientType.mac) && (
+        {(platform === ClientType.windows || platform === ClientType.mac) && (
           <IconTextButton
             width={'full'}
             height={48}
