@@ -46,6 +46,7 @@ const NovaHome = (props: NovaHomeProps) => {
   useEffect(() => {
     if (location.state) {
       const { inputText } = location.state.body;
+      console.log('inputText: ', inputText);
       setInputContents(inputText);
     }
   }, [location.state]);

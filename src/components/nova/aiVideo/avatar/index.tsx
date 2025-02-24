@@ -40,6 +40,7 @@ import AvatarCard from '../component/AvatarCard';
 import SelectAvatar from '../component/SelectAvatar';
 
 import * as S from './style';
+import { LogoWrap } from './style';
 
 export default function Avatar() {
   const dispatch = useAppDispatch();
@@ -262,11 +263,13 @@ export default function Avatar() {
             <span>10</span>
           </S.CreditInfo>
         </Button>
-        <img
-          src={isLightMode ? HeyzenLogoLightIcon : HeyzenLogoDarkIcon}
-          alt="logo"
-          className="logo"
-        />
+        <S.LogoWrap>
+          <img
+            src={isLightMode ? HeyzenLogoLightIcon : HeyzenLogoDarkIcon}
+            alt="logo"
+            className="logo"
+          />
+        </S.LogoWrap>
       </S.Container>
 
       {isOpen && <SelectAvatar setIsOpen={setIsOpen} changeSelectedAvatar={changeSelectedAvatar} />}

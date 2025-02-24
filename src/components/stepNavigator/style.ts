@@ -25,7 +25,7 @@ export const Step = styled(Stepper).withConfig({
     )
 })<StepProps>`
   width: 100%;
-  padding: 16px 24px 4px;
+  padding: 16px 24px;
   transform: ${({ isStared, isFinished, width }) =>
     isStared
       ? `translateX(calc(50% - ${width / 2}px - 16px))`
