@@ -109,6 +109,10 @@ export default function useCurrentDocAnalysis() {
           dispatch(setPageStatus({ tab: selectedNovaTab, status: 'progress' }));
           Bridge.callBridgeApi('uploadFile');
         }
+      },
+      onCancel: {
+        text: t('Nova.Confirm.UploadFile.Cancel'),
+        callback: () => {}
       }
     });
   };
