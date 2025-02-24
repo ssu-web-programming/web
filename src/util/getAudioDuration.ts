@@ -1,8 +1,10 @@
 export const getAudioDuration = async (audioFile: File): Promise<number> => {
   return new Promise((resolve, reject) => {
     // AudioContext 생성 시 타입 에러 없이 사용 가능
+    console.log('context 확인!', window.webkitAudioContext);
+    console.log('생성 객ㅊ체 확인', new window.webkitAudioContext());
+
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    console.log('audioContext', audioContext);
     const reader = new FileReader();
 
     reader.onload = async (event) => {
