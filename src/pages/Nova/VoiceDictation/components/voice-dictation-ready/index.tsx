@@ -1,5 +1,6 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 import voiceDictationHttp from 'api/voice-dictation';
+import { useConfirm } from 'components/Confirm';
 import useErrorHandle from 'components/hooks/useErrorHandle';
 import Select from 'components/select';
 import CheckDarkIcon from 'img/dark/nova/check_purple.svg';
@@ -37,6 +38,7 @@ export default function VoiceDictationReady() {
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const dispatch = useAppDispatch();
   const errorHandle = useErrorHandle();
+  const confirm = useConfirm();
   const { t } = useTranslation();
   const isCreditRecieved = useAppSelector(selectPageCreditReceived(NOVA_TAB_TYPE.translation));
 
@@ -120,6 +122,12 @@ export default function VoiceDictationReady() {
       if (error.code === 'Timeout') {
         handleErrorTrigger({
           title: '작업 시간이 초과되었습니다. \n 다시 시도해 주세요.',
+          onRetry: translationVoiceDictation
+        });
+      } else if (error.code === '400') {
+        handleErrorTrigger({
+          title:
+            '변환된 받아쓰기 내용이 없어요.\n 음성 파일에 대화가 포함되어 있는지, 설정한 인식 언어가 음성과 같은 언어인지 확인해주세요.',
           onRetry: translationVoiceDictation
         });
       } else {
