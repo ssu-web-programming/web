@@ -6,6 +6,7 @@ import { ReactComponent as CloseDarkIcon } from 'img/dark/ico_nova_close.svg';
 import { ReactComponent as MessagePlusLightIcon } from 'img/light/ico_message_plus.svg';
 import { ReactComponent as CloseLightIcon } from 'img/light/ico_nova_close.svg';
 import { overlay } from 'overlay-kit';
+import { useTranslationContext } from 'pages/Nova/Translation/provider/translation-provider';
 import ClosedModalContent from 'pages/Nova/VoiceDictation/components/modals/closed-modal-content';
 import { useVoiceDictationContext } from 'pages/Nova/VoiceDictation/provider/voice-dictation-provider';
 import { Trans, useTranslation } from 'react-i18next';
@@ -70,6 +71,9 @@ export default function NovaHeader(props: NovaHeaderProps) {
     resetVoiceInfo,
     sharedVoiceDictationInfo: { isVoiceRecording, componentType, voiceDictationResult }
   } = useVoiceDictationContext();
+  const {
+    sharedTranslationInfo: { componentType: translationComponentType }
+  } = useTranslationContext();
 
   const isDisableBack =
     status !== 'progress' && status !== 'saving' && status !== 'loading' && creating != 'NOVA';
@@ -160,7 +164,10 @@ export default function NovaHeader(props: NovaHeaderProps) {
       const isClosedModalCondition =
         isVoiceRecording || componentType === 'VOICE_READY' || componentType === 'FILE_READY';
       // 녹음중 상태이면 아래 팝업을 열어여한다.
-      if (componentType === 'LOADING' && voiceDictationResult === null) {
+      if (
+        (componentType === 'LOADING' && voiceDictationResult === null) ||
+        translationComponentType === 'LOADING'
+      ) {
         return;
       }
 

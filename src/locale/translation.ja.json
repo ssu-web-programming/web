@@ -657,6 +657,7 @@
       "Loading": "テキスト変換する"
     },
     "translation": {
+      "Loading": "テキスト変換する",
       "Menu": {
         "Title": "翻訳",
         "RecentLanguages": "最近の言語"
@@ -672,7 +673,7 @@
       },
       "Input": {
         "Placeholder": "翻訳するコンテンツを入力してください。",
-        "CharacterCount": "0文字 / 10,000文字"
+        "CharacterCount": "文字 / 10,000文字"
       },
       "Guide": {
         "MaxCharacters": "入力できる文字数は最大10,000文字です。",
