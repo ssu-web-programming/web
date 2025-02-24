@@ -1,5 +1,4 @@
 import { useConfirm } from 'components/Confirm';
-import { useTranslationContext } from 'pages/Nova/Translation/provider/translation-provider';
 import { useTranslation } from 'react-i18next';
 import { setPageStatus } from 'store/slices/nova/pageStatusSlice';
 import { platformInfoSelector } from 'store/slices/platformInfo';

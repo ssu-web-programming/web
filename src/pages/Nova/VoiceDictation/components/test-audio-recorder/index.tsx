@@ -7,6 +7,8 @@ import { ReactComponent as DarkStop } from 'img/dark/nova/voice-dictation/stop.s
 import { ReactComponent as Lang } from 'img/light/nova/voiceDictation/lang.svg';
 import { ReactComponent as Stop } from 'img/light/nova/voiceDictation/stop.svg';
 import { useTranslation } from 'react-i18next';
+import { appStateSelector } from 'store/slices/appState';
+import { useAppSelector } from 'store/store';
 
 import { useAudioRecorder } from '../../provider/audio-recorder-provider';
 import { LangOptionValues } from '../../provider/voice-dictation-provider';
@@ -30,6 +32,7 @@ const TestAudioRecorder: React.FC<AudioRecorderProps> = ({
   openLangOverlay
 }) => {
   const { t } = useTranslation();
+  const { isRecordState } = useAppSelector(appStateSelector);
   const {
     isPaused,
     recordingTime,
@@ -71,6 +74,14 @@ const TestAudioRecorder: React.FC<AudioRecorderProps> = ({
       }
     }
   }, [isInitRecording]);
+
+  useEffect(() => {
+    if (isRecordState === 'pause') {
+      pauseRecording();
+    } else if (isRecordState === 'start') {
+      resumeRecording();
+    }
+  }, [isRecordState]);
 
   return (
     <S.Container>
