@@ -3,10 +3,13 @@ import translationHttp, {
   PostTranslateDocument,
   TranslateDocumentResponse
 } from 'api/translation';
+import { useConfirm } from 'components/Confirm';
 import useErrorHandle from 'components/hooks/useErrorHandle';
 import { usePolling } from 'hooks/use-polling';
 import { overlay } from 'overlay-kit';
+import { useTranslation } from 'react-i18next';
 import { setError } from 'store/slices/errorSlice';
+import { getDriveFiles } from 'store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import { calLeftCredit, getCookie } from 'util/common';
 
@@ -59,9 +62,12 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
     triggerLoading,
     sharedTranslationInfo: { sourceLang, targetLang, isSwitchActive }
   } = useTranslationContext();
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const errorHandle = useErrorHandle();
   const isCreditRecieved = useAppSelector(selectPageCreditReceived(NOVA_TAB_TYPE.translation));
+  const driveFiles = useAppSelector(getDriveFiles);
+  const confirm = useConfirm();
 
   // 데이터 정제 작업을 위한 Hook
   const { convertFileObject, isDriveActive, sanitizedOriginFile } = useSanitizedDrive();
@@ -186,9 +192,32 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
 
   const submitFileTranslate = async () => {
     triggerLoading();
+    // 손상된 여부 파악 로직!
+    const { data } = await translationHttp.postCheckOpenStatus({
+      fileId: driveFiles[0].fileId,
+      fileRevision: driveFiles[0].fileRevision
+    });
+
+    if (data.status === 'UNOPENABLE_DOCUMENT' || data.status === 'PASSWORD') {
+      setSharedTranslationInfo((prev) => ({
+        ...prev,
+        componentType: 'INTRO'
+      }));
+
+      await confirm({
+        msg: t('Nova.Alert.UnopenableDocError')!,
+        onOk: {
+          text: t('Confirm'),
+          callback: () => {}
+        }
+      });
+      return;
+    }
+
+    const file = await convertFileObject();
 
     try {
-      await translationRequest({ file: await convertFileObject(), sourceLang, targetLang });
+      await translationRequest({ file, sourceLang, targetLang });
     } catch (e) {
       handleErrorTrigger({ title: '오류가 발생했습니다. 잠시 후 다시 시작해주세요.' });
     }

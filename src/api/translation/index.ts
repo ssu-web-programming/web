@@ -3,7 +3,8 @@ import {
   NOVA_TRANSLATE_DOCUMENT,
   NOVA_TRANSLATE_DOCUMENT_CHECK_STATUS,
   NOVA_TRANSLATE_LATEST_LANG,
-  NOVA_TRANSLATE_TEXT
+  NOVA_TRANSLATE_TEXT,
+  PO_DRIVE_DOC_OPEN_STATUS
 } from 'api/constant';
 
 interface PostTranslateText {
@@ -92,6 +93,22 @@ const translationHttp = {
       throw response.error;
     }
 
+    return response;
+  },
+  postCheckOpenStatus: async ({ fileId, fileRevision }: any) => {
+    const { res } = await apiWrapper().request(PO_DRIVE_DOC_OPEN_STATUS, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ fileId, fileRevision }),
+      method: 'POST'
+    });
+    const response = await res.json();
+    if (!response.success) {
+      throw response.error;
+    }
+
+    console.log('response', response);
     return response;
   }
 };
