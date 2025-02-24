@@ -57,6 +57,8 @@ export const TRANSLATION_SUPPORT_TYPE: SupportFileType[] = [
   }
 ];
 
+export const TRANSLATION_EXTENSION_TYPE = ['.docx', '.pptx', '.pdf'];
+
 export const AUDIO_SUPPORT_TYPE: SupportFileType[] = [
   {
     mimeType: 'audio/mp4',
