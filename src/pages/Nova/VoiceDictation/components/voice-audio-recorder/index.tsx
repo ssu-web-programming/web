@@ -1,9 +1,6 @@
-// VoiceAudioRecorder.tsx
-import React from 'react';
 import OverlayModal from 'components/overlay-modal';
 import { overlay } from 'overlay-kit';
 import { setIsMicrophoneState } from 'store/slices/appState';
-import { selectNovaTab } from 'store/slices/tabSlice';
 import { useAppDispatch } from 'store/store';
 import Bridge from 'util/bridge';
 
