@@ -93,8 +93,9 @@ export default function VoiceDictationIntro() {
           onNext={handleMoveToFileReady}
         />
       </Guide>
-
-      <S.StyledClova />
+      <S.ClovaContainer>
+        <S.StyledClova />
+      </S.ClovaContainer>
     </>
   );
 }
@@ -112,10 +113,16 @@ const S = {
     background: ${({ theme }) => theme.color.background.gray01};
     border: 1px solid ${({ theme }) => theme.color.border.gray01};
   `,
+  ClovaContainer: styled.div`
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 16px;
+    margin-top: 16px;
+    height: 24px;
+    margin-bottom: 30px;
+  `,
   StyledClova: styled(Clova)`
-    position: absolute;
-    bottom: 34px;
-    right: 16px;
+    position: static;
     & path {
       fill: ${({ theme }) => theme.color.text.gray04};
     }
