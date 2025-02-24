@@ -532,6 +532,9 @@
         "selectVoice": "The voice's nationality must match the script language.",
         "addScript": "The voice's nationality must match the script language.\nVideo creation time varies (about 5 min per 100 characters)."
       },
+      "ColorPicker": {
+        "bgColor": "Background color"
+      },
       "selectAvatar": {
         "stepTitle": "Select Avatar",
         "title": "Select Avatar",

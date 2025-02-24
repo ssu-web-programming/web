@@ -62,7 +62,7 @@ export default function AvatarCard({
             right: 12px;
           `}>
           <ColorPicker
-            title="배경 색상"
+            title={t('Nova.aiVideo.ColorPicker.bgColor')}
             color={result?.info.selectedAvatar?.background_color ?? ''}
             setColor={(color: string) => selectAvatarBackground(color)}
           />

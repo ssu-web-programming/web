@@ -34,6 +34,7 @@ export const Title = styled.span`
   font-weight: 700;
   line-height: 30px;
   color: ${({ theme }) => theme.color.text.gray04};
+  text-transform: none;
 `;
 
 export const ColorPickerWrap = styled.div`

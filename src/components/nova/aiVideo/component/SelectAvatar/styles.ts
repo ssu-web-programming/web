@@ -20,7 +20,7 @@ export const Container = styled.div<{
   background-color: ${({ theme }) => theme.color.background.gray05};
   z-index: 100;
   box-shadow: 0 8px 16px 0 #0000001a;
-  border-radius: height: ${({ $isMobile }) => ($isMobile ? '16px' : 'unset')};
+  border-radius: ${({ $isMobile }) => ($isMobile ? 'unset' : '16px')};
 `;
 
 export const TitleWrap = styled.div`
