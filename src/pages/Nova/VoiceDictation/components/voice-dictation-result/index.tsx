@@ -81,7 +81,7 @@ export default function VoiceDictationResult() {
                     {t('Nova.voiceDictation.Status.Participant')}
                     {transcript.speaker.name}
                   </S.TranscriptName>
-                  <S.TranscriptTime>{formatMilliseconds(transcript.end)}</S.TranscriptTime>
+                  <S.TranscriptTime>{formatMilliseconds(transcript.start)}</S.TranscriptTime>
                 </S.TranscriptInfo>
                 <S.TranscriptText>{transcript.text}</S.TranscriptText>
               </S.TranscriptContent>

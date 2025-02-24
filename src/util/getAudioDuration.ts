@@ -1,23 +1,45 @@
 export const getAudioDuration = async (audioFile: File): Promise<number> => {
   return new Promise((resolve, reject) => {
-    // AudioContext 생성 시 타입 에러 없이 사용 가능
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    console.log('audioContext', audioContext);
+    // iOS Safari 호환성을 위한 조치
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    const audioContext = new AudioContext();
     const reader = new FileReader();
 
-    reader.onload = async (event) => {
-      try {
-        const arrayBuffer = event.target?.result as ArrayBuffer;
-        const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+    reader.onload = () => {
+      // 명시적 타입 체크 및 방어 코드 추가
+      if (!reader.result || !(reader.result instanceof ArrayBuffer)) {
+        reject(new Error('Failed to read file as ArrayBuffer'));
+        return;
+      }
 
-        resolve(audioBuffer.duration);
-        audioContext.close();
+      // iOS Safari 호환성을 위해 try-catch로 감싸고 Promise API 활용
+      try {
+        // 구형 callback API 대신 Promise API 사용 (iOS에서 더 안정적)
+        audioContext.decodeAudioData(
+          reader.result,
+          (audioBuffer) => {
+            resolve(audioBuffer.duration);
+            audioContext.close().catch(console.error);
+          },
+          (error) => {
+            console.error('Audio decoding failed:', error);
+            reject(new Error('Audio decoding failed'));
+            audioContext.close().catch(console.error);
+          }
+        );
       } catch (error) {
+        console.error('Error during audio processing:', error);
         reject(error);
+        audioContext.close().catch(console.error);
       }
     };
 
-    reader.onerror = (error) => reject(error);
+    reader.onerror = (error) => {
+      console.error('FileReader error:', error);
+      reject(error);
+    };
+
+    // 명시적으로 ArrayBuffer로 읽기
     reader.readAsArrayBuffer(audioFile);
   });
 };

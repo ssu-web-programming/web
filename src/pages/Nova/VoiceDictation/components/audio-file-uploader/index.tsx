@@ -50,6 +50,7 @@ export default function AudioFileUploader({
 
   const audioDuration = async (file: File) => {
     try {
+      console.log('file', file);
       const duration = await getAudioDuration(file);
 
       setSharedVoiceDictationInfo((prev) => ({
@@ -69,7 +70,7 @@ export default function AudioFileUploader({
         ref={inputRef}
         onClick={handleClickFileUpload}
         handleOnChange={async (files) => {
-          await dispatch(setLocalFiles(files));
+          dispatch(setLocalFiles(files));
           await audioDuration(files[0]);
           onNext?.();
         }}>

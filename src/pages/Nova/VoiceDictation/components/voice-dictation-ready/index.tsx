@@ -150,8 +150,6 @@ export default function VoiceDictationReady() {
     }
   }, [localFiles]);
 
-  console.log('audioDuration', audioDuration);
-
   return (
     <S.Wrapper>
       <S.Container>
