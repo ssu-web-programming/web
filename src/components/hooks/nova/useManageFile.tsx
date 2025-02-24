@@ -14,6 +14,7 @@ import {
   MIN_FILE_UPLOAD_SIZE_KB,
   SUPPORT_DOCUMENT_TYPE,
   SupportFileType,
+  TRANSLATION_EXTENSION_TYPE,
   TRANSLATION_SUPPORT_TYPE
 } from '../../../constants/fileTypes';
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
@@ -63,9 +64,10 @@ export function useManageFile({ onFinishCallback, onClearPastedImages }: Props =
 
     files.forEach((file) => {
       let isFileValid = true;
-
+      const fileName = file.name.toLowerCase();
+      const extractFileType = fileName.slice(fileName.lastIndexOf('.'));
       // 파일 타입 검사
-      if (!ALLOWED_MIME_TYPES.includes(file.type)) {
+      if (!TRANSLATION_EXTENSION_TYPE.includes(extractFileType)) {
         console.log('file', file.type);
         isFileValid = false;
         result.invalidReason.type.push(file);
@@ -300,6 +302,7 @@ export function useManageFile({ onFinishCallback, onClearPastedImages }: Props =
           const ext = getFileExtension(item.fileName).toLowerCase();
           const supports =
             target === 'nova-image' ? getValidExt(selectedNovaTab) : SUPPORT_DOCUMENT_TYPE;
+          console.log('supports', supports);
           const type = supports.find((type: SupportFileType) => type.extensions === ext)?.mimeType;
 
           return {
