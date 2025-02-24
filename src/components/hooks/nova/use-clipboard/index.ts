@@ -150,11 +150,19 @@ export default function useClipboard({
     handlePaste(e);
   };
 
+  const addGlobalPasteListener = () => {
+    document.addEventListener('paste', handleGlobalPaste);
+  };
+
+  const removeGlobalPasteListener = () => {
+    document.removeEventListener('paste', handleGlobalPaste);
+  };
+
   // 컴포넌트 마운트/언마운트 시 이벤트 리스너 관리
   useEffect(() => {
-    document.addEventListener('paste', handleGlobalPaste);
+    addGlobalPasteListener();
     return () => {
-      document.removeEventListener('paste', handleGlobalPaste);
+      removeGlobalPasteListener();
     };
   }, []);
 
@@ -170,6 +178,7 @@ export default function useClipboard({
     pastedImages,
     pastedImagesAsFileType,
     handleRemovePastedImages,
-    handleClearPastedImages
+    handleClearPastedImages,
+    removeGlobalPasteListener
   };
 }

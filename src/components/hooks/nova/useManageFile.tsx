@@ -181,7 +181,7 @@ export function useManageFile({ onFinishCallback, onClearPastedImages }: Props =
     }
 
     const supportedExtensions =
-      selectedNovaTab === 'aiChat'
+      selectedNovaTab === NOVA_TAB_TYPE.home || NOVA_TAB_TYPE.aiChat
         ? [
             ...SUPPORT_DOCUMENT_TYPE.flatMap((type) => type.extensions),
             ...getValidExt(selectedNovaTab).flatMap((type) => type.extensions)

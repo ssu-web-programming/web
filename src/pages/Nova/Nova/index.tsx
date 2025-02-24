@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import Announcement from '../../../components/Announcement';
 import { useConfirm } from '../../../components/Confirm';
+import useClipboard from '../../../components/hooks/nova/use-clipboard';
 import { useChangeBackground } from '../../../components/hooks/nova/useChangeBackground';
 import { useChangeStyle } from '../../../components/hooks/nova/useChangeStyle';
 import { useConvert2DTo3D } from '../../../components/hooks/nova/useConvert2DTo3D';
@@ -65,6 +66,7 @@ export default function Nova() {
   const { goThemePage } = useChangeStyle();
   const { handleAgreement } = usePrivacyConsent();
   const { loadLocalFile } = useManageFile();
+  const { removeGlobalPasteListener } = useClipboard();
   const chatNova = useChatNova();
   const [expiredNOVA, setExpiredNOVA] = useState<boolean>(false);
   const [fileUploadState, setFileUploadState] = useState<FileUploadState>({
@@ -84,6 +86,7 @@ export default function Nova() {
 
   useEffect(() => {
     if (expiredNOVA) {
+      removeGlobalPasteListener();
       confirm({
         title: '',
         msg: t('Nova.Alert.ExpiredNOVA'),

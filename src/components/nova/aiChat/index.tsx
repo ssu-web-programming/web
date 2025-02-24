@@ -189,7 +189,6 @@ const AIChat = (props: AIChatProps) => {
         }),
         method: 'POST'
       });
-      console.log(chatMode);
       const response = await res.json();
       const url = {
         text: `${window.location.origin}/Nova/share/${response.data.shareId}?lang=${lang}`
