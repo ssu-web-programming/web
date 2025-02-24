@@ -53,13 +53,7 @@ export const useTranslationContext = () => {
 export function TranslationProvider({ children }: Props) {
   // const searchParams = new URLSearchParams(window.location.search);
 
-  console.log('window params', window);
-
   // const lang = searchParams.get('lang');
-
-  console.log('langCode', langCode);
-  console.log('lang', lang);
-  console.log('langFormatCode', langFormatCode);
 
   const getSourceLang = () => {
     if (lang === 'ja') {
