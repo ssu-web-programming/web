@@ -977,7 +977,8 @@
     "Toast": {
       "ConsumeCredit": "{{deductionCredit}} creditが使用されました。\n残りのcredit:{{leftCredit}}",
       "SelectDoc": "分析するドキュメントを選択してください。",
-      "SelectImg": "分析したい画像を選んでください。"
+      "SelectImg": "分析したい画像を選んでください。",
+      "SelectTranslationFile": "번역하고 싶은 문서를 선택해 보세요."
     }
   }
 }

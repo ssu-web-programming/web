@@ -189,10 +189,17 @@ export default function PoDrive(props: PoDriveProps) {
 
   useEffect(() => {
     initFileList();
+
     dispatch(
       activeToast({
         type: 'info',
-        msg: t(props.target === 'nova-file' ? 'Nova.Toast.SelectDoc' : 'Nova.Toast.SelectImg')
+        msg: t(
+          props.target === 'nova-file'
+            ? 'Nova.Toast.SelectDoc'
+            : props.target === 'nova-translation'
+              ? 'Nova.Toast.SelectTranslationFile'
+              : 'Nova.Toast.SelectImg'
+        )
       })
     );
   }, []);
