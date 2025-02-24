@@ -3,7 +3,7 @@ import { platformInfoSelector } from 'store/slices/platformInfo';
 import { setLocalFiles } from 'store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import { ClientType } from 'util/bridge';
-import { blobToFile } from 'util/getAudioDuration';
+import { blobToFile, formatCurrentTime, formatDuration } from 'util/getAudioDuration';
 import { convertWebmToWavFile } from 'util/getAudioDuration';
 
 import { useVoiceDictationContext } from '../voice-dictation-provider';
@@ -13,7 +13,6 @@ interface AudioRecorderContextType {
   isPaused: boolean;
   recordingTime: number;
   audioUrl: string | null;
-  audioDuration: number | null;
   startRecording: () => Promise<void>;
   stopRecording: (onConfirm?: () => Promise<boolean>) => Promise<void>;
   pauseRecording: () => void;
@@ -106,14 +105,10 @@ const draw = (
   }
 };
 
-export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({
-  children
-  // onRecordingComplete
-}) => {
+export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({ children }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
-  const [audioDuration, setAudioDuration] = useState<number | null>(null);
   const [recordingTime, setRecordingTime] = useState<number>(0);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -135,6 +130,14 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({
     setSharedVoiceDictationInfo((prev) => ({
       ...prev,
       componentType: 'VOICE_READY'
+    }));
+  };
+
+  const handleSetAudioDuration = (duration: number) => {
+    setSharedVoiceDictationInfo((prev) => ({
+      ...prev,
+      audioDuration: formatDuration(duration),
+      currentTime: formatCurrentTime()
     }));
   };
 
@@ -216,7 +219,8 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({
             audioContext.decodeAudioData(
               arrayBuffer,
               function (buffer) {
-                setAudioDuration(buffer.duration);
+                const duration = buffer.duration;
+                handleSetAudioDuration(duration);
                 resolve(buffer.duration);
               },
               function (error) {
@@ -253,7 +257,6 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({
       startVisualization(stream);
       setIsRecording(true);
       setIsPaused(false);
-      setAudioDuration(null);
       setRecordingTime(0);
       startTimer();
     } catch (error) {
@@ -351,7 +354,6 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({
         isPaused,
         recordingTime,
         audioUrl,
-        audioDuration,
         startRecording,
         stopRecording,
         pauseRecording,

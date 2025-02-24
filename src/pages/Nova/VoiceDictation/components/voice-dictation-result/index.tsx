@@ -21,7 +21,7 @@ import * as S from './style';
 
 export default function VoiceDictationResult() {
   const {
-    sharedVoiceDictationInfo: { voiceDictationResult, audioDuration }
+    sharedVoiceDictationInfo: { voiceDictationResult, audioDuration, currentTime }
   } = useVoiceDictationContext();
   const localFiles = useAppSelector(getLocalFiles);
   const { isLightMode } = useAppSelector(themeInfoSelector);
@@ -65,7 +65,9 @@ export default function VoiceDictationResult() {
         <S.TranscriptContainer>
           <S.NewTranscript>
             <span>{t('Nova.voiceDictation.Button.NewDictation')}</span>
-            <span>오늘 오후 10:57 · {audioDuration}</span>
+            <span>
+              {currentTime} · {audioDuration}
+            </span>
           </S.NewTranscript>
 
           {voiceDictationResult?.data.segments.map((transcript, idx) => (
@@ -79,7 +81,7 @@ export default function VoiceDictationResult() {
                     {t('Nova.voiceDictation.Status.Participant')}
                     {transcript.speaker.name}
                   </S.TranscriptName>
-                  <S.TranscriptTime>{formatMilliseconds(transcript.end)}</S.TranscriptTime>
+                  <S.TranscriptTime>{formatMilliseconds(transcript.start)}</S.TranscriptTime>
                 </S.TranscriptInfo>
                 <S.TranscriptText>{transcript.text}</S.TranscriptText>
               </S.TranscriptContent>
