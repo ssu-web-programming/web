@@ -509,7 +509,6 @@ export default function InputBar(props: InputBarProps) {
 
 export const getFileIcon = (name: string) => {
   const fileExt = name.includes('.') ? name.split('.').pop() : name;
-
   if (!fileExt) return null;
 
   const fileIconMap: { [key: string]: string } = {

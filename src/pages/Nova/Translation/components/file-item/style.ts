@@ -10,6 +10,7 @@ const Wrapper = styled.div`
 const FileName = styled.p`
   text-align: center;
   color: ${({ theme }) => theme.color.text.gray03};
+  margin-top: 8px;
 `;
 
 export { FileName, Wrapper };
