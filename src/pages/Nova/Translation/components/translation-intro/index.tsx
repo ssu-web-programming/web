@@ -5,6 +5,7 @@ import { ReactComponent as CloseLightIcon } from 'img/light/ico_nova_close.svg';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { activeToast } from 'store/slices/toastSlice';
+import { setDriveFiles } from 'store/slices/uploadFiles';
 import { useAppDispatch } from 'store/store';
 import { css } from 'styled-components';
 import { getLangFromLangCode } from 'util/translation';
@@ -82,6 +83,14 @@ export default function TranslationIntro() {
       setTranslateInputValue(location.state.body);
     }
   }, [location.state?.body]);
+
+  useEffect(() => {
+    if (type === 'TEXT') {
+      dispatch(setDriveFiles([]));
+    } else if (type === 'FILE') {
+      setTranslateInputValue('');
+    }
+  }, [type]);
 
   return (
     <>
