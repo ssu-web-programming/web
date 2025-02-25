@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
 import { useConfirm } from 'components/Confirm';
+import { useVoiceDictationContext } from 'pages/Nova/VoiceDictation/provider/voice-dictation-provider';
 import { useTranslation } from 'react-i18next';
 import { activeLoadingSpinner, initLoadingSpinner } from 'store/slices/loadingSpinner';
 import { uploadFiles } from 'util/files';
@@ -8,6 +9,7 @@ import { apiWrapper } from '../../../api/apiWrapper';
 import { PO_DRIVE_FILEINFO, PO_DRIVE_LIST } from '../../../api/constant';
 import {
   ALLOWED_MIME_TYPES,
+  AUDIO_SUPPORT_TYPE,
   getMaxFileSize,
   getValidExt,
   isValidFileSize,
@@ -50,6 +52,7 @@ export function useManageFile({ onFinishCallback, onClearPastedImages }: Props =
   const novaHistory = useAppSelector(novaHistorySelector);
   const { getMaxFilesPerUpload, getAvailableFileCnt } = useUserInfoUtils();
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
+  const { handleAudioDuration, moveToFileReady } = useVoiceDictationContext();
 
   const validateFiles = (files: File[], maxFileSize: number): ValidationResult => {
     const result: ValidationResult = {
@@ -135,7 +138,6 @@ export function useManageFile({ onFinishCallback, onClearPastedImages }: Props =
 
   const uploadTranslationFile = async (files: File[], maxFileSize: number) => {
     const isValid = await validateFileUpload(files, maxFileSize);
-    console.log('isValid', isValid);
     if (!isValid) return;
     await confirmTranslationUploadFile(files);
   };
@@ -181,7 +183,7 @@ export function useManageFile({ onFinishCallback, onClearPastedImages }: Props =
     }
 
     const supportedExtensions =
-      selectedNovaTab === NOVA_TAB_TYPE.home || NOVA_TAB_TYPE.aiChat
+      selectedNovaTab === NOVA_TAB_TYPE.home || selectedNovaTab === NOVA_TAB_TYPE.aiChat
         ? [
             ...SUPPORT_DOCUMENT_TYPE.flatMap((type) => type.extensions),
             ...getValidExt(selectedNovaTab).flatMap((type) => type.extensions)
@@ -191,22 +193,24 @@ export function useManageFile({ onFinishCallback, onClearPastedImages }: Props =
               ...TRANSLATION_SUPPORT_TYPE.flatMap((type) => type.extensions),
               ...getValidExt(selectedNovaTab).flatMap((type) => type.extensions)
             ]
-          : [...getValidExt(selectedNovaTab).flatMap((type) => type.extensions)];
+          : selectedNovaTab === NOVA_TAB_TYPE.voiceDictation
+            ? [...AUDIO_SUPPORT_TYPE.flatMap((type) => type.extensions)]
+            : [...getValidExt(selectedNovaTab).flatMap((type) => type.extensions)];
 
     const invalidFiles = files.filter((file) => {
       const fileExtension = `.${file.name.split('.').pop()?.toLowerCase()}`;
       return !supportedExtensions.includes(fileExtension);
     });
-
     const support = supportedExtensions.filter((ext) => ext !== '.jpeg').join(', ');
-
     if (invalidFiles.length > 0) {
       await confirm({
         title: '',
         msg:
           selectedNovaTab === 'aiChat'
             ? t('Nova.Alert.CommonUnsupportFile')
-            : t(`Nova.Alert.CommonUnsupportImage`, { support }),
+            : selectedNovaTab === 'voiceDictation'
+              ? t('Nova.translation.Alert.CommonUnsupportVoiceFile')
+              : t(`Nova.Alert.CommonUnsupportImage`, { support }),
         onOk: {
           text: t('Confirm'),
           callback: () => {
@@ -231,6 +235,13 @@ export function useManageFile({ onFinishCallback, onClearPastedImages }: Props =
         }
       });
       return;
+    }
+
+    if (selectedNovaTab === NOVA_TAB_TYPE.voiceDictation) {
+      if (handleAudioDuration && files.length > 0) {
+        await handleAudioDuration(files[0]); // 오디오 파일 처리
+      }
+      moveToFileReady?.(); // onNext 함수 호출
     }
 
     dispatch(setLocalFiles(files));

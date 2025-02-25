@@ -785,7 +785,8 @@
         "CharacterLimit": "Exceeds limit. Reduce text and retry.",
         "EncryptedDocument": "Encrypted documents cannot be queried. Please check the document again.",
         "DamagedDocument": "Damaged documents cannot be queried. Please check the document again.",
-        "CommonUnsupportFile": "This file format is not supported.\nPlease check the supported file formats and try again.\n\n- Documents : docx, pptx, pdf"
+        "CommonUnsupportFile": "This file format is not supported.\nPlease check the supported file formats and try again.\n\n- Documents : docx, pptx, pdf",
+        "CommonUnsupportVoiceFile": "This file format is not supported.\nPlease check the supported file formats and try again.\n\n- Documents : m4a, mp3 , aac , wav"
       },
       "FileUpload": {
         "Guide": {

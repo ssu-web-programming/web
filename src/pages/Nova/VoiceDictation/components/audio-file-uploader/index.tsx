@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { useConfirm } from 'components/Confirm';
 import FileButton from 'components/FileButton';
+import useManageFile from 'components/hooks/nova/useManageFile';
 import { getAccept } from 'components/nova/FileUploader';
 import GuideBox from 'components/nova/guide-box';
 import OverlayModal from 'components/overlay-modal';
@@ -29,9 +30,7 @@ interface ImageUploaderProps {
   onNext?: () => void;
 }
 
-export default function AudioFileUploader({ guideMsg, onNext }: ImageUploaderProps) {
-  const { setSharedVoiceDictationInfo } = useVoiceDictationContext();
-  const dispatch = useAppDispatch();
+export default function AudioFileUploader({ guideMsg }: ImageUploaderProps) {
   const { platform } = useAppSelector(platformInfoSelector);
   const confirm = useConfirm();
 
@@ -72,17 +71,10 @@ export default function AudioFileUploader({ guideMsg, onNext }: ImageUploaderPro
     }
   };
 
-  const audioDuration = async (file: File) => {
-    try {
-      const duration = await getAudioDuration(file);
+  const { loadLocalFile } = useManageFile({});
 
-      setSharedVoiceDictationInfo((prev) => ({
-        ...prev,
-        audioDuration: formatDuration(duration)
-      }));
-    } catch (e) {
-      console.log('터짐', e);
-    }
+  const handleChange = async (files: File[]) => {
+    await loadLocalFile(files);
   };
 
   return (
@@ -92,11 +84,7 @@ export default function AudioFileUploader({ guideMsg, onNext }: ImageUploaderPro
         accept={getAccept(AUDIO_SUPPORT_TYPE)}
         ref={inputRef}
         onClick={handleClickFileUpload}
-        handleOnChange={async (files) => {
-          dispatch(setLocalFiles(files));
-          await audioDuration(files[0]);
-          onNext?.();
-        }}>
+        handleOnChange={handleChange}>
         <GuideBox
           guideMsg={guideMsg}
           guideTitle={t('Nova.voiceDictation.Button.UploadFile')}

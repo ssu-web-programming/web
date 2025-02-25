@@ -1,4 +1,5 @@
 import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState } from 'react';
+import { formatDuration, getAudioDuration } from 'util/getAudioDuration';
 
 export type VoiceDictationComponentType =
   | 'INTRO'
@@ -55,6 +56,8 @@ interface VoiceDictationContextType {
   setSharedVoiceDictationInfo: Dispatch<SetStateAction<SharedVoiceDictationInfo>>;
   triggerLoading: () => void;
   resetVoiceInfo: () => void;
+  handleAudioDuration: (file: File) => Promise<void>; // 추가
+  moveToFileReady: () => void; // 추가
 }
 
 export const VoiceDictationContext = createContext<VoiceDictationContextType | null>(null);
@@ -100,13 +103,36 @@ export default function VoiceDictationProvider({ children }: Props) {
     });
   };
 
+  // 새로 추가하는 함수들
+  const handleAudioDuration = async (file: File) => {
+    try {
+      const duration = await getAudioDuration(file);
+      setSharedVoiceDictationInfo((prev) => ({
+        ...prev,
+        audioDuration: formatDuration(duration),
+        fileName: file.name // 파일 이름도 함께 저장
+      }));
+    } catch (e) {
+      console.log('오디오 처리 오류:', e);
+    }
+  };
+
+  const moveToFileReady = () => {
+    setSharedVoiceDictationInfo((prev) => ({
+      ...prev,
+      componentType: 'FILE_READY'
+    }));
+  };
+
   return (
     <VoiceDictationContext.Provider
       value={{
         sharedVoiceDictationInfo,
         setSharedVoiceDictationInfo,
         triggerLoading,
-        resetVoiceInfo
+        resetVoiceInfo,
+        handleAudioDuration, // 새로 추가한 함수
+        moveToFileReady // 새로 추가한 함수
       }}>
       {children}
     </VoiceDictationContext.Provider>
