@@ -629,7 +629,7 @@
         "Downloading": "音声ファイルをダウンロードしています。（NN%）",
         "FileFormatSelection": "どのファイル形式で保存しますか?",
         "iPhoneGuideTitle": "iPhone録音ファイルを見つける方法",
-        "iPhoneGuideContent": "デフォルトのiPhoneレコーダーで録音されたファイルが、\niCloud DriveまたはiPhone上に保存されている場合のみ\nアップロードできます。",
+        "iPhoneGuideContent": "デフォルトのiPhoneレコーダーで録音されたファイルが、 iCloud DriveまたはiPhone上に保存されている場合のみ アップロードできます。",
         "FileSizeError": "ファイルサイズが大きすぎます。\nサイズが1 GB未満のファイルのみを選択してください。",
         "NotFoundMic": "マイクデバイスが見つかりません",
         "NotFoundMicDetail": "使用可能なマイクが検出されませんでした。正確な音声入力のために、マイクを接続するか、デバイスの設定で有効にしてください。",
