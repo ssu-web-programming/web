@@ -205,6 +205,7 @@ export default function Avatar() {
             </S.TitleWrap>
             <S.AvartarList>
               {result?.info.avatars &&
+                result?.info?.selectedAvatar.avatar &&
                 result?.info.avatars.slice(0, 4).map((avatar: Avatars) => (
                   <S.AvartarContainer
                     key={avatar.avatar_id}
