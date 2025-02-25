@@ -115,7 +115,7 @@ export default function Voice() {
   return (
     <>
       <S.Container>
-        <AvatarCard />
+        <AvatarCard isHideColorPicker={true} />
         <S.TitleWrap>
           <div className="wrap">
             <span className="title">{t('Nova.aiVideo.selectVoice.title')}</span>

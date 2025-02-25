@@ -1,17 +1,13 @@
 import * as React from 'react';
-import { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { css } from 'styled-components';
 
-import { AvatarInfo } from '../../../../../constants/heygenTypes';
 import { NOVA_TAB_TYPE } from '../../../../../constants/novaTapTypes';
-import HeyZenDarkIcon from '../../../../../img/dark/nova/logo/ico_heygen_logo.svg';
-import HeyZenLightIcon from '../../../../../img/light/nova/logo/ico_heygen_logo.svg';
 import {
   selectPageResult,
+  selectPageStatus,
   updatePageResult
 } from '../../../../../store/slices/nova/pageStatusSlice';
-import { themeInfoSelector } from '../../../../../store/slices/theme';
 import { useAppDispatch, useAppSelector } from '../../../../../store/store';
 import ArrowTooltips from '../../../../ArrowTooltip';
 import ColorPicker from '../../../../colorPicker';
@@ -31,8 +27,8 @@ export default function AvatarCard({
 }: AvatarCardProps) {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
-  const { isLightMode } = useAppSelector(themeInfoSelector);
   const result = useAppSelector(selectPageResult(NOVA_TAB_TYPE.aiVideo));
+  const status = useAppSelector(selectPageStatus(NOVA_TAB_TYPE.aiVideo));
 
   const selectAvatarBackground = (color: string) => {
     dispatch(
@@ -56,6 +52,8 @@ export default function AvatarCard({
       {!isShowOnlyCard && !isHideColorPicker && (
         <ArrowTooltips
           message={t('Nova.aiVideo.tooltip.colorPicker')}
+          autoClose={true}
+          isReady={status === 'avatar' && result?.info.selectedAvatar.avatar.avatar_id != ''}
           cssExt={css`
             position: absolute;
             top: 12px;

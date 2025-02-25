@@ -227,19 +227,20 @@ export default function Avatar() {
                   </S.AvartarContainer>
                 ))}
             </S.AvartarList>
-            <ImageUploader
-              curTab={NOVA_TAB_TYPE.aiVideo}
-              handleUploadComplete={handleUploadedImage}>
-              <S.UploadInner>
-                <img src={isLightMode ? PlusDocLightIcon : PlusDocDarkIcon} alt="doc_plus" />
-                <S.ImageUploadGuide>
-                  <span className="title">
-                    {t('Nova.aiVideo.selectAvatar.imageUploader.title')}
-                  </span>
-                  <span className="desc">{t('Nova.aiVideo.selectAvatar.imageUploader.desc')}</span>
-                </S.ImageUploadGuide>
-              </S.UploadInner>
-            </ImageUploader>
+            {/*다음 배포에 포함 예정*/}
+            {/*<ImageUploader*/}
+            {/*  curTab={NOVA_TAB_TYPE.aiVideo}*/}
+            {/*  handleUploadComplete={handleUploadedImage}>*/}
+            {/*  <S.UploadInner>*/}
+            {/*    <img src={isLightMode ? PlusDocLightIcon : PlusDocDarkIcon} alt="doc_plus" />*/}
+            {/*    <S.ImageUploadGuide>*/}
+            {/*      <span className="title">*/}
+            {/*        {t('Nova.aiVideo.selectAvatar.imageUploader.title')}*/}
+            {/*      </span>*/}
+            {/*      <span className="desc">{t('Nova.aiVideo.selectAvatar.imageUploader.desc')}</span>*/}
+            {/*    </S.ImageUploadGuide>*/}
+            {/*  </S.UploadInner>*/}
+            {/*</ImageUploader>*/}
           </S.AvatarSelectBox>
           <S.TitleWrap>
             <span className="title">{t('Nova.aiVideo.selectAvatar.imageShape.title')}</span>

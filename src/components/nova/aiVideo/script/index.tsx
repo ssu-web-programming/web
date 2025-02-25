@@ -57,7 +57,7 @@ export default function Script() {
 
   return (
     <S.Container>
-      <AvatarCard />
+      <AvatarCard isHideColorPicker={true} />
       <S.VoiceContainer>
         <S.TitleWrap>
           <div className="wrap">
