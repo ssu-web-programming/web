@@ -63,6 +63,8 @@ export default function AIVideo() {
           <AvatarCard isHideColorPicker={true} />
         </Result>
       );
+    } else if (status === 'loading') {
+      return <Loading />;
     } else {
       return (
         <>
