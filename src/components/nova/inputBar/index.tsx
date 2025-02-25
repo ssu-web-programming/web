@@ -54,8 +54,7 @@ import NovaLogoLightIcon from '../../../img/light/nova/ico_logo_nova.svg';
 import LoadingSpinner from '../../../img/light/spinner.webp';
 import {
   selectAllServiceCredits,
-  selectPageStatus,
-  setPageStatus
+  selectPageStatus
 } from '../../../store/slices/nova/pageStatusSlice';
 import { selectNovaTab, selectTabSlice } from '../../../store/slices/tabSlice';
 import { themeInfoSelector } from '../../../store/slices/theme';
@@ -263,7 +262,7 @@ export default function InputBar(props: InputBarProps) {
 
   return (
     <S.InputBarBase disabled={disabled || expiredNOVA}>
-      {pastedImages.length > 0 && (
+      {pastedImages.length > 0 && !expiredNOVA && (
         <S.FileListViewer onWheel={handleWheel}>
           {pastedImages.map((file) => (
             <S.ClipboardItem key={file.id}>

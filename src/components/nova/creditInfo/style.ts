@@ -39,8 +39,7 @@ export const TooltipWrap = styled.div<{ $isWide: boolean }>`
   width: ${({ $isWide }) => ($isWide ? '240px' : '202px')};
   position: absolute;
   top: 36px;
-  right: -40px;
-  //width: max-content;
+  right: -16px;
   display: flex;
   flex-direction: column;
   gap: 12px;
