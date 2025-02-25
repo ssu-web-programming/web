@@ -1,12 +1,15 @@
 import IconTextButton from 'components/buttons/IconTextButton';
+import { useConfirm } from 'components/Confirm';
 import { useCopyToClipboard } from 'components/hooks/useCopyToClipboard';
 import copyDarkIcon from 'img/dark/nova/translation/copy.svg';
 import insertDarkDocIcon from 'img/dark/nova/translation/insert_docs.svg';
 import copyIcon from 'img/light/nova/translation/copy.svg';
 import insertDocIcon from 'img/light/nova/translation/insert_docs.svg';
+import { ClientStatusType } from 'pages/Nova/Nova';
 import { useTranslation } from 'react-i18next';
 import { themeInfoSelector } from 'store/slices/theme';
 import { useAppSelector } from 'store/store';
+import Bridge from 'util/bridge';
 import { insertDoc } from 'util/common';
 
 import * as S from './style';
@@ -27,12 +30,31 @@ export default function TranslationResultAction({
   const { t } = useTranslation();
   const { copyText } = useCopyToClipboard();
   const { isLightMode } = useAppSelector(themeInfoSelector);
+  const confirm = useConfirm();
 
   const ICON_BUTTON_LIST = [
     {
       name: t('Nova.Chat.InsertDoc.Title'),
       iconSrc: isLightMode ? insertDocIcon : insertDarkDocIcon,
       clickHandler: async () => {
+        Bridge.callSyncBridgeApiWithCallback({
+          api: 'getClientStatus',
+          callback: async (status: ClientStatusType) => {
+            if (status === 'doc_view_mode') {
+              confirm({
+                title: t(`Nova.Chat.InsertDoc.Fail.Title`)!,
+                msg: t(`Nova.Chat.InsertDoc.Fail.Msg.Viewer`)!,
+                onOk: {
+                  text: t(`Confirm`),
+                  callback: () => {}
+                }
+              });
+            } else {
+              // status가 doc_view_mode가 아닐 때만 insertDoc 실행
+              await insertDoc(translatedValue.replace(/\n/g, '<br>'));
+            }
+          }
+        });
         await insertDoc(translatedValue.replace(/\n/g, '<br>'));
       },
       isActive: isInsertDocAction
