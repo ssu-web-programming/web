@@ -566,6 +566,10 @@
         "stepTitle": "スクリプトを追加",
         "textAreaPlaceHolder": "アバターに言わせるセリフをここに記入します"
       },
+      "loading": {
+        "title": "動画生成中",
+        "desc": "動画生成に時間がかかる場合があります。\n画面を開いたままにすると自動保存されます。"
+      },
       "button": {
         "showMore": "もっと見る",
         "collapse": "畳む",

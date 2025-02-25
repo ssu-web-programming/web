@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { apiWrapper } from '../../../../api/apiWrapper';
 import { NOVA_VIDEO_GET_INFO, NOVA_VIDEO_MAKE_VIDEOS } from '../../../../api/constant';
@@ -21,6 +22,7 @@ const POLLING_INTERVAL = 8000;
 
 export default function Loading() {
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
   const errorHandle = useErrorHandle();
   const result = useAppSelector(selectPageResult(NOVA_TAB_TYPE.aiVideo));
   const [progress, setProgress] = useState(0);
@@ -162,12 +164,8 @@ export default function Loading() {
   return (
     <S.Container>
       <S.Guide>
-        <span className="title">비디오 생성 중</span>
-        <span className="desc">
-          {
-            '스크립트양에 따라 다소 시간이 소요될 수 있어요.\n생성 중 화면을 유지하면 영상이\n다운로드 폴더에 자동 저장됩니다.'
-          }
-        </span>
+        <span className="title">{t('Nova.aiVideo.loading.title')}</span>
+        <span className="desc">{t('Nova.aiVideo.loading.desc')}</span>
       </S.Guide>
       <AvatarCard isShowOnlyCard={true}>
         <Progress progress={progress} setProgress={setProgress} />
