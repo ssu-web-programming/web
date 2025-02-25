@@ -45,10 +45,14 @@ export default function TranslationFileResult() {
 
   const handleCompareSourceAndTranslation = async () => {
     dispatch(activeLoadingSpinner());
+    console.log('비교 분석하기 log', {
+      originalFileType,
+      originFile
+    });
     await Bridge.callBridgeApi<CompareSouceAndTranslationArgs>('compareSourceAndTranslation', {
       originalFileType,
       originalFileName,
-      originFile: originalFileType === 'local' ? await fileToString(originFile) : originFile,
+      originFile,
       translationFileName,
       translationFileUrl
     });
