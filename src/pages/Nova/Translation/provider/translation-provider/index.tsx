@@ -3,7 +3,7 @@ import { lang } from 'locale';
 
 export type ComponentType = 'INTRO' | 'TEXT_RESULT' | 'FILE_RESULT' | 'LOADING';
 export type LangType = 'source' | 'target';
-export type OriginalFileType = 'currentDoc' | 'drive' | 'local';
+export type OriginalFileType = 'currentDoc' | 'drive';
 
 export interface TranslateResult {
   detectedSourceLanguage: string;
@@ -81,7 +81,7 @@ export function TranslationProvider({ children }: Props) {
     // 번역 된 문장
     translatedText: '',
     // 원본-번역 비교보기를 위해 필요한 기능
-    originalFileType: 'local',
+    originalFileType: 'drive',
     originalFileName: '',
     originFile: '',
     translationFileName: '',

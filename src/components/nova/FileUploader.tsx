@@ -141,7 +141,7 @@ export const FileUploader = (props: FileUploaderProps) => {
                 : PCDarkIcon
         },
         onClick: () => {
-          onChangeTranslationFileType?.('local');
+          onChangeTranslationFileType?.('drive');
           const element = inputRef?.current;
           if (element) {
             const targetType =
