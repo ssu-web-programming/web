@@ -192,7 +192,6 @@ export default function InputBar(props: InputBarProps) {
           ? 'image'
           : 'document';
 
-    dispatch(selectNovaTab(NOVA_TAB_TYPE.aiChat));
     await props.onSubmit(
       {
         input: contents,
