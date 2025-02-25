@@ -39,7 +39,9 @@ export default function SurveyModalContent() {
 
   const handleClose = () => {
     if (dontShowSurvey) {
-      setCookie('dontShowSurvey', String(dontShowSurvey), 7);
+      // 검증을 위해 7분으로 세팅
+      const days = process.env.NODE_ENV == 'development' ? 0.00486 : 7;
+      setCookie('dontShowSurvey', String(dontShowSurvey), days);
     }
     overlay.closeAll();
   };

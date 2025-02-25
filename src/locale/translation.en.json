@@ -931,6 +931,10 @@
         "Msg": "Wait! Do you want to end your last conversation with NOVA?",
         "Ok": "Exit"
       },
+      "CloseAIVideo":  {
+        "Msg": "Wait! The AI video generation set-up is not yet completed. If you go back without completing the settings, the values set so far may be lost. Do you still want to go back?",
+        "Ok": "Move"
+      },
       "PersonalInfo": {
         "Title": "Consent to Collection and Use of Personal Information (Required)",
         "Msg1": "To provide the AI NOVA service, we need your consent for the collection and use of personal information as follows.",
