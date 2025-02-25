@@ -115,7 +115,7 @@ export default function LanguageItemList({
         </S.LanguageItem>
       ))}
 
-      <S.LanguageTitle>모든 언어</S.LanguageTitle>
+      <S.LanguageTitle>{t('Nova.translation.Menu.AllLanguages')}</S.LanguageTitle>
       {langList.map((lang, idx) => (
         <LanguageItem
           key={idx}

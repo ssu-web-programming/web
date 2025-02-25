@@ -632,7 +632,8 @@
         "iPhoneGuideContent": "デフォルトのiPhoneレコーダーで録音されたファイルが、\niCloud DriveまたはiPhone上に保存されている場合のみ\nアップロードできます。",
         "FileSizeError": "ファイルサイズが大きすぎます。\nサイズが1 GB未満のファイルのみを選択してください。",
         "NotFoundMic": "マイクデバイスが見つかりません",
-        "NotFoundMicDetail": "使用可能なマイクが検出されませんでした。正確な音声入力のために、マイクを接続するか、デバイスの設定で有効にしてください。"
+        "NotFoundMicDetail": "使用可能なマイクが検出されませんでした。正確な音声入力のために、マイクを接続するか、デバイスの設定で有効にしてください。",
+        "Overed30Minutes": "録音時間が30分を超えたため、自動的に停止しました。追加で録音が必要な場合は、新しく開始してください。"
       },
       "LanguageSelector": {
         "Options": {
@@ -661,7 +662,8 @@
       "FileLoading": "ファイルを翻訳中...",
       "Menu": {
         "Title": "翻訳",
-        "RecentLanguages": "最近の言語"
+        "RecentLanguages": "最近の言語",
+        "AllLanguages": "すべての言語"
       },
       "Button": {
         "TextTranslation": "テキスト翻訳",
@@ -979,7 +981,7 @@
       "ConsumeCredit": "{{deductionCredit}} creditが使用されました。\n残りのcredit:{{leftCredit}}",
       "SelectDoc": "分析するドキュメントを選択してください。",
       "SelectImg": "分析したい画像を選んでください。",
-      "SelectTranslationFile": "번역하고 싶은 문서를 선택해 보세요."
+      "SelectTranslationFile": "翻訳したい文書を選択してください。"
     }
   }
 }
