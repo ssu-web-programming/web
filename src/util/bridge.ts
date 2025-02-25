@@ -415,16 +415,11 @@ export const useInitBridgeListener = () => {
             break;
           }
           case 'openNOVA': {
-            dispatch(
-              changePanel({
-                cmd,
-                body: {
-                  inputText: body.inputText || ''
-                }
-              })
-            );
             overlay.closeAll();
-            if (body.isExternal) dispatch(setIsExternal(body.isExternal));
+            if (body.isExternal) {
+              dispatch(setIsExternal(body.isExternal));
+              return;
+            }
 
             if (body.openTab in NOVA_TAB_TYPE) {
               const tab = body.openTab;
@@ -500,6 +495,15 @@ export const useInitBridgeListener = () => {
                 })
               );
             }
+
+            dispatch(
+              changePanel({
+                cmd,
+                body: {
+                  inputText: body.inputText || ''
+                }
+              })
+            );
 
             Bridge.callBridgeApi('analyzeCurFile');
 

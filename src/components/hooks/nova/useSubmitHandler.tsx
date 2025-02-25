@@ -37,6 +37,7 @@ import {
 } from '../../../store/slices/nova/pageStatusSlice';
 import { DriveFileInfo } from '../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
+import Bridge from '../../../util/bridge';
 import { convertFiles, downloadFiles, fileToBase64, uploadFiles } from '../../../util/files';
 import { useConfirm } from '../../Confirm';
 import { InputBarSubmitParam } from '../../nova/inputBar';
@@ -142,6 +143,7 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
             : NOVA_TAB_TYPE.aiChat;
         dispatch(selectNovaTab(curTab));
         dispatch(setPageStatus({ tab: curTab, status: 'chat' }));
+        Bridge.callBridgeApi('curNovaTab', curTab);
 
         const fileInfo: NovaChatType['files'] = [];
         if (expireTimer.current) clearTimeout(expireTimer.current);
@@ -318,6 +320,7 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
           }
         );
         dispatch(updateChatStatus({ id, status: 'done' }));
+        await showSurveyModal();
       } catch (err) {
         if (timer) clearTimeout(timer);
         if (requestor.current?.isAborted() === true) {
@@ -345,7 +348,6 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
           if (citations.length > 0) {
             await getReferences(citations, id);
           }
-          await showSurveyModal();
 
           if (splunk) {
             splunk({
