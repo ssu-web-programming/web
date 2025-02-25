@@ -101,11 +101,13 @@ export default function Script() {
           <span>10</span>
         </S.CreditInfo>
       </Button>
-      <img
-        src={isLightMode ? HeyzenLogoLightIcon : HeyzenLogoDarkIcon}
-        alt="logo"
-        className="logo"
-      />
+      <S.LogoWrap>
+        <img
+          src={isLightMode ? HeyzenLogoLightIcon : HeyzenLogoDarkIcon}
+          alt="logo"
+          className="logo"
+        />
+      </S.LogoWrap>
     </S.Container>
   );
 }

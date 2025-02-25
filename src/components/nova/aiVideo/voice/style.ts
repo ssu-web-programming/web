@@ -114,3 +114,10 @@ export const CreditInfo = styled.div`
     line-height: 21px;
   }
 `;
+
+export const LogoWrap = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+`;
