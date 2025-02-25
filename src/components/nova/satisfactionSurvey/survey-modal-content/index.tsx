@@ -47,6 +47,12 @@ export default function SurveyModalContent() {
   };
 
   const handleSubmit = () => {
+    if (dontShowSurvey) {
+      // 검증을 위해 7분으로 세팅
+      const days = process.env.NODE_ENV == 'production' ? 7 : 0.00486;
+      setCookie('dontShowSurvey', String(dontShowSurvey), days);
+    }
+
     handleOfferCredit().then(() => {
       showOfferCreditPopup();
     });
