@@ -54,7 +54,7 @@ export default function LanguageItemList({
 
   const checkSwitchState = (langCode: string) => {
     const langTypeWithCode =
-      langType === 'source' ? TARGET_LANGUAGES_WITH_LANG_CODE : SOURCE_LANGUAGES_WITH_LANG_CODE;
+      langType === 'source' ? SOURCE_LANGUAGES_WITH_LANG_CODE : TARGET_LANGUAGES_WITH_LANG_CODE;
 
     // source 언어가 기본 형태(EN, ZH, PT)인 경우
     if (langType === 'source') {

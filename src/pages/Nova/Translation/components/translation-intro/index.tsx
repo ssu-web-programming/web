@@ -52,9 +52,12 @@ export default function TranslationIntro() {
       icon: <S.StyledTransFile $isActive={type === 'FILE'} />
     }
   ];
-
+  // 기본 언어 코드가 같은지 확인 (EN과 EN-US/EN-GB 같은 경우 처리)
+  const isEnglishVariant =
+    sourceLang === 'EN' && (targetLang === 'EN-GB' || targetLang === 'EN-US');
   const validateLang = () => {
-    if (sourceLang === targetLang) {
+    // 완전히 동일하거나 영어 변형인 경우
+    if (sourceLang === targetLang || isEnglishVariant) {
       confirm({
         msg: t('Nova.translation.Guide.SameLanguage'),
         onOk: {
@@ -79,7 +82,6 @@ export default function TranslationIntro() {
 
   useEffect(() => {
     if (location.state?.body) {
-      console.log('location.state', location.state);
       setTranslateInputValue(location.state.body.inputText);
     }
   }, [location.state?.body]);
@@ -162,7 +164,9 @@ export default function TranslationIntro() {
       <ButtonWithCredit
         text={t('Nova.translation.Button.Translate')}
         isActive={
-          (translateInputValue.length > 0 || isTranslateActive) && sourceLang !== targetLang
+          (translateInputValue.length > 0 || isTranslateActive) &&
+          sourceLang !== targetLang &&
+          !isEnglishVariant
         }
         onClick={handleTranslate}
         creditAmount={type === 'TEXT' ? 20 : 100}
