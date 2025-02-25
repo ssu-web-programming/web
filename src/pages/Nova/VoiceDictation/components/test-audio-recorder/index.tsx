@@ -1,5 +1,6 @@
 // AudioRecorder.tsx
 import React, { useEffect } from 'react';
+import { useConfirm } from 'components/Confirm';
 import ControlButton from 'components/nova/buttons/control-button';
 import PlayPauseButton from 'components/nova/buttons/play-pause-button';
 import { ReactComponent as DarkLang } from 'img/dark/nova/voice-dictation/lang.svg';
@@ -32,6 +33,7 @@ const TestAudioRecorder: React.FC<AudioRecorderProps> = ({
   openLangOverlay
 }) => {
   const { t } = useTranslation();
+  const confirm = useConfirm();
   const { isRecordState } = useAppSelector(appStateSelector);
   const {
     isPaused,
@@ -84,6 +86,21 @@ const TestAudioRecorder: React.FC<AudioRecorderProps> = ({
       resumeRecording();
     }
   }, [isRecordState]);
+
+  useEffect(() => {
+    if (recordingTime >= 30 * 60 && !isPaused) {
+      pauseRecording();
+      confirm({
+        msg: '녹음 시간이 30분을 초과하여 자동으로 중단되었습니다. 추가 녹음이 필요하면  새롭게 시작해주세요.',
+        onOk: {
+          text: t('Confirm'),
+          callback: () => {
+            stopRecording();
+          }
+        }
+      });
+    }
+  }, [recordingTime, isPaused]);
 
   return (
     <S.Container>

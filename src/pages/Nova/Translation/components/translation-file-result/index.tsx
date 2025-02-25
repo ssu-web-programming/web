@@ -7,6 +7,7 @@ import { activeLoadingSpinner } from 'store/slices/loadingSpinner';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import { css } from 'styled-components';
 import Bridge, { ClientType, fileToString, getPlatform } from 'util/bridge';
+import { getCurrentDateFormatted } from 'util/getAudioDuration';
 
 import { platformInfoSelector } from '../../../../../store/slices/platformInfo';
 import { useTranslationContext } from '../../provider/translation-provider';
@@ -57,7 +58,7 @@ export default function TranslationFileResult() {
     dispatch(activeLoadingSpinner());
 
     await Bridge.callBridgeApi<DownloadFileArgs>('downloadFile', {
-      fileName: translationFileName,
+      fileName: translationFileName + getCurrentDateFormatted(),
       url: translationFileUrl
     });
   };

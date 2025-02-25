@@ -144,7 +144,6 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({ ch
   const onRecordingComplete = async (blob: Blob) => {
     const file =
       platform === ClientType.windows ? await convertWebmToWavFile(blob) : blobToFile(blob);
-    console.log('file', file);
     handleMoveToReady(file);
   };
 

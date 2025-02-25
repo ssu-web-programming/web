@@ -632,7 +632,8 @@
         "iPhoneGuideContent": "Files recorded with the default iPhone recorder\ncan only be uploaded if saved to\n'iCloud Drive' or 'On My iPhone'.",
         "FileSizeError": "The file size is too large.\nPlease select only files less than 1GB in size.",
         "NotFoundMic": "Microphone device not found",
-        "NotFoundMicDetail": "No available microphone has been detected. To ensure accurate dictation, please connect a microphone or enable it in your device settings."
+        "NotFoundMicDetail": "No available microphone has been detected. To ensure accurate dictation, please connect a microphone or enable it in your device settings.",
+        "Overed30Minutes": "Recording has automatically stopped as it exceeded 30 minutes. If you need to continue, please start a new recording."
       },
       "LanguageSelector": {
         "Options": {
@@ -658,9 +659,11 @@
     },
     "translation": {
       "Loading": "Converting to text",
+      "FileLoading": "Translating file…",
       "Menu": {
         "Title": "Translation",
-        "RecentLanguages": "Recent languages"
+        "RecentLanguages": "Recent languages",
+        "AllLanguages": "All languages"
       },
       "Button": {
         "TextTranslation": "Text translation",
@@ -963,6 +966,9 @@
         "Ok": "Save now",
         "Cancel": "Cancel"
       },
+      "AnalyzeFile": {
+        "Msg": "Save to Polaris Drive to analyze. Save now?"
+      },
       "UpdateVersion": {
         "Msg": "2D to 3D conversion is available only in the latest version. Update now to explore this new feature!",
         "Ok": "Update now",
@@ -983,7 +989,8 @@
     "Toast": {
       "ConsumeCredit": "{{deductionCredit}} credits were used. \nRemaining Credits: {{leftCredit}}",
       "SelectDoc": "Select the document you want to analyze.",
-      "SelectImg": "Please select an image to analyze."
+      "SelectImg": "Please select an image to analyze.",
+      "SelectTranslationFile": "Please select the document you want to translate."
     }
   }
 }

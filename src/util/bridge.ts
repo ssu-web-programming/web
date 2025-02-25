@@ -380,6 +380,8 @@ export const useInitBridgeListener = () => {
           thunkAPI.dispatch(updateT2ICurItemIndex(null));
         }
       }
+
+      console.log('페이지 이동해라!', body);
       navigate(`${path}${location.search}`, {
         state: { body },
         replace: true

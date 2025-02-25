@@ -100,7 +100,9 @@ function App() {
         <OverlayModal isOpen={isOpen} onClose={close}>
           <ClosedModalContent
             title={t('Nova.voiceDictation.Alert.UnsavedRecording')}
-            onConfirm={handleResetVoiceInfo}
+            onConfirm={() => {
+              handleResetVoiceInfo();
+            }}
           />
         </OverlayModal>
       );

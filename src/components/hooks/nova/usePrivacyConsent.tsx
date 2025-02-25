@@ -78,7 +78,9 @@ const usePrivacyConsent = () => {
   };
 
   const handleAgreement = async () => {
-    if (selectedNovaTab !== 'aiChat' || isAgreed === true) return true;
+    // 호진: 기존 aiChat -> home으로 로직 변경
+    if (selectedNovaTab !== 'home' || isAgreed === true) return true;
+
     if (isAgreed === undefined) return false;
 
     const isConfirmed = await confirm({

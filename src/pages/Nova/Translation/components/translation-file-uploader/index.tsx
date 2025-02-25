@@ -136,8 +136,6 @@ export default function TranslationFileUploader({
     return null;
   };
 
-  console.log('driveFiles', driveFiles);
-
   return (
     <Wrap>
       {getActiveFile() ? (

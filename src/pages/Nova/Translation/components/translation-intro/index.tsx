@@ -2,21 +2,15 @@ import { useEffect, useState } from 'react';
 import ButtonWithCredit from 'components/buttons/button-with-credit';
 import { useConfirm } from 'components/Confirm';
 import { ReactComponent as CloseLightIcon } from 'img/light/ico_nova_close.svg';
-import { overlay } from 'overlay-kit';
 import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
 import { activeToast } from 'store/slices/toastSlice';
-import { useAppDispatch, useAppSelector } from 'store/store';
+import { setDriveFiles } from 'store/slices/uploadFiles';
+import { useAppDispatch } from 'store/store';
 import { css } from 'styled-components';
 import { getLangFromLangCode } from 'util/translation';
 
-import { apiWrapper } from '../../../../../api/apiWrapper';
-import { NOVA_GET_CREDIT_USE_COUNT } from '../../../../../api/constant';
-import SurveyModalContent from '../../../../../components/nova/satisfactionSurvey/survey-modal-content';
-import OverlayModal from '../../../../../components/overlay-modal';
 import { NOVA_TAB_TYPE } from '../../../../../constants/novaTapTypes';
-import { SERVICE_TYPE } from '../../../../../constants/serviceType';
-import { selectPageCreditReceived } from '../../../../../store/slices/nova/pageStatusSlice';
-import { getCookie } from '../../../../../util/common';
 import useTranslationIntro from '../../hooks/use-translation-intro';
 import { useTranslationContext } from '../../provider/translation-provider';
 import Toggle, { ToggleOption } from '../toggle';
@@ -32,6 +26,7 @@ export default function TranslationIntro() {
   const confirm = useConfirm();
   const [type, setType] = useState<TranslateType>('TEXT');
   const [translateInputValue, setTranslateInputValue] = useState('');
+  const location = useLocation();
 
   const {
     sharedTranslationInfo: { sourceLang, targetLang }
@@ -81,6 +76,21 @@ export default function TranslationIntro() {
   useEffect(() => {
     validateLang();
   }, [sourceLang, targetLang]);
+
+  useEffect(() => {
+    if (location.state?.body) {
+      console.log('location.state', location.state);
+      setTranslateInputValue(location.state.body);
+    }
+  }, [location.state?.body]);
+
+  useEffect(() => {
+    if (type === 'TEXT') {
+      dispatch(setDriveFiles([]));
+    } else if (type === 'FILE') {
+      setTranslateInputValue('');
+    }
+  }, [type]);
 
   return (
     <>

@@ -36,7 +36,7 @@ export default function LanguageSearch({
   setSharedTranslationInfo,
   btnType
 }: Props) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const initialLanguages =
     langType === 'source'
       ? SOURCE_LANGUAGES_WITH_LANG_CODE
@@ -56,7 +56,8 @@ export default function LanguageSearch({
   const filteredLanguages = useMemo(() => {
     const searchValue = searchTerm.toLowerCase();
 
-    return initialLanguages.filter((language) => {
+    // 먼저 검색어에 맞는 언어 필터링
+    const filtered = initialLanguages.filter((language) => {
       const { lang, langCode } = language;
 
       // 1. 일반 검색 (대소문자 구분 없이)
@@ -76,8 +77,24 @@ export default function LanguageSearch({
 
       return normalMatch || consonantMatch || englishMatch || langCodeMatch;
     });
-  }, [searchTerm, initialLanguages]);
 
+    // i18n 현재 언어 확인
+    const currentLang = i18n.language;
+
+    // 언어별 정렬 처리
+    switch (currentLang) {
+      case 'en':
+        // 영어일 경우 알파벳 A-Z 순으로 정렬
+        return filtered.sort((a, b) => a.lang.localeCompare(b.lang, 'en'));
+      case 'ja':
+        // 일본어일 경우 가나 순(あいうえお)으로 정렬
+        return filtered.sort((a, b) => a.lang.localeCompare(b.lang, 'ja'));
+      case 'ko':
+      default:
+        // 한국어나 기타 언어일 경우 한국어 기준으로 정렬
+        return filtered.sort((a, b) => a.lang.localeCompare(b.lang, 'ko'));
+    }
+  }, [searchTerm, initialLanguages, i18n.language]);
   return (
     <ModalSheet isOpen={isOpen} setIsOpen={close} snapPoints={[0.8]} initialSnap={0}>
       <S.Wrapper>

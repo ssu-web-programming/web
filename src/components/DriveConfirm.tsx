@@ -53,6 +53,7 @@ const HeaderContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 12.5px 16px;
 
   & > img {
     cursor: pointer;

@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import Lottie from 'react-lottie-player';
+import { getDriveFiles } from 'store/slices/uploadFiles';
 import styled from 'styled-components';
 
 import BlurDarkIcon from '../../img/dark/nova/ico_bg_blur_loading.svg';
@@ -40,6 +41,18 @@ export default function Loading() {
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
 
+  const drivesFiles = useAppSelector(getDriveFiles);
+  const isDrivesFiles = drivesFiles.length > 0;
+
+  const getSelectedTab = () => {
+    if (selectedNovaTab === 'translation') {
+      if (isDrivesFiles) {
+        return t(`Nova.${selectedNovaTab}.FileLoading`);
+      }
+    }
+    return t(`Nova.${selectedNovaTab}.Loading`);
+  };
+
   return (
     <Background>
       <Lottie
@@ -48,7 +61,7 @@ export default function Loading() {
         play
         style={{ width: 56, height: 56 }}
       />
-      <span>{t(`Nova.${selectedNovaTab}.Loading`)}</span>
+      <span>{getSelectedTab()}</span>
     </Background>
   );
 }
