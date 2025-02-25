@@ -416,7 +416,7 @@ export const useInitBridgeListener = () => {
           }
           case 'openNOVA': {
             overlay.closeAll();
-            if (body.isExternal) {
+            if (!body.isExternal) {
               dispatch(setIsExternal(body.isExternal));
               return;
             }
