@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { activeLoadingSpinner } from 'store/slices/loadingSpinner';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import { css } from 'styled-components';
-import Bridge, { ClientType, fileToString } from 'util/bridge';
+import Bridge, { ClientType } from 'util/bridge';
 import { getCurrentDateFormatted } from 'util/getAudioDuration';
 
 import { platformInfoSelector } from '../../../../../store/slices/platformInfo';
@@ -16,7 +16,7 @@ import FileItem from '../file-item';
 import * as S from './style';
 
 interface CompareSouceAndTranslationArgs {
-  originalFileType: 'currentDoc' | 'drive' | 'local';
+  originalFileType: 'currentDoc' | 'drive';
   originalFileName: string;
   originFile: any;
   translationFileName: string;
@@ -45,10 +45,14 @@ export default function TranslationFileResult() {
 
   const handleCompareSourceAndTranslation = async () => {
     dispatch(activeLoadingSpinner());
+    console.log('비교 분석하기 log', {
+      originalFileType,
+      originFile
+    });
     await Bridge.callBridgeApi<CompareSouceAndTranslationArgs>('compareSourceAndTranslation', {
       originalFileType,
       originalFileName,
-      originFile: originalFileType === 'local' ? await fileToString(originFile) : originFile,
+      originFile,
       translationFileName,
       translationFileUrl
     });

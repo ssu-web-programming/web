@@ -1,4 +1,4 @@
-import { getCurrentFile, getDriveFiles, getLocalFiles } from 'store/slices/uploadFiles';
+import { getDriveFiles, getLocalFiles } from 'store/slices/uploadFiles';
 import { useAppSelector } from 'store/store';
 import { downloadFiles } from 'util/files';
 
@@ -28,18 +28,10 @@ export default function useSanitizedDrive() {
       };
     }
 
-    if (originalFileType === 'drive') {
-      return {
-        originalFileType,
-        originalFileName: targetFile.name,
-        originFile: driveFiles[0].fileId
-      };
-    }
-
     return {
       originalFileType,
       originalFileName: targetFile.name,
-      originFile: new Blob([targetFile], { type: targetFile.type })
+      originFile: driveFiles[0].fileId
     };
   };
 

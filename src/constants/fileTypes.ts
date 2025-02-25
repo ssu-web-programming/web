@@ -73,10 +73,6 @@ export const AUDIO_SUPPORT_TYPE: SupportFileType[] = [
     extensions: '.aac'
   },
   {
-    mimeType: 'audio/amr',
-    extensions: '.amr'
-  },
-  {
     mimeType: 'audio/wav',
     extensions: '.wav'
   }

@@ -19,7 +19,7 @@ export default function TranslationTextResult() {
 
   return (
     <>
-      <S.Title>{t('Nova.translation.Status.FileTranslated')}</S.Title>
+      <S.Title>{t('Nova.translation.Button.TranslationComplete')}</S.Title>
       <TranslationResultAction
         translatedLang={getLangFromLangCode('source', detectedSourceLanguage)}
         translatedValue={translateInputValue}
