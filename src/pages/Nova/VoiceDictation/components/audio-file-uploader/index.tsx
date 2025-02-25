@@ -1,17 +1,23 @@
 import { useRef } from 'react';
+import { useConfirm } from 'components/Confirm';
 import FileButton from 'components/FileButton';
 import { getAccept } from 'components/nova/FileUploader';
 import GuideBox from 'components/nova/guide-box';
+import OverlayModal from 'components/overlay-modal';
 import { AUDIO_SUPPORT_TYPE } from 'constants/fileTypes';
 import { NOVA_TAB_TYPE } from 'constants/novaTapTypes';
 import { ReactComponent as UploadDarkIcon } from 'img/dark/ico_upload_img_plus.svg';
 import { ReactComponent as UploadFileLightIcon } from 'img/light/nova/translation/file_upload.svg';
+import { overlay } from 'overlay-kit';
 import { useTranslation } from 'react-i18next';
+import { ClientType, platformInfoSelector } from 'store/slices/platformInfo';
 import { setLocalFiles } from 'store/slices/uploadFiles';
-import { useAppDispatch } from 'store/store';
+import { useAppDispatch, useAppSelector } from 'store/store';
+import { getCookie } from 'util/common';
 import { formatDuration, getAudioDuration } from 'util/getAudioDuration';
 
 import { useVoiceDictationContext } from '../../provider/voice-dictation-provider';
+import IosRecordedFileGuide from '../modals/ios-recorded-file-guide';
 
 import * as S from './style';
 
@@ -23,28 +29,46 @@ interface ImageUploaderProps {
   onNext?: () => void;
 }
 
-export default function AudioFileUploader({
-  guideMsg,
-  handleUploadComplete,
-  curTab,
-  creditCount = 10,
-  onNext
-}: ImageUploaderProps) {
+export default function AudioFileUploader({ guideMsg, onNext }: ImageUploaderProps) {
   const { setSharedVoiceDictationInfo } = useVoiceDictationContext();
   const dispatch = useAppDispatch();
+  const { platform } = useAppSelector(platformInfoSelector);
+  const confirm = useConfirm();
 
   const target = 'nova-voice-dictation';
   const inputRef = useRef<HTMLInputElement | null>(null);
   const { t } = useTranslation();
 
-  const handleClickFileUpload = () => {
-    // IOS는 팝업을 넣어야함!
+  const handleUpload = () => {
     const element = inputRef?.current;
     if (element) {
       const targetType = AUDIO_SUPPORT_TYPE;
       element.accept = getAccept(targetType);
       element.multiple = false;
       element.click();
+    }
+  };
+
+  const handleClickFileUpload = async () => {
+    const iosRecordDontWatchAgain = !!getCookie('iosRecordDontWatchAgain');
+
+    // iOS 플랫폼이고 '다시 보지 않기' 설정이 없는 경우에만 확인 창 표시
+    if (platform === ClientType.ios && !iosRecordDontWatchAgain) {
+      await confirm({
+        title: t('Nova.voiceDictation.Alert.iPhoneGuideTitle') as string,
+        msg: t('Nova.voiceDictation.Alert.iPhoneGuideContent'),
+        onOk: {
+          text: t('Nova.voiceDictation.Button.Confirm') as string,
+          callback: () => {
+            handleUpload();
+          }
+        },
+        neverShowAgain: true,
+        cookieName: 'iosRecordDontWatchAgain'
+      });
+    } else {
+      // iOS가 아니거나 이미 '다시 보지 않기'를 선택한 경우 바로 업로드
+      handleUpload();
     }
   };
 

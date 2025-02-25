@@ -72,7 +72,8 @@ export default function NovaHeader(props: NovaHeaderProps) {
     sharedVoiceDictationInfo: { isVoiceRecording, componentType, voiceDictationResult }
   } = useVoiceDictationContext();
   const {
-    sharedTranslationInfo: { componentType: translationComponentType }
+    sharedTranslationInfo: { componentType: translationComponentType },
+    resetTranslation
   } = useTranslationContext();
 
   const isDisableBack =
@@ -123,6 +124,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
 
     return t(`Nova.Home.${category?.toLowerCase()}.${tab}`);
   };
+
   const openClosedModal = async () => {
     const isReadyStatus = componentType === 'VOICE_READY' || componentType === 'FILE_READY';
     const result = await overlay.openAsync(({ isOpen, close }) => {
@@ -177,7 +179,16 @@ export default function NovaHeader(props: NovaHeaderProps) {
       }
 
       await resetPage();
-      resetVoiceInfo();
+      if (
+        translationComponentType === 'FILE_RESULT' ||
+        translationComponentType === 'TEXT_RESULT'
+      ) {
+        resetTranslation();
+      }
+
+      if (componentType === 'RESULT') {
+        resetVoiceInfo();
+      }
     }
   };
 

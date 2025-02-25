@@ -9,6 +9,7 @@ export interface ConfirmType {
   onOk?: { text: string; callback?: () => void };
   direction?: 'row' | 'column';
   neverShowAgain?: boolean;
+  cookieName?: string;
 }
 
 const initialState: ConfirmType = {
@@ -23,7 +24,8 @@ const initialState: ConfirmType = {
     callback: () => {}
   },
   direction: 'column',
-  neverShowAgain: false
+  neverShowAgain: false,
+  cookieName: ''
 };
 
 const confirmSlice = createSlice({

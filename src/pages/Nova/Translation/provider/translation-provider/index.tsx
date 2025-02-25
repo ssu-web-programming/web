@@ -34,6 +34,7 @@ interface TranslationContextType {
   sharedTranslationInfo: SharedTranslation;
   setSharedTranslationInfo: Dispatch<SetStateAction<SharedTranslation>>;
   triggerLoading: () => void;
+  resetTranslation: () => void;
 }
 
 interface Props {
@@ -71,30 +72,32 @@ export function TranslationProvider({ children }: Props) {
     return 'ES';
   };
 
-  // 비슷한 조건별로 state를 쪼게면 좋을 듯
-  const [sharedTranslationInfo, setSharedTranslationInfo] = useState<SharedTranslation>({
+  // 초기 상태를 함수로 정의하여 재사용성 높이기
+  const getInitialState = (): SharedTranslation => ({
     componentType: 'INTRO',
-    // 번역 할 문장
     translateInputValue: '',
-    // 감지된 언어
     detectedSourceLanguage: '',
-    // 번역 된 문장
     translatedText: '',
-    // 원본-번역 비교보기를 위해 필요한 기능
     originalFileType: 'drive',
     originalFileName: '',
     originFile: '',
     translationFileName: '',
     translationFileUrl: '',
-    // 언어 BottomSheet
     sourceLang: getSourceLang(),
     targetLang: getTargetLang(),
     previousEnglishVariant: 'EN-US',
     previousVariant: {},
-    // 필요없으면 제거해도 괜찮을 것 같음
     LangType: 'source',
     isSwitchActive: true
   });
+
+  const [sharedTranslationInfo, setSharedTranslationInfo] =
+    useState<SharedTranslation>(getInitialState());
+
+  // 번역 상태 초기화 함수
+  const resetTranslation = () => {
+    setSharedTranslationInfo(getInitialState());
+  };
 
   const triggerLoading = () => {
     setSharedTranslationInfo({
@@ -105,7 +108,12 @@ export function TranslationProvider({ children }: Props) {
 
   return (
     <TranslationContext.Provider
-      value={{ sharedTranslationInfo, setSharedTranslationInfo, triggerLoading }}>
+      value={{
+        sharedTranslationInfo,
+        setSharedTranslationInfo,
+        triggerLoading,
+        resetTranslation // 초기화 함수 컨텍스트에 추가
+      }}>
       {children}
     </TranslationContext.Provider>
   );

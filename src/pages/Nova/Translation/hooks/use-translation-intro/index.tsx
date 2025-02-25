@@ -96,7 +96,7 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
           onRetry: async () =>
             await translationRequest({ file: await convertFileObject(), sourceLang, targetLang })
         });
-      } else if (error.code === '400') {
+      } else if (error.code === 'damage') {
         confirm({
           msg: t('Nova.Alert.UnopenableDocError')!,
           onOk: {
