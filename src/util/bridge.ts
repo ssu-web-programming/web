@@ -416,6 +416,22 @@ export const useInitBridgeListener = () => {
           }
           case 'openNOVA': {
             overlay.closeAll();
+
+            const platform = getPlatform();
+            const version = getVersion();
+            const device = getDevice();
+
+            if (platform == ClientType.unknown || !version || version === '') {
+              if (!body.platform) return;
+              dispatch(
+                setPlatformInfo({
+                  platform: body.platform as ClientType,
+                  device: device,
+                  version: body.version
+                })
+              );
+            }
+
             if (!body.isExternal) {
               dispatch(setIsExternal(body.isExternal));
               return;
@@ -479,21 +495,6 @@ export const useInitBridgeListener = () => {
               } else {
                 dispatch(setLocalFiles([]));
               }
-            }
-
-            const platform = getPlatform();
-            const version = getVersion();
-            const device = getDevice();
-
-            if (platform == ClientType.unknown || !version || version === '') {
-              if (!body.platform) return;
-              dispatch(
-                setPlatformInfo({
-                  platform: body.platform as ClientType,
-                  device: device,
-                  version: body.version
-                })
-              );
             }
 
             dispatch(
