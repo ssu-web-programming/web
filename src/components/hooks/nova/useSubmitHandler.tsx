@@ -320,6 +320,7 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
           }
         );
         dispatch(updateChatStatus({ id, status: 'done' }));
+        await showSurveyModal();
       } catch (err) {
         if (timer) clearTimeout(timer);
         if (requestor.current?.isAborted() === true) {
@@ -347,7 +348,6 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
           if (citations.length > 0) {
             await getReferences(citations, id);
           }
-          await showSurveyModal();
 
           if (splunk) {
             splunk({

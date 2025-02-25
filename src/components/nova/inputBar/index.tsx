@@ -452,7 +452,7 @@ export default function InputBar(props: InputBarProps) {
           </S.TextAreaWrap>
         </InputWrap>
         <S.ButtonWrap>
-          {status === 'home' && (
+          {(status === 'home' || props.novaHistory.length <= 0) && (
             <>
               <SelectBox
                 menuItem={getMenuItemsFromServiceGroup(serviceCredits, isLightMode, t)}
