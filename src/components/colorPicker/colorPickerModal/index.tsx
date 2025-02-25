@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { css } from 'styled-components';
 
 import Blanket from '../../Blanket';
@@ -22,6 +22,8 @@ export default function ColorPickerModal({
   setColor,
   setIsOpen
 }: ColorPickerModalProps) {
+  const [tempColor, setTempColor] = useState('');
+
   return (
     <>
       <Blanket />
@@ -29,12 +31,12 @@ export default function ColorPickerModal({
         <S.ContentWrap>
           <S.Title>{title}</S.Title>
           <S.ColorPickerWrap>
-            <S.ColorPicker color={color} onChange={setColor} />
+            <S.ColorPicker color={tempColor} onChange={setTempColor} />
             <S.ColorPickerInfo>
-              <S.CurrentColor color={color} />
+              <S.CurrentColor color={tempColor} />
               <S.PresetWrap>
                 {colorPreset.map((color) => (
-                  <S.Preset color={color} key={color} onClick={() => setColor(color)} />
+                  <S.Preset color={color} key={color} onClick={() => setTempColor(color)} />
                 ))}
               </S.PresetWrap>
             </S.ColorPickerInfo>
@@ -67,7 +69,7 @@ export default function ColorPickerModal({
               flex: 2;
             `}
             onClick={() => {
-              setColor(color);
+              setColor(tempColor);
               setIsOpen(false);
             }}>
             <span>{'완료'}</span>
