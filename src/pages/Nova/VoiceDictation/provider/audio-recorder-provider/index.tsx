@@ -1,4 +1,5 @@
 import React, { createContext, useCallback, useContext, useRef, useState } from 'react';
+import { setIsRecordingState } from 'store/slices/appState';
 import { platformInfoSelector } from 'store/slices/platformInfo';
 import { setLocalFiles } from 'store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from 'store/store';
@@ -285,6 +286,7 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({ ch
           }
           setIsRecording(false);
           setIsPaused(false);
+          dispatch(setIsRecordingState('not-started'));
           stopTimer();
           setRecordingTime(0);
         }
