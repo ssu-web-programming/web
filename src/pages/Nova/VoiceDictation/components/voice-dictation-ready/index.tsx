@@ -122,15 +122,12 @@ export default function VoiceDictationReady() {
 
       await handleMoveToResult(result);
     } catch (error: any) {
-      setSharedVoiceDictationInfo((prev) => ({
-        ...prev,
-        componentType: 'VOICE_READY'
-      }));
       if (error.code === 'Timeout') {
         handleErrorTrigger({
           title: '작업 시간이 초과되었습니다. \n 다시 시도해 주세요.',
           onRetry: translationVoiceDictation
         });
+        return;
       } else if (error.code === 'damage') {
         handleErrorTrigger({
           title:
@@ -140,6 +137,11 @@ export default function VoiceDictationReady() {
       } else {
         errorHandle(error);
       }
+
+      setSharedVoiceDictationInfo((prev) => ({
+        ...prev,
+        componentType: 'VOICE_READY'
+      }));
     }
   };
 
