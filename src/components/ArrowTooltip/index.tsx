@@ -14,7 +14,7 @@ const CustomTooltip = styled(({ className, ...props }: TooltipProps) => (
   },
   [`& .${tooltipClasses.tooltip}`]: {
     padding: '8px',
-    marginBottom: '1px',
+    marginBottom: '4px !important',
     backgroundColor: theme.color.background.tooltip,
     whiteSpace: 'break-spaces',
     fontSize: '12px'
@@ -50,7 +50,9 @@ export default function ArrowTooltips({
 
   React.useEffect(() => {
     if (open) {
-      document.addEventListener('mousedown', handleClickOutside);
+      setTimeout(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+      }, 0);
     } else {
       document.removeEventListener('mousedown', handleClickOutside);
     }
@@ -59,26 +61,18 @@ export default function ArrowTooltips({
     };
   }, [open]);
 
-  return isMobile ? (
-    <CustomTooltip
-      title={message}
-      arrow
-      placement={placement || 'top'}
-      onClick={handleTooltipToggle}>
-      <S.CustomButton className="tooltipBtn" cssExt={cssExt}>
-        {children}
-      </S.CustomButton>
-    </CustomTooltip>
-  ) : (
-    <CustomTooltip
-      title={message}
-      arrow
-      placement={placement || 'top'}
-      open={open}
-      onClick={handleTooltipToggle}>
-      <S.CustomButton className="tooltipBtn" cssExt={cssExt}>
-        {children}
-      </S.CustomButton>
-    </CustomTooltip>
+  return (
+    <div ref={tooltipRef}>
+      <CustomTooltip
+        title={message}
+        arrow
+        placement={placement || 'top'}
+        open={open}
+        onClick={handleTooltipToggle}>
+        <S.CustomButton className="tooltipBtn" cssExt={cssExt}>
+          {children}
+        </S.CustomButton>
+      </CustomTooltip>
+    </div>
   );
 }
