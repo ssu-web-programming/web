@@ -74,7 +74,6 @@ export default function AudioFileUploader({ guideMsg, onNext }: ImageUploaderPro
 
   const audioDuration = async (file: File) => {
     try {
-      console.log('file', file);
       const duration = await getAudioDuration(file);
 
       setSharedVoiceDictationInfo((prev) => ({
