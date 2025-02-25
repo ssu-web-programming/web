@@ -97,7 +97,8 @@ const Confirm = () => {
     onOk,
     onCancel,
     direction = 'row',
-    neverShowAgain = false
+    neverShowAgain = false,
+    cookieName
   } = useAppSelector(selectConfirm);
   const { t } = useTranslation();
   const headerRef = useRef<HTMLDivElement>(null);
@@ -123,7 +124,8 @@ const Confirm = () => {
 
   const handleOk = () => {
     if (isChecked) {
-      setCookie('creditGuide', String(isChecked));
+      console.log('cookieName', cookieName);
+      setCookie(cookieName || 'creditGuide', String(isChecked));
     }
     onOk?.callback?.();
   };

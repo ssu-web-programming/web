@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { ClientType, platformInfoSelector } from 'store/slices/platformInfo';
 import { setLocalFiles } from 'store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from 'store/store';
+import { getCookie } from 'util/common';
 import { formatDuration, getAudioDuration } from 'util/getAudioDuration';
 
 import { useVoiceDictationContext } from '../../provider/voice-dictation-provider';
@@ -49,8 +50,10 @@ export default function AudioFileUploader({ guideMsg, onNext }: ImageUploaderPro
   };
 
   const handleClickFileUpload = async () => {
-    // IOS는 팝업을 넣어야함!
-    if (platform === ClientType.ios) {
+    const iosRecordDontWatchAgain = !!getCookie('iosRecordDontWatchAgain');
+
+    // iOS 플랫폼이고 '다시 보지 않기' 설정이 없는 경우에만 확인 창 표시
+    if (platform === ClientType.ios && !iosRecordDontWatchAgain) {
       await confirm({
         title: t('Nova.voiceDictation.Alert.iPhoneGuideTitle') as string,
         msg: t('Nova.voiceDictation.Alert.iPhoneGuideContent'),
@@ -60,14 +63,11 @@ export default function AudioFileUploader({ guideMsg, onNext }: ImageUploaderPro
             handleUpload();
           }
         },
-        onCancel: {
-          text: t('Nova.voiceDictation.Button.DontShowAgain') as string,
-          callback: () => {
-            handleUpload();
-          }
-        }
+        neverShowAgain: true,
+        cookieName: 'iosRecordDontWatchAgain'
       });
     } else {
+      // iOS가 아니거나 이미 '다시 보지 않기'를 선택한 경우 바로 업로드
       handleUpload();
     }
   };

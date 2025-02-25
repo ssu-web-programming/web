@@ -124,6 +124,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
 
     return t(`Nova.Home.${category?.toLowerCase()}.${tab}`);
   };
+
   const openClosedModal = async () => {
     const isReadyStatus = componentType === 'VOICE_READY' || componentType === 'FILE_READY';
     const result = await overlay.openAsync(({ isOpen, close }) => {
