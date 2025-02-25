@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { activeLoadingSpinner } from 'store/slices/loadingSpinner';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import { css } from 'styled-components';
-import Bridge, { ClientType, fileToString, getPlatform } from 'util/bridge';
+import Bridge, { ClientType, fileToString } from 'util/bridge';
 import { getCurrentDateFormatted } from 'util/getAudioDuration';
 
 import { platformInfoSelector } from '../../../../../store/slices/platformInfo';
@@ -56,9 +56,12 @@ export default function TranslationFileResult() {
 
   const handleDownloadFile = async () => {
     dispatch(activeLoadingSpinner());
+    const extractFileType = translationFileName.slice(translationFileName.lastIndexOf('.'));
+    const sanitizedFileName =
+      translationFileName.split(extractFileType)[0] + getCurrentDateFormatted() + extractFileType;
 
     await Bridge.callBridgeApi<DownloadFileArgs>('downloadFile', {
-      fileName: translationFileName + getCurrentDateFormatted(),
+      fileName: sanitizedFileName,
       url: translationFileUrl
     });
   };
@@ -74,7 +77,7 @@ export default function TranslationFileResult() {
         <p>{t('Nova.translation.Status.SaveAndCheck')}</p>
       </S.SubTitle>
       <S.FileItemWrapper>
-        <FileItem fileName={translationFileName} />
+        <FileItem fileName={translationFileName} isDeleteIcon={false} />
       </S.FileItemWrapper>
       <S.ButtonGroup>
         {(platform === ClientType.windows || platform === ClientType.mac) && (

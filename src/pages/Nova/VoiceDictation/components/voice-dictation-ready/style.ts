@@ -64,6 +64,7 @@ const Description = styled.p`
   text-align: center;
   font-weight: 500;
   line-height: 24px;
+  white-space: pre-wrap;
 `;
 
 const RecordingBox = styled.div`

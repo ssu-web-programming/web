@@ -195,6 +195,8 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({ ch
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
       streamRef.current = stream;
 
+      console.log('platform', platform);
+
       const mediaRecorder = new MediaRecorder(stream, {
         mimeType: platform === ClientType.windows ? 'video/webm;codecs=vp8' : 'video/mp4'
       });

@@ -90,8 +90,6 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
         componentType: 'INTRO'
       }));
 
-      console.log('error', error);
-
       if (error.code === 'Timeout') {
         handleErrorTrigger({
           title: '작업 시간이 초과되었습니다. \n 다시 시도해 주세요.',
