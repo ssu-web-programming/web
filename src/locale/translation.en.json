@@ -653,7 +653,8 @@
         }
       },
       "Done": {
-        "Title": "Conversion ready"
+        "Title": "Conversion ready",
+        "Description": "Your recording file is ready for conversion. \n Press the convert button to transform it into text."
       },
       "Loading": "Converting to text"
     },

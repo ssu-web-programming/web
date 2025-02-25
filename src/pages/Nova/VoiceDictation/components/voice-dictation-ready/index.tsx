@@ -170,11 +170,7 @@ export default function VoiceDictationReady() {
           </S.Title>
         </S.Header>
 
-        <S.Description>
-          녹음 파일을 변환할 준비가 완료되었어요.
-          <br />
-          변환하기 버튼을 눌러 텍스트로 변환해보세요.
-        </S.Description>
+        <S.Description>{t(`Nova.voiceDictation.Done.Description`)}</S.Description>
         {componentType === 'FILE_READY' ? (
           <S.RecordingBox>
             <AudioFile />
