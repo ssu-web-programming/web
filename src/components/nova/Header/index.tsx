@@ -72,7 +72,8 @@ export default function NovaHeader(props: NovaHeaderProps) {
     sharedVoiceDictationInfo: { isVoiceRecording, componentType, voiceDictationResult }
   } = useVoiceDictationContext();
   const {
-    sharedTranslationInfo: { componentType: translationComponentType }
+    sharedTranslationInfo: { componentType: translationComponentType },
+    resetTranslation
   } = useTranslationContext();
 
   const isDisableBack =
@@ -177,7 +178,16 @@ export default function NovaHeader(props: NovaHeaderProps) {
       }
 
       await resetPage();
-      resetVoiceInfo();
+      if (
+        translationComponentType === 'FILE_RESULT' ||
+        translationComponentType === 'TEXT_RESULT'
+      ) {
+        resetTranslation();
+      }
+
+      if (componentType === 'RESULT') {
+        resetVoiceInfo();
+      }
     }
   };
 
