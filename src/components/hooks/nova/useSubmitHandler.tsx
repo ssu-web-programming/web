@@ -37,6 +37,7 @@ import {
 } from '../../../store/slices/nova/pageStatusSlice';
 import { DriveFileInfo } from '../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
+import Bridge from '../../../util/bridge';
 import { convertFiles, downloadFiles, fileToBase64, uploadFiles } from '../../../util/files';
 import { useConfirm } from '../../Confirm';
 import { InputBarSubmitParam } from '../../nova/inputBar';
@@ -142,6 +143,7 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
             : NOVA_TAB_TYPE.aiChat;
         dispatch(selectNovaTab(curTab));
         dispatch(setPageStatus({ tab: curTab, status: 'chat' }));
+        Bridge.callBridgeApi('curNovaTab', curTab);
 
         const fileInfo: NovaChatType['files'] = [];
         if (expireTimer.current) clearTimeout(expireTimer.current);

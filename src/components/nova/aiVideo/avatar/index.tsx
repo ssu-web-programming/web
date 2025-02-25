@@ -95,6 +95,39 @@ export default function Avatar() {
   const changeSelectedAvatar = (avatar: Avatars) => {
     if (!result || !result.info.avatars) return;
 
+    const currentAvatars = result.info.avatars;
+    const firstFourAvatars = currentAvatars.slice(0, 4); // 앞의 4개 요소
+    const remainingAvatars = currentAvatars.slice(4); // 나머지 요소
+
+    // 선택한 아바타가 앞의 4개 중 하나라면 순서 변경 없이 유지
+    if (firstFourAvatars.some((item: Avatars) => item.avatar_id === avatar.avatar_id)) {
+      return dispatch(
+        updatePageResult({
+          tab: NOVA_TAB_TYPE.aiVideo,
+          result: {
+            info: {
+              selectedAvatar: {
+                ...result.info.selectedAvatar,
+                avatar: avatar
+              },
+              avatars: currentAvatars // 순서 유지
+            }
+          }
+        })
+      );
+    }
+
+    // 선택한 아바타가 앞의 4개에 없으면 나머지 목록에서 필터링 후 맨 앞으로 이동
+    const updatedAvatars = firstFourAvatars.some(
+      (item: Avatars) => item.avatar_id === avatar.avatar_id
+    )
+      ? currentAvatars
+      : [
+          avatar,
+          ...firstFourAvatars,
+          ...remainingAvatars.filter((item: Avatars) => item.avatar_id !== avatar.avatar_id)
+        ];
+
     dispatch(
       updatePageResult({
         tab: NOVA_TAB_TYPE.aiVideo,
@@ -104,10 +137,7 @@ export default function Avatar() {
               ...result.info.selectedAvatar,
               avatar: avatar
             },
-            avatars: [
-              avatar,
-              ...result.info.avatars.filter((item: Avatars) => item.avatar_id !== avatar.avatar_id)
-            ]
+            avatars: updatedAvatars
           }
         }
       })

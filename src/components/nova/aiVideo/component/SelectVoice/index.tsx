@@ -53,6 +53,7 @@ export default function SelectVoice({ setIsOpen, changeSelectedVoice }: SelectAv
   const { getVoices, hasMore, loading } = useGetVoices();
   const observerRef = useRef<IntersectionObserver | null>(null);
   const lastVoiceRef = useRef<HTMLDivElement | null>(null);
+  const [filteredVoices, setFilteredVoices] = useState<Voices[]>([]);
 
   useEffect(() => {
     if (result?.info.selectedAvatar.voice_id != '') {
@@ -61,7 +62,32 @@ export default function SelectVoice({ setIsOpen, changeSelectedVoice }: SelectAv
   }, [result]);
 
   useEffect(() => {
+    if (!result?.info?.voices) return;
+
+    const newFilteredVoices = result.info.voices.filter(
+      (voice: Voices) =>
+        (selectedGender === 'all' || voice.gender.toLowerCase() === selectedGender) &&
+        (selectedLanguage === 'all' ||
+          voice.language?.toLowerCase() === selectedLanguage?.toLowerCase())
+    );
+
+    setFilteredVoices(newFilteredVoices);
+  }, [result?.info?.voices, selectedGender, selectedLanguage]);
+
+  useEffect(() => {
+    if (filteredVoices.length > 0) {
+      lastVoiceRef.current = document.getElementById(
+        filteredVoices[filteredVoices.length - 1].voice_id
+      ) as HTMLDivElement;
+    }
+  }, [filteredVoices]);
+
+  useEffect(() => {
     if (loading || !hasMore) return;
+
+    if (observerRef.current) {
+      observerRef.current.disconnect();
+    }
 
     observerRef.current = new IntersectionObserver(
       ([entry]) => {
@@ -69,7 +95,7 @@ export default function SelectVoice({ setIsOpen, changeSelectedVoice }: SelectAv
           getVoices(selectedGender, selectedLanguage);
         }
       },
-      { threshold: 0.5 }
+      { threshold: 1 }
     );
 
     if (lastVoiceRef.current) {
@@ -171,58 +197,42 @@ export default function SelectVoice({ setIsOpen, changeSelectedVoice }: SelectAv
           )}
         </S.SelectBoxWrap>
         <S.ListWrap>
-          {result?.info?.voices ? (
-            (() => {
-              const filteredVoices = result.info.voices.filter(
-                (voice: Voices) =>
-                  (selectedGender === 'all' || voice.gender.toLowerCase() === selectedGender) &&
-                  (selectedLanguage === 'all' ||
-                    voice.language?.toLowerCase() === selectedLanguage?.toLowerCase())
-              );
-
-              return filteredVoices.length > 0
-                ? filteredVoices.map((voice: Voices) => (
-                    <S.VoiceContainer
-                      key={voice.voice_id}
-                      isSelected={tempVoice?.voice_id === voice.voice_id}
-                      onClick={() => handleVoiceClick(voice)}
-                      ref={lastVoiceRef}>
-                      <S.VoiceInfoWrap>
-                        <img
-                          src={
-                            tempVoice?.voice_id === voice.voice_id
-                              ? isLightMode
-                                ? CircleSelectedLightIcon
-                                : CircleSelectedDarkIcon
-                              : isLightMode
-                                ? CircleLightIcon
-                                : CircleDarkIcon
-                          }
-                          alt="play"
-                          className="radio"
-                        />
-                        <S.VoiceInfo>
-                          <span className="name">{voice.name}</span>
-                          <S.IdentifyWrap>
-                            <img src={voice?.flag} alt="flag" />
-                            <span>{`${voice?.language} | ${voice?.gender}`}</span>
-                          </S.IdentifyWrap>
-                        </S.VoiceInfo>
-                      </S.VoiceInfoWrap>
-                      <img src={isLightMode ? SoundLightIcon : SoundDarkIcon} alt="play" />
-                    </S.VoiceContainer>
-                  ))
-                : Array.from({ length: 10 }).map((_, index) => (
-                    <Lottie
-                      key={index}
-                      animationData={isLightMode ? SkeletonLight : SkeletonDark}
-                      loop
-                      play
-                    />
-                  ));
-            })()
+          {filteredVoices.length > 0 ? (
+            filteredVoices.map((voice: Voices, index) => (
+              <S.VoiceContainer
+                key={voice.voice_id}
+                id={voice.voice_id} // ✅ 요소를 식별할 수 있도록 ID 추가
+                isSelected={tempVoice?.voice_id === voice.voice_id}
+                onClick={() => handleVoiceClick(voice)}
+                ref={index === filteredVoices.length - 1 ? lastVoiceRef : null} // ✅ 마지막 요소만 lastVoiceRef에 저장
+              >
+                <S.VoiceInfoWrap>
+                  <img
+                    src={
+                      tempVoice?.voice_id === voice.voice_id
+                        ? isLightMode
+                          ? CircleSelectedLightIcon
+                          : CircleSelectedDarkIcon
+                        : isLightMode
+                          ? CircleLightIcon
+                          : CircleDarkIcon
+                    }
+                    alt="play"
+                    className="radio"
+                  />
+                  <S.VoiceInfo>
+                    <span className="name">{voice.name}</span>
+                    <S.IdentifyWrap>
+                      <img src={voice?.flag} alt="flag" />
+                      <span>{`${voice?.language} | ${voice?.gender}`}</span>
+                    </S.IdentifyWrap>
+                  </S.VoiceInfo>
+                </S.VoiceInfoWrap>
+                <img src={isLightMode ? SoundLightIcon : SoundDarkIcon} alt="play" />
+              </S.VoiceContainer>
+            ))
           ) : (
-            <></>
+            <Lottie animationData={isLightMode ? SkeletonLight : SkeletonDark} loop play />
           )}
           {loading && (
             <Lottie animationData={isLightMode ? SkeletonLight : SkeletonDark} loop play />
