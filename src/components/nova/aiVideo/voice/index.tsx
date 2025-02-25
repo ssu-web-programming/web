@@ -115,7 +115,7 @@ export default function Voice() {
   return (
     <>
       <S.Container>
-        <AvatarCard />
+        <AvatarCard isHideColorPicker={true} />
         <S.TitleWrap>
           <div className="wrap">
             <span className="title">{t('Nova.aiVideo.selectVoice.title')}</span>
@@ -183,14 +183,23 @@ export default function Voice() {
             <span>10</span>
           </S.CreditInfo>
         </Button>
-
-        <img
-          src={isLightMode ? HeyzenLogoLightIcon : HeyzenLogoDarkIcon}
-          alt="logo"
-          className="logo"
-        />
+        <S.LogoWrap>
+          <img
+            src={isLightMode ? HeyzenLogoLightIcon : HeyzenLogoDarkIcon}
+            alt="logo"
+            className="logo"
+          />
+        </S.LogoWrap>
       </S.Container>
-      {isOpen && <SelectVoice setIsOpen={setIsOpen} changeSelectedVoice={changeSelectedVoice} />}
+      {isOpen && (
+        <SelectVoice
+          setIsOpen={setIsOpen}
+          changeSelectedVoice={changeSelectedVoice}
+          audioRef={audioRef}
+          playingVoiceId={playingVoiceId}
+          setPlayingVoiceId={setPlayingVoiceId}
+        />
+      )}
     </>
   );
 }

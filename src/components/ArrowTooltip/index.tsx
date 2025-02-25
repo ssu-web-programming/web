@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useEffect } from 'react';
 import Tooltip, { tooltipClasses, TooltipProps } from '@mui/material/Tooltip';
 import styled, { FlattenSimpleInterpolation } from 'styled-components';
 
@@ -26,19 +27,30 @@ interface ArrowTooltipsProps {
   children: React.ReactNode;
   cssExt?: FlattenSimpleInterpolation;
   placement?: TooltipProps['placement'];
+  autoClose?: boolean;
+  isReady?: boolean;
 }
 
 export default function ArrowTooltips({
   message,
   children,
   cssExt,
-  placement
+  placement,
+  autoClose = false,
+  isReady = true
 }: ArrowTooltipsProps) {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState<boolean>(false);
   const tooltipRef = React.useRef<HTMLDivElement | null>(null);
+  const autoCloseTimer = React.useRef<NodeJS.Timeout | null>(null);
 
   const handleTooltipToggle = (event: React.MouseEvent) => {
-    event.stopPropagation();
+    if (!isReady) return;
+
+    if (autoClose) {
+      event.preventDefault(); // 클릭 이벤트 방지
+    } else {
+      event.stopPropagation();
+    }
     setOpen((prev) => !prev);
   };
 
@@ -48,18 +60,39 @@ export default function ArrowTooltips({
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
+    if (isReady) {
+      setOpen(true);
+    }
+  }, [isReady]);
+
+  useEffect(() => {
+    if (!isReady) {
+      setOpen(false);
+      return;
+    }
+
     if (open) {
-      setTimeout(() => {
-        document.addEventListener('mousedown', handleClickOutside);
-      }, 0);
+      if (autoClose) {
+        autoCloseTimer.current = setTimeout(() => {
+          setOpen(false);
+        }, 2000);
+      } else {
+        setTimeout(() => {
+          document.addEventListener('mousedown', handleClickOutside);
+        }, 0);
+      }
     } else {
       document.removeEventListener('mousedown', handleClickOutside);
     }
+
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      if (autoCloseTimer.current) {
+        clearTimeout(autoCloseTimer.current);
+      }
     };
-  }, [open]);
+  }, [open, autoClose, isReady]);
 
   return (
     <div ref={tooltipRef}>

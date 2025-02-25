@@ -57,7 +57,7 @@ export default function Script() {
 
   return (
     <S.Container>
-      <AvatarCard />
+      <AvatarCard isHideColorPicker={true} />
       <S.VoiceContainer>
         <S.TitleWrap>
           <div className="wrap">
@@ -101,11 +101,13 @@ export default function Script() {
           <span>10</span>
         </S.CreditInfo>
       </Button>
-      <img
-        src={isLightMode ? HeyzenLogoLightIcon : HeyzenLogoDarkIcon}
-        alt="logo"
-        className="logo"
-      />
+      <S.LogoWrap>
+        <img
+          src={isLightMode ? HeyzenLogoLightIcon : HeyzenLogoDarkIcon}
+          alt="logo"
+          className="logo"
+        />
+      </S.LogoWrap>
     </S.Container>
   );
 }

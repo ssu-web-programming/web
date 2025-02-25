@@ -68,7 +68,6 @@ export default function AIVideo() {
     } else {
       return (
         <>
-          {status === 'progress' && <Progress />}
           <StepNavigator
             activeStep={activeStep}
             setActiveStep={setActiveStep}

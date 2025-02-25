@@ -11,6 +11,7 @@
   "OK": "確認",
   "Cancel": "キャンセル",
   "Save": "保存",
+  "Complete": "完了",
   "Result": "結果",
   "Generate": "生成",
   "Regenerate": "再生成",
@@ -565,6 +566,10 @@
         "title": "スクリプトを追加",
         "stepTitle": "スクリプトを追加",
         "textAreaPlaceHolder": "アバターに言わせるセリフをここに記入します"
+      },
+      "loading": {
+        "title": "動画生成中",
+        "desc": "動画生成に時間がかかる場合があります。\n画面を開いたままにすると自動保存されます。"
       },
       "button": {
         "showMore": "もっと見る",

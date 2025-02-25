@@ -11,6 +11,7 @@
   "OK": "OK",
   "Cancel": "Cancel",
   "Save": "Save",
+  "Complete": "Complete",
   "Result": "Result",
   "Generate": "Generate",
   "Regenerate": "Regenerate",
@@ -565,6 +566,10 @@
         "title": "Add script",
         "stepTitle": "Add script",
         "textAreaPlaceHolder": "Write the script you want the avatar to speak here"
+      },
+      "loading": {
+        "title": "Creating video",
+        "desc": "Video creation may take time.\nKeep this screen open to auto-save."
       },
       "button": {
         "showMore": "View More",

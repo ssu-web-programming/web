@@ -176,12 +176,7 @@ export default function Nova() {
         </>
       );
     } else if (selectedNovaTab === NOVA_TAB_TYPE.aiVideo) {
-      return (
-        <>
-          {status === 'progress' && <Progress />}
-          <AIVideo />
-        </>
-      );
+      return <AIVideo />;
     } else if (selectedNovaTab === NOVA_TAB_TYPE.translation) {
       return <Translation />;
     } else if (selectedNovaTab === NOVA_TAB_TYPE.voiceDictation) {

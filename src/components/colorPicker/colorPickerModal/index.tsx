@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { css } from 'styled-components';
 
 import Blanket from '../../Blanket';
@@ -22,6 +23,7 @@ export default function ColorPickerModal({
   setColor,
   setIsOpen
 }: ColorPickerModalProps) {
+  const { t } = useTranslation();
   const [tempColor, setTempColor] = useState('');
 
   return (
@@ -56,7 +58,7 @@ export default function ColorPickerModal({
             onClick={() => {
               setIsOpen(false);
             }}>
-            <span>{'취소'}</span>
+            <span>{t('Cancel')}</span>
           </Button>
           <Button
             variant="purple"
@@ -72,7 +74,7 @@ export default function ColorPickerModal({
               setColor(tempColor);
               setIsOpen(false);
             }}>
-            <span>{'완료'}</span>
+            <span>{t('Complete')}</span>
           </Button>
         </S.ButtonWrap>
       </S.Container>

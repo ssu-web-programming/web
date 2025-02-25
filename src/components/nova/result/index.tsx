@@ -34,7 +34,6 @@ import { useConfirm } from '../../Confirm';
 import { useChangeBackground } from '../../hooks/nova/useChangeBackground';
 import { useInsertDocsHandler } from '../../hooks/nova/useInsertDocsHandler';
 import { useRemakeImage } from '../../hooks/nova/useRemakeImage';
-import useErrorHandle from '../../hooks/useErrorHandle';
 import OverlayModal from '../../overlay-modal';
 import SurveyModalContent from '../satisfactionSurvey/survey-modal-content';
 
@@ -96,7 +95,6 @@ export default function Result({ children }: ResultProps) {
           </OverlayModal>
         );
       });
-      // show poptup
     }
   }, []);
 

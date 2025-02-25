@@ -9,12 +9,14 @@ import { NOVA_TAB_TYPE } from '../../../../../constants/novaTapTypes';
 import CircleSelectedDarkIcon from '../../../../../img/dark/ico_check_circle.svg';
 import CircleDarkIcon from '../../../../../img/dark/ico_circle.svg';
 import CloseDarkIcon from '../../../../../img/dark/ico_nova_close.svg';
+import PlayDarkIcon from '../../../../../img/dark/nova/aiVideo/ico_play.svg';
 import SoundDarkIcon from '../../../../../img/dark/nova/aiVideo/ico_sound.svg';
 import SkeletonDark from '../../../../../img/dark/nova/aiVideo/skeleton_voice.json';
 import SpinnerDark from '../../../../../img/dark/nova/nova_spinner.json';
 import CircleSelectedLightIcon from '../../../../../img/light/ico_check_circle.svg';
 import CircleLightIcon from '../../../../../img/light/ico_circle.svg';
 import CloseLightIcon from '../../../../../img/light/ico_nova_close.svg';
+import PlayLightIcon from '../../../../../img/light/nova/aiVideo/ico_play.svg';
 import SoundLightIcon from '../../../../../img/light/nova/aiVideo/ico_sound.svg';
 import SkeletonLight from '../../../../../img/light/nova/aiVideo/skeleton_voice.json';
 import SpinnerLight from '../../../../../img/light/nova/nova_spinner.json';
@@ -33,9 +35,18 @@ import * as S from './styles';
 interface SelectAvatarProps {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   changeSelectedVoice: (voice: Voices) => void;
+  audioRef: React.MutableRefObject<HTMLAudioElement | null>;
+  playingVoiceId: string | null;
+  setPlayingVoiceId: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
-export default function SelectVoice({ setIsOpen, changeSelectedVoice }: SelectAvatarProps) {
+export default function SelectVoice({
+  setIsOpen,
+  changeSelectedVoice,
+  audioRef,
+  playingVoiceId,
+  setPlayingVoiceId
+}: SelectAvatarProps) {
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const { screenMode } = useAppSelector(screenModeSelector);
   const { t } = useTranslation();
@@ -130,6 +141,15 @@ export default function SelectVoice({ setIsOpen, changeSelectedVoice }: SelectAv
     }
   };
 
+  const playVoice = (voice: Voices) => {
+    const audioElement = audioRef.current;
+    if (audioElement) {
+      audioElement.src = voice.preview_audio;
+      audioElement.play().then(() => setPlayingVoiceId(voice.voice_id));
+      audioElement.onended = () => setPlayingVoiceId(null);
+    }
+  };
+
   return (
     <>
       <Blanket />
@@ -201,7 +221,7 @@ export default function SelectVoice({ setIsOpen, changeSelectedVoice }: SelectAv
             filteredVoices.map((voice: Voices, index) => (
               <S.VoiceContainer
                 key={voice.voice_id}
-                id={voice.voice_id} // ✅ 요소를 식별할 수 있도록 ID 추가
+                id={voice.voice_id}
                 isSelected={tempVoice?.voice_id === voice.voice_id}
                 onClick={() => handleVoiceClick(voice)}
                 ref={index === filteredVoices.length - 1 ? lastVoiceRef : null} // ✅ 마지막 요소만 lastVoiceRef에 저장
@@ -228,7 +248,19 @@ export default function SelectVoice({ setIsOpen, changeSelectedVoice }: SelectAv
                     </S.IdentifyWrap>
                   </S.VoiceInfo>
                 </S.VoiceInfoWrap>
-                <img src={isLightMode ? SoundLightIcon : SoundDarkIcon} alt="play" />
+                <img
+                  src={
+                    playingVoiceId === voice.voice_id
+                      ? isLightMode
+                        ? PlayLightIcon
+                        : PlayDarkIcon
+                      : isLightMode
+                        ? SoundLightIcon
+                        : SoundDarkIcon
+                  }
+                  alt="play"
+                  onClick={() => playVoice(voice)}
+                />
               </S.VoiceContainer>
             ))
           ) : (

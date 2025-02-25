@@ -9,12 +9,6 @@ export const Container = styled.div`
   justify-content: center;
   gap: 24px;
   padding: 0 16px;
-
-  .logo {
-    position: absolute;
-    right: 16px;
-    bottom: 24px;
-  }
 `;
 
 export const TitleWrap = styled.div`
@@ -106,4 +100,11 @@ export const CreditInfo = styled.div`
     font-weight: 500;
     line-height: 21px;
   }
+`;
+
+export const LogoWrap = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 `;
