@@ -617,7 +617,7 @@
       "Guide": {
         "Title": "받아쓰기",
         "SubTitle": "녹음 또는 파일 업로드로 \n 음성 기록을 만들어보세요.",
-        "UploadGuide": "최대 1GB 용량, 최대 길이 약 30분의 .m4a, .mp3, .aac, .amr, .wav 파일을 지원합니다.",
+        "UploadGuide": "최대 1GB 용량, 최대 길이 약 30분의 .m4a, .mp3, .aac, .wav 파일을 지원합니다.",
         "TimeLimit": "최대 30분 가능합니다.",
         "NetworkError": "서비스 접속이 원활하지 않습니다. \n사용 중인 네크워크 상태를 확인해주세요.",
         "LanguageConversion": "선택한 인식 언어로 변환됩니다."

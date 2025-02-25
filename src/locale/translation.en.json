@@ -583,7 +583,7 @@
       "Guide": {
         "Title": "Dictation",
         "SubTitle": "Record or upload a file.",
-        "UploadGuide": "Supports .m4a, .mp3, .aac, .amr, and .wav files, up to 1GB and about 30 minutes.",
+        "UploadGuide": "Supports .m4a, .mp3, .aac, and .wav files, up to 1GB and about 30 minutes.",
         "TimeLimit": "Up to 30 minutes available.",
         "NetworkError": "Service connection is unstable. Please check your network status.",
         "LanguageConversion": "Converted to the selected recognition language."
@@ -671,7 +671,7 @@
         "FileTranslation": "File translation",
         "Translate": "Translate",
         "LanguageSearch": "Language Search",
-        "TranslationComplete": "File translation complete",
+        "TranslationComplete": "translation complete",
         "ProceedWithoutChanges": "Proceed without changes",
         "SaveNow": "Save now"
       },

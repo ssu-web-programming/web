@@ -583,7 +583,7 @@
       "Guide": {
         "Title": "書き取り",
         "SubTitle": "録音またはファイルアップロード。",
-        "UploadGuide": ".m4a、.mp3、.aac、.amr、.wavファイル対応、最大1GB・約30分まで。",
+        "UploadGuide": ".m4a、.mp3、.aac、.wavファイル対応、最大1GB・約30分まで。",
         "TimeLimit": "最大30分まで利用可能。",
         "NetworkError": "サービスに接続できません。ご利用のネットワーク状態を確認してください。",
         "LanguageConversion": "選択した認識言語に変換されます。"
@@ -671,7 +671,7 @@
         "FileTranslation": "ファイル翻訳",
         "Translate": "翻訳",
         "LanguageSearch": "言語検索",
-        "TranslationComplete": "ファイルの翻訳が完了しました",
+        "TranslationComplete": "翻訳完了",
         "ProceedWithoutChanges": "変更せずに進む",
         "SaveNow": "今すぐ保存"
       },
