@@ -17,6 +17,7 @@ const ToggleButton = styled.button<ToggleButtonProps>`
   font-size: 16px;
   line-height: 24px;
   cursor: pointer;
+  width: 100%;
 
   ${({ isActive, theme }) =>
     isActive
@@ -45,6 +46,7 @@ const ToggleContainer = styled.div<{
   padding: 4px;
   border-radius: 100px;
   border: 1px solid ${({ theme }) => theme.color.background.gray07};
+  width: 100%;
 
   ${({ containerStyle }) => containerStyle && containerStyle}
 `;

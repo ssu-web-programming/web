@@ -620,7 +620,10 @@
         "Completed": "Dictation completed",
         "ConversionSuccess": "The voice conversation has been converted to text.\nSave your conversations and use them freely!",
         "Participant": "Attendee",
-        "Recognizing": "Recognizing"
+        "Recognizing": "Recognizing",
+        "Today": "Today",
+        "Am": "AM",
+        "Pm": "PM"
       },
       "Alert": {
         "MicPermission": "Polaris Office wants to \naccess the microphone.",
@@ -931,7 +934,7 @@
         "Msg": "Wait! Do you want to end your last conversation with NOVA?",
         "Ok": "Exit"
       },
-      "CloseAIVideo":  {
+      "CloseAIVideo": {
         "Msg": "Wait! The AI video generation set-up is not yet completed. If you go back without completing the settings, the values set so far may be lost. Do you still want to go back?",
         "Ok": "Move"
       },
@@ -977,7 +980,7 @@
         "Cancel": "Cancel"
       },
       "AnalyzeFile": {
-        "Msg": "Save to Polaris Drive to analyze. Save now?"
+        "Msg": "Save to Polaris Drive to Translation. Save now?"
       },
       "UpdateVersion": {
         "Msg": "2D to 3D conversion is available only in the latest version. Update now to explore this new feature!",

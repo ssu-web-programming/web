@@ -620,7 +620,10 @@
         "Completed": "書き取り完了",
         "ConversionSuccess": "音声会話がテキストに変換されました。\n会話を保存して自由に使用してください。",
         "Participant": "出席者",
-        "Recognizing": "を認識"
+        "Recognizing": "を認識",
+        "Today": "今日 (きょう)",
+        "Am": "午前 (ごぜん)",
+        "Pm": "午後 (ごご)"
       },
       "Alert": {
         "MicPermission": "Polaris Officeが\nマイクへのアクセスを求めています。",
@@ -922,7 +925,7 @@
         "Msg": "待って！NOVAとの最近の会話を終了しますか？",
         "Ok": "終了する"
       },
-      "CloseAIVideo":  {
+      "CloseAIVideo": {
         "Msg": "待って！AIビデオ生成のセットアップはまだ完了していません。設定を完了せずに戻ると、それまでに設定した値が失われる可能性があります。本当に戻りますか？",
         "Ok": "移動"
       },
@@ -968,7 +971,7 @@
         "Cancel": "キャンセル"
       },
       "AnalyzeFile": {
-        "Msg": "分析にはPolaris Driveへの保存が必要です。今すぐ保存しますか？"
+        "Msg": "翻訳にはPolaris Driveへの保存が必要です。今すぐ保存しますか？"
       },
       "UpdateVersion": {
         "Msg": "2Dから3Dへの変換機能は最新バージョンでのみ利用可能です。今すぐアップデートして、新機能をお試しください！",

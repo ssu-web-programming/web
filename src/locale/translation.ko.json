@@ -654,7 +654,10 @@
         "Completed": "받아쓰기 완료",
         "ConversionSuccess": "음성 대화를 텍스트로 변환했어요\n대화 내용을 저장해, 자유롭게 활용해 보세요!",
         "Participant": "참석자",
-        "Recognizing": "인식 중"
+        "Recognizing": "인식 중",
+        "Today": "오늘",
+        "Am": "오전",
+        "Pm": "오후"
       },
       "Alert": {
         "MicPermission": "'Polaris Office'이(가) 마이크에 \n접근하려고 합니다.",
@@ -941,7 +944,7 @@
         "Msg": "잠깐! NOVA와의 최근 대화를 종료하시겠어요?",
         "Ok": "종료하기"
       },
-      "CloseAIVideo":  {
+      "CloseAIVideo": {
         "Msg": "잠깐! AI 비디오 생성 설정이 아직 완료되지 않았어요. 설정을 완료하지 않고 뒤로가면 현재까지 설정된 값이 사라질 수 있어요. 그래도 뒤로가시겠어요?",
         "Ok": "이동하기"
       },

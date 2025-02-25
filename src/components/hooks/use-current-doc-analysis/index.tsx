@@ -27,7 +27,6 @@ export default function useCurrentDocAnalysis() {
   const { getAvailableFileCnt } = useUserInfoUtils();
 
   const analysisCurDoc = async () => {
-    console.log('currentFile123', currentFile);
     if (currentFile.type === 'notSupported') {
       await confirm({
         msg: t('Nova.Alert.UnopenableDocError', { max: getAvailableFileCnt(selectedNovaTab) })!,
@@ -102,7 +101,10 @@ export default function useCurrentDocAnalysis() {
 
   const confirmUploadFile = async () => {
     await confirm({
-      msg: t('Nova.Confirm.UploadFile.Msg'),
+      msg:
+        selectedNovaTab === 'translation'
+          ? t('Nova.Confirm.AnalyzeFile.Msg')
+          : t('Nova.Confirm.UploadFile.Msg'),
       onOk: {
         text: t('Nova.Confirm.UploadFile.Ok'),
         callback: () => {
