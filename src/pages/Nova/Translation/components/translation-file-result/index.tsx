@@ -57,6 +57,7 @@ export default function TranslationFileResult() {
   const handleDownloadFile = async () => {
     dispatch(activeLoadingSpinner());
 
+    console.log('translationFileName', translationFileName);
     await Bridge.callBridgeApi<DownloadFileArgs>('downloadFile', {
       fileName: translationFileName + getCurrentDateFormatted(),
       url: translationFileUrl
