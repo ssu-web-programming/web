@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 
 import { FileUploadState } from '../../../constants/fileTypes';
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
+import { getDownloadUrlByPlatform } from '../../../constants/platform';
 import {
   findTabByService,
   iconMap,
@@ -16,10 +17,14 @@ import { ReactComponent as IconConvertLight } from '../../../img/light/nova/tab/
 import { setIsExternal } from '../../../store/slices/appState';
 import { novaHistorySelector, setChatMode } from '../../../store/slices/nova/novaHistorySlice';
 import { setPageStatus } from '../../../store/slices/nova/pageStatusSlice';
+import { platformInfoSelector } from '../../../store/slices/platformInfo';
 import { selectNovaTab, selectTabSlice } from '../../../store/slices/tabSlice';
 import { themeInfoSelector } from '../../../store/slices/theme';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
 import Bridge from '../../../util/bridge';
+import { ClientType } from '../../../util/bridge';
+import { isHigherVersion } from '../../../util/common';
+import { useConfirm } from '../../Confirm';
 import { FileUploading } from '../FileUploading';
 import InputBar, { InputBarSubmitParam } from '../inputBar';
 
@@ -35,11 +40,14 @@ interface NovaHomeProps {
 const NovaHome = (props: NovaHomeProps) => {
   const location = useLocation();
   const { t } = useTranslation();
-  const { isLightMode } = useAppSelector(themeInfoSelector);
   const dispatch = useAppDispatch();
+  const confirm = useConfirm();
+  const { isLightMode } = useAppSelector(themeInfoSelector);
+  const { platform, version } = useAppSelector(platformInfoSelector);
 
   const novaHistory = useAppSelector(novaHistorySelector);
   const { creating } = useAppSelector(selectTabSlice);
+  const { selectedNovaTab } = useAppSelector(selectTabSlice);
 
   const [inputContents, setInputContents] = useState<string>('');
 
@@ -51,7 +59,55 @@ const NovaHome = (props: NovaHomeProps) => {
     }
   }, [location.state]);
 
+  const isUpdateRequired = () => {
+    if (platform === ClientType.web || platform === ClientType.unknown) return false;
+
+    type ClientType = 'android' | 'ios' | 'windows' | 'mac';
+    const versionMap: Record<ClientType, string> = {
+      android: '9.9.8',
+      ios: '9.8.10',
+      windows: '10.105.262',
+      mac: '9.0.67'
+    };
+    return !isHigherVersion(versionMap[platform as keyof typeof versionMap], version);
+  };
+
+  const confirmUpload = async () => {
+    if (platform === ClientType.windows) {
+      await confirm({
+        title: '',
+        msg: t('Nova.Confirm.UpdateVersionWindows.Msg'),
+        onOk: {
+          text: t('Ok'),
+          callback: () => {}
+        }
+      });
+    } else {
+      await confirm({
+        title: '',
+        msg: t('Nova.Confirm.UpdateVersion.Msg'),
+        onOk: {
+          text: t('Nova.Confirm.UpdateVersion.Ok'),
+          callback: () => {
+            Bridge.callBridgeApi('openWindow', getDownloadUrlByPlatform(platform));
+          }
+        },
+        onCancel: {
+          text: t('Nova.Confirm.UpdateVersion.Cancel'),
+          callback: () => {}
+        }
+      });
+    }
+  };
+
   const handleMovePage = (tab: NOVA_TAB_TYPE) => {
+    if (tab === NOVA_TAB_TYPE.translation || tab === NOVA_TAB_TYPE.voiceDictation) {
+      if (isUpdateRequired()) {
+        confirmUpload();
+        return;
+      }
+    }
+
     dispatch(selectNovaTab(tab));
     dispatch(setIsExternal(false));
     Bridge.callBridgeApi('curNovaTab', tab);
