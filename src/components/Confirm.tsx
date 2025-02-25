@@ -219,7 +219,8 @@ export function useConfirm() {
     onOk,
     onCancel,
     direction = 'row',
-    neverShowAgain = false
+    neverShowAgain = false,
+    cookieName
   }: ConfirmType): Promise<boolean> {
     return new Promise((resolve) => {
       const handleOk = () => {
@@ -247,7 +248,8 @@ export function useConfirm() {
           onCancel: onCancel && {
             text: onCancel.text || t('Cancel'),
             callback: handleCancel
-          }
+          },
+          cookieName
         })
       );
     });

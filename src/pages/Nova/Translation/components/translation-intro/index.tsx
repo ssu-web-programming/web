@@ -56,7 +56,6 @@ export default function TranslationIntro() {
   const isEnglishVariant =
     sourceLang === 'EN' && (targetLang === 'EN-GB' || targetLang === 'EN-US');
   const validateLang = () => {
-    // 완전히 동일하거나 영어 변형인 경우
     if (sourceLang === targetLang || isEnglishVariant) {
       confirm({
         msg: t('Nova.translation.Guide.SameLanguage'),

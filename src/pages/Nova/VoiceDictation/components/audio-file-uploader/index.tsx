@@ -51,6 +51,7 @@ export default function AudioFileUploader({ guideMsg, onNext }: ImageUploaderPro
 
   const handleClickFileUpload = async () => {
     const iosRecordDontWatchAgain = !!getCookie('iosRecordDontWatchAgain');
+    console.log('iosRecordDontWatchAgain', iosRecordDontWatchAgain);
 
     // iOS 플랫폼이고 '다시 보지 않기' 설정이 없는 경우에만 확인 창 표시
     if (platform === ClientType.ios && !iosRecordDontWatchAgain) {
