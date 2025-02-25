@@ -178,7 +178,6 @@ export default function useClipboard({
     pastedImages,
     pastedImagesAsFileType,
     handleRemovePastedImages,
-    handleClearPastedImages,
-    removeGlobalPasteListener
+    handleClearPastedImages
   };
 }

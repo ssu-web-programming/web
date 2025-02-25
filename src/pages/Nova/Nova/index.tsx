@@ -65,7 +65,6 @@ export default function Nova() {
   const { goThemePage } = useChangeStyle();
   const { handleAgreement } = usePrivacyConsent();
   const { loadLocalFile } = useManageFile();
-  const { removeGlobalPasteListener } = useClipboard();
   const chatNova = useChatNova();
   const [expiredNOVA, setExpiredNOVA] = useState<boolean>(false);
   const [fileUploadState, setFileUploadState] = useState<FileUploadState>({
@@ -85,7 +84,6 @@ export default function Nova() {
 
   useEffect(() => {
     if (expiredNOVA) {
-      removeGlobalPasteListener();
       confirm({
         title: '',
         msg: t('Nova.Alert.ExpiredNOVA'),
