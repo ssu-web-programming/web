@@ -85,17 +85,14 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
       handleMoveToFileResult({ downloadUrl });
     },
     onError: (error: any) => {
-      setSharedTranslationInfo((prev) => ({
-        ...prev,
-        componentType: 'INTRO'
-      }));
-
       if (error.code === 'Timeout') {
         handleErrorTrigger({
           title: '작업 시간이 초과되었습니다. \n 다시 시도해 주세요.',
           onRetry: async () =>
             await translationRequest({ file: await convertFileObject(), sourceLang, targetLang })
         });
+
+        return;
       } else if (error.code === 'damage') {
         confirm({
           msg: t('Nova.Alert.UnopenableDocError')!,
@@ -107,6 +104,11 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
       } else {
         errorHandle(error);
       }
+
+      setSharedTranslationInfo((prev) => ({
+        ...prev,
+        componentType: 'INTRO'
+      }));
     }
   });
 
