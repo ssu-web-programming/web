@@ -7,17 +7,21 @@ import * as S from './style';
 
 interface Props {
   fileName?: string;
+  isDeleteIcon?: boolean;
 }
 
-export default function FileItem({ fileName }: Props) {
+export default function FileItem({ fileName, isDeleteIcon = true }: Props) {
   const dispatch = useAppDispatch();
   return (
     <S.Wrapper>
-      <S.DeleteIcon
-        onClick={() => {
-          dispatch(setDriveFiles([]));
-        }}
-      />
+      {isDeleteIcon && (
+        <S.DeleteIcon
+          onClick={() => {
+            dispatch(setDriveFiles([]));
+          }}
+        />
+      )}
+
       <Icon size={45} iconSrc={getFileIcon(fileName as string)} />
       <S.FileName>{fileName || ''}</S.FileName>
     </S.Wrapper>
