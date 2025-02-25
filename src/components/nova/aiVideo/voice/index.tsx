@@ -190,7 +190,15 @@ export default function Voice() {
           className="logo"
         />
       </S.Container>
-      {isOpen && <SelectVoice setIsOpen={setIsOpen} changeSelectedVoice={changeSelectedVoice} />}
+      {isOpen && (
+        <SelectVoice
+          setIsOpen={setIsOpen}
+          changeSelectedVoice={changeSelectedVoice}
+          audioRef={audioRef}
+          playingVoiceId={playingVoiceId}
+          setPlayingVoiceId={setPlayingVoiceId}
+        />
+      )}
     </>
   );
 }

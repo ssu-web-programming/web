@@ -137,7 +137,11 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
       status: ['done', 'cancel'],
       iconSrc: isLightMode ? <RetryChatLightIcon /> : <RetryChatDarkIcon />,
       clickHandler: (history: NovaChatType) => {
-        createChatSubmitHandler({ input: history.input, type: '' }, false);
+        createChatSubmitHandler(
+          { input: history.input, type: '' },
+          history.isAnswer ?? false,
+          history.chatType
+        );
       }
     },
     {
@@ -330,7 +334,7 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                       </S.MakeNewImageGuide>
                     )}
                     <S.ChatButtonWrapper>
-                      {creating != 'NOVA' && !expiredNOVA && item.isAnswer && (
+                      {creating != 'NOVA' && !expiredNOVA && chatMode != item.chatType && (
                         <S.ChatMode>
                           <span>
                             {item.chatType === SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO
