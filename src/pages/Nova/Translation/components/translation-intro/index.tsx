@@ -80,7 +80,7 @@ export default function TranslationIntro() {
   useEffect(() => {
     if (location.state?.body) {
       console.log('location.state', location.state);
-      setTranslateInputValue(location.state.body);
+      setTranslateInputValue(location.state.body.inputText);
     }
   }, [location.state?.body]);
 
