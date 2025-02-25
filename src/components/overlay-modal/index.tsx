@@ -9,6 +9,7 @@ interface OverlayModalProps {
   width?: string;
   height?: string;
   padding?: string;
+  closeOnOutsideClick?: boolean;
 }
 
 interface ModalContentProps {
@@ -23,7 +24,8 @@ const OverlayModal: React.FC<OverlayModalProps> = ({
   children,
   width = '500px',
   height = 'auto',
-  padding = '20px'
+  padding = '20px',
+  closeOnOutsideClick = false
 }) => {
   useEffect(() => {
     if (isOpen) {
@@ -36,8 +38,14 @@ const OverlayModal: React.FC<OverlayModalProps> = ({
 
   if (!isOpen) return null;
 
+  const handleWrapperClick = () => {
+    if (closeOnOutsideClick) {
+      onClose();
+    }
+  };
+
   return createPortal(
-    <ModalWrapper onClick={onClose}>
+    <ModalWrapper onClick={handleWrapperClick}>
       <ModalContent
         onClick={(e) => e.stopPropagation()}
         width={width}
