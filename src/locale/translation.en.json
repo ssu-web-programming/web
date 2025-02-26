@@ -630,10 +630,10 @@
         "MicPermission": "Polaris Office wants to \naccess the microphone.",
         "MicPermissionDetail": "Allow Polaris Office to\nrecord audio for transcription?",
         "AudioPermissionRequired": "Allow audio permission to start recording!",
-        "UnsavedRecording": "Wait! If you go back without finishing the recording, \nit won't be saved. Do you still want to go back?",
+        "UnsavedRecording": "Wait! If you go back without finishing the recording, it won't be saved. Do you still want to go back?",
         "StopRecordingConfirm": "Do you want to stop the recording?",
         "ConversionNotice": "When the recording stops, Nova will convert the voice to text.",
-        "UnsavedGoBack": "Wait! If you go back, the recording will not be saved. \nDo you still want to go back?",
+        "UnsavedGoBack": "Wait! If you go back, the recording will not be saved. Do you still want to go back?",
         "LanguageCheck": "Please check if the voice file contains a conversation and\nif the set recognition language matches the voice language.",
         "Downloading": "Downloading voice file. (NN%)",
         "FileFormatSelection": "What file format would you like to save it as?",
@@ -682,7 +682,8 @@
         "LanguageSearch": "Language Search",
         "TranslationComplete": "translation complete",
         "ProceedWithoutChanges": "Proceed without changes",
-        "SaveNow": "Save now"
+        "SaveNow": "Save now",
+        "CompareAndTranslation": "View original-translation comparison"
       },
       "Input": {
         "Placeholder": "Enter the content to be translated.",

@@ -135,10 +135,12 @@ export default function NovaHeader(props: NovaHeaderProps) {
             onConfirm={() => close(true)}
             title={
               isReadyStatus
-                ? '잠깐! 뒤로가면 녹음이 저장되지 않아요. 그래도 뒤로가시겠어요?'
-                : '잠깐! 녹음을 끝내지 않고 이동하면 녹음이 저장되지 않아요. 그래도 뒤로가시겠어요?'
+                ? t('Nova.voiceDictation.Alert.UnsavedGoBack')
+                : t('Nova.voiceDictation.Alert.UnsavedRecording')
             }
-            confirmTxt={isReadyStatus ? '뒤로가기' : '이동하기'}
+            confirmTxt={
+              isReadyStatus ? (t('Back') as string) : (t('Nova.Confirm.CloseAIVideo.Ok') as string)
+            }
           />
         </OverlayModal>
       );

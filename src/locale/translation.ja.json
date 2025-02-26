@@ -630,10 +630,10 @@
         "MicPermission": "Polaris Officeが\nマイクへのアクセスを求めています。",
         "MicPermissionDetail": "Polaris Officeに\nテキスト変換用のオーディオ録音を許可しますか？",
         "AudioPermissionRequired": "録音を開始するには、オーディオ権限を許可してください！",
-        "UnsavedRecording": "待って！録音を終了せずに戻ると、\nデータは保存されません。本当に戻りますか？",
+        "UnsavedRecording": "待って！録音を終了せずに戻ると、データは保存されません。本当に戻りますか？",
         "StopRecordingConfirm": "録音を停止しますか?",
         "ConversionNotice": "録音が止まると、 Novaは音声をテキストに変換します。",
-        "UnsavedGoBack": "待って！戻ると音声録音は保存されません。\n本当に戻りますか？",
+        "UnsavedGoBack": "待って！戻ると音声録音は保存されません。本当に戻りますか？",
         "LanguageCheck": "音声ファイルに会話が含まれているか、また\n設定された認識言語が音声言語と一致しているかを確認してください。",
         "Downloading": "音声ファイルをダウンロードしています。（NN%）",
         "FileFormatSelection": "どのファイル形式で保存しますか?",
@@ -682,7 +682,8 @@
         "LanguageSearch": "言語検索",
         "TranslationComplete": "翻訳完了",
         "ProceedWithoutChanges": "変更せずに進む",
-        "SaveNow": "今すぐ保存"
+        "SaveNow": "今すぐ保存",
+        "CompareAndTranslation": "原文と翻訳を比較表示"
       },
       "Input": {
         "Placeholder": "翻訳するコンテンツを入力してください。",

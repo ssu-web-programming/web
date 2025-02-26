@@ -97,7 +97,7 @@ export default function TranslationFileResult() {
               border-radius: 8px;
               font-size: 15px;
             `}>
-            원본-번역 비교보기
+            {t('Nova.translation.Button.CompareAndTranslation')}
           </IconTextButton>
         )}
 
