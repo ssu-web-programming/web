@@ -51,10 +51,12 @@ export default function ArrowTooltips({
     } else {
       event.stopPropagation();
     }
-    setOpen((prev) => !prev);
+    // setOpen((prev) => !prev);
   };
 
   const handleClickOutside = (event: MouseEvent) => {
+    if (autoClose) return;
+
     if (tooltipRef.current && !tooltipRef.current.contains(event.target as Node)) {
       setOpen(false);
     }
