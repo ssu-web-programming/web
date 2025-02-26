@@ -80,6 +80,13 @@ export default function NovaHeader(props: NovaHeaderProps) {
   const isDisableBack =
     status !== 'progress' && status !== 'saving' && status !== 'loading' && creating != 'NOVA';
 
+  const isVoiceAndTranslationDisabledBack =
+    (componentType === 'LOADING' && voiceDictationResult === null) ||
+    translationComponentType === 'LOADING';
+
+  console.log('translationComponentType', translationComponentType);
+  console.log('isVoiceAndTranslationDisabledBack', isVoiceAndTranslationDisabledBack);
+
   const newChat = async (isBack = false) => {
     if (creating === 'NOVA') return;
 
@@ -196,13 +203,11 @@ export default function NovaHeader(props: NovaHeaderProps) {
       } else {
         const isClosedModalCondition =
           isVoiceRecording || componentType === 'VOICE_READY' || componentType === 'FILE_READY';
-        // 녹음중 상태이면 아래 팝업을 열어여한다.
-        if (
-          (componentType === 'LOADING' && voiceDictationResult === null) ||
-          translationComponentType === 'LOADING'
-        ) {
+
+        if (isVoiceAndTranslationDisabledBack) {
           return;
         }
+        // 녹음중 상태이면 아래 팝업을 열어여한다.
 
         if (isClosedModalCondition) {
           const result = await openClosedModal();
@@ -247,12 +252,14 @@ export default function NovaHeader(props: NovaHeaderProps) {
               <>
                 <img
                   src={
-                    isDisableBack ||
-                    (status === 'progress' && selectedNovaTab === NOVA_TAB_TYPE.aiVideo)
-                      ? isLightMode
-                        ? ArrowLeftLightIcon
-                        : ArrowLeftDarkIcon
-                      : ArrowLeftDisableIcon
+                    isVoiceAndTranslationDisabledBack
+                      ? ArrowLeftDisableIcon
+                      : isDisableBack ||
+                          (status === 'progress' && selectedNovaTab === NOVA_TAB_TYPE.aiVideo)
+                        ? isLightMode
+                          ? ArrowLeftLightIcon
+                          : ArrowLeftDarkIcon
+                        : ArrowLeftDisableIcon
                   }
                   alt="arrow-left"
                   onClick={handleGoHome}

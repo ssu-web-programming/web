@@ -9,7 +9,6 @@ import * as S from './style';
 // 메인 컴포넌트 Props 타입
 interface AudioPlayerProps extends PropsWithChildren {
   audioSource: string | File;
-  onTimeUpdate?: (currentTime: number) => void;
   onDurationChange?: (duration: number) => void;
   onPlay?: () => void;
   onPause?: () => void;
@@ -25,7 +24,6 @@ export type PlaybackSpeed = 0.8 | 1.0 | 1.2 | 1.5 | 1.8 | 2.0;
 
 const AudioPlayer: React.FC<AudioPlayerProps> = ({
   audioSource,
-  onTimeUpdate,
   onDurationChange,
   onPlay,
   onPause,
@@ -61,7 +59,6 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
       const currentTimeValue = audioRef.current.currentTime;
       console.log('currentTimeValue', currentTimeValue);
       setCurrentTime(currentTimeValue);
-      onTimeUpdate?.(currentTimeValue);
     }
   };
 
