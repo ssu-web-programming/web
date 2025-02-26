@@ -20,6 +20,7 @@ import OverlayModal from '../../../../../components/overlay-modal';
 import { NOVA_TAB_TYPE } from '../../../../../constants/novaTapTypes';
 import { SERVICE_TYPE } from '../../../../../constants/serviceType';
 import { selectPageCreditReceived } from '../../../../../store/slices/nova/pageStatusSlice';
+import { selectTabSlice } from '../../../../../store/slices/tabSlice';
 import LanguageSearch from '../../components/language-search';
 import { TranslateType } from '../../components/translation-intro';
 import {
@@ -64,10 +65,9 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
   } = useTranslationContext();
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const errorHandle = useErrorHandle();
-  const isCreditRecieved = useAppSelector(selectPageCreditReceived(NOVA_TAB_TYPE.translation));
   const driveFiles = useAppSelector(getDriveFiles);
   const confirm = useConfirm();
+  const errorHandle = useErrorHandle();
 
   // 데이터 정제 작업을 위한 Hook
   const { convertFileObject, isDriveActive, sanitizedOriginFile } = useSanitizedDrive();
@@ -116,7 +116,6 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
     detectedSourceLanguage,
     translatedText
   }: TranslateResult) => {
-    await showSurveyModal();
     setSharedTranslationInfo((prevSharedTranslationInfo) => ({
       ...prevSharedTranslationInfo,
       componentType: 'TEXT_RESULT',
@@ -127,7 +126,6 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
   };
 
   const handleMoveToFileResult = async ({ downloadUrl }: { downloadUrl: string }) => {
-    await showSurveyModal();
     const sanitizedFile = (await sanitizedOriginFile()) as any;
     setSharedTranslationInfo((prevSharedTranslationInfo) => ({
       ...prevSharedTranslationInfo,
@@ -136,43 +134,6 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
       translationFileUrl: downloadUrl,
       translationFileName: sanitizedFile.originalFileName
     }));
-  };
-
-  const showSurveyModal = async () => {
-    // 만족도 이벤트
-    if (!isCreditRecieved && !getCookie('dontShowSurvey')) {
-      try {
-        const { res } = await apiWrapper().request(NOVA_GET_CREDIT_USE_COUNT, {
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            serviceTypes: [
-              SERVICE_TYPE.NOVA_TRANSLATION_DEEPL,
-              SERVICE_TYPE.NOVA_TRANSLATION_DEEPL_FILE
-            ],
-            startTime: '1740182400000',
-            endTime: '1740528000000'
-          }),
-          method: 'POST'
-        });
-
-        const { data } = await res.json();
-        if (data.creditUsecount >= 1) {
-          overlay.closeAll();
-
-          overlay.open(({ isOpen, close }) => {
-            return (
-              <OverlayModal isOpen={isOpen} onClose={close} padding={'24px'}>
-                <SurveyModalContent />
-              </OverlayModal>
-            );
-          });
-        }
-      } catch (error) {
-        errorHandle(error);
-      }
-    }
   };
 
   const submitTextTranslate = async () => {

@@ -1,7 +1,9 @@
+import { useEffect } from 'react';
 import IconTextButton from 'components/buttons/IconTextButton';
 import { ReactComponent as CheckLightIcon } from 'img/light/nova/check_purple.svg';
 import compareViewerIcon from 'img/light/nova/translation/book.svg';
 import downloadIcon from 'img/light/nova/translation/download.svg';
+import { overlay } from 'overlay-kit';
 import { useTranslation } from 'react-i18next';
 import { activeLoadingSpinner } from 'store/slices/loadingSpinner';
 import { useAppDispatch, useAppSelector } from 'store/store';
@@ -9,7 +11,17 @@ import { css } from 'styled-components';
 import Bridge, { ClientType } from 'util/bridge';
 import { getCurrentDateFormatted } from 'util/getAudioDuration';
 
+import { apiWrapper } from '../../../../../api/apiWrapper';
+import { NOVA_GET_CREDIT_USE_COUNT } from '../../../../../api/constant';
+import useErrorHandle from '../../../../../components/hooks/useErrorHandle';
+import SurveyModalContent from '../../../../../components/nova/satisfactionSurvey/survey-modal-content';
+import OverlayModal from '../../../../../components/overlay-modal';
+import { NOVA_TAB_TYPE } from '../../../../../constants/novaTapTypes';
+import { SERVICE_TYPE } from '../../../../../constants/serviceType';
+import { selectPageCreditReceived } from '../../../../../store/slices/nova/pageStatusSlice';
 import { platformInfoSelector } from '../../../../../store/slices/platformInfo';
+import { selectTabSlice } from '../../../../../store/slices/tabSlice';
+import { getCookie } from '../../../../../util/common';
 import { useTranslationContext } from '../../provider/translation-provider';
 import FileItem from '../file-item';
 
@@ -32,6 +44,9 @@ export default function TranslationFileResult() {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const { platform } = useAppSelector(platformInfoSelector);
+  const errorHandle = useErrorHandle();
+  const { selectedNovaTab } = useAppSelector(selectTabSlice);
+  const isCreditRecieved = useAppSelector(selectPageCreditReceived(NOVA_TAB_TYPE.translation));
 
   const {
     sharedTranslationInfo: {
@@ -68,6 +83,47 @@ export default function TranslationFileResult() {
       fileName: sanitizedFileName,
       url: translationFileUrl
     });
+  };
+
+  useEffect(() => {
+    showSurveyModal();
+  }, []);
+
+  const showSurveyModal = async () => {
+    // 만족도 이벤트
+    if (!isCreditRecieved && !getCookie(`dontShowSurvey${selectedNovaTab}`)) {
+      try {
+        const { res } = await apiWrapper().request(NOVA_GET_CREDIT_USE_COUNT, {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            serviceTypes: [
+              SERVICE_TYPE.NOVA_TRANSLATION_DEEPL,
+              SERVICE_TYPE.NOVA_TRANSLATION_DEEPL_FILE
+            ],
+            startTime: '1740182400000',
+            endTime: '1740528000000'
+          }),
+          method: 'POST'
+        });
+
+        const { data } = await res.json();
+        if (data.creditUsecount >= 1) {
+          overlay.closeAll();
+
+          overlay.open(({ isOpen, close }) => {
+            return (
+              <OverlayModal isOpen={isOpen} onClose={close} padding={'24px'}>
+                <SurveyModalContent />
+              </OverlayModal>
+            );
+          });
+        }
+      } catch (error) {
+        errorHandle(error);
+      }
+    }
   };
 
   return (

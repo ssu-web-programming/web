@@ -19,6 +19,7 @@ import SurveyModalContent from '../../../../../components/nova/satisfactionSurve
 import OverlayModal from '../../../../../components/overlay-modal';
 import { NOVA_TAB_TYPE } from '../../../../../constants/novaTapTypes';
 import { selectPageCreditReceived } from '../../../../../store/slices/nova/pageStatusSlice';
+import { selectTabSlice } from '../../../../../store/slices/tabSlice';
 import { getCookie } from '../../../../../util/common';
 import { useAudioRecorder } from '../../provider/audio-recorder-provider';
 import {
@@ -46,7 +47,6 @@ export default function VoiceDictationReady() {
   const dispatch = useAppDispatch();
   const errorHandle = useErrorHandle();
   const { t } = useTranslation();
-  const isCreditRecieved = useAppSelector(selectPageCreditReceived(NOVA_TAB_TYPE.translation));
 
   const [isEditMode, setIsEditMode] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null); // input에 대한 ref 추가
@@ -65,28 +65,12 @@ export default function VoiceDictationReady() {
   };
 
   const handleMoveToResult = async (result: VoiceDictationResult) => {
-    await showSurveyModal();
     setSharedVoiceDictationInfo((prev) => ({
       ...prev,
       componentType: 'RESULT',
       voiceDictationResult: result,
       currentTime: formatCurrentTime()
     }));
-  };
-
-  const showSurveyModal = async () => {
-    // 만족도 이벤트
-    if (!isCreditRecieved && !getCookie('dontShowSurvey')) {
-      overlay.closeAll();
-
-      overlay.open(({ isOpen, close }) => {
-        return (
-          <OverlayModal isOpen={isOpen} onClose={close} padding={'24px'}>
-            <SurveyModalContent />
-          </OverlayModal>
-        );
-      });
-    }
   };
 
   const handleErrorTrigger = ({ title, onRetry }: { title: string; onRetry?: () => void }) => {
