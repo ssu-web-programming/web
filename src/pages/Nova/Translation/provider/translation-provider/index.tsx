@@ -112,7 +112,7 @@ export function TranslationProvider({ children }: Props) {
         sharedTranslationInfo,
         setSharedTranslationInfo,
         triggerLoading,
-        resetTranslation // 초기화 함수 컨텍스트에 추가
+        resetTranslation
       }}>
       {children}
     </TranslationContext.Provider>

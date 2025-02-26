@@ -11,16 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { setError } from 'store/slices/errorSlice';
 import { getDriveFiles } from 'store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from 'store/store';
-import { calLeftCredit, getCookie } from 'util/common';
 
-import { apiWrapper } from '../../../../../api/apiWrapper';
-import { NOVA_GET_CREDIT_USE_COUNT } from '../../../../../api/constant';
-import SurveyModalContent from '../../../../../components/nova/satisfactionSurvey/survey-modal-content';
-import OverlayModal from '../../../../../components/overlay-modal';
-import { NOVA_TAB_TYPE } from '../../../../../constants/novaTapTypes';
-import { SERVICE_TYPE } from '../../../../../constants/serviceType';
-import { selectPageCreditReceived } from '../../../../../store/slices/nova/pageStatusSlice';
-import { selectTabSlice } from '../../../../../store/slices/tabSlice';
 import LanguageSearch from '../../components/language-search';
 import { TranslateType } from '../../components/translation-intro';
 import {
@@ -186,12 +177,7 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
     }
 
     const file = await convertFileObject();
-
-    try {
-      await translationRequest({ file, sourceLang, targetLang });
-    } catch (e) {
-      handleErrorTrigger({ title: '오류가 발생했습니다. 잠시 후 다시 시작해주세요.' });
-    }
+    await translationRequest({ file, sourceLang, targetLang });
   };
 
   const getNewSourceLang = (targetLang: string): string => {
