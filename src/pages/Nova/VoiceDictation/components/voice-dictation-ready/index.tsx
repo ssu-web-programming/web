@@ -205,7 +205,7 @@ export default function VoiceDictationReady() {
         <ButtonWithCredit
           onClick={translationVoiceDictation}
           text={t('Nova.voiceDictation.Button.Convert')}
-          isActive={fileName.length !== 0}
+          isActive={fileName.trim().length !== 0}
           creditAmount={50}
         />
       </S.Container>
