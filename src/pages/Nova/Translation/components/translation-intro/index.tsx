@@ -55,6 +55,7 @@ export default function TranslationIntro() {
   // 기본 언어 코드가 같은지 확인 (EN과 EN-US/EN-GB 같은 경우 처리)
   const isEnglishVariant =
     sourceLang === 'EN' && (targetLang === 'EN-GB' || targetLang === 'EN-US');
+
   const validateLang = () => {
     if (sourceLang === targetLang || isEnglishVariant) {
       confirm({

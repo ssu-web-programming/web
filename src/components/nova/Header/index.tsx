@@ -84,9 +84,6 @@ export default function NovaHeader(props: NovaHeaderProps) {
     (componentType === 'LOADING' && voiceDictationResult === null) ||
     translationComponentType === 'LOADING';
 
-  console.log('translationComponentType', translationComponentType);
-  console.log('isVoiceAndTranslationDisabledBack', isVoiceAndTranslationDisabledBack);
-
   const newChat = async (isBack = false) => {
     if (creating === 'NOVA') return;
 
