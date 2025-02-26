@@ -20,6 +20,7 @@ import OverlayModal from '../../../../../components/overlay-modal';
 import { NOVA_TAB_TYPE } from '../../../../../constants/novaTapTypes';
 import { selectPageCreditReceived } from '../../../../../store/slices/nova/pageStatusSlice';
 import { getCookie } from '../../../../../util/common';
+import { useAudioRecorder } from '../../provider/audio-recorder-provider';
 import {
   LangOptionValues,
   useVoiceDictationContext,

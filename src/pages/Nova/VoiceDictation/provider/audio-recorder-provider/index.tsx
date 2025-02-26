@@ -285,6 +285,7 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({ ch
           if (animationFrameRef.current) {
             cancelAnimationFrame(animationFrameRef.current);
           }
+
           setIsRecording(false);
           setIsPaused(false);
           dispatch(setIsRecordingState('not-started'));
