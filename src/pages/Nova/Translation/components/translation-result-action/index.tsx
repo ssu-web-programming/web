@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import IconTextButton from 'components/buttons/IconTextButton';
 import { useConfirm } from 'components/Confirm';
 import { useCopyToClipboard } from 'components/hooks/useCopyToClipboard';
@@ -35,11 +35,23 @@ export default function TranslationResultAction({
 
   const confirm = useConfirm();
   const shouldShowInsertDocButton = isInsertDocAction && clientStatus !== 'home';
+
+  const updateClientStatus = useCallback(() => {
+    Bridge.callSyncBridgeApiWithCallback({
+      api: 'getClientStatus',
+      callback: async (status: ClientStatusType) => {
+        setClientStatus(status);
+      }
+    });
+  }, []);
+
   const ICON_BUTTON_LIST = [
     {
       name: t('Nova.Chat.InsertDoc.Title'),
       iconSrc: isLightMode ? insertDocIcon : insertDarkDocIcon,
       clickHandler: async () => {
+        updateClientStatus();
+        console.log('clientStatus', clientStatus);
         if (clientStatus === 'doc_view_mode') {
           confirm({
             title: t(`Nova.Chat.InsertDoc.Fail.Title`)!,
@@ -65,13 +77,8 @@ export default function TranslationResultAction({
   ];
 
   useEffect(() => {
-    Bridge.callSyncBridgeApiWithCallback({
-      api: 'getClientStatus',
-      callback: async (status: ClientStatusType) => {
-        setClientStatus(status);
-      }
-    });
-  }, []);
+    updateClientStatus();
+  }, [updateClientStatus]);
 
   return (
     <S.Wrapper>
