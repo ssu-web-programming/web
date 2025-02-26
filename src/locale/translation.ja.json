@@ -195,7 +195,8 @@
     "CopyFailed": "コピーに失敗しました。",
     "SaveCompleted": "保存",
     "SaveFailed": "保存に失敗しました",
-    "CopyLinkCompleted": "リンクが正常にコピーされました。"
+    "CopyLinkCompleted": "リンクが正常にコピーされました。",
+    "Success": "成功的に保存されました！"
   },
   "Offline": {
     "UnstableConnection": "サービス接続に問題が発生しました。",
@@ -588,7 +589,7 @@
       "Guide": {
         "Title": "書き取り",
         "SubTitle": "録音またはファイルアップロード。",
-        "UploadGuide": ".m4a、.mp3、.aac、.wavファイル対応、最大1GB・約30分まで。",
+        "UploadGuide": ".m4a、.mp3、.aac、.wavファイル対応、最大200MB・約30分まで。",
         "TimeLimit": "最大30分まで利用可能。",
         "NetworkError": "サービスに接続できません。ご利用のネットワーク状態を確認してください。",
         "LanguageConversion": "選択した認識言語に変換されます。"
@@ -631,7 +632,7 @@
         "AudioPermissionRequired": "録音を開始するには、オーディオ権限を許可してください！",
         "UnsavedRecording": "待って！録音を終了せずに戻ると、\nデータは保存されません。本当に戻りますか？",
         "StopRecordingConfirm": "録音を停止しますか?",
-        "ConversionNotice": "録音が止まると、\n Novaは音声をテキストに変換します。",
+        "ConversionNotice": "録音が止まると、 Novaは音声をテキストに変換します。",
         "UnsavedGoBack": "待って！戻ると音声録音は保存されません。\n本当に戻りますか？",
         "LanguageCheck": "音声ファイルに会話が含まれているか、また\n設定された認識言語が音声言語と一致しているかを確認してください。",
         "Downloading": "音声ファイルをダウンロードしています。（NN%）",

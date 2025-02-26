@@ -195,7 +195,8 @@
     "CopyFailed": "Copy failed.",
     "SaveCompleted": "Saved",
     "SaveFailed": "Failed to save",
-    "CopyLinkCompleted": "Link copied successfully."
+    "CopyLinkCompleted": "Link copied successfully.",
+    "Success": "Successfully saved!"
   },
   "Offline": {
     "UnstableConnection": "Service connectivity issues!",
@@ -588,7 +589,7 @@
       "Guide": {
         "Title": "Dictation",
         "SubTitle": "Record or upload a file.",
-        "UploadGuide": "Supports .m4a, .mp3, .aac, and .wav files, up to 1GB and about 30 minutes.",
+        "UploadGuide": "Supports .m4a, .mp3, .aac, and .wav files, up to 200MB and about 30 minutes.",
         "TimeLimit": "Up to 30 minutes available.",
         "NetworkError": "Service connection is unstable. Please check your network status.",
         "LanguageConversion": "Converted to the selected recognition language."
@@ -631,7 +632,7 @@
         "AudioPermissionRequired": "Allow audio permission to start recording!",
         "UnsavedRecording": "Wait! If you go back without finishing the recording, \nit won't be saved. Do you still want to go back?",
         "StopRecordingConfirm": "Do you want to stop the recording?",
-        "ConversionNotice": "When the recording stops, \n Nova will convert the voice to text.",
+        "ConversionNotice": "When the recording stops, Nova will convert the voice to text.",
         "UnsavedGoBack": "Wait! If you go back, the recording will not be saved. \nDo you still want to go back?",
         "LanguageCheck": "Please check if the voice file contains a conversation and\nif the set recognition language matches the voice language.",
         "Downloading": "Downloading voice file. (NN%)",

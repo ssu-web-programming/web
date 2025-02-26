@@ -4,21 +4,14 @@ import FileButton from 'components/FileButton';
 import useManageFile from 'components/hooks/nova/useManageFile';
 import { getAccept } from 'components/nova/FileUploader';
 import GuideBox from 'components/nova/guide-box';
-import OverlayModal from 'components/overlay-modal';
 import { AUDIO_SUPPORT_TYPE } from 'constants/fileTypes';
 import { NOVA_TAB_TYPE } from 'constants/novaTapTypes';
 import { ReactComponent as UploadDarkIcon } from 'img/dark/ico_upload_img_plus.svg';
 import { ReactComponent as UploadFileLightIcon } from 'img/light/nova/translation/file_upload.svg';
-import { overlay } from 'overlay-kit';
 import { useTranslation } from 'react-i18next';
 import { ClientType, platformInfoSelector } from 'store/slices/platformInfo';
-import { setLocalFiles } from 'store/slices/uploadFiles';
-import { useAppDispatch, useAppSelector } from 'store/store';
+import { useAppSelector } from 'store/store';
 import { getCookie } from 'util/common';
-import { formatDuration, getAudioDuration } from 'util/getAudioDuration';
-
-import { useVoiceDictationContext } from '../../provider/voice-dictation-provider';
-import IosRecordedFileGuide from '../modals/ios-recorded-file-guide';
 
 import * as S from './style';
 
