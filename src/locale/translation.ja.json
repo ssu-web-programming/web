@@ -293,7 +293,12 @@
     "getCurrentSlideNote": "現在のスライドの内容を取得する",
     "AlreadyExistSlideContents": "スライドの内容をインポートすると、以前の編集が失われます. 続行する?",
     "ReturnAppList": "アプリ一覧に戻る",
-    "RemoveAll": "すべてクリア"
+    "RemoveAll": "すべてクリア",
+    "EOS": {
+      "title": "Notice of AI Apps Service Termination",
+      "content": "The AI Apps service ended on February 28, 2025. Please update your app and continue to explore various AI activities on NOVA!",
+      "close": "Close"
+    }
   },
   "EOS": {
     "ASKDocEOSTitle": "ASK Doc V1のサービスが終了しました",

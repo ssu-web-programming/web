@@ -293,7 +293,12 @@
     "getCurrentSlideNote": "현재 슬라이드 내용 가져오기",
     "AlreadyExistSlideContents": "슬라이드 내용을 새로 가져오면 기존에 편집한 내용은 사라집니다. 계속 진행할까요?",
     "ReturnAppList": "앱 목록으로 돌아가기",
-    "RemoveAll": "전체 지우기"
+    "RemoveAll": "전체 지우기",
+    "EOS": {
+      "title": "AI Apps 서비스 종료 안내",
+      "content": "AI Apps 서비스가 2025년 2월 28일에 종료되었습니다. 앱을 업데이트 하시고 앞으로는 NOVA에서 다양한 AI 활동을 진행해 보세요!",
+      "close": "닫기"
+    }
   },
   "EOS": {
     "ASKDocEOSTitle": "ASK Doc V1 서비스 종료",
