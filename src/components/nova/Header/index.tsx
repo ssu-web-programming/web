@@ -132,7 +132,10 @@ export default function NovaHeader(props: NovaHeaderProps) {
       return (
         <OverlayModal isOpen={isOpen} onClose={() => close(false)}>
           <ClosedModalContent
-            onConfirm={() => close(true)}
+            onConfirm={() => {
+              resetVoiceInfo();
+              close(true);
+            }}
             title={
               isReadyStatus
                 ? t('Nova.voiceDictation.Alert.UnsavedGoBack')
@@ -207,8 +210,8 @@ export default function NovaHeader(props: NovaHeaderProps) {
         }
       }
 
-      console.log('여기까지 오냐?', isError);
       await resetPage();
+
       if (
         translationComponentType === 'FILE_RESULT' ||
         translationComponentType === 'TEXT_RESULT'
