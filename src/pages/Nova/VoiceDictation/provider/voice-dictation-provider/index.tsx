@@ -1,9 +1,5 @@
 import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState } from 'react';
-import {
-  formatDuration,
-  getAudioDuration,
-  getAudioDurationViaAudioElement
-} from 'util/getAudioDuration';
+import { formatDuration, getAudioDurationViaAudioElement } from 'util/getAudioDuration';
 
 export type VoiceDictationComponentType =
   | 'INTRO'
