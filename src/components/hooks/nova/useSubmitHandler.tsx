@@ -134,7 +134,6 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
       try {
         dispatch(setCreating('NOVA'));
         dispatch(setUsingAI(true));
-        dispatch(setIsExternal(false));
 
         const curTab =
           chatType === SERVICE_TYPE.NOVA_WEBSEARCH_PERPLEXITY ||
