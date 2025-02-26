@@ -653,7 +653,7 @@
           "Chinese2": "Chinese (Traditional)",
           "KoEn": "Korean & English"
         },
-        "ChangeNotice": "The recognition language has been changed to []!"
+        "ChangeNotice": "The recognition language has been changed to {{lang}}!"
       },
       "FileFormat": {
         "Options": {

@@ -9,8 +9,6 @@ import { themeInfoSelector } from 'store/slices/theme';
 import { activeToast } from 'store/slices/toastSlice';
 import { useAppDispatch, useAppSelector } from 'store/store';
 
-import { langOptions } from '../../recognized-lang';
-
 import * as S from './style';
 
 export default function DesktopLangSelector() {
@@ -23,16 +21,37 @@ export default function DesktopLangSelector() {
   const { t } = useTranslation();
 
   const [tempSelectedLang, setTempSelectedLang] = useState<LangOptionValues>(selectedLangOption);
-
-  const findLabelByLangOptions = (lang: LangOptionValues) => {
-    return langOptions.find((langOption) => langOption.value === lang)?.label;
+  const findLabelKeyByLangValue = (lang: LangOptionValues): string => {
+    switch (lang) {
+      case 'ko-KR':
+        return 'Korean';
+      case 'en-US':
+        return 'English';
+      case 'ja':
+        return 'Japanese';
+      case 'zh-cn':
+        return 'Chinese1';
+      case 'zh-tw':
+        return 'Chinese2';
+      case 'enko':
+        return 'KoEn';
+      default:
+        return 'Korean'; // 기본값
+    }
   };
 
   const openToastPopup = (lang: LangOptionValues) => {
+    const langLabel = t(
+      `Nova.voiceDictation.LanguageSelector.Options.${findLabelKeyByLangValue(lang)}`
+    );
+
     dispatch(
       activeToast({
         type: 'info',
-        msg: `인식 언어가 ${findLabelByLangOptions(lang)}로 변경되었어요!`
+        msg: t('Nova.voiceDictation.LanguageSelector.ChangeNotice', { lang: langLabel }).replace(
+          '&amp;',
+          '&'
+        )
       })
     );
   };

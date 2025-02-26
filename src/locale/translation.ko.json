@@ -663,7 +663,7 @@
       "Alert": {
         "MicPermission": "'Polaris Office'이(가) 마이크에 \n접근하려고 합니다.",
         "MicPermissionDetail": "Polaris office에서 받아쓰기를 위한 오디오를\n녹음하도록 허용하시겠습니까?",
-        "AudioPermissionRequired": "녹음을 시작하려면 오디오 권한을 허욯해 주세요!",
+        "AudioPermissionRequired": "녹음을 시작하려면 오디오 권한을 허용해 주세요!",
         "UnsavedRecording": "잠깐! 녹음을 끝내지 않고 뒤로가면 \n녹음이 저장되지 않아요. 그래도 뒤로가시겠어요?",
         "StopRecordingConfirm": "녹음을 종료할까요?",
         "ConversionNotice": "녹음이 종료되면 NOVA가 음성을 텍스트로 변환합니다.",
@@ -687,7 +687,7 @@
           "Chinese2": "중국어(번체)",
           "KoEn": "한국어 + 영어"
         },
-        "ChangeNotice": "인식 언어가 []로 변경되었어요!"
+        "ChangeNotice": "인식 언어가 {{lang}}로 변경되었어요!"
       },
       "FileFormat": {
         "Options": {

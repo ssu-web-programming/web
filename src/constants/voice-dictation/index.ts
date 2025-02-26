@@ -1,3 +1,4 @@
+import i18n from 'i18next';
 import { MediaErrorMessages } from 'types/media-error';
 
 export const VOICE_COLOR = {
@@ -12,11 +13,11 @@ export const VOICE_COLOR = {
 export const MEDIA_ERROR_MESSAGES: MediaErrorMessages = {
   NotAllowedError: {
     title: '마이크 접근이 거부되었습니다. ',
-    msg: '녹음을 시작하려면 오디오 권한을 허용해 주세요!'
+    msg: i18n.t('Nova.voiceDictation.Alert.AudioPermissionRequired')
   },
   PermissionDeniedError: {
     title: '마이크 접근이 거부되었습니다.',
-    msg: '녹음을 시작하려면 오디오 권한을 허용해 주세요!'
+    msg: i18n.t('Nova.voiceDictation.Alert.AudioPermissionRequired')
   },
   NotFoundError: {
     title: '마이크 장치를 찾을 수 없습니다',

@@ -653,7 +653,7 @@
           "Chinese2": "中国語（繁体)",
           "KoEn": "韓国語および英語"
         },
-        "ChangeNotice": "認識言語が[]に変更されました!"
+        "ChangeNotice": "認識言語が{{lang}}に変更されました!"
       },
       "FileFormat": {
         "Options": {
