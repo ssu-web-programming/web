@@ -3,13 +3,15 @@ import React, { useEffect } from 'react';
 import { useConfirm } from 'components/Confirm';
 import ControlButton from 'components/nova/buttons/control-button';
 import PlayPauseButton from 'components/nova/buttons/play-pause-button';
+import { NOVA_TAB_TYPE } from 'constants/novaTapTypes';
 import { ReactComponent as DarkLang } from 'img/dark/nova/voice-dictation/lang.svg';
 import { ReactComponent as DarkStop } from 'img/dark/nova/voice-dictation/stop.svg';
 import { ReactComponent as Lang } from 'img/light/nova/voiceDictation/lang.svg';
 import { ReactComponent as Stop } from 'img/light/nova/voiceDictation/stop.svg';
 import { useTranslation } from 'react-i18next';
 import { appStateSelector } from 'store/slices/appState';
-import { useAppSelector } from 'store/store';
+import { selectNovaTab } from 'store/slices/tabSlice';
+import { useAppDispatch, useAppSelector } from 'store/store';
 
 import { useAudioRecorder } from '../../provider/audio-recorder-provider';
 import { LangOptionValues } from '../../provider/voice-dictation-provider';
@@ -44,7 +46,8 @@ const TestAudioRecorder: React.FC<AudioRecorderProps> = ({
     resumeRecording,
     canvasRef,
     mediaRecorderRef,
-    startVisualization
+    startVisualization,
+    setIsPaused
   } = useAudioRecorder();
 
   const formatDuration = (seconds: number): string => {

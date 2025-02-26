@@ -41,10 +41,10 @@ import CreditIcon from '../../../img/light/ico_credit_gray.svg';
 import { ReactComponent as UploadLightIcon } from '../../../img/light/ico_upload_img_plus.svg';
 import { announceInfoSelector } from '../../../store/slices/nova/announceSlice';
 import { selectPageService, selectPageStatus } from '../../../store/slices/nova/pageStatusSlice';
-import { selectTabSlice } from '../../../store/slices/tabSlice';
+import { selectNovaTab, selectTabSlice } from '../../../store/slices/tabSlice';
 import { themeInfoSelector } from '../../../store/slices/theme';
 import { userInfoSelector } from '../../../store/slices/userInfo';
-import { useAppSelector } from '../../../store/store';
+import { useAppDispatch, useAppSelector } from '../../../store/store';
 import Translation from '../Translation';
 import VoiceDictation from '../VoiceDictation';
 

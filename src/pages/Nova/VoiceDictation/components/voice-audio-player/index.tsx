@@ -129,7 +129,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
         onLoadedMetadata={handleLoadedMetadata}
         onTimeUpdate={handleTimeUpdate}
         onEnded={() => setIsPlaying(false)}
-        preload="metadata"
+        preload="auto"
       />
 
       <S.ProgressBarContainer onClick={handleProgressBarClick}>

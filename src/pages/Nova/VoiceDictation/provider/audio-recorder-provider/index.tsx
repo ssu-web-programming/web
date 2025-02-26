@@ -25,6 +25,7 @@ interface AudioRecorderContextType {
   audioContextRef: React.MutableRefObject<AudioContext | null>;
   startVisualization: any;
   initializingRecording: () => void;
+  setIsPaused: any;
 }
 
 const AudioRecorderContext = createContext<AudioRecorderContextType | null>(null);
@@ -162,34 +163,43 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({ ch
     }
   }, []);
 
-  const startVisualization = useCallback((stream: MediaStream) => {
-    if (!canvasRef.current || !stream.active) return;
+  const startVisualization = useCallback(
+    (stream: MediaStream) => {
+      if (!canvasRef.current || !stream.active) return;
 
-    try {
-      audioContextRef.current = new window.AudioContext();
-      const source = audioContextRef.current.createMediaStreamSource(stream);
-      const analyser = audioContextRef.current.createAnalyser();
+      try {
+        audioContextRef.current = new window.AudioContext();
+        const source = audioContextRef.current.createMediaStreamSource(stream);
+        const analyser = audioContextRef.current.createAnalyser();
 
-      source.connect(analyser);
-      analyserRef.current = analyser;
+        source.connect(analyser);
+        analyserRef.current = analyser;
 
-      const animate = () => {
-        if (!canvasRef.current || !analyserRef.current) return;
+        const animate = () => {
+          if (!canvasRef.current || !analyserRef.current) return;
 
-        const frequencyData = new Uint8Array(analyserRef.current.frequencyBinCount);
-        analyserRef.current.getByteFrequencyData(frequencyData);
+          const frequencyData = new Uint8Array(analyserRef.current.frequencyBinCount);
+          analyserRef.current.getByteFrequencyData(frequencyData);
 
-        const data = calculateBarData(frequencyData, canvasRef.current.clientWidth, 2, 5);
+          const data = calculateBarData(frequencyData, canvasRef.current.clientWidth, 2, 5);
 
-        draw(data, canvasRef.current, 2, 5, isPaused);
-        animationFrameRef.current = requestAnimationFrame(animate);
-      };
+          draw(data, canvasRef.current, 2, 5, isPaused);
+          if (isPaused) {
+            if (animationFrameRef.current) {
+              cancelAnimationFrame(animationFrameRef.current);
+            }
+          } else {
+            animationFrameRef.current = requestAnimationFrame(animate);
+          }
+        };
 
-      animate();
-    } catch (error) {
-      console.error('Error starting visualization:', error);
-    }
-  }, []);
+        animate();
+      } catch (error) {
+        console.error('Error starting visualization:', error);
+      }
+    },
+    [isPaused]
+  );
 
   const startRecording = useCallback(async () => {
     try {
@@ -345,7 +355,7 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({ ch
       startTimer();
       startVisualization(streamRef.current);
     }
-  }, [startTimer, startVisualization]);
+  }, [startTimer]);
 
   const initializingRecording = () => {
     if (mediaRecorderRef.current) {
@@ -384,7 +394,8 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({ ch
         analyserRef,
         audioContextRef,
         startVisualization,
-        initializingRecording
+        initializingRecording,
+        setIsPaused
       }}>
       {children}
     </AudioRecorderContext.Provider>

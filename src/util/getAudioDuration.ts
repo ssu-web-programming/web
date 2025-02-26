@@ -74,7 +74,7 @@ export const getAudioDurationViaAudioElement = (audioFile: File): Promise<number
     });
 
     // iOS Safari에서 필요한 설정
-    audio.preload = 'metadata';
+    audio.preload = 'auto';
     audio.src = objectUrl;
     audio.load();
   });
