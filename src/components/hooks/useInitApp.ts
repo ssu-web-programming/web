@@ -28,14 +28,9 @@ import {
   setPageCreditReceivedByServiceType,
   setPageService
 } from '../../store/slices/nova/pageStatusSlice';
-import { setPlatformInfo } from '../../store/slices/platformInfo';
 
 export default function useInitApp() {
   const dispatch = useAppDispatch();
-
-  const platform = getPlatform();
-  const version = getVersion();
-  const device = getDevice();
 
   const initNovaExpireTime = useCallback(
     async (headers: HeadersInit) => {
@@ -203,10 +198,6 @@ export default function useInitApp() {
       'User-Agent': navigator.userAgent,
       'X-PO-AI-API-LANGUAGE': lang
     };
-
-    if (platform != ClientType.unknown && version) {
-      dispatch(setPlatformInfo({ platform: platform, device: device, version: version }));
-    }
 
     await Promise.all([
       initCreditInfo(headers),

@@ -33,11 +33,18 @@ import Offline from './pages/Offline';
 import TextToImage from './pages/TextToImage';
 import Tools from './pages/Tools';
 import { setPageStatus } from './store/slices/nova/pageStatusSlice';
+import { setPlatformInfo } from './store/slices/platformInfo';
 import { setThemeInfo, themeInfoSelector, ThemeType } from './store/slices/theme';
 import { useAppDispatch, useAppSelector } from './store/store';
 import GlobalStyle from './style/globalStyle';
 import { selectTheme } from './theme/theme';
-import Bridge, { ClientType, getPlatform, useInitBridgeListener } from './util/bridge';
+import Bridge, {
+  ClientType,
+  getDevice,
+  getPlatform,
+  getVersion,
+  useInitBridgeListener
+} from './util/bridge';
 
 function App() {
   const initBridgeListener = useInitBridgeListener();
@@ -47,6 +54,10 @@ function App() {
   const { isClosedNova } = useAppSelector(appStateSelector);
   const { t } = useTranslation();
   const { resetVoiceInfo } = useVoiceDictationContext();
+
+  const platform = getPlatform();
+  const version = getVersion();
+  const device = getDevice();
 
   useEffect(() => {
     const detectTheme = () => {
@@ -86,6 +97,9 @@ function App() {
       }
     };
 
+    if (platform != ClientType.unknown && version) {
+      dispatch(setPlatformInfo({ platform: platform, device: device, version: version }));
+    }
     fetchInit();
   }, []);
 
