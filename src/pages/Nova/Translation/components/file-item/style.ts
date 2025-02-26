@@ -9,6 +9,13 @@ const Wrapper = styled.div`
   position: relative;
 `;
 
+const IconContainer = styled.div`
+  position: relative; /* 이 컨테이너를 기준으로 삭제 아이콘 배치 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const FileName = styled.p`
   text-align: center;
   color: ${({ theme }) => theme.color.text.gray03};
@@ -22,9 +29,9 @@ const FileName = styled.p`
 const DeleteIcon = styled(IcDelete)`
   position: absolute;
   top: -6px;
-  right: 60px;
+  right: -6px; /* 아이콘 컨테이너 기준 오른쪽 상단 */
   cursor: pointer;
   z-index: 1;
 `;
 
-export { DeleteIcon, FileName, Wrapper };
+export { DeleteIcon, FileName, IconContainer, Wrapper };

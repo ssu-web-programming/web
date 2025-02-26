@@ -16,6 +16,7 @@ const ToggleWrapper = styled.div`
   display: flex;
   justify-content: center;
   display: flex;
+  width: 100%;
 `;
 
 const TextAreaWrapper = styled.div`

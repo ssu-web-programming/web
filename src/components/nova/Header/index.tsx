@@ -10,7 +10,7 @@ import { useTranslationContext } from 'pages/Nova/Translation/provider/translati
 import ClosedModalContent from 'pages/Nova/VoiceDictation/components/modals/closed-modal-content';
 import { useVoiceDictationContext } from 'pages/Nova/VoiceDictation/provider/voice-dictation-provider';
 import { Trans, useTranslation } from 'react-i18next';
-import { clearError } from 'store/slices/errorSlice';
+import { clearError, errorSelector } from 'store/slices/errorSlice';
 
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import {
@@ -66,6 +66,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
   const { isExternal } = useAppSelector(appStateSelector);
   const chatMode = useAppSelector(novaChatModeSelector);
   const { handleClearPastedImages } = useClipboard();
+  const { isError } = useAppSelector(errorSelector);
 
   const {
     resetVoiceInfo,
@@ -161,6 +162,16 @@ export default function NovaHeader(props: NovaHeaderProps) {
     if (status === 'progress' && selectedNovaTab === NOVA_TAB_TYPE.aiVideo) {
       await resetPage();
     }
+    if (isError && selectedNovaTab === NOVA_TAB_TYPE.voiceDictation) {
+      await resetPage();
+      resetVoiceInfo();
+      return;
+    }
+    if (isError && selectedNovaTab === NOVA_TAB_TYPE.translation) {
+      await resetPage();
+      resetTranslation();
+      return;
+    }
 
     if (isDisableBack) {
       if (selectedNovaTab === NOVA_TAB_TYPE.voiceDictation) {
@@ -193,7 +204,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
         });
         if (!ret) return;
       }
-
+      console.log('여기까지 오냐?', isError);
       await resetPage();
       if (
         translationComponentType === 'FILE_RESULT' ||

@@ -4,6 +4,7 @@ import { TRANSLATION_SUPPORT_TYPE } from 'constants/fileTypes';
 import { ReactComponent as UploadDarkIcon } from 'img/dark/ico_upload_img_plus.svg';
 import { ReactComponent as CreditIcon } from 'img/light/ico_credit_gray.svg';
 import { ReactComponent as UploadFileLightIcon } from 'img/light/nova/translation/file_upload.svg';
+import { useTranslation } from 'react-i18next';
 import { themeInfoSelector } from 'store/slices/theme';
 import { getDriveFiles, getLocalFiles } from 'store/slices/uploadFiles';
 import { userInfoSelector } from 'store/slices/userInfo';
@@ -119,6 +120,7 @@ export default function TranslationFileUploader({
   const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
   const localFiles = useAppSelector(getLocalFiles);
   const driveFiles = useAppSelector(getDriveFiles);
+  const { t } = useTranslation();
 
   const { setSharedTranslationInfo } = useTranslationContext();
 
@@ -159,7 +161,7 @@ export default function TranslationFileUploader({
           <ImageBox>
             <Icon disable={isAgreed === undefined}>
               {isLightMode ? <UploadFileLightIcon /> : <UploadDarkIcon />}
-              <span>파일 업로드</span>
+              <span>{t('Nova.translation.FileUpload.Guide.Title')}</span>
             </Icon>
             <Credit>
               <span>{creditCount}</span>

@@ -620,7 +620,10 @@
         "Completed": "Dictation completed",
         "ConversionSuccess": "The voice conversation has been converted to text.\nSave your conversations and use them freely!",
         "Participant": "Attendee",
-        "Recognizing": "Recognizing"
+        "Recognizing": "Recognizing",
+        "Today": "Today",
+        "Am": "AM",
+        "Pm": "PM"
       },
       "Alert": {
         "MicPermission": "Polaris Office wants to \naccess the microphone.",
@@ -782,7 +785,8 @@
         "CharacterLimit": "Exceeds limit. Reduce text and retry.",
         "EncryptedDocument": "Encrypted documents cannot be queried. Please check the document again.",
         "DamagedDocument": "Damaged documents cannot be queried. Please check the document again.",
-        "CommonUnsupportFile": "This file format is not supported.\nPlease check the supported file formats and try again.\n\n- Documents : docx, pptx, pdf"
+        "CommonUnsupportFile": "This file format is not supported.\nPlease check the supported file formats and try again.\n\n- Documents : docx, pptx, pdf",
+        "CommonUnsupportVoiceFile": "This file format is not supported.\nPlease check the supported file formats and try again.\n\n- Documents : m4a, mp3 , aac , wav"
       },
       "FileUpload": {
         "Guide": {
@@ -868,7 +872,8 @@
           "Title": "Document Insertion Guide",
           "Msg": {
             "Home": "To insert into the document, please open the document and enter edit mode first. Don't worry, your response won't disappear!",
-            "Viewer": "To insert into the document, please enter edit mode. Don't worry, your response won't disappear!"
+            "Viewer": "To insert into the document, please enter edit mode. Don't worry, your response won't disappear!",
+            "Translation": "To insert into the document, please enter edit mode."
           }
         }
       },
@@ -931,7 +936,7 @@
         "Msg": "Wait! Do you want to end your last conversation with NOVA?",
         "Ok": "Exit"
       },
-      "CloseAIVideo":  {
+      "CloseAIVideo": {
         "Msg": "Wait! The AI video generation set-up is not yet completed. If you go back without completing the settings, the values set so far may be lost. Do you still want to go back?",
         "Ok": "Move"
       },
@@ -977,7 +982,7 @@
         "Cancel": "Cancel"
       },
       "AnalyzeFile": {
-        "Msg": "Save to Polaris Drive to analyze. Save now?"
+        "Msg": "Save to Polaris Drive to Translation. Save now?"
       },
       "UpdateVersion": {
         "Msg": "Update to the latest version to enjoy the new features right away! If the update is not available yet, it’s being rolled out gradually, so please wait a little longer. You’ll be able to enjoy it soon!",

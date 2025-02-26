@@ -101,7 +101,6 @@ export default function TranslationIntro() {
           type={type}
           onToggle={setType}
           buttonStyle={css`
-            width: 136px;
             justify-content: center;
           `}
         />
@@ -155,7 +154,7 @@ export default function TranslationIntro() {
         <S.TextAreaBottom>
           <S.StyledDeepL />
           {type === 'TEXT' && (
-            <span>{`${translateInputValue.length.toLocaleString()}${t('Nova.translation.Input.CharacterCount')}`}</span>
+            <span>{`${translateInputValue.length.toLocaleString()} / 10,000`}</span>
           )}
         </S.TextAreaBottom>
       </S.TextAreaWrapper>

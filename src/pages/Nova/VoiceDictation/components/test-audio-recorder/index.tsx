@@ -78,13 +78,9 @@ const TestAudioRecorder: React.FC<AudioRecorderProps> = ({
   }, [isInitRecording]);
 
   useEffect(() => {
-    console.log('useEffect-isRecordState', isRecordState);
-
     if (isRecordState === 'pause') {
-      console.log('isRecordState-pause', isRecordState);
       pauseRecording();
     } else if (isRecordState === 'start') {
-      console.log('isRecordState-start', isRecordState);
       resumeRecording();
     }
   }, [isRecordState]);
@@ -93,7 +89,7 @@ const TestAudioRecorder: React.FC<AudioRecorderProps> = ({
     if (recordingTime >= 30 * 60 && !isPaused) {
       pauseRecording();
       confirm({
-        msg: '녹음 시간이 30분을 초과하여 자동으로 중단되었습니다. 추가 녹음이 필요하면  새롭게 시작해주세요.',
+        msg: t('Nova.voiceDictation.Alert.Overed30Minutes'),
         onOk: {
           text: t('Confirm'),
           callback: () => {

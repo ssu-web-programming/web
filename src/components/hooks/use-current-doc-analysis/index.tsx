@@ -27,7 +27,7 @@ export default function useCurrentDocAnalysis() {
   const { getAvailableFileCnt } = useUserInfoUtils();
 
   const analysisCurDoc = async () => {
-    console.log('currentFile123', currentFile);
+    console.log('currentFile', currentFile);
     if (currentFile.type === 'notSupported') {
       await confirm({
         msg: t('Nova.Alert.UnopenableDocError', { max: getAvailableFileCnt(selectedNovaTab) })!,
@@ -42,12 +42,14 @@ export default function useCurrentDocAnalysis() {
       if (Number(currentFile.id) === -1) {
         await confirmSaveDoc(true);
       } else if (currentFile.isSaved) {
+        console.log('현재 문서를 분석하기 위해 들어오는 곳!');
         dispatch(setCreating('NOVA'));
         dispatch(setLocalFiles([]));
         dispatch(setDriveFiles([]));
 
         dispatch(setLoadingFile({ id: currentFile.id }));
         const curFile = await getFileInfo(currentFile.id);
+        console.log('용량 체크가 필요한 curFile', curFile);
         dispatch(removeLoadingFile());
 
         dispatch(setDriveFiles([curFile]));
@@ -102,7 +104,10 @@ export default function useCurrentDocAnalysis() {
 
   const confirmUploadFile = async () => {
     await confirm({
-      msg: t('Nova.Confirm.UploadFile.Msg'),
+      msg:
+        selectedNovaTab === 'translation'
+          ? t('Nova.Confirm.AnalyzeFile.Msg')
+          : t('Nova.Confirm.UploadFile.Msg'),
       onOk: {
         text: t('Nova.Confirm.UploadFile.Ok'),
         callback: () => {
