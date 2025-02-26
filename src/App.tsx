@@ -117,6 +117,8 @@ function App() {
             onConfirm={() => {
               handleResetVoiceInfo();
             }}
+            confirmTxt={t('Nova.Confirm.CloseChat.Ok') as string}
+            closeTxt={t('Cancel') as string}
           />
         </OverlayModal>
       );
