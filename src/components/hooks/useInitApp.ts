@@ -51,7 +51,7 @@ export default function useInitApp() {
           data: { expiredTime } // seconds
         } = await res.json();
         if (success) {
-          dispatch(setNovaExpireTime(1 * 1000));
+          dispatch(setNovaExpireTime(expiredTime * 1000));
         }
       } catch (err) {
         /* empty */
