@@ -205,7 +205,7 @@ export function useManageFile({ onFinishCallback, onClearPastedImages }: Props =
       await confirm({
         title: '',
         msg:
-          selectedNovaTab === 'aiChat' || selectedNovaTab === 'home'
+          selectedNovaTab === NOVA_TAB_TYPE.aiChat || selectedNovaTab === NOVA_TAB_TYPE.home
             ? t('Nova.Alert.CommonUnsupportFile')
             : selectedNovaTab === 'voiceDictation'
               ? t('Nova.translation.Alert.CommonUnsupportVoiceFile')
