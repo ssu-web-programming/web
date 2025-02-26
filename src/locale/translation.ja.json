@@ -609,7 +609,8 @@
         "DictationFile": "書き取りファイル",
         "SeeDetails": "詳しくはこちら",
         "DontShowAgain": "今後表示しない",
-        "Confirm": "OK"
+        "Confirm": "OK",
+        "Recognition": "認識言語"
       },
       "Status": {
         "RecognizingKorean": "韓国語を認識",
@@ -617,14 +618,16 @@
         "Recording": "録音中…",
         "MovingToDictation": "書き取りへ移動",
         "Converting": "テキスト変換する",
-        "NoContent": "音声を変換したテキスト変換コンテンツが存在しません。",
+        "NoContent": "音声を変換したテキスト変換コンテンツが存在しません。\n 音声ファイルに会話が含まれているか、また\n 設定された認識言語が音声言語と一致しているかを確認してください。",
         "Completed": "書き取り完了",
         "ConversionSuccess": "音声会話がテキストに変換されました。\n会話を保存して自由に使用してください。",
         "Participant": "出席者",
         "Recognizing": "を認識",
         "Today": "今日 (きょう)",
-        "Am": "午前 (ごぜん)",
-        "Pm": "午後 (ごご)"
+        "Am": "午前",
+        "Pm": "午後",
+        "Minutes": "分",
+        "Seconds": "秒"
       },
       "Alert": {
         "MicPermission": "Polaris Officeが\nマイクへのアクセスを求めています。",

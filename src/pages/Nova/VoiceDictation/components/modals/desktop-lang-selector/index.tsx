@@ -80,7 +80,7 @@ export default function DesktopLangSelector() {
 
   return (
     <S.ModalContainer>
-      <S.ModalTitle>인식 언어</S.ModalTitle>
+      <S.ModalTitle>{t('Nova.voiceDictation.Button.Recognition')}</S.ModalTitle>
       <S.ModalSubTitle>{t('Nova.voiceDictation.Guide.LanguageConversion')}</S.ModalSubTitle>
 
       <S.RadioGroup>

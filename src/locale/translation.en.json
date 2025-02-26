@@ -609,7 +609,8 @@
         "DictationFile": "Dictation file",
         "SeeDetails": "See details",
         "DontShowAgain": "Don't show again",
-        "Confirm": "OK"
+        "Confirm": "OK",
+        "Recognition": "Recognition Language"
       },
       "Status": {
         "RecognizingKorean": "Recognizing Korean",
@@ -617,14 +618,16 @@
         "Recording": "Recording…",
         "MovingToDictation": "Go to dictation",
         "Converting": "Converting to text",
-        "NoContent": "There is no converted voice transcribed content.",
+        "NoContent": "There is no converted voice transcribed content.\n Please check if the voice file contains a conversation and\n if the set recognition language matches the voice language.",
         "Completed": "Dictation completed",
         "ConversionSuccess": "The voice conversation has been converted to text.\nSave your conversations and use them freely!",
         "Participant": "Attendee",
         "Recognizing": "Recognizing",
         "Today": "Today",
         "Am": "AM",
-        "Pm": "PM"
+        "Pm": "PM",
+        "Minutes": "Minute",
+        "Seconds": "Second"
       },
       "Alert": {
         "MicPermission": "Polaris Office wants to \naccess the microphone.",

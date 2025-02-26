@@ -113,8 +113,7 @@ export default function VoiceDictationReady() {
         }));
 
         handleErrorTrigger({
-          title:
-            '변환된 받아쓰기 내용이 없어요.\n 음성 파일에 대화가 포함되어 있는지, 설정한 인식 언어가 음성과 같은 언어인지 확인해주세요.',
+          title: t('Nova.voiceDictation.Status.NoContent'),
           onRetry: translationVoiceDictation
         });
         return;
@@ -124,14 +123,13 @@ export default function VoiceDictationReady() {
     } catch (error: any) {
       if (error.code === 'Timeout') {
         handleErrorTrigger({
-          title: '작업 시간이 초과되었습니다. \n 다시 시도해 주세요.',
+          title: t('Nova.TimeOut.Title'),
           onRetry: translationVoiceDictation
         });
         return;
       } else if (error.code === 'damage') {
         handleErrorTrigger({
-          title:
-            '변환된 받아쓰기 내용이 없어요.\n 음성 파일에 대화가 포함되어 있는지, 설정한 인식 언어가 음성과 같은 언어인지 확인해주세요.',
+          title: t('Nova.voiceDictation.Status.NoContent'),
           onRetry: translationVoiceDictation
         });
       } else {
@@ -180,7 +178,7 @@ export default function VoiceDictationReady() {
             <S.Duration>{audioDuration}</S.Duration>
 
             <S.LanguageSelector>
-              <S.LanguageLabel>인식 언어</S.LanguageLabel>
+              <S.LanguageLabel>{t('Nova.voiceDictation.Button.Recognition')}</S.LanguageLabel>
               <S.LanguageValue>
                 <Select<LangOptionValues>
                   options={langOptions}

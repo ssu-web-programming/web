@@ -1,3 +1,5 @@
+import i18n from 'i18next';
+
 export const getAudioDuration = async (audioFile: File): Promise<number> => {
   return new Promise((resolve, reject) => {
     // iOS Safari 호환성을 위한 조치
@@ -52,11 +54,15 @@ export const formatDuration = (seconds: number): string => {
 
   // 각 단위가 0인 경우는 출력하지 않음
   const hoursStr = hours > 0 ? `${hours}시간 ` : '';
-  const minutesStr = minutes > 0 ? `${minutes}분 ` : '';
-  const secondsStr = remainingSeconds > 0 ? `${remainingSeconds}초` : '';
+  const minutesStr =
+    minutes > 0 ? `${minutes}${i18n.t('Nova.voiceDictation.Status.Minutes')} ` : '';
+  const secondsStr =
+    remainingSeconds > 0
+      ? `${remainingSeconds}${i18n.t('Nova.voiceDictation.Status.Seconds')}`
+      : '';
 
   // 모든 단위가 0인 경우 "0초" 반환
-  return hoursStr + minutesStr + secondsStr || '0초';
+  return hoursStr + minutesStr + secondsStr || `0${i18n.t('Nova.voiceDictation.Status.Minutes')}`;
 };
 
 export const formatMilliseconds = (ms: number): string => {
@@ -186,16 +192,17 @@ export function formatCurrentTime() {
   const hours = now.getHours();
   const minutes = now.getMinutes();
 
-  // 오전/오후 구분
-  const period = hours < 12 ? '오전' : '오후';
-
   // 12시간제로 변환
   const formattedHours = hours % 12 || 12;
 
   // 분이 한 자리 수일 경우 앞에 0 붙이기
   const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
 
-  return `오늘 ${period} ${formattedHours}:${formattedMinutes}`;
+  // AM/PM 구분
+  const period =
+    hours < 12 ? i18n.t('Nova.voiceDictation.Status.Am') : i18n.t('Nova.voiceDictation.Status.Pm');
+
+  return `${formattedHours}:${formattedMinutes} ${period}`;
 }
 
 export function getCurrentDateFormatted() {

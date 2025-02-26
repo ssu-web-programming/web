@@ -87,7 +87,7 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
     onError: (error: any) => {
       if (error.code === 'Timeout') {
         handleErrorTrigger({
-          title: '작업 시간이 초과되었습니다. \n 다시 시도해 주세요.',
+          title: t('Nova.TimeOut.Title'),
           onRetry: async () =>
             await translationRequest({ file: await convertFileObject(), sourceLang, targetLang })
         });

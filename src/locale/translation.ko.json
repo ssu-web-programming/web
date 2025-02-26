@@ -643,7 +643,8 @@
         "DictationFile": "받아쓰기 파일",
         "SeeDetails": "자세히 보기",
         "DontShowAgain": "다시 보지 않기",
-        "Confirm": "확인"
+        "Confirm": "확인",
+        "Recognition": "인식 언어"
       },
       "Status": {
         "RecognizingKorean": "한국어 인식 중",
@@ -651,14 +652,16 @@
         "Recording": "녹음 중",
         "MovingToDictation": "받아쓰기로 이동",
         "Converting": "텍스트로 변환하고 있어요",
-        "NoContent": "변환된 음성 받아쓰기 내용이 없어요",
+        "NoContent": "변환된 음성 받아쓰기 내용이 없어요\n 음성 파일에 대화가 포함되어 있는지\n 설정한 인식 언어가 음성과 같은 언어인지 확인해주세요.",
         "Completed": "받아쓰기 완료",
         "ConversionSuccess": "음성 대화를 텍스트로 변환했어요\n대화 내용을 저장해, 자유롭게 활용해 보세요!",
         "Participant": "참석자",
         "Recognizing": "인식 중",
         "Today": "오늘",
-        "Am": "오전",
-        "Pm": "오후"
+        "Am": "AM",
+        "Pm": "PM",
+        "Minutes": "분",
+        "Seconds": "초"
       },
       "Alert": {
         "MicPermission": "'Polaris Office'이(가) 마이크에 \n접근하려고 합니다.",
