@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import { apiWrapper } from '../../../../api/apiWrapper';
 import { NOVA_VIDEO_GET_AVATARS, NOVA_VIDEO_GET_VOICES } from '../../../../api/constant';
+import { Voices } from '../../../../constants/heygenTypes';
 import { NOVA_TAB_TYPE } from '../../../../constants/novaTapTypes';
 import {
   selectPageResult,
@@ -16,6 +17,12 @@ export function useGetVoices() {
 
   const [hasMoreMap, setHasMoreMap] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState(false);
+
+  const mergeVoices = (existingVoices: Voices[], newVoices: Voices[]): Voices[] => {
+    const voiceMap = new Map(existingVoices.map((voice) => [voice.voice_id, voice]));
+    newVoices.forEach((voice) => voiceMap.set(voice.voice_id, voice));
+    return Array.from(voiceMap.values());
+  };
 
   const getVoices = async (gender: string, lang: string) => {
     if (loading || hasMoreMap[lang] === false) return;
@@ -32,6 +39,7 @@ export function useGetVoices() {
       );
 
       const { data } = await res.json();
+      console.log(data);
       if (data.voices.length > 0) {
         dispatch(
           updatePageResult({
@@ -43,7 +51,7 @@ export function useGetVoices() {
                   ...(result?.info?.voicePage ?? {}),
                   [lang]: currentPage + 1
                 },
-                voices: [...(result?.info?.voices ?? []), ...data.voices]
+                voices: mergeVoices(result?.info?.voices ?? [], data.voices)
               }
             }
           })
