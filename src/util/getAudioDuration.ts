@@ -47,6 +47,38 @@ export const getAudioDuration = async (audioFile: File): Promise<number> => {
   });
 };
 
+export const getAudioDurationViaAudioElement = (audioFile: File): Promise<number> => {
+  return new Promise((resolve, reject) => {
+    if (!audioFile) {
+      reject(new Error('파일이 제공되지 않았습니다.'));
+      return;
+    }
+
+    // iOS Safari에서 호환성을 위해 URL.createObjectURL 사용
+    const objectUrl = URL.createObjectURL(audioFile);
+
+    // 오디오 요소 생성
+    const audio = new Audio();
+
+    // 메타데이터 로드 완료 시 실행
+    audio.addEventListener('loadedmetadata', () => {
+      // 메모리 누수 방지를 위해 URL 객체 해제
+      URL.revokeObjectURL(objectUrl);
+      resolve(audio.duration);
+    });
+
+    // 오류 발생 시 실행
+    audio.addEventListener('error', (event) => {
+      URL.revokeObjectURL(objectUrl);
+      reject(new Error('오디오 파일을 로드하는 중 오류가 발생했습니다.'));
+    });
+
+    // iOS Safari에서 필요한 설정
+    audio.preload = 'metadata';
+    audio.src = objectUrl;
+  });
+};
+
 export const formatDuration = (seconds: number): string => {
   // 시간, 분, 초 계산
   const hours = Math.floor(seconds / 3600);
