@@ -176,7 +176,21 @@ export default function NovaHeader(props: NovaHeaderProps) {
     }
 
     if (isDisableBack) {
-      if (selectedNovaTab === NOVA_TAB_TYPE.voiceDictation) {
+      if (selectedNovaTab === NOVA_TAB_TYPE.aiVideo) {
+        const ret = await confirm({
+          title: '',
+          msg: t(`Nova.Confirm.CloseAIVideo.Msg`),
+          onOk: {
+            text: t('Nova.Confirm.CloseAIVideo.Ok'),
+            callback: () => {}
+          },
+          onCancel: {
+            text: t('Cancel'),
+            callback: () => {}
+          }
+        });
+        if (!ret) return;
+      } else {
         const isClosedModalCondition =
           isVoiceRecording || componentType === 'VOICE_READY' || componentType === 'FILE_READY';
         // 녹음중 상태이면 아래 팝업을 열어여한다.
@@ -191,21 +205,8 @@ export default function NovaHeader(props: NovaHeaderProps) {
           const result = await openClosedModal();
           if (!result) return;
         }
-      } else if (selectedNovaTab === NOVA_TAB_TYPE.aiVideo) {
-        const ret = await confirm({
-          title: '',
-          msg: t(`Nova.Confirm.CloseAIVideo.Msg`),
-          onOk: {
-            text: t('Nova.Confirm.CloseAIVideo.Ok'),
-            callback: () => {}
-          },
-          onCancel: {
-            text: t('Cancel'),
-            callback: () => {}
-          }
-        });
-        if (!ret) return;
       }
+
       console.log('여기까지 오냐?', isError);
       await resetPage();
       if (
