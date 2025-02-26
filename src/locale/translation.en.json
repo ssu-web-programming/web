@@ -1011,6 +1011,9 @@
       "SelectDoc": "Select the document you want to analyze.",
       "SelectImg": "Please select an image to analyze.",
       "SelectTranslationFile": "Please select the document you want to translate."
+    },
+    "Translate": {
+      "UploadGuide": "Translates PDF, DOCX, and PPTX documents. \n Supported Capacity: Up to 30 MB"
     }
   }
 }
