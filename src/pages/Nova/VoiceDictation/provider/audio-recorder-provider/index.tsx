@@ -277,8 +277,10 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({ ch
           mediaRecorderRef.current = null;
 
           if (streamRef.current) {
+            console.log('stream 정리 전', streamRef.current);
             streamRef.current.getTracks().forEach((track) => track.stop());
             streamRef.current = null;
+            console.log('stream 정리 후', streamRef.current);
           }
           if (animationFrameRef.current) {
             cancelAnimationFrame(animationFrameRef.current);
