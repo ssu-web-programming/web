@@ -9,19 +9,14 @@ import * as S from './style';
 export default function TranslationTextResult() {
   const { t } = useTranslation(); // 추가
   const {
-    sharedTranslationInfo: {
-      detectedSourceLanguage,
-      translateInputValue,
-      translatedText,
-      targetLang
-    }
+    sharedTranslationInfo: { translateInputValue, translatedText, targetLang, sourceLang }
   } = useTranslationContext();
 
   return (
     <>
       <S.Title>{t('Nova.translation.Button.TranslationComplete')}</S.Title>
       <TranslationResultAction
-        translatedLang={getLangFromLangCode('source', detectedSourceLanguage)}
+        translatedLang={getLangFromLangCode('source', sourceLang)}
         translatedValue={translateInputValue}
       />
       <S.Wrapper>

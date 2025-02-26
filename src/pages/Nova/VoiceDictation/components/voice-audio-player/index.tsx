@@ -50,6 +50,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
   const handleLoadedMetadata = (): void => {
     if (audioRef.current) {
       const audioDuration = audioRef.current.duration;
+      console.log('audioDuration', audioDuration);
       setDuration(audioDuration);
       onDurationChange?.(audioDuration);
     }
@@ -58,6 +59,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
   const handleTimeUpdate = (): void => {
     if (audioRef.current) {
       const currentTimeValue = audioRef.current.currentTime;
+      console.log('currentTimeValue', currentTimeValue);
       setCurrentTime(currentTimeValue);
       onTimeUpdate?.(currentTimeValue);
     }
