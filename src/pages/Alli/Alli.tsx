@@ -227,234 +227,235 @@ export default function Alli() {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
 
-  const errorHandle = useErrorHandle();
-  const showCreditToast = useShowCreditToast();
-  const confirm = useConfirm();
+  // const errorHandle = useErrorHandle();
+  // const showCreditToast = useShowCreditToast();
+  // const confirm = useConfirm();
 
-  const { isInit } = useAppSelector(initFlagSelector);
-  const { selectedApp, createResult } = useAppSelector(selectAlliApps);
+  // const { isInit } = useAppSelector(initFlagSelector);
+  // const { selectedApp, createResult } = useAppSelector(selectAlliApps);
 
-  const [inputs, setInputs] = useState<any>(createResult.inputs);
-  const [result, setResult] = useState<string>(createResult.output);
-  const [refSlideNum, setRefSlideNum] = useState<number>(createResult.refSlideNum);
-  const [insertSlideNum, setInsertSlideNum] = useState<number>(createResult.insertSlideNum);
+  // const [inputs, setInputs] = useState<any>(createResult.inputs);
+  // const [result, setResult] = useState<string>(createResult.output);
+  // const [refSlideNum, setRefSlideNum] = useState<number>(createResult.refSlideNum);
+  // const [insertSlideNum, setInsertSlideNum] = useState<number>(createResult.insertSlideNum);
 
-  const [streamingStatus, setStreamingStatus] = useState<StreamingStatus>('none');
+  // const [streamingStatus, setStreamingStatus] = useState<StreamingStatus>('none');
+  // const [showEos, setShowEos] = useState<boolean>(true);
 
-  const requestor = useRef<any>();
+  // const requestor = useRef<any>();
 
-  const selectApp = (appInfo: AppInfo) => {
-    dispatch(setSelectedApp(appInfo));
-    ga.event({ category: 'AI Apps', action: 'App Select', label: appInfo.id });
-  };
+  // const selectApp = (appInfo: AppInfo) => {
+  //   dispatch(setSelectedApp(appInfo));
+  //   ga.event({ category: 'AI Apps', action: 'App Select', label: appInfo.id });
+  // };
 
-  const refresh = (appInfo?: AppInfo) => {
-    dispatch(resetCreateResult());
-    setInputs({});
-    setRefSlideNum(0);
-    setInsertSlideNum(0);
-    setResult('');
-    if (appInfo) {
-      selectApp(appInfo);
-    }
-    ga.event({
-      category: 'AI Apps',
-      action: appInfo ? 'App Refresh' : 'Back to App List',
-      label: selectedApp?.id
-    });
-  };
+  // const refresh = (appInfo?: AppInfo) => {
+  //   dispatch(resetCreateResult());
+  //   setInputs({});
+  //   setRefSlideNum(0);
+  //   setInsertSlideNum(0);
+  //   setResult('');
+  //   if (appInfo) {
+  //     selectApp(appInfo);
+  //   }
+  //   ga.event({
+  //     category: 'AI Apps',
+  //     action: appInfo ? 'App Refresh' : 'Back to App List',
+  //     label: selectedApp?.id
+  //   });
+  // };
 
-  const goBack = () => {
-    refresh();
-    dispatch(setSelectedApp(null));
-  };
+  // const goBack = () => {
+  //   refresh();
+  //   dispatch(setSelectedApp(null));
+  // };
 
-  const requestAlliRun = async (appId: string, inputs: any) => {
-    let resultText = '';
-    try {
-      dispatch(setCreating('AI Apps'));
-      setStreamingStatus('request');
-      const { res } = await apiWrapper().request(ALLI_RESPONSE_STREAM_API, {
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ inputs, appId, lang }),
-        method: 'POST'
-      });
+  // const requestAlliRun = async (appId: string, inputs: any) => {
+  //   let resultText = '';
+  //   try {
+  //     dispatch(setCreating('AI Apps'));
+  //     setStreamingStatus('request');
+  //     const { res } = await apiWrapper().request(ALLI_RESPONSE_STREAM_API, {
+  //       headers: {
+  //         'Content-Type': 'application/json'
+  //       },
+  //       body: JSON.stringify({ inputs, appId, lang }),
+  //       method: 'POST'
+  //     });
 
-      const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
-      showCreditToast(deductionCredit ?? '', leftCredit ?? '');
+  //     const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
+  //     showCreditToast(deductionCredit ?? '', leftCredit ?? '');
 
-      setStreamingStatus('streaming');
-      await streaming(res, (contents) => {
-        setResult((prev) => prev + contents);
-        resultText += contents;
-      });
-    } catch (err) {
-      if (requestor.current?.isAborted() === true) {
-        /* empty */
-      } else {
-        errorHandle(err);
-      }
-    } finally {
-      dispatch(setCreating('none'));
-      dispatch(
-        setCreateResult({ inputs, output: resultText, refSlideNum, insertSlideNum: refSlideNum })
-      );
-      setStreamingStatus('none');
-      ga.event({ category: 'AI Apps', action: 'App Run', label: appId });
-    }
-  };
+  //     setStreamingStatus('streaming');
+  //     await streaming(res, (contents) => {
+  //       setResult((prev) => prev + contents);
+  //       resultText += contents;
+  //     });
+  //   } catch (err) {
+  //     if (requestor.current?.isAborted() === true) {
+  //       /* empty */
+  //     } else {
+  //       errorHandle(err);
+  //     }
+  //   } finally {
+  //     dispatch(setCreating('none'));
+  //     dispatch(
+  //       setCreateResult({ inputs, output: resultText, refSlideNum, insertSlideNum: refSlideNum })
+  //     );
+  //     setStreamingStatus('none');
+  //     ga.event({ category: 'AI Apps', action: 'App Run', label: appId });
+  //   }
+  // };
 
-  const onClickStop = () => {
-    requestor.current?.abort();
-    dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.StopMsg`) }));
-  };
+  // const onClickStop = () => {
+  //   requestor.current?.abort();
+  //   dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.StopMsg`) }));
+  // };
 
-  const hasEmpty = (inputs: any) =>
-    Object.values(inputs).some((val) => val === undefined || val === '');
+  // const hasEmpty = (inputs: any) =>
+  //   Object.values(inputs).some((val) => val === undefined || val === '');
 
-  const parseShape = useCallback((contents: any) => {
-    const getShapeText = (shape: any) => Object.values(shape.text).join('\n');
-    const texts = contents.map((c: any) => {
-      try {
-        if (c.type === 'shape') {
-          return getShapeText(c.shape);
-        } else if (c.type === 'group') {
-          return parseShape(c.shapes).join('\n');
-        } else if (c.type === 'table') {
-          return c.table.cells.map((c: any) => getShapeText(c)).join('\n');
-        } else {
-          console.log('unknown type', c.type);
-          return '';
-        }
-      } catch (err) {
-        return '';
-      }
-    });
-    return texts;
-  }, []);
+  // const parseShape = useCallback((contents: any) => {
+  //   const getShapeText = (shape: any) => Object.values(shape.text).join('\n');
+  //   const texts = contents.map((c: any) => {
+  //     try {
+  //       if (c.type === 'shape') {
+  //         return getShapeText(c.shape);
+  //       } else if (c.type === 'group') {
+  //         return parseShape(c.shapes).join('\n');
+  //       } else if (c.type === 'table') {
+  //         return c.table.cells.map((c: any) => getShapeText(c)).join('\n');
+  //       } else {
+  //         console.log('unknown type', c.type);
+  //         return '';
+  //       }
+  //     } catch (err) {
+  //       return '';
+  //     }
+  //   });
+  //   return texts;
+  // }, []);
 
-  const onClickGetSlideContents = useCallback(
-    async (prop: ResponseAppInputInfo) => {
-      if (inputs[prop.value]) {
-        const ret = await confirm({
-          msg: (
-            <>
-              <ConfirmContents>
-                <ConfirmTitle>{t('Alli.ReCheck')}</ConfirmTitle>
-                {t('Alli.AlreadyExistSlideContents')}
-              </ConfirmContents>
-              <div style={{ marginTop: '24px' }}>
-                <IconDocument></IconDocument>
-              </div>
-            </>
-          ),
-          onOk: {
-            text: t('Confirm'),
-            callback: () => {}
-          },
-          onCancel: {
-            text: t('Cancel'),
-            callback: () => {}
-          },
-          direction: 'column'
-        });
-        if (!ret) return;
-      }
+  // const onClickGetSlideContents = useCallback(
+  //   async (prop: ResponseAppInputInfo) => {
+  //     if (inputs[prop.value]) {
+  //       const ret = await confirm({
+  //         msg: (
+  //           <>
+  //             <ConfirmContents>
+  //               <ConfirmTitle>{t('Alli.ReCheck')}</ConfirmTitle>
+  //               {t('Alli.AlreadyExistSlideContents')}
+  //             </ConfirmContents>
+  //             <div style={{ marginTop: '24px' }}>
+  //               <IconDocument></IconDocument>
+  //             </div>
+  //           </>
+  //         ),
+  //         onOk: {
+  //           text: t('Confirm'),
+  //           callback: () => {}
+  //         },
+  //         onCancel: {
+  //           text: t('Cancel'),
+  //           callback: () => {}
+  //         },
+  //         direction: 'column'
+  //       });
+  //       if (!ret) return;
+  //     }
 
-      try {
-        Bridge.callSyncBridgeApiWithCallback({
-          api: 'getSlideContents',
-          callback: (response) => {
-            try {
-              const { contents, slide_number, note } = JSON.parse(response); // slide contents type is string
+  //     try {
+  //       Bridge.callSyncBridgeApiWithCallback({
+  //         api: 'getSlideContents',
+  //         callback: (response) => {
+  //           try {
+  //             const { contents, slide_number, note } = JSON.parse(response); // slide contents type is string
 
-              if (note) {
-                dispatch(
-                  activeToast({
-                    type: 'error',
-                    msg: t('Alli.AlreadyExistNote')
-                  })
-                );
-              }
-              const texts = parseShape(contents);
-              setInputs((prev: any) => ({ ...prev, [prop.value]: texts.join('\n') }));
-              setResult('');
-              setRefSlideNum(slide_number);
-              setInsertSlideNum(slide_number);
-            } catch (err) {
-              /* empty */
-            }
-          }
-        });
-      } catch (err) {
-        /* empty */
-      }
-    },
-    [inputs, confirm, dispatch, parseShape, t]
-  );
+  //             if (note) {
+  //               dispatch(
+  //                 activeToast({
+  //                   type: 'error',
+  //                   msg: t('Alli.AlreadyExistNote')
+  //                 })
+  //               );
+  //             }
+  //             const texts = parseShape(contents);
+  //             setInputs((prev: any) => ({ ...prev, [prop.value]: texts.join('\n') }));
+  //             setResult('');
+  //             setRefSlideNum(slide_number);
+  //             setInsertSlideNum(slide_number);
+  //           } catch (err) {
+  //             /* empty */
+  //           }
+  //         }
+  //       });
+  //     } catch (err) {
+  //       /* empty */
+  //     }
+  //   },
+  //   [inputs, confirm, dispatch, parseShape, t]
+  // );
 
-  const inputComponents = selectedApp
-    ? uiBuild(
-        {
-          appId: selectedApp.id,
-          props: selectedApp.inputs,
-          GetSlideContentsButton: (
-            <Button
-              variant="white"
-              width={'full'}
-              height={40}
-              cssExt={css`
-                margin-top: 8px;
-              `}
-              selected={true}
-              onClick={() =>
-                onClickGetSlideContents(
-                  selectedApp.inputs.find((input) => input.inputType === 'paragraph')!
-                )
-              }>
-              {t('Alli.getCurrentSlideNote')}
-            </Button>
-          ),
-          slideNum: refSlideNum > 0 ? `${t('Alli.RefPage', { page: refSlideNum })}` : undefined
-        },
-        setInputs,
-        inputs
-      )
-    : undefined;
+  // const inputComponents = selectedApp
+  //   ? uiBuild(
+  //       {
+  //         appId: selectedApp.id,
+  //         props: selectedApp.inputs,
+  //         GetSlideContentsButton: (
+  //           <Button
+  //             variant="white"
+  //             width={'full'}
+  //             height={40}
+  //             cssExt={css`
+  //               margin-top: 8px;
+  //             `}
+  //             selected={true}
+  //             onClick={() =>
+  //               onClickGetSlideContents(
+  //                 selectedApp.inputs.find((input) => input.inputType === 'paragraph')!
+  //               )
+  //             }>
+  //             {t('Alli.getCurrentSlideNote')}
+  //           </Button>
+  //         ),
+  //         slideNum: refSlideNum > 0 ? `${t('Alli.RefPage', { page: refSlideNum })}` : undefined
+  //       },
+  //       setInputs,
+  //       inputs
+  //     )
+  //   : undefined;
 
-  useEffect(() => {
-    init();
-    ga.event({ category: 'AI Apps', action: 'App List' });
-  }, []);
+  // useEffect(() => {
+  //   init();
+  //   ga.event({ category: 'AI Apps', action: 'App List' });
+  // }, []);
 
-  useEffect(() => {
-    if (selectedApp?.inputs && createResult.output === '') {
-      const initVal = selectedApp.inputs.reduce((acc, cur) => {
-        return {
-          ...acc,
-          [cur.value]:
-            cur.value === 'language'
-              ? cur.options.find((opt) => opt.value.toLowerCase().startsWith(lang))?.value
-              : isSlideNoteApp(selectedApp.id)
-                ? cur.options[0]?.value
-                : undefined
-        };
-      }, {});
-      setInputs(initVal);
-    }
-  }, [selectedApp, createResult.output]);
+  // useEffect(() => {
+  //   if (selectedApp?.inputs && createResult.output === '') {
+  //     const initVal = selectedApp.inputs.reduce((acc, cur) => {
+  //       return {
+  //         ...acc,
+  //         [cur.value]:
+  //           cur.value === 'language'
+  //             ? cur.options.find((opt) => opt.value.toLowerCase().startsWith(lang))?.value
+  //             : isSlideNoteApp(selectedApp.id)
+  //               ? cur.options[0]?.value
+  //               : undefined
+  //       };
+  //     }, {});
+  //     setInputs(initVal);
+  //   }
+  // }, [selectedApp, createResult.output]);
 
   return (
     <ThemeProvider theme={theme}>
       <Wrapper>
         <Header title={t('AITools')} subTitle={'AI Apps'}></Header>
         <BackButtonArea>
-          {selectedApp && <ReturnButton onClick={goBack}>{t('Alli.ReturnAppList')}</ReturnButton>}
+          {/* {selectedApp && <ReturnButton onClick={goBack}>{t('Alli.ReturnAppList')}</ReturnButton>} */}
         </BackButtonArea>
         <Body>
-          {!selectedApp ? (
+          {/* {!selectedApp ? (
             isInit ? (
               <Suspense fallback={<Loading></Loading>}>
                 <AlliApps onSelect={selectApp}></AlliApps>
@@ -506,9 +507,7 @@ export default function Alli() {
                                 dispatch(
                                   activeToast({ type: success ? 'info' : 'error', msg: message })
                                 );
-                              } catch (err) {
-                                /* empty */
-                              }
+                              } catch (err) {}
                             }
                           });
                         } else {
@@ -560,12 +559,63 @@ export default function Alli() {
             <MakingOverlap>
               <Loading></Loading>
             </MakingOverlap>
-          )}
+          )} */}
         </Body>
+        <EosCover>
+          <div className="popup">
+            <div className="title">{t('Alli.EOS.title')}</div>
+            <div className="content">{t('Alli.EOS.content')}</div>
+            <Button
+              variant="purple"
+              height={40}
+              onClick={() => Bridge.callBridgeApi('closePanel', '')}>
+              {t('Alli.EOS.close')}
+            </Button>
+          </div>
+        </EosCover>
       </Wrapper>
     </ThemeProvider>
   );
 }
+
+const EosCover = styled.div`
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.2);
+
+  .popup {
+    width: 300px;
+    box-shadow: 0 8px 16px 0 #0000001a;
+    background: ${({ theme }) => theme.color.subBgGray05};
+    border-radius: 10px;
+    padding: 24px;
+    background-color: white;
+
+    .title {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 24px;
+      box-sizing: border-box;
+      color: ${({ theme }) => theme.color.text.subGray04};
+      margin-bottom: 16px;
+    }
+
+    .content {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      color: var(--gray-gray-80-02);
+      margin-bottom: 16px;
+    }
+  }
+`;
 
 export const isSlideNoteApp = (appId: string) => {
   const AlliAppID = JSON.parse(process.env.REACT_APP_ALLI_APPS ?? '{}');

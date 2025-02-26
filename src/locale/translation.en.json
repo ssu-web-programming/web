@@ -293,7 +293,12 @@
     "getCurrentSlideNote": "Get the current slide contents",
     "AlreadyExistSlideContents": "Previous edits are lost when the slide content is imported. Continue to proceed?",
     "ReturnAppList": "Back to the app list",
-    "RemoveAll": "Clear All"
+    "RemoveAll": "Clear All",
+    "EOS": {
+      "title": "Notice of AI Apps Service Termination",
+      "content": "The AI Apps service ended on February 28, 2025. Please update your app and continue to explore various AI activities on NOVA!",
+      "close": "Close"
+    }
   },
   "EOS": {
     "ASKDocEOSTitle": "ASK Doc V1 Service Ended",
