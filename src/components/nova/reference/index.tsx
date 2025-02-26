@@ -104,16 +104,12 @@ export default function Reference({ references }: referenceProps) {
           </ModalSheet>
         </S.ItemWrap>
       ) : isMobile ? (
-        <S.SkeletonWrap>
-          {Array.from({ length: 3 }).map((_, idx) => {
-            return (
-              <S.SkeletonContainer key={idx}>
-                <S.SkeletonCircle />
-                <S.SkeletonLargeBox />
-              </S.SkeletonContainer>
-            );
-          })}
-        </S.SkeletonWrap>
+        <Lottie
+          animationData={isLightMode ? SkeletonMobileLight : SkeletonMobileDark}
+          loop
+          play
+          style={{ width: 288, height: 90 }}
+        />
       ) : (
         <Lottie
           animationData={isLightMode ? SkeletonPCLight : SkeletonPCDark}
