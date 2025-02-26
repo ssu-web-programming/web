@@ -195,7 +195,8 @@
     "CopyFailed": "복사가 실패되었어요.",
     "SaveCompleted": "저장 완료",
     "SaveFailed": "저장 실패",
-    "CopyLinkCompleted": "링크 복사가 완료되었습니다."
+    "CopyLinkCompleted": "링크 복사가 완료되었습니다.",
+    "Success": "성공적으로 저장되었어요!"
   },
   "Offline": {
     "UnstableConnection": "서비스 접속이 원활하지 않습니다.",
@@ -622,7 +623,7 @@
       "Guide": {
         "Title": "받아쓰기",
         "SubTitle": "녹음 또는 파일 업로드로 \n 음성 기록을 만들어보세요.",
-        "UploadGuide": "최대 1GB 용량, 최대 길이 약 30분의 .m4a, .mp3, .aac, .wav 파일을 지원합니다.",
+        "UploadGuide": "최대 200MB 용량, 최대 길이 약 30분의 .m4a, .mp3, .aac, .wav 파일을 지원합니다.",
         "TimeLimit": "최대 30분 가능합니다.",
         "NetworkError": "서비스 접속이 원활하지 않습니다. \n사용 중인 네크워크 상태를 확인해주세요.",
         "LanguageConversion": "선택한 인식 언어로 변환됩니다."
@@ -642,7 +643,8 @@
         "DictationFile": "받아쓰기 파일",
         "SeeDetails": "자세히 보기",
         "DontShowAgain": "다시 보지 않기",
-        "Confirm": "확인"
+        "Confirm": "확인",
+        "Recognition": "인식 언어"
       },
       "Status": {
         "RecognizingKorean": "한국어 인식 중",
@@ -650,23 +652,25 @@
         "Recording": "녹음 중",
         "MovingToDictation": "받아쓰기로 이동",
         "Converting": "텍스트로 변환하고 있어요",
-        "NoContent": "변환된 음성 받아쓰기 내용이 없어요",
+        "NoContent": "변환된 음성 받아쓰기 내용이 없어요\n 음성 파일에 대화가 포함되어 있는지\n 설정한 인식 언어가 음성과 같은 언어인지 확인해주세요.",
         "Completed": "받아쓰기 완료",
         "ConversionSuccess": "음성 대화를 텍스트로 변환했어요\n대화 내용을 저장해, 자유롭게 활용해 보세요!",
         "Participant": "참석자",
         "Recognizing": "인식 중",
         "Today": "오늘",
-        "Am": "오전",
-        "Pm": "오후"
+        "Am": "AM",
+        "Pm": "PM",
+        "Minutes": "분",
+        "Seconds": "초"
       },
       "Alert": {
         "MicPermission": "'Polaris Office'이(가) 마이크에 \n접근하려고 합니다.",
         "MicPermissionDetail": "Polaris office에서 받아쓰기를 위한 오디오를\n녹음하도록 허용하시겠습니까?",
-        "AudioPermissionRequired": "녹음을 시작하려면 오디오 권한을 허욯해 주세요!",
-        "UnsavedRecording": "잠깐! 녹음을 끝내지 않고 뒤로가면 \n녹음이 저장되지 않아요. 그래도 뒤로가시겠어요?",
+        "AudioPermissionRequired": "녹음을 시작하려면 오디오 권한을 허용해 주세요!",
+        "UnsavedRecording": "잠깐! 녹음을 끝내지 않고 뒤로가면 녹음이 저장되지 않아요. 그래도 뒤로가시겠어요?",
         "StopRecordingConfirm": "녹음을 종료할까요?",
-        "ConversionNotice": "녹음이 종료되면 NOVA가 \n 음성을 텍스트로 변환합니다.",
-        "UnsavedGoBack": "잠깐! 뒤로가면 녹음이 저장되지 않아요. \n그래도 뒤로가시겠어요?",
+        "ConversionNotice": "녹음이 종료되면 NOVA가 음성을 텍스트로 변환합니다.",
+        "UnsavedGoBack": "잠깐! 뒤로가면 녹음이 저장되지 않아요. 그래도 뒤로가시겠어요?",
         "LanguageCheck": "음성 파일에 대화가 포함되어 있는지\n설정한 인식 언어가 음성과 같은 언어인지 확인해주세요.",
         "Downloading": "음성 파일을 다운로드 중입니다. (NN%)",
         "FileFormatSelection": "어떤 파일 형식으로 저장할까요?",
@@ -686,7 +690,7 @@
           "Chinese2": "중국어(번체)",
           "KoEn": "한국어 + 영어"
         },
-        "ChangeNotice": "인식 언어가 []로 변경되었어요!"
+        "ChangeNotice": "인식 언어가 {{lang}}로 변경되었어요!"
       },
       "FileFormat": {
         "Options": {
@@ -715,7 +719,8 @@
         "LanguageSearch": "언어 검색",
         "TranslationComplete": "번역 완료",
         "ProceedWithoutChanges": "변경 없이 진행",
-        "SaveNow": "지금 저장"
+        "SaveNow": "지금 저장",
+        "CompareAndTranslation": "원본-번역 비교보기"
       },
       "Input": {
         "Placeholder": "번역할 내용을 입력하세요",

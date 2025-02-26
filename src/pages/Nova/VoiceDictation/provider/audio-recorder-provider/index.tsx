@@ -272,6 +272,7 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({ ch
         pauseRecording();
 
         const shouldStop = onConfirm ? await onConfirm() : true;
+        console.log('shouldStop', shouldStop);
 
         if (shouldStop) {
           mediaRecorderRef.current.stop();

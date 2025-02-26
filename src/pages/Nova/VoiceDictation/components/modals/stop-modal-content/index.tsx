@@ -1,5 +1,6 @@
 import { overlay } from 'overlay-kit';
 import { useVoiceDictationContext } from 'pages/Nova/VoiceDictation/provider/voice-dictation-provider';
+import { useTranslation } from 'react-i18next';
 
 import * as S from './style';
 
@@ -9,6 +10,7 @@ interface Props {
 
 export default function StopModalContent({ onConfirm }: Props) {
   const { setSharedVoiceDictationInfo } = useVoiceDictationContext();
+  const { t } = useTranslation();
 
   const handleCancle = () => {
     overlay.closeAll();
@@ -26,12 +28,12 @@ export default function StopModalContent({ onConfirm }: Props) {
   return (
     <>
       <S.ModalContainer>
-        <S.Title>녹음을 종료할까요?</S.Title>
-        <S.SubTitle>녹음이 종료되면 Nova가 음성을 텍스트로 변환합니다.</S.SubTitle>
+        <S.Title>{t('Nova.voiceDictation.Alert.StopRecordingConfirm')}</S.Title>
+        <S.SubTitle>{t('Nova.voiceDictation.Alert.ConversionNotice')}</S.SubTitle>
         <S.ButtonGroup>
           <S.Button onClick={handleCancle}>취소</S.Button>
           <S.Button primary onClick={handleClose}>
-            녹음 종료
+            {t('Nova.voiceDictation.Button.StopRecording')}
           </S.Button>
         </S.ButtonGroup>
       </S.ModalContainer>

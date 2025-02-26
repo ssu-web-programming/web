@@ -195,7 +195,8 @@
     "CopyFailed": "コピーに失敗しました。",
     "SaveCompleted": "保存",
     "SaveFailed": "保存に失敗しました",
-    "CopyLinkCompleted": "リンクが正常にコピーされました。"
+    "CopyLinkCompleted": "リンクが正常にコピーされました。",
+    "Success": "成功的に保存されました！"
   },
   "Offline": {
     "UnstableConnection": "サービス接続に問題が発生しました。",
@@ -588,7 +589,7 @@
       "Guide": {
         "Title": "書き取り",
         "SubTitle": "録音またはファイルアップロード。",
-        "UploadGuide": ".m4a、.mp3、.aac、.wavファイル対応、最大1GB・約30分まで。",
+        "UploadGuide": ".m4a、.mp3、.aac、.wavファイル対応、最大200MB・約30分まで。",
         "TimeLimit": "最大30分まで利用可能。",
         "NetworkError": "サービスに接続できません。ご利用のネットワーク状態を確認してください。",
         "LanguageConversion": "選択した認識言語に変換されます。"
@@ -608,7 +609,8 @@
         "DictationFile": "書き取りファイル",
         "SeeDetails": "詳しくはこちら",
         "DontShowAgain": "今後表示しない",
-        "Confirm": "OK"
+        "Confirm": "OK",
+        "Recognition": "認識言語"
       },
       "Status": {
         "RecognizingKorean": "韓国語を認識",
@@ -616,23 +618,25 @@
         "Recording": "録音中…",
         "MovingToDictation": "書き取りへ移動",
         "Converting": "テキスト変換する",
-        "NoContent": "音声を変換したテキスト変換コンテンツが存在しません。",
+        "NoContent": "音声を変換したテキスト変換コンテンツが存在しません。\n 音声ファイルに会話が含まれているか、また\n 設定された認識言語が音声言語と一致しているかを確認してください。",
         "Completed": "書き取り完了",
         "ConversionSuccess": "音声会話がテキストに変換されました。\n会話を保存して自由に使用してください。",
         "Participant": "出席者",
         "Recognizing": "を認識",
         "Today": "今日 (きょう)",
-        "Am": "午前 (ごぜん)",
-        "Pm": "午後 (ごご)"
+        "Am": "午前",
+        "Pm": "午後",
+        "Minutes": "分",
+        "Seconds": "秒"
       },
       "Alert": {
         "MicPermission": "Polaris Officeが\nマイクへのアクセスを求めています。",
         "MicPermissionDetail": "Polaris Officeに\nテキスト変換用のオーディオ録音を許可しますか？",
         "AudioPermissionRequired": "録音を開始するには、オーディオ権限を許可してください！",
-        "UnsavedRecording": "待って！録音を終了せずに戻ると、\nデータは保存されません。本当に戻りますか？",
+        "UnsavedRecording": "待って！録音を終了せずに戻ると、データは保存されません。本当に戻りますか？",
         "StopRecordingConfirm": "録音を停止しますか?",
-        "ConversionNotice": "録音が止まると、\n Novaは音声をテキストに変換します。",
-        "UnsavedGoBack": "待って！戻ると音声録音は保存されません。\n本当に戻りますか？",
+        "ConversionNotice": "録音が止まると、 Novaは音声をテキストに変換します。",
+        "UnsavedGoBack": "待って！戻ると音声録音は保存されません。本当に戻りますか？",
         "LanguageCheck": "音声ファイルに会話が含まれているか、また\n設定された認識言語が音声言語と一致しているかを確認してください。",
         "Downloading": "音声ファイルをダウンロードしています。（NN%）",
         "FileFormatSelection": "どのファイル形式で保存しますか?",
@@ -652,7 +656,7 @@
           "Chinese2": "中国語（繁体)",
           "KoEn": "韓国語および英語"
         },
-        "ChangeNotice": "認識言語が[]に変更されました!"
+        "ChangeNotice": "認識言語が{{lang}}に変更されました!"
       },
       "FileFormat": {
         "Options": {
@@ -681,7 +685,8 @@
         "LanguageSearch": "言語検索",
         "TranslationComplete": "翻訳完了",
         "ProceedWithoutChanges": "変更せずに進む",
-        "SaveNow": "今すぐ保存"
+        "SaveNow": "今すぐ保存",
+        "CompareAndTranslation": "原文と翻訳を比較表示"
       },
       "Input": {
         "Placeholder": "翻訳するコンテンツを入力してください。",

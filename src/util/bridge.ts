@@ -619,18 +619,18 @@ export const useInitBridgeListener = () => {
             dispatch(initLoadingSpinner());
 
             if (body.isSaved) {
-              dispatch(activeToast({ type: 'info', msg: '성공적으로 저장되었어요!' }));
+              dispatch(activeToast({ type: 'info', msg: t('ToastMsg.Success') }));
             } else {
-              dispatch(activeToast({ type: 'error', msg: '저장 실패' }));
+              dispatch(activeToast({ type: 'error', msg: t('ToastMsg.SaveFailed') }));
             }
             break;
           }
           case 'finishDownloadVoiceFile': {
             dispatch(initLoadingSpinner());
             if (body.isSaved) {
-              dispatch(activeToast({ type: 'info', msg: '성공적으로 저장되었어요!' }));
+              dispatch(activeToast({ type: 'info', msg: t('ToastMsg.Success') }));
             } else {
-              dispatch(activeToast({ type: 'error', msg: '저장 실패' }));
+              dispatch(activeToast({ type: 'error', msg: t('ToastMsg.SaveFailed') }));
             }
             break;
           }

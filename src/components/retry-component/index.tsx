@@ -1,5 +1,6 @@
 import NovaHeader from 'components/nova/Header';
 import CreditColorIcon from 'img/light/ico_credit_color_outline.svg';
+import { useTranslation } from 'react-i18next';
 import { clearError, errorSelector } from 'store/slices/errorSlice';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import styled from 'styled-components';
@@ -50,6 +51,7 @@ const Title = styled.p`
   text-align: center;
   white-space: break-spaces;
   color: #454c53;
+  white-space: pre-wrap;
 `;
 
 const ButtonWrap = styled.div`
@@ -82,6 +84,7 @@ const ButtonWrap = styled.div`
 export default function RetryComponent() {
   const { isError, errorTitle, onRetry } = useAppSelector(errorSelector);
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
   if (!isError) return null;
 
   const handleRetry = () => {
@@ -100,7 +103,7 @@ export default function RetryComponent() {
           </ContentWrap>
           {onRetry && (
             <ButtonWrap onClick={handleRetry}>
-              <span>재시도</span>
+              <span>{t('Nova.TimeOut.Retry')}</span>
               <img src={CreditColorIcon} alt="credit" />
             </ButtonWrap>
           )}
