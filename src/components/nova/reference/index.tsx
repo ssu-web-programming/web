@@ -15,10 +15,8 @@ import { themeInfoSelector } from '../../../store/slices/theme';
 import { useAppSelector } from '../../../store/store';
 import Bridge, { isMobile } from '../../../util/bridge';
 import ModalSheet from '../../modalSheet';
-import Skeleton from '../../Skeleton';
 
 import * as S from './style';
-import { SkeletonWrap } from './style';
 
 interface referenceProps {
   references: NovaWebReference[];
