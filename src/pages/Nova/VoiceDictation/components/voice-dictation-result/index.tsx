@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import Button from 'components/buttons/Button';
 import OverlayModal from 'components/overlay-modal';
 import { VOICE_COLOR } from 'constants/voice-dictation';
@@ -12,6 +13,12 @@ import { useAppSelector } from 'store/store';
 import { css } from 'styled-components';
 import { formatMilliseconds } from 'util/getAudioDuration';
 
+import useErrorHandle from '../../../../../components/hooks/useErrorHandle';
+import SurveyModalContent from '../../../../../components/nova/satisfactionSurvey/survey-modal-content';
+import { NOVA_TAB_TYPE } from '../../../../../constants/novaTapTypes';
+import { selectPageCreditReceived } from '../../../../../store/slices/nova/pageStatusSlice';
+import { selectTabSlice } from '../../../../../store/slices/tabSlice';
+import { getCookie } from '../../../../../util/common';
 import { useVoiceDictationContext } from '../../provider/voice-dictation-provider';
 import PlaybackSpeedModalContent from '../modals/playback-speed-modal-content';
 import AudioPlayer, { PlaybackSpeed } from '../voice-audio-player';
@@ -25,8 +32,15 @@ export default function VoiceDictationResult() {
   } = useVoiceDictationContext();
   const localFiles = useAppSelector(getLocalFiles);
   const { isLightMode } = useAppSelector(themeInfoSelector);
+  const errorHandle = useErrorHandle();
+  const { selectedNovaTab } = useAppSelector(selectTabSlice);
+  const isCreditRecieved = useAppSelector(selectPageCreditReceived(NOVA_TAB_TYPE.translation));
 
   const { t } = useTranslation();
+
+  useEffect(() => {
+    showSurveyModal();
+  }, []);
 
   const handleOpenSaveOverlay = () => {
     overlay.open(({ isOpen, close }) => {
@@ -48,6 +62,21 @@ export default function VoiceDictationResult() {
         </OverlayModal>
       );
     });
+  };
+
+  const showSurveyModal = async () => {
+    // 만족도 이벤트
+    if (!isCreditRecieved && !getCookie(`dontShowSurvey${selectedNovaTab}`)) {
+      overlay.closeAll();
+
+      overlay.open(({ isOpen, close }) => {
+        return (
+          <OverlayModal isOpen={isOpen} onClose={close} padding={'24px'}>
+            <SurveyModalContent />
+          </OverlayModal>
+        );
+      });
+    }
   };
 
   return (

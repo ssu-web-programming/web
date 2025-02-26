@@ -88,7 +88,11 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
 
   const showSurveyModal = async () => {
     // 만족도 이벤트
-    if (!isCreditRecieved && !getCookie('dontShowSurvey')) {
+    if (
+      !isCreditRecieved &&
+      !getCookie(`dontShowSurvey${NOVA_TAB_TYPE.aiChat}`) &&
+      !getCookie(`dontShowSurvey${NOVA_TAB_TYPE.perplexity}`)
+    ) {
       try {
         const { res } = await apiWrapper().request(NOVA_GET_CREDIT_USE_COUNT, {
           headers: {

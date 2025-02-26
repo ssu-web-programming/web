@@ -187,19 +187,21 @@ export default function NovaHeader(props: NovaHeaderProps) {
 
     if (isDisableBack) {
       if (selectedNovaTab === NOVA_TAB_TYPE.aiVideo) {
-        const ret = await confirm({
-          title: '',
-          msg: t(`Nova.Confirm.CloseAIVideo.Msg`),
-          onOk: {
-            text: t('Nova.Confirm.CloseAIVideo.Ok'),
-            callback: () => {}
-          },
-          onCancel: {
-            text: t('Cancel'),
-            callback: () => {}
-          }
-        });
-        if (!ret) return;
+        if (['avatar', 'voice', 'script'].includes(status)) {
+          const ret = await confirm({
+            title: '',
+            msg: t(`Nova.Confirm.CloseAIVideo.Msg`),
+            onOk: {
+              text: t('Nova.Confirm.CloseAIVideo.Ok'),
+              callback: () => {}
+            },
+            onCancel: {
+              text: t('Cancel'),
+              callback: () => {}
+            }
+          });
+          if (!ret) return;
+        }
       } else {
         const isClosedModalCondition =
           isVoiceRecording || componentType === 'VOICE_READY' || componentType === 'FILE_READY';

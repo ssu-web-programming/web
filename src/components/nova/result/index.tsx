@@ -85,7 +85,7 @@ export default function Result({ children }: ResultProps) {
 
   useEffect(() => {
     // 만족도 이벤트
-    if (!isCreditRecieved && !getCookie('dontShowSurvey')) {
+    if (!isCreditRecieved && !getCookie(`dontShowSurvey${selectedNovaTab}`)) {
       overlay.closeAll();
 
       overlay.open(({ isOpen, close }) => {
