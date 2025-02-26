@@ -59,14 +59,26 @@ export const useInsertDocsHandler = () => {
               });
               break;
             case 'doc_view_mode':
-              confirm({
-                title: t(`Nova.Chat.InsertDoc.Fail.Title`)!,
-                msg: t(`Nova.Chat.InsertDoc.Fail.Msg.Viewer`)!,
-                onOk: {
-                  text: t(`Confirm`),
-                  callback: () => {}
-                }
-              });
+              if (selectedNovaTab === NOVA_TAB_TYPE.translation) {
+                confirm({
+                  title: t(`Nova.Chat.InsertDoc.Fail.Title`)!,
+                  msg: t(`Nova.Chat.InsertDoc.Fail.Msg.Translation`)!,
+                  onOk: {
+                    text: t(`Confirm`),
+                    callback: () => {}
+                  }
+                });
+              } else {
+                confirm({
+                  title: t(`Nova.Chat.InsertDoc.Fail.Title`)!,
+                  msg: t(`Nova.Chat.InsertDoc.Fail.Msg.Viewer`)!,
+                  onOk: {
+                    text: t(`Confirm`),
+                    callback: () => {}
+                  }
+                });
+              }
+
               break;
             case 'doc_edit_mode':
               if (selectedNovaTab === NOVA_TAB_TYPE.aiChat && history) {
@@ -89,6 +101,10 @@ export const useInsertDocsHandler = () => {
                     break;
                   }
                 }
+              } else if (selectedNovaTab === NOVA_TAB_TYPE.translation) {
+                console.log('history', history);
+                insertDoc(history!.output);
+                dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.CompleteInsert`) }));
               } else {
                 if (!result) break;
                 if (result.link) {

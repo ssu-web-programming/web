@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import IconTextButton from 'components/buttons/IconTextButton';
 import { useConfirm } from 'components/Confirm';
+import { useInsertDocsHandler } from 'components/hooks/nova/useInsertDocsHandler';
 import { useCopyToClipboard } from 'components/hooks/useCopyToClipboard';
 import copyDarkIcon from 'img/dark/nova/translation/copy.svg';
 import insertDarkDocIcon from 'img/dark/nova/translation/insert_docs.svg';
@@ -8,10 +9,10 @@ import copyIcon from 'img/light/nova/translation/copy.svg';
 import insertDocIcon from 'img/light/nova/translation/insert_docs.svg';
 import { ClientStatusType } from 'pages/Nova/Nova';
 import { useTranslation } from 'react-i18next';
+import { NovaChatType } from 'store/slices/nova/novaHistorySlice';
 import { themeInfoSelector } from 'store/slices/theme';
 import { useAppSelector } from 'store/store';
 import Bridge from 'util/bridge';
-import { insertDoc } from 'util/common';
 
 import * as S from './style';
 
@@ -31,9 +32,9 @@ export default function TranslationResultAction({
   const { t } = useTranslation();
   const { copyText } = useCopyToClipboard();
   const { isLightMode } = useAppSelector(themeInfoSelector);
+  const { insertDocsHandler } = useInsertDocsHandler();
   const [clientStatus, setClientStatus] = useState<ClientStatusType>('doc_edit_mode');
 
-  const confirm = useConfirm();
   const shouldShowInsertDocButton = isInsertDocAction && clientStatus !== 'home';
 
   const updateClientStatus = useCallback(() => {
@@ -45,26 +46,22 @@ export default function TranslationResultAction({
     });
   }, []);
 
+  // 번역 결과를 NovaChatType 형태로 변환하는 함수
+  const createTranslationHistory = (): Partial<NovaChatType> => {
+    return {
+      askType: 'document',
+      output: translatedValue.replace(/\n/g, '<br>')
+    };
+  };
+
   const ICON_BUTTON_LIST = [
     {
       name: t('Nova.Chat.InsertDoc.Title'),
       iconSrc: isLightMode ? insertDocIcon : insertDarkDocIcon,
       clickHandler: async () => {
-        updateClientStatus();
-        console.log('clientStatus', clientStatus);
-        if (clientStatus === 'doc_view_mode') {
-          confirm({
-            title: t(`Nova.Chat.InsertDoc.Fail.Title`)!,
-            msg: t(`Nova.Chat.InsertDoc.Fail.Msg.Translation`)!,
-            onOk: {
-              text: t(`Confirm`),
-              callback: () => {}
-            }
-          });
-        } else {
-          // status가 doc_view_mode가 아닐 때만 insertDoc 실행
-          await insertDoc(translatedValue.replace(/\n/g, '<br>'));
-        }
+        // useInsertDocsHandler의 insertDocsHandler 사용
+        const translationHistory = createTranslationHistory();
+        await insertDocsHandler(translationHistory as NovaChatType);
       },
       isActive: shouldShowInsertDocButton
     },
