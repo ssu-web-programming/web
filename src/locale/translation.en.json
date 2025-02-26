@@ -985,12 +985,12 @@
         "Msg": "Save to Polaris Drive to Translation. Save now?"
       },
       "UpdateVersion": {
-        "Msg": "2D to 3D conversion is available only in the latest version. Update now to explore this new feature!",
+        "Msg": "Update to the latest version to enjoy the new features right away! If the update is not available yet, it’s being rolled out gradually, so please wait a little longer. You’ll be able to enjoy it soon!",
         "Ok": "Update now",
         "Cancel": "Later"
       },
       "UpdateVersionWindows": {
-        "Msg": "The 2D to 3D conversion feature is only available in the latest version. Update to the latest version under [Document > Options > About Program] to experience the new features!"
+        "Msg": "Update to the latest version to enjoy the new features right away! If the update is not available yet, it’s being rolled out gradually, so please wait a little longer. You’ll be able to enjoy it soon!\n(Update path: Document > Options > Program Info)"
       },
       "ExpireImageLink": {
         "Msg": "The image link has expired. Please start the function again."

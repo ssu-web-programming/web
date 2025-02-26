@@ -1,9 +1,6 @@
 import React, { RefObject, useState } from 'react';
 import useCurrentDocAnalysis from 'components/hooks/use-current-doc-analysis';
-import {
-  OriginalFileType,
-  useTranslationContext
-} from 'pages/Nova/Translation/provider/translation-provider';
+import { OriginalFileType } from 'pages/Nova/Translation/provider/translation-provider';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -13,6 +10,7 @@ import {
   TRANSLATION_SUPPORT_TYPE
 } from '../../constants/fileTypes';
 import { NOVA_TAB_TYPE } from '../../constants/novaTapTypes';
+import { getDownloadUrlByPlatform } from '../../constants/platform';
 import InsertDocsDarkIcon from '../../img/dark/ico_insert_docs.svg';
 import MobileDarkIcon from '../../img/dark/ico_mobile.svg';
 import PCDarkIcon from '../../img/dark/ico_pc.svg';
@@ -21,19 +19,12 @@ import InsertDocsLightIcon from '../../img/light/ico_insert_docs.svg';
 import LogoPOIcon from '../../img/light/ico_logo_po.svg';
 import MobileLightIcon from '../../img/light/ico_mobile.svg';
 import PCLightIcon from '../../img/light/ico_pc.svg';
-import { setPageStatus } from '../../store/slices/nova/pageStatusSlice';
 import { platformInfoSelector } from '../../store/slices/platformInfo';
-import { selectTabSlice, setCreating } from '../../store/slices/tabSlice';
+import { selectTabSlice } from '../../store/slices/tabSlice';
 import { themeInfoSelector } from '../../store/slices/theme';
-import {
-  getCurrentFile,
-  removeLoadingFile,
-  setDriveFiles,
-  setLoadingFile,
-  setLocalFiles
-} from '../../store/slices/uploadFiles';
+import { getCurrentFile } from '../../store/slices/uploadFiles';
 import { userInfoSelector } from '../../store/slices/userInfo';
-import { useAppDispatch, useAppSelector } from '../../store/store';
+import { useAppSelector } from '../../store/store';
 import Bridge, { ClientType, getPlatform } from '../../util/bridge';
 import { getFileExtension, isHigherVersion } from '../../util/common';
 import { useConfirm } from '../Confirm';
@@ -199,7 +190,7 @@ export const FileUploader = (props: FileUploaderProps) => {
     return options;
   };
 
-  const confirmUpload = async (url: string) => {
+  const confirmUpload = async () => {
     if (platform === ClientType.windows) {
       await confirm({
         title: '',
@@ -216,7 +207,7 @@ export const FileUploader = (props: FileUploaderProps) => {
         onOk: {
           text: t('Nova.Confirm.UpdateVersion.Ok'),
           callback: () => {
-            Bridge.callBridgeApi('openWindow', url);
+            Bridge.callBridgeApi('openWindow', getDownloadUrlByPlatform(platform));
           }
         },
         onCancel: {
@@ -224,21 +215,6 @@ export const FileUploader = (props: FileUploaderProps) => {
           callback: () => {}
         }
       });
-    }
-  };
-
-  const getDownloadUrlByPlatform = () => {
-    switch (platform) {
-      case ClientType.android:
-        return 'market://details?id=com.infraware.office.link';
-      case ClientType.ios:
-        return 'https://itunes.apple.com/app/polaris-office-pdf-docs/id698070860';
-      case ClientType.windows:
-        return 'https://polarisoffice.com/ko/download';
-      case ClientType.mac:
-        return 'itms-apps://itunes.apple.com/app/id1098211970?mt=12';
-      default:
-        return '';
     }
   };
 
@@ -269,8 +245,7 @@ export const FileUploader = (props: FileUploaderProps) => {
           style={tooltipStyle}
           onClick={() => {
             if (isUpdateRequired()) {
-              const url = getDownloadUrlByPlatform();
-              confirmUpload(url);
+              confirmUpload();
               return;
             }
           }}>
