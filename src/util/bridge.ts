@@ -432,10 +432,8 @@ export const useInitBridgeListener = () => {
               );
             }
 
-            if (!body.isExternal) {
-              dispatch(setIsExternal(body.isExternal));
-              return;
-            }
+            dispatch(setIsExternal(body.isExternal));
+            if (!body.isExternal) return;
 
             if (body.openTab in NOVA_TAB_TYPE) {
               const tab = body.openTab;
