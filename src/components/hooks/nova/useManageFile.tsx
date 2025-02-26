@@ -116,7 +116,6 @@ export function useManageFile({ onFinishCallback, onClearPastedImages }: Props =
 
   const validateFileUpload = async (files: File[], maxFileSize: number) => {
     const validation = validateFiles(files, maxFileSize);
-    console.log('validation', validation);
 
     // 실패했을때 나오는 팝업!
     if (validation.invalidReason.type.length > 0) {

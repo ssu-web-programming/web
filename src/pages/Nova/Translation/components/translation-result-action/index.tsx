@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import IconTextButton from 'components/buttons/IconTextButton';
 import { useConfirm } from 'components/Confirm';
 import { useCopyToClipboard } from 'components/hooks/useCopyToClipboard';
@@ -30,34 +31,30 @@ export default function TranslationResultAction({
   const { t } = useTranslation();
   const { copyText } = useCopyToClipboard();
   const { isLightMode } = useAppSelector(themeInfoSelector);
-  const confirm = useConfirm();
+  const [clientStatus, setClientStatus] = useState<ClientStatusType>('doc_edit_mode');
 
+  const confirm = useConfirm();
+  const shouldShowInsertDocButton = isInsertDocAction && clientStatus !== 'home';
   const ICON_BUTTON_LIST = [
     {
       name: t('Nova.Chat.InsertDoc.Title'),
       iconSrc: isLightMode ? insertDocIcon : insertDarkDocIcon,
       clickHandler: async () => {
-        Bridge.callSyncBridgeApiWithCallback({
-          api: 'getClientStatus',
-          callback: async (status: ClientStatusType) => {
-            if (status === 'doc_view_mode') {
-              confirm({
-                title: t(`Nova.Chat.InsertDoc.Fail.Title`)!,
-                msg: t(`Nova.Chat.InsertDoc.Fail.Msg.Viewer`)!,
-                onOk: {
-                  text: t(`Confirm`),
-                  callback: () => {}
-                }
-              });
-            } else {
-              // status가 doc_view_mode가 아닐 때만 insertDoc 실행
-              await insertDoc(translatedValue.replace(/\n/g, '<br>'));
+        if (clientStatus === 'doc_view_mode') {
+          confirm({
+            title: t(`Nova.Chat.InsertDoc.Fail.Title`)!,
+            msg: t(`Nova.Chat.InsertDoc.Fail.Msg.Translation`)!,
+            onOk: {
+              text: t(`Confirm`),
+              callback: () => {}
             }
-          }
-        });
-        await insertDoc(translatedValue.replace(/\n/g, '<br>'));
+          });
+        } else {
+          // status가 doc_view_mode가 아닐 때만 insertDoc 실행
+          await insertDoc(translatedValue.replace(/\n/g, '<br>'));
+        }
       },
-      isActive: isInsertDocAction
+      isActive: shouldShowInsertDocButton
     },
     {
       name: t('Nova.Chat.Copy'),
@@ -66,6 +63,15 @@ export default function TranslationResultAction({
       isActive: isCopyAction
     }
   ];
+
+  useEffect(() => {
+    Bridge.callSyncBridgeApiWithCallback({
+      api: 'getClientStatus',
+      callback: async (status: ClientStatusType) => {
+        setClientStatus(status);
+      }
+    });
+  }, []);
 
   return (
     <S.Wrapper>

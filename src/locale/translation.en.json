@@ -872,7 +872,8 @@
           "Title": "Document Insertion Guide",
           "Msg": {
             "Home": "To insert into the document, please open the document and enter edit mode first. Don't worry, your response won't disappear!",
-            "Viewer": "To insert into the document, please enter edit mode. Don't worry, your response won't disappear!"
+            "Viewer": "To insert into the document, please enter edit mode. Don't worry, your response won't disappear!",
+            "Translation": "To insert into the document, please enter edit mode."
           }
         }
       },
