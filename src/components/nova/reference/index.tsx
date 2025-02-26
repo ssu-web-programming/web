@@ -15,8 +15,10 @@ import { themeInfoSelector } from '../../../store/slices/theme';
 import { useAppSelector } from '../../../store/store';
 import Bridge, { isMobile } from '../../../util/bridge';
 import ModalSheet from '../../modalSheet';
+import Skeleton from '../../Skeleton';
 
 import * as S from './style';
+import { SkeletonWrap } from './style';
 
 interface referenceProps {
   references: NovaWebReference[];
@@ -102,12 +104,16 @@ export default function Reference({ references }: referenceProps) {
           </ModalSheet>
         </S.ItemWrap>
       ) : isMobile ? (
-        <Lottie
-          animationData={isLightMode ? SkeletonMobileLight : SkeletonMobileDark}
-          loop
-          play
-          style={{ width: 226, height: 28 }}
-        />
+        <S.SkeletonWrap>
+          {Array.from({ length: 3 }).map((_, idx) => {
+            return (
+              <S.SkeletonContainer key={idx}>
+                <S.SkeletonCircle />
+                <S.SkeletonLargeBox />
+              </S.SkeletonContainer>
+            );
+          })}
+        </S.SkeletonWrap>
       ) : (
         <Lottie
           animationData={isLightMode ? SkeletonPCLight : SkeletonPCDark}
