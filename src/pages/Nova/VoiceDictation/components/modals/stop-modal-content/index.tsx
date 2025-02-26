@@ -31,7 +31,7 @@ export default function StopModalContent({ onConfirm }: Props) {
         <S.Title>{t('Nova.voiceDictation.Alert.StopRecordingConfirm')}</S.Title>
         <S.SubTitle>{t('Nova.voiceDictation.Alert.ConversionNotice')}</S.SubTitle>
         <S.ButtonGroup>
-          <S.Button onClick={handleCancle}>취소</S.Button>
+          <S.Button onClick={handleCancle}>{t('Nova.voiceDictation.Button.Cancel')}</S.Button>
           <S.Button primary onClick={handleClose}>
             {t('Nova.voiceDictation.Button.StopRecording')}
           </S.Button>

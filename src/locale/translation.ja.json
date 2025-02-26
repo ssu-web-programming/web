@@ -1002,6 +1002,9 @@
       "SelectDoc": "分析するドキュメントを選択してください。",
       "SelectImg": "分析したい画像を選んでください。",
       "SelectTranslationFile": "翻訳したい文書を選択してください。"
+    },
+    "Translate": {
+      "UploadGuide": "PDF、DOCX、PPTXドキュメントを翻訳します。 \n サポートされる容量：最大30MB"
     }
   }
 }

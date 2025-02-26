@@ -617,7 +617,7 @@
       "MobileGuide": "모바일에서는 3D모션이 <span class='highlight'>MP4</span> 파일로 제공됩니다."
     },
     "Translate": {
-      "UploadGuide": "PDF, DOCX, PPTX 문서를 번역합니다. \n지원 용량: 최대 30MB\n 지원 글자 수: 최대 50,000 자"
+      "UploadGuide": "PDF, DOCX, PPTX 문서를 번역합니다. \n지원 용량: 최대 30MB"
     },
     "voiceDictation": {
       "Guide": {
