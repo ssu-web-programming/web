@@ -432,10 +432,10 @@ export const useInitBridgeListener = () => {
               );
             }
 
-            if (!body.isExternal) {
-              dispatch(setIsExternal(body.isExternal));
-              return;
-            }
+            Bridge.callBridgeApi('analyzeCurFile');
+
+            dispatch(setIsExternal(body.isExternal));
+            if (!body.isExternal) return;
 
             if (body.openTab in NOVA_TAB_TYPE) {
               const tab = body.openTab;
@@ -505,8 +505,6 @@ export const useInitBridgeListener = () => {
                 }
               })
             );
-
-            Bridge.callBridgeApi('analyzeCurFile');
 
             break;
           }

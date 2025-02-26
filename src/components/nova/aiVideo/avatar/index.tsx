@@ -60,7 +60,9 @@ export default function Avatar() {
           result: {
             info: {
               ...result?.info,
-              selectedAvatar: { ...InitAvatarInfo, avatar: result?.info.avatars[0] }
+              selectedAvatar: result?.info.avatars[0]
+                ? { ...InitAvatarInfo, avatar: result.info.avatars[0] }
+                : InitAvatarInfo
             }
           }
         })
@@ -95,7 +97,7 @@ export default function Avatar() {
   const changeSelectedAvatar = (avatar: Avatars) => {
     if (!result || !result.info.avatars) return;
 
-    const currentAvatars = result.info.avatars;
+    const currentAvatars = result?.info?.avatars;
     const firstFourAvatars = currentAvatars.slice(0, 4); // 앞의 4개 요소
     const remainingAvatars = currentAvatars.slice(4); // 나머지 요소
 
@@ -161,7 +163,7 @@ export default function Avatar() {
   };
 
   const getShapeIcon = (shape: 'circle' | 'normal') => {
-    const isSelected = result?.info.selectedAvatar?.avatar_style === shape;
+    const isSelected = result?.info?.selectedAvatar?.avatar_style === shape;
     return isLightMode
       ? isSelected
         ? shape === 'normal'
@@ -204,12 +206,11 @@ export default function Avatar() {
               </div>
             </S.TitleWrap>
             <S.AvartarList>
-              {result?.info.avatars &&
-                result?.info?.selectedAvatar.avatar &&
-                result?.info.avatars.slice(0, 4).map((avatar: Avatars) => (
+              {result?.info?.avatars &&
+                result?.info?.avatars.slice(0, 4).map((avatar: Avatars) => (
                   <S.AvartarContainer
                     key={avatar.avatar_id}
-                    isSelected={result?.info?.selectedAvatar?.avatar.avatar_id == avatar.avatar_id}
+                    isSelected={result?.info?.selectedAvatar?.avatar?.avatar_id == avatar.avatar_id}
                     onClick={() => changeSelectedAvatar(avatar)}>
                     <S.OuterBorder
                       isSelected={
