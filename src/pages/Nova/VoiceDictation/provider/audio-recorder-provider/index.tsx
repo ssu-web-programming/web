@@ -270,22 +270,38 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({ ch
         pauseRecording();
 
         const shouldStop = onConfirm ? await onConfirm() : true;
-        console.log('shouldStop', shouldStop);
 
         if (shouldStop) {
+          // MediaRecorder 정리
           mediaRecorderRef.current.stop();
-          mediaRecorderRef.current = null;
 
+          // Stream 정리
           if (streamRef.current) {
-            console.log('stream 정리 전', streamRef.current);
-            streamRef.current.getTracks().forEach((track) => track.stop());
+            const tracks = streamRef.current.getTracks();
+            tracks.forEach((track) => {
+              track.stop();
+              streamRef.current?.removeTrack(track);
+            });
             streamRef.current = null;
-            console.log('stream 정리 후', streamRef.current);
           }
+
+          // 애니메이션 정리
           if (animationFrameRef.current) {
             cancelAnimationFrame(animationFrameRef.current);
+            animationFrameRef.current = null;
           }
 
+          // AudioContext 정리
+          if (audioContextRef.current) {
+            audioContextRef.current.close().catch(console.error);
+            audioContextRef.current = null;
+          }
+
+          // Analyser 정리
+          analyserRef.current = null;
+
+          // 상태 업데이트
+          mediaRecorderRef.current = null;
           setIsRecording(false);
           setIsPaused(false);
           dispatch(setIsRecordingState('not-started'));
@@ -296,7 +312,6 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({ ch
     },
     [isRecording, stopTimer]
   );
-
   const pauseRecording = useCallback(() => {
     if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
       const isPaused = true;
