@@ -432,6 +432,8 @@ export const useInitBridgeListener = () => {
               );
             }
 
+            Bridge.callBridgeApi('analyzeCurFile');
+
             dispatch(setIsExternal(body.isExternal));
             if (!body.isExternal) return;
 
@@ -503,8 +505,6 @@ export const useInitBridgeListener = () => {
                 }
               })
             );
-
-            Bridge.callBridgeApi('analyzeCurFile');
 
             break;
           }
