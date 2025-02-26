@@ -106,7 +106,7 @@ export default function Reference({ references }: referenceProps) {
           animationData={isLightMode ? SkeletonMobileLight : SkeletonMobileDark}
           loop
           play
-          style={{ width: 226, height: 28 }}
+          style={{ width: 288, height: 90 }}
         />
       ) : (
         <Lottie
