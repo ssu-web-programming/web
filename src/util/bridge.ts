@@ -421,7 +421,7 @@ export const useInitBridgeListener = () => {
             const version = getVersion();
             const device = getDevice();
 
-            if (platform == ClientType.unknown || !version || version === '') {
+            if (platform === ClientType.unknown || !version || version === '') {
               if (!body.platform) return;
               dispatch(
                 setPlatformInfo({
