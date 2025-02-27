@@ -22,7 +22,12 @@ import {
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import { novaHistorySelector } from '../../../store/slices/nova/novaHistorySlice';
 import { selectTabSlice } from '../../../store/slices/tabSlice';
-import { DriveFileInfo, setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
+import {
+  CurrentFileInfo,
+  DriveFileInfo,
+  setDriveFiles,
+  setLocalFiles
+} from '../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { getFileExtension } from '../../../util/common';
 import { useChatNova } from '../useChatNova';
@@ -117,7 +122,7 @@ export function useManageFile({ onFinishCallback, onClearPastedImages }: Props =
   const validateFileUpload = async (files: File[], maxFileSize: number) => {
     const validation = validateFiles(files, maxFileSize);
 
-    // 실패했을때 나오는 팝업!
+    // 실패했을때 나오는 팝업
     if (validation.invalidReason.type.length > 0) {
       await confirm({
         msg: t('Nova.translation.Alert.UnsupportedFormat')
@@ -217,21 +222,7 @@ export function useManageFile({ onFinishCallback, onClearPastedImages }: Props =
       return;
     }
 
-    const invalidSize = files.filter((file) => !isValidFileSize(file.size, selectedNovaTab));
-    if (invalidSize.length > 0) {
-      confirm({
-        title: '',
-        msg: t('Nova.Alert.OverFileUploadSize', {
-          max: getMaxFileSize(selectedNovaTab),
-          min: MIN_FILE_UPLOAD_SIZE_KB
-        })!,
-        onOk: {
-          text: t('Confirm'),
-          callback: () => {}
-        }
-      });
-      return;
-    }
+    if (!validateFileSize(files)) return;
 
     if (selectedNovaTab === NOVA_TAB_TYPE.voiceDictation) {
       if (handleAudioDuration && files.length > 0) {
@@ -270,6 +261,47 @@ export function useManageFile({ onFinishCallback, onClearPastedImages }: Props =
     onClearPastedImages?.();
     dispatch(setLocalFiles([]));
     dispatch(setDriveFiles(files));
+  };
+
+  const validateFileSize = (files: File[]) => {
+    const invalidSize = files.filter((file) => !isValidFileSize(file.size, selectedNovaTab));
+    if (invalidSize.length > 0) {
+      confirm({
+        title: '',
+        msg: t('Nova.Alert.OverFileUploadSize', {
+          max: getMaxFileSize(selectedNovaTab),
+          min: MIN_FILE_UPLOAD_SIZE_KB
+        })!,
+        onOk: {
+          text: t('Confirm'),
+          callback: () => {
+            return false;
+          }
+        }
+      });
+      return false;
+    }
+    return true;
+  };
+
+  const validateCurFileSize = (file: CurrentFileInfo) => {
+    if (!isValidFileSize(file.size, selectedNovaTab)) {
+      confirm({
+        title: '',
+        msg: t('Nova.Alert.OverFileUploadSize', {
+          max: getMaxFileSize(selectedNovaTab),
+          min: MIN_FILE_UPLOAD_SIZE_KB
+        })!,
+        onOk: {
+          text: t('Confirm'),
+          callback: () => {
+            return false;
+          }
+        }
+      });
+      return false;
+    }
+    return false;
   };
 
   interface getFileListProps {
@@ -362,6 +394,8 @@ export function useManageFile({ onFinishCallback, onClearPastedImages }: Props =
     loadDriveFile,
     getFileList,
     getFileInfo,
+    validateFileSize,
+    validateCurFileSize,
     validateFileUpload,
     uploadTranslationFile
   };
