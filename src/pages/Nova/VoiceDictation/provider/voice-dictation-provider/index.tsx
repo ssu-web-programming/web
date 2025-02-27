@@ -112,6 +112,7 @@ export default function VoiceDictationProvider({ children }: Props) {
   const handleAudioDuration = async (file: File) => {
     try {
       const duration = await getAudioDurationViaAudioElement(file);
+      moveToFileReady();
       if (duration) {
         setSharedVoiceDictationInfo((prev) => ({
           ...prev,

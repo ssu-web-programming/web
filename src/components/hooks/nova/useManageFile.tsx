@@ -57,7 +57,7 @@ export function useManageFile({ onFinishCallback, onClearPastedImages }: Props =
   const novaHistory = useAppSelector(novaHistorySelector);
   const { getMaxFilesPerUpload, getAvailableFileCnt } = useUserInfoUtils();
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
-  const { handleAudioDuration, moveToFileReady } = useVoiceDictationContext();
+  const { handleAudioDuration } = useVoiceDictationContext();
 
   const validateFiles = (files: File[], maxFileSize: number): ValidationResult => {
     const result: ValidationResult = {
@@ -228,7 +228,6 @@ export function useManageFile({ onFinishCallback, onClearPastedImages }: Props =
       if (handleAudioDuration && files.length > 0) {
         await handleAudioDuration(files[0]); // 오디오 파일 처리
       }
-      moveToFileReady?.(); // onNext 함수 호출
     }
 
     dispatch(setLocalFiles(files));
