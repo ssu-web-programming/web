@@ -107,27 +107,28 @@ const CustomAudioPlayer: React.FC<CustomAudioPlayerProps> = ({
   }, []);
 
   // progress bar 클릭 핸들러
-  const handleProgressBarClick = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>): void => {
-      if (playerRef.current && playerRef.current.audio.current) {
-        const audioElement = playerRef.current.audio.current;
-        const progressBar = e.currentTarget;
-        const rect = progressBar.getBoundingClientRect();
-        const clickPosition = e.clientX - rect.left;
-        const totalWidth = rect.width;
-        const percentage = clickPosition / totalWidth;
-        const newTime = percentage * audioElement.duration;
+  // const handleProgressBarClick = useCallback((e: React.MouseEvent<HTMLDivElement>): void => {
+  //   if (playerRef.current && playerRef.current.audio.current) {
+  //     const audioElement = playerRef.current.audio.current;
+  //     console.log('audioElement', audioElement);
+  //     const progressBar = e.currentTarget;
+  //     console.log('progressBar', progressBar);
+  //     const rect = progressBar.getBoundingClientRect();
+  //     console.log('rect', rect);
+  //     const clickPosition = e.clientX - rect.left;
+  //     console.log('clickPosition', clickPosition);
+  //     const totalWidth = rect.width;
+  //     const percentage = clickPosition / totalWidth;
+  //     const newTime = percentage * audioElement.duration;
 
-        // 시간 변경
-        audioElement.currentTime = Math.max(0, Math.min(newTime, audioElement.duration));
-        setCurrentTime(audioElement.currentTime);
+  //     // 시간 변경
+  //     audioElement.currentTime = Math.max(0, Math.min(newTime, audioElement.duration));
+  //     setCurrentTime(audioElement.currentTime);
 
-        // 바로 재생 시작
-        startPlayback();
-      }
-    },
-    [startPlayback]
-  );
+  //     // 바로 재생 시작
+  //     startPlayback();
+  //   }
+  // }, []);
 
   // 재생/일시정지 토글 핸들러
   const handleTogglePlay = useCallback(
@@ -220,7 +221,7 @@ const CustomAudioPlayer: React.FC<CustomAudioPlayerProps> = ({
         }}
       />
 
-      <S.ProgressBarContainer onClick={handleProgressBarClick}>
+      <S.ProgressBarContainer>
         <S.ProgressBar progress={`${progress}%`} />
       </S.ProgressBarContainer>
 
