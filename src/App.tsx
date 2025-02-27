@@ -33,7 +33,7 @@ import Offline from './pages/Offline';
 import TextToImage from './pages/TextToImage';
 import Tools from './pages/Tools';
 import { setPageStatus } from './store/slices/nova/pageStatusSlice';
-import { setPlatformInfo } from './store/slices/platformInfo';
+import { platformInfoSelector, setPlatformInfo } from './store/slices/platformInfo';
 import { setThemeInfo, themeInfoSelector, ThemeType } from './store/slices/theme';
 import { useAppDispatch, useAppSelector } from './store/store';
 import GlobalStyle from './style/globalStyle';
@@ -54,19 +54,12 @@ function App() {
   const { isClosedNova } = useAppSelector(appStateSelector);
   const { t } = useTranslation();
   const { resetVoiceInfo } = useVoiceDictationContext();
-
-  const platform = getPlatform();
-  const version = getVersion();
-  const device = getDevice();
+  const { platform, version, device } = useAppSelector(platformInfoSelector);
 
   useEffect(() => {
     const detectTheme = () => {
       const platform = getPlatform();
-      if (
-        platform === ClientType.mac ||
-        platform === ClientType.web ||
-        platform === ClientType.unknown
-      ) {
+      if (platform === ClientType.mac) {
         const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
         const newTheme = prefersDarkMode ? ThemeType.dark : ThemeType.light;
         dispatch(setThemeInfo(newTheme));
@@ -83,7 +76,7 @@ function App() {
     return () => {
       mediaQuery.removeEventListener('change', detectTheme);
     };
-  }, [dispatch]);
+  }, [dispatch, platform]);
 
   useEffect(() => {
     const fetchInit = async () => {

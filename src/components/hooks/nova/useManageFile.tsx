@@ -188,7 +188,10 @@ export function useManageFile({ onFinishCallback, onClearPastedImages }: Props =
 
     const supportedExtensions =
       selectedNovaTab === NOVA_TAB_TYPE.home || selectedNovaTab === NOVA_TAB_TYPE.aiChat
-        ? [...SUPPORT_DOCUMENT_TYPE.flatMap((type) => type.extensions)]
+        ? [
+            ...SUPPORT_DOCUMENT_TYPE.flatMap((type) => type.extensions),
+            ...getValidExt(selectedNovaTab).flatMap((type) => type.extensions)
+          ]
         : selectedNovaTab === 'translation'
           ? [
               ...TRANSLATION_SUPPORT_TYPE.flatMap((type) => type.extensions),
@@ -207,7 +210,7 @@ export function useManageFile({ onFinishCallback, onClearPastedImages }: Props =
       await confirm({
         title: '',
         msg:
-          selectedNovaTab === NOVA_TAB_TYPE.aiChat || selectedNovaTab === NOVA_TAB_TYPE.home
+          selectedNovaTab === NOVA_TAB_TYPE.home || selectedNovaTab === NOVA_TAB_TYPE.aiChat
             ? t('Nova.Alert.CommonUnsupportFile')
             : selectedNovaTab === 'voiceDictation'
               ? t('Nova.translation.Alert.CommonUnsupportVoiceFile')
