@@ -209,6 +209,7 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({ ch
       });
       streamRef.current = stream;
 
+      console.log('startRecording-platform', platform);
       const mediaRecorder = new MediaRecorder(stream, {
         mimeType: platform === ClientType.windows ? 'video/webm;codecs=vp8' : 'video/mp4'
       });
@@ -251,8 +252,6 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({ ch
       };
 
       mediaRecorder.onstop = async () => {
-        console.log('stop일때 호출', stream);
-        console.log('streamRef는?', streamRef.current);
         const blob = new Blob(chunksRef.current, {
           type: platform === ClientType.windows ? 'audio/wav' : 'audio/mpeg'
         });
