@@ -432,7 +432,7 @@
       "button": {
         "viewMore": "View More",
         "countMore": "{{count}} More Items",
-        "collapse": "畳む",
+        "collapse": "Collapse",
         "anotherAnswer": "See Other Answers"
       }
     },
