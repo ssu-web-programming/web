@@ -1,6 +1,4 @@
 import { useState } from 'react';
-import * as React from 'react';
-import { over } from 'lodash';
 import { overlay } from 'overlay-kit';
 import { css } from 'styled-components';
 

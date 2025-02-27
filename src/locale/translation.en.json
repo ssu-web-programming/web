@@ -650,7 +650,8 @@
         "FileSizeError": "The file size is too large.\nPlease select only files less than 1GB in size.",
         "NotFoundMic": "Microphone device not found",
         "NotFoundMicDetail": "No available microphone has been detected. To ensure accurate dictation, please connect a microphone or enable it in your device settings.",
-        "Overed30Minutes": "Recording has automatically stopped as it exceeded 30 minutes. If you need to continue, please start a new recording."
+        "Overed30Minutes": "Recording has automatically stopped as it exceeded 30 minutes. If you need to continue, please start a new recording.",
+        "ConfirmCorrectAudio": "The file cannot be opened. Please check if it is a valid audio file."
       },
       "LanguageSelector": {
         "Options": {
