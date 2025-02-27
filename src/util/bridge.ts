@@ -430,7 +430,7 @@ export const useInitBridgeListener = () => {
                   version: body.version
                 })
               );
-              console.log('platform: ', body.platform);
+              console.log('bridge platform: ', body.platform);
             }
 
             Bridge.callBridgeApi('analyzeCurFile');
