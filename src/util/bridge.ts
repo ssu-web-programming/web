@@ -433,7 +433,6 @@ export const useInitBridgeListener = () => {
             }
 
             Bridge.callBridgeApi('analyzeCurFile');
-            console.log('analyzeCurFile ');
 
             dispatch(setIsExternal(body.isExternal));
             if (!body.isExternal) return;
@@ -514,7 +513,6 @@ export const useInitBridgeListener = () => {
             break;
           }
           case 'getFileInfo': {
-            console.log('getFileInfo');
             dispatch(
               setCurrentFile({
                 type: body.type,

@@ -301,7 +301,7 @@ export function useManageFile({ onFinishCallback, onClearPastedImages }: Props =
       });
       return false;
     }
-    return false;
+    return true;
   };
 
   interface getFileListProps {
