@@ -117,9 +117,9 @@ export default function VoiceDictationProvider({ children }: Props) {
         setSharedVoiceDictationInfo((prev) => ({
           ...prev,
           audioDuration: formatDuration(duration),
-          fileName: file.name // 파일 이름도 함께 저장
+          fileName: file.name, // 파일 이름도 함께 저장
+          componentType: 'FILE_READY'
         }));
-        moveToFileReady();
       }
     } catch (e) {
       await confirm({
