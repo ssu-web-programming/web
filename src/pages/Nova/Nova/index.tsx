@@ -40,6 +40,7 @@ import { ReactComponent as UploadDarkIcon } from '../../../img/dark/ico_upload_i
 import CreditIcon from '../../../img/light/ico_credit_gray.svg';
 import { ReactComponent as UploadLightIcon } from '../../../img/light/ico_upload_img_plus.svg';
 import { announceInfoSelector } from '../../../store/slices/nova/announceSlice';
+import { novaChatModeSelector } from '../../../store/slices/nova/novaHistorySlice';
 import { selectPageService, selectPageStatus } from '../../../store/slices/nova/pageStatusSlice';
 import { selectNovaTab, selectTabSlice } from '../../../store/slices/tabSlice';
 import { themeInfoSelector } from '../../../store/slices/theme';
@@ -81,6 +82,7 @@ export default function Nova() {
   const { usingAI, selectedNovaTab } = useAppSelector(selectTabSlice);
   const status = useAppSelector(selectPageStatus(selectedNovaTab));
   const service = useAppSelector(selectPageService(selectedNovaTab));
+  const chatMode = useAppSelector(novaChatModeSelector);
 
   useEffect(() => {
     if (expiredNOVA) {
@@ -100,7 +102,12 @@ export default function Nova() {
 
   const onDrop = useCallback(
     async (acceptedFiles: FileWithPath[]) => {
-      if (selectedNovaTab !== NOVA_TAB_TYPE.aiChat && status != 'home') return;
+      if (
+        selectedNovaTab == NOVA_TAB_TYPE.perplexity ||
+        (selectedNovaTab !== NOVA_TAB_TYPE.aiChat && status !== 'home') ||
+        (selectedNovaTab === NOVA_TAB_TYPE.aiChat && chatMode !== SERVICE_TYPE.NOVA_CHAT_GPT4O)
+      )
+        return;
       if (!(await handleAgreement())) return;
 
       loadLocalFile(acceptedFiles);

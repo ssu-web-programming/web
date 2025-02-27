@@ -165,11 +165,5 @@ export const selectTheme = (theme: ThemeType) => {
   if (process.env.NODE_ENV == 'development') {
     return theme == ThemeType.light ? lightTheme : darkTheme;
   }
-
-  const platform = getPlatform();
-  if (platform === ClientType.mac) {
-    return theme == ThemeType.light ? lightTheme : darkTheme;
-  } else {
-    return lightTheme;
-  }
+  return theme == ThemeType.light ? lightTheme : darkTheme;
 };

@@ -432,7 +432,7 @@
       "button": {
         "viewMore": "View More",
         "countMore": "{{count}} More Items",
-        "collapse": "畳む",
+        "collapse": "Collapse",
         "anotherAnswer": "See Other Answers"
       }
     },
@@ -900,7 +900,7 @@
       }
     },
     "Alert": {
-      "CommonUnsupportFile": "This file format is not supported.\nPlease check the supported file formats and try again.\n\n- Documents : docx, pptx, pdf, hwp, xlsx",
+      "CommonUnsupportFile": "This file format is not supported.\nPlease check the supported file formats and try again.\n\n- Documents : docx, pptx, pdf, hwp, xlsx\n- Images : jpg, png, gif",
       "CommonUnsupportImage": "This file format is not supported.\nPlease check the supported file formats and try again.\n\n- Images : {{support}}",
       "UnsupportFile": "This file is not supported. Please upload only {{support}} files.",
       "NoCredit": {
