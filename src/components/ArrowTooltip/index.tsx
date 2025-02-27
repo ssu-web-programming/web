@@ -47,11 +47,11 @@ export default function ArrowTooltips({
     if (!isReady) return;
 
     if (autoClose) {
-      event.preventDefault(); // 클릭 이벤트 방지
+      event.preventDefault();
     } else {
       event.stopPropagation();
+      setOpen((prev) => !prev);
     }
-    // setOpen((prev) => !prev);
   };
 
   const handleClickOutside = (event: MouseEvent) => {
