@@ -56,7 +56,6 @@ const NovaHome = (props: NovaHomeProps) => {
       setInputContents(inputText);
     }
   }, [location.state]);
-  console.log('home');
 
   const isUpdateRequired = () => {
     if (platform === ClientType.web || platform === ClientType.unknown) return false;
