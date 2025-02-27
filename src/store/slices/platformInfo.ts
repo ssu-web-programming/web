@@ -42,10 +42,14 @@ const platformInfo = createSlice({
       state.device = device;
       state.version = version;
       return state;
+    },
+    getPlatformInfo: (state) => {
+      console.log('현재 state 반환!', state);
+      return state;
     }
   }
 });
 
-export const { setPlatformInfo } = platformInfo.actions;
+export const { setPlatformInfo, getPlatformInfo } = platformInfo.actions;
 export const platformInfoSelector = (state: RootState) => state.platformInfo;
 export default platformInfo.reducer;

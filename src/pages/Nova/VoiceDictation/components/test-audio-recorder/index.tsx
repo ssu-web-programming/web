@@ -44,8 +44,7 @@ const TestAudioRecorder: React.FC<AudioRecorderProps> = ({
     resumeRecording,
     canvasRef,
     mediaRecorderRef,
-    startVisualization,
-    setIsPaused
+    startVisualization
   } = useAudioRecorder();
 
   const formatDuration = (seconds: number): string => {
