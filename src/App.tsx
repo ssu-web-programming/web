@@ -58,7 +58,6 @@ function App() {
 
   useEffect(() => {
     const detectTheme = () => {
-      const platform = getPlatform();
       if (platform === ClientType.mac) {
         const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
         const newTheme = prefersDarkMode ? ThemeType.dark : ThemeType.light;
