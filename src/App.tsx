@@ -52,7 +52,7 @@ function App() {
   const { isClosedNova } = useAppSelector(appStateSelector);
   const { t } = useTranslation();
   const { resetVoiceInfo } = useVoiceDictationContext();
-  const { platform, version, device } = useAppSelector(platformInfoSelector);
+  const { platform } = useAppSelector(platformInfoSelector);
 
   useEffect(() => {
     const detectTheme = () => {
@@ -87,6 +87,9 @@ function App() {
       }
     };
 
+    const platform = getPlatform();
+    const version = getVersion();
+    const device = getDevice();
     console.log('init app platform(before) : ', platform);
     if (platform !== ClientType.unknown && version) {
       dispatch(setPlatformInfo({ platform: platform, device: device, version: version }));
