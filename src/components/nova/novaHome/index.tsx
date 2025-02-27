@@ -129,6 +129,8 @@ const NovaHome = (props: NovaHomeProps) => {
     );
   };
 
+  console.log('NovaHome Platform Setting', platform);
+
   return (
     <>
       <S.Body>
