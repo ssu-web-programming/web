@@ -206,7 +206,10 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({ ch
 
   const startRecording = useCallback(async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: { echoCancellation: false },
+        video: false
+      });
       streamRef.current = stream;
 
       const mediaRecorder = new MediaRecorder(stream, {
@@ -251,6 +254,7 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({ ch
       };
 
       mediaRecorder.onstop = async () => {
+        stream.getTracks().forEach((track) => track.stop());
         const blob = new Blob(chunksRef.current, {
           type: platform === ClientType.windows ? 'audio/wav' : 'audio/mpeg'
         });
@@ -262,7 +266,6 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({ ch
 
         if (streamRef.current) {
           streamRef.current.getTracks().forEach((track) => track.stop());
-          stream.getTracks().forEach((track) => track.stop());
           streamRef.current = null;
         }
       };
@@ -293,8 +296,8 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({ ch
           if (streamRef.current) {
             const tracks = streamRef.current.getTracks();
             tracks.forEach((track) => {
-              track.stop();
               track.enabled = false;
+              track.stop();
             });
           }
 
