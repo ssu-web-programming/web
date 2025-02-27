@@ -1,4 +1,6 @@
 import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState } from 'react';
+import { useConfirm } from 'components/Confirm';
+import { useTranslation } from 'react-i18next';
 import { formatDuration, getAudioDurationViaAudioElement } from 'util/getAudioDuration';
 
 export type VoiceDictationComponentType =
@@ -71,6 +73,9 @@ export const useVoiceDictationContext = () => {
 };
 
 export default function VoiceDictationProvider({ children }: Props) {
+  const confirm = useConfirm();
+  const { t } = useTranslation();
+
   const [sharedVoiceDictationInfo, setSharedVoiceDictationInfo] =
     useState<SharedVoiceDictationInfo>({
       componentType: 'INTRO',
@@ -107,13 +112,17 @@ export default function VoiceDictationProvider({ children }: Props) {
   const handleAudioDuration = async (file: File) => {
     try {
       const duration = await getAudioDurationViaAudioElement(file);
-      setSharedVoiceDictationInfo((prev) => ({
-        ...prev,
-        audioDuration: formatDuration(duration),
-        fileName: file.name // 파일 이름도 함께 저장
-      }));
+      if (duration) {
+        setSharedVoiceDictationInfo((prev) => ({
+          ...prev,
+          audioDuration: formatDuration(duration),
+          fileName: file.name // 파일 이름도 함께 저장
+        }));
+      }
     } catch (e) {
-      console.log('오디오 처리 오류:', e);
+      await confirm({
+        msg: t('Nova.voiceDictation.Alert.ConfirmCorrectAudio')
+      });
     }
   };
 
