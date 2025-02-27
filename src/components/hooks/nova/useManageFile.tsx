@@ -76,7 +76,6 @@ export function useManageFile({ onFinishCallback, onClearPastedImages }: Props =
       const extractFileType = fileName.slice(fileName.lastIndexOf('.'));
       // 파일 타입 검사
       if (!TRANSLATION_EXTENSION_TYPE.includes(extractFileType)) {
-        console.log('file', file.type);
         isFileValid = false;
         result.invalidReason.type.push(file);
       }
