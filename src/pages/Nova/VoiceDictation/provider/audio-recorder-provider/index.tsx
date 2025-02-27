@@ -1,6 +1,6 @@
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { setIsRecordingState } from 'store/slices/appState';
-import { platformInfoSelector } from 'store/slices/platformInfo';
+import { getPlatformInfo, platformInfoSelector } from 'store/slices/platformInfo';
 import { setLocalFiles } from 'store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import { ClientType } from 'util/bridge';
@@ -125,7 +125,7 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({ ch
   // 호진 FIXME: 아래 로직은 걷어내고 싶음
   const dispatch = useAppDispatch();
   const { setSharedVoiceDictationInfo } = useVoiceDictationContext();
-  const { platform } = useAppSelector(platformInfoSelector);
+  const platform = useAppSelector((state) => state.platformInfo.platform);
 
   const handleMoveToReady = async (file: File) => {
     dispatch(setLocalFiles([file]));
@@ -288,7 +288,7 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({ ch
     } catch (error) {
       console.error('Error accessing microphone:', error);
     }
-  }, [startTimer, startVisualization]);
+  }, [startTimer, startVisualization, platform]);
 
   const stopRecording = useCallback(
     async (onConfirm?: () => Promise<boolean>) => {
