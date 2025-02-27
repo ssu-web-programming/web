@@ -58,6 +58,9 @@ export default function useCurrentDocAnalysis() {
         await confirmSaveDoc(false);
       }
     } else if (currentFile.type === 'local' || currentFile.type === 'unknown') {
+      if (selectedNovaTab === 'translation') {
+        console.log('validation!');
+      }
       await confirmUploadFile();
     }
   };
