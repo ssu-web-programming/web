@@ -366,6 +366,7 @@ export const useInitBridgeListener = () => {
     const {
       tab: { creating }
     } = thunkAPI.getState();
+    overlay.closeAll();
 
     const path = getPath(cmd as PanelOpenCmd);
     if (creating === 'none') {
@@ -381,7 +382,6 @@ export const useInitBridgeListener = () => {
         }
       }
 
-      console.log('페이지 이동해라!', body);
       navigate(`${path}${location.search}`, {
         state: { body },
         replace: true

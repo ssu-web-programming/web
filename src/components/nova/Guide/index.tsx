@@ -8,9 +8,9 @@ import { ReactComponent as IconConvertDark } from '../../../img/dark/nova/tab/co
 import { ReactComponent as IconConvertLight } from '../../../img/light/nova/tab/convert_Img.svg';
 import { announceInfoSelector, IAnnouceInfo } from '../../../store/slices/nova/announceSlice';
 import { novaChatModeSelector } from '../../../store/slices/nova/novaHistorySlice';
-import { selectTabSlice } from '../../../store/slices/tabSlice';
+import { selectNovaTab, selectTabSlice } from '../../../store/slices/tabSlice';
 import { themeInfoSelector } from '../../../store/slices/theme';
-import { useAppSelector } from '../../../store/store';
+import { useAppDispatch, useAppSelector } from '../../../store/store';
 import Announcement from '../../Announcement';
 
 import * as S from './style';
