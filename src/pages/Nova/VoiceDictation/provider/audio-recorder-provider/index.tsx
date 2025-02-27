@@ -124,10 +124,7 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({ ch
 
   // 호진 FIXME: 아래 로직은 걷어내고 싶음
   const dispatch = useAppDispatch();
-  const {
-    setSharedVoiceDictationInfo,
-    sharedVoiceDictationInfo: { componentType }
-  } = useVoiceDictationContext();
+  const { setSharedVoiceDictationInfo } = useVoiceDictationContext();
   const { platform } = useAppSelector(platformInfoSelector);
 
   const handleMoveToReady = async (file: File) => {
@@ -207,7 +204,7 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({ ch
   const startRecording = useCallback(async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
-        audio: { echoCancellation: false },
+        audio: true,
         video: false
       });
       streamRef.current = stream;
@@ -254,7 +251,8 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({ ch
       };
 
       mediaRecorder.onstop = async () => {
-        stream.getTracks().forEach((track) => track.stop());
+        console.log('stop일때 호출', stream);
+        console.log('streamRef는?', streamRef.current);
         const blob = new Blob(chunksRef.current, {
           type: platform === ClientType.windows ? 'audio/wav' : 'audio/mpeg'
         });
@@ -263,6 +261,14 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({ ch
         setAudioUrl(url);
         await checkAudioDuration(blob);
         onRecordingComplete?.(blob);
+
+        streamRef.current?.getAudioTracks().forEach((track) => {
+          console.log('audio', track);
+        });
+
+        streamRef.current?.getTracks().forEach((track) => {
+          console.log('그냥 tracck', track);
+        });
 
         if (streamRef.current) {
           streamRef.current.getTracks().forEach((track) => track.stop());
@@ -279,7 +285,7 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({ ch
     } catch (error) {
       console.error('Error accessing microphone:', error);
     }
-  }, [onRecordingComplete, startTimer, startVisualization]);
+  }, [startTimer, startVisualization]);
 
   const stopRecording = useCallback(
     async (onConfirm?: () => Promise<boolean>) => {
@@ -295,18 +301,20 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({ ch
           // Stream 정리
           if (streamRef.current) {
             const tracks = streamRef.current.getTracks();
+            const audioTracks = streamRef.current.getAudioTracks();
             tracks.forEach((track) => {
               track.enabled = false;
               track.stop();
             });
-          }
 
-          if (audioContextRef.current && streamRef.current) {
-            const microphone = audioContextRef.current.createMediaStreamSource(streamRef.current);
-            microphone.disconnect();
-          }
+            audioTracks.forEach((track) => {
+              console.log('ahahahah-track', track);
+              track.enabled = false;
+              track.stop();
+            });
 
-          streamRef.current = null;
+            streamRef.current = null;
+          }
 
           // 애니메이션 정리
           if (animationFrameRef.current) {
