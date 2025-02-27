@@ -229,6 +229,22 @@ export default function NovaHeader(props: NovaHeaderProps) {
     }
   };
 
+  const getBackButtonIcon = () => {
+    if (isError) {
+      return isLightMode ? ArrowLeftLightIcon : ArrowLeftDarkIcon;
+    }
+
+    if (isVoiceAndTranslationDisabledBack) {
+      return ArrowLeftDisableIcon;
+    }
+
+    if (isDisableBack || (status === 'progress' && selectedNovaTab === NOVA_TAB_TYPE.aiVideo)) {
+      return isLightMode ? ArrowLeftLightIcon : ArrowLeftDarkIcon;
+    }
+
+    return ArrowLeftDisableIcon;
+  };
+
   return (
     <S.StyledHeader title="" subTitle="">
       {isShareMode ? (
@@ -250,16 +266,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
             ) : (
               <>
                 <img
-                  src={
-                    isVoiceAndTranslationDisabledBack
-                      ? ArrowLeftDisableIcon
-                      : isDisableBack ||
-                          (status === 'progress' && selectedNovaTab === NOVA_TAB_TYPE.aiVideo)
-                        ? isLightMode
-                          ? ArrowLeftLightIcon
-                          : ArrowLeftDarkIcon
-                        : ArrowLeftDisableIcon
-                  }
+                  src={getBackButtonIcon()}
                   alt="arrow-left"
                   onClick={handleGoHome}
                   style={{
