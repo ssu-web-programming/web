@@ -145,6 +145,7 @@ export const MAX_FILE_UPLOAD_SIZE_MB_CHANGE_STYLE = 10;
 export const MAX_FILE_UPLOAD_SIZE_MB_AI_VIDEO = 50;
 export const MIN_FILE_UPLOAD_SIZE_KB = 1;
 export const MAX_FILE_UPLOAD_SIZE_MB_VOICE_DICTATION = 200;
+export const MAX_FILE_UPLOAD_SIZE_MB_TRANSLATE = 200;
 
 export const getMaxFileSize = (tab: NOVA_TAB_TYPE): number => {
   switch (tab) {
@@ -168,6 +169,8 @@ export const getMaxFileSize = (tab: NOVA_TAB_TYPE): number => {
       return MAX_FILE_UPLOAD_SIZE_MB_AI_VIDEO;
     case NOVA_TAB_TYPE.voiceDictation:
       return MAX_FILE_UPLOAD_SIZE_MB_VOICE_DICTATION;
+    case NOVA_TAB_TYPE.translation:
+      return MAX_FILE_UPLOAD_SIZE_MB_TRANSLATE;
     default:
       return MAX_FILE_UPLOAD_SIZE_MB_AI_CHAT;
   }
