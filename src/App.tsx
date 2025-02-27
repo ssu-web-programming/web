@@ -10,11 +10,9 @@ import { useVoiceDictationContext } from 'pages/Nova/VoiceDictation/provider/voi
 import { useTranslation } from 'react-i18next';
 import { Route, Routes } from 'react-router-dom';
 import { appStateSelector } from 'store/slices/appState';
-import { errorSelector } from 'store/slices/errorSlice';
 import { ThemeProvider } from 'styled-components';
 
 import Confirm from './components/Confirm';
-import { useChangeBackground } from './components/hooks/nova/useChangeBackground';
 import Spinner from './components/Spinner';
 import Toast from './components/toast/Toast';
 import { NOVA_TAB_TYPE } from './constants/novaTapTypes';
@@ -98,7 +96,7 @@ function App() {
     };
 
     console.log('init app platform(before) : ', platform);
-    if (platform != ClientType.unknown && version) {
+    if (platform !== ClientType.unknown && version) {
       dispatch(setPlatformInfo({ platform: platform, device: device, version: version }));
       console.log('init app platform : ', platform);
     }
