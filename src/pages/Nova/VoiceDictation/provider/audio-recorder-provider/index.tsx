@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useContext, useRef, useState } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { setIsRecordingState } from 'store/slices/appState';
 import { platformInfoSelector } from 'store/slices/platformInfo';
 import { setLocalFiles } from 'store/slices/uploadFiles';
@@ -124,7 +124,10 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({ ch
 
   // 호진 FIXME: 아래 로직은 걷어내고 싶음
   const dispatch = useAppDispatch();
-  const { setSharedVoiceDictationInfo } = useVoiceDictationContext();
+  const {
+    setSharedVoiceDictationInfo,
+    sharedVoiceDictationInfo: { componentType }
+  } = useVoiceDictationContext();
   const { platform } = useAppSelector(platformInfoSelector);
 
   const handleMoveToReady = async (file: File) => {
@@ -259,6 +262,7 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({ ch
 
         if (streamRef.current) {
           streamRef.current.getTracks().forEach((track) => track.stop());
+          stream.getTracks().forEach((track) => track.stop());
           streamRef.current = null;
         }
       };
@@ -290,7 +294,7 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({ ch
             const tracks = streamRef.current.getTracks();
             tracks.forEach((track) => {
               track.stop();
-              streamRef.current?.removeTrack(track);
+              track.enabled = false;
             });
             streamRef.current = null;
           }
