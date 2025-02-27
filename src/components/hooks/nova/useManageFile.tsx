@@ -286,7 +286,6 @@ export function useManageFile({ onFinishCallback, onClearPastedImages }: Props =
 
   const validateCurFileSize = (file: CurrentFileInfo) => {
     if (!isValidFileSize(file.size, selectedNovaTab)) {
-      console.log('invalidate');
       confirm({
         title: '',
         msg: t('Nova.Alert.OverFileUploadSize', {
@@ -302,7 +301,6 @@ export function useManageFile({ onFinishCallback, onClearPastedImages }: Props =
       });
       return false;
     }
-    console.log('validate');
     return true;
   };
 
