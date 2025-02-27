@@ -95,10 +95,10 @@ export default function VoiceDictationIntro() {
           creditCount={50}
           onNext={handleMoveToFileReady}
         />
+        <S.ClovaContainer>
+          <S.StyledClova />
+        </S.ClovaContainer>
       </Guide>
-      <S.ClovaContainer>
-        <S.StyledClova />
-      </S.ClovaContainer>
     </>
   );
 }

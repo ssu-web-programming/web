@@ -65,7 +65,7 @@ export default function Nova() {
   const { handleImprovedResolution } = useImprovedResolution();
   const { goThemePage } = useChangeStyle();
   const { handleAgreement } = usePrivacyConsent();
-  const { loadLocalFile } = useManageFile();
+  const { loadLocalFile, uploadTranslationFile } = useManageFile();
   const chatNova = useChatNova();
   const [expiredNOVA, setExpiredNOVA] = useState<boolean>(false);
   const [fileUploadState, setFileUploadState] = useState<FileUploadState>({
@@ -110,7 +110,11 @@ export default function Nova() {
         return;
       if (!(await handleAgreement())) return;
 
-      loadLocalFile(acceptedFiles);
+      if (selectedNovaTab === NOVA_TAB_TYPE.translation) {
+        await uploadTranslationFile(acceptedFiles, 30 * 1024 * 1024);
+      } else {
+        loadLocalFile(acceptedFiles);
+      }
     },
     [confirm, t]
   );
