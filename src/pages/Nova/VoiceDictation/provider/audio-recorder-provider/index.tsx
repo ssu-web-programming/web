@@ -296,8 +296,14 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({ ch
               track.stop();
               track.enabled = false;
             });
-            streamRef.current = null;
           }
+
+          if (audioContextRef.current && streamRef.current) {
+            const microphone = audioContextRef.current.createMediaStreamSource(streamRef.current);
+            microphone.disconnect();
+          }
+
+          streamRef.current = null;
 
           // 애니메이션 정리
           if (animationFrameRef.current) {
