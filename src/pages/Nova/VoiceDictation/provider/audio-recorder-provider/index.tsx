@@ -168,7 +168,9 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({ ch
       if (!canvasRef.current || !stream.active) return;
 
       try {
-        audioContextRef.current = new window.AudioContext();
+        const Context = window.AudioContext || window.webkitAudioContext;
+        audioContextRef.current = new Context();
+        console.log('audioContextRef.current', audioContextRef.current);
         const source = audioContextRef.current.createMediaStreamSource(stream);
         const analyser = audioContextRef.current.createAnalyser();
 
