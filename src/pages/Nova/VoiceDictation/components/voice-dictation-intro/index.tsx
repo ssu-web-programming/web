@@ -43,6 +43,8 @@ export default function VoiceDictationIntro() {
   const startRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+      stream.getTracks().forEach((track) => track.stop());
+
       await Bridge.callBridgeApi('getRecordingState', true);
 
       setSharedVoiceDictationInfo((prev) => ({

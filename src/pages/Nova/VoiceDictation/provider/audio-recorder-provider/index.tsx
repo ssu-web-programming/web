@@ -264,10 +264,12 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({ ch
 
         streamRef.current?.getAudioTracks().forEach((track) => {
           console.log('audio', track);
+          track.stop();
         });
 
         streamRef.current?.getTracks().forEach((track) => {
           console.log('그냥 tracck', track);
+          track.stop();
         });
 
         if (streamRef.current) {
@@ -302,6 +304,7 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({ ch
           if (streamRef.current) {
             const tracks = streamRef.current.getTracks();
             const audioTracks = streamRef.current.getAudioTracks();
+            console.log('audioTracks', audioTracks);
             tracks.forEach((track) => {
               track.enabled = false;
               track.stop();
