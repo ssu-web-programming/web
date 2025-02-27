@@ -112,7 +112,7 @@ export default function VoiceDictationProvider({ children }: Props) {
   const handleAudioDuration = async (file: File) => {
     try {
       const duration = await getAudioDurationViaAudioElement(file);
-      console.log('duration', duration);
+
       if (duration) {
         setSharedVoiceDictationInfo((prev) => ({
           ...prev,
@@ -120,6 +120,10 @@ export default function VoiceDictationProvider({ children }: Props) {
           fileName: file.name, // 파일 이름도 함께 저장
           componentType: 'FILE_READY'
         }));
+      } else {
+        await confirm({
+          msg: t('Nova.voiceDictation.Alert.ConfirmCorrectAudio')
+        });
       }
     } catch (e) {
       await confirm({
