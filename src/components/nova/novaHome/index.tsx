@@ -47,17 +47,16 @@ const NovaHome = (props: NovaHomeProps) => {
 
   const novaHistory = useAppSelector(novaHistorySelector);
   const { creating } = useAppSelector(selectTabSlice);
-  const { selectedNovaTab } = useAppSelector(selectTabSlice);
 
   const [inputContents, setInputContents] = useState<string>('');
 
   useEffect(() => {
     if (location.state) {
       const { inputText } = location.state.body;
-      console.log('inputText: ', inputText);
       setInputContents(inputText);
     }
   }, [location.state]);
+  console.log('home');
 
   const isUpdateRequired = () => {
     if (platform === ClientType.web || platform === ClientType.unknown) return false;

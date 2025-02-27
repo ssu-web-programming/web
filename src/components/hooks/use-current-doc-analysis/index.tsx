@@ -38,6 +38,7 @@ export default function useCurrentDocAnalysis() {
         }
       });
     } else if (currentFile.type === 'drive') {
+      console.log('currentFile: ', currentFile);
       if (!validateCurFileSize(currentFile)) return;
 
       if (Number(currentFile.id) === -1) {
