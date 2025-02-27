@@ -3,11 +3,14 @@ import { ReactComponent as DarkGoBackward } from 'img/dark/nova/voice-dictation/
 import { ReactComponent as DarkGoForward } from 'img/dark/nova/voice-dictation/go_forward.svg';
 import { ReactComponent as GoBackward } from 'img/light/nova/voiceDictation/go_backward.svg';
 import { ReactComponent as GoForward } from 'img/light/nova/voiceDictation/go_forward.svg';
+import AudioPlayer from 'react-h5-audio-player';
 
 import * as S from './style';
 
+import 'react-h5-audio-player/lib/styles.css';
+
 // 메인 컴포넌트 Props 타입
-interface AudioPlayerProps extends PropsWithChildren {
+interface CustomAudioPlayerProps extends PropsWithChildren {
   audioSource: string | File;
   onDurationChange?: (duration: number) => void;
   onPlay?: () => void;
@@ -22,7 +25,7 @@ interface AudioPlayerProps extends PropsWithChildren {
 // 재생 속도 타입
 export type PlaybackSpeed = 0.8 | 1.0 | 1.2 | 1.5 | 1.8 | 2.0;
 
-const AudioPlayer: React.FC<AudioPlayerProps> = ({
+const CustomAudioPlayer: React.FC<CustomAudioPlayerProps> = ({
   audioSource,
   onDurationChange,
   onPlay,
@@ -35,14 +38,9 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
   const [duration, setDuration] = useState<number>(0);
   const [playbackSpeed, setPlaybackSpeed] = useState<PlaybackSpeed>(1.0);
   const [audioUrl, setAudioUrl] = useState<string>('');
-  // 컴포넌트 리렌더링을 위한 상태
-  const [, forceUpdate] = useState<any>({});
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
 
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-
-  const isPlaying = useCallback(() => {
-    return audioRef.current ? !audioRef.current.paused : false;
-  }, []);
+  const playerRef = useRef<any>(null);
 
   const formatTime = (timeInSeconds: number): string => {
     const minutes = Math.floor(timeInSeconds / 60);
@@ -50,82 +48,11 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
     return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
   };
 
-  const handleLoadedMetadata = useCallback((): void => {
-    if (audioRef.current) {
-      const audioDuration = audioRef.current.duration;
-      setDuration(audioDuration);
-      onDurationChange?.(audioDuration);
-    }
-  }, [onDurationChange]);
-
-  const handleTimeUpdate = useCallback((): void => {
-    if (audioRef.current) {
-      setCurrentTime(audioRef.current.currentTime);
-    }
-  }, []);
-
-  const togglePlay = useCallback((): void => {
-    if (audioRef.current) {
-      if (!audioRef.current.paused) {
-        audioRef.current.pause();
-      } else {
-        audioRef.current.play().catch((err) => {
-          console.error('Error playing audio:', err);
-        });
-      }
-    }
-  }, []);
-
-  // 앞/뒤로 이동 함수
-  const handleSkip = useCallback((seconds: number): void => {
-    if (audioRef.current) {
-      const wasPlaying = !audioRef.current.paused;
-
-      // 정확한 시간 계산 및 제한
-      const newTime = Math.max(
-        0,
-        Math.min(audioRef.current.currentTime + seconds, audioRef.current.duration || 0)
-      );
-
-      // 시간 설정
-      audioRef.current.currentTime = newTime;
-      setCurrentTime(newTime);
-
-      // 재생 중이었다면 재생 상태 유지
-      if (wasPlaying && audioRef.current.paused) {
-        audioRef.current.play().catch((err) => {
-          console.error('Error playing audio after skip:', err);
-        });
-      }
-    }
-  }, []);
-
-  const handleProgressBarClick = useCallback((e: React.MouseEvent<HTMLDivElement>): void => {
-    if (audioRef.current) {
-      const progressBar = e.currentTarget;
-      const rect = progressBar.getBoundingClientRect();
-      const clickPosition = e.clientX - rect.left;
-      const totalWidth = rect.width;
-      const percentage = clickPosition / totalWidth;
-      const newTime = percentage * audioRef.current.duration;
-
-      // 시간 변경
-      audioRef.current.currentTime = Math.max(0, Math.min(newTime, audioRef.current.duration));
-      setCurrentTime(audioRef.current.currentTime);
-
-      setTimeout(() => {
-        audioRef.current?.play().catch((err) => {
-          console.error('Error playing audio after progress click:', err);
-        });
-      }, 10);
-    }
-  }, []);
-
   // 재생 속도 변경 핸들러
   const handleChangeSpeedOptions = useCallback((nextSpeed: PlaybackSpeed) => {
-    if (audioRef.current) {
+    if (playerRef.current && playerRef.current.audio.current) {
       setPlaybackSpeed(nextSpeed);
-      audioRef.current.playbackRate = nextSpeed;
+      playerRef.current.audio.current.playbackRate = nextSpeed;
     }
   }, []);
 
@@ -134,69 +61,163 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
     openSpeedbackPopup?.(handleChangeSpeedOptions, playbackSpeed);
   }, [openSpeedbackPopup, handleChangeSpeedOptions, playbackSpeed]);
 
+  // 재생 시작 함수
+  const startPlayback = useCallback(() => {
+    if (playerRef.current && playerRef.current.audio && playerRef.current.audio.current) {
+      const audioElement = playerRef.current.audio.current;
+
+      if (audioElement.paused) {
+        audioElement
+          .play()
+          .then(() => {
+            setIsPlaying(true);
+            onPlay?.();
+          })
+          .catch((err: Error) => {
+            console.error('Error playing audio:', err);
+          });
+      }
+    }
+  }, [onPlay]);
+
+  // 앞/뒤로 이동 함수 - react-h5-audio-player에서는 직접 건너뛰기 기능을 제공하지만
+  // 기존 UI를 유지하기 위해 커스텀 기능으로 구현
+  const handleSkip = useCallback((seconds: number): void => {
+    if (playerRef.current && playerRef.current.audio.current) {
+      const audioElement = playerRef.current.audio.current;
+      const wasPlaying = !audioElement.paused;
+
+      // 정확한 시간 계산 및 제한
+      const newTime = Math.max(
+        0,
+        Math.min(audioElement.currentTime + seconds, audioElement.duration || 0)
+      );
+
+      // 시간 설정
+      audioElement.currentTime = newTime;
+      setCurrentTime(newTime);
+
+      // 재생 중이었다면 재생 상태 유지
+      if (wasPlaying && audioElement.paused) {
+        audioElement.play().catch((err: Error) => {
+          console.error('Error playing audio after skip:', err);
+        });
+      }
+    }
+  }, []);
+
+  // progress bar 클릭 핸들러
+  const handleProgressBarClick = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>): void => {
+      if (playerRef.current && playerRef.current.audio.current) {
+        const audioElement = playerRef.current.audio.current;
+        const progressBar = e.currentTarget;
+        const rect = progressBar.getBoundingClientRect();
+        const clickPosition = e.clientX - rect.left;
+        const totalWidth = rect.width;
+        const percentage = clickPosition / totalWidth;
+        const newTime = percentage * audioElement.duration;
+
+        // 시간 변경
+        audioElement.currentTime = Math.max(0, Math.min(newTime, audioElement.duration));
+        setCurrentTime(audioElement.currentTime);
+
+        // 바로 재생 시작
+        startPlayback();
+      }
+    },
+    [startPlayback]
+  );
+
+  // 재생/일시정지 토글 핸들러
+  const handleTogglePlay = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation(); // 이벤트 버블링 방지
+
+      if (playerRef.current) {
+        if (playerRef.current.audio && playerRef.current.audio.current) {
+          const audioElement = playerRef.current.audio.current;
+
+          if (audioElement.paused) {
+            audioElement
+              .play()
+              .then(() => {
+                setIsPlaying(true);
+                onPlay?.();
+              })
+              .catch((err: Error) => {
+                console.error('Error playing audio:', err);
+              });
+          } else {
+            audioElement.pause();
+            setIsPlaying(false);
+            onPause?.();
+          }
+        }
+      }
+    },
+    [onPlay, onPause]
+  );
+
   // 진행률 계산
   const progress = duration ? (currentTime / duration) * 100 : 0;
-
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    const handleAudioPlay = () => {
-      forceUpdate({});
-      onPlay?.();
-    };
-
-    const handleAudioPause = () => {
-      forceUpdate({});
-      onPause?.();
-    };
-
-    const handleAudioEnded = () => {
-      forceUpdate({});
-    };
-
-    // 이벤트 리스너 등록
-    audio.addEventListener('play', handleAudioPlay);
-    audio.addEventListener('pause', handleAudioPause);
-    audio.addEventListener('ended', handleAudioEnded);
-
-    // 클린업 함수
-    return () => {
-      audio.removeEventListener('play', handleAudioPlay);
-      audio.removeEventListener('pause', handleAudioPause);
-      audio.removeEventListener('ended', handleAudioEnded);
-    };
-  }, [onPlay, onPause]);
 
   useEffect(() => {
     if (audioSource instanceof File) {
       const url = URL.createObjectURL(audioSource);
       setAudioUrl(url);
 
-      if (audioRef.current) {
-        audioRef.current.load();
-      }
-
       return () => {
         URL.revokeObjectURL(url);
       };
     } else {
       setAudioUrl(audioSource);
-
-      if (audioRef.current) {
-        audioRef.current.load();
-      }
     }
   }, [audioSource]);
 
+  // 오디오 상태 감시
+  useEffect(() => {
+    const updateCurrentTime = () => {
+      if (playerRef.current && playerRef.current.audio.current) {
+        setCurrentTime(playerRef.current.audio.current.currentTime);
+      }
+    };
+
+    // 100ms마다 현재 시간 업데이트
+    const timeUpdateInterval = setInterval(updateCurrentTime, 100);
+
+    return () => {
+      clearInterval(timeUpdateInterval);
+    };
+  }, []);
+
   return (
     <S.Container>
-      <audio
-        ref={audioRef}
+      <AudioPlayer
+        ref={playerRef}
         src={audioUrl}
-        onLoadedMetadata={handleLoadedMetadata}
-        onTimeUpdate={handleTimeUpdate}
+        autoPlay={false}
         preload="auto"
+        customControlsSection={[]} // 모든 기본 컨트롤 숨기기
+        customProgressBarSection={[]} // 기본 프로그레스 바 숨기기
+        style={{ display: 'none' }} // 전체 플레이어 UI 숨기기
+        onLoadedMetaData={(e: any) => {
+          const audioElement = e.target as HTMLAudioElement;
+          const audioDuration = audioElement.duration;
+          setDuration(audioDuration);
+          onDurationChange?.(audioDuration);
+        }}
+        onPlay={() => {
+          setIsPlaying(true);
+          onPlay?.();
+        }}
+        onPause={() => {
+          setIsPlaying(false);
+          onPause?.();
+        }}
+        onEnded={() => {
+          setIsPlaying(false);
+        }}
       />
 
       <S.ProgressBarContainer onClick={handleProgressBarClick}>
@@ -214,8 +235,8 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
           <span>x</span>
         </S.PlaybackSpeedButton>
 
-        <S.PlayButton onClick={togglePlay}>
-          {isPlaying() ? <S.StyledPause /> : <S.StyledPlay />}
+        <S.PlayButton onClick={handleTogglePlay}>
+          {isPlaying ? <S.StyledPause /> : <S.StyledPlay />}
         </S.PlayButton>
 
         <S.SkipButton onClick={() => handleSkip(-5)}>
@@ -232,4 +253,4 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
   );
 };
 
-export default AudioPlayer;
+export default CustomAudioPlayer;

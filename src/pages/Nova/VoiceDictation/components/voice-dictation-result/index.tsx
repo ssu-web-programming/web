@@ -21,7 +21,8 @@ import { selectTabSlice } from '../../../../../store/slices/tabSlice';
 import { getCookie } from '../../../../../util/common';
 import { useVoiceDictationContext } from '../../provider/voice-dictation-provider';
 import PlaybackSpeedModalContent from '../modals/playback-speed-modal-content';
-import AudioPlayer, { PlaybackSpeed } from '../voice-audio-player';
+// AudioPlayer 컴포넌트와 타입 임포트 업데이트
+import CustomAudioPlayer, { PlaybackSpeed } from '../voice-audio-player';
 import VoiceSaveBottomSheet from '../voice-save-bottom-sheet';
 
 import * as S from './style';
@@ -50,14 +51,14 @@ export default function VoiceDictationResult() {
 
   const handleOpenPlaybackSpeed = (
     handleChangeSpeedOtions: (nextSpeed: PlaybackSpeed) => void,
-    currentSpeed: PlaybackSpeed // 추가
+    currentSpeed: PlaybackSpeed
   ) => {
     overlay.open(({ isOpen, close }) => {
       return (
         <OverlayModal isOpen={isOpen} onClose={close}>
           <PlaybackSpeedModalContent
             onChangeSpeedOptions={handleChangeSpeedOtions}
-            currentSpeed={currentSpeed} // 현재 속도 전달
+            currentSpeed={currentSpeed}
           />
         </OverlayModal>
       );
@@ -118,14 +119,13 @@ export default function VoiceDictationResult() {
           ))}
         </S.TranscriptContainer>
 
-        <AudioPlayer
-          // audioSource="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3"
+        {/* CustomAudioPlayer로 컴포넌트 이름 변경 */}
+        <CustomAudioPlayer
           audioSource={localFiles[0]}
           onPlay={() => console.log('Started playing')}
           onPause={() => console.log('Paused')}
           isLightMode={isLightMode}
           openSpeedbackPopup={handleOpenPlaybackSpeed}>
-          {/* 호진FIXME: 아래 컴포넌트는 audio 로직과 떨어져있는게 맞는 것 같음! */}
           <S.ButtonWrapper>
             <Button
               variant="purple"
@@ -143,7 +143,7 @@ export default function VoiceDictationResult() {
               <span>{t(`Nova.Result.Save`)}</span>
             </Button>
           </S.ButtonWrapper>
-        </AudioPlayer>
+        </CustomAudioPlayer>
       </S.Container>
     </S.Wrapper>
   );
