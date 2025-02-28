@@ -430,12 +430,12 @@ export const useInitBridgeListener = () => {
                   version: body.version
                 })
               );
-              console.log('bridge platform: ', body.platform);
             }
 
             Bridge.callBridgeApi('analyzeCurFile');
 
             dispatch(setIsExternal(body.isExternal));
+            console.log(body.isExternal);
             if (!body.isExternal) return;
 
             if (body.openTab in NOVA_TAB_TYPE) {
