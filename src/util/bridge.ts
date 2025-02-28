@@ -437,6 +437,7 @@ export const useInitBridgeListener = () => {
 
             // 이전 버전에는 해당 이벤트가 없어 예외처리
             if (body.isExternal === undefined) {
+              console.log('undefined: ', body.isExternal);
               dispatch(setIsExternal(true));
             } else {
               dispatch(setIsExternal(body.isExternal));
