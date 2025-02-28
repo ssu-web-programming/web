@@ -16,7 +16,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   z-index: 9999;
-  background-color: rgb(244, 246, 248);
+  background-color: ${({ theme }) => theme.color.background.bg};
 `;
 
 const ContentContainer = styled.div`
@@ -50,7 +50,7 @@ const Title = styled.p`
   line-height: 24px;
   text-align: center;
   white-space: break-spaces;
-  color: #454c53;
+  color: ${({ theme }) => theme.color.text.gray03};
   white-space: pre-wrap;
 `;
 

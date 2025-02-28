@@ -20,7 +20,6 @@ const ProgressBarContainer = styled.div`
   background-color: ${({ theme }) => theme.color.background.gray02};
   border-radius: 9999px;
   margin-bottom: 8px;
-  cursor: pointer;
 
   &:hover {
     height: 5px;
