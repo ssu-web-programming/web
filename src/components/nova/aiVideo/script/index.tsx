@@ -98,7 +98,7 @@ export default function Script() {
         <span>{t('Nova.aiVideo.button.makeVideo')}</span>
         <S.CreditInfo>
           <img src={CreditColorIcon} alt="credit" />
-          <span>10</span>
+          <span>50</span>
         </S.CreditInfo>
       </Button>
       <S.LogoWrap>
