@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { initLoadingSpinner } from 'store/slices/loadingSpinner';
 import { setFileState } from 'store/slices/nova/translation/download-slice';
 import { resetCurrentWrite } from 'store/slices/writeHistorySlice';
+import { isExternal } from 'util/types';
 import { v4 as uuidv4 } from 'uuid';
 
 import { createAsyncThunk } from '@reduxjs/toolkit';
@@ -434,9 +435,13 @@ export const useInitBridgeListener = () => {
 
             Bridge.callBridgeApi('analyzeCurFile');
 
-            dispatch(setIsExternal(body.isExternal));
-            console.log(body.isExternal);
-            if (!body.isExternal) return;
+            // 이전 버전에는 해당 이벤트가 없어 예외처리
+            if (body.isExternal === undefined) {
+              dispatch(setIsExternal(true));
+            } else {
+              dispatch(setIsExternal(body.isExternal));
+              if (body.isExternal) return;
+            }
 
             if (body.openTab in NOVA_TAB_TYPE) {
               const tab = body.openTab;
