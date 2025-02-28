@@ -22,7 +22,7 @@ const initialState: InitialState = {
   // 전화 여부 추가
   isIncomingCall: false,
   isRecordState: 'not-started',
-  isExternal: false,
+  isExternal: true,
   isClosedNova: false,
   isAosMicrophonePermission: null
 };
