@@ -29,7 +29,7 @@ export default function TranslationTextResult() {
   } = useTranslationContext();
 
   useEffect(() => {
-    showSurveyModal();
+    // showSurveyModal();
   }, []);
 
   const showSurveyModal = async () => {

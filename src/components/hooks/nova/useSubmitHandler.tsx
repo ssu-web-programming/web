@@ -323,7 +323,7 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
           }
         );
         dispatch(updateChatStatus({ id, status: 'done' }));
-        await showSurveyModal();
+        // await showSurveyModal();
       } catch (err) {
         if (timer) clearTimeout(timer);
         if (requestor.current?.isAborted() === true) {

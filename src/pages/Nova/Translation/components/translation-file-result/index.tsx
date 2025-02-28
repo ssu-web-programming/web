@@ -86,7 +86,7 @@ export default function TranslationFileResult() {
   };
 
   useEffect(() => {
-    showSurveyModal();
+    // showSurveyModal();
   }, []);
 
   const showSurveyModal = async () => {

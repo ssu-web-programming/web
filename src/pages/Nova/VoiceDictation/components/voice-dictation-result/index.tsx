@@ -40,7 +40,7 @@ export default function VoiceDictationResult() {
   const { t } = useTranslation();
 
   useEffect(() => {
-    showSurveyModal();
+    // showSurveyModal();
   }, []);
 
   const handleOpenSaveOverlay = () => {

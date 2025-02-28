@@ -241,7 +241,8 @@ export default function Nova() {
         <NovaHeader />
         {(status === 'progress' || status === 'saving') && <Progress />}
         <S.Body>
-          {selectedNovaTab === NOVA_TAB_TYPE.home && <Banner />}
+          {/*신학기 오픈 예정*/}
+          {/*{selectedNovaTab === NOVA_TAB_TYPE.home && <Banner />}*/}
           {announcementList
             .filter(
               (info) =>
