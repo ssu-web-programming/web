@@ -168,9 +168,6 @@ export default function NovaHeader(props: NovaHeaderProps) {
   };
 
   const handleGoHome = async () => {
-    if (status === 'progress' && selectedNovaTab === NOVA_TAB_TYPE.aiVideo) {
-      await resetPage();
-    }
     if (isError && selectedNovaTab === NOVA_TAB_TYPE.voiceDictation) {
       await resetPage();
       resetVoiceInfo();
@@ -238,7 +235,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
       return ArrowLeftDisableIcon;
     }
 
-    if (isDisableBack || (status === 'progress' && selectedNovaTab === NOVA_TAB_TYPE.aiVideo)) {
+    if (isDisableBack) {
       return isLightMode ? ArrowLeftLightIcon : ArrowLeftDarkIcon;
     }
 

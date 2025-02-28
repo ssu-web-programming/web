@@ -8,6 +8,7 @@ import {
   addChatOutputRes,
   appendChatOutput,
   appendChatRecommendedQuestions,
+  changeChatOutput,
   novaChatModeSelector,
   NovaChatType,
   NovaFileInfo,
@@ -286,6 +287,15 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
                   switch (json.event_type) {
                     case 'text': {
                       return json.data;
+                    }
+                    case 'fulltext': {
+                      dispatch(
+                        changeChatOutput({
+                          id,
+                          output: json.data
+                        })
+                      );
+                      return;
                     }
                     case 'credit': {
                       // #svr-5601 credit 사용 toast 제거

@@ -86,10 +86,8 @@ function App() {
     const platform = getPlatform();
     const version = getVersion();
     const device = getDevice();
-    console.log('init app platform(before) : ', platform);
     if (platform !== ClientType.unknown && version) {
       dispatch(setPlatformInfo({ platform: platform, device: device, version: version }));
-      console.log('init app platform : ', platform);
     }
     fetchInit();
   }, []);

@@ -112,6 +112,12 @@ const novaHistorySlice = createSlice({
         chat.status = 'stream';
       }
     },
+    changeChatOutput: (state, action: PayloadAction<Pick<NovaChatType, 'id' | 'output'>>) => {
+      const chat = state.chatHistory.find((chat) => chat.id === action.payload.id);
+      if (chat) {
+        chat.output = action.payload.output;
+      }
+    },
     addChatOutputRes: (state, action: PayloadAction<Pick<NovaChatType, 'id' | 'res'>>) => {
       const chat = state.chatHistory.find((chat) => chat.id === action.payload.id);
       if (chat) {
@@ -163,6 +169,7 @@ export const {
   pushChat,
   addChatOutputRes,
   appendChatOutput,
+  changeChatOutput,
   appendChatReferences,
   appendChatRecommendedQuestions,
   updateChatStatus,
