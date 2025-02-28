@@ -85,17 +85,17 @@ export default function Result({ children }: ResultProps) {
 
   useEffect(() => {
     // 만족도 이벤트
-    if (!isCreditRecieved && !getCookie(`dontShowSurvey${selectedNovaTab}`)) {
-      overlay.closeAll();
-
-      overlay.open(({ isOpen, close }) => {
-        return (
-          <OverlayModal isOpen={isOpen} onClose={close} padding={'24px'}>
-            <SurveyModalContent />
-          </OverlayModal>
-        );
-      });
-    }
+    // if (!isCreditRecieved && !getCookie(`dontShowSurvey${selectedNovaTab}`)) {
+    //   overlay.closeAll();
+    //
+    //   overlay.open(({ isOpen, close }) => {
+    //     return (
+    //       <OverlayModal isOpen={isOpen} onClose={close} padding={'24px'}>
+    //         <SurveyModalContent />
+    //       </OverlayModal>
+    //     );
+    //   });
+    // }
   }, []);
 
   const ShowExpireLinkPopup = async () => {
