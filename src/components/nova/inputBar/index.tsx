@@ -27,6 +27,7 @@ import { useTranslation } from 'react-i18next';
 import {
   novaChatModeSelector,
   NovaChatType,
+  novaHistorySelector,
   setChatMode
 } from 'store/slices/nova/novaHistorySlice';
 import { useAppDispatch, useAppSelector } from 'store/store';
@@ -84,7 +85,11 @@ interface InputBarProps {
   novaHistory: NovaChatType[];
   disabled?: boolean;
   expiredNOVA?: boolean;
-  onSubmit: (param: InputBarSubmitParam, isAnswer: boolean) => Promise<void>;
+  onSubmit: (
+    param: InputBarSubmitParam,
+    isAnswer: boolean,
+    chatType: SERVICE_TYPE
+  ) => Promise<void>;
   contents?: string;
   setContents: React.Dispatch<React.SetStateAction<string>>;
 }
@@ -102,6 +107,7 @@ export default function InputBar(props: InputBarProps) {
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
   const status = useAppSelector(selectPageStatus(selectedNovaTab));
   const chatMode = useAppSelector(novaChatModeSelector);
+  const novaHistory = useAppSelector(novaHistorySelector);
   const serviceCredits = useAppSelector(selectAllServiceCredits);
   const {
     pastedImages,
@@ -203,7 +209,8 @@ export default function InputBar(props: InputBarProps) {
               : [],
         type: fileType
       },
-      false
+      false,
+      chatMode
     );
     textAreaRef.current?.focus();
   };
@@ -252,7 +259,7 @@ export default function InputBar(props: InputBarProps) {
     });
 
     if (ret) {
-      await chatNova.newChat();
+      await chatNova.newChat(selectedNovaTab, novaHistory);
       handleClearPastedImages();
       setContents('');
       dispatch(setLocalFiles([]));

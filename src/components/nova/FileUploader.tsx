@@ -19,6 +19,7 @@ import InsertDocsLightIcon from '../../img/light/ico_insert_docs.svg';
 import LogoPOIcon from '../../img/light/ico_logo_po.svg';
 import MobileLightIcon from '../../img/light/ico_mobile.svg';
 import PCLightIcon from '../../img/light/ico_pc.svg';
+import { novaHistorySelector } from '../../store/slices/nova/novaHistorySlice';
 import { platformInfoSelector } from '../../store/slices/platformInfo';
 import { selectTabSlice } from '../../store/slices/tabSlice';
 import { themeInfoSelector } from '../../store/slices/theme';
@@ -68,6 +69,7 @@ export const FileUploader = (props: FileUploaderProps) => {
   const confirm = useConfirm();
   const chatNova = useChatNova();
   const { getAvailableFileCnt, calcAvailableFileCnt } = useUserInfoUtils();
+  const novaHistory = useAppSelector(novaHistorySelector);
   const currentFile = useAppSelector(getCurrentFile);
   const { platform, version } = useAppSelector(platformInfoSelector);
 
@@ -109,7 +111,10 @@ export const FileUploader = (props: FileUploaderProps) => {
               msg: t('Nova.Confirm.OverMaxFileUploadCnt', {
                 max: getAvailableFileCnt(selectedNovaTab)
               })!,
-              onOk: { text: t('Nova.Confirm.NewChat.StartNewChat'), callback: chatNova.newChat },
+              onOk: {
+                text: t('Nova.Confirm.NewChat.StartNewChat'),
+                callback: () => chatNova.newChat(selectedNovaTab, novaHistory)
+              },
               onCancel: {
                 text: t('Cancel'),
                 callback: () => {}

@@ -102,7 +102,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
     });
 
     if (ret) {
-      await chatNova.newChat();
+      await chatNova.newChat(selectedNovaTab, novaHistory);
       handleClearPastedImages();
       if (props.setInputContents) props.setInputContents('');
       dispatch(setLocalFiles([]));

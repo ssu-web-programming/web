@@ -415,7 +415,7 @@ export const useInitBridgeListener = () => {
     }
   };
 
-  const initChatMode = async (
+  const initTab = async (
     tab: string,
     selectedNovaTab: NOVA_TAB_TYPE,
     novaHistory: NovaChatType[]
@@ -430,7 +430,8 @@ export const useInitBridgeListener = () => {
           onOk: {
             text: '계속하기',
             handleOk: () => {
-              chatNova.newChat();
+              chatNova.newChat(tab, novaHistory);
+              dispatch(selectNovaTab(NOVA_TAB_TYPE[tab as keyof typeof NOVA_TAB_TYPE]));
             }
           },
           onCancel: {
@@ -444,6 +445,7 @@ export const useInitBridgeListener = () => {
         } else {
           dispatch(setChatMode(SERVICE_TYPE.NOVA_CHAT_GPT4O));
         }
+        dispatch(selectNovaTab(NOVA_TAB_TYPE[tab as keyof typeof NOVA_TAB_TYPE]));
       }
     }
   };
@@ -481,12 +483,11 @@ export const useInitBridgeListener = () => {
             if (body.openTab in NOVA_TAB_TYPE) {
               const tab = body.openTab;
 
-              await initChatMode(tab, selectedNovaTab, novaHistory);
+              await initTab(tab, selectedNovaTab, novaHistory);
               dispatch(resetPageData(tab));
               dispatch(setDriveFiles([]));
               dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.home, status: 'home' }));
               dispatch(setLocalFiles([]));
-              dispatch(selectNovaTab(NOVA_TAB_TYPE[body.openTab as keyof typeof NOVA_TAB_TYPE]));
 
               const isBlob = body.image instanceof Blob && body.image.size > 0;
               const isBase64 = typeof body.image === 'string' && body.image.startsWith('data:');

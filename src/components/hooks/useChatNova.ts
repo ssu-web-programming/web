@@ -2,6 +2,7 @@ import { apiWrapper } from 'api/apiWrapper';
 import { NOVA_DELETE_CONVERSATION } from 'api/constant';
 import {
   initNovaHistory,
+  NovaChatType,
   novaHistorySelector,
   setChatMode
 } from 'store/slices/nova/novaHistorySlice';
@@ -14,13 +15,10 @@ import { setPageStatus } from '../../store/slices/nova/pageStatusSlice';
 
 export const useChatNova = () => {
   const dispatch = useAppDispatch();
-  const novaHistory = useAppSelector(novaHistorySelector);
-  const { selectedNovaTab } = useAppSelector(selectTabSlice);
 
-  const newChat = async () => {
+  const newChat = async (selectedNovaTab: NOVA_TAB_TYPE, novaHistory: NovaChatType[]) => {
     try {
       const lastChat = novaHistory[novaHistory.length - 1];
-      console.log('lastChat: ', lastChat);
       apiWrapper().request(NOVA_DELETE_CONVERSATION, {
         headers: {
           'Content-Type': 'application/json'

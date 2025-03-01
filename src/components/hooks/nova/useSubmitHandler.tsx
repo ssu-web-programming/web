@@ -146,7 +146,6 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
             ? NOVA_TAB_TYPE.perplexity
             : NOVA_TAB_TYPE.aiChat;
         dispatch(selectNovaTab(curTab));
-        dispatch(setPageStatus({ tab: curTab, status: 'chat' }));
         Bridge.callBridgeApi('curNovaTab', curTab);
 
         const fileInfo: NovaChatType['files'] = [];

@@ -57,7 +57,7 @@ interface AIChatProps {
   createChatSubmitHandler: (
     param: InputBarSubmitParam,
     isAnswer: boolean,
-    chatType?: SERVICE_TYPE
+    chatType: SERVICE_TYPE
   ) => Promise<void>;
   fileUploadState: FileUploadState;
 }

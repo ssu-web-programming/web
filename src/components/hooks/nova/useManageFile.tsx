@@ -175,7 +175,10 @@ export function useManageFile({ onFinishCallback, onClearPastedImages }: Props =
         await confirm({
           title: '',
           msg: t('Nova.Confirm.OverMaxFileUploadCnt', { max: uploadLimit })!,
-          onOk: { text: t('Nova.Confirm.NewChat.StartNewChat'), callback: chatNova.newChat },
+          onOk: {
+            text: t('Nova.Confirm.NewChat.StartNewChat'),
+            callback: async () => await chatNova.newChat(selectedNovaTab, novaHistory)
+          },
           onCancel: {
             text: t('Cancel'),
             callback: () => {}
@@ -248,7 +251,10 @@ export function useManageFile({ onFinishCallback, onClearPastedImages }: Props =
         await confirm({
           title: '',
           msg: t('Nova.Confirm.OverMaxFileUploadCnt', { max: uploadLimit })!,
-          onOk: { text: t('Nova.Confirm.NewChat.StartNewChat'), callback: chatNova.newChat },
+          onOk: {
+            text: t('Nova.Confirm.NewChat.StartNewChat'),
+            callback: async () => await chatNova.newChat(selectedNovaTab, novaHistory)
+          },
           onCancel: {
             text: t('Cancel'),
             callback: () => {}

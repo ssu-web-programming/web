@@ -72,7 +72,7 @@ interface ChatListProps {
   createChatSubmitHandler: (
     submitParam: InputBarSubmitParam,
     isAnswer: boolean,
-    chatType?: SERVICE_TYPE
+    chatType: SERVICE_TYPE
   ) => void;
   onSave: (history: NovaChatType) => void;
   scrollHandler: (e: React.UIEvent<HTMLDivElement>) => void;

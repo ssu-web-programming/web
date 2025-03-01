@@ -40,7 +40,10 @@ import { ReactComponent as UploadDarkIcon } from '../../../img/dark/ico_upload_i
 import CreditIcon from '../../../img/light/ico_credit_gray.svg';
 import { ReactComponent as UploadLightIcon } from '../../../img/light/ico_upload_img_plus.svg';
 import { announceInfoSelector } from '../../../store/slices/nova/announceSlice';
-import { novaChatModeSelector } from '../../../store/slices/nova/novaHistorySlice';
+import {
+  novaChatModeSelector,
+  novaHistorySelector
+} from '../../../store/slices/nova/novaHistorySlice';
 import { selectPageService, selectPageStatus } from '../../../store/slices/nova/pageStatusSlice';
 import { selectNovaTab, selectTabSlice } from '../../../store/slices/tabSlice';
 import { themeInfoSelector } from '../../../store/slices/theme';
@@ -83,6 +86,7 @@ export default function Nova() {
   const status = useAppSelector(selectPageStatus(selectedNovaTab));
   const service = useAppSelector(selectPageService(selectedNovaTab));
   const chatMode = useAppSelector(novaChatModeSelector);
+  const novaHistory = useAppSelector(novaHistorySelector);
 
   useEffect(() => {
     if (expiredNOVA) {
@@ -93,7 +97,7 @@ export default function Nova() {
           text: t(`Confirm`),
           callback: () => {
             setExpiredNOVA(false);
-            chatNova.newChat();
+            chatNova.newChat(selectedNovaTab, novaHistory);
           }
         }
       });
@@ -177,7 +181,7 @@ export default function Nova() {
           <AIChat
             expiredNOVA={expiredNOVA}
             setExpiredNOVA={setExpiredNOVA}
-            createChatSubmitHandler={(submitParam, isAnswer, chatType?: SERVICE_TYPE) =>
+            createChatSubmitHandler={(submitParam, isAnswer, chatType: SERVICE_TYPE) =>
               createChatSubmitHandler(submitParam, isAnswer, chatType)
             }
             fileUploadState={fileUploadState}
