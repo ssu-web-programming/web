@@ -145,8 +145,9 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
           chatType === SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO
             ? NOVA_TAB_TYPE.perplexity
             : NOVA_TAB_TYPE.aiChat;
-        dispatch(selectNovaTab(curTab));
         Bridge.callBridgeApi('curNovaTab', curTab);
+        dispatch(selectNovaTab(curTab));
+        dispatch(setPageStatus({ tab: curTab, status: 'chat' }));
 
         const fileInfo: NovaChatType['files'] = [];
         if (expireTimer.current) clearTimeout(expireTimer.current);

@@ -420,22 +420,19 @@ export const useInitBridgeListener = () => {
     selectedNovaTab: NOVA_TAB_TYPE,
     novaHistory: NovaChatType[]
   ) => {
-    console.log('tab: ', tab);
-    console.log('selectedNovaTab: ', selectedNovaTab);
-    console.log('novaHistory.length: ', novaHistory);
     if (tab === NOVA_TAB_TYPE.perplexity || tab === NOVA_TAB_TYPE.aiChat) {
       if (tab != selectedNovaTab && novaHistory.length > 0) {
         await showConfirmModal({
-          msg: '새로운 LLM을 선택하면 이전 대화 내용이 초기화됩니다. 계속하시겠습니까?',
+          msg: t('Nova.Confirm.ChangeChatMode.Msg') || '',
           onOk: {
-            text: '계속하기',
+            text: t('Nova.Confirm.ChangeChatMode.Ok') || '',
             handleOk: () => {
               chatNova.newChat(tab, novaHistory);
               dispatch(selectNovaTab(NOVA_TAB_TYPE[tab as keyof typeof NOVA_TAB_TYPE]));
             }
           },
           onCancel: {
-            text: '취소',
+            text: t('Cancel'),
             handleCancel: () => {}
           }
         });
@@ -447,6 +444,8 @@ export const useInitBridgeListener = () => {
         }
         dispatch(selectNovaTab(NOVA_TAB_TYPE[tab as keyof typeof NOVA_TAB_TYPE]));
       }
+    } else {
+      dispatch(selectNovaTab(NOVA_TAB_TYPE[tab as keyof typeof NOVA_TAB_TYPE]));
     }
   };
 

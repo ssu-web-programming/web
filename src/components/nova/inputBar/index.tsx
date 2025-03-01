@@ -55,7 +55,8 @@ import NovaLogoLightIcon from '../../../img/light/nova/ico_logo_nova.svg';
 import LoadingSpinner from '../../../img/light/spinner.webp';
 import {
   selectAllServiceCredits,
-  selectPageStatus
+  selectPageStatus,
+  setPageStatus
 } from '../../../store/slices/nova/pageStatusSlice';
 import { selectNovaTab, selectTabSlice } from '../../../store/slices/tabSlice';
 import { themeInfoSelector } from '../../../store/slices/theme';
@@ -70,6 +71,7 @@ import {
   setLocalFiles
 } from '../../../store/slices/uploadFiles';
 import { useConfirm } from '../../Confirm';
+import useShowConfirmModal from '../../hooks/use-show-confirm-modal';
 import { useChatNova } from '../../hooks/useChatNova';
 import SelectBox from '../../selectBox';
 import { FileUploader } from '../FileUploader';
@@ -99,6 +101,7 @@ export default function InputBar(props: InputBarProps) {
   const dispatch = useAppDispatch();
   const confirm = useConfirm();
   const chatNova = useChatNova();
+  const showConfirmModal = useShowConfirmModal();
   const { disabled = false, expiredNOVA = false, contents = '', setContents } = props;
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const localFiles = useAppSelector(getLocalFiles);
@@ -229,15 +232,16 @@ export default function InputBar(props: InputBarProps) {
       ref: inputImgFileRef
     }
   ];
-
   const handleMoveChat = () => {
     if (
       chatMode === SERVICE_TYPE.NOVA_WEBSEARCH_PERPLEXITY ||
       chatMode === SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO
     ) {
       dispatch(selectNovaTab(NOVA_TAB_TYPE.perplexity));
+      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.perplexity, status: 'chat' }));
     } else {
       dispatch(selectNovaTab(NOVA_TAB_TYPE.aiChat));
+      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiChat, status: 'chat' }));
     }
   };
 
@@ -264,6 +268,22 @@ export default function InputBar(props: InputBarProps) {
       setContents('');
       dispatch(setLocalFiles([]));
       dispatch(setDriveFiles([]));
+    }
+  };
+
+  const changeChatMode = (selectChatMode: SERVICE_TYPE) => {
+    dispatch(setChatMode(selectChatMode));
+    dispatch(setLocalFiles([]));
+    dispatch(setDriveFiles([]));
+    if (selectedNovaTab !== NOVA_TAB_TYPE.home) {
+      if (
+        selectChatMode === SERVICE_TYPE.NOVA_WEBSEARCH_PERPLEXITY ||
+        selectChatMode === SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO
+      ) {
+        dispatch(selectNovaTab(NOVA_TAB_TYPE.perplexity));
+      } else {
+        dispatch(selectNovaTab(NOVA_TAB_TYPE.aiChat));
+      }
     }
   };
 
@@ -466,20 +486,41 @@ export default function InputBar(props: InputBarProps) {
                 paddingX={4}
                 paddingY={4}
                 selectedItem={chatMode}
-                setSelectedItem={(item: string) => {
-                  dispatch(setChatMode(item.toUpperCase() as SERVICE_TYPE));
-                  dispatch(setLocalFiles([]));
-                  dispatch(setDriveFiles([]));
-                  if (selectedNovaTab !== NOVA_TAB_TYPE.home) {
-                    if (
-                      (item as SERVICE_TYPE) === SERVICE_TYPE.NOVA_WEBSEARCH_PERPLEXITY ||
-                      (item as SERVICE_TYPE) === SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO
-                    ) {
-                      dispatch(selectNovaTab(NOVA_TAB_TYPE.perplexity));
-                    } else {
-                      dispatch(selectNovaTab(NOVA_TAB_TYPE.aiChat));
-                    }
+                setSelectedItem={async (item: string) => {
+                  const selectChatMode = item.toUpperCase() as SERVICE_TYPE;
+                  const isPerplexityMode = [
+                    SERVICE_TYPE.NOVA_WEBSEARCH_PERPLEXITY,
+                    SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO
+                  ].includes(chatMode);
+                  const isSelectingPerplexity = [
+                    SERVICE_TYPE.NOVA_WEBSEARCH_PERPLEXITY,
+                    SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO
+                  ].includes(selectChatMode);
+
+                  if (novaHistory.length > 0 && isPerplexityMode !== isSelectingPerplexity) {
+                    const isConfirmed = await showConfirmModal({
+                      msg: t('Nova.Confirm.ChangeChatMode.Msg') || '',
+                      onOk: {
+                        text: t('Nova.Confirm.ChangeChatMode.Ok') || '',
+                        handleOk: () => {
+                          chatNova.newChat(selectedNovaTab, novaHistory);
+                          dispatch(
+                            selectNovaTab(
+                              isSelectingPerplexity
+                                ? NOVA_TAB_TYPE.aiChat
+                                : NOVA_TAB_TYPE.perplexity
+                            )
+                          );
+                          changeChatMode(selectChatMode);
+                        }
+                      },
+                      onCancel: { text: t('Cancel'), handleCancel: () => {} }
+                    });
+
+                    if (!isConfirmed) return;
                   }
+
+                  changeChatMode(selectChatMode);
                 }}
                 selectBoxCssExt={css`
                   border: 1px solid ${isLightMode ? 'var(--gray-gray-30)' : 'var(--gray-gray-87)'};

@@ -947,6 +947,10 @@
         "Msg": "Wait! Do you want to end your last conversation with NOVA?",
         "Ok": "Exit"
       },
+      "ChangeChatMode": {
+        "Msg": "Selecting a new LLM will reset the previous conversation. Do you want to continue?",
+        "Ok": "Continue"
+      },
       "CloseAIVideo": {
         "Msg": "Wait! The AI video generation set-up is not yet completed. If you go back without completing the settings, the values set so far may be lost. Do you still want to go back?",
         "Ok": "Move"

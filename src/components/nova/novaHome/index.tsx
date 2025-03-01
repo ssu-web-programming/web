@@ -16,7 +16,11 @@ import {
 import { ReactComponent as IconConvertDark } from '../../../img/dark/nova/tab/convert_Img.svg';
 import { ReactComponent as IconConvertLight } from '../../../img/light/nova/tab/convert_Img.svg';
 import { setIsExternal } from '../../../store/slices/appState';
-import { novaHistorySelector, setChatMode } from '../../../store/slices/nova/novaHistorySlice';
+import {
+  novaChatModeSelector,
+  novaHistorySelector,
+  setChatMode
+} from '../../../store/slices/nova/novaHistorySlice';
 import { setPageStatus } from '../../../store/slices/nova/pageStatusSlice';
 import { platformInfoSelector } from '../../../store/slices/platformInfo';
 import { selectNovaTab, selectTabSlice } from '../../../store/slices/tabSlice';
@@ -27,6 +31,7 @@ import { ClientType } from '../../../util/bridge';
 import { isHigherVersion } from '../../../util/common';
 import { useConfirm } from '../../Confirm';
 import useShowConfirmModal from '../../hooks/use-show-confirm-modal';
+import { useChatNova } from '../../hooks/useChatNova';
 import { FileUploading } from '../FileUploading';
 import InputBar, { InputBarSubmitParam } from '../inputBar';
 
@@ -43,11 +48,14 @@ const NovaHome = (props: NovaHomeProps) => {
   const location = useLocation();
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const chatNova = useChatNova();
   const confirm = useConfirm();
+  const { selectedNovaTab } = useAppSelector(selectTabSlice);
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const { platform, version } = useAppSelector(platformInfoSelector);
 
   const novaHistory = useAppSelector(novaHistorySelector);
+  const chatMode = useAppSelector(novaChatModeSelector);
   const { creating } = useAppSelector(selectTabSlice);
 
   const showConfirmModal = useShowConfirmModal();
@@ -110,15 +118,43 @@ const NovaHome = (props: NovaHomeProps) => {
       }
     }
 
-    dispatch(selectNovaTab(tab));
-    dispatch(setIsExternal(false));
-    Bridge.callBridgeApi('curNovaTab', tab);
-
     if (tab === NOVA_TAB_TYPE.aiVideo) {
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'avatar' }));
-    } else if (tab === NOVA_TAB_TYPE.perplexity) {
-      dispatch(setChatMode(SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO));
     }
+    if (tab === NOVA_TAB_TYPE.perplexity) {
+      if (
+        novaHistory.length > 0 &&
+        ![
+          SERVICE_TYPE.NOVA_WEBSEARCH_PERPLEXITY,
+          SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO
+        ].includes(chatMode)
+      ) {
+        const ret = await showConfirmModal({
+          msg: t('Nova.Confirm.ChangeChatMode.Msg') || '',
+          onOk: {
+            text: t('Nova.Confirm.ChangeChatMode.Ok') || '',
+            handleOk: () => {
+              chatNova.newChat(selectedNovaTab, novaHistory);
+              dispatch(setChatMode(SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO));
+            }
+          },
+          onCancel: {
+            text: t('Cancel'),
+            handleCancel: () => {
+              return;
+            }
+          }
+        });
+
+        if (!ret) return;
+      } else {
+        dispatch(setChatMode(SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO));
+      }
+    }
+
+    dispatch(setIsExternal(false));
+    dispatch(selectNovaTab(tab));
+    Bridge.callBridgeApi('curNovaTab', tab);
   };
 
   const getTabTranslationKey = (tab: NOVA_TAB_TYPE) => {
