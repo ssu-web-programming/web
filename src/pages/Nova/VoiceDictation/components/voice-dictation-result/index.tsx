@@ -72,7 +72,7 @@ export default function VoiceDictationResult() {
 
       overlay.open(({ isOpen, close }) => {
         return (
-          <OverlayModal isOpen={isOpen} onClose={close} padding={'24px'}>
+          <OverlayModal isOpen={isOpen} onClose={close}>
             <SurveyModalContent />
           </OverlayModal>
         );

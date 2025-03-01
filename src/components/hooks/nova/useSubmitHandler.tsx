@@ -110,10 +110,9 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
         const { data } = await res.json();
         if (data.creditUsecount >= 3) {
           overlay.closeAll();
-
           overlay.open(({ isOpen, close }) => {
             return (
-              <OverlayModal isOpen={isOpen} onClose={close} padding={'24px'}>
+              <OverlayModal isOpen={isOpen} onClose={close}>
                 <SurveyModalContent />
               </OverlayModal>
             );

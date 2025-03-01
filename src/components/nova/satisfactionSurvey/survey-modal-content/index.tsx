@@ -78,7 +78,7 @@ export default function SurveyModalContent() {
 
     overlay.open(({ isOpen, close }) => {
       return (
-        <OverlayModal isOpen={isOpen} onClose={close} padding={'24px'}>
+        <OverlayModal isOpen={isOpen} onClose={close}>
           <CreditOfferContent />
         </OverlayModal>
       );

@@ -5,26 +5,22 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { initLoadingSpinner } from 'store/slices/loadingSpinner';
 import { setFileState } from 'store/slices/nova/translation/download-slice';
 import { resetCurrentWrite } from 'store/slices/writeHistorySlice';
-import { isExternal } from 'util/types';
 import { v4 as uuidv4 } from 'uuid';
 
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { useConfirm } from '../components/Confirm';
 import useManageFile from '../components/hooks/nova/useManageFile';
+import useShowConfirmModal from '../components/hooks/use-show-confirm-modal';
+import { useChatNova } from '../components/hooks/useChatNova';
 import { NOVA_TAB_TYPE } from '../constants/novaTapTypes';
 import { SERVICE_TYPE } from '../constants/serviceType';
 import gI18n, { convertLangFromLangCode } from '../locale';
-import {
-  setIsClosedNovaState,
-  setIsExternal,
-  setIsMicrophoneState,
-  setIsRecordingState
-} from '../store/slices/appState';
+import { setIsClosedNovaState, setIsExternal, setIsRecordingState } from '../store/slices/appState';
 import { AskDocStatus, setSrouceId, setStatus } from '../store/slices/askDoc';
 import { setFiles } from '../store/slices/askDocAnalyzeFiesSlice';
 import { initConfirm } from '../store/slices/confirm';
-import { setChatMode } from '../store/slices/nova/novaHistorySlice';
+import novaHistorySlice, { NovaChatType, setChatMode } from '../store/slices/nova/novaHistorySlice';
 import {
   resetPageData,
   resetPageResult,
@@ -327,6 +323,8 @@ export const useInitBridgeListener = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const confirm = useConfirm();
+  const showConfirmModal = useShowConfirmModal();
+  const chatNova = useChatNova();
 
   const { getFileInfo, loadLocalFile } = useManageFile();
 
@@ -403,6 +401,7 @@ export const useInitBridgeListener = () => {
   const procMsg = async (msg: any) => {
     const state = store.getState();
     const selectedNovaTab = state.tab.selectedNovaTab;
+    const novaHistory = state.novaHistory.chatHistory;
 
     try {
       const { cmd, body } = msg;
@@ -418,21 +417,7 @@ export const useInitBridgeListener = () => {
           case 'openNOVA': {
             overlay.closeAll();
 
-            const platform = getPlatform();
-            const version = getVersion();
-            const device = getDevice();
-
-            if (platform === ClientType.unknown || !version || version === '') {
-              if (!body.platform) return;
-              dispatch(
-                setPlatformInfo({
-                  platform: body.platform as ClientType,
-                  device: device,
-                  version: body.version
-                })
-              );
-            }
-
+            initPlatform(body);
             Bridge.callBridgeApi('analyzeCurFile');
 
             // 이전 버전에는 해당 이벤트가 없어 예외처리
@@ -445,14 +430,15 @@ export const useInitBridgeListener = () => {
 
             if (body.openTab in NOVA_TAB_TYPE) {
               const tab = body.openTab;
+
+              if (!(await initChatMode(body, selectedNovaTab, novaHistory))) return;
+
               dispatch(resetPageData(tab));
               dispatch(setDriveFiles([]));
               dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.home, status: 'home' }));
               dispatch(setLocalFiles([]));
               dispatch(selectNovaTab(NOVA_TAB_TYPE[body.openTab as keyof typeof NOVA_TAB_TYPE]));
-              if (body.openTab === NOVA_TAB_TYPE.perplexity) {
-                dispatch(setChatMode(SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO));
-              }
+
               const isBlob = body.image instanceof Blob && body.image.size > 0;
               const isBase64 = typeof body.image === 'string' && body.image.startsWith('data:');
               const showCreditGuide =
@@ -695,6 +681,60 @@ export const useInitBridgeListener = () => {
     });
 
     Bridge.callBridgeApi('initComplete');
+  };
+
+  const initPlatform = (body: any) => {
+    const platform = getPlatform();
+    const version = getVersion();
+    const device = getDevice();
+
+    if (platform === ClientType.unknown || !version || version === '') {
+      if (!body.platform) return;
+      dispatch(
+        setPlatformInfo({
+          platform: body.platform as ClientType,
+          device: device,
+          version: body.version
+        })
+      );
+    }
+  };
+
+  const initChatMode = async (
+    body: any,
+    selectedNovaTab: NOVA_TAB_TYPE,
+    novaHistory: NovaChatType[]
+  ) => {
+    if (
+      (selectedNovaTab === NOVA_TAB_TYPE.aiChat &&
+        body.tab === NOVA_TAB_TYPE.perplexity &&
+        novaHistory.length > 0) ||
+      (selectedNovaTab === NOVA_TAB_TYPE.perplexity &&
+        body.tab === NOVA_TAB_TYPE.aiChat &&
+        novaHistory.length > 0)
+    ) {
+      return await showConfirmModal({
+        msg: '새로운 LLM을 선택하면 이전 대화 내용이 초기화됩니다. 계속하시겠습니까?',
+        onOk: {
+          text: '계속하기',
+          handleOk: () => {
+            chatNova.newChat();
+            if (body.tab === NOVA_TAB_TYPE.aiChat) {
+              dispatch(setChatMode(SERVICE_TYPE.NOVA_CHAT_GPT4O));
+            } else if (body.tab == NOVA_TAB_TYPE.perplexity) {
+              dispatch(setChatMode(SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO));
+            }
+            return true;
+          }
+        },
+        onCancel: {
+          text: '취소',
+          handleCancel: () => {
+            return false;
+          }
+        }
+      });
+    }
   };
 };
 

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { overlay } from 'overlay-kit';
 import { Trans, useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
@@ -25,6 +26,7 @@ import Bridge from '../../../util/bridge';
 import { ClientType } from '../../../util/bridge';
 import { isHigherVersion } from '../../../util/common';
 import { useConfirm } from '../../Confirm';
+import useShowConfirmModal from '../../hooks/use-show-confirm-modal';
 import { FileUploading } from '../FileUploading';
 import InputBar, { InputBarSubmitParam } from '../inputBar';
 
@@ -47,6 +49,8 @@ const NovaHome = (props: NovaHomeProps) => {
 
   const novaHistory = useAppSelector(novaHistorySelector);
   const { creating } = useAppSelector(selectTabSlice);
+
+  const showConfirmModal = useShowConfirmModal();
 
   const [inputContents, setInputContents] = useState<string>('');
 
@@ -98,7 +102,7 @@ const NovaHome = (props: NovaHomeProps) => {
     }
   };
 
-  const handleMovePage = (tab: NOVA_TAB_TYPE) => {
+  const handleMovePage = async (tab: NOVA_TAB_TYPE) => {
     if (tab === NOVA_TAB_TYPE.translation || tab === NOVA_TAB_TYPE.voiceDictation) {
       if (isUpdateRequired()) {
         confirmUpload();

@@ -114,7 +114,7 @@ export default function TranslationFileResult() {
 
           overlay.open(({ isOpen, close }) => {
             return (
-              <OverlayModal isOpen={isOpen} onClose={close} padding={'24px'}>
+              <OverlayModal isOpen={isOpen} onClose={close}>
                 <SurveyModalContent />
               </OverlayModal>
             );
