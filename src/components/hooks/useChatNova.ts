@@ -1,19 +1,26 @@
 import { apiWrapper } from 'api/apiWrapper';
 import { NOVA_DELETE_CONVERSATION } from 'api/constant';
-import { initNovaHistory, novaHistorySelector } from 'store/slices/nova/novaHistorySlice';
-import { setCreating, setUsingAI } from 'store/slices/tabSlice';
+import {
+  initNovaHistory,
+  novaHistorySelector,
+  setChatMode
+} from 'store/slices/nova/novaHistorySlice';
+import { selectTabSlice, setCreating, setUsingAI } from 'store/slices/tabSlice';
 import { useAppDispatch, useAppSelector } from 'store/store';
 
 import { NOVA_TAB_TYPE } from '../../constants/novaTapTypes';
+import { SERVICE_TYPE } from '../../constants/serviceType';
 import { setPageStatus } from '../../store/slices/nova/pageStatusSlice';
 
 export const useChatNova = () => {
   const dispatch = useAppDispatch();
   const novaHistory = useAppSelector(novaHistorySelector);
+  const { selectedNovaTab } = useAppSelector(selectTabSlice);
 
   const newChat = async () => {
     try {
       const lastChat = novaHistory[novaHistory.length - 1];
+      console.log('lastChat: ', lastChat);
       apiWrapper().request(NOVA_DELETE_CONVERSATION, {
         headers: {
           'Content-Type': 'application/json'
@@ -24,7 +31,12 @@ export const useChatNova = () => {
       dispatch(initNovaHistory());
       dispatch(setCreating('none'));
       dispatch(setUsingAI(false));
-      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiChat, status: 'home' }));
+      if (selectedNovaTab === NOVA_TAB_TYPE.perplexity) {
+        dispatch(setChatMode(SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO));
+      } else {
+        dispatch(setChatMode(SERVICE_TYPE.NOVA_CHAT_GPT4O));
+      }
+      dispatch(setPageStatus({ tab: selectedNovaTab, status: 'home' }));
     } catch (err) {
       console.log(err);
     }

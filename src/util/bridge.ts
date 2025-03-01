@@ -422,20 +422,15 @@ export const useInitBridgeListener = () => {
   ) => {
     console.log('tab: ', tab);
     console.log('selectedNovaTab: ', selectedNovaTab);
-    console.log('novaHistory.length: ', novaHistory.length);
+    console.log('novaHistory.length: ', novaHistory);
     if (tab === NOVA_TAB_TYPE.perplexity || tab === NOVA_TAB_TYPE.aiChat) {
-      if (novaHistory.length > 0) {
+      if (tab != selectedNovaTab && novaHistory.length > 0) {
         await showConfirmModal({
           msg: '새로운 LLM을 선택하면 이전 대화 내용이 초기화됩니다. 계속하시겠습니까?',
           onOk: {
             text: '계속하기',
             handleOk: () => {
               chatNova.newChat();
-              if (tab === NOVA_TAB_TYPE.perplexity) {
-                dispatch(setChatMode(SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO));
-              } else {
-                dispatch(setChatMode(SERVICE_TYPE.NOVA_CHAT_GPT4O));
-              }
             }
           },
           onCancel: {

@@ -35,9 +35,6 @@ const platformInfo = createSlice({
   reducers: {
     setPlatformInfo: (state, action: PayloadAction<InitialState>) => {
       const { platform, version, device } = action.payload;
-      console.log('redux platform: ', platform);
-      console.log('redux version: ', version);
-      console.log('redux device: ', device);
       state.platform = platform;
       state.device = device;
       state.version = version;
