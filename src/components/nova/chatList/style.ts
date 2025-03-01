@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const Wrapper = styled.div<{ isPerplexity: boolean }>`
+export const Wrapper = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
@@ -9,8 +9,7 @@ export const Wrapper = styled.div<{ isPerplexity: boolean }>`
   flex-direction: column;
   padding: 24px 16px;
   overflow-y: auto;
-  background-color: ${({ isPerplexity, theme }) =>
-    isPerplexity ? theme.color.background.yellow01 : 'transparent'};
+  background-color: transparent;
 `;
 
 export const ChatItem = styled.div`

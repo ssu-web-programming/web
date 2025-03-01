@@ -186,8 +186,7 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
           (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
         }
       }}
-      onScroll={(ref) => scrollHandler(ref)}
-      isPerplexity={chatMode === SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO}>
+      onScroll={(ref) => scrollHandler(ref)}>
       {novaHistory.map((item) => (
         <S.ChatItem key={item.id}>
           <S.Question>

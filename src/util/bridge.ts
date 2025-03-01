@@ -20,7 +20,7 @@ import { setIsClosedNovaState, setIsExternal, setIsRecordingState } from '../sto
 import { AskDocStatus, setSrouceId, setStatus } from '../store/slices/askDoc';
 import { setFiles } from '../store/slices/askDocAnalyzeFiesSlice';
 import { initConfirm } from '../store/slices/confirm';
-import novaHistorySlice, { NovaChatType, setChatMode } from '../store/slices/nova/novaHistorySlice';
+import { NovaChatType, setChatMode } from '../store/slices/nova/novaHistorySlice';
 import {
   resetPageData,
   resetPageResult,
@@ -399,7 +399,6 @@ export const useInitBridgeListener = () => {
   });
 
   const initPlatform = (body: any) => {
-    console.log('aaaaaaaa');
     const platform = getPlatform();
     const version = getVersion();
     const device = getDevice();
@@ -415,7 +414,6 @@ export const useInitBridgeListener = () => {
         })
       );
     }
-    console.log('bbbbbbbbbb');
   };
 
   const initChatMode = async (
@@ -423,37 +421,33 @@ export const useInitBridgeListener = () => {
     selectedNovaTab: NOVA_TAB_TYPE,
     novaHistory: NovaChatType[]
   ) => {
-    console.log('init chat');
-    if (
-      (selectedNovaTab === NOVA_TAB_TYPE.aiChat &&
-        body.tab === NOVA_TAB_TYPE.perplexity &&
-        novaHistory.length > 0) ||
-      (selectedNovaTab === NOVA_TAB_TYPE.perplexity &&
-        body.tab === NOVA_TAB_TYPE.aiChat &&
-        novaHistory.length > 0)
-    ) {
-      console.log('chat -ing');
-      await showConfirmModal({
-        msg: '새로운 LLM을 선택하면 이전 대화 내용이 초기화됩니다. 계속하시겠습니까?',
-        onOk: {
-          text: '계속하기',
-          handleOk: () => {
-            console.log('continue');
-            chatNova.newChat();
-            if (body.tab === NOVA_TAB_TYPE.aiChat) {
-              dispatch(setChatMode(SERVICE_TYPE.NOVA_CHAT_GPT4O));
-            } else if (body.tab == NOVA_TAB_TYPE.perplexity) {
-              dispatch(setChatMode(SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO));
+    if (body.tab === NOVA_TAB_TYPE.perplexity || body.tab === NOVA_TAB_TYPE.aiChat) {
+      if (novaHistory.length > 0) {
+        await showConfirmModal({
+          msg: '새로운 LLM을 선택하면 이전 대화 내용이 초기화됩니다. 계속하시겠습니까?',
+          onOk: {
+            text: '계속하기',
+            handleOk: () => {
+              chatNova.newChat();
+              if (body.tab === NOVA_TAB_TYPE.perplexity) {
+                dispatch(setChatMode(SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO));
+              } else {
+                dispatch(setChatMode(SERVICE_TYPE.NOVA_CHAT_GPT4O));
+              }
             }
+          },
+          onCancel: {
+            text: '취소',
+            handleCancel: () => {}
           }
-        },
-        onCancel: {
-          text: '취소',
-          handleCancel: () => {
-            console.log('cancel');
-          }
+        });
+      } else {
+        if (body.tab === NOVA_TAB_TYPE.perplexity) {
+          dispatch(setChatMode(SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO));
+        } else {
+          dispatch(setChatMode(SERVICE_TYPE.NOVA_CHAT_GPT4O));
         }
-      });
+      }
     }
   };
 
@@ -474,14 +468,10 @@ export const useInitBridgeListener = () => {
             break;
           }
           case 'openNOVA': {
-            console.log('111111111');
             overlay.closeAll();
-            console.log('222222222');
 
             initPlatform(body);
-            console.log('3333333333');
             Bridge.callBridgeApi('analyzeCurFile');
-            console.log('44444444444');
 
             // 이전 버전에는 해당 이벤트가 없어 예외처리
             if (body.isExternal === undefined) {
@@ -490,14 +480,11 @@ export const useInitBridgeListener = () => {
               dispatch(setIsExternal(body.isExternal));
               if (!body.isExternal) return;
             }
-            console.log('555555555');
 
             if (body.openTab in NOVA_TAB_TYPE) {
               const tab = body.openTab;
 
-              console.log('aaa');
               await initChatMode(body, selectedNovaTab, novaHistory);
-              console.log('bbb');
               dispatch(resetPageData(tab));
               dispatch(setDriveFiles([]));
               dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.home, status: 'home' }));
