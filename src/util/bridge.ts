@@ -431,8 +431,7 @@ export const useInitBridgeListener = () => {
             if (body.openTab in NOVA_TAB_TYPE) {
               const tab = body.openTab;
 
-              if (!(await initChatMode(body, selectedNovaTab, novaHistory))) return;
-
+              await initChatMode(body, selectedNovaTab, novaHistory);
               dispatch(resetPageData(tab));
               dispatch(setDriveFiles([]));
               dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.home, status: 'home' }));
@@ -705,6 +704,7 @@ export const useInitBridgeListener = () => {
     selectedNovaTab: NOVA_TAB_TYPE,
     novaHistory: NovaChatType[]
   ) => {
+    console.log('init chat');
     if (
       (selectedNovaTab === NOVA_TAB_TYPE.aiChat &&
         body.tab === NOVA_TAB_TYPE.perplexity &&
@@ -713,29 +713,29 @@ export const useInitBridgeListener = () => {
         body.tab === NOVA_TAB_TYPE.aiChat &&
         novaHistory.length > 0)
     ) {
-      return await showConfirmModal({
+      console.log('chat -ing');
+      await showConfirmModal({
         msg: '새로운 LLM을 선택하면 이전 대화 내용이 초기화됩니다. 계속하시겠습니까?',
         onOk: {
           text: '계속하기',
           handleOk: () => {
+            console.log('continue');
             chatNova.newChat();
             if (body.tab === NOVA_TAB_TYPE.aiChat) {
               dispatch(setChatMode(SERVICE_TYPE.NOVA_CHAT_GPT4O));
             } else if (body.tab == NOVA_TAB_TYPE.perplexity) {
               dispatch(setChatMode(SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO));
             }
-            return true;
           }
         },
         onCancel: {
           text: '취소',
           handleCancel: () => {
-            return false;
+            console.log('cancel');
           }
         }
       });
     }
-    return true;
   };
 };
 
