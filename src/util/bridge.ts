@@ -404,7 +404,6 @@ export const useInitBridgeListener = () => {
     const device = getDevice();
 
     if (platform === ClientType.unknown || !version || version === '') {
-      console.log('nnnnnnnn');
       if (!body.platform) return;
       dispatch(
         setPlatformInfo({
@@ -417,11 +416,14 @@ export const useInitBridgeListener = () => {
   };
 
   const initChatMode = async (
-    body: any,
+    tab: string,
     selectedNovaTab: NOVA_TAB_TYPE,
     novaHistory: NovaChatType[]
   ) => {
-    if (body.tab === NOVA_TAB_TYPE.perplexity || body.tab === NOVA_TAB_TYPE.aiChat) {
+    console.log('tab: ', tab);
+    console.log('selectedNovaTab: ', selectedNovaTab);
+    console.log('novaHistory.length: ', novaHistory.length);
+    if (tab === NOVA_TAB_TYPE.perplexity || tab === NOVA_TAB_TYPE.aiChat) {
       if (novaHistory.length > 0) {
         await showConfirmModal({
           msg: '새로운 LLM을 선택하면 이전 대화 내용이 초기화됩니다. 계속하시겠습니까?',
@@ -429,7 +431,7 @@ export const useInitBridgeListener = () => {
             text: '계속하기',
             handleOk: () => {
               chatNova.newChat();
-              if (body.tab === NOVA_TAB_TYPE.perplexity) {
+              if (tab === NOVA_TAB_TYPE.perplexity) {
                 dispatch(setChatMode(SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO));
               } else {
                 dispatch(setChatMode(SERVICE_TYPE.NOVA_CHAT_GPT4O));
@@ -442,7 +444,7 @@ export const useInitBridgeListener = () => {
           }
         });
       } else {
-        if (body.tab === NOVA_TAB_TYPE.perplexity) {
+        if (tab === NOVA_TAB_TYPE.perplexity) {
           dispatch(setChatMode(SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO));
         } else {
           dispatch(setChatMode(SERVICE_TYPE.NOVA_CHAT_GPT4O));
@@ -484,7 +486,7 @@ export const useInitBridgeListener = () => {
             if (body.openTab in NOVA_TAB_TYPE) {
               const tab = body.openTab;
 
-              await initChatMode(body, selectedNovaTab, novaHistory);
+              await initChatMode(tab, selectedNovaTab, novaHistory);
               dispatch(resetPageData(tab));
               dispatch(setDriveFiles([]));
               dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.home, status: 'home' }));
