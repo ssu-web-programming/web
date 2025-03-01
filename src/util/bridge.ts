@@ -415,10 +415,14 @@ export const useInitBridgeListener = () => {
             break;
           }
           case 'openNOVA': {
+            console.log('111111111');
             overlay.closeAll();
+            console.log('222222222');
 
             initPlatform(body);
+            console.log('3333333333');
             Bridge.callBridgeApi('analyzeCurFile');
+            console.log('44444444444');
 
             // 이전 버전에는 해당 이벤트가 없어 예외처리
             if (body.isExternal === undefined) {
@@ -427,6 +431,7 @@ export const useInitBridgeListener = () => {
               dispatch(setIsExternal(body.isExternal));
               if (!body.isExternal) return;
             }
+            console.log('555555555');
 
             if (body.openTab in NOVA_TAB_TYPE) {
               const tab = body.openTab;
@@ -685,11 +690,13 @@ export const useInitBridgeListener = () => {
   };
 
   const initPlatform = (body: any) => {
+    console.log('aaaaaaaa');
     const platform = getPlatform();
     const version = getVersion();
     const device = getDevice();
 
     if (platform === ClientType.unknown || !version || version === '') {
+      console.log('nnnnnnnn');
       if (!body.platform) return;
       dispatch(
         setPlatformInfo({
@@ -699,6 +706,7 @@ export const useInitBridgeListener = () => {
         })
       );
     }
+    console.log('bbbbbbbbbb');
   };
 
   const initChatMode = async (
