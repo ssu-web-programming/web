@@ -735,6 +735,7 @@ export const useInitBridgeListener = () => {
         }
       });
     }
+    return true;
   };
 };
 
