@@ -431,7 +431,9 @@ export const useInitBridgeListener = () => {
             if (body.openTab in NOVA_TAB_TYPE) {
               const tab = body.openTab;
 
+              console.log('aaa');
               await initChatMode(body, selectedNovaTab, novaHistory);
+              console.log('bbb');
               dispatch(resetPageData(tab));
               dispatch(setDriveFiles([]));
               dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.home, status: 'home' }));
