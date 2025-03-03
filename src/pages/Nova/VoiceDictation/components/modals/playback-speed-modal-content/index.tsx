@@ -1,6 +1,14 @@
 import { useState } from 'react';
 import { overlay } from 'overlay-kit';
+import { useTranslation } from 'react-i18next';
 
+import UseShowSurveyModal from '../../../../../../components/hooks/use-survey-modal';
+import {
+  selectPageCreditReceived,
+  selectPageService
+} from '../../../../../../store/slices/nova/pageStatusSlice';
+import { selectTabSlice } from '../../../../../../store/slices/tabSlice';
+import { useAppSelector } from '../../../../../../store/store';
 import { PlaybackSpeed } from '../../voice-audio-player';
 
 import * as S from './style';
@@ -15,11 +23,17 @@ export default function PlaybackSpeedModalContent({ onChangeSpeedOptions, curren
 
   const speeds: PlaybackSpeed[] = [0.8, 1.0, 1.2, 1.5, 1.8, 2.0];
 
+  const { t } = useTranslation();
+  const { selectedNovaTab } = useAppSelector(selectTabSlice);
+  const service = useAppSelector(selectPageService(selectedNovaTab));
+  const isCreditRecieved = useAppSelector(selectPageCreditReceived(selectedNovaTab));
+  const showSurveyModal = UseShowSurveyModal();
+
   const handleClose = () => {
     overlay.closeAll();
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     onChangeSpeedOptions(selectedSpeed);
     handleClose();
   };
@@ -36,7 +50,9 @@ export default function PlaybackSpeedModalContent({ onChangeSpeedOptions, curren
               name="playbackSpeed"
               value={speed}
               checked={selectedSpeed === speed}
-              onChange={() => setSelectedSpeed(speed)}
+              onChange={async () => {
+                setSelectedSpeed(speed);
+              }}
             />
             <S.RadioText>{speed.toFixed(1)}</S.RadioText>
           </S.RadioLabel>

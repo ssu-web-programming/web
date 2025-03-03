@@ -14,6 +14,13 @@ import { themeInfoSelector } from 'store/slices/theme';
 import { useAppSelector } from 'store/store';
 import Bridge from 'util/bridge';
 
+import UseShowSurveyModal from '../../../../../components/hooks/use-survey-modal';
+import {
+  selectPageCreditReceived,
+  selectPageService
+} from '../../../../../store/slices/nova/pageStatusSlice';
+import { selectTabSlice } from '../../../../../store/slices/tabSlice';
+
 import * as S from './style';
 
 interface Props {
@@ -37,6 +44,11 @@ export default function TranslationResultAction({
 
   const shouldShowInsertDocButton = isInsertDocAction && clientStatus !== 'home';
 
+  const { selectedNovaTab } = useAppSelector(selectTabSlice);
+  const isCreditRecieved = useAppSelector(selectPageCreditReceived(selectedNovaTab));
+  const service = useAppSelector(selectPageService(selectedNovaTab));
+  const showSurveyModal = UseShowSurveyModal();
+
   const updateClientStatus = useCallback(() => {
     Bridge.callSyncBridgeApiWithCallback({
       api: 'getClientStatus',
@@ -59,6 +71,9 @@ export default function TranslationResultAction({
       name: t('Nova.Chat.InsertDoc.Title'),
       iconSrc: isLightMode ? insertDocIcon : insertDarkDocIcon,
       clickHandler: async () => {
+        const isShowModal = await showSurveyModal(selectedNovaTab, service, isCreditRecieved);
+        if (isShowModal) return;
+
         // useInsertDocsHandler의 insertDocsHandler 사용
         const translationHistory = createTranslationHistory();
         await insertDocsHandler(translationHistory as NovaChatType);
@@ -68,7 +83,11 @@ export default function TranslationResultAction({
     {
       name: t('Nova.Chat.Copy'),
       iconSrc: isLightMode ? copyIcon : copyDarkIcon,
-      clickHandler: async () => await copyText(translatedValue),
+      clickHandler: async () => {
+        const isShowModal = await showSurveyModal(selectedNovaTab, service, isCreditRecieved);
+        if (isShowModal) return;
+        await copyText(translatedValue);
+      },
       isActive: isCopyAction
     }
   ];

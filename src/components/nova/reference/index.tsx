@@ -11,9 +11,15 @@ import LinkLightIcon from '../../../img/light/nova/ico_link.svg';
 import SkeletonMobileLight from '../../../img/light/nova/skeleton_ref_mobile.json';
 import SkeletonPCLight from '../../../img/light/nova/skeleton_ref_pc.json';
 import { NovaWebReference } from '../../../store/slices/nova/novaHistorySlice';
+import {
+  selectPageCreditReceived,
+  selectPageService
+} from '../../../store/slices/nova/pageStatusSlice';
+import { selectTabSlice } from '../../../store/slices/tabSlice';
 import { themeInfoSelector } from '../../../store/slices/theme';
 import { useAppSelector } from '../../../store/store';
 import Bridge, { isMobile } from '../../../util/bridge';
+import UseShowSurveyModal from '../../hooks/use-survey-modal';
 import ModalSheet from '../../modalSheet';
 
 import * as S from './style';
@@ -29,6 +35,11 @@ export default function Reference({ references }: referenceProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
+  const { selectedNovaTab } = useAppSelector(selectTabSlice);
+  const isCreditRecieved = useAppSelector(selectPageCreditReceived(selectedNovaTab));
+  const service = useAppSelector(selectPageService(selectedNovaTab));
+  const showSurveyModal = UseShowSurveyModal();
+
   const maxItemsToShow = isMobile
     ? 3
     : isExpanded
@@ -40,6 +51,9 @@ export default function Reference({ references }: referenceProps) {
   };
 
   const openLink = async (url: string) => {
+    const isShowModal = await showSurveyModal(selectedNovaTab, service, isCreditRecieved);
+    if (isShowModal) return;
+
     await Bridge.callBridgeApi('openWindow', url);
   };
 

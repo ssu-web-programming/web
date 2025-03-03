@@ -41,6 +41,7 @@ export type PageResult = ResultImage | null;
 export type PageService = {
   serviceType: SERVICE_TYPE;
   deductCredit: number;
+  isUsed: boolean;
 }[];
 
 export type PageStateType = {
@@ -149,6 +150,21 @@ const pageSlice = createSlice({
     ) => {
       state.service[action.payload.tab] = action.payload.services;
     },
+    setPageServiceUsage: <T extends keyof PageStatus>(
+      state: PageStateType,
+      action: PayloadAction<{ tab: T; serviceType: SERVICE_TYPE; isUsed: boolean }>
+    ) => {
+      const serviceList = state.service[action.payload.tab];
+      const service = serviceList.find((s) => s.serviceType === action.payload.serviceType);
+
+      if (service) {
+        service.isUsed = action.payload.isUsed;
+      } else {
+        console.warn(
+          `ServiceType ${action.payload.serviceType} not found in ${action.payload.tab}`
+        );
+      }
+    },
     setPageCreditReceived: <T extends keyof PageStatus>(
       state: PageStateType,
       action: PayloadAction<{ tab: T; isCreditReceived: boolean }>
@@ -182,6 +198,7 @@ export const {
   updatePageResult,
   resetPageResult,
   setPageService,
+  setPageServiceUsage,
   setPageCreditReceived,
   setPageCreditReceivedByServiceType
 } = pageSlice.actions;

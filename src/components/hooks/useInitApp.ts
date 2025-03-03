@@ -102,7 +102,8 @@ export default function useInitApp() {
                 )
                 .map((service: any) => ({
                   serviceType: service.serviceType as SERVICE_TYPE,
-                  deductCredit: service.deductCredit
+                  deductCredit: service.deductCredit,
+                  isUsed: false
                 }));
 
               return {

@@ -36,19 +36,19 @@ export default function SurveyModalContent() {
   const [dontShowSurvey, setDontShowSurvey] = useState(false);
 
   const handleClose = () => {
-    if (dontShowSurvey) {
-      // 검증을 위해 7분으로 세팅
-      const days = process.env.NODE_ENV == 'production' ? 7 : 0.00486;
-      setCookie(`dontShowSurvey${selectedNovaTab}`, String(dontShowSurvey), days);
-    }
+    // 검증을 위해 1분으로 세팅 / 상용은 1시간
+    const minute = process.env.NODE_ENV == 'production' ? 60 : 1;
+    setCookie(`closeSurvey${selectedNovaTab}`, String('closeSurvey'), minute);
+    console.log(minute);
+
     overlay.closeAll();
   };
 
   const handleSubmit = () => {
     if (dontShowSurvey) {
       // 검증을 위해 7분으로 세팅
-      const days = process.env.NODE_ENV == 'production' ? 7 : 0.00486;
-      setCookie(`dontShowSurvey${selectedNovaTab}`, String(dontShowSurvey), days);
+      const minute = process.env.NODE_ENV == 'production' ? 10080 : 7;
+      setCookie(`dontShowSurvey${selectedNovaTab}`, String(dontShowSurvey), minute);
     }
 
     handleOfferCredit().then(() => {

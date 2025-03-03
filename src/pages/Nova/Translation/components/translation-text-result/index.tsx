@@ -21,53 +21,9 @@ import * as S from './style';
 
 export default function TranslationTextResult() {
   const { t } = useTranslation(); // 추가
-  const errorHandle = useErrorHandle();
-  const { selectedNovaTab } = useAppSelector(selectTabSlice);
-  const isCreditRecieved = useAppSelector(selectPageCreditReceived(NOVA_TAB_TYPE.translation));
   const {
     sharedTranslationInfo: { translateInputValue, translatedText, targetLang, sourceLang }
   } = useTranslationContext();
-
-  useEffect(() => {
-    // showSurveyModal();
-  }, []);
-
-  const showSurveyModal = async () => {
-    // 만족도 이벤트
-    if (!isCreditRecieved && !getCookie(`dontShowSurvey${selectedNovaTab}`)) {
-      try {
-        const { res } = await apiWrapper().request(NOVA_GET_CREDIT_USE_COUNT, {
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            serviceTypes: [
-              SERVICE_TYPE.NOVA_TRANSLATION_DEEPL,
-              SERVICE_TYPE.NOVA_TRANSLATION_DEEPL_FILE
-            ],
-            startTime: '1740182400000',
-            endTime: '1740528000000'
-          }),
-          method: 'POST'
-        });
-
-        const { data } = await res.json();
-        if (data.creditUsecount >= 1) {
-          overlay.closeAll();
-
-          overlay.open(({ isOpen, close }) => {
-            return (
-              <OverlayModal isOpen={isOpen} onClose={close}>
-                <SurveyModalContent />
-              </OverlayModal>
-            );
-          });
-        }
-      } catch (error) {
-        errorHandle(error);
-      }
-    }
-  };
 
   return (
     <>

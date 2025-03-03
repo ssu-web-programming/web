@@ -12,6 +12,11 @@ import { setError } from 'store/slices/errorSlice';
 import { getDriveFiles } from 'store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from 'store/store';
 
+import {
+  selectPageService,
+  setPageServiceUsage
+} from '../../../../../store/slices/nova/pageStatusSlice';
+import { selectTabSlice } from '../../../../../store/slices/tabSlice';
 import LanguageSearch from '../../components/language-search';
 import { TranslateType } from '../../components/translation-intro';
 import {
@@ -57,6 +62,8 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const driveFiles = useAppSelector(getDriveFiles);
+  const { selectedNovaTab } = useAppSelector(selectTabSlice);
+  const service = useAppSelector(selectPageService(selectedNovaTab));
   const confirm = useConfirm();
   const errorHandle = useErrorHandle();
 
@@ -114,6 +121,14 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
       translatedText,
       translateInputValue
     }));
+
+    dispatch(
+      setPageServiceUsage({
+        tab: selectedNovaTab,
+        serviceType: service[0].serviceType,
+        isUsed: true
+      })
+    );
   };
 
   const handleMoveToFileResult = async ({ downloadUrl }: { downloadUrl: string }) => {
@@ -125,6 +140,14 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
       translationFileUrl: downloadUrl,
       translationFileName: sanitizedFile.originalFileName
     }));
+
+    dispatch(
+      setPageServiceUsage({
+        tab: selectedNovaTab,
+        serviceType: service[0].serviceType,
+        isUsed: true
+      })
+    );
   };
 
   const submitTextTranslate = async () => {

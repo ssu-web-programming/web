@@ -30,6 +30,8 @@ import {
   setIsShareMode
 } from '../../../store/slices/nova/novaHistorySlice';
 import {
+  selectPageCreditReceived,
+  selectPageService,
   selectPageStatus,
   setPageData,
   setPageResult,
@@ -43,6 +45,7 @@ import Bridge, { isDesktop } from '../../../util/bridge';
 import IconButton from '../../buttons/IconButton';
 import { useConfirm } from '../../Confirm';
 import useClipboard from '../../hooks/nova/use-clipboard';
+import UseShowSurveyModal from '../../hooks/use-survey-modal';
 import { useChatNova } from '../../hooks/useChatNova';
 import CreditInfo from '../creditInfo';
 import { ScreenChangeButton } from '../ScreenChangeButton';
@@ -59,6 +62,8 @@ export default function NovaHeader(props: NovaHeaderProps) {
   const novaHistory = useAppSelector(novaHistorySelector);
   const isShareMode = useAppSelector(isShareModeSelector);
   const { creating, selectedNovaTab } = useAppSelector(selectTabSlice);
+  const isCreditRecieved = useAppSelector(selectPageCreditReceived(selectedNovaTab));
+  const service = useAppSelector(selectPageService(selectedNovaTab));
   const status = useAppSelector(selectPageStatus(selectedNovaTab));
   const dispatch = useAppDispatch();
   const confirm = useConfirm();
@@ -67,6 +72,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
   const chatMode = useAppSelector(novaChatModeSelector);
   const { handleClearPastedImages } = useClipboard();
   const { isError } = useAppSelector(errorSelector);
+  const showSurveyModal = UseShowSurveyModal();
 
   const {
     resetVoiceInfo,
@@ -85,6 +91,9 @@ export default function NovaHeader(props: NovaHeaderProps) {
     translationComponentType === 'LOADING';
 
   const newChat = async (isBack = false) => {
+    const isShowModal = await showSurveyModal(selectedNovaTab, service, isCreditRecieved);
+    if (isShowModal) return;
+
     if (creating === 'NOVA') return;
 
     const ret = await confirm({
@@ -168,6 +177,9 @@ export default function NovaHeader(props: NovaHeaderProps) {
   };
 
   const handleGoHome = async () => {
+    const isShowModal = await showSurveyModal(selectedNovaTab, service, isCreditRecieved);
+    if (isShowModal) return;
+
     if (isError && selectedNovaTab === NOVA_TAB_TYPE.voiceDictation) {
       await resetPage();
       resetVoiceInfo();
@@ -313,11 +325,18 @@ export default function NovaHeader(props: NovaHeaderProps) {
                 />
               )}
             <CreditInfo />
-            <ScreenChangeButton></ScreenChangeButton>
+            <ScreenChangeButton />
             {isDesktop && (
               <IconButton
                 iconComponent={isLightMode ? CloseLightIcon : CloseDarkIcon}
-                onClick={() => {
+                onClick={async () => {
+                  const isShowModal = await showSurveyModal(
+                    selectedNovaTab,
+                    service,
+                    isCreditRecieved
+                  );
+                  if (isShowModal) return;
+
                   Bridge.callBridgeApi('closePanel', selectedNovaTab as string);
                 }}
                 iconSize="lg"

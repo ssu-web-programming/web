@@ -124,7 +124,6 @@ const Confirm = () => {
 
   const handleOk = () => {
     if (isChecked) {
-      console.log('cookieName', cookieName);
       setCookie(cookieName || 'creditGuide', String(isChecked));
     }
     onOk?.callback?.();

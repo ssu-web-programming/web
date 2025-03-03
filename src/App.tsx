@@ -15,7 +15,6 @@ import { ThemeProvider } from 'styled-components';
 import Confirm from './components/Confirm';
 import Spinner from './components/Spinner';
 import Toast from './components/toast/Toast';
-import { NOVA_TAB_TYPE } from './constants/novaTapTypes';
 import Alli from './pages/Alli/Alli';
 import AskDoc from './pages/AskDoc';
 import AskDocHome from './pages/AskDocStep/AskDocHome';

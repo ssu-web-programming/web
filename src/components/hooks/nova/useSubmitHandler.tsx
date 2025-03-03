@@ -34,6 +34,7 @@ import { getServiceEngineName, SERVICE_TYPE } from '../../../constants/serviceTy
 import { appStateSelector, setIsExternal } from '../../../store/slices/appState';
 import {
   selectPageCreditReceived,
+  setPageServiceUsage,
   setPageStatus
 } from '../../../store/slices/nova/pageStatusSlice';
 import { DriveFileInfo } from '../../../store/slices/uploadFiles';
@@ -58,7 +59,6 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
   const novaHistory = useAppSelector(novaHistorySelector);
   const { novaExpireTime } = useAppSelector(appStateSelector);
   const chatMode = useAppSelector(novaChatModeSelector);
-  const isCreditRecieved = useAppSelector(selectPageCreditReceived(NOVA_TAB_TYPE.aiChat));
   const { getReferences } = useGetChatReferences();
   const errorHandle = useErrorHandle();
   const { t } = useTranslation();
@@ -87,43 +87,6 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
     return results;
   };
 
-  const showSurveyModal = async () => {
-    // 만족도 이벤트
-    if (
-      !isCreditRecieved &&
-      !getCookie(`dontShowSurvey${NOVA_TAB_TYPE.aiChat}`) &&
-      !getCookie(`dontShowSurvey${NOVA_TAB_TYPE.perplexity}`)
-    ) {
-      try {
-        const { res } = await apiWrapper().request(NOVA_GET_CREDIT_USE_COUNT, {
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            serviceTypes: [SERVICE_TYPE.NOVA_CHAT_GPT4O],
-            startTime: '1740182400000',
-            endTime: '1740528000000'
-          }),
-          method: 'POST'
-        });
-
-        const { data } = await res.json();
-        if (data.creditUsecount >= 3) {
-          overlay.closeAll();
-          overlay.open(({ isOpen, close }) => {
-            return (
-              <OverlayModal isOpen={isOpen} onClose={close}>
-                <SurveyModalContent />
-              </OverlayModal>
-            );
-          });
-        }
-      } catch (error) {
-        errorHandle(error);
-      }
-    }
-  };
-
   const createChatSubmitHandler = useCallback(
     async (submitParam: InputBarSubmitParam, isAnswer?: boolean, chatType?: SERVICE_TYPE) => {
       const id = v4();
@@ -148,6 +111,7 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
         Bridge.callBridgeApi('curNovaTab', curTab);
         dispatch(selectNovaTab(curTab));
         dispatch(setPageStatus({ tab: curTab, status: 'chat' }));
+        dispatch(setPageServiceUsage({ tab: curTab, serviceType: chatMode, isUsed: true }));
 
         const fileInfo: NovaChatType['files'] = [];
         if (expireTimer.current) clearTimeout(expireTimer.current);
@@ -333,7 +297,6 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
           }
         );
         dispatch(updateChatStatus({ id, status: 'done' }));
-        // await showSurveyModal();
       } catch (err) {
         if (timer) clearTimeout(timer);
         if (requestor.current?.isAborted() === true) {

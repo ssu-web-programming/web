@@ -2,11 +2,9 @@ import React, { useEffect } from 'react';
 import { overlay } from 'overlay-kit';
 import { css } from 'styled-components';
 
-import { useAppDispatch } from '../../store/store';
 import Button from '../buttons/Button';
 
 import * as S from './style';
-import { Content, Message } from './style';
 
 export interface ConfirmModalProps {
   title?: string;

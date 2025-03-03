@@ -2,6 +2,13 @@ import React, { Dispatch } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import PlusIcon from '../../../img/common/ico_plus_cyan.svg';
+import {
+  selectPageCreditReceived,
+  selectPageService
+} from '../../../store/slices/nova/pageStatusSlice';
+import { selectTabSlice } from '../../../store/slices/tabSlice';
+import { useAppSelector } from '../../../store/store';
+import UseShowSurveyModal from '../../hooks/use-survey-modal';
 
 import * as S from './style';
 
@@ -15,6 +22,10 @@ export default function RecommendedQuestions({
   setInputContents
 }: recommendedQuestionsProps) {
   const { t } = useTranslation();
+  const { selectedNovaTab } = useAppSelector(selectTabSlice);
+  const isCreditRecieved = useAppSelector(selectPageCreditReceived(selectedNovaTab));
+  const service = useAppSelector(selectPageService(selectedNovaTab));
+  const showSurveyModal = UseShowSurveyModal();
 
   return (
     <S.Container>
@@ -24,7 +35,20 @@ export default function RecommendedQuestions({
           <>
             <div key={index} className="item">
               <span>{question}</span>
-              <img src={PlusIcon} alt="plus" onClick={() => setInputContents(question)} />
+              <img
+                src={PlusIcon}
+                alt="plus"
+                onClick={async () => {
+                  const isShowModal = await showSurveyModal(
+                    selectedNovaTab,
+                    service,
+                    isCreditRecieved
+                  );
+                  if (isShowModal) return;
+
+                  setInputContents(question);
+                }}
+              />
             </div>
             <div className="driver" />
           </>

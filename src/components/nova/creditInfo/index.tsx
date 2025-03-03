@@ -8,9 +8,15 @@ import CreditLightIcon from '../../../img/light/ico_credit_gray.svg';
 import { ReactComponent as IconConvertLight } from '../../../img/light/nova/tab/convert_Img.svg';
 import { lang } from '../../../locale';
 import { initFlagSelector } from '../../../store/slices/initFlagSlice';
-import { selectAllServiceCredits } from '../../../store/slices/nova/pageStatusSlice';
+import {
+  selectAllServiceCredits,
+  selectPageCreditReceived,
+  selectPageService
+} from '../../../store/slices/nova/pageStatusSlice';
+import { selectTabSlice } from '../../../store/slices/tabSlice';
 import { themeInfoSelector } from '../../../store/slices/theme';
 import { useAppSelector } from '../../../store/store';
+import UseShowSurveyModal from '../../hooks/use-survey-modal';
 
 import * as S from './style';
 
@@ -23,7 +29,15 @@ export default function CreditInfo() {
   const [tab, setTab] = useState<SERVICE_CATEGORY>(SERVICE_CATEGORY.CHAT);
   const tooltipRef = useRef<HTMLDivElement>(null);
 
-  const toggleTooltip = () => {
+  const { selectedNovaTab } = useAppSelector(selectTabSlice);
+  const isCreditRecieved = useAppSelector(selectPageCreditReceived(selectedNovaTab));
+  const service = useAppSelector(selectPageService(selectedNovaTab));
+  const showSurveyModal = UseShowSurveyModal();
+
+  const toggleTooltip = async () => {
+    const isShowModal = await showSurveyModal(selectedNovaTab, service, isCreditRecieved);
+    if (isShowModal) return;
+
     if (!isInit) return;
 
     setIsOpen(!isOpen);

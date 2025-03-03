@@ -5,6 +5,14 @@ import { ReactComponent as GoBackward } from 'img/light/nova/voiceDictation/go_b
 import { ReactComponent as GoForward } from 'img/light/nova/voiceDictation/go_forward.svg';
 import AudioPlayer from 'react-h5-audio-player';
 
+import UseShowSurveyModal from '../../../../../components/hooks/use-survey-modal';
+import {
+  selectPageCreditReceived,
+  selectPageService
+} from '../../../../../store/slices/nova/pageStatusSlice';
+import { selectTabSlice } from '../../../../../store/slices/tabSlice';
+import { useAppSelector } from '../../../../../store/store';
+
 import * as S from './style';
 
 import 'react-h5-audio-player/lib/styles.css';
@@ -41,6 +49,11 @@ const CustomAudioPlayer: React.FC<CustomAudioPlayerProps> = ({
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
 
   const playerRef = useRef<any>(null);
+
+  const { selectedNovaTab } = useAppSelector(selectTabSlice);
+  const service = useAppSelector(selectPageService(selectedNovaTab));
+  const isCreditRecieved = useAppSelector(selectPageCreditReceived(selectedNovaTab));
+  const showSurveyModal = UseShowSurveyModal();
 
   const formatTime = (timeInSeconds: number): string => {
     const minutes = Math.floor(timeInSeconds / 60);
@@ -82,7 +95,10 @@ const CustomAudioPlayer: React.FC<CustomAudioPlayerProps> = ({
 
   // 앞/뒤로 이동 함수 - react-h5-audio-player에서는 직접 건너뛰기 기능을 제공하지만
   // 기존 UI를 유지하기 위해 커스텀 기능으로 구현
-  const handleSkip = useCallback((seconds: number): void => {
+  const handleSkip = useCallback(async (seconds: number): Promise<void> => {
+    const isShowModal = await showSurveyModal(selectedNovaTab, service, isCreditRecieved);
+    if (isShowModal) return;
+
     if (playerRef.current && playerRef.current.audio.current) {
       const audioElement = playerRef.current.audio.current;
       const wasPlaying = !audioElement.paused;
@@ -208,7 +224,10 @@ const CustomAudioPlayer: React.FC<CustomAudioPlayerProps> = ({
           setDuration(audioDuration);
           onDurationChange?.(audioDuration);
         }}
-        onPlay={() => {
+        onPlay={async () => {
+          const isShowModal = await showSurveyModal(selectedNovaTab, service, isCreditRecieved);
+          if (isShowModal) return;
+
           setIsPlaying(true);
           onPlay?.();
         }}

@@ -3,7 +3,6 @@ import InsertDocsDarkIcon from 'img/dark/ico_insert_docs.svg';
 import DownloadIcon from 'img/light/ico_download_white.svg';
 import InsertDocsLightIcon from 'img/light/ico_insert_docs.svg';
 import { lang } from 'locale';
-import { overlay } from 'overlay-kit';
 import { useTranslation } from 'react-i18next';
 import ReactPlayer from 'react-player';
 import { setOnlineStatus } from 'store/slices/network';
@@ -19,6 +18,8 @@ import {
   resetPageResult,
   selectPageCreditReceived,
   selectPageResult,
+  selectPageService,
+  setPageServiceUsage,
   setPageStatus
 } from '../../../store/slices/nova/pageStatusSlice';
 import { selectTabSlice } from '../../../store/slices/tabSlice';
@@ -27,15 +28,13 @@ import { activeToast } from '../../../store/slices/toastSlice';
 import { getCurrentFile, setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
 import Bridge, { ClientType, getPlatform } from '../../../util/bridge';
-import { getCookie } from '../../../util/common';
 import { base64ToBlob } from '../../../util/files';
 import Button from '../../buttons/Button';
 import { useConfirm } from '../../Confirm';
 import { useChangeBackground } from '../../hooks/nova/useChangeBackground';
 import { useInsertDocsHandler } from '../../hooks/nova/useInsertDocsHandler';
 import { useRemakeImage } from '../../hooks/nova/useRemakeImage';
-import OverlayModal from '../../overlay-modal';
-import SurveyModalContent from '../satisfactionSurvey/survey-modal-content';
+import UseShowSurveyModal from '../../hooks/use-survey-modal';
 
 import * as S from './style';
 
@@ -52,19 +51,29 @@ export default function Result({ children }: ResultProps) {
   const dispatch = useAppDispatch();
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
+  const service = useAppSelector(selectPageService(selectedNovaTab));
   const currentFile = useAppSelector(getCurrentFile);
   const result = useAppSelector(selectPageResult(selectedNovaTab));
-  const isCreditRecieved = useAppSelector(selectPageCreditReceived(selectedNovaTab));
   const { insertDocsHandler } = useInsertDocsHandler();
   const { handleChangeBackground } = useChangeBackground();
   const { handleRemakeImage } = useRemakeImage();
   const [showInsertDocBtn, setShowInsertDocBtn] = useState(true);
+
+  const isCreditRecieved = useAppSelector(selectPageCreditReceived(selectedNovaTab));
+  const showSurveyModal = UseShowSurveyModal();
 
   useEffect(() => {
     // aiVideo는 결과 페이지 진입 시 자동 저장
     if (selectedNovaTab === NOVA_TAB_TYPE.aiVideo) {
       OnSave();
     }
+    dispatch(
+      setPageServiceUsage({
+        tab: selectedNovaTab,
+        serviceType: service[0].serviceType,
+        isUsed: true
+      })
+    );
   }, []);
 
   useEffect(() => {
@@ -82,21 +91,6 @@ export default function Result({ children }: ResultProps) {
       }
     });
   }, [selectedNovaTab]);
-
-  useEffect(() => {
-    // 만족도 이벤트
-    // if (!isCreditRecieved && !getCookie(`dontShowSurvey${selectedNovaTab}`)) {
-    //   overlay.closeAll();
-    //
-    //   overlay.open(({ isOpen, close }) => {
-    //     return (
-    //       <OverlayModal isOpen={isOpen} onClose={close} padding={'24px'}>
-    //         <SurveyModalContent />
-    //       </OverlayModal>
-    //     );
-    //   });
-    // }
-  }, []);
 
   const ShowExpireLinkPopup = async () => {
     confirm({
@@ -116,6 +110,11 @@ export default function Result({ children }: ResultProps) {
   };
 
   const OnSave = async () => {
+    if (selectedNovaTab != NOVA_TAB_TYPE.aiVideo) {
+      const isShowModal = await showSurveyModal(selectedNovaTab, service, isCreditRecieved);
+      if (isShowModal) return;
+    }
+
     if (result) {
       if (result.link) {
         try {
@@ -144,6 +143,9 @@ export default function Result({ children }: ResultProps) {
   };
 
   const handleRemake = async () => {
+    const isShowModal = await showSurveyModal(selectedNovaTab, service, isCreditRecieved);
+    if (isShowModal) return;
+
     switch (selectedNovaTab) {
       case NOVA_TAB_TYPE.changeBG:
         await handleChangeBackground(result?.info);
@@ -230,7 +232,18 @@ export default function Result({ children }: ResultProps) {
                     border-radius: 8px;
                     background: ${isLightMode ? 'var(--white)' : 'none'};
                   `}
-                  onClick={() => insertDocsHandler()}>
+                  onClick={async () => {
+                    if (selectedNovaTab != NOVA_TAB_TYPE.aiVideo) {
+                      const isShowModal = await showSurveyModal(
+                        selectedNovaTab,
+                        service,
+                        isCreditRecieved
+                      );
+                      if (isShowModal) return;
+                    }
+
+                    insertDocsHandler();
+                  }}>
                   <img src={isLightMode ? InsertDocsLightIcon : InsertDocsDarkIcon} alt="docs" />
                   <span>{t(`Nova.Result.InsertDoc`)}</span>
                 </Button>

@@ -52,13 +52,18 @@ import {
   SERVICE_GROUP_MAP,
   SERVICE_TYPE
 } from '../../../constants/serviceType';
-import { selectAllServiceCredits } from '../../../store/slices/nova/pageStatusSlice';
+import {
+  selectAllServiceCredits,
+  selectPageCreditReceived,
+  selectPageService
+} from '../../../store/slices/nova/pageStatusSlice';
 import { themeInfoSelector } from '../../../store/slices/theme';
 import { setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
 import { blobToFile } from '../../../util/files';
 import CheckBox from '../../checkbox';
 import useCopyText from '../../hooks/copyText';
 import { useInsertDocsHandler } from '../../hooks/nova/useInsertDocsHandler';
+import UseShowSurveyModal from '../../hooks/use-survey-modal';
 import SelectBox from '../../selectBox';
 import { getFileIcon, InputBarSubmitParam } from '../inputBar';
 import RecommendedQuestions from '../recommendedQuestions';
@@ -102,12 +107,14 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
   const confirm = useConfirm();
   const { insertDocsHandler } = useInsertDocsHandler();
   const { isLightMode } = useAppSelector(themeInfoSelector);
-  const { selectedNovaTab } = useAppSelector(selectTabSlice);
-  const { creating } = useAppSelector(selectTabSlice);
+  const { selectedNovaTab, creating } = useAppSelector(selectTabSlice);
+  const isCreditRecieved = useAppSelector(selectPageCreditReceived(selectedNovaTab));
+  const service = useAppSelector(selectPageService(selectedNovaTab));
   const selectedItems = useAppSelector(selectedItemsSelector);
   const isShareMode = useAppSelector(isShareModeSelector);
   const chatMode = useAppSelector(novaChatModeSelector);
   const serviceCredits = useAppSelector(selectAllServiceCredits);
+  const showSurveyModal = UseShowSurveyModal();
   const { from } = useLangParameterNavigate();
   const { onCopy } = useCopyText();
   const scrollRef = useRef<HTMLDivElement | null>(null);
@@ -136,7 +143,10 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
       name: t('Nova.Result.Remake'),
       status: ['done', 'cancel'],
       iconSrc: isLightMode ? <RetryChatLightIcon /> : <RetryChatDarkIcon />,
-      clickHandler: (history: NovaChatType) => {
+      clickHandler: async (history: NovaChatType) => {
+        const isShowModal = await showSurveyModal(selectedNovaTab, service, isCreditRecieved);
+        if (isShowModal) return;
+
         createChatSubmitHandler(
           { input: history.input, type: '' },
           history.isAnswer ?? false,
@@ -148,19 +158,32 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
       name: t('Nova.Chat.Copy'),
       status: ['done'],
       iconSrc: isLightMode ? <CopyChatLightIcon /> : <CopyChatDarkIcon />,
-      clickHandler: (history: NovaChatType) => onCopy(history.output)
+      clickHandler: async (history: NovaChatType) => {
+        const isShowModal = await showSurveyModal(selectedNovaTab, service, isCreditRecieved);
+        if (isShowModal) return;
+
+        onCopy(history.output);
+      }
     },
     {
       name: t('Nova.Result.InsertDoc'),
       status: ['done'],
       iconSrc: isLightMode ? <InsertDocsLightIcon /> : <InsertDocsDarkIcon />,
-      clickHandler: (history: NovaChatType) => insertDocsHandler(history)
+      clickHandler: async (history: NovaChatType) => {
+        const isShowModal = await showSurveyModal(selectedNovaTab, service, isCreditRecieved);
+        if (isShowModal) return;
+
+        insertDocsHandler(history);
+      }
     },
     {
       name: t('Nova.Result.Share'),
       status: ['done'],
       iconSrc: isLightMode ? <ShareChatLightIcon /> : <ShareChatDarkIcon />,
-      clickHandler: () => {
+      clickHandler: async () => {
+        const isShowModal = await showSurveyModal(selectedNovaTab, service, isCreditRecieved);
+        if (isShowModal) return;
+
         dispatch(selectAllItems());
         dispatch(setIsShareMode(true));
       }
@@ -379,7 +402,7 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                               isLightMode,
                               t
                             ).filter((item) => item.key !== chatMode)}
-                            setSelectedItem={(selectedItem) => {
+                            setSelectedItem={async (selectedItem) => {
                               if (
                                 Object.values(SERVICE_TYPE).includes(selectedItem as SERVICE_TYPE)
                               ) {

@@ -55,6 +55,8 @@ import NovaLogoLightIcon from '../../../img/light/nova/ico_logo_nova.svg';
 import LoadingSpinner from '../../../img/light/spinner.webp';
 import {
   selectAllServiceCredits,
+  selectPageCreditReceived,
+  selectPageService,
   selectPageStatus,
   setPageStatus
 } from '../../../store/slices/nova/pageStatusSlice';
@@ -72,6 +74,7 @@ import {
 } from '../../../store/slices/uploadFiles';
 import { useConfirm } from '../../Confirm';
 import useShowConfirmModal from '../../hooks/use-show-confirm-modal';
+import UseShowSurveyModal from '../../hooks/use-survey-modal';
 import { useChatNova } from '../../hooks/useChatNova';
 import SelectBox from '../../selectBox';
 import { FileUploader } from '../FileUploader';
@@ -108,6 +111,7 @@ export default function InputBar(props: InputBarProps) {
   const driveFiles = useAppSelector(getDriveFiles);
   const loadingFile = useAppSelector(getLoadingFile);
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
+  const service = useAppSelector(selectPageService(selectedNovaTab));
   const status = useAppSelector(selectPageStatus(selectedNovaTab));
   const chatMode = useAppSelector(novaChatModeSelector);
   const novaHistory = useAppSelector(novaHistorySelector);
@@ -122,6 +126,8 @@ export default function InputBar(props: InputBarProps) {
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const inputDocsFileRef = useRef<HTMLInputElement | null>(null);
   const inputImgFileRef = useRef<HTMLInputElement | null>(null);
+  const isCreditRecieved = useAppSelector(selectPageCreditReceived(selectedNovaTab));
+  const showSurveyModal = UseShowSurveyModal();
 
   useEffect(() => {
     adjustTextareaHeight();
@@ -400,7 +406,16 @@ export default function InputBar(props: InputBarProps) {
                   <Icon
                     iconSrc={isLightMode ? PlusCircleLightIcon : PlusCircleDarkIcon}
                     size={24}
-                    onClick={handleActiveUploadBtn}
+                    onClick={async () => {
+                      const isShowModal = await showSurveyModal(
+                        selectedNovaTab,
+                        service,
+                        isCreditRecieved
+                      );
+                      if (isShowModal) return;
+
+                      handleActiveUploadBtn();
+                    }}
                   />
                 )}
               </S.DocButtonWrap>

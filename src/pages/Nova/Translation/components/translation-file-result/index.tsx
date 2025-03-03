@@ -13,12 +13,16 @@ import { getCurrentDateFormatted } from 'util/getAudioDuration';
 
 import { apiWrapper } from '../../../../../api/apiWrapper';
 import { NOVA_GET_CREDIT_USE_COUNT } from '../../../../../api/constant';
+import UseShowSurveyModal from '../../../../../components/hooks/use-survey-modal';
 import useErrorHandle from '../../../../../components/hooks/useErrorHandle';
 import SurveyModalContent from '../../../../../components/nova/satisfactionSurvey/survey-modal-content';
 import OverlayModal from '../../../../../components/overlay-modal';
 import { NOVA_TAB_TYPE } from '../../../../../constants/novaTapTypes';
 import { SERVICE_TYPE } from '../../../../../constants/serviceType';
-import { selectPageCreditReceived } from '../../../../../store/slices/nova/pageStatusSlice';
+import {
+  selectPageCreditReceived,
+  selectPageService
+} from '../../../../../store/slices/nova/pageStatusSlice';
 import { platformInfoSelector } from '../../../../../store/slices/platformInfo';
 import { selectTabSlice } from '../../../../../store/slices/tabSlice';
 import { getCookie } from '../../../../../util/common';
@@ -44,10 +48,6 @@ export default function TranslationFileResult() {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const { platform } = useAppSelector(platformInfoSelector);
-  const errorHandle = useErrorHandle();
-  const { selectedNovaTab } = useAppSelector(selectTabSlice);
-  const isCreditRecieved = useAppSelector(selectPageCreditReceived(NOVA_TAB_TYPE.translation));
-
   const {
     sharedTranslationInfo: {
       originFile,
@@ -58,12 +58,16 @@ export default function TranslationFileResult() {
     }
   } = useTranslationContext();
 
+  const { selectedNovaTab } = useAppSelector(selectTabSlice);
+  const isCreditRecieved = useAppSelector(selectPageCreditReceived(selectedNovaTab));
+  const service = useAppSelector(selectPageService(selectedNovaTab));
+  const showSurveyModal = UseShowSurveyModal();
+
   const handleCompareSourceAndTranslation = async () => {
+    const isShowModal = await showSurveyModal(selectedNovaTab, service, isCreditRecieved);
+    if (isShowModal) return;
+
     dispatch(activeLoadingSpinner());
-    console.log('비교 분석하기 log', {
-      originalFileType,
-      originFile
-    });
     await Bridge.callBridgeApi<CompareSouceAndTranslationArgs>('compareSourceAndTranslation', {
       originalFileType,
       originalFileName,
@@ -74,6 +78,9 @@ export default function TranslationFileResult() {
   };
 
   const handleDownloadFile = async () => {
+    const isShowModal = await showSurveyModal(selectedNovaTab, service, isCreditRecieved);
+    if (isShowModal) return;
+
     dispatch(activeLoadingSpinner());
     const extractFileType = translationFileName.slice(translationFileName.lastIndexOf('.'));
     const sanitizedFileName =
@@ -83,47 +90,6 @@ export default function TranslationFileResult() {
       fileName: sanitizedFileName,
       url: translationFileUrl
     });
-  };
-
-  useEffect(() => {
-    // showSurveyModal();
-  }, []);
-
-  const showSurveyModal = async () => {
-    // 만족도 이벤트
-    if (!isCreditRecieved && !getCookie(`dontShowSurvey${selectedNovaTab}`)) {
-      try {
-        const { res } = await apiWrapper().request(NOVA_GET_CREDIT_USE_COUNT, {
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            serviceTypes: [
-              SERVICE_TYPE.NOVA_TRANSLATION_DEEPL,
-              SERVICE_TYPE.NOVA_TRANSLATION_DEEPL_FILE
-            ],
-            startTime: '1740182400000',
-            endTime: '1740528000000'
-          }),
-          method: 'POST'
-        });
-
-        const { data } = await res.json();
-        if (data.creditUsecount >= 1) {
-          overlay.closeAll();
-
-          overlay.open(({ isOpen, close }) => {
-            return (
-              <OverlayModal isOpen={isOpen} onClose={close}>
-                <SurveyModalContent />
-              </OverlayModal>
-            );
-          });
-        }
-      } catch (error) {
-        errorHandle(error);
-      }
-    }
   };
 
   return (
