@@ -14,10 +14,13 @@ import BadDisableLightIcon from '../../../../img/light/nova/survey/ico_bad_disab
 import BadEnableLightIcon from '../../../../img/light/nova/survey/ico_bad_enable.svg';
 import GoodDisableLightIcon from '../../../../img/light/nova/survey/ico_good_disable.svg';
 import GoodEnableLightIcon from '../../../../img/light/nova/survey/ico_good_enable.svg';
-import { selectPageService } from '../../../../store/slices/nova/pageStatusSlice';
+import {
+  selectPageService,
+  setPageCreditReceivedByServiceType
+} from '../../../../store/slices/nova/pageStatusSlice';
 import { selectTabSlice } from '../../../../store/slices/tabSlice';
 import { themeInfoSelector } from '../../../../store/slices/theme';
-import { useAppSelector } from '../../../../store/store';
+import { useAppDispatch, useAppSelector } from '../../../../store/store';
 import { setCookie } from '../../../../util/common';
 import Button from '../../../buttons/Button';
 import CheckBox from '../../../checkbox';
@@ -28,6 +31,7 @@ import CreditOfferContent from '../ciredit-offer-modal-content';
 import * as S from './style';
 
 export default function SurveyModalContent() {
+  const dispatch = useAppDispatch();
   const isLightMode = useAppSelector(themeInfoSelector);
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
   const service = useAppSelector(selectPageService(selectedNovaTab));
@@ -58,16 +62,21 @@ export default function SurveyModalContent() {
 
   const handleOfferCredit = async () => {
     try {
-      await apiWrapper().request(NOVA_CREDIT_OFFER, {
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          creditType: 'AI_NOVA_FUNC_SATISFACTION_SURVEY',
-          serviceType: service[0].serviceType
-        }),
-        method: 'POST'
-      });
+      await apiWrapper()
+        .request(NOVA_CREDIT_OFFER, {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            creditType: 'AI_NOVA_FUNC_SATISFACTION_SURVEY',
+            serviceType: service[0].serviceType
+          }),
+          method: 'POST'
+        })
+        .then(() => {
+          console.log('survey finish');
+          dispatch(setPageCreditReceivedByServiceType({ serviceType: service[0].serviceType }));
+        });
     } catch (error) {
       errHandle(error);
     }
