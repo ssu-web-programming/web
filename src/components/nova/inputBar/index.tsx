@@ -488,29 +488,14 @@ export default function InputBar(props: InputBarProps) {
                 selectedItem={chatMode}
                 setSelectedItem={async (item: string) => {
                   const selectChatMode = item.toUpperCase() as SERVICE_TYPE;
-                  const isPerplexityMode = [
-                    SERVICE_TYPE.NOVA_WEBSEARCH_PERPLEXITY,
-                    SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO
-                  ].includes(chatMode);
-                  const isSelectingPerplexity = [
-                    SERVICE_TYPE.NOVA_WEBSEARCH_PERPLEXITY,
-                    SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO
-                  ].includes(selectChatMode);
 
-                  if (novaHistory.length > 0 && isPerplexityMode !== isSelectingPerplexity) {
+                  if (novaHistory.length > 0 && selectChatMode !== chatMode) {
                     const isConfirmed = await showConfirmModal({
                       msg: t('Nova.Confirm.ChangeChatMode.Msg') || '',
                       onOk: {
                         text: t('Nova.Confirm.ChangeChatMode.Ok') || '',
                         handleOk: () => {
                           chatNova.newChat(selectedNovaTab, novaHistory);
-                          dispatch(
-                            selectNovaTab(
-                              isSelectingPerplexity
-                                ? NOVA_TAB_TYPE.aiChat
-                                : NOVA_TAB_TYPE.perplexity
-                            )
-                          );
                           changeChatMode(selectChatMode);
                         }
                       },
