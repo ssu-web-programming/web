@@ -421,7 +421,12 @@ export const useInitBridgeListener = () => {
     novaHistory: NovaChatType[]
   ) => {
     if (tab === NOVA_TAB_TYPE.perplexity || tab === NOVA_TAB_TYPE.aiChat) {
-      if (tab != selectedNovaTab && novaHistory.length > 0) {
+      if (
+        (selectedNovaTab === NOVA_TAB_TYPE.perplexity ||
+          selectedNovaTab === NOVA_TAB_TYPE.aiChat) &&
+        tab != selectedNovaTab &&
+        novaHistory.length > 0
+      ) {
         await showConfirmModal({
           msg: t('Nova.Confirm.ChangeChatMode.Msg') || '',
           onOk: {
