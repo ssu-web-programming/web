@@ -7,7 +7,6 @@ import CheckDarkIcon from 'img/dark/nova/check_purple.svg';
 import CheckLightIcon from 'img/light/nova/check_purple.svg';
 import { ReactComponent as AudioFile } from 'img/light/nova/voiceDictation/audio_file.svg';
 import { ReactComponent as EditIcon } from 'img/light/nova/voiceDictation/edit.svg';
-import { overlay } from 'overlay-kit';
 import { useTranslation } from 'react-i18next';
 import { setError } from 'store/slices/errorSlice';
 import { themeInfoSelector } from 'store/slices/theme';
@@ -15,13 +14,6 @@ import { getLocalFiles } from 'store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import { formatCurrentTime } from 'util/getAudioDuration';
 
-import SurveyModalContent from '../../../../../components/nova/satisfactionSurvey/survey-modal-content';
-import OverlayModal from '../../../../../components/overlay-modal';
-import { NOVA_TAB_TYPE } from '../../../../../constants/novaTapTypes';
-import { selectPageCreditReceived } from '../../../../../store/slices/nova/pageStatusSlice';
-import { selectTabSlice } from '../../../../../store/slices/tabSlice';
-import { getCookie } from '../../../../../util/common';
-import { useAudioRecorder } from '../../provider/audio-recorder-provider';
 import {
   LangOptionValues,
   useVoiceDictationContext,

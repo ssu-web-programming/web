@@ -170,7 +170,6 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({ ch
       try {
         const Context = window.AudioContext || window.webkitAudioContext;
         audioContextRef.current = new Context();
-        console.log('audioContextRef.current', audioContextRef.current);
         const source = audioContextRef.current.createMediaStreamSource(stream);
         const analyser = audioContextRef.current.createAnalyser();
 
@@ -264,12 +263,10 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({ ch
         onRecordingComplete?.(blob);
 
         streamRef.current?.getAudioTracks().forEach((track) => {
-          console.log('audio', track);
           track.stop();
         });
 
         streamRef.current?.getTracks().forEach((track) => {
-          console.log('그냥 tracck', track);
           track.stop();
         });
 
@@ -305,14 +302,12 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({ ch
           if (streamRef.current) {
             const tracks = streamRef.current.getTracks();
             const audioTracks = streamRef.current.getAudioTracks();
-            console.log('audioTracks', audioTracks);
             tracks.forEach((track) => {
               track.enabled = false;
               track.stop();
             });
 
             audioTracks.forEach((track) => {
-              console.log('ahahahah-track', track);
               track.enabled = false;
               track.stop();
             });
