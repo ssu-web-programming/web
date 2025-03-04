@@ -138,9 +138,11 @@ export default function TranslationIntro() {
                 setTranslateInputValue(newValue);
               }}
             />
-            <S.CloseIconWrapper onClick={() => setTranslateInputValue('')}>
-              <CloseLightIcon width={24} height={24} />
-            </S.CloseIconWrapper>
+            {translateInputValue.length > 0 && (
+              <S.CloseIconWrapper onClick={() => setTranslateInputValue('')}>
+                <CloseLightIcon width={24} height={24} />
+              </S.CloseIconWrapper>
+            )}
           </S.TextInputWrapper>
         ) : (
           <S.FileUploaderWrapper>
