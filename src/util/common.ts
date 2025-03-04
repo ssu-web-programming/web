@@ -149,9 +149,8 @@ export const removeRefPages = (contents: string) => {
   return contents.replaceAll(CHAT_PDF_PAGE_PARSE_REG, '');
 };
 
-export const setCookie = (name: string, value: string, minutes = 525600) => {
-  const maxAge = minutes * 60;
-  document.cookie = `${name}=${encodeURIComponent(value)}; max-age=${maxAge}; path=/; SameSite=Lax`;
+export const setCookie = (name: string, value: string, minutes = 1) => {
+  document.cookie = `${name}=${encodeURIComponent(value)}; max-age=${minutes * 60}; path=/; SameSite=Lax; Secure`;
 };
 
 export const getCookie = (name: string) => {
