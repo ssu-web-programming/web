@@ -150,11 +150,8 @@ export const removeRefPages = (contents: string) => {
 };
 
 export const setCookie = (name: string, value: string, minutes = 525600) => {
-  const date = new Date();
-  date.setTime(date.getTime() + minutes * 60 * 1000);
-
-  const expires = `expires=${date.toUTCString()}`;
-  document.cookie = `${name}=${encodeURIComponent(value)}; ${expires}; path=/`;
+  const maxAge = minutes * 60;
+  document.cookie = `${name}=${encodeURIComponent(value)}; max-age=${maxAge}; path=/`;
 };
 
 export const getCookie = (name: string) => {
