@@ -183,6 +183,7 @@ const pageSlice = createSlice({
       ) as keyof PageStatus | undefined;
 
       if (matchedTab) {
+        console.log('matchedTab: ', matchedTab);
         state.isCreditReceived[matchedTab] = true;
       }
     }

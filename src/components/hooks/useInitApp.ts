@@ -203,10 +203,10 @@ export default function useInitApp() {
     await Promise.all([
       initCreditInfo(headers),
       initUserInfo(headers),
-      initOfferList(headers),
       initAnnouncementInfo(headers),
       initNovaExpireTime(headers)
     ]);
+    await initOfferList(headers);
 
     dispatch(
       initComplete({
