@@ -107,13 +107,17 @@ export default function LanguageItemList({
   return (
     <>
       {/* 시간이 좀 오래걸려서 UX적인 처리가 필요할듯 */}
-      <S.LanguageTitle>{t('Nova.translation.Menu.RecentLanguages')}</S.LanguageTitle>
+      {latestLangList!.length > 0 && (
+        <>
+          <S.LanguageTitle>{t('Nova.translation.Menu.RecentLanguages')}</S.LanguageTitle>
 
-      {findLatestLangList()?.map((lang, idx) => (
-        <S.LanguageItem key={idx} onClick={() => handleSetLangCode(lang!.langCode)}>
-          {lang?.lang}
-        </S.LanguageItem>
-      ))}
+          {findLatestLangList()?.map((lang, idx) => (
+            <S.LanguageItem key={idx} onClick={() => handleSetLangCode(lang!.langCode)}>
+              {lang?.lang}
+            </S.LanguageItem>
+          ))}
+        </>
+      )}
 
       <S.LanguageTitle>{t('Nova.translation.Menu.AllLanguages')}</S.LanguageTitle>
       {langList.map((lang, idx) => (

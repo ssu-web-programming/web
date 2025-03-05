@@ -190,7 +190,10 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
       }));
 
       await confirm({
-        msg: t('Nova.Alert.UnopenableDocError')!,
+        msg:
+          data.status === 'UNOPENABLE_DOCUMENT'
+            ? t('Nova.translation.Alert.DamagedDocument')!
+            : t('Nova.translation.Alert.EncryptedDocument')!,
         onOk: {
           text: t('Confirm'),
           callback: () => {}

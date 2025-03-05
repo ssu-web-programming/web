@@ -6,12 +6,10 @@ import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import { getChatGroupKey, getServiceGroupInfo, iconMap } from '../../../constants/serviceType';
 import { ReactComponent as IconConvertDark } from '../../../img/dark/nova/tab/convert_Img.svg';
 import { ReactComponent as IconConvertLight } from '../../../img/light/nova/tab/convert_Img.svg';
-import { announceInfoSelector, IAnnouceInfo } from '../../../store/slices/nova/announceSlice';
 import { novaChatModeSelector } from '../../../store/slices/nova/novaHistorySlice';
-import { selectNovaTab, selectTabSlice } from '../../../store/slices/tabSlice';
+import { selectTabSlice } from '../../../store/slices/tabSlice';
 import { themeInfoSelector } from '../../../store/slices/theme';
-import { useAppDispatch, useAppSelector } from '../../../store/store';
-import Announcement from '../../Announcement';
+import { useAppSelector } from '../../../store/store';
 
 import * as S from './style';
 
@@ -30,7 +28,7 @@ export const Guide = (props: GuideProps) => {
     selectedNovaTab === NOVA_TAB_TYPE.aiChat || selectedNovaTab === NOVA_TAB_TYPE.perplexity;
 
   const getIcon = () => {
-    if (selectedNovaTab === NOVA_TAB_TYPE.aiChat || selectedNovaTab === NOVA_TAB_TYPE.perplexity) {
+    if (isChat) {
       const groupKey = getChatGroupKey(chatMode);
       const info = getServiceGroupInfo(groupKey, isLightMode);
       return info.icon;
@@ -49,10 +47,7 @@ export const Guide = (props: GuideProps) => {
             onClick={() => {
               props.onClick && props.onClick();
             }}
-            $isChat={
-              selectedNovaTab === NOVA_TAB_TYPE.aiChat ||
-              selectedNovaTab === NOVA_TAB_TYPE.perplexity
-            }
+            $isChat={isChat}
           />
           <div className="title">
             {isChat ? (

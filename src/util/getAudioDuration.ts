@@ -99,6 +99,23 @@ export const formatDuration = (seconds: number): string => {
   return hoursStr + minutesStr + secondsStr || `0${i18n.t('Nova.voiceDictation.Status.Minutes')}`;
 };
 
+export const getCurrentFormattedTime = () => {
+  const now = new Date();
+
+  // 연, 월, 일 가져오기
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1
+  const day = String(now.getDate()).padStart(2, '0');
+
+  // 시, 분, 초 가져오기
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  const seconds = String(now.getSeconds()).padStart(2, '0');
+
+  // YYYY-MM-DD HH:mm:ss 형식으로 조합
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+};
+
 export const formatMilliseconds = (ms: number): string => {
   // 전체 초 계산
   const totalSeconds = Math.floor(ms / 1000);
@@ -120,7 +137,7 @@ export const formatMilliseconds = (ms: number): string => {
 };
 
 export const blobToFile = (audioBlob: Blob) => {
-  const filename = `recording_${new Date().getTime()}.mp3`;
+  const filename = getCurrentFormattedTime();
   return new File([audioBlob], filename, {
     type: 'audio/mpeg',
     lastModified: Date.now()
@@ -128,7 +145,7 @@ export const blobToFile = (audioBlob: Blob) => {
 };
 
 export const windowBlobToFile = (audioBlob: Blob) => {
-  const filename = `recording_${new Date().getTime()}.mp3`;
+  const filename = getCurrentFormattedTime();
   return new File([audioBlob], filename, {
     type: 'audio/wav',
     lastModified: Date.now()

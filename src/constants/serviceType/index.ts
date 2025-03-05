@@ -6,11 +6,11 @@ import Convert2DTo3DIcon from '../../img/common/nova/imgSample/convert_2dto3d_sm
 import AIVideoIcon from '../../img/common/nova/imgSample/ico_ai_video.png';
 import PerplexityIcon from '../../img/common/nova/imgSample/ico_perplexity.png';
 import TranslationIcon from '../../img/common/nova/imgSample/ico_translation.png';
-import VoiceDictationIcon from '../../img/common/nova/imgSample/ico_voice_dictation.png';
 import ExpandImgIcon from '../../img/common/nova/imgSample/image_expand_sample.png';
 import RemakeImgIcon from '../../img/common/nova/imgSample/image_remake_sample.png';
 import ChangeStyleIcon from '../../img/common/nova/imgSample/image_style_sample.png';
 import ImprovedResIcon from '../../img/common/nova/imgSample/image_upscaling_sample.png';
+import VoiceDictationIcon from '../../img/common/nova/imgSample/voice_dictation_sample.svg';
 import ClaudeLogoDarkIcon from '../../img/dark/nova/logo/ico_claude_logo.svg';
 import ClovaLogoDarkIcon from '../../img/dark/nova/logo/ico_clova_logo.svg';
 import GPTLogoDarkIcon from '../../img/dark/nova/logo/ico_gpt_logo.svg';
