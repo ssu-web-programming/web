@@ -3,6 +3,7 @@ import { track } from '@amplitude/analytics-browser';
 import { apiWrapper } from '../../../api/apiWrapper';
 import { NOVA_EXPAND_IMAGE } from '../../../api/constant';
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
+import { getServiceLoggingInfo, SERVICE_TYPE } from '../../../constants/serviceType';
 import {
   resetPageData,
   resetPageResult,
@@ -103,10 +104,11 @@ export const useExpandImage = () => {
         );
         dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.expandImg, status: 'done' }));
 
+        const log_info = getServiceLoggingInfo(SERVICE_TYPE.NOVA_UNCROP_CLIPDROP);
         await logger({
           dp: 'ai.nova',
-          el: 'nova_image_expansion',
-          gpt_ver: 'clipdrop'
+          el: log_info.name,
+          gpt_ver: log_info.detail
         });
         track('click_nova_image', { image_name: 'NOVA_UNCROP_CLIPDROP' });
       } else {

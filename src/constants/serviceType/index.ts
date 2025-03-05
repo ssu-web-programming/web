@@ -278,3 +278,57 @@ export const findTabByService = (serviceType: SERVICE_TYPE): NOVA_TAB_TYPE => {
     services.includes(serviceType)
   )?.[0] as NOVA_TAB_TYPE;
 };
+
+export interface ServiceLoggingInfo {
+  name: string;
+  detail: string;
+}
+export const getServiceLoggingInfo = (serviceType: SERVICE_TYPE): ServiceLoggingInfo => {
+  const mapping: Partial<Record<SERVICE_TYPE, ServiceLoggingInfo>> = {
+    [SERVICE_TYPE.NOVA_CHAT_GPT4O]: { name: 'nova_chating', detail: 'nova_chat_gpt4o' },
+    [SERVICE_TYPE.NOVA_IMG_GPT4O]: { name: 'nova_chating', detail: 'nova_chat_gpt4o' },
+    [SERVICE_TYPE.NOVA_ASK_DOC_GPT4O]: { name: 'nova_chating', detail: 'nova_chat_gpt4o' },
+    [SERVICE_TYPE.NOVA_ASK_IMG_GPT4O]: { name: 'nova_chating', detail: 'nova_chat_gpt4o' },
+    [SERVICE_TYPE.NOVA_CHAT_O3MINI]: { name: 'nova_chating', detail: '3o_mini' },
+    [SERVICE_TYPE.WRITE_GPT4]: { name: 'nova_chating', detail: '4' },
+    [SERVICE_TYPE.GPT3]: { name: 'nova_chating', detail: '3.5' },
+    [SERVICE_TYPE.WRITE_CLADE3]: { name: 'nova_chating', detail: 'claude3' },
+    [SERVICE_TYPE.WRITE_CLOVA]: { name: 'nova_chating', detail: 'clova' },
+    [SERVICE_TYPE.NOVA_WEBSEARCH_PERPLEXITY]: { name: 'nova_web_search', detail: 'perplexity' },
+    [SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO]: {
+      name: 'nova_web_search',
+      detail: 'perplexity_pro'
+    },
+    [SERVICE_TYPE.NOVA_REMOVE_BG]: { name: 'nova_background_remove', detail: 'remove_bg' },
+    [SERVICE_TYPE.NOVA_REPLACE_BG_CLIPDROP]: { name: 'nova_background_change', detail: 'clipdrop' },
+    [SERVICE_TYPE.NOVA_REIMAGE_CLIPDROP]: { name: 'nova_image_remake', detail: 'clipdrop' },
+    [SERVICE_TYPE.NOVA_UNCROP_CLIPDROP]: { name: 'nova_image_expansion', detail: 'clipdrop' },
+    [SERVICE_TYPE.NOVA_PO_RESOLUTION]: {
+      name: 'nova_resolution_elevation',
+      detail: 'nova_po_resolution'
+    },
+    [SERVICE_TYPE.NOVA_PO_STYLE_TRANSFER]: {
+      name: 'nova_style_change',
+      detail: 'nova_po_style_transfer'
+    },
+    [SERVICE_TYPE.NOVA_ANIMATION_3D_IMMERSITY]: { name: 'nova_transform_3d', detail: 'immersity' },
+    [SERVICE_TYPE.NOVA_SPEECH_RECOGNITION_CLOVA]: {
+      name: 'nova_write_down',
+      detail: 'clova_speech'
+    },
+    [SERVICE_TYPE.NOVA_AI_AVATA_VIDEO_HEYGEN]: {
+      name: 'nova_video_create',
+      detail: 'heygen'
+    },
+    [SERVICE_TYPE.NOVA_TRANSLATION_DEEPL]: {
+      name: 'nova_translation',
+      detail: 'deepl'
+    },
+    [SERVICE_TYPE.NOVA_TRANSLATION_DEEPL_FILE]: {
+      name: 'nova_file_translation',
+      detail: 'deepl'
+    }
+  };
+
+  return mapping[serviceType] || { name: 'unknown', detail: 'unknown' };
+};

@@ -30,7 +30,11 @@ import {
 } from '../../../api/constant';
 import { FileUploadState } from '../../../constants/fileTypes';
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
-import { getServiceEngineName, SERVICE_TYPE } from '../../../constants/serviceType';
+import {
+  getServiceEngineName,
+  getServiceLoggingInfo,
+  SERVICE_TYPE
+} from '../../../constants/serviceType';
 import { appStateSelector, setIsExternal } from '../../../store/slices/appState';
 import {
   selectPageCreditReceived,
@@ -326,10 +330,11 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
           }
 
           if (splunk) {
+            const log_info = getServiceLoggingInfo(chatType ?? chatMode);
             splunk({
               dp: 'ai.nova',
-              el: vsId || type !== '' ? 'nova_document_or_image' : 'nova_chating',
-              gpt_ver: vsId || type !== '' ? 'NOVA_ASK_DOC_GPT4O' : 'NOVA_CHAT_GPT4O'
+              el: vsId || type !== '' ? 'nova_document_or_image' : log_info.name,
+              gpt_ver: vsId || type !== '' ? 'NOVA_ASK_DOC_GPT4O' : log_info.detail
             });
             if (type) {
               splunk({

@@ -73,7 +73,6 @@ export default function SurveyModalContent() {
           method: 'POST'
         })
         .then(() => {
-          console.log('survey finish');
           dispatch(setPageCreditReceivedByServiceType({ serviceType: service[0].serviceType }));
         });
     } catch (error) {

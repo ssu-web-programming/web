@@ -2,6 +2,8 @@ import { apiWrapper } from 'api/apiWrapper';
 import { NOVA_SPEECH_DOWNLOAD, NOVA_SPEECH_RECOGNIZE } from 'api/constant';
 import { LangOptionValues } from 'pages/Nova/VoiceDictation/provider/voice-dictation-provider';
 
+import { getServiceLoggingInfo, SERVICE_TYPE } from '../../constants/serviceType';
+
 interface PostSpeechRecognize {
   file: File;
   lang: LangOptionValues;
@@ -19,7 +21,7 @@ const voiceDictationHttp = {
     formData.append('file', file);
     formData.append('language', lang);
 
-    const { res } = await apiWrapper().request(NOVA_SPEECH_RECOGNIZE, {
+    const { res, logger } = await apiWrapper().request(NOVA_SPEECH_RECOGNIZE, {
       headers: {
         'Content-Type': 'application/json'
       },
@@ -32,6 +34,13 @@ const voiceDictationHttp = {
     if (!response.success) {
       throw response.error;
     }
+
+    const log_info = getServiceLoggingInfo(SERVICE_TYPE.NOVA_SPEECH_RECOGNITION_CLOVA);
+    await logger({
+      dp: 'ai.nova',
+      el: log_info.name,
+      gpt_ver: log_info.detail
+    });
 
     return response;
   },

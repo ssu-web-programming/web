@@ -3,6 +3,7 @@ import { track } from '@amplitude/analytics-browser';
 import { apiWrapper } from '../../../api/apiWrapper';
 import { NOVA_REMOVE_BACKGROUND } from '../../../api/constant';
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
+import { getServiceLoggingInfo, SERVICE_TYPE } from '../../../constants/serviceType';
 import {
   resetPageData,
   selectPageCreditReceived,
@@ -56,10 +57,11 @@ export const useRemoveBackground = () => {
         dispatch(setPageResult({ tab: NOVA_TAB_TYPE.removeBG, result: response.data.image[0] }));
         dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.removeBG, status: 'done' }));
 
+        const log_info = getServiceLoggingInfo(SERVICE_TYPE.NOVA_REMOVE_BG);
         await logger({
           dp: 'ai.nova',
-          el: 'nova_background_remove',
-          gpt_ver: 'remove_bg'
+          el: log_info.name,
+          gpt_ver: log_info.detail
         });
         track('click_nova_image', { image_name: 'NOVA_REMOVE_BG' });
       } else {

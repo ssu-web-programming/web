@@ -3,6 +3,7 @@ import { track } from '@amplitude/analytics-browser';
 import { apiWrapper } from '../../../api/apiWrapper';
 import { NOVA_CHANGE_BACKGROUND } from '../../../api/constant';
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
+import { getServiceLoggingInfo, SERVICE_TYPE } from '../../../constants/serviceType';
 import {
   resetPageData,
   resetPageResult,
@@ -94,10 +95,11 @@ export const useChangeBackground = () => {
         );
         dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeBG, status: 'done' }));
 
+        const log_info = getServiceLoggingInfo(SERVICE_TYPE.NOVA_REPLACE_BG_CLIPDROP);
         await logger({
           dp: 'ai.nova',
-          el: 'nova_background_change',
-          gpt_ver: 'clipdrop'
+          el: log_info.name,
+          gpt_ver: log_info.detail
         });
         track('click_nova_image', { image_name: 'NOVA_REPLACE_BG_CLIPDROP' });
       } else {

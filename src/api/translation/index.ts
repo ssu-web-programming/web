@@ -7,6 +7,8 @@ import {
   PO_DRIVE_DOC_OPEN_STATUS
 } from 'api/constant';
 
+import { getServiceLoggingInfo, SERVICE_TYPE } from '../../constants/serviceType';
+
 interface PostTranslateText {
   text: string;
   sourceLang?: string;
@@ -31,7 +33,7 @@ export interface CheckTranslateStatusResponse {
 
 const translationHttp = {
   postTranslateText: async ({ text, sourceLang, targetLang }: PostTranslateText) => {
-    const { res } = await apiWrapper().request(NOVA_TRANSLATE_TEXT, {
+    const { res, logger } = await apiWrapper().request(NOVA_TRANSLATE_TEXT, {
       headers: {
         'Content-Type': 'application/json'
       },
@@ -44,6 +46,13 @@ const translationHttp = {
       throw response.error;
     }
 
+    const log_info = getServiceLoggingInfo(SERVICE_TYPE.NOVA_TRANSLATION_DEEPL);
+    await logger({
+      dp: 'ai.nova',
+      el: log_info.name,
+      gpt_ver: log_info.detail
+    });
+
     return { response: response.data, headers: res.headers };
   },
   postTranslateDocument: async ({ file, sourceLang, targetLang }: PostTranslateDocument) => {
@@ -52,7 +61,7 @@ const translationHttp = {
     formData.append('sourceLang', sourceLang || '');
     formData.append('targetLang', targetLang);
 
-    const { res } = await apiWrapper().request(NOVA_TRANSLATE_DOCUMENT, {
+    const { res, logger } = await apiWrapper().request(NOVA_TRANSLATE_DOCUMENT, {
       method: 'POST',
       body: formData
     });
@@ -61,6 +70,13 @@ const translationHttp = {
     if (!response.success) {
       throw response.error;
     }
+
+    const log_info = getServiceLoggingInfo(SERVICE_TYPE.NOVA_TRANSLATION_DEEPL_FILE);
+    await logger({
+      dp: 'ai.nova',
+      el: log_info.name,
+      gpt_ver: log_info.detail
+    });
 
     return response.data;
   },

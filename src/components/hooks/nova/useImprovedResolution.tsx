@@ -3,6 +3,7 @@ import { track } from '@amplitude/analytics-browser';
 import { apiWrapper } from '../../../api/apiWrapper';
 import { NOVA_IMPROVED_RESOLUTION } from '../../../api/constant';
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
+import { getServiceLoggingInfo, SERVICE_TYPE } from '../../../constants/serviceType';
 import {
   resetPageData,
   resetPageResult,
@@ -63,10 +64,11 @@ export const useImprovedResolution = () => {
         dispatch(setPageResult({ tab: NOVA_TAB_TYPE.improvedRes, result: response.data.image[0] }));
         dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.improvedRes, status: 'done' }));
 
+        const log_info = getServiceLoggingInfo(SERVICE_TYPE.NOVA_PO_RESOLUTION);
         await logger({
           dp: 'ai.nova',
-          el: 'nova_resolution_elevation',
-          gpt_ver: 'NOVA_PO_RESOLUTION'
+          el: log_info.name,
+          gpt_ver: log_info.detail
         });
         track('click_nova_image', { image_name: 'NOVA_PO_RESOLUTION' });
       } else {

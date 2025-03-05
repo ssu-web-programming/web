@@ -3,6 +3,7 @@ import { track } from '@amplitude/analytics-browser';
 import { apiWrapper } from '../../../api/apiWrapper';
 import { NOVA_GENERATE_ANIMATION } from '../../../api/constant';
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
+import { getServiceLoggingInfo, SERVICE_TYPE } from '../../../constants/serviceType';
 import {
   resetPageData,
   resetPageResult,
@@ -97,10 +98,11 @@ export const useConvert2DTo3D = () => {
         );
         dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.convert2DTo3D, status: 'done' }));
 
+        const log_info = getServiceLoggingInfo(SERVICE_TYPE.NOVA_ANIMATION_3D_IMMERSITY);
         await logger({
           dp: 'ai.nova',
-          el: 'transform_3d', // nova_transform_3d으로 바꾸기!!!!!
-          gpt_ver: 'immersity'
+          el: log_info.name,
+          gpt_ver: log_info.detail
         });
         track('click_nova_image', { image_name: 'Immersity' });
       } else {

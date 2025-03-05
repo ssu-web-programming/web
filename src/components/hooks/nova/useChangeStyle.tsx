@@ -3,6 +3,7 @@ import { track } from '@amplitude/analytics-browser';
 import { apiWrapper } from '../../../api/apiWrapper';
 import { NOVA_CHANGE_STYLE } from '../../../api/constant';
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
+import { getServiceLoggingInfo, SERVICE_TYPE } from '../../../constants/serviceType';
 import {
   resetPageData,
   resetPageResult,
@@ -92,10 +93,11 @@ export const useChangeStyle = () => {
         );
         dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeStyle, status: 'done' }));
 
+        const log_info = getServiceLoggingInfo(SERVICE_TYPE.NOVA_PO_STYLE_TRANSFER);
         await logger({
           dp: 'ai.nova',
-          el: 'nova_style_change',
-          gpt_ver: 'NOVA_PO_STYLE_TRANSFER'
+          el: log_info.name,
+          gpt_ver: log_info.detail
         });
         track('click_nova_image', { image_name: 'NOVA_PO_STYLE_TRANSFER' });
       } else {

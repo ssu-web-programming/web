@@ -5,6 +5,7 @@ import { apiWrapper } from '../../../../api/apiWrapper';
 import { NOVA_VIDEO_GET_INFO, NOVA_VIDEO_MAKE_VIDEOS } from '../../../../api/constant';
 import { EVideoStatus, InitVideos } from '../../../../constants/heygenTypes';
 import { NOVA_TAB_TYPE } from '../../../../constants/novaTapTypes';
+import { getServiceLoggingInfo, SERVICE_TYPE } from '../../../../constants/serviceType';
 import {
   resetPageData,
   selectPageResult,
@@ -123,7 +124,7 @@ export default function Loading() {
 
   const pollingVideo = async (videoId: string) => {
     try {
-      const { res } = await apiWrapper().request(NOVA_VIDEO_GET_INFO, {
+      const { res, logger } = await apiWrapper().request(NOVA_VIDEO_GET_INFO, {
         headers: {
           'Content-Type': 'application/json'
         },
@@ -152,6 +153,12 @@ export default function Loading() {
           })
         );
         dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'done' }));
+        const log_info = getServiceLoggingInfo(SERVICE_TYPE.NOVA_AI_AVATA_VIDEO_HEYGEN);
+        await logger({
+          dp: 'ai.nova',
+          el: log_info.name,
+          gpt_ver: log_info.detail
+        });
       }
     } catch (error) {
       errorHandle(error);
