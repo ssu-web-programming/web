@@ -40,6 +40,8 @@ interface SplunkLogDataType {
     env?: string;
     gpt_ver?: LLMVersion;
     file_type?: string;
+    type?: string;
+    detail_type?: string;
   };
 }
 
@@ -63,6 +65,8 @@ export interface SplunkData {
   input_token?: number;
   output_token?: number;
   gpt_ver?: LLMVersion;
+  type?: string;
+  detail_type?: string;
 
   dt?: string;
 
@@ -126,6 +130,8 @@ const usePostSplunkLog = (sessionInfo: SessionInfo) => {
     logData.cobj.output_token = data.output_token;
     logData.cobj.gpt_ver = data.gpt_ver;
     logData.cobj.file_type = data.file_type;
+    logData.cobj.type = data.type;
+    logData.cobj.detail_type = data.detail_type;
 
     if (isVfMode) logData.cobj.env = 'vf';
 
@@ -169,6 +175,8 @@ export const postSplunkLog = async (sessionResponse: CheckSessionResponse, data:
     logData.cobj.input_token = data.input_token;
     logData.cobj.output_token = data.output_token;
     logData.cobj.gpt_ver = data.gpt_ver;
+    logData.cobj.type = data.type;
+    logData.cobj.detail_type = data.detail_type;
 
     if (isVfMode) logData.cobj.env = 'vf';
 
