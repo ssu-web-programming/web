@@ -43,7 +43,6 @@ export default function SurveyModalContent() {
     // 검증을 위해 1분으로 세팅 / 상용은 1시간
     const minute = process.env.NODE_ENV == 'production' ? 60 : 1;
     setCookie(`closeSurvey${selectedNovaTab}`, String('closeSurvey'), minute);
-    console.log(minute);
 
     overlay.closeAll();
   };

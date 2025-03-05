@@ -13,14 +13,6 @@ export default function UseShowSurveyModal() {
     services: PageService,
     isCreditRecieved: boolean
   ) => {
-    console.log('selectedNovaTab: ', selectedNovaTab);
-    console.log('isCreditRecieved: ', isCreditRecieved);
-    console.log('dontShowSurvey: ', getCookie(`dontShowSurvey${selectedNovaTab}`));
-    console.log('closeSurvey: ', getCookie(`closeSurvey${selectedNovaTab}`));
-    console.log(
-      'isUsed: ',
-      services.some((service) => service.isUsed)
-    );
     // 만족도 이벤트
     if (
       !isCreditRecieved &&
