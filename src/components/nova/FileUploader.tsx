@@ -183,7 +183,10 @@ export const FileUploader = (props: FileUploaderProps) => {
           supportedExtensions.includes(`.${currentFile.ext}`)))
     ) {
       options.push({
-        name: t(`Nova.UploadTooltip.CurrentFile`),
+        name:
+          target === 'nova-translation'
+            ? t(`Nova.UploadTooltip.TranslationCurrentFile`)
+            : t(`Nova.UploadTooltip.CurrentFile`),
         icon: { src: isLightMode ? InsertDocsLightIcon : InsertDocsDarkIcon },
         onClick: async () => {
           onChangeTranslationFileType?.('currentDoc');

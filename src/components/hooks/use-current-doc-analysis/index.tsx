@@ -68,7 +68,9 @@ export default function useCurrentDocAnalysis() {
       msg:
         platform === ClientType.web || platform === 'unknown'
           ? t('Nova.Confirm.NotSavedFileInWeb.Msg')
-          : t('Nova.Confirm.NotSavedFile.Msg'),
+          : selectedNovaTab === 'translation'
+            ? t('Nova.translation.Alert.UnsavedChanges')
+            : t('Nova.Confirm.NotSavedFile.Msg'),
       onOk: {
         text: t('Nova.Confirm.NotSavedFile.Ok'),
         callback: () => {

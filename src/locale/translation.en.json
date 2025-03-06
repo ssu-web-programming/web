@@ -865,7 +865,8 @@
       "PolarisDrive": "Polaris Drive",
       "Local": "Current device",
       "Camera": "Camera",
-      "CurrentFile": "Analyze the current document"
+      "CurrentFile": "Analyze the current document",
+      "TranslationCurrentFile": "Translate the current document"
     },
     "UploadState": {
       "upload_image": "Processing a file in the drive",

@@ -875,7 +875,8 @@
       "PolarisDrive": "폴라리스 드라이브",
       "Local": "현재 장치",
       "Camera": "사진 촬영",
-      "CurrentFile": "현재 문서 분석하기"
+      "CurrentFile": "현재 문서 분석하기",
+      "TranslationCurrentFile": "현재 문서 번역하기"
     },
     "UploadState": {
       "upload_image": "드라이브에 파일을 처리하고 있어요",
