@@ -517,6 +517,11 @@ export const useInitBridgeListener = () => {
                 if (file) loadLocalFile([file]);
               };
 
+              console.log('image: ', body.image);
+              console.log('showCreditGuide: ', showCreditGuide);
+              console.log('isBlob: ', isBlob);
+              console.log('isBase64: ', isBase64);
+              console.log('getCookie: ', getCookie('creditGuide'));
               if (body.image && (isBlob || isBase64)) {
                 if (showCreditGuide && !getCookie('creditGuide')) {
                   await showConfirmModal({
