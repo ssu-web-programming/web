@@ -487,7 +487,6 @@ export const useInitBridgeListener = () => {
 
             if (body.openTab in NOVA_TAB_TYPE) {
               const tab = body.openTab;
-              console.log('tab: ', tab);
 
               await initTab(tab, selectedNovaTab, novaHistory);
               dispatch(resetPageData(tab));
@@ -518,15 +517,13 @@ export const useInitBridgeListener = () => {
                 if (file) loadLocalFile([file]);
               };
 
-              console.log('image: ', body.image);
-              console.log('showCreditGuide: ', showCreditGuide);
-              console.log('isBlob: ', isBlob);
-              console.log('isBase64: ', isBase64);
-              console.log('getCookie: ', getCookie('creditGuide'));
               if (body.image && (isBlob || isBase64)) {
                 if (showCreditGuide && !getCookie('creditGuide')) {
                   await showConfirmModal({
-                    msg: t('Nova.Alert.ExecuteFunction') || '',
+                    msg:
+                      t('Nova.Alert.ExecuteFunction', {
+                        creditAmount: 10
+                      })! || '',
                     onOk: {
                       text: t('Execute') || '',
                       handleOk: () => {
