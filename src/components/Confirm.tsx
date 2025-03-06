@@ -81,8 +81,7 @@ export const Footer = styled.div<{ direction?: 'column' | 'row' }>`
   display: flex;
   flex-direction: ${(props) => props.direction};
   gap: 8px;
-  margin-top: 24px;
-  /* padding: 16px; */
+  padding: 16px;
 
   button {
     font-size: 16px;
