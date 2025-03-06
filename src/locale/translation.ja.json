@@ -666,7 +666,7 @@
       },
       "FileFormat": {
         "Options": {
-          "Text": "Text document(.txt)",
+          "Text": "テキスト文書 (.txt)",
           "Pdf": "PDFファイル（.pdf）"
         }
       },
