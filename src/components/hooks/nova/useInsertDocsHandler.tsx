@@ -81,7 +81,7 @@ export const useInsertDocsHandler = () => {
 
               break;
             case 'doc_edit_mode':
-              if (selectedNovaTab === NOVA_TAB_TYPE.aiChat && history) {
+              if (history) {
                 switch (history.askType) {
                   case 'image': {
                     try {
