@@ -3,7 +3,6 @@ import styled from 'styled-components';
 export const ModalContainer = styled.div`
   background: ${({ theme }) => theme.color.background.gray05};
   width: 100%;
-  max-width: calc(100% - 16px);
   display: flex;
   flex-direction: column;
   border-radius: 16px;
@@ -32,7 +31,13 @@ export const Message = styled.div`
   color: ${({ theme }) => theme.color.text.gray03};
 `;
 
-export const ButtonGroup = styled.div`
+export const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+export const ButtonWrap = styled.div`
   display: flex;
   gap: 12px;
 
@@ -42,5 +47,18 @@ export const ButtonGroup = styled.div`
 
   & > :nth-child(2) {
     flex-grow: 3;
+  }
+`;
+
+export const CheckWrap = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  span {
+    margin-left: 6px;
+    font-size: 14px;
+    font-weight: 400;
+    color: ${({ theme }) => theme.color.text.gray03};
   }
 `;

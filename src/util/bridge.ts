@@ -535,7 +535,8 @@ export const useInitBridgeListener = () => {
                         loadFile();
                       }
                     },
-                    onCancel: { text: t('Cancel'), handleCancel: () => {} }
+                    onCancel: { text: t('Cancel'), handleCancel: () => {} },
+                    neverShowAgain: true
                   });
                 } else {
                   loadFile();
