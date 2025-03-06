@@ -525,22 +525,15 @@ export const useInitBridgeListener = () => {
               console.log('getCookie: ', getCookie('creditGuide'));
               if (body.image && (isBlob || isBase64)) {
                 if (showCreditGuide && !getCookie('creditGuide')) {
-                  confirm({
-                    title: '',
-                    msg: t('Nova.Alert.ExecuteFunction', {
-                      creditAmount: 10
-                    })!,
-                    neverShowAgain: true,
+                  await showConfirmModal({
+                    msg: t('Nova.Alert.ExecuteFunction') || '',
                     onOk: {
-                      text: t('Execute'),
-                      callback: () => {
+                      text: t('Execute') || '',
+                      handleOk: () => {
                         loadFile();
                       }
                     },
-                    onCancel: {
-                      text: t('Cancel'),
-                      callback: () => {}
-                    }
+                    onCancel: { text: t('Cancel'), handleCancel: () => {} }
                   });
                 } else {
                   loadFile();
