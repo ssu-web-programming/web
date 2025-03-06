@@ -3,14 +3,12 @@ import voiceDictationHttp from 'api/voice-dictation';
 import ButtonWithCredit from 'components/buttons/button-with-credit';
 import useErrorHandle from 'components/hooks/useErrorHandle';
 import Select from 'components/select';
-import { NOVA_TAB_TYPE } from 'constants/novaTapTypes';
 import CheckDarkIcon from 'img/dark/nova/check_purple.svg';
 import CheckLightIcon from 'img/light/nova/check_purple.svg';
 import { ReactComponent as AudioFile } from 'img/light/nova/voiceDictation/audio_file.svg';
 import { ReactComponent as EditIcon } from 'img/light/nova/voiceDictation/edit.svg';
 import { useTranslation } from 'react-i18next';
 import { setError } from 'store/slices/errorSlice';
-import { selectNovaTab } from 'store/slices/tabSlice';
 import { themeInfoSelector } from 'store/slices/theme';
 import { getLocalFiles } from 'store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from 'store/store';
@@ -143,7 +141,6 @@ export default function VoiceDictationReady() {
   return (
     <S.Wrapper>
       <S.Container>
-        <button onClick={() => dispatch(selectNovaTab(NOVA_TAB_TYPE.aiVideo))}>페이지 이동!</button>
         <S.Header>
           <S.Title lang={'ko'}>
             <img src={isLightMode ? CheckLightIcon : CheckDarkIcon} alt="check" />
