@@ -61,6 +61,12 @@ const TranscriptContainer = styled.div`
   height: 314px;
   margin: 0px 16px;
   border: 1px solid ${({ theme }) => theme.color.border.gray01};
+
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const NewTranscript = styled.div`
