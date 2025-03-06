@@ -1,4 +1,5 @@
 import React from 'react';
+import VoiceDictationIcon from 'img/common/nova/imgSample/voice_dictation_sample.svg';
 import { Trans, useTranslation } from 'react-i18next';
 import { FlattenSimpleInterpolation } from 'styled-components';
 
@@ -33,7 +34,9 @@ export const Guide = (props: GuideProps) => {
       const info = getServiceGroupInfo(groupKey, isLightMode);
       return info.icon;
     } else {
-      return iconMap[selectedNovaTab];
+      const isVoiceDictation = selectedNovaTab === 'voiceDictation';
+
+      return isVoiceDictation ? VoiceDictationIcon : iconMap[selectedNovaTab];
     }
   };
 
