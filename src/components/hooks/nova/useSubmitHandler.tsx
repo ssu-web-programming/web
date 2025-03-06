@@ -115,7 +115,6 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
         Bridge.callBridgeApi('curNovaTab', curTab);
         dispatch(selectNovaTab(curTab));
         dispatch(setPageStatus({ tab: curTab, status: 'chat' }));
-        dispatch(setPageServiceUsage({ tab: curTab, serviceType: chatMode, isUsed: true }));
 
         const fileInfo: NovaChatType['files'] = [];
         if (expireTimer.current) clearTimeout(expireTimer.current);
@@ -301,6 +300,7 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
           }
         );
         dispatch(updateChatStatus({ id, status: 'done' }));
+        dispatch(setPageServiceUsage({ tab: curTab, serviceType: chatMode, isUsed: true }));
       } catch (err) {
         if (timer) clearTimeout(timer);
         if (requestor.current?.isAborted() === true) {

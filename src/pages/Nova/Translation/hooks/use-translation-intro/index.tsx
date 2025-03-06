@@ -121,14 +121,6 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
       translatedText,
       translateInputValue
     }));
-
-    dispatch(
-      setPageServiceUsage({
-        tab: selectedNovaTab,
-        serviceType: service[0].serviceType,
-        isUsed: true
-      })
-    );
   };
 
   const handleMoveToFileResult = async ({ downloadUrl }: { downloadUrl: string }) => {
@@ -140,14 +132,6 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
       translationFileUrl: downloadUrl,
       translationFileName: sanitizedFile.originalFileName
     }));
-
-    dispatch(
-      setPageServiceUsage({
-        tab: selectedNovaTab,
-        serviceType: service[0].serviceType,
-        isUsed: true
-      })
-    );
   };
 
   const submitTextTranslate = async () => {
@@ -166,6 +150,14 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
         detectedSourceLanguage: detectedSourceLanguage.toUpperCase(),
         translatedText
       });
+
+      dispatch(
+        setPageServiceUsage({
+          tab: selectedNovaTab,
+          serviceType: service[0].serviceType,
+          isUsed: true
+        })
+      );
     } catch (e) {
       setSharedTranslationInfo((prev) => ({
         ...prev,
@@ -204,6 +196,14 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
 
     const file = await convertFileObject();
     await translationRequest({ file, sourceLang, targetLang });
+
+    dispatch(
+      setPageServiceUsage({
+        tab: selectedNovaTab,
+        serviceType: service[0].serviceType,
+        isUsed: true
+      })
+    );
   };
 
   const getNewSourceLang = (targetLang: string): string => {
