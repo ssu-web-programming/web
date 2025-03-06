@@ -475,6 +475,7 @@ export const useInitBridgeListener = () => {
 
             initPlatform(body);
             Bridge.callBridgeApi('analyzeCurFile');
+            console.log('isExternal: ', body.isExternal);
 
             // 이전 버전에는 해당 이벤트가 없어 예외처리
             if (body.isExternal === undefined) {
@@ -486,6 +487,7 @@ export const useInitBridgeListener = () => {
 
             if (body.openTab in NOVA_TAB_TYPE) {
               const tab = body.openTab;
+              console.log('tab: ', tab);
 
               await initTab(tab, selectedNovaTab, novaHistory);
               dispatch(resetPageData(tab));
@@ -516,6 +518,8 @@ export const useInitBridgeListener = () => {
                 if (file) loadLocalFile([file]);
               };
 
+              console.log('image: ', body.image);
+              console.log('showCreditGuide: ', showCreditGuide);
               if (body.image && (isBlob || isBase64)) {
                 if (showCreditGuide && !getCookie('creditGuide')) {
                   confirm({
