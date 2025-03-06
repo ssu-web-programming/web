@@ -20,6 +20,7 @@ import { NOVA_TAB_TYPE } from '../../constants/novaTapTypes';
 import { IOfferCredit } from '../../constants/offerCredit';
 import { SERVICE_TYPE, TAB_SERVICE_MAP } from '../../constants/serviceType';
 import { ClientStatusType } from '../../pages/Nova/Nova';
+import { setCreditInfo } from '../../store/slices/creditInfo';
 import { initComplete } from '../../store/slices/initFlagSlice';
 import { setAnnounceInfo } from '../../store/slices/nova/announceSlice';
 import {
@@ -122,6 +123,7 @@ export default function useInitApp() {
               })
             );
           });
+          dispatch(setCreditInfo(creditInfos));
         }
       } catch (err) {
         /* empty */
