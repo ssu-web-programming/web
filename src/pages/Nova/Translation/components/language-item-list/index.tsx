@@ -107,7 +107,7 @@ export default function LanguageItemList({
   return (
     <>
       {/* 시간이 좀 오래걸려서 UX적인 처리가 필요할듯 */}
-      {latestLangList!.length > 0 && (
+      {latestLangList !== null && latestLangList!.length > 0 && (
         <>
           <S.LanguageTitle>{t('Nova.translation.Menu.RecentLanguages')}</S.LanguageTitle>
 
