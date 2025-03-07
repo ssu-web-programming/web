@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { ContentArea, Footer, Header } from 'components/Confirm';
+import { ContentArea, Header } from 'components/Confirm';
 import styled, { css } from 'styled-components';
 import { isMobile } from 'util/bridge';
 
@@ -57,6 +57,19 @@ const HeaderContainer = styled.div`
 
   & > img {
     cursor: pointer;
+  }
+`;
+
+const Footer = styled.div<{ direction?: 'column' | 'row' }>`
+  width: 100%;
+  display: flex;
+  flex-direction: ${(props) => props.direction};
+  gap: 8px;
+  padding: 16px;
+
+  button {
+    font-size: 16px;
+    font-weight: 500;
   }
 `;
 

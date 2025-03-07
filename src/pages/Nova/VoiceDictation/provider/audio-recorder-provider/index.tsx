@@ -131,7 +131,8 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({ ch
     dispatch(setLocalFiles([file]));
     setSharedVoiceDictationInfo((prev) => ({
       ...prev,
-      componentType: 'VOICE_READY'
+      componentType: 'VOICE_READY',
+      voiceFile: file
     }));
   };
 

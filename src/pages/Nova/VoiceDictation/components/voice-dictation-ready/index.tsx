@@ -30,7 +30,8 @@ export default function VoiceDictationReady() {
       audioDuration,
       fileName,
       selectedLangOption,
-      currentTime
+      currentTime,
+      voiceFile
     },
     setSharedVoiceDictationInfo,
     triggerLoading
@@ -79,7 +80,7 @@ export default function VoiceDictationReady() {
 
     try {
       const result = await voiceDictationHttp.postSpeechRecognize({
-        file: localFiles[0],
+        file: localFiles[0] || voiceFile,
         lang: selectedLangOption
       });
 

@@ -7,11 +7,13 @@ const Container = styled.div`
   flex-direction: column;
   height: 100%;
   padding: 16px;
+  overflow-y: auto;
 `;
 
 const Background = styled.div`
   width: 100%;
-  height: 100%;
+  flex: 1;
+  min-height: 300px; // 최소 높이 설정
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -21,14 +23,16 @@ const Background = styled.div`
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
+  overflow: hidden;
 `;
 
 const CanvasWrapper = styled.div`
   width: 100%;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 0; // 상하 여백 추가
 `;
 
 const StatusText = styled.p<{ $isPaused: boolean }>`
@@ -50,8 +54,8 @@ const ButtonGroup = styled.div`
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  margin-top: auto;
   height: 64px;
+  margin-top: 8px;
 `;
 
 const DurationText = styled.p`

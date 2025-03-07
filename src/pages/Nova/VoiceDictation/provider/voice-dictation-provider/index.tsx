@@ -51,6 +51,7 @@ interface SharedVoiceDictationInfo {
   selectedLangOption: LangOptionValues;
   fileName: string;
   currentTime: string;
+  voiceFile: File | null;
 }
 
 interface VoiceDictationContextType {
@@ -85,7 +86,8 @@ export default function VoiceDictationProvider({ children }: Props) {
       previousPageType: null,
       selectedLangOption: 'ko-KR',
       fileName: '',
-      currentTime: ''
+      currentTime: '',
+      voiceFile: null
     });
 
   const triggerLoading = () => {
@@ -104,7 +106,8 @@ export default function VoiceDictationProvider({ children }: Props) {
       previousPageType: null,
       selectedLangOption: 'ko-KR',
       fileName: '',
-      currentTime: ''
+      currentTime: '',
+      voiceFile: null
     });
   };
 
