@@ -137,7 +137,7 @@ export const formatMilliseconds = (ms: number): string => {
 };
 
 export const blobToFile = (audioBlob: Blob) => {
-  const filename = getCurrentFormattedTime();
+  const filename = `${getCurrentFormattedTime()}.mp3`;
   return new File([audioBlob], filename, {
     type: 'audio/mpeg',
     lastModified: Date.now()
@@ -145,7 +145,7 @@ export const blobToFile = (audioBlob: Blob) => {
 };
 
 export const windowBlobToFile = (audioBlob: Blob) => {
-  const filename = getCurrentFormattedTime();
+  const filename = `${getCurrentFormattedTime()}.mp3`;
   return new File([audioBlob], filename, {
     type: 'audio/wav',
     lastModified: Date.now()

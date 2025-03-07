@@ -75,6 +75,8 @@ export default function VoiceSaveBottomSheet({ isOpened, setIsOpened }: Props) {
     });
 
     const { data } = result;
+    console.log('fileName', fileName);
+    console.log('변환 완료', changeFileExtension(fileName, type));
 
     await Bridge.callBridgeApi('downloadVoiceFile', {
       fileName: changeFileExtension(fileName, type),
