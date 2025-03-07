@@ -86,7 +86,7 @@ export default function SurveyModalContent() {
           dt: 'credit_event',
           el: 'feedback_send',
           type: result ?? '',
-          detail_type: log_info.detail
+          detail_type: log_info.name
         });
       }
     } catch (error) {
