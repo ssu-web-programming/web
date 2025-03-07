@@ -475,6 +475,7 @@ export const useInitBridgeListener = () => {
 
             initPlatform(body);
             Bridge.callBridgeApi('analyzeCurFile');
+            console.log('isExternal: ', body.isExternal);
 
             // 이전 버전에는 해당 이벤트가 없어 예외처리
             if (body.isExternal === undefined) {
@@ -516,24 +517,26 @@ export const useInitBridgeListener = () => {
                 if (file) loadLocalFile([file]);
               };
 
+              console.log('image: ', body.image);
+              console.log('showCreditGuide: ', showCreditGuide);
+              console.log('isBlob: ', isBlob);
+              console.log('isBase64: ', isBase64);
+              console.log('getCookie: ', getCookie('creditGuide'));
               if (body.image && (isBlob || isBase64)) {
                 if (showCreditGuide && !getCookie('creditGuide')) {
-                  confirm({
-                    title: '',
-                    msg: t('Nova.Alert.ExecuteFunction', {
-                      creditAmount: 10
-                    })!,
-                    neverShowAgain: true,
+                  await showConfirmModal({
+                    msg:
+                      t('Nova.Alert.ExecuteFunction', {
+                        creditAmount: 10
+                      })! || '',
                     onOk: {
-                      text: t('Execute'),
-                      callback: () => {
+                      text: t('Execute') || '',
+                      handleOk: () => {
                         loadFile();
                       }
                     },
-                    onCancel: {
-                      text: t('Cancel'),
-                      callback: () => {}
-                    }
+                    onCancel: { text: t('Cancel'), handleCancel: () => {} },
+                    neverShowAgain: true
                   });
                 } else {
                   loadFile();
