@@ -432,6 +432,7 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                               }
                             }}
                             selectBoxCssExt={css`
+                              background: ${isLightMode ? 'var(--white)' : 'var(--gray-gray-90)'};
                               border: 1px solid
                                 ${isLightMode ? 'var(--gray-gray-30)' : 'var(--gray-gray-87)'};
                             `}

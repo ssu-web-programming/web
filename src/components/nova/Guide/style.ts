@@ -38,7 +38,7 @@ export const GuideTitle = styled.div<{ $guideTitleStyle?: FlattenSimpleInterpola
     font-size: 24px;
     font-weight: 700;
     line-height: 36px;
-    color: ${({ theme }) => theme.color.text.gray04};
+    color: ${({ theme }) => theme.color.text.highlight01};
 
     svg {
       width: 19px;
