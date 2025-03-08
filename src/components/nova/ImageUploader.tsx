@@ -24,7 +24,7 @@ const Wrap = styled.div`
   align-items: center;
   justify-content: center;
   position: relative;
-  padding: 0 16px;
+  padding: 24px 16px;
   border: 1px dashed ${({ theme }) => theme.color.border.gray01};
   border-radius: 8px;
   background-color: ${({ theme }) => theme.color.background.gray01};

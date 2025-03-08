@@ -63,6 +63,10 @@ export const StyledMenuItem = styled(MenuItem)<{
     background-color: ${({ theme, $isSelectedHighlighted }) =>
       $isSelectedHighlighted ? theme.color.background.selected : 'transparent'} !important;
     border-radius: 8px;
+
+    span {
+      color: ${({ theme }) => theme.color.text.main};
+    }
   }
 `;
 
