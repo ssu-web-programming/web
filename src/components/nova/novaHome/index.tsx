@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { overlay } from 'overlay-kit';
 import { Trans, useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 

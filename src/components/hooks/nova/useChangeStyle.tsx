@@ -11,7 +11,7 @@ import {
   setPageResult,
   setPageStatus
 } from '../../../store/slices/nova/pageStatusSlice';
-import { setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
+import { getCurrentFile, setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { calLeftCredit } from '../../../util/common';
 import { createFormDataFromFiles, fileToBase64 } from '../../../util/files';
@@ -20,7 +20,8 @@ import useErrorHandle from '../useErrorHandle';
 export const useChangeStyle = () => {
   const errorHandle = useErrorHandle();
   const dispatch = useAppDispatch();
-  const currentFile = useAppSelector(selectPageData(NOVA_TAB_TYPE.changeStyle));
+  const curPageFile = useAppSelector(selectPageData(NOVA_TAB_TYPE.changeStyle));
+  const currentFile = useAppSelector(getCurrentFile);
 
   const resetPageState = () => {
     dispatch(resetPageData(NOVA_TAB_TYPE.changeStyle));
@@ -50,11 +51,11 @@ export const useChangeStyle = () => {
   };
 
   const goThemePage = async () => {
-    if (!currentFile) return;
+    if (!curPageFile) return;
 
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeStyle, status: 'progress' }));
     try {
-      fileToBase64(currentFile)
+      fileToBase64(curPageFile)
         .then((data) => {
           dispatch(setPageResult({ tab: NOVA_TAB_TYPE.changeStyle, result: data }));
         })
@@ -68,16 +69,18 @@ export const useChangeStyle = () => {
   };
 
   const handleChangeStyle = async (style: string) => {
-    if (!currentFile) return;
+    if (!curPageFile) return;
 
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeStyle, status: 'loading' }));
     try {
-      const formData = await createFormDataFromFiles([currentFile]);
+      const formData = await createFormDataFromFiles([curPageFile]);
       formData.append('style', style);
       const { res, logger } = await apiWrapper().request(NOVA_CHANGE_STYLE, {
         body: formData,
         method: 'POST'
       });
+      const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
+
       const response = await res.json();
       if (response.success) {
         const image = response.data.image[0];
@@ -99,9 +102,13 @@ export const useChangeStyle = () => {
           el: log_info.name,
           gpt_ver: log_info.detail
         });
-        track('click_nova_image', { image_name: 'NOVA_PO_STYLE_TRANSFER' });
+        track('click_nova_image', {
+          image_name: 'NOVA_PO_STYLE_TRANSFER',
+          file_id: currentFile.id,
+          document_format: currentFile.ext,
+          credit: deductionCredit
+        });
       } else {
-        const { leftCredit } = calLeftCredit(res.headers);
         handleChangeStyleError(response.error.code, Number(leftCredit), style);
       }
     } catch (err) {

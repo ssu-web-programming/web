@@ -132,14 +132,11 @@ export default function TranslationFileUploader({
   };
 
   const getActiveFile = () => {
-    console.log('driveFiles', driveFiles);
     if (localFiles.length > 0) return localFiles[0];
     if (driveFiles.length > 0) return driveFiles[0];
 
     return null;
   };
-
-  console.log('getActiveFile', getActiveFile());
 
   return (
     <Wrap>

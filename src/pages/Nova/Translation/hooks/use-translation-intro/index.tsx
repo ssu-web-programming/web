@@ -9,14 +9,17 @@ import { usePolling } from 'hooks/use-polling';
 import { overlay } from 'overlay-kit';
 import { useTranslation } from 'react-i18next';
 import { setError } from 'store/slices/errorSlice';
-import { getDriveFiles } from 'store/slices/uploadFiles';
+import { getCurrentFile, getDriveFiles } from 'store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from 'store/store';
+
+import { track } from '@amplitude/analytics-browser';
 
 import {
   selectPageService,
   setPageServiceUsage
 } from '../../../../../store/slices/nova/pageStatusSlice';
 import { selectTabSlice } from '../../../../../store/slices/tabSlice';
+import { calLeftCredit } from '../../../../../util/common';
 import LanguageSearch from '../../components/language-search';
 import { TranslateType } from '../../components/translation-intro';
 import {
@@ -62,6 +65,7 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const driveFiles = useAppSelector(getDriveFiles);
+  const currentFile = useAppSelector(getCurrentFile);
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
   const service = useAppSelector(selectPageService(selectedNovaTab));
   const confirm = useConfirm();
@@ -74,11 +78,19 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
     CheckTranslateStatusResponse,
     PostTranslateDocument
   >({
-    initialFn: (params) => translationHttp.postTranslateDocument(params),
+    initialFn: async (params) => translationHttp.postTranslateDocument(params),
     pollingFn: (translateId) => translationHttp.postCheckTranslateStatus({ translateId }),
     getPollingId: ({ translateId }) => translateId,
     shouldContinue: ({ status }) => status === 'translating' || status === 'queued',
     onPollingSuccess: (result) => {
+      const { deductionCredit } = calLeftCredit(result._headers);
+      track('nova_translate', {
+        file_id: currentFile.id,
+        document_format: currentFile.ext,
+        credit: deductionCredit,
+        translate_type: 'text'
+      });
+
       const { downloadUrl } = result;
       handleMoveToFileResult({ downloadUrl });
     },
@@ -137,7 +149,7 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
   const submitTextTranslate = async () => {
     triggerLoading();
     try {
-      const { response } = await translationHttp.postTranslateText({
+      const { response, headers } = await translationHttp.postTranslateText({
         text: translateInputValue,
         sourceLang,
         targetLang
@@ -158,6 +170,14 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
           isUsed: true
         })
       );
+
+      const { deductionCredit } = calLeftCredit(headers);
+      track('nova_translate', {
+        file_id: currentFile.id,
+        document_format: currentFile.ext,
+        credit: deductionCredit,
+        translate_type: 'text'
+      });
     } catch (e) {
       setSharedTranslationInfo((prev) => ({
         ...prev,

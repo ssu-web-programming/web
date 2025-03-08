@@ -11,7 +11,7 @@ import {
   setPageResult,
   setPageStatus
 } from '../../../store/slices/nova/pageStatusSlice';
-import { setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
+import { getCurrentFile, setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { calLeftCredit } from '../../../util/common';
 import { createFormDataFromFiles, fileToBase64 } from '../../../util/files';
@@ -20,7 +20,8 @@ import useErrorHandle from '../useErrorHandle';
 export const useConvert2DTo3D = () => {
   const errorHandle = useErrorHandle();
   const dispatch = useAppDispatch();
-  const currentFile = useAppSelector(selectPageData(NOVA_TAB_TYPE.convert2DTo3D));
+  const curPageFile = useAppSelector(selectPageData(NOVA_TAB_TYPE.convert2DTo3D));
+  const currentFile = useAppSelector(getCurrentFile);
 
   const resetPageState = () => {
     dispatch(resetPageData(NOVA_TAB_TYPE.convert2DTo3D));
@@ -55,11 +56,11 @@ export const useConvert2DTo3D = () => {
   };
 
   const goConvertPage = async () => {
-    if (!currentFile) return;
+    if (!curPageFile) return;
 
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.convert2DTo3D, status: 'progress' }));
     try {
-      const base64Data = await fileToBase64(currentFile);
+      const base64Data = await fileToBase64(curPageFile);
       dispatch(setPageResult({ tab: NOVA_TAB_TYPE.convert2DTo3D, result: base64Data }));
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.convert2DTo3D, status: 'convert' }));
     } catch (err) {
@@ -69,12 +70,12 @@ export const useConvert2DTo3D = () => {
   };
 
   const handleConver2DTo3D = async (pattern: string, animationType: string) => {
-    if (!currentFile) return;
+    if (!curPageFile) return;
 
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.convert2DTo3D, status: 'loading' }));
 
     try {
-      const formData = await createFormDataFromFiles([currentFile]);
+      const formData = await createFormDataFromFiles([curPageFile]);
       formData.append('pattern', pattern);
       formData.append('animationType', animationType);
 
@@ -82,8 +83,9 @@ export const useConvert2DTo3D = () => {
         body: formData,
         method: 'POST'
       });
-      const response = await res.json();
+      const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
 
+      const response = await res.json();
       if (response.success) {
         dispatch(
           setPageResult({
@@ -104,9 +106,13 @@ export const useConvert2DTo3D = () => {
           el: log_info.name,
           gpt_ver: log_info.detail
         });
-        track('click_nova_image', { image_name: 'Immersity' });
+        track('click_nova_image', {
+          image_name: 'Immersity',
+          file_id: currentFile.id,
+          document_format: currentFile.ext,
+          credit: deductionCredit
+        });
       } else {
-        const { leftCredit } = calLeftCredit(res.headers);
         handleExpandError(response.error.code, Number(leftCredit), pattern, animationType);
       }
     } catch (err) {

@@ -11,7 +11,7 @@ import {
   setPageResult,
   setPageStatus
 } from '../../../store/slices/nova/pageStatusSlice';
-import { setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
+import { getCurrentFile, setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { calLeftCredit } from '../../../util/common';
 import { createFormDataFromFiles } from '../../../util/files';
@@ -20,7 +20,8 @@ import useErrorHandle from '../useErrorHandle';
 export const useRemoveBackground = () => {
   const errorHandle = useErrorHandle();
   const dispatch = useAppDispatch();
-  const currentFile = useAppSelector(selectPageData(NOVA_TAB_TYPE.removeBG));
+  const curPageFile = useAppSelector(selectPageData(NOVA_TAB_TYPE.removeBG));
+  const currentFile = useAppSelector(getCurrentFile);
 
   const resetPageState = () => {
     dispatch(resetPageData(NOVA_TAB_TYPE.removeBG));
@@ -42,15 +43,16 @@ export const useRemoveBackground = () => {
   };
 
   const handleRemoveBackground = async () => {
-    if (!currentFile) return;
+    if (!curPageFile) return;
 
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.removeBG, status: 'loading' }));
     try {
-      const formData = await createFormDataFromFiles([currentFile]);
+      const formData = await createFormDataFromFiles([curPageFile]);
       const { res, logger } = await apiWrapper().request(NOVA_REMOVE_BACKGROUND, {
         body: formData,
         method: 'POST'
       });
+      const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
 
       const response = await res.json();
       if (response.success) {
@@ -63,9 +65,13 @@ export const useRemoveBackground = () => {
           el: log_info.name,
           gpt_ver: log_info.detail
         });
-        track('click_nova_image', { image_name: 'NOVA_REMOVE_BG' });
+        track('click_nova_image', {
+          image_name: 'NOVA_REMOVE_BG',
+          file_id: currentFile.id,
+          document_format: currentFile.ext,
+          credit: deductionCredit
+        });
       } else {
-        const { leftCredit } = calLeftCredit(res.headers);
         handleRemoveBGError(response.error.code, Number(leftCredit));
       }
     } catch (err) {

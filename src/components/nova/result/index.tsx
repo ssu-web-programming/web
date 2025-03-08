@@ -8,7 +8,11 @@ import ReactPlayer from 'react-player';
 import { setOnlineStatus } from 'store/slices/network';
 import { css } from 'styled-components';
 
+import { track } from '@amplitude/analytics-browser';
+import { current } from '@reduxjs/toolkit';
+
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
+import { SERVICE_TYPE } from '../../../constants/serviceType';
 import CheckDarkIcon from '../../../img/dark/nova/check_purple.svg';
 import CreditColorIcon from '../../../img/light/ico_credit_color.svg';
 import CheckLightIcon from '../../../img/light/nova/check_purple.svg';
@@ -74,6 +78,11 @@ export default function Result({ children }: ResultProps) {
         isUsed: true
       })
     );
+    track('save_nova_image', {
+      image_name: service[0].serviceType,
+      document_format: currentFile.ext,
+      file_id: currentFile.id
+    });
   }, []);
 
   useEffect(() => {
@@ -243,6 +252,12 @@ export default function Result({ children }: ResultProps) {
                     }
 
                     insertDocsHandler();
+
+                    track('insert_nova_image', {
+                      image_name: service[0].serviceType,
+                      document_format: currentFile.ext,
+                      file_id: currentFile.id
+                    });
                   }}>
                   <img src={isLightMode ? InsertDocsLightIcon : InsertDocsDarkIcon} alt="docs" />
                   <span>{t(`Nova.Result.InsertDoc`)}</span>

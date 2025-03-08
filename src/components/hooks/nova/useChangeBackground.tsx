@@ -12,7 +12,7 @@ import {
   setPageResult,
   setPageStatus
 } from '../../../store/slices/nova/pageStatusSlice';
-import { setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
+import { getCurrentFile, setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { calLeftCredit } from '../../../util/common';
 import { createFormDataFromFiles, fileToBase64 } from '../../../util/files';
@@ -21,7 +21,8 @@ import useErrorHandle from '../useErrorHandle';
 export const useChangeBackground = () => {
   const errorHandle = useErrorHandle();
   const dispatch = useAppDispatch();
-  const currentFile = useAppSelector(selectPageData(NOVA_TAB_TYPE.changeBG));
+  const curPageFile = useAppSelector(selectPageData(NOVA_TAB_TYPE.changeBG));
+  const currentFile = useAppSelector(getCurrentFile);
   const status = useAppSelector(selectPageStatus(NOVA_TAB_TYPE.changeBG));
 
   const resetPageState = () => {
@@ -52,11 +53,11 @@ export const useChangeBackground = () => {
   };
 
   const goPromptPage = async () => {
-    if (!currentFile || status === 'progress') return;
+    if (!curPageFile || status === 'progress') return;
 
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeBG, status: 'progress' }));
     try {
-      fileToBase64(currentFile)
+      fileToBase64(curPageFile)
         .then((data) => {
           dispatch(setPageResult({ tab: NOVA_TAB_TYPE.changeBG, result: data }));
         })
@@ -70,16 +71,18 @@ export const useChangeBackground = () => {
   };
 
   const handleChangeBackground = async (prompt: string) => {
-    if (!currentFile) return;
+    if (!curPageFile) return;
 
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeBG, status: 'loading' }));
     try {
-      const formData = await createFormDataFromFiles([currentFile]);
+      const formData = await createFormDataFromFiles([curPageFile]);
       formData.append('prompt', prompt);
       const { res, logger } = await apiWrapper().request(NOVA_CHANGE_BACKGROUND, {
         body: formData,
         method: 'POST'
       });
+      const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
+
       const response = await res.json();
       if (response.success) {
         const image = response.data.image[0];
@@ -101,9 +104,13 @@ export const useChangeBackground = () => {
           el: log_info.name,
           gpt_ver: log_info.detail
         });
-        track('click_nova_image', { image_name: 'NOVA_REPLACE_BG_CLIPDROP' });
+        track('click_nova_image', {
+          image_name: 'NOVA_REPLACE_BG_CLIPDROP',
+          file_id: currentFile.id,
+          document_format: currentFile.ext,
+          credit: deductionCredit
+        });
       } else {
-        const { leftCredit } = calLeftCredit(res.headers);
         handleChangeBGError(response.error.code, Number(leftCredit), prompt);
       }
     } catch (err) {

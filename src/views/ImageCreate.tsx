@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 import styled, { FlattenSimpleInterpolation } from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 
+import { track } from '@amplitude/analytics-browser';
+
 import { apiWrapper } from '../api/apiWrapper';
 import { TEXT_TO_IMAGE_API } from '../api/constant';
 import { calcToken, parseGptVer } from '../api/usePostSplunkLog';
@@ -24,6 +26,7 @@ import {
   updateT2ICurListId,
   VersionType
 } from '../store/slices/txt2imgHistory';
+import { getCurrentFile } from '../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import { calLeftCredit } from '../util/common';
 
@@ -61,6 +64,7 @@ export const RowContainer = styled.div<{
 const ImageCreate = ({ contents }: { contents: string }) => {
   const { creating } = useAppSelector(selectTabSlice);
   const dispatch = useAppDispatch();
+  const currentFile = useAppSelector(getCurrentFile);
   const { currentListId, currentItemIdx, history } = useAppSelector(selectT2IHistory);
   const errorHandle = useErrorHandle();
 
@@ -75,19 +79,20 @@ const ImageCreate = ({ contents }: { contents: string }) => {
 
   const createAiImage = useCallback(
     async (option: T2IOptionType) => {
+      const apiBody: {
+        prompt: string;
+        imgSize: string;
+        stylePreset?: string;
+        type: VersionType;
+      } = {
+        prompt: option.input,
+        imgSize: option.ratio,
+        type: option.type
+      };
+      let usedCredit: string | null = '';
       try {
         const assistantId = uuidv4();
         dispatch(setCreating('CreateImage'));
-        const apiBody: {
-          prompt: string;
-          imgSize: string;
-          stylePreset?: string;
-          type: VersionType;
-        } = {
-          prompt: option.input,
-          imgSize: option.ratio,
-          type: option.type
-        };
         if (option.style !== 'none') apiBody['stylePreset'] = option.style;
 
         const { res, logger } = await apiWrapper().request(TEXT_TO_IMAGE_API, {
@@ -108,6 +113,7 @@ const ImageCreate = ({ contents }: { contents: string }) => {
         });
 
         const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
+        usedCredit = deductionCredit;
         dispatch(
           activeToast({
             type: 'info',
@@ -140,6 +146,13 @@ const ImageCreate = ({ contents }: { contents: string }) => {
         errorHandle(error);
       } finally {
         dispatch(setCreating('none'));
+
+        track('text_to_image', {
+          document_format: currentFile.ext,
+          file_id: currentFile.id,
+          model_type: parseGptVer(apiBody.type),
+          credit: usedCredit
+        });
       }
     },
     [dispatch, errorHandle, t]

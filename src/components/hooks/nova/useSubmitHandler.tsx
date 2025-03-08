@@ -28,6 +28,7 @@ import {
   NOVA_GET_CREDIT_USE_COUNT,
   PO_DRIVE_DOC_OPEN_STATUS
 } from '../../../api/constant';
+import { parseGptVer } from '../../../api/usePostSplunkLog';
 import { FileUploadState } from '../../../constants/fileTypes';
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import {
@@ -37,11 +38,12 @@ import {
 } from '../../../constants/serviceType';
 import { appStateSelector, setIsExternal } from '../../../store/slices/appState';
 import {
+  selectAllServiceCredits,
   selectPageCreditReceived,
   setPageServiceUsage,
   setPageStatus
 } from '../../../store/slices/nova/pageStatusSlice';
-import { DriveFileInfo } from '../../../store/slices/uploadFiles';
+import { DriveFileInfo, getCurrentFile } from '../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
 import Bridge from '../../../util/bridge';
 import { convertFiles, downloadFiles, fileToBase64, uploadFiles } from '../../../util/files';
@@ -62,7 +64,9 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
   const dispatch = useAppDispatch();
   const novaHistory = useAppSelector(novaHistorySelector);
   const { novaExpireTime } = useAppSelector(appStateSelector);
+  const currentFile = useAppSelector(getCurrentFile);
   const chatMode = useAppSelector(novaChatModeSelector);
+  const serviceCredits = useAppSelector(selectAllServiceCredits);
   const { getReferences } = useGetChatReferences();
   const errorHandle = useErrorHandle();
   const { t } = useTranslation();
@@ -343,6 +347,12 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
                 file_type: type
               });
             }
+            track('nova_chating', {
+              document_format: currentFile.ext,
+              file_id: currentFile.id,
+              model_type: chatMode,
+              credit: serviceCredits[chatMode]
+            });
           }
           track('click_nova_chating', { is_document: files.length > 0 });
         } catch (err) {

@@ -12,6 +12,9 @@ import {
 } from '../components/chat/RecommendBox/FormRec';
 import Header from '../components/layout/Header';
 import { lang, LANG_KO_KR } from '../locale';
+import { getCurrentFile } from '../store/slices/uploadFiles';
+import store, { useAppSelector } from '../store/store';
+import Bridge from '../util/bridge';
 import AIWriteTab from '../views/AIWriteTab';
 
 const Wrapper = styled.div`
@@ -39,6 +42,7 @@ const initWriteOptions: WriteOptions = {
 export default function Tools() {
   const { t } = useTranslation();
   const location = useLocation();
+  const currentFile = useAppSelector(getCurrentFile);
 
   const [writeOptions, setWriteOptions] = useState<WriteOptions>(initWriteOptions);
 
@@ -47,6 +51,12 @@ export default function Tools() {
       setWriteOptions({ ...writeOptions, input: location.state?.body });
     }
   }, [location.state?.body]);
+
+  useEffect(() => {
+    if (currentFile.type === 'unknown') {
+      Bridge.callBridgeApi('analyzeCurFile');
+    }
+  }, []);
 
   return (
     <Wrapper>

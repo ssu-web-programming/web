@@ -2,7 +2,12 @@ import { apiWrapper } from 'api/apiWrapper';
 import { NOVA_SPEECH_DOWNLOAD, NOVA_SPEECH_RECOGNIZE } from 'api/constant';
 import { LangOptionValues } from 'pages/Nova/VoiceDictation/provider/voice-dictation-provider';
 
+import { track } from '@amplitude/analytics-browser';
+
 import { getServiceLoggingInfo, SERVICE_TYPE } from '../../constants/serviceType';
+import { CurrentFileInfo, getCurrentFile } from '../../store/slices/uploadFiles';
+import { useAppSelector } from '../../store/store';
+import { calLeftCredit } from '../../util/common';
 
 interface PostSpeechRecognize {
   file: File;
@@ -42,7 +47,7 @@ const voiceDictationHttp = {
       gpt_ver: log_info.detail
     });
 
-    return response;
+    return { result: response, headers: res.headers };
   },
   postVoiceDownload: async ({ file, fileType, requestId }: PostVoiceDownload) => {
     const formData = new FormData();

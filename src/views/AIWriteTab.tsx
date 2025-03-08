@@ -5,6 +5,8 @@ import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 
+import { track } from '@amplitude/analytics-browser';
+
 import { apiWrapper, streaming } from '../api/apiWrapper';
 import { AI_WRITE_RESPONSE_STREAM_API } from '../api/constant';
 import { calcToken, parseGptVer } from '../api/usePostSplunkLog';
@@ -15,6 +17,7 @@ import { useShowCreditToast } from '../components/hooks/useShowCreditToast';
 import { StreamPreprocessing } from '../store/slices/chatHistorySlice';
 import { setCreating } from '../store/slices/tabSlice';
 import { activeToast } from '../store/slices/toastSlice';
+import { getCurrentFile } from '../store/slices/uploadFiles';
 import {
   addWriteHistory,
   removeWriteHistory,
@@ -42,6 +45,7 @@ interface WriteTabProps {
 const AIWriteTab = (props: WriteTabProps) => {
   const { options: selectedOptions, setOptions: setSelectedOptions } = props;
   const { t } = useTranslation();
+  const currentFile = useAppSelector(getCurrentFile);
 
   const requestor = useRef<any>();
   const errorHandle = useErrorHandle();
@@ -55,6 +59,7 @@ const AIWriteTab = (props: WriteTabProps) => {
     let input = '';
     let splunk = undefined;
     let version: EngineVersion = 'gpt3.5';
+    let usedCredit: string | null = '';
 
     const assistantId = uuidv4();
 
@@ -107,6 +112,7 @@ const AIWriteTab = (props: WriteTabProps) => {
 
       const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
       showCreditToast(deductionCredit ?? '', leftCredit ?? '');
+      usedCredit = deductionCredit;
 
       await streaming(res, (contents) => {
         if (preProc) {
@@ -140,11 +146,11 @@ const AIWriteTab = (props: WriteTabProps) => {
     } finally {
       dispatch(setCreating('none'));
 
+      const gpt_ver = parseGptVer(version);
       if (splunk) {
         try {
           const input_token = calcToken(input);
           const output_token = calcToken(resultText);
-          const gpt_ver = parseGptVer(version);
           splunk({
             dp: 'ai.write',
             el: 'create_text',
@@ -156,6 +162,12 @@ const AIWriteTab = (props: WriteTabProps) => {
           /* empty */
         }
       }
+      track('ai_write', {
+        document_format: currentFile.ext,
+        file_id: currentFile.id,
+        model_type: gpt_ver,
+        credit: usedCredit
+      });
     }
   };
 

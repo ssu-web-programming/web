@@ -42,6 +42,8 @@ import { css } from 'styled-components';
 import Bridge, { ClientType, getPlatform } from 'util/bridge';
 import { getFileExtension, sliceFileName } from 'util/common';
 
+import { track } from '@amplitude/analytics-browser';
+
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import {
   findTabByService,
@@ -58,7 +60,7 @@ import {
   selectPageService
 } from '../../../store/slices/nova/pageStatusSlice';
 import { themeInfoSelector } from '../../../store/slices/theme';
-import { setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
+import { getCurrentFile, setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
 import { blobToFile } from '../../../util/files';
 import CheckBox from '../../checkbox';
 import useCopyText from '../../hooks/copyText';
@@ -108,6 +110,7 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
   const { insertDocsHandler } = useInsertDocsHandler();
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const { selectedNovaTab, creating } = useAppSelector(selectTabSlice);
+  const currentFile = useAppSelector(getCurrentFile);
   const isCreditRecieved = useAppSelector(selectPageCreditReceived(selectedNovaTab));
   const service = useAppSelector(selectPageService(selectedNovaTab));
   const selectedItems = useAppSelector(selectedItemsSelector);
@@ -163,6 +166,10 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
         if (isShowModal) return;
 
         onCopy(history.output);
+        track('copy_nova_chating', {
+          file_id: currentFile.id,
+          document_format: currentFile.ext
+        });
       }
     },
     {
@@ -174,6 +181,10 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
         if (isShowModal) return;
 
         insertDocsHandler(history);
+        track('insert_nova_chating', {
+          file_id: currentFile.id,
+          document_format: currentFile.ext
+        });
       }
     },
     {
@@ -186,6 +197,10 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
 
         dispatch(selectAllItems());
         dispatch(setIsShareMode(true));
+        track('share_nova_chating', {
+          file_id: currentFile.id,
+          document_format: currentFile.ext
+        });
       }
     }
   ];
