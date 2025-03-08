@@ -47,13 +47,18 @@ export default function AvatarCard({
     );
   };
 
+  if (!result?.info?.selectedAvatar) {
+    return null;
+  }
+
+  const selectedAvatar = result.info.selectedAvatar;
   return (
-    <S.AvatarCard isCircle={result?.info.selectedAvatar?.avatar_style === 'circle'}>
+    <S.AvatarCard isCircle={selectedAvatar?.avatar_style === 'circle'}>
       {!isShowOnlyCard && !isHideColorPicker && (
         <ArrowTooltips
           message={t('Nova.aiVideo.tooltip.colorPicker')}
           autoClose={true}
-          isReady={status === 'avatar' && result?.info.selectedAvatar.avatar.avatar_id != ''}
+          isReady={status === 'avatar' && selectedAvatar.avatar.avatar_id != ''}
           cssExt={css`
             position: absolute;
             top: 12px;
@@ -61,29 +66,29 @@ export default function AvatarCard({
           `}>
           <ColorPicker
             title={t('Nova.aiVideo.ColorPicker.bgColor')}
-            color={result?.info.selectedAvatar?.background_color ?? ''}
+            color={selectedAvatar?.background_color ?? ''}
             setColor={(color: string) => selectAvatarBackground(color)}
           />
         </ArrowTooltips>
       )}
       <S.PreviewWrap
-        isCircle={result?.info.selectedAvatar?.avatar_style === 'circle'}
-        bgColor={result?.info.selectedAvatar?.background_color ?? ''}>
+        isCircle={selectedAvatar?.avatar_style === 'circle'}
+        bgColor={selectedAvatar?.background_color ?? ''}>
         <img
           src={
-            result?.info.selectedAvatar?.avatar.avatar_id != ''
-              ? result?.info.selectedAvatar?.avatar.preview_image_url
-              : result?.info.selectedAvatar?.avatar.talking_photo_url
+            selectedAvatar?.avatar.avatar_id != ''
+              ? selectedAvatar?.avatar.preview_image_url
+              : selectedAvatar?.avatar.talking_photo_url
           }
           alt="preview_img"
         />
       </S.PreviewWrap>
       {!isShowOnlyCard && (
-        <S.AvatarInfo isCircle={result?.info.selectedAvatar?.avatar_style === 'circle'}>
-          {result?.info.selectedAvatar?.voice.name ? (
+        <S.AvatarInfo isCircle={selectedAvatar?.avatar_style === 'circle'}>
+          {selectedAvatar?.voice.name ? (
             <>
-              <span className="name">{result?.info.selectedAvatar?.voice.name}</span>
-              <span className="etc">{`${result?.info.selectedAvatar?.voice.language} | ${result?.info.selectedAvatar?.voice.gender}`}</span>
+              <span className="name">{selectedAvatar?.voice.name}</span>
+              <span className="etc">{`${selectedAvatar?.voice.language} | ${selectedAvatar?.voice.gender}`}</span>
             </>
           ) : (
             <span className="name">{'-'}</span>

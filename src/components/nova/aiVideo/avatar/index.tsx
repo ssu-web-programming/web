@@ -14,7 +14,6 @@ import CircleSelectedDarkIcon from '../../../../img/dark/ico_circle_selected.svg
 import SqureDarkIcon from '../../../../img/dark/ico_square.svg';
 import SqureSelectedDarkIcon from '../../../../img/dark/ico_squre_selected.svg';
 import HeyzenLogoDarkIcon from '../../../../img/dark/nova/logo/ico_heygen_name_logo.svg';
-import PlusDocDarkIcon from '../../../../img/dark/upload_img_plus_new.svg';
 import ArrowRightLightIcon from '../../../../img/light/ico_arrow_right.svg';
 import CircleLightIcon from '../../../../img/light/ico_circle.svg';
 import CircleSelectedLightIcon from '../../../../img/light/ico_circle_selected.svg';
@@ -22,7 +21,6 @@ import CreditColorIcon from '../../../../img/light/ico_credit_color.svg';
 import SqureLightIcon from '../../../../img/light/ico_square.svg';
 import SqureSelectedLightIcon from '../../../../img/light/ico_square_selected.svg';
 import HeyzenLogoLightIcon from '../../../../img/light/nova/logo/ico_heygen_name_logo.svg';
-import PlusDocLightIcon from '../../../../img/light/upload_img_plus_new.svg';
 import {
   resetPageData,
   selectPageData,
@@ -35,12 +33,10 @@ import { setLocalFiles } from '../../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../../store/store';
 import Button from '../../../buttons/Button';
 import useErrorHandle from '../../../hooks/useErrorHandle';
-import ImageUploader from '../../ImageUploader';
 import AvatarCard from '../component/AvatarCard';
 import SelectAvatar from '../component/SelectAvatar';
 
 import * as S from './style';
-import { LogoWrap } from './style';
 
 export default function Avatar() {
   const dispatch = useAppDispatch();
