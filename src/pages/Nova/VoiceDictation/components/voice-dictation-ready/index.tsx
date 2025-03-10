@@ -106,7 +106,7 @@ export default function VoiceDictationReady() {
         file_id: currentFile.id,
         document_format: currentFile.ext,
         credit: deductionCredit,
-        dictation_type: !localFiles[0] ? 'record' : 'file',
+        dictation_type: voiceFile ? 'record' : 'file',
         function_result: true
       });
 
@@ -135,7 +135,7 @@ export default function VoiceDictationReady() {
       track('nova_dictation', {
         file_id: currentFile.id,
         document_format: currentFile.ext,
-        dictation_type: !localFiles[0] ? 'record' : 'file',
+        dictation_type: voiceFile ? 'record' : 'file',
         function_result: false
       });
     }

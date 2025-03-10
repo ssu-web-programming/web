@@ -361,7 +361,7 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
               is_document: type != '',
               document_format: currentFile.ext,
               file_id: currentFile.id,
-              model_type: chatMode,
+              model_type: chatType ?? chatMode,
               chating_type: type == '' ? 'default' : type,
               credit:
                 type === ''

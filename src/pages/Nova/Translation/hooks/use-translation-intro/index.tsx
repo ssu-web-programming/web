@@ -88,7 +88,7 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
         file_id: currentFile.id,
         document_format: currentFile.ext,
         credit: deductionCredit,
-        translate_type: 'text',
+        translate_type: 'file',
         function_result: true
       });
 
@@ -124,7 +124,7 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
       track('nova_translate', {
         file_id: currentFile.id,
         document_format: currentFile.ext,
-        translate_type: 'text',
+        translate_type: 'file',
         function_result: false
       });
     }
