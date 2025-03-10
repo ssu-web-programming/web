@@ -130,6 +130,12 @@ export default function VoiceDictationReady() {
         ...prev,
         componentType: 'VOICE_READY'
       }));
+
+      track('nova_dictation', {
+        file_id: currentFile.id,
+        document_format: currentFile.ext,
+        dictation_type: !localFiles[0] ? 'record' : 'file'
+      });
     }
   };
 

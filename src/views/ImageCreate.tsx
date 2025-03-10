@@ -144,6 +144,13 @@ const ImageCreate = ({ contents }: { contents: string }) => {
         dispatch(updateT2ICurListId(null));
         dispatch(updateT2ICurItemIndex(null));
         errorHandle(error);
+
+        track('text_to_image', {
+          document_format: currentFile.ext,
+          file_id: currentFile.id,
+          model_type: parseGptVer(apiBody.type),
+          function_result: false
+        });
       } finally {
         dispatch(setCreating('none'));
 
@@ -151,7 +158,8 @@ const ImageCreate = ({ contents }: { contents: string }) => {
           document_format: currentFile.ext,
           file_id: currentFile.id,
           model_type: parseGptVer(apiBody.type),
-          credit: usedCredit
+          credit: usedCredit,
+          function_result: true
         });
       }
     },

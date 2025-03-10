@@ -119,6 +119,12 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
         ...prev,
         componentType: 'INTRO'
       }));
+
+      track('nova_translate', {
+        file_id: currentFile.id,
+        document_format: currentFile.ext,
+        translate_type: 'text'
+      });
     }
   });
 
@@ -184,6 +190,12 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
         componentType: 'INTRO'
       }));
       errorHandle(e);
+
+      track('nova_translate', {
+        file_id: currentFile.id,
+        document_format: currentFile.ext,
+        translate_type: 'text'
+      });
     }
   };
 

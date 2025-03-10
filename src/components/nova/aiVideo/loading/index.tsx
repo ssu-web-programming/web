@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { track } from '@amplitude/analytics-browser';
+
 import { apiWrapper } from '../../../../api/apiWrapper';
 import { NOVA_VIDEO_GET_INFO, NOVA_VIDEO_MAKE_VIDEOS } from '../../../../api/constant';
 import { EVideoStatus, InitVideos } from '../../../../constants/heygenTypes';
@@ -12,7 +14,9 @@ import {
   setPageStatus,
   updatePageResult
 } from '../../../../store/slices/nova/pageStatusSlice';
+import { getCurrentFile } from '../../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../../store/store';
+import { calLeftCredit } from '../../../../util/common';
 import useErrorHandle from '../../../hooks/useErrorHandle';
 import AvatarCard from '../component/AvatarCard';
 import Progress from '../component/Progress';
@@ -26,6 +30,7 @@ export default function Loading() {
   const { t } = useTranslation();
   const errorHandle = useErrorHandle();
   const result = useAppSelector(selectPageResult(NOVA_TAB_TYPE.aiVideo));
+  const currentFile = useAppSelector(getCurrentFile);
   const [progress, setProgress] = useState(0);
   const pollingRef = useRef<NodeJS.Timeout | null>(null);
   const timerRef = useRef<{ interval: NodeJS.Timeout | null; startTime: number | null }>({
@@ -159,12 +164,24 @@ export default function Loading() {
           el: log_info.name,
           gpt_ver: log_info.detail
         });
+
+        const { deductionCredit } = calLeftCredit(res.headers);
+        track('nova_create_video', {
+          file_id: currentFile.id,
+          document_format: currentFile.ext,
+          credit: deductionCredit
+        });
       }
     } catch (error) {
       errorHandle(error);
       stopTimer();
       dispatch(resetPageData(NOVA_TAB_TYPE.aiVideo));
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'home' }));
+
+      track('nova_create_video', {
+        file_id: currentFile.id,
+        document_format: currentFile.ext
+      });
     }
   };
 

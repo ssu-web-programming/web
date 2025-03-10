@@ -72,14 +72,21 @@ export const useRemakeImage = () => {
           el: log_info.name,
           gpt_ver: log_info.detail
         });
-        track('click_nova_image', {
+        track('nova_image', {
           image_name: 'NOVA_REIMAGE_CLIPDROP',
           file_id: currentFile.id,
           document_format: currentFile.ext,
-          credit: deductionCredit
+          credit: deductionCredit,
+          function_result: true
         });
       } else {
         handleRemakeImgError(response.error.code, Number(leftCredit));
+        track('nova_image', {
+          image_name: 'NOVA_REIMAGE_CLIPDROP',
+          file_id: currentFile.id,
+          document_format: currentFile.ext,
+          function_result: false
+        });
       }
     } catch (err) {
       resetPageState();

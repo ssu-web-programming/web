@@ -106,14 +106,21 @@ export const useConvert2DTo3D = () => {
           el: log_info.name,
           gpt_ver: log_info.detail
         });
-        track('click_nova_image', {
+        track('nova_image', {
           image_name: 'Immersity',
           file_id: currentFile.id,
           document_format: currentFile.ext,
-          credit: deductionCredit
+          credit: deductionCredit,
+          function_result: true
         });
       } else {
         handleExpandError(response.error.code, Number(leftCredit), pattern, animationType);
+        track('nova_image', {
+          image_name: 'Immersity',
+          file_id: currentFile.id,
+          document_format: currentFile.ext,
+          function_result: false
+        });
       }
     } catch (err) {
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.convert2DTo3D, status: 'home' }));

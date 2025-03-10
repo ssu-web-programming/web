@@ -324,6 +324,14 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
         }
 
         dispatch(setUsingAI(false));
+
+        track('nova_chating', {
+          is_document: type != '',
+          document_format: currentFile.ext,
+          file_id: currentFile.id,
+          model_type: chatMode,
+          chating_type: type == '' ? 'default' : type
+        });
       } finally {
         dispatch(setCreating('none'));
         setFileUploadState({ type: '', state: 'ready', progress: 0 });
@@ -347,14 +355,21 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
                 file_type: type
               });
             }
+
             track('nova_chating', {
+              is_document: type != '',
               document_format: currentFile.ext,
               file_id: currentFile.id,
               model_type: chatMode,
-              credit: serviceCredits[chatMode]
+              chating_type: type == '' ? 'default' : type,
+              credit:
+                type === ''
+                  ? serviceCredits[chatMode]
+                  : type == 'image'
+                    ? serviceCredits[SERVICE_TYPE.NOVA_ASK_IMG_GPT4O]
+                    : serviceCredits[SERVICE_TYPE.NOVA_ASK_DOC_GPT4O]
             });
           }
-          track('click_nova_chating', { is_document: files.length > 0 });
         } catch (err) {
           /*empty*/
         }

@@ -79,6 +79,7 @@ const AIWriteTab = (props: WriteTabProps) => {
       version = selectedOptions.version.version;
     }
 
+    const gpt_ver = parseGptVer(version);
     dispatch(
       addWriteHistory({
         id: assistantId,
@@ -143,10 +144,15 @@ const AIWriteTab = (props: WriteTabProps) => {
           setSelectedOptions((prev) => ({ ...prev, input: input }));
         }
       }
+
+      track('ai_write', {
+        document_format: currentFile.ext,
+        file_id: currentFile.id,
+        model_type: gpt_ver,
+        function_result: true
+      });
     } finally {
       dispatch(setCreating('none'));
-
-      const gpt_ver = parseGptVer(version);
       if (splunk) {
         try {
           const input_token = calcToken(input);
@@ -166,7 +172,8 @@ const AIWriteTab = (props: WriteTabProps) => {
         document_format: currentFile.ext,
         file_id: currentFile.id,
         model_type: gpt_ver,
-        credit: usedCredit
+        credit: usedCredit,
+        function_result: true
       });
     }
   };
