@@ -97,7 +97,8 @@ const Confirm = () => {
     onCancel,
     direction = 'row',
     neverShowAgain = false,
-    cookieName
+    cookieName,
+    expiredDuration
   } = useAppSelector(selectConfirm);
   const { t } = useTranslation();
   const headerRef = useRef<HTMLDivElement>(null);
@@ -123,7 +124,7 @@ const Confirm = () => {
 
   const handleOk = () => {
     if (isChecked) {
-      setCookie(cookieName || 'creditGuide', String(isChecked));
+      setCookie(cookieName || 'creditGuide', String(isChecked), expiredDuration);
     }
     onOk?.callback?.();
   };
@@ -218,7 +219,8 @@ export function useConfirm() {
     onCancel,
     direction = 'row',
     neverShowAgain = false,
-    cookieName
+    cookieName,
+    expiredDuration
   }: ConfirmType): Promise<boolean> {
     return new Promise((resolve) => {
       const handleOk = () => {
@@ -247,7 +249,8 @@ export function useConfirm() {
             text: onCancel.text || t('Cancel'),
             callback: handleCancel
           },
-          cookieName
+          cookieName,
+          expiredDuration
         })
       );
     });

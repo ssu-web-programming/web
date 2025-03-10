@@ -56,7 +56,8 @@ export default function AudioFileUploader({ guideMsg }: ImageUploaderProps) {
           }
         },
         neverShowAgain: true,
-        cookieName: 'iosRecordDontWatchAgain'
+        cookieName: 'iosRecordDontWatchAgain',
+        expiredDuration: 52600
       });
     } else {
       // iOS가 아니거나 이미 '다시 보지 않기'를 선택한 경우 바로 업로드
