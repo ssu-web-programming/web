@@ -169,7 +169,7 @@ export const convertWebmToWavFile = async (webmBlob: Blob): Promise<File> => {
     const arrayBuffer = await webmBlob.arrayBuffer();
     const audioContext = new AudioContext();
     const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
-    const filename = getCurrentFormattedTime();
+    const filename = `${getCurrentFormattedTime()}.mp3`;
 
     // AudioBuffer를 WAV로 변환
     const wavBuffer = audioBufferToWav(audioBuffer);
