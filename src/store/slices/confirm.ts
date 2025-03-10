@@ -10,6 +10,7 @@ export interface ConfirmType {
   direction?: 'row' | 'column';
   neverShowAgain?: boolean;
   cookieName?: string;
+  expiredDuration?: number;
 }
 
 const initialState: ConfirmType = {
@@ -25,7 +26,8 @@ const initialState: ConfirmType = {
   },
   direction: 'column',
   neverShowAgain: false,
-  cookieName: ''
+  cookieName: '',
+  expiredDuration: 1
 };
 
 const confirmSlice = createSlice({
