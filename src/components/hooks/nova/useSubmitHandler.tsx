@@ -330,7 +330,8 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
           document_format: currentFile.ext,
           file_id: currentFile.id,
           model_type: chatMode,
-          chating_type: type == '' ? 'default' : type
+          chating_type: type == '' ? 'default' : type,
+          function_result: true
         });
       } finally {
         dispatch(setCreating('none'));
@@ -367,7 +368,8 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
                   ? serviceCredits[chatMode]
                   : type == 'image'
                     ? serviceCredits[SERVICE_TYPE.NOVA_ASK_IMG_GPT4O]
-                    : serviceCredits[SERVICE_TYPE.NOVA_ASK_DOC_GPT4O]
+                    : serviceCredits[SERVICE_TYPE.NOVA_ASK_DOC_GPT4O],
+              function_result: true
             });
           }
         } catch (err) {
