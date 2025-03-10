@@ -365,7 +365,7 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
               chating_type: type == '' ? 'default' : type,
               credit:
                 type === ''
-                  ? serviceCredits[chatMode]
+                  ? serviceCredits[chatType ?? chatMode]
                   : type == 'image'
                     ? serviceCredits[SERVICE_TYPE.NOVA_ASK_IMG_GPT4O]
                     : serviceCredits[SERVICE_TYPE.NOVA_ASK_DOC_GPT4O],
