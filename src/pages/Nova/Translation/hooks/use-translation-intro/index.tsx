@@ -88,7 +88,8 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
         file_id: currentFile.id,
         document_format: currentFile.ext,
         credit: deductionCredit,
-        translate_type: 'text'
+        translate_type: 'text',
+        function_result: true
       });
 
       const { downloadUrl } = result;
@@ -123,7 +124,8 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
       track('nova_translate', {
         file_id: currentFile.id,
         document_format: currentFile.ext,
-        translate_type: 'text'
+        translate_type: 'text',
+        function_result: false
       });
     }
   });

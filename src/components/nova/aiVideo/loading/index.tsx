@@ -169,7 +169,8 @@ export default function Loading() {
         track('nova_create_video', {
           file_id: currentFile.id,
           document_format: currentFile.ext,
-          credit: deductionCredit
+          credit: deductionCredit,
+          function_result: true
         });
       }
     } catch (error) {
@@ -180,7 +181,8 @@ export default function Loading() {
 
       track('nova_create_video', {
         file_id: currentFile.id,
-        document_format: currentFile.ext
+        document_format: currentFile.ext,
+        function_result: false
       });
     }
   };
