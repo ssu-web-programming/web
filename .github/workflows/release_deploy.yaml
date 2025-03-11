@@ -1,4 +1,4 @@
-name: React App Build And Deploy
+name: Release
 
 # 워크플로우 트리거 설정
 on:
