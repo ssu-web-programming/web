@@ -11,7 +11,7 @@ import {
   setPageResult,
   setPageStatus
 } from '../../../store/slices/nova/pageStatusSlice';
-import { setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
+import { getCurrentFile, setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { calLeftCredit } from '../../../util/common';
 import { createFormDataFromFiles } from '../../../util/files';
@@ -20,7 +20,8 @@ import useErrorHandle from '../useErrorHandle';
 export const useRemakeImage = () => {
   const errorHandle = useErrorHandle();
   const dispatch = useAppDispatch();
-  const currentFile = useAppSelector(selectPageData(NOVA_TAB_TYPE.remakeImg));
+  const curPageFile = useAppSelector(selectPageData(NOVA_TAB_TYPE.removeBG));
+  const currentFile = useAppSelector(getCurrentFile);
 
   const resetPageState = () => {
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.remakeImg, status: 'home' }));
@@ -49,15 +50,16 @@ export const useRemakeImage = () => {
   };
 
   const handleRemakeImage = async () => {
-    if (!currentFile) return;
+    if (!curPageFile) return;
 
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.remakeImg, status: 'loading' }));
     try {
-      const formData = await createFormDataFromFiles([currentFile]);
+      const formData = await createFormDataFromFiles([curPageFile]);
       const { res, logger } = await apiWrapper().request(NOVA_REMAKE_IMAGE, {
         body: formData,
         method: 'POST'
       });
+      const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
 
       const response = await res.json();
       if (response.success) {
@@ -70,10 +72,21 @@ export const useRemakeImage = () => {
           el: log_info.name,
           gpt_ver: log_info.detail
         });
-        track('click_nova_image', { image_name: 'NOVA_REIMAGE_CLIPDROP' });
+        track('nova_image', {
+          image_name: 'NOVA_REIMAGE_CLIPDROP',
+          file_id: currentFile.id,
+          document_format: currentFile.ext,
+          credit: deductionCredit,
+          function_result: true
+        });
       } else {
-        const { leftCredit } = calLeftCredit(res.headers);
         handleRemakeImgError(response.error.code, Number(leftCredit));
+        track('nova_image', {
+          image_name: 'NOVA_REIMAGE_CLIPDROP',
+          file_id: currentFile.id,
+          document_format: currentFile.ext,
+          function_result: false
+        });
       }
     } catch (err) {
       resetPageState();

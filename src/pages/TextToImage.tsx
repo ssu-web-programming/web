@@ -1,8 +1,12 @@
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router';
 import styled from 'styled-components';
 
 import Header from '../components/layout/Header';
+import { getCurrentFile } from '../store/slices/uploadFiles';
+import { useAppSelector } from '../store/store';
+import Bridge from '../util/bridge';
 import ImageCreate from '../views/ImageCreate';
 
 const Wrapper = styled.div`
@@ -24,6 +28,13 @@ const Body = styled.div`
 const TextToImage = () => {
   const location = useLocation();
   const { t } = useTranslation();
+  const currentFile = useAppSelector(getCurrentFile);
+
+  useEffect(() => {
+    if (currentFile.type === 'unknown') {
+      Bridge.callBridgeApi('analyzeCurFile');
+    }
+  }, []);
 
   return (
     <Wrapper>

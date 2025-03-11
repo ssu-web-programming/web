@@ -63,6 +63,7 @@ export default function ImageUploader({
   };
 
   const getSelectedFile = async () => {
+    // localFiles에 Audio 관련 파일이 있을 경우에는 handleFileProcessing 실행하지 않는다.
     if (AUDIO_SUPPORT_TYPE.find((el) => el.mimeType === localFiles[0]?.type)) {
       return null;
     }

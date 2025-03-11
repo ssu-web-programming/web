@@ -157,6 +157,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
             confirmTxt={
               isReadyStatus ? (t('Back') as string) : (t('Nova.Confirm.CloseAIVideo.Ok') as string)
             }
+            closeTxt={t('Cancel') as string}
           />
         </OverlayModal>
       );

@@ -7,7 +7,12 @@ import {
   PO_DRIVE_DOC_OPEN_STATUS
 } from 'api/constant';
 
+import { track } from '@amplitude/analytics-browser';
+
 import { getServiceLoggingInfo, SERVICE_TYPE } from '../../constants/serviceType';
+import { getCurrentFile } from '../../store/slices/uploadFiles';
+import { useAppSelector } from '../../store/store';
+import { calLeftCredit } from '../../util/common';
 
 interface PostTranslateText {
   text: string;
@@ -29,6 +34,7 @@ export interface CheckTranslateStatusResponse {
   status: string;
   secondsRemaining: number;
   downloadUrl: string;
+  _headers: Headers;
 }
 
 const translationHttp = {
@@ -94,7 +100,8 @@ const translationHttp = {
       throw response.error;
     }
 
-    return response.data;
+    const headers = res.headers;
+    return { ...response.data, _headers: headers };
   },
   postTranslateLatestLang: async () => {
     const { res } = await apiWrapper().request(NOVA_TRANSLATE_LATEST_LANG, {
@@ -124,7 +131,6 @@ const translationHttp = {
       throw response.error;
     }
 
-    console.log('response', response);
     return response;
   }
 };

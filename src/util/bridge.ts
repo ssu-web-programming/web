@@ -7,6 +7,7 @@ import { setFileState } from 'store/slices/nova/translation/download-slice';
 import { resetCurrentWrite } from 'store/slices/writeHistorySlice';
 import { v4 as uuidv4 } from 'uuid';
 
+import { track } from '@amplitude/analytics-browser';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { useConfirm } from '../components/Confirm';
@@ -373,6 +374,7 @@ export const useInitBridgeListener = () => {
         if (body && body !== '') {
           // movePage(body);
           thunkAPI.dispatch(resetCurrentWrite());
+          // track('ai_write', { document_format: 'document_format' });
         }
       } else if (cmd === `openTextToImg`) {
         if (body && body !== '') {
@@ -517,11 +519,6 @@ export const useInitBridgeListener = () => {
                 if (file) loadLocalFile([file]);
               };
 
-              console.log('image: ', body.image);
-              console.log('showCreditGuide: ', showCreditGuide);
-              console.log('isBlob: ', isBlob);
-              console.log('isBase64: ', isBase64);
-              console.log('getCookie: ', getCookie('creditGuide'));
               if (body.image && (isBlob || isBase64)) {
                 if (showCreditGuide && !getCookie('creditGuide')) {
                   await showConfirmModal({
