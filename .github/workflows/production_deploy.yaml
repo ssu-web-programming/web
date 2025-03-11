@@ -2,10 +2,21 @@ name: React App Build And Deploy
 
 # 워크플로우 트리거 설정
 on:
+  # 수동 트리거 기능 추가
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: '배포 환경 선택'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - production
+
+  # 기존 push 트리거도 유지 (선택사항)
   push:
-    # release 브랜치에 푸시될 때만 실행
     branches:
-      - release
+      - main
 
 jobs:
   # 작업 이름 정의
@@ -31,22 +42,22 @@ jobs:
       # 프로젝트 빌드 실행
       # CI false를 하지 않으면 warning의 경우에 에러를 던지기 때문에 필수!
       - name: Build
-        run: CI=false yarn run build:staging
+        run: CI=false yarn build:prod
 
       # AWS 인증 정보 설정
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          aws-access-key-id: ${{ secrets.RELEASE_AWS_S3_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.RELEASE_AWS_S3_PRIVATE_KEY }}
+          aws-access-key-id: ${{ secrets.AWS_S3_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_S3_PRIVATE_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
       # S3에 빌드 결과물 배포
       # dist 폴더 내용을 S3 버킷에 동기화, --delete 옵션으로 버킷에 있는 이전 파일 삭제
       - name: Deploy to S3
         run: |
-          aws s3 sync ./build s3://${{ secrets.RELEASE_AWS_BUCKET_NAME }} --delete
+          aws s3 sync ./build s3://${{ secrets.AWS_BUCKET_NAME }} --delete
 
       # CloudFront 캐시 무효화
       - name: Invalidate CloudFront Cache
-        run: aws cloudfront create-invalidation --distribution-id ${{ secrets.RELEASE_AWS_CLOUD_FRONT_KEY }} --paths "/*"
+        run: aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_CLOUD_FRONT_KEY }} --paths "/*"
