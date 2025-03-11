@@ -29,7 +29,6 @@ import ShareChat from './pages/Nova/ShareChat';
 import Offline from './pages/Offline';
 import TextToImage from './pages/TextToImage';
 import Tools from './pages/Tools';
-import { setPageStatus } from './store/slices/nova/pageStatusSlice';
 import { platformInfoSelector, setPlatformInfo } from './store/slices/platformInfo';
 import { setThemeInfo, themeInfoSelector, ThemeType } from './store/slices/theme';
 import { useAppDispatch, useAppSelector } from './store/store';
