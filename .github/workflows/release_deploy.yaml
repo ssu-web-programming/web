@@ -22,7 +22,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: '18'
 
       # 프로젝트 의존성 설치
       - name: Install dependencies
@@ -30,7 +30,7 @@ jobs:
 
       # 프로젝트 빌드 실행
       - name: Build
-        run: yarn build:staging
+        run: yarn build:staging --verbose
 
       # AWS 인증 정보 설정
       - name: Configure AWS credentials
