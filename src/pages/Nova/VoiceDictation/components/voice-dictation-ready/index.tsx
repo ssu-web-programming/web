@@ -10,10 +10,13 @@ import { ReactComponent as EditIcon } from 'img/light/nova/voiceDictation/edit.s
 import { useTranslation } from 'react-i18next';
 import { setError } from 'store/slices/errorSlice';
 import { themeInfoSelector } from 'store/slices/theme';
-import { getLocalFiles } from 'store/slices/uploadFiles';
+import { getCurrentFile, getLocalFiles } from 'store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import { formatCurrentTime } from 'util/getAudioDuration';
 
+import { track } from '@amplitude/analytics-browser';
+
+import { calLeftCredit } from '../../../../../util/common';
 import {
   LangOptionValues,
   useVoiceDictationContext,
@@ -40,6 +43,7 @@ export default function VoiceDictationReady() {
   const dispatch = useAppDispatch();
   const errorHandle = useErrorHandle();
   const { t } = useTranslation();
+  const currentFile = useAppSelector(getCurrentFile);
 
   const [isEditMode, setIsEditMode] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null); // input에 대한 ref 추가
@@ -79,7 +83,7 @@ export default function VoiceDictationReady() {
     triggerLoading();
 
     try {
-      const result = await voiceDictationHttp.postSpeechRecognize({
+      const { result, headers } = await voiceDictationHttp.postSpeechRecognize({
         file: localFiles[0] || voiceFile,
         lang: selectedLangOption
       });
@@ -96,6 +100,15 @@ export default function VoiceDictationReady() {
         });
         return;
       }
+
+      const { deductionCredit } = calLeftCredit(headers);
+      track('nova_dictation', {
+        file_id: currentFile.id,
+        document_format: currentFile.ext,
+        credit: deductionCredit,
+        dictation_type: voiceFile ? 'record' : 'file',
+        function_result: true
+      });
 
       await handleMoveToResult(result);
     } catch (error: any) {
@@ -118,6 +131,13 @@ export default function VoiceDictationReady() {
         ...prev,
         componentType: 'VOICE_READY'
       }));
+
+      track('nova_dictation', {
+        file_id: currentFile.id,
+        document_format: currentFile.ext,
+        dictation_type: voiceFile ? 'record' : 'file',
+        function_result: false
+      });
     }
   };
 

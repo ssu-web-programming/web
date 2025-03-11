@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { SERVICE_CATEGORY, SERVICE_GROUP_MAP } from '../../../constants/serviceType';
+import { SERVICE_CATEGORY, SERVICE_GROUP_MAP, SERVICE_TYPE } from '../../../constants/serviceType';
 import CreditDarkIcon from '../../../img/dark/ico_credit_gray.svg';
 import { ReactComponent as IconConvertDark } from '../../../img/dark/nova/tab/convert_Img.svg';
 import CreditLightIcon from '../../../img/light/ico_credit_gray.svg';

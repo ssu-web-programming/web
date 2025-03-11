@@ -47,7 +47,8 @@ export default function useInitApp() {
           data: { expiredTime } // seconds
         } = await res.json();
         if (success) {
-          dispatch(setNovaExpireTime(expiredTime * 1000));
+          const time = process.env.NODE_ENV == 'production' ? expiredTime * 1000 : 10000;
+          dispatch(setNovaExpireTime(time));
         }
       } catch (err) {
         /* empty */

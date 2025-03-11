@@ -89,7 +89,12 @@ export default function Nova() {
   const novaHistory = useAppSelector(novaHistorySelector);
 
   useEffect(() => {
-    if (expiredNOVA) {
+    if (
+      expiredNOVA &&
+      (selectedNovaTab === NOVA_TAB_TYPE.home ||
+        selectedNovaTab === NOVA_TAB_TYPE.aiChat ||
+        selectedNovaTab === NOVA_TAB_TYPE.perplexity)
+    ) {
       confirm({
         title: '',
         msg: t('Nova.Alert.ExpiredNOVA'),
