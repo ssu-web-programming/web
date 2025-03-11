@@ -52,8 +52,6 @@ function App() {
   const { resetVoiceInfo } = useVoiceDictationContext();
   const { platform } = useAppSelector(platformInfoSelector);
 
-  console.log('git-action trigger!');
-
   useEffect(() => {
     const detectTheme = () => {
       if (platform === ClientType.mac) {
