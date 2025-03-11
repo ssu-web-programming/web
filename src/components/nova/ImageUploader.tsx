@@ -2,7 +2,12 @@ import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { compressImage, isPixelLimitExceeded, SUPPORT_IMAGE_TYPE } from '../../constants/fileTypes';
+import {
+  AUDIO_SUPPORT_TYPE,
+  compressImage,
+  isPixelLimitExceeded,
+  SUPPORT_IMAGE_TYPE
+} from '../../constants/fileTypes';
 import { NOVA_TAB_TYPE } from '../../constants/novaTapTypes';
 import {
   selectPageData,
@@ -58,6 +63,10 @@ export default function ImageUploader({
   };
 
   const getSelectedFile = async () => {
+    if (AUDIO_SUPPORT_TYPE.find((el) => el.mimeType === localFiles[0]?.type)) {
+      return null;
+    }
+
     if (localFiles[0]) return localFiles[0];
     if (driveFiles[0]) {
       try {
