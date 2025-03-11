@@ -30,9 +30,7 @@ jobs:
 
       # 프로젝트 빌드 실행
       - name: Build
-        run: |
-          export NODE_OPTIONS="--max-old-space-size=4096"
-          yarn run build:staging
+        run: CI=false yarn run build:staging
 
       # AWS 인증 정보 설정
       - name: Configure AWS credentials
