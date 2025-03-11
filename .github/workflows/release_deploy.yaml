@@ -24,18 +24,13 @@ jobs:
         with:
           node-version: '20'
 
-      # Yarn 캐시 정리 및 의존성 클린 설치
-      - name: Clean Yarn cache and reinstall
-        run: |
-          echo "Cleaning Yarn cache and reinstalling dependencies"
-          rm -rf node_modules
-          rm -rf .yarn/cache
-          yarn cache clean --all
-          yarn install --force
+      # 프로젝트 의존성 설치
+      - name: Install dependencies
+        run: yarn install
 
       # 프로젝트 빌드 실행
       - name: Build
-        run: yarn build:staging --verbose
+        run: yarn run build:staging --verbose
 
       # AWS 인증 정보 설정
       - name: Configure AWS credentials
