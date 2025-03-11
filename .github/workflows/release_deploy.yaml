@@ -1,4 +1,4 @@
-name: Deploy React App Build And Deploy
+name: React App Build And Deploy
 
 # 워크플로우 트리거 설정
 on:
@@ -22,7 +22,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '20'
 
       # 프로젝트 의존성 설치
       - name: Install dependencies
