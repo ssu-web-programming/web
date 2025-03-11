@@ -1,4 +1,4 @@
-name: React App Build And Deploy
+name: Production
 
 # 워크플로우 트리거 설정
 on:
@@ -12,11 +12,6 @@ on:
         type: choice
         options:
           - production
-
-  # 기존 push 트리거도 유지 (선택사항)
-  push:
-    branches:
-      - main
 
 jobs:
   # 작업 이름 정의
