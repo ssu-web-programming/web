@@ -68,7 +68,7 @@ export const getAudioDurationViaAudioElement = (audioFile: File): Promise<number
     });
 
     // 오류 발생 시 실행
-    audio.addEventListener('error', (event) => {
+    audio.addEventListener('error', () => {
       URL.revokeObjectURL(objectUrl);
       reject(new Error('오디오 파일을 로드하는 중 오류가 발생했습니다.'));
     });
