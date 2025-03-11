@@ -26,11 +26,13 @@ jobs:
 
       # 프로젝트 의존성 설치
       - name: Install dependencies
-        run: yarn install
+        run: yarn install --frozen-lockfile
 
       # 프로젝트 빌드 실행
       - name: Build
-        run: yarn run build:staging --verbose
+        run: |
+          export NODE_OPTIONS="--max-old-space-size=4096"
+          yarn run build:staging
 
       # AWS 인증 정보 설정
       - name: Configure AWS credentials
