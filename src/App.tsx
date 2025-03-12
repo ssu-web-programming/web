@@ -53,7 +53,6 @@ function App() {
   const { platform } = useAppSelector(platformInfoSelector);
 
   useEffect(() => {
-    console.log('production 배포 확인용!');
     const detectTheme = () => {
       if (platform === ClientType.mac) {
         const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
