@@ -11,6 +11,7 @@ import { lang } from '../../../locale';
 import Bridge from '../../../util/bridge';
 
 import * as S from './style';
+import { Image } from './style';
 
 import 'swiper/css';
 import 'swiper/css/pagination';
@@ -19,18 +20,18 @@ import 'swiper/css/navigation';
 const bannerImages = [
   {
     image: {
+      ko: BannerKo2,
+      en: BannerEn2,
+      ja: BannerJa2
+    }
+  },
+  {
+    image: {
       ko: BannerKo1,
       en: BannerEn1,
       ja: BannerJa1
     },
     url: `https://vf-ca-cloud.polarisoffice.com/${lang}/ai`
-  },
-  {
-    image: {
-      ko: BannerKo2,
-      en: BannerEn2,
-      ja: BannerJa2
-    }
   }
 ];
 
@@ -53,7 +54,7 @@ const Banner = () => {
             className="swiper-slide"
             key={index}
             onClick={() => handleOpenPage(banner.url ?? '')}>
-            <img src={banner.image[lang] || BannerEn2} alt="banner" />
+            <S.Image src={banner.image[lang] || BannerEn2} alt="banner" />
           </SwiperSlide>
         ))}
       </Swiper>
