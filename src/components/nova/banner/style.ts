@@ -25,10 +25,9 @@ export const SwiperWrapper = styled.div`
     line-height: 11px;
     color: var(--white);
   }
+`;
 
-  .swiper-slide {
-    img {
-      width: 100%;
-    }
-  }
+export const Image = styled.img`
+  width: 100%;
+  cursor: pointer;
 `;
