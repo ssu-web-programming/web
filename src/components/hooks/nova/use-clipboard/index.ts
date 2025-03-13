@@ -15,6 +15,7 @@ interface PasteImage {
 interface Props {
   maxFileSize?: number;
   allowTypes?: string[];
+  allowExt?: string[];
 }
 
 const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
@@ -22,7 +23,8 @@ const ALLOWED_IMAGES = ['jpeg', 'jpg', 'png', 'gif'];
 
 export default function useClipboard({
   maxFileSize = 20 * 1024 * 1024,
-  allowTypes = ALLOWED_TYPES
+  allowTypes = ALLOWED_TYPES,
+  allowExt = ALLOWED_IMAGES
 }: Props = {}) {
   const confirm = useConfirm();
   const { t } = useTranslation();
@@ -32,6 +34,11 @@ export default function useClipboard({
   const [pastedImagesAsFileType, setPastedImagesAsFileType] = useState<File[]>([]);
   // preview를 보여주기 위한 image
   const [pastedImages, setPastedImages] = useState<PasteImage[]>([]);
+
+  const getFileExtension = (fileName: string): string => {
+    const ext = fileName.split('.').pop()?.toLowerCase();
+    return ext && ext !== fileName ? ext : '';
+  };
 
   // 이미지 유효성 검사
   const validateImage = async (file: File): Promise<boolean> => {
@@ -53,7 +60,7 @@ export default function useClipboard({
     }
 
     // 파일 타입 체크
-    if (!allowTypes.includes(file.type)) {
+    if (!ALLOWED_TYPES.includes(file.type) || !allowExt.includes(getFileExtension(file.name))) {
       await confirm({
         title: '',
         msg:
