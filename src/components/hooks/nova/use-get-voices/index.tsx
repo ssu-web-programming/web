@@ -39,7 +39,6 @@ export function useGetVoices() {
       );
 
       const { data } = await res.json();
-      console.log(data);
       if (data.voices.length > 0) {
         dispatch(
           updatePageResult({
