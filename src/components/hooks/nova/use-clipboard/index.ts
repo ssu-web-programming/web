@@ -119,17 +119,16 @@ export default function useClipboard({
         // 1. 클립보드 이벤트에서 직접 읽기
         if (e?.clipboardData?.files?.length > 0) {
           const files = Array.from(e.clipboardData.files);
-          const imageFiles = files.filter((file) => file.type.startsWith('image/'));
 
           // 모든 파일이 유효한지 먼저 확인
-          for (const file of imageFiles) {
+          for (const file of files) {
             if (!(await validateImage(file))) {
               return; // 하나라도 유효하지 않으면 전체 처리 중단
             }
           }
 
           // 모든 파일이 유효한 경우에만 처리 진행
-          for (const file of imageFiles) {
+          for (const file of files) {
             const fileName = file.name;
             const imageUrl = URL.createObjectURL(file);
 
