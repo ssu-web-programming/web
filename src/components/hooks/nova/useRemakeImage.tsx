@@ -20,7 +20,7 @@ import useErrorHandle from '../useErrorHandle';
 export const useRemakeImage = () => {
   const errorHandle = useErrorHandle();
   const dispatch = useAppDispatch();
-  const curPageFile = useAppSelector(selectPageData(NOVA_TAB_TYPE.removeBG));
+  const curPageFile = useAppSelector(selectPageData(NOVA_TAB_TYPE.remakeImg));
   const currentFile = useAppSelector(getCurrentFile);
 
   const resetPageState = () => {
@@ -50,6 +50,7 @@ export const useRemakeImage = () => {
   };
 
   const handleRemakeImage = async () => {
+    console.log('동작!', curPageFile);
     if (!curPageFile) return;
 
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.remakeImg, status: 'loading' }));
