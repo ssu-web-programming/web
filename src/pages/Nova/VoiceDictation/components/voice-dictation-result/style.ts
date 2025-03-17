@@ -65,7 +65,7 @@ const TranscriptContainer = styled.div`
   margin: 0 0 16px 0;
   border: 1px solid ${({ theme }) => theme.color.border.gray01};
   height: calc(100vh - 345px);
-  overflow: hidden; /* 중요: 외부 컨테이너는 hidden으로 처리 */
+  overflow: hidden;
 `;
 
 const TranscriptInnerContainer = styled.div`
@@ -73,9 +73,26 @@ const TranscriptInnerContainer = styled.div`
   height: 100%;
   overflow-y: auto;
 
+  /* 스크롤 숨기기 */
   &::-webkit-scrollbar {
     display: none;
   }
+
+  /* 오버스크롤/바운스 효과 제거 */
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: auto; /* iOS의 기본 관성 스크롤 비활성화 */
+
+  /* 스크롤 경계에서 생기는 시각적 효과 제거 */
+  &::before,
+  &::after {
+    content: '';
+    display: block;
+    height: 1px;
+    opacity: 0;
+  }
+
+  /* 터치 디바이스에서 스크롤 동작 개선 */
+  touch-action: pan-y;
 `;
 
 const NewTranscript = styled.div`
