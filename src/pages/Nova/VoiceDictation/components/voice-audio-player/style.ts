@@ -11,6 +11,12 @@ const Container = styled.div`
   width: 100%;
   background-color: ${({ theme }) => theme.color.background.gray01};
   margin-top: 12px;
+  position: fixed; /* 고정 위치 설정 */
+  bottom: 0; /* 화면 하단에 고정 */
+  left: 0; /* 화면 왼쪽에 맞춤 */
+  z-index: 1000; /* 다른 요소보다 앞에 표시 */
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1); /* 상단 그림자 효과 */
+  border-top: 1px solid ${({ theme }) => theme.color.border.gray01}; /* 상단 경계선 */
 `;
 
 const ProgressBarContainer = styled.div`

@@ -12,11 +12,22 @@ const Container = styled.div`
   flex-direction: column;
   width: 100%;
   height: 100vh;
+  overflow: hidden; /* 전체 컨테이너가 스크롤되지 않도록 */
+`;
+
+// 상단 콘텐츠 영역을 감싸는 컨테이너 추가
+const ContentContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1; /* 남은 공간을 모두 차지 */
+  overflow: hidden; /* 내부 스크롤 처리를 위해 */
+  padding: 0 16px;
+  min-height: 0; /* flex 컨테이너에서 overflow가 제대로 작동하기 위해 필요 */
 `;
 
 const Header = styled.div`
   text-align: center;
-  padding: 24px 16px 0px;
+  padding: 24px 0 0;
 `;
 
 const Title = styled.div<{ lang: string }>`
@@ -47,23 +58,18 @@ const Description = styled.p`
   white-space: pre-wrap;
 `;
 
-const TranscriptWrapper = styled.div`
-  height: 100%;
-  padding: 0px 16px;
-`;
-
 const TranscriptContainer = styled.div`
-  flex: 1;
-  overflow-y: auto;
+  /* flex: 1; */
+  overflow-y: auto; /* 세로 스크롤만 활성화 */
   background: ${({ theme }) => theme.color.background.gray01};
   padding: 16px;
   border-radius: 16px;
-  height: 314px;
-  margin: 0px 16px;
+  margin: 0 0 16px 0; /* 하단 여백 추가 */
   border: 1px solid ${({ theme }) => theme.color.border.gray01};
 
   scrollbar-width: none;
   -ms-overflow-style: none;
+  height: calc(100vh - 345px);
   &::-webkit-scrollbar {
     display: none;
   }
@@ -155,9 +161,17 @@ const ButtonWrapper = styled.div`
   margin-bottom: 24px;
 `;
 
+// AudioPlayer와 버튼 영역을 감싸는 컨테이너 추가
+const AudioPlayerContainer = styled.div`
+  /* AudioPlayer의 높이가 고정되어 있다고 가정 */
+  flex-shrink: 0; /* 크기 고정 */
+`;
+
 export {
+  AudioPlayerContainer,
   ButtonWrapper,
   Container,
+  ContentContainer,
   Description,
   Header,
   NewTranscript,
@@ -171,6 +185,5 @@ export {
   TranscriptName,
   TranscriptText,
   TranscriptTime,
-  TranscriptWrapper,
   Wrapper
 };
