@@ -75,7 +75,7 @@ const NovaHome = (props: NovaHomeProps) => {
     const versionMap: Record<ClientType, string> = {
       android: '9.9.8',
       ios: '9.8.10',
-      windows: '10.105.267',
+      windows: '10.105.262',
       mac: '9.0.67'
     };
     return !isHigherVersion(versionMap[platform as keyof typeof versionMap], version);

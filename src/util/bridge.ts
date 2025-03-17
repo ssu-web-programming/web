@@ -661,6 +661,8 @@ export const useInitBridgeListener = () => {
           }
           // 다운로드 완료될때 불리는 command
           case 'finishDownloadFile': {
+            console.log('다운로드될때 상태', body);
+            console.log('상태 확인해보기', body.isSaved === true);
             dispatch(setFileState({ type: body.translation, isSaved: body.isSaved }));
             dispatch(initLoadingSpinner());
 
@@ -672,6 +674,9 @@ export const useInitBridgeListener = () => {
             break;
           }
           case 'finishDownloadVoiceFile': {
+            console.log('다운로드될때 상태', body);
+            console.log('상태 확인해보기', body.isSaved === true);
+
             dispatch(initLoadingSpinner());
             if (body.isSaved) {
               dispatch(activeToast({ type: 'info', msg: t('ToastMsg.Success') }));
