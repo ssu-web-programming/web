@@ -27,6 +27,8 @@ export default function useCurrentDocAnalysis() {
   const { getAvailableFileCnt } = useUserInfoUtils();
 
   const analysisCurDoc = async () => {
+    console.log('현재 문서 정보 - currentFile', currentFile);
+
     if (currentFile.type === 'notSupported') {
       await confirm({
         msg: t('Nova.Alert.UnopenableDocError', { max: getAvailableFileCnt(selectedNovaTab) })!,
