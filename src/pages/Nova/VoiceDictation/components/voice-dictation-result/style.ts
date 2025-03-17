@@ -59,17 +59,20 @@ const Description = styled.p`
 `;
 
 const TranscriptContainer = styled.div`
-  /* flex: 1; */
-  overflow-y: auto; /* 세로 스크롤만 활성화 */
   background: ${({ theme }) => theme.color.background.gray01};
-  padding: 16px;
+  padding: 0;
   border-radius: 16px;
-  margin: 0 0 16px 0; /* 하단 여백 추가 */
+  margin: 0 0 16px 0;
   border: 1px solid ${({ theme }) => theme.color.border.gray01};
-
-  scrollbar-width: none;
-  -ms-overflow-style: none;
   height: calc(100vh - 345px);
+  overflow: hidden; /* 중요: 외부 컨테이너는 hidden으로 처리 */
+`;
+
+const TranscriptInnerContainer = styled.div`
+  padding: 16px;
+  height: 100%;
+  overflow-y: auto;
+
   &::-webkit-scrollbar {
     display: none;
   }
@@ -181,6 +184,7 @@ export {
   TranscriptContent,
   TranscriptIcon,
   TranscriptInfo,
+  TranscriptInnerContainer,
   TranscriptItem,
   TranscriptName,
   TranscriptText,
