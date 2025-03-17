@@ -74,7 +74,6 @@ function App() {
   }, [dispatch, platform]);
 
   useEffect(() => {
-    console.log('release cache 적용됐나 check!!!!');
     const fetchInit = async () => {
       if (!location.pathname.toLowerCase().startsWith('/nova/share')) {
         await initBridgeListener();

@@ -1,4 +1,5 @@
 import { useConfirm } from 'components/Confirm';
+import { NOVA_TAB_TYPE } from 'constants/novaTapTypes';
 import { useTranslation } from 'react-i18next';
 import { setPageStatus } from 'store/slices/nova/pageStatusSlice';
 import { platformInfoSelector } from 'store/slices/platformInfo';

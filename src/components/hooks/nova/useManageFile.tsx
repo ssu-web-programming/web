@@ -348,7 +348,6 @@ export function useManageFile({ onFinishCallback, onClearPastedImages }: Props =
           const ext = getFileExtension(item.fileName).toLowerCase();
           const supports =
             target === 'nova-image' ? getValidExt(selectedNovaTab) : SUPPORT_DOCUMENT_TYPE;
-          console.log('supports', supports);
           const type = supports.find((type: SupportFileType) => type.extensions === ext)?.mimeType;
 
           return {
