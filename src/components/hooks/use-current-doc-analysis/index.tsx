@@ -1,4 +1,5 @@
 import { useConfirm } from 'components/Confirm';
+import { TRANSLATION_EXTENSION_TYPE } from 'constants/fileTypes';
 import { NOVA_TAB_TYPE } from 'constants/novaTapTypes';
 import { useTranslation } from 'react-i18next';
 import { setPageStatus } from 'store/slices/nova/pageStatusSlice';
@@ -42,6 +43,14 @@ export default function useCurrentDocAnalysis() {
       });
     } else if (currentFile.type === 'drive') {
       if (!validateCurFileSize(currentFile)) return;
+      if (selectedNovaTab === NOVA_TAB_TYPE.translation) {
+        if (!TRANSLATION_EXTENSION_TYPE.includes(currentFile.ext)) {
+          await confirm({
+            msg: t('Nova.translation.Alert.UnsupportedFormat')
+          });
+          return;
+        }
+      }
 
       if (Number(currentFile.id) === -1) {
         await confirmSaveDoc(true);
