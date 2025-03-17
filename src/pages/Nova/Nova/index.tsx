@@ -249,7 +249,7 @@ export default function Nova() {
         {(usingAI || status === 'home') && isDragActive && <Uploading />}
         <NovaHeader />
         {(status === 'progress' || status === 'saving') && <Progress />}
-        <S.Body>
+        <S.Body isScroll={selectedNovaTab != NOVA_TAB_TYPE.voiceDictation}>
           {selectedNovaTab === NOVA_TAB_TYPE.home && <Banner />}
           {announcementList
             .filter(
