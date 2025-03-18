@@ -44,7 +44,7 @@ export default function useCurrentDocAnalysis() {
     } else if (currentFile.type === 'drive') {
       if (!validateCurFileSize(currentFile)) return;
       if (selectedNovaTab === NOVA_TAB_TYPE.translation) {
-        if (!TRANSLATION_EXTENSION_TYPE.includes(currentFile.ext)) {
+        if (!TRANSLATION_EXTENSION_TYPE.includes(`.${currentFile.ext}`)) {
           await confirm({
             msg: t('Nova.translation.Alert.UnsupportedFormat')
           });
