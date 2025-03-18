@@ -105,9 +105,9 @@ export default function Loading() {
         })
       });
 
-      const { data } = await res.json();
+      const response = await res.json();
 
-      if (data.video_id) {
+      if (response.success) {
         dispatch(
           updatePageResult({
             tab: NOVA_TAB_TYPE.aiVideo,
@@ -116,12 +116,18 @@ export default function Loading() {
                 ...result?.info,
                 selectedAvatar: {
                   ...result?.info?.selectedAvatar,
-                  video: { ...InitVideos, id: data.video_id }
+                  video: { ...InitVideos, id: response.data.video_id }
                 }
               }
             }
           })
         );
+      } else {
+        const { leftCredit } = calLeftCredit(res.headers);
+        errorHandle({ code: response.error.code, credit: leftCredit });
+        stopTimer();
+        dispatch(resetPageData(NOVA_TAB_TYPE.aiVideo));
+        dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'home' }));
       }
     } catch (error) {
       errorHandle(error);
