@@ -47,8 +47,8 @@ export default function useInitApp() {
           data: { expiredTime } // seconds
         } = await res.json();
         if (success) {
-          const time = process.env.NODE_ENV == 'production' ? expiredTime * 1000 : 10000;
-          console.log('time 설정값!', time);
+          // const time = process.env.NODE_ENV == 'production' ? expiredTime * 1000 : 10000;
+          const time = 60 * 1000 * 5; // 5분 임의로 설정
           dispatch(setNovaExpireTime(time));
         }
       } catch (err) {
