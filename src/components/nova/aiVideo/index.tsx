@@ -24,7 +24,6 @@ import Avatar from './avatar';
 import Loading from './loading';
 import Script from './script';
 import * as S from './styles';
-import { Container } from './styles';
 import Voice from './voice';
 
 export default function AIVideo() {
