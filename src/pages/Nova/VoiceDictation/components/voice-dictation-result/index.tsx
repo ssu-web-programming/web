@@ -77,6 +77,8 @@ export default function VoiceDictationResult() {
     });
   };
 
+  console.log('localFiles', localFiles);
+
   return (
     <S.Wrapper>
       <S.Container>
