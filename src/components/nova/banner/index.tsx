@@ -8,6 +8,8 @@ import BannerEn2 from '../../../img/common/nova/banner/banner2_nova_en.png';
 import BannerJa2 from '../../../img/common/nova/banner/banner2_nova_jp.png';
 import BannerKo2 from '../../../img/common/nova/banner/banner2_nova_ko.png';
 import { lang } from '../../../locale';
+import { ClientType } from '../../../store/slices/platformInfo';
+import { useAppSelector } from '../../../store/store';
 import Bridge from '../../../util/bridge';
 
 import * as S from './style';
@@ -36,9 +38,12 @@ const bannerImages = [
 ];
 
 const Banner = () => {
+  const platform = useAppSelector((state) => state.platformInfo.platform);
+
   const handleOpenPage = (url: string) => {
     if (url === '') return;
-    Bridge.callBridgeApi('openWindow', url);
+
+    if (platform != ClientType.mac) Bridge.callBridgeApi('openWindow', url);
   };
 
   return (
