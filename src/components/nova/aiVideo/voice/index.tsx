@@ -56,6 +56,10 @@ export default function Voice() {
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'voice' }));
   }, [result?.info.voices]);
 
+  useEffect(() => {
+    dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'voice' }));
+  }, []);
+
   const changeSelectedVoice = (voice: Voices) => {
     if (!result || !result.info.voices) return;
 

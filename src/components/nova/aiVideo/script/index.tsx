@@ -40,6 +40,10 @@ export default function Script() {
     };
   }, [text]);
 
+  useEffect(() => {
+    dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'script' }));
+  }, []);
+
   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     const newText = event.target.value;
     if (newText.length <= 400) {
