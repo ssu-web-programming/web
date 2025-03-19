@@ -66,6 +66,13 @@ const TranscriptContainer = styled.div`
   height: calc(100vh - 345px);
   overflow-y: auto;
   padding: 16px;
+
+  &::-webkit-scrollbar-track {
+    padding-top: 12px;
+    margin-top: 12px;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+  }
 `;
 
 const NewTranscript = styled.div`

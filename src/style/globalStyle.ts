@@ -28,11 +28,7 @@ const GlobalStyle = createGlobalStyle`
     }
 
     &::-webkit-scrollbar-track {
-      background: #ffffff;
-      padding-top: 12px;
-      margin-top: 12px;
-      margin-bottom: 12px;
-      padding-bottom: 12px;
+      border-radius: 14px;
     }
   }
 
