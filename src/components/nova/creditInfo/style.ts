@@ -13,6 +13,8 @@ export const TooltipContainer = styled.div`
   justify-content: center;
 `;
 
+export const CreditIconWrapper = styled.div``;
+
 export const CreditIcon = styled(CreditLineIcon)<{
   $isInit: boolean;
 }>`

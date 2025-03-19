@@ -28,9 +28,9 @@ export const Step = styled(Stepper).withConfig({
   padding: 16px 24px;
   transform: ${({ isStared, isFinished, width }) =>
     isStared
-      ? `translateX(calc(50% - ${width / 2}px - 48px))`
+      ? `translateX(calc(50% - ${width / 2}px - 24px))`
       : isFinished
-        ? `translateX(calc(-1 * (50% - ${width / 2}px - 48px)))`
+        ? `translateX(calc(-1 * (50% - ${width / 2}px - 24px)))`
         : 'none'};
 
   .MuiStep-root {
@@ -47,6 +47,10 @@ export const Step = styled(Stepper).withConfig({
   .step-has-completed,
   .step-has-disabled {
     width: ${({ isWide }) => (isWide ? '66px' : '63px')};
+
+    span {
+      gap: unset;
+    }
   }
 
   .MuiStepConnector-root {
@@ -66,10 +70,6 @@ export const Label = styled(StepLabel)`
     display: flex;
     flex-direction: row;
     gap: 4px;
-  }
-  .step-label-has-completed,
-  .step-label-has-disabled {
-    gap: unset;
   }
 
   .MuiStepLabel-iconContainer {
