@@ -82,6 +82,7 @@ const AIChat = (props: AIChatProps) => {
     if (location.state) {
       const { inputText } = location.state.body;
       setInputContents(inputText);
+      console.log('inputText: ', inputText);
     }
   }, [location.state]);
 
