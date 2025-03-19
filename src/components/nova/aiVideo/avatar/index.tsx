@@ -294,14 +294,14 @@ export default function Avatar() {
             <span>50</span>
           </S.CreditInfo>
         </Button>
-        <S.LogoWrap>
-          <img
-            src={isLightMode ? HeyzenLogoLightIcon : HeyzenLogoDarkIcon}
-            alt="logo"
-            className="logo"
-          />
-        </S.LogoWrap>
       </S.Container>
+      <S.LogoWrap>
+        <img
+          src={isLightMode ? HeyzenLogoLightIcon : HeyzenLogoDarkIcon}
+          alt="logo"
+          className="logo"
+        />
+      </S.LogoWrap>
 
       {isOpen && <SelectAvatar setIsOpen={setIsOpen} changeSelectedAvatar={changeSelectedAvatar} />}
     </>

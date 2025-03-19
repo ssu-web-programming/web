@@ -70,51 +70,53 @@ export default function Script() {
   };
 
   return (
-    <S.Container>
-      <AvatarCard isHideColorPicker={true} />
-      <S.VoiceContainer>
-        <S.TitleWrap>
-          <div className="wrap">
-            <span className="title">{t('Nova.aiVideo.addScript.title')}</span>
-            <ArrowTooltips message={t('Nova.aiVideo.tooltip.addScript')} placement="top-start">
-              <img src={isLightMode ? InfoLightIcon : InfoDarkIcon} alt="info" />
-            </ArrowTooltips>
-          </div>
-        </S.TitleWrap>
-        <S.TextWrap isActive={isEnabled}>
-          <S.TextArea
-            maxLength={100}
-            placeholder={t('Nova.aiVideo.addScript.textAreaPlaceHolder') || ''}
-            onChange={handleChange}
-            value={text}
-            isEnabled={isEnabled}
-          />
-          <span className="length">{text.length}/100</span>
-        </S.TextWrap>
-      </S.VoiceContainer>
-      <Button
-        variant="purple"
-        width={'full'}
-        height={48}
-        disable={text.length <= 0}
-        cssExt={css`
-          display: flex;
-          gap: 4px;
-          font-size: 16px;
-          font-weight: 500;
-          border-radius: 8px;
-          position: relative;
-        `}
-        onClick={() => {
-          dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'loading' }));
-          selectAvatarScript();
-        }}>
-        <span>{t('Nova.aiVideo.button.makeVideo')}</span>
-        <S.CreditInfo>
-          <img src={CreditColorIcon} alt="credit" />
-          <span>50</span>
-        </S.CreditInfo>
-      </Button>
+    <>
+      <S.Container>
+        <AvatarCard isHideColorPicker={true} />
+        <S.VoiceContainer>
+          <S.TitleWrap>
+            <div className="wrap">
+              <span className="title">{t('Nova.aiVideo.addScript.title')}</span>
+              <ArrowTooltips message={t('Nova.aiVideo.tooltip.addScript')} placement="top-start">
+                <img src={isLightMode ? InfoLightIcon : InfoDarkIcon} alt="info" />
+              </ArrowTooltips>
+            </div>
+          </S.TitleWrap>
+          <S.TextWrap isActive={isEnabled}>
+            <S.TextArea
+              maxLength={100}
+              placeholder={t('Nova.aiVideo.addScript.textAreaPlaceHolder') || ''}
+              onChange={handleChange}
+              value={text}
+              isEnabled={isEnabled}
+            />
+            <span className="length">{text.length}/100</span>
+          </S.TextWrap>
+        </S.VoiceContainer>
+        <Button
+          variant="purple"
+          width={'full'}
+          height={48}
+          disable={text.length <= 0}
+          cssExt={css`
+            display: flex;
+            gap: 4px;
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: 8px;
+            position: relative;
+          `}
+          onClick={() => {
+            dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'loading' }));
+            selectAvatarScript();
+          }}>
+          <span>{t('Nova.aiVideo.button.makeVideo')}</span>
+          <S.CreditInfo>
+            <img src={CreditColorIcon} alt="credit" />
+            <span>50</span>
+          </S.CreditInfo>
+        </Button>
+      </S.Container>
       <S.LogoWrap>
         <img
           src={isLightMode ? HeyzenLogoLightIcon : HeyzenLogoDarkIcon}
@@ -122,6 +124,6 @@ export default function Script() {
           className="logo"
         />
       </S.LogoWrap>
-    </S.Container>
+    </>
   );
 }
