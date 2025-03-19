@@ -188,14 +188,14 @@ export default function Voice() {
             <span>50</span>
           </S.CreditInfo>
         </Button>
+        <S.LogoWrap>
+          <img
+            src={isLightMode ? HeyzenLogoLightIcon : HeyzenLogoDarkIcon}
+            alt="logo"
+            className="logo"
+          />
+        </S.LogoWrap>
       </S.Container>
-      <S.LogoWrap>
-        <img
-          src={isLightMode ? HeyzenLogoLightIcon : HeyzenLogoDarkIcon}
-          alt="logo"
-          className="logo"
-        />
-      </S.LogoWrap>
       {isOpen && (
         <SelectVoice
           setIsOpen={setIsOpen}
