@@ -38,6 +38,8 @@ export default function AIVideo() {
   const { getLanguages } = useGetLanguages();
 
   const fetchInitialData = async () => {
+    dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'progress' }));
+
     if (!result?.info.avatars) {
       await getAvatars('all');
     }
@@ -45,12 +47,11 @@ export default function AIVideo() {
       await getVoices('all', 'all');
     }
     if (!result?.info.languages) {
-      getLanguages();
+      await getLanguages();
     }
   };
 
   useEffect(() => {
-    dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'progress' }));
     fetchInitialData().then(() => {
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: status }));
     });

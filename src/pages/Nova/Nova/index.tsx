@@ -91,7 +91,6 @@ export default function Nova() {
   const novaHistory = useAppSelector(novaHistorySelector);
 
   useEffect(() => {
-    console.log('expiredNOVA: ', expiredNOVA);
     if (
       expiredNOVA &&
       (selectedNovaTab === NOVA_TAB_TYPE.home ||
