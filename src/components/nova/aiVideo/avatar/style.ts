@@ -6,7 +6,6 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   gap: 24px;
   padding: 12px 16px;
 `;
@@ -163,4 +162,5 @@ export const LogoWrap = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  padding: 16px 24px;
 `;
