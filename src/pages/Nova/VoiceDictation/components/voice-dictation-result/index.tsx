@@ -75,7 +75,21 @@ export default function VoiceDictationResult() {
     });
   };
 
+  const convertKoreanTimeToSeconds = (timeString: string): number => {
+    // 정규식을 사용하여 분과 초 추출
+    const minutesMatch = timeString.match(/(\d+)분/);
+    const secondsMatch = timeString.match(/(\d+)초/);
+
+    // 분과 초 값 추출 (없을 경우 0으로 설정)
+    const minutes = minutesMatch ? parseInt(minutesMatch[1], 10) : 0;
+    const seconds = secondsMatch ? parseInt(secondsMatch[1], 10) : 0;
+
+    // 총 초 계산 및 반환
+    return minutes * 60 + seconds;
+  };
+
   console.log('123 배포 확인!');
+  console.log('audioDuration123123', audioDuration);
 
   return (
     <S.Wrapper>
@@ -121,6 +135,7 @@ export default function VoiceDictationResult() {
         <S.AudioPlayerContainer>
           <CustomAudioPlayer
             audioSource={voiceDictationResult?.data.voiceUrl as string}
+            endDuration={convertKoreanTimeToSeconds(audioDuration)}
             onPlay={async () => {
               const isShowModal = await showSurveyModal(selectedNovaTab, service, isCreditRecieved);
               if (isShowModal) return;

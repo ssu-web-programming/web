@@ -8,7 +8,7 @@ import * as S from './style';
 
 interface AudioPlayerProps extends PropsWithChildren {
   audioSource: string;
-  onDurationChange?: (duration: number) => void;
+  endDuration: number;
   onPlay?: () => void;
   onPause?: () => void;
   isLightMode?: boolean;
@@ -23,7 +23,7 @@ export type PlaybackSpeed = 0.8 | 1.0 | 1.2 | 1.5 | 1.8 | 2.0;
 
 const AudioPlayer: React.FC<AudioPlayerProps> = ({
   audioSource,
-  onDurationChange,
+  endDuration,
   onPlay,
   onPause,
   children,
@@ -32,7 +32,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
 }) => {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [currentTime, setCurrentTime] = useState<number>(0);
-  const [duration, setDuration] = useState<number>(0);
+  // const [duration, setDuration] = useState<number>(0);
   const [playbackSpeed, setPlaybackSpeed] = useState<PlaybackSpeed>(1.0);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -43,14 +43,14 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
     return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
   };
 
-  const handleLoadedMetadata = (): void => {
-    if (audioRef.current) {
-      const audioDuration = audioRef.current.duration;
-      console.log('audioDuration', audioDuration);
-      setDuration(audioDuration);
-      onDurationChange?.(audioDuration);
-    }
-  };
+  // const handleLoadedMetadata = (): void => {
+  //   if (audioRef.current) {
+  //     const audioDuration = audioRef.current.duration;
+  //     console.log('loadedMetadata-audioDuration', audioDuration);
+  //     setDuration(audioDuration);
+  //     onDurationChange?.(audioDuration);
+  //   }
+  // };
 
   const handleTimeUpdate = (): void => {
     if (audioRef.current) {
@@ -104,20 +104,18 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
 
   const handleEnded = () => {
     setIsPlaying(false);
-    setCurrentTime(duration); // 종료 시 현재 시간을 duration으로 설정
+    setCurrentTime(endDuration); // 종료 시 현재 시간을 duration으로 설정
   };
 
-  const progress = duration ? Math.min((currentTime / duration) * 100, 100) : 0;
+  const progress = endDuration ? Math.min((currentTime / endDuration) * 100, 100) : 0;
 
   return (
     <S.Container>
       <audio
         ref={audioRef}
         src={audioSource as string}
-        onLoadedMetadata={handleLoadedMetadata}
         onTimeUpdate={handleTimeUpdate}
         onEnded={handleEnded}
-        preload="auto"
       />
 
       <S.ProgressBarContainer>
@@ -126,7 +124,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
 
       <S.TimeDisplay>
         <span>{formatTime(currentTime)}</span>
-        <span>{formatTime(duration)}</span>
+        <span>{formatTime(endDuration)}</span>
       </S.TimeDisplay>
 
       <S.ControlsContainer>
