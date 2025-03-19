@@ -363,7 +363,7 @@ export const useInitBridgeListener = () => {
     }
   >('changePanel', async ({ cmd, body }, thunkAPI) => {
     const {
-      tab: { creating, selectedNovaTab }
+      tab: { creating }
     } = thunkAPI.getState();
     overlay.closeAll();
 
@@ -382,10 +382,8 @@ export const useInitBridgeListener = () => {
         }
       }
 
-      console.log('cmd', cmd);
-      console.log('body', body);
       navigate(`${path}${location.search}`, {
-        state: { body, selectedNovaTab },
+        state: { body },
         replace: true
       });
       thunkAPI.dispatch(initConfirm());
@@ -548,7 +546,8 @@ export const useInitBridgeListener = () => {
               changePanel({
                 cmd,
                 body: {
-                  inputText: body.inputText || ''
+                  inputText: body.inputText || '',
+                  selectedNovaTab
                 }
               })
             );

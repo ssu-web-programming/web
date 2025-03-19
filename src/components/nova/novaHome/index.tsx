@@ -111,8 +111,6 @@ const NovaHome = (props: NovaHomeProps) => {
 
   const handleMovePage = async (tab: NOVA_TAB_TYPE) => {
     if (tab === NOVA_TAB_TYPE.translation || tab === NOVA_TAB_TYPE.voiceDictation) {
-      console.log('location.state?.body', location.state);
-
       if (isUpdateRequired()) {
         confirmUpload();
         return;
