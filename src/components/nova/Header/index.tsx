@@ -219,8 +219,8 @@ export default function NovaHeader(props: NovaHeaderProps) {
         // 녹음중 상태이면 아래 팝업을 열어여한다.
 
         if (isClosedModalCondition && selectedNovaTab === NOVA_TAB_TYPE.voiceDictation) {
-          const result = await openClosedModal();
-          if (!result) return;
+          await openClosedModal();
+          return;
         }
       }
 
