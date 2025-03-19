@@ -83,7 +83,7 @@ export default function TranslationIntro() {
   useEffect(() => {
     if (location.state?.body) {
       console.log('location.state', location.state);
-      if (location.state.selectedNovaTab === NOVA_TAB_TYPE.translation) {
+      if (location.state.body.selectedNovaTab === NOVA_TAB_TYPE.translation) {
         setTranslateInputValue(location.state.body.inputText);
       }
     }
