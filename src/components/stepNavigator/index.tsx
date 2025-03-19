@@ -48,6 +48,20 @@ export default function StepNavigator({ activeStep, steps }: StepNavigatorProps)
         el.classList.remove('step-has-disabled');
       }
     });
+
+    document.querySelectorAll('.MuiStepLabel-root').forEach((el) => {
+      if (el.querySelector('.Mui-completed')) {
+        el.classList.add('step-label-has-completed');
+      } else {
+        el.classList.remove('step-label-has-completed');
+      }
+
+      if (el.querySelector('.Mui-disabled')) {
+        el.classList.add('step-label-has-disabled');
+      } else {
+        el.classList.remove('step-label-has-disabled');
+      }
+    });
   }, [steps]);
 
   const handleMove = (index: number) => {

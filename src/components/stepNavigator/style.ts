@@ -67,8 +67,8 @@ export const Label = styled(StepLabel)`
     flex-direction: row;
     gap: 4px;
   }
-  &.MuiStepLabel-root:has(.Mui-completed),
-  &.MuiStepLabel-root:has(.Mui-disabled) {
+  .step-label-has-completed,
+  .step-label-has-disabled {
     gap: unset;
   }
 
