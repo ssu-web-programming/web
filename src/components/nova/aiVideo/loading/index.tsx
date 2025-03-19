@@ -67,7 +67,7 @@ export default function Loading() {
   }, [result?.info.selectedAvatar.startTime]);
 
   useEffect(() => {
-    if (result?.info.selectedAvatar.video.id != '') {
+    if (result?.info.selectedAvatar.video.id) {
       pollingRef.current = setInterval(
         () => pollingVideo(result?.info.selectedAvatar.video.id),
         POLLING_INTERVAL
@@ -118,6 +118,10 @@ export default function Loading() {
 
   const generateVideo = async () => {
     try {
+      if (!result?.info.selectedAvatar.startTime) {
+        startTimer();
+      }
+
       const { res } = await apiWrapper().request(NOVA_VIDEO_MAKE_VIDEOS, {
         headers: {
           'Content-Type': 'application/json'
@@ -149,7 +153,8 @@ export default function Loading() {
                 ...result?.info,
                 selectedAvatar: {
                   ...result?.info?.selectedAvatar,
-                  video: { ...InitVideos, id: response.data.video_id }
+                  video: { ...InitVideos, id: response.data.video_id },
+                  startTime: Date.now()
                 }
               }
             }
@@ -161,9 +166,6 @@ export default function Loading() {
         stopTimer();
         dispatch(resetPageData(NOVA_TAB_TYPE.aiVideo));
         dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'home' }));
-      }
-      if (!result?.info.selectedAvatar.startTime) {
-        startTimer();
       }
     } catch (error) {
       errorHandle(error);
