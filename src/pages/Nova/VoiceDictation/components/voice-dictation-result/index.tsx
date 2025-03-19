@@ -93,32 +93,30 @@ export default function VoiceDictationResult() {
           </S.Header>
 
           <S.TranscriptContainer>
-            <S.TranscriptInnerContainer>
-              <S.NewTranscript>
-                <span>{t('Nova.voiceDictation.Button.NewDictation')}</span>
-                <span>
-                  {currentTime} · {audioDuration}
-                </span>
-              </S.NewTranscript>
+            <S.NewTranscript>
+              <span>{t('Nova.voiceDictation.Button.NewDictation')}</span>
+              <span>
+                {currentTime} · {audioDuration}
+              </span>
+            </S.NewTranscript>
 
-              {voiceDictationResult?.data.segments.map((transcript, idx) => (
-                <S.TranscriptItem key={idx} color={VOICE_COLOR[transcript.speaker.name]}>
-                  <S.TranscriptIcon color={VOICE_COLOR[transcript.speaker.name]}>
-                    참{transcript.speaker.label}
-                  </S.TranscriptIcon>
-                  <S.TranscriptContent>
-                    <S.TranscriptInfo>
-                      <S.TranscriptName>
-                        {t('Nova.voiceDictation.Status.Participant')}
-                        {transcript.speaker.name}
-                      </S.TranscriptName>
-                      <S.TranscriptTime>{formatMilliseconds(transcript.start)}</S.TranscriptTime>
-                    </S.TranscriptInfo>
-                    <S.TranscriptText>{transcript.text}</S.TranscriptText>
-                  </S.TranscriptContent>
-                </S.TranscriptItem>
-              ))}
-            </S.TranscriptInnerContainer>
+            {voiceDictationResult?.data.segments.map((transcript, idx) => (
+              <S.TranscriptItem key={idx} color={VOICE_COLOR[transcript.speaker.name]}>
+                <S.TranscriptIcon color={VOICE_COLOR[transcript.speaker.name]}>
+                  참{transcript.speaker.label}
+                </S.TranscriptIcon>
+                <S.TranscriptContent>
+                  <S.TranscriptInfo>
+                    <S.TranscriptName>
+                      {t('Nova.voiceDictation.Status.Participant')}
+                      {transcript.speaker.name}
+                    </S.TranscriptName>
+                    <S.TranscriptTime>{formatMilliseconds(transcript.start)}</S.TranscriptTime>
+                  </S.TranscriptInfo>
+                  <S.TranscriptText>{transcript.text}</S.TranscriptText>
+                </S.TranscriptContent>
+              </S.TranscriptItem>
+            ))}
           </S.TranscriptContainer>
         </S.ContentContainer>
 
