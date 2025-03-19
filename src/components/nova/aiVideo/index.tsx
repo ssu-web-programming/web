@@ -26,11 +26,12 @@ import Script from './script';
 import * as S from './styles';
 import Voice from './voice';
 
+export const stepOrder = ['avatar', 'voice', 'script'] as const;
 export default function AIVideo() {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const status = useAppSelector(selectPageStatus(NOVA_TAB_TYPE.aiVideo));
-  const [activeStep, setActiveStep] = useState<number>(0);
+  const activeStep = stepOrder.includes(status as any) ? stepOrder.indexOf(status as any) : 0;
   const result = useAppSelector(selectPageResult(NOVA_TAB_TYPE.aiVideo));
   const { getAvatars } = useGetAvatars();
   const { getVoices } = useGetVoices();
@@ -70,7 +71,6 @@ export default function AIVideo() {
         <>
           <StepNavigator
             activeStep={activeStep}
-            setActiveStep={setActiveStep}
             steps={[
               {
                 label: <S.Label>{t('Nova.aiVideo.selectAvatar.stepTitle')}</S.Label>,
