@@ -547,7 +547,7 @@ export const useInitBridgeListener = () => {
                 cmd,
                 body: {
                   inputText: body.inputText || '',
-                  selectedNovaTab
+                  selectedNovaTab: body.openTab
                 }
               })
             );
