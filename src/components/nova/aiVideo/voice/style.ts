@@ -113,5 +113,4 @@ export const LogoWrap = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  padding: 16px 24px;
 `;
