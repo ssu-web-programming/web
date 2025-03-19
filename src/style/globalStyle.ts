@@ -20,16 +20,19 @@ const GlobalStyle = createGlobalStyle`
 
     &::-webkit-scrollbar {
       width: 6px;
-      background: #ffffff;
     }
 
     &::-webkit-scrollbar-thumb {
       border-radius: 14px;
+      background: #ccc;
     }
 
     &::-webkit-scrollbar-track {
       background: #ffffff;
-      border-radius: 14px;
+      padding-top: 12px;
+      margin-top: 12px;
+      margin-bottom: 12px;
+      padding-bottom: 12px;
     }
   }
 
