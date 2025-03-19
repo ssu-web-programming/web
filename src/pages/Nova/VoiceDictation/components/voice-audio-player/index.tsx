@@ -180,6 +180,7 @@ const CustomAudioPlayer: React.FC<CustomAudioPlayerProps> = ({
   const progress = duration ? (currentTime / duration) * 100 : 0;
 
   useEffect(() => {
+    console.log('audioSource', audioSource);
     if (audioSource instanceof File) {
       const url = URL.createObjectURL(audioSource);
       setAudioUrl(url);
