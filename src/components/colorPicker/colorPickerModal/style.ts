@@ -20,6 +20,7 @@ export const Container = styled.div`
   z-index: 100;
   box-shadow: 0 8px 16px 0 #0000001a;
   border-radius: 16px;
+  overflow-y: auto;
 `;
 
 export const ContentWrap = styled.div`
