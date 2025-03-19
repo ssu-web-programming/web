@@ -42,7 +42,8 @@ import { ReactComponent as UploadLightIcon } from '../../../img/light/ico_upload
 import { announceInfoSelector } from '../../../store/slices/nova/announceSlice';
 import {
   novaChatModeSelector,
-  novaHistorySelector
+  novaHistorySelector,
+  setIsShareMode
 } from '../../../store/slices/nova/novaHistorySlice';
 import { selectPageService, selectPageStatus } from '../../../store/slices/nova/pageStatusSlice';
 import { selectNovaTab, selectTabSlice } from '../../../store/slices/tabSlice';
@@ -58,6 +59,7 @@ export type ClientStatusType = 'home' | 'doc_edit_mode' | 'doc_view_mode';
 
 export default function Nova() {
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
   const confirm = useConfirm();
   const announcementList = useAppSelector(announceInfoSelector);
   const { goConvertPage } = useConvert2DTo3D();
@@ -89,6 +91,7 @@ export default function Nova() {
   const novaHistory = useAppSelector(novaHistorySelector);
 
   useEffect(() => {
+    console.log('expiredNOVA: ', expiredNOVA);
     if (
       expiredNOVA &&
       (selectedNovaTab === NOVA_TAB_TYPE.home ||
@@ -102,12 +105,13 @@ export default function Nova() {
           text: t(`Confirm`),
           callback: () => {
             setExpiredNOVA(false);
+            dispatch(setIsShareMode(false));
             chatNova.newChat(selectedNovaTab, novaHistory);
           }
         }
       });
     }
-  }, [expiredNOVA]);
+  }, [expiredNOVA, selectedNovaTab]);
 
   const onDrop = useCallback(
     async (acceptedFiles: FileWithPath[]) => {
