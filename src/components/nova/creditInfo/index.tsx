@@ -28,13 +28,16 @@ export default function CreditInfo() {
   const [isOpen, setIsOpen] = useState(false);
   const [tab, setTab] = useState<SERVICE_CATEGORY>(SERVICE_CATEGORY.CHAT);
   const tooltipRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLDivElement>(null);
 
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
   const isCreditRecieved = useAppSelector(selectPageCreditReceived(selectedNovaTab));
   const service = useAppSelector(selectPageService(selectedNovaTab));
   const showSurveyModal = UseShowSurveyModal();
 
-  const toggleTooltip = async () => {
+  const toggleTooltip = async (event: React.MouseEvent) => {
+    event.stopPropagation();
+
     const isShowModal = await showSurveyModal(selectedNovaTab, service, isCreditRecieved);
     if (isShowModal) return;
 
@@ -49,8 +52,13 @@ export default function CreditInfo() {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (tooltipRef.current && !tooltipRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
+      if (
+        tooltipRef.current &&
+        !tooltipRef.current.contains(event.target as Node) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(!isOpen);
       }
     };
 
@@ -78,7 +86,9 @@ export default function CreditInfo() {
 
   return (
     <S.TooltipContainer>
-      <S.CreditIcon $isInit={isInit} onClick={toggleTooltip} />
+      <S.CreditIconWrapper onClick={toggleTooltip} ref={buttonRef}>
+        <S.CreditIcon $isInit={isInit} />
+      </S.CreditIconWrapper>
       {isOpen && (
         <S.TooltipWrap ref={tooltipRef} $isWide={lang != 'ko'}>
           <S.Title>{t('Nova.Home.creditGuide')}</S.Title>
