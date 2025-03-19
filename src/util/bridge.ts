@@ -382,6 +382,7 @@ export const useInitBridgeListener = () => {
         }
       }
 
+      console.log('cmd', cmd);
       navigate(`${path}${location.search}`, {
         state: { body },
         replace: true

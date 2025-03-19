@@ -111,6 +111,16 @@ const NovaHome = (props: NovaHomeProps) => {
 
   const handleMovePage = async (tab: NOVA_TAB_TYPE) => {
     if (tab === NOVA_TAB_TYPE.translation || tab === NOVA_TAB_TYPE.voiceDictation) {
+      console.log('location.state?.body', location.state?.body);
+
+      // 위와 같이 들어갔을때는 location.body에 있는 값을 제거한다.
+      if (location.state?.body) {
+        const newState = { ...location.state };
+        delete newState.body;
+
+        window.history.replaceState(newState, '', window.location.pathname);
+      }
+
       if (isUpdateRequired()) {
         confirmUpload();
         return;
