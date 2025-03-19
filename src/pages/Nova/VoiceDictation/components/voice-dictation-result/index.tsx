@@ -77,9 +77,6 @@ export default function VoiceDictationResult() {
     });
   };
 
-  console.log('localFiles', localFiles);
-  console.log('voiceDictationResult', voiceDictationResult?.data.voiceUrl);
-
   return (
     <S.Wrapper>
       <S.Container>
@@ -124,8 +121,11 @@ export default function VoiceDictationResult() {
         {/* AudioPlayerContainer로 감싸서 고정 높이 보장 */}
         <S.AudioPlayerContainer>
           <CustomAudioPlayer
-            audioUrl={voiceDictationResult?.data.voiceUrl}
-            onPlay={() => console.log('Started playing')}
+            audioSource={voiceDictationResult?.data.voiceUrl as string}
+            onPlay={async () => {
+              const isShowModal = await showSurveyModal(selectedNovaTab, service, isCreditRecieved);
+              if (isShowModal) return;
+            }}
             onPause={() => console.log('Paused')}
             isLightMode={isLightMode}
             openSpeedbackPopup={handleOpenPlaybackSpeed}>
