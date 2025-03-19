@@ -128,6 +128,9 @@ export default function InputBar(props: InputBarProps) {
   const inputImgFileRef = useRef<HTMLInputElement | null>(null);
   const isCreditRecieved = useAppSelector(selectPageCreditReceived(selectedNovaTab));
   const showSurveyModal = UseShowSurveyModal();
+  const swiperRef = useRef<any>(null);
+
+  useEffect(() => {}, [swiperRef]);
 
   useEffect(() => {
     adjustTextareaHeight();
@@ -355,7 +358,8 @@ export default function InputBar(props: InputBarProps) {
                 slidesPerView={'auto'}
                 spaceBetween={6}
                 pagination={{ clickable: true }}
-                modules={[Pagination]}>
+                modules={[Pagination]}
+                onSwiper={(swiper: any) => (swiperRef.current = swiper)}>
                 {getMenuItemsFromServiceGroup(serviceCredits, isLightMode, t)
                   .filter((item) => item.key === chatMode)
                   .flatMap(() =>
@@ -521,6 +525,10 @@ export default function InputBar(props: InputBarProps) {
                   }
 
                   changeChatMode(selectChatMode);
+
+                  if (swiperRef.current) {
+                    swiperRef.current.slideTo(0);
+                  }
                 }}
                 selectBoxCssExt={css`
                   border: 1px solid ${isLightMode ? 'var(--gray-gray-30)' : 'var(--gray-gray-87)'};
