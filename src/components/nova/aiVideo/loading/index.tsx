@@ -31,7 +31,7 @@ export default function Loading() {
   const errorHandle = useErrorHandle();
   const result = useAppSelector(selectPageResult(NOVA_TAB_TYPE.aiVideo));
   const currentFile = useAppSelector(getCurrentFile);
-  const [progress, setProgress] = useState(0);
+  const [progress, setProgress] = useState(result?.info.selectedAvatar.progress);
   const pollingRef = useRef<NodeJS.Timeout | null>(null);
   const timerRef = useRef<{ interval: NodeJS.Timeout | null; startTime: number | null }>({
     interval: null,
@@ -39,7 +39,9 @@ export default function Loading() {
   });
 
   useEffect(() => {
-    generateVideo();
+    if (result?.info.selectedAvatar.video.id === '') {
+      generateVideo();
+    }
   }, []);
 
   useEffect(() => {
@@ -54,19 +56,42 @@ export default function Loading() {
       if (pollingRef.current) {
         clearInterval(pollingRef.current);
       }
+      if (progress !== result?.info.selectedAvatar.progress) {
+        dispatch(
+          updatePageResult({
+            tab: NOVA_TAB_TYPE.aiVideo,
+            result: {
+              info: {
+                ...result?.info,
+                selectedAvatar: {
+                  ...result?.info?.selectedAvatar,
+                  progress
+                }
+              }
+            }
+          })
+        );
+      }
     };
   }, [result?.info.selectedAvatar.video.id]);
 
   const startTimer = () => {
     if (timerRef.current.interval) return;
 
-    timerRef.current.startTime = Date.now();
+    const elapsedSeconds = Math.floor(
+      (progress / 100) * (result?.info.selectedAvatar.input_text.length || 0) * 60
+    );
+    const startTime = Date.now() - elapsedSeconds * 1000;
+
+    timerRef.current.startTime = startTime;
 
     timerRef.current.interval = setInterval(() => {
       const elapsedSeconds = Math.floor((Date.now() - timerRef.current.startTime!) / 1000);
       const expectedDuration = (result?.info.selectedAvatar.input_text.length || 0) * 60;
 
-      setProgress(Math.floor(Math.min((elapsedSeconds / expectedDuration) * 100, 99)));
+      const newProgress = Math.floor(Math.min((elapsedSeconds / expectedDuration) * 100, 99));
+
+      setProgress(newProgress);
     }, POLLING_INTERVAL);
   };
 
