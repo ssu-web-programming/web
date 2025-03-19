@@ -66,6 +66,10 @@ export default function Avatar() {
     }
   }, [result?.info.avatars]);
 
+  useEffect(() => {
+    dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'avatar' }));
+  }, []);
+
   const makeAvatars = async () => {
     if (!currentFile) return;
 

@@ -52,6 +52,7 @@ export default function AIVideo() {
   useEffect(() => {
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'progress' }));
     fetchInitialData().then(() => {
+      console.log(status);
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: status }));
     });
   }, []);

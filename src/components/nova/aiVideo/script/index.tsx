@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { css } from 'styled-components';
@@ -29,6 +29,10 @@ export default function Script() {
   const result = useAppSelector(selectPageResult(NOVA_TAB_TYPE.aiVideo));
   const [text, setText] = useState('');
   const [isEnabled, setIsEnabled] = useState(false);
+
+  useEffect(() => {
+    dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'script' }));
+  }, []);
 
   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     const newText = event.target.value;
