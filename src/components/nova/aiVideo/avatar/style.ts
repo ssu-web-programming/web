@@ -47,6 +47,10 @@ export const TitleWrap = styled.div`
     align-items: center;
     justify-content: center;
   }
+
+  span {
+    cursor: pointer;
+  }
 `;
 
 export const ButtonWrap = styled.div`
