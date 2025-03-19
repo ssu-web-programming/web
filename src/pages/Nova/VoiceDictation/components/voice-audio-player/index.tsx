@@ -208,6 +208,8 @@ const CustomAudioPlayer: React.FC<CustomAudioPlayerProps> = ({
     };
   }, []);
 
+  console.log('audioUrl', audioUrl);
+
   return (
     <S.Container>
       <AudioPlayer
