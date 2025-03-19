@@ -35,20 +35,9 @@ export default function CreditInfo() {
   const service = useAppSelector(selectPageService(selectedNovaTab));
   const showSurveyModal = UseShowSurveyModal();
 
-  const toggleTooltip = async (event: React.MouseEvent) => {
-    event.stopPropagation();
-
-    const isShowModal = await showSurveyModal(selectedNovaTab, service, isCreditRecieved);
-    if (isShowModal) return;
-
-    if (!isInit) return;
-
-    setIsOpen(!isOpen);
-  };
-
-  const handleChange = (event: React.SyntheticEvent, tab: SERVICE_CATEGORY) => {
-    setTab(tab);
-  };
+  useEffect(() => {
+    setIsOpen(false);
+  }, [selectedNovaTab]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -72,6 +61,21 @@ export default function CreditInfo() {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isOpen]);
+
+  const toggleTooltip = async (event: React.MouseEvent) => {
+    event.stopPropagation();
+
+    const isShowModal = await showSurveyModal(selectedNovaTab, service, isCreditRecieved);
+    if (isShowModal) return;
+
+    if (!isInit) return;
+
+    setIsOpen(!isOpen);
+  };
+
+  const handleChange = (event: React.SyntheticEvent, tab: SERVICE_CATEGORY) => {
+    setTab(tab);
+  };
 
   const getTabTranslationKey = (tab: string, group: string) => {
     return (
