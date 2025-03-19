@@ -66,7 +66,7 @@ export interface AvatarInfo {
   avatar_style: 'circle' | 'normal';
   input_text: string;
   background_color: string; // 16진수 색상 값
-  progress: number;
+  startTime: number | null;
 }
 
 export const InitAvatarInfo: AvatarInfo = {
@@ -77,5 +77,5 @@ export const InitAvatarInfo: AvatarInfo = {
   avatar_style: 'circle',
   input_text: '',
   background_color: '#e8ebed',
-  progress: 0
+  startTime: null
 };
