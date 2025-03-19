@@ -1,7 +1,11 @@
 import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState } from 'react';
 import { useConfirm } from 'components/Confirm';
 import { useTranslation } from 'react-i18next';
-import { formatDuration, getAudioDurationViaAudioElement } from 'util/getAudioDuration';
+import {
+  formatDuration,
+  getAudioDurationViaAudioElement,
+  getAudioDurationViaWebAudioAPI
+} from 'util/getAudioDuration';
 
 export type VoiceDictationComponentType =
   | 'INTRO'
@@ -114,7 +118,7 @@ export default function VoiceDictationProvider({ children }: Props) {
   // 새로 추가하는 함수들
   const handleAudioDuration = async (file: File) => {
     try {
-      const duration = await getAudioDurationViaAudioElement(file);
+      const duration = await getAudioDurationViaWebAudioAPI(file);
 
       if (duration) {
         setSharedVoiceDictationInfo((prev) => ({
