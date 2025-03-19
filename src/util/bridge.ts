@@ -667,7 +667,8 @@ export const useInitBridgeListener = () => {
             if (body.isSaved) {
               dispatch(activeToast({ type: 'info', msg: t('ToastMsg.Success') }));
             } else if (
-              (getPlatform() !== ClientType.mac || getPlatform() !== ClientType.unknown) &&
+              getPlatform() !== ClientType.mac &&
+              getPlatform() !== ClientType.unknown &&
               body.isSaved === false
             ) {
               dispatch(activeToast({ type: 'error', msg: t('ToastMsg.SaveFailed') }));
@@ -679,7 +680,8 @@ export const useInitBridgeListener = () => {
             if (body.isSaved) {
               dispatch(activeToast({ type: 'info', msg: t('ToastMsg.Success') }));
             } else if (
-              (getPlatform() !== ClientType.mac || getPlatform() !== ClientType.unknown) &&
+              getPlatform() !== ClientType.mac &&
+              getPlatform() !== ClientType.unknown &&
               body.isSaved === false
             ) {
               dispatch(activeToast({ type: 'error', msg: t('ToastMsg.SaveFailed') }));
