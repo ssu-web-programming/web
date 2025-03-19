@@ -19,7 +19,7 @@ import 'react-h5-audio-player/lib/styles.css';
 
 // 메인 컴포넌트 Props 타입
 interface CustomAudioPlayerProps extends PropsWithChildren {
-  audioSource: string | File;
+  audioUrl?: string;
   onDurationChange?: (duration: number) => void;
   onPlay?: () => void;
   onPause?: () => void;
@@ -34,7 +34,7 @@ interface CustomAudioPlayerProps extends PropsWithChildren {
 export type PlaybackSpeed = 0.8 | 1.0 | 1.2 | 1.5 | 1.8 | 2.0;
 
 const CustomAudioPlayer: React.FC<CustomAudioPlayerProps> = ({
-  audioSource,
+  audioUrl,
   onDurationChange,
   onPlay,
   onPause,
@@ -45,7 +45,7 @@ const CustomAudioPlayer: React.FC<CustomAudioPlayerProps> = ({
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [duration, setDuration] = useState<number>(0);
   const [playbackSpeed, setPlaybackSpeed] = useState<PlaybackSpeed>(1.0);
-  const [audioUrl, setAudioUrl] = useState<string>('');
+  // const [audioUrl, setAudioUrl] = useState<string>('');
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
 
   const playerRef = useRef<any>(null);
@@ -179,19 +179,19 @@ const CustomAudioPlayer: React.FC<CustomAudioPlayerProps> = ({
   // 진행률 계산
   const progress = duration ? (currentTime / duration) * 100 : 0;
 
-  useEffect(() => {
-    console.log('audioSource', audioSource);
-    if (audioSource instanceof File) {
-      const url = URL.createObjectURL(audioSource);
-      setAudioUrl(url);
+  // useEffect(() => {
+  //   console.log('audioSource', audioSource);
+  //   if (audioSource instanceof File) {
+  //     const url = URL.createObjectURL(audioSource);
+  //     setAudioUrl(url);
 
-      return () => {
-        URL.revokeObjectURL(url);
-      };
-    } else {
-      setAudioUrl(audioSource);
-    }
-  }, [audioSource]);
+  //     return () => {
+  //       URL.revokeObjectURL(url);
+  //     };
+  //   } else {
+  //     setAudioUrl(audioSource);
+  //   }
+  // }, [audioSource]);
 
   // 오디오 상태 감시
   useEffect(() => {
