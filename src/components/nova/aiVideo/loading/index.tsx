@@ -35,7 +35,7 @@ export default function Loading() {
   const errorHandle = useErrorHandle();
   const result = useAppSelector(selectPageResult(NOVA_TAB_TYPE.aiVideo));
   const currentFile = useAppSelector(getCurrentFile);
-  const [progress, setProgress] = useState(result?.info.selectedAvatar.progress);
+  const [progress, setProgress] = useState(0);
   const pollingRef = useRef<NodeJS.Timeout | null>(null);
   const timerRef = useRef<{ interval: NodeJS.Timeout | null; startTime: number | null }>({
     interval: null,
@@ -49,6 +49,24 @@ export default function Loading() {
   }, []);
 
   useEffect(() => {
+    if (result?.info.selectedAvatar.startTime) {
+      const newProgress = calculateProgress(
+        result.info.selectedAvatar.startTime,
+        result.info.selectedAvatar.input_text
+      );
+      setProgress(newProgress);
+    }
+  }, [result?.info.selectedAvatar.startTime]);
+
+  useEffect(() => {
+    if (!result?.info.selectedAvatar) return;
+
+    if (result?.info.selectedAvatar.startTime && !timerRef.current.interval) {
+      startTimer(result.info.selectedAvatar.startTime);
+    }
+  }, [result?.info.selectedAvatar.startTime]);
+
+  useEffect(() => {
     if (result?.info.selectedAvatar.video.id != '') {
       pollingRef.current = setInterval(
         () => pollingVideo(result?.info.selectedAvatar.video.id),
@@ -60,41 +78,33 @@ export default function Loading() {
       if (pollingRef.current) {
         clearInterval(pollingRef.current);
       }
-      if (progress !== result?.info.selectedAvatar.progress) {
-        dispatch(
-          updatePageResult({
-            tab: NOVA_TAB_TYPE.aiVideo,
-            result: {
-              info: {
-                ...result?.info,
-                selectedAvatar: {
-                  ...result?.info?.selectedAvatar,
-                  progress
-                }
-              }
-            }
-          })
-        );
-      }
     };
   }, [result?.info.selectedAvatar.video.id]);
 
-  const startTimer = () => {
+  // dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'script' }));
+  const startTimer = (savedStartTime?: number) => {
     if (timerRef.current.interval) return;
 
-    const elapsedSeconds = Math.floor(
-      (progress / 100) * (result?.info.selectedAvatar.input_text.length || 0) * 60
-    );
-    const startTime = Date.now() - elapsedSeconds * 1000;
-
+    const startTime = savedStartTime ?? Date.now();
     timerRef.current.startTime = startTime;
 
+    dispatch(
+      updatePageResult({
+        tab: NOVA_TAB_TYPE.aiVideo,
+        result: {
+          info: {
+            ...result?.info,
+            selectedAvatar: {
+              ...result?.info?.selectedAvatar,
+              startTime: startTime
+            }
+          }
+        }
+      })
+    );
+
     timerRef.current.interval = setInterval(() => {
-      const elapsedSeconds = Math.floor((Date.now() - timerRef.current.startTime!) / 1000);
-      const expectedDuration = (result?.info.selectedAvatar.input_text.length || 0) * 60;
-
-      const newProgress = Math.floor(Math.min((elapsedSeconds / expectedDuration) * 100, 99));
-
+      const newProgress = calculateProgress(startTime, result?.info?.selectedAvatar?.input_text);
       setProgress(newProgress);
     }, POLLING_INTERVAL);
   };
@@ -108,8 +118,6 @@ export default function Loading() {
 
   const generateVideo = async () => {
     try {
-      startTimer();
-
       const { res } = await apiWrapper().request(NOVA_VIDEO_MAKE_VIDEOS, {
         headers: {
           'Content-Type': 'application/json'
@@ -153,6 +161,9 @@ export default function Loading() {
         stopTimer();
         dispatch(resetPageData(NOVA_TAB_TYPE.aiVideo));
         dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'home' }));
+      }
+      if (!result?.info.selectedAvatar.startTime) {
+        startTimer();
       }
     } catch (error) {
       errorHandle(error);
@@ -245,3 +256,12 @@ export default function Loading() {
     </S.Container>
   );
 }
+
+const calculateProgress = (startTime: number | null, inputText: string | undefined) => {
+  if (!startTime) return 0;
+
+  const elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);
+  const expectedDuration = (inputText?.length || 0) * 60;
+
+  return Math.floor(Math.min((elapsedSeconds / expectedDuration) * 100, 99));
+};
