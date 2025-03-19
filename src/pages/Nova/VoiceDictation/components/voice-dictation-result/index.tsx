@@ -123,7 +123,7 @@ export default function VoiceDictationResult() {
         {/* AudioPlayerContainer로 감싸서 고정 높이 보장 */}
         <S.AudioPlayerContainer>
           <CustomAudioPlayer
-            audioSource={voiceFile as File}
+            audioSource={localFiles[0] || (voiceFile as File)}
             onPlay={() => console.log('Started playing')}
             onPause={() => console.log('Paused')}
             isLightMode={isLightMode}
