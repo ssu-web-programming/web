@@ -8,7 +8,6 @@ import CheckLightIcon from 'img/light/nova/check_purple.svg';
 import { overlay } from 'overlay-kit';
 import { useTranslation } from 'react-i18next';
 import { themeInfoSelector } from 'store/slices/theme';
-import { getLocalFiles } from 'store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import { css } from 'styled-components';
 import { formatMilliseconds } from 'util/getAudioDuration';
@@ -30,10 +29,9 @@ import * as S from './style';
 
 export default function VoiceDictationResult() {
   const {
-    sharedVoiceDictationInfo: { voiceDictationResult, audioDuration, currentTime, voiceFile }
+    sharedVoiceDictationInfo: { voiceDictationResult, audioDuration, currentTime }
   } = useVoiceDictationContext();
   const dispatch = useAppDispatch();
-  const localFiles = useAppSelector(getLocalFiles);
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
   const service = useAppSelector(selectPageService(selectedNovaTab));
@@ -77,6 +75,8 @@ export default function VoiceDictationResult() {
     });
   };
 
+  console.log('123 배포 확인!');
+
   return (
     <S.Wrapper>
       <S.Container>
@@ -118,7 +118,6 @@ export default function VoiceDictationResult() {
           </S.TranscriptContainer>
         </S.ContentContainer>
 
-        {/* AudioPlayerContainer로 감싸서 고정 높이 보장 */}
         <S.AudioPlayerContainer>
           <CustomAudioPlayer
             audioSource={voiceDictationResult?.data.voiceUrl as string}

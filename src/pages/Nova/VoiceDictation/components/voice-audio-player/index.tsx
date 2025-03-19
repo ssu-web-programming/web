@@ -102,7 +102,12 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
     openSpeedbackPopup?.(handleChangeSpeedOtions, playbackSpeed);
   };
 
-  const progress = duration ? (currentTime / duration) * 100 : 0;
+  const handleEnded = () => {
+    setIsPlaying(false);
+    setCurrentTime(duration); // 종료 시 현재 시간을 duration으로 설정
+  };
+
+  const progress = duration ? Math.min((currentTime / duration) * 100, 100) : 0;
 
   return (
     <S.Container>
@@ -111,7 +116,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
         src={audioSource as string}
         onLoadedMetadata={handleLoadedMetadata}
         onTimeUpdate={handleTimeUpdate}
-        onEnded={() => setIsPlaying(false)}
+        onEnded={handleEnded}
         preload="auto"
       />
 
