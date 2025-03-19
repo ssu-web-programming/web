@@ -78,6 +78,7 @@ export default function VoiceDictationResult() {
   };
 
   console.log('localFiles', localFiles);
+  console.log('voiceDictationResult', voiceDictationResult?.data.voiceUrl);
 
   return (
     <S.Wrapper>
@@ -123,7 +124,7 @@ export default function VoiceDictationResult() {
         {/* AudioPlayerContainer로 감싸서 고정 높이 보장 */}
         <S.AudioPlayerContainer>
           <CustomAudioPlayer
-            audioSource={localFiles[0] || (voiceFile as File)}
+            audioUrl={voiceDictationResult?.data.voiceUrl}
             onPlay={() => console.log('Started playing')}
             onPause={() => console.log('Paused')}
             isLightMode={isLightMode}
