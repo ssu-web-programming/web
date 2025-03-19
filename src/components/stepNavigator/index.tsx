@@ -34,6 +34,22 @@ export default function StepNavigator({ activeStep, steps }: StepNavigatorProps)
     }
   }, []);
 
+  useEffect(() => {
+    document.querySelectorAll('.MuiStep-root').forEach((el) => {
+      if (el.querySelector('.Mui-completed')) {
+        el.classList.add('step-has-completed');
+      } else {
+        el.classList.remove('step-has-completed');
+      }
+
+      if (el.querySelector('.Mui-disabled')) {
+        el.classList.add('step-has-disabled');
+      } else {
+        el.classList.remove('step-has-disabled');
+      }
+    });
+  }, [steps]);
+
   const handleMove = (index: number) => {
     if (index === activeStep) return;
 
