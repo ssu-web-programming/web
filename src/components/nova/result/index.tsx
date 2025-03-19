@@ -9,10 +9,8 @@ import { setOnlineStatus } from 'store/slices/network';
 import { css } from 'styled-components';
 
 import { track } from '@amplitude/analytics-browser';
-import { current } from '@reduxjs/toolkit';
 
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
-import { SERVICE_TYPE } from '../../../constants/serviceType';
 import CheckDarkIcon from '../../../img/dark/nova/check_purple.svg';
 import CreditColorIcon from '../../../img/light/ico_credit_color.svg';
 import CheckLightIcon from '../../../img/light/nova/check_purple.svg';
@@ -67,10 +65,6 @@ export default function Result({ children }: ResultProps) {
   const showSurveyModal = UseShowSurveyModal();
 
   useEffect(() => {
-    // aiVideo는 결과 페이지 진입 시 자동 저장
-    if (selectedNovaTab === NOVA_TAB_TYPE.aiVideo) {
-      OnSave();
-    }
     dispatch(
       setPageServiceUsage({
         tab: selectedNovaTab,

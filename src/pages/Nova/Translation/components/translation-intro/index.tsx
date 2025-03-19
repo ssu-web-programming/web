@@ -82,7 +82,10 @@ export default function TranslationIntro() {
 
   useEffect(() => {
     if (location.state?.body) {
-      setTranslateInputValue(location.state.body.inputText);
+      console.log('location.state', location.state);
+      if (location.state.selectedNovaTab === NOVA_TAB_TYPE.translation) {
+        setTranslateInputValue(location.state.body.inputText);
+      }
     }
   }, [location.state?.body]);
 
@@ -109,16 +112,16 @@ export default function TranslationIntro() {
 
       <S.TextAreaWrapper>
         <S.TextAreaHeader>
-          <div>
+          <div onClick={() => handleOpenLangSearch('source')}>
             <span>{getLangFromLangCode('source', sourceLang)}</span>
-            <S.StyledArrowIcon onClick={() => handleOpenLangSearch('source')} />
+            <S.StyledArrowIcon />
           </div>
           <div>
             <S.StyledSwitch onClick={handleSwitchLang} />
           </div>
-          <div>
+          <div onClick={() => handleOpenLangSearch('target')}>
             <span>{getLangFromLangCode('target', targetLang)}</span>
-            <S.StyledArrowIcon onClick={() => handleOpenLangSearch('target')} />
+            <S.StyledArrowIcon />
           </div>
         </S.TextAreaHeader>
         {type === 'TEXT' ? (

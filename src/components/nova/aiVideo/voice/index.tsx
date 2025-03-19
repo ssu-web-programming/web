@@ -53,6 +53,7 @@ export default function Voice() {
         })
       );
     }
+    dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'voice' }));
   }, [result?.info.voices]);
 
   useEffect(() => {

@@ -27,8 +27,18 @@ export default function Script() {
   const { t } = useTranslation();
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const result = useAppSelector(selectPageResult(NOVA_TAB_TYPE.aiVideo));
-  const [text, setText] = useState('');
-  const [isEnabled, setIsEnabled] = useState(false);
+  const [text, setText] = useState(result?.info.selectedAvatar.input_text);
+  const [isEnabled, setIsEnabled] = useState(text.length);
+
+  useEffect(() => {
+    dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'script' }));
+  }, [result?.info.script]);
+
+  useEffect(() => {
+    return () => {
+      selectAvatarScript();
+    };
+  }, [text]);
 
   useEffect(() => {
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'script' }));
@@ -42,7 +52,7 @@ export default function Script() {
     }
   };
 
-  const selectAvatarScript = (script: string) => {
+  const selectAvatarScript = () => {
     dispatch(
       updatePageResult({
         tab: NOVA_TAB_TYPE.aiVideo,
@@ -51,7 +61,7 @@ export default function Script() {
             ...result?.info,
             selectedAvatar: {
               ...result?.info?.selectedAvatar,
-              input_text: script
+              input_text: text
             }
           }
         }
@@ -97,7 +107,7 @@ export default function Script() {
         `}
         onClick={() => {
           dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'loading' }));
-          selectAvatarScript(text);
+          selectAvatarScript();
         }}>
         <span>{t('Nova.aiVideo.button.makeVideo')}</span>
         <S.CreditInfo>

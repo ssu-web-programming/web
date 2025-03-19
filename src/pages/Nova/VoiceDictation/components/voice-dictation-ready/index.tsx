@@ -55,9 +55,11 @@ export default function VoiceDictationReady() {
   };
 
   const handleChangeInputValue = (e: ChangeEvent<HTMLInputElement>) => {
+    const extension = fileName.substring(fileName.lastIndexOf('.'));
+
     setSharedVoiceDictationInfo((prev) => ({
       ...prev,
-      fileName: e.target.value
+      fileName: e.target.value + extension
     }));
   };
 
@@ -141,6 +143,10 @@ export default function VoiceDictationReady() {
     }
   };
 
+  const getFileNameWithoutExtension = (fileName: string) => {
+    return fileName.substring(0, fileName.lastIndexOf('.'));
+  };
+
   // localFiles가 변경될 때 파일 이름 업데이트
   useEffect(() => {
     if (localFiles.length) {
@@ -172,7 +178,7 @@ export default function VoiceDictationReady() {
         {componentType === 'FILE_READY' ? (
           <S.RecordingBox>
             <AudioFile />
-            <S.FileTitle>{fileName}</S.FileTitle>
+            <S.FileTitle>{getFileNameWithoutExtension(fileName)}</S.FileTitle>
             <S.Duration>{audioDuration}</S.Duration>
 
             <S.LanguageSelector>
@@ -199,12 +205,12 @@ export default function VoiceDictationReady() {
               {isEditMode ? (
                 <S.InputFileTitle
                   ref={inputRef}
-                  value={fileName}
+                  value={getFileNameWithoutExtension(fileName)}
                   onChange={handleChangeInputValue}
                 />
               ) : (
                 <>
-                  <S.FileTitle>{fileName}</S.FileTitle>
+                  <S.FileTitle>{getFileNameWithoutExtension(fileName)}</S.FileTitle>
                   <EditIcon onClick={handleChangeEditMode} />
                 </>
               )}
@@ -218,7 +224,7 @@ export default function VoiceDictationReady() {
         <ButtonWithCredit
           onClick={translationVoiceDictation}
           text={t('Nova.voiceDictation.Button.Convert')}
-          isActive={fileName.trim().length !== 0}
+          isActive={getFileNameWithoutExtension(fileName).trim().length !== 0}
           creditAmount={50}
         />
       </S.Container>

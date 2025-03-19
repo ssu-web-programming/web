@@ -8,15 +8,19 @@ import { NOVA_VIDEO_GET_INFO, NOVA_VIDEO_MAKE_VIDEOS } from '../../../../api/con
 import { EVideoStatus, InitVideos } from '../../../../constants/heygenTypes';
 import { NOVA_TAB_TYPE } from '../../../../constants/novaTapTypes';
 import { getServiceLoggingInfo, SERVICE_TYPE } from '../../../../constants/serviceType';
+import { setOnlineStatus } from '../../../../store/slices/network';
 import {
   resetPageData,
   selectPageResult,
   setPageStatus,
   updatePageResult
 } from '../../../../store/slices/nova/pageStatusSlice';
+import { activeToast } from '../../../../store/slices/toastSlice';
 import { getCurrentFile } from '../../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../../store/store';
+import Bridge from '../../../../util/bridge';
 import { calLeftCredit } from '../../../../util/common';
+import { base64ToBlob } from '../../../../util/files';
 import useErrorHandle from '../../../hooks/useErrorHandle';
 import AvatarCard from '../component/AvatarCard';
 import Progress from '../component/Progress';
@@ -134,10 +138,9 @@ export default function Loading() {
         })
       });
 
-      const { data } = await res.json();
+      const response = await res.json();
 
-      if (data.video_id) {
-        console.log('set???: ', result?.info.selectedAvatar);
+      if (response.success) {
         dispatch(
           updatePageResult({
             tab: NOVA_TAB_TYPE.aiVideo,
@@ -146,12 +149,18 @@ export default function Loading() {
                 ...result?.info,
                 selectedAvatar: {
                   ...result?.info?.selectedAvatar,
-                  video: { ...InitVideos, id: data.video_id }
+                  video: { ...InitVideos, id: response.data.video_id }
                 }
               }
             }
           })
         );
+      } else {
+        const { leftCredit } = calLeftCredit(res.headers);
+        errorHandle({ code: response.error.code, credit: leftCredit });
+        stopTimer();
+        dispatch(resetPageData(NOVA_TAB_TYPE.aiVideo));
+        dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'home' }));
       }
       if (!result?.info.selectedAvatar.startTime) {
         startTimer();
@@ -195,6 +204,8 @@ export default function Loading() {
           })
         );
         dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'done' }));
+        await OnSave(data.video_url);
+
         const log_info = getServiceLoggingInfo(SERVICE_TYPE.NOVA_AI_AVATA_VIDEO_HEYGEN);
         await logger({
           dp: 'ai.nova',
@@ -221,6 +232,15 @@ export default function Loading() {
         document_format: currentFile.ext,
         function_result: false
       });
+    }
+  };
+
+  const OnSave = async (link: string) => {
+    if (link) {
+      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'saving' }));
+      Bridge.callBridgeApi('downloadAnimation', link);
+    } else {
+      dispatch(activeToast({ type: 'error', msg: 'ToastMsg.SaveFailed' }));
     }
   };
 
