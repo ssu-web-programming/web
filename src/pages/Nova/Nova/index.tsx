@@ -47,7 +47,7 @@ import {
   setIsShareMode
 } from '../../../store/slices/nova/novaHistorySlice';
 import { selectPageService, selectPageStatus } from '../../../store/slices/nova/pageStatusSlice';
-import { selectNovaTab, selectTabSlice } from '../../../store/slices/tabSlice';
+import { selectTabSlice } from '../../../store/slices/tabSlice';
 import { themeInfoSelector } from '../../../store/slices/theme';
 import { userInfoSelector } from '../../../store/slices/userInfo';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
@@ -60,8 +60,6 @@ export type ClientStatusType = 'home' | 'doc_edit_mode' | 'doc_view_mode';
 
 export default function Nova() {
   const { t } = useTranslation();
-  const location = useLocation();
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const confirm = useConfirm();
   const announcementList = useAppSelector(announceInfoSelector);
@@ -92,7 +90,6 @@ export default function Nova() {
   const service = useAppSelector(selectPageService(selectedNovaTab));
   const chatMode = useAppSelector(novaChatModeSelector);
   const novaHistory = useAppSelector(novaHistorySelector);
-  const [inputContents, setInputContents] = useState<string>('');
 
   useEffect(() => {
     if (
@@ -115,15 +112,6 @@ export default function Nova() {
       });
     }
   }, [expiredNOVA, selectedNovaTab]);
-
-  useEffect(() => {
-    if (location.state) {
-      const { inputText } = location.state.body;
-      setInputContents(inputText);
-
-      navigate(location.pathname, { replace: true, state: null });
-    }
-  }, [location.state]);
 
   const onDrop = useCallback(
     async (acceptedFiles: FileWithPath[]) => {
@@ -206,8 +194,6 @@ export default function Nova() {
               createChatSubmitHandler(submitParam, isAnswer, chatType)
             }
             fileUploadState={fileUploadState}
-            inputContents={inputContents}
-            setInputContents={setInputContents}
           />
         </>
       );
