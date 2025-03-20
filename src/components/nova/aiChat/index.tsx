@@ -60,19 +60,10 @@ interface AIChatProps {
     chatType: SERVICE_TYPE
   ) => Promise<void>;
   fileUploadState: FileUploadState;
-  inputContents: string;
-  setInputContents: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const AIChat = (props: AIChatProps) => {
-  const {
-    expiredNOVA,
-    setExpiredNOVA,
-    createChatSubmitHandler,
-    fileUploadState,
-    inputContents,
-    setInputContents
-  } = props;
+  const { expiredNOVA, setExpiredNOVA, createChatSubmitHandler, fileUploadState } = props;
   const dispatch = useAppDispatch();
   const location = useLocation();
   const navigate = useNavigate();
@@ -84,18 +75,9 @@ const AIChat = (props: AIChatProps) => {
   const isExporting = useAppSelector(isExportingSelector);
   const chatMode = useAppSelector(novaChatModeSelector);
   const [imagePreview, setImagePreview] = useState<NovaFileInfo | null>(null);
-
+  const [inputContents, setInputContents] = useState<string>('');
   const chatListRef = useRef<HTMLDivElement>(null);
   const [showScrollDownBtn, setShowScrollDownBtn] = useState(false);
-
-  useEffect(() => {
-    if (location.state) {
-      const { inputText } = location.state.body;
-      setInputContents(inputText);
-
-      navigate(location.pathname, { replace: true, state: null });
-    }
-  }, [location.state]);
 
   useEffect(() => {
     const handleOrientationChange = () => {
