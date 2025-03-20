@@ -45,21 +45,45 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
   const handleTimeUpdate = (): void => {
     if (audioRef.current) {
       const currentTimeValue = audioRef.current.currentTime;
-      console.log('currentTimeValue', currentTimeValue);
       setCurrentTime(currentTimeValue);
+
+      // 오디오가 거의 끝에 도달했는지 확인
+      const isNearEnd =
+        currentTimeValue >= endDuration - 0.2 ||
+        currentTimeValue >= audioRef.current.duration - 0.2;
+
+      // 재생 중이고 거의 끝에 도달했다면 재생 종료 처리
+      if (isPlaying && isNearEnd) {
+        audioRef.current.pause();
+        setIsPlaying(false);
+      }
     }
   };
 
   const togglePlay = (): void => {
     if (audioRef.current) {
+      // 현재 위치가 끝에 가까운지 확인
+      const isNearEnd =
+        audioRef.current.currentTime >= endDuration - 0.2 ||
+        audioRef.current.currentTime >= audioRef.current.duration - 0.2;
+
       if (isPlaying) {
         audioRef.current.pause();
         onPause?.();
-      } else {
+        setIsPlaying(false);
+      } else if (!isNearEnd) {
+        // 끝 부분이 아닌 경우에만 재생 시작
         audioRef.current.play();
         onPlay?.();
+        setIsPlaying(true);
+      } else {
+        console.log('end');
+        // 끝 부분인 경우 처음으로 되돌리고 재생 시작 (선택 사항)
+        audioRef.current.currentTime = 0;
+        audioRef.current.play();
+        onPlay?.();
+        setIsPlaying(true);
       }
-      setIsPlaying(!isPlaying);
     }
   };
 
@@ -94,14 +118,12 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
     openSpeedbackPopup?.(handleChangeSpeedOtions, playbackSpeed);
   };
 
-  const handleEnded = () => {
-    console.log('handleEnded 함수 실행!');
-    setIsPlaying(false);
-  };
+  // const handleEnded = () => {
+  //   console.log('handleEnded 함수 실행!');
+  //   setIsPlaying(false);
+  // };
 
   const progress = endDuration ? Math.min((currentTime / endDuration) * 100, 100) : 0;
-  console.log('외부에서 발생하는 currentTime', currentTime);
-  console.log('endDuration', endDuration);
 
   return (
     <S.Container>
@@ -109,7 +131,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
         ref={audioRef}
         src={audioSource as string}
         onTimeUpdate={handleTimeUpdate}
-        onEnded={handleEnded}
+        // onEnded={handleEnded}
       />
 
       <S.ProgressBarContainer onClick={handleProgressBarClick}>
