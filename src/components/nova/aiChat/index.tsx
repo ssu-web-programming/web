@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { ReactComponent as IconArrowLeft } from 'img/light/ico_arrow_left.svg';
 import { useTranslation } from 'react-i18next';
 import Lottie from 'react-lottie-player';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import { css } from 'styled-components';
 import { SwiperSlide } from 'swiper/swiper-react';
@@ -65,6 +65,7 @@ interface AIChatProps {
 const AIChat = (props: AIChatProps) => {
   const dispatch = useAppDispatch();
   const location = useLocation();
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const { usingAI, creating } = useAppSelector(selectTabSlice);
   const novaHistory = useAppSelector(novaHistorySelector);
@@ -82,7 +83,8 @@ const AIChat = (props: AIChatProps) => {
     if (location.state) {
       const { inputText } = location.state.body;
       setInputContents(inputText);
-      console.log('inputText: ', inputText);
+
+      navigate(location.pathname, { replace: true, state: null });
     }
   }, [location.state]);
 
