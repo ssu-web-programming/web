@@ -32,7 +32,6 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
 }) => {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [currentTime, setCurrentTime] = useState<number>(0);
-  // const [duration, setDuration] = useState<number>(0);
   const [playbackSpeed, setPlaybackSpeed] = useState<PlaybackSpeed>(1.0);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -42,15 +41,6 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
     const seconds = Math.floor(timeInSeconds % 60);
     return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
   };
-
-  // const handleLoadedMetadata = (): void => {
-  //   if (audioRef.current) {
-  //     const audioDuration = audioRef.current.duration;
-  //     console.log('loadedMetadata-audioDuration', audioDuration);
-  //     setDuration(audioDuration);
-  //     onDurationChange?.(audioDuration);
-  //   }
-  // };
 
   const handleTimeUpdate = (): void => {
     if (audioRef.current) {
@@ -80,16 +70,16 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
     }
   };
 
-  // const handleProgressBarClick = (e: React.MouseEvent<HTMLDivElement>): void => {
-  //   if (audioRef.current) {
-  //     const progressBar = e.currentTarget;
-  //     const clickPosition = e.nativeEvent.offsetX;
-  //     const totalWidth = progressBar.offsetWidth;
-  //     const percentage = clickPosition / totalWidth;
-  //     const newTime = percentage * audioRef.current.duration;
-  //     audioRef.current.currentTime = newTime;
-  //   }
-  // };
+  const handleProgressBarClick = (e: React.MouseEvent<HTMLDivElement>): void => {
+    if (audioRef.current) {
+      const progressBar = e.currentTarget;
+      const clickPosition = e.nativeEvent.offsetX;
+      const totalWidth = progressBar.offsetWidth;
+      const percentage = clickPosition / totalWidth;
+      const newTime = percentage * audioRef.current.duration;
+      audioRef.current.currentTime = newTime;
+    }
+  };
 
   const handleChangeSpeedOtions = (nextSpeed: PlaybackSpeed) => {
     if (audioRef.current) {
@@ -118,7 +108,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
         onEnded={handleEnded}
       />
 
-      <S.ProgressBarContainer>
+      <S.ProgressBarContainer onClick={handleProgressBarClick}>
         <S.ProgressBar progress={`${progress}%`} />
       </S.ProgressBarContainer>
 
