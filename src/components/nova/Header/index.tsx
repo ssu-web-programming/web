@@ -93,10 +93,10 @@ export default function NovaHeader(props: NovaHeaderProps) {
     translationComponentType === 'LOADING';
 
   const newChat = async (isBack = false) => {
+    if (creating === 'NOVA') return;
+
     const isShowModal = await showSurveyModal(selectedNovaTab, service, isCreditRecieved);
     if (isShowModal) return;
-
-    if (creating === 'NOVA') return;
 
     const ret = await confirm({
       title: isBack ? undefined : t(`Nova.Confirm.NewChat.Title`)!,
