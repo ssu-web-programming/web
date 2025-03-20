@@ -95,6 +95,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
   };
 
   const handleEnded = () => {
+    console.log('handleEnded 함수 실행!');
     setIsPlaying(false);
     setCurrentTime(endDuration); // 종료 시 현재 시간을 duration으로 설정
   };
