@@ -66,7 +66,9 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
   const handleSkip = (seconds: number): void => {
     if (audioRef.current) {
       const newTime = audioRef.current.currentTime + seconds;
-      audioRef.current.currentTime = Math.min(Math.max(0, newTime), audioRef.current.duration);
+      const limitedTime = Math.min(Math.max(0, newTime), endDuration);
+      const finalTime = Math.min(limitedTime, audioRef.current.duration);
+      audioRef.current.currentTime = finalTime;
     }
   };
 
