@@ -44,7 +44,6 @@ interface NovaHomeProps {
 }
 
 const NovaHome = (props: NovaHomeProps) => {
-  const location = useLocation();
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const chatNova = useChatNova();
@@ -60,13 +59,6 @@ const NovaHome = (props: NovaHomeProps) => {
   const showConfirmModal = useShowConfirmModal();
 
   const [inputContents, setInputContents] = useState<string>('');
-
-  useEffect(() => {
-    if (location.state) {
-      const { inputText } = location.state.body;
-      setInputContents(inputText);
-    }
-  }, [location.state]);
 
   const isUpdateRequired = () => {
     if (platform === ClientType.web || platform === ClientType.unknown) return false;
