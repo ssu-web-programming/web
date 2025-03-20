@@ -33,17 +33,15 @@ const bannerImages = [
       en: BannerEn1,
       ja: BannerJa1
     },
-    url: `https://vf-ca-cloud.polarisoffice.com/${lang}/ai`
+    url: `https://polarisoffice.com/${lang}/ai`
   }
 ];
 
 const Banner = () => {
-  const platform = useAppSelector((state) => state.platformInfo.platform);
-
   const handleOpenPage = (url: string) => {
     if (url === '') return;
 
-    if (platform != ClientType.mac) Bridge.callBridgeApi('openWindow', url);
+    Bridge.callBridgeApi('openWindow', url);
   };
 
   return (
