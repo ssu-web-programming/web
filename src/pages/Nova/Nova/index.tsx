@@ -1,6 +1,7 @@
 import React, { Suspense, useCallback, useEffect, useState } from 'react';
 import { FileWithPath, useDropzone } from 'react-dropzone';
 import { useTranslation } from 'react-i18next';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import Announcement from '../../../components/Announcement';
 import { useConfirm } from '../../../components/Confirm';
@@ -59,6 +60,8 @@ export type ClientStatusType = 'home' | 'doc_edit_mode' | 'doc_view_mode';
 
 export default function Nova() {
   const { t } = useTranslation();
+  const location = useLocation();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const confirm = useConfirm();
   const announcementList = useAppSelector(announceInfoSelector);
@@ -89,6 +92,7 @@ export default function Nova() {
   const service = useAppSelector(selectPageService(selectedNovaTab));
   const chatMode = useAppSelector(novaChatModeSelector);
   const novaHistory = useAppSelector(novaHistorySelector);
+  const [inputContents, setInputContents] = useState<string>('');
 
   useEffect(() => {
     if (
@@ -111,6 +115,15 @@ export default function Nova() {
       });
     }
   }, [expiredNOVA, selectedNovaTab]);
+
+  useEffect(() => {
+    if (location.state) {
+      const { inputText } = location.state.body;
+      setInputContents(inputText);
+
+      navigate(location.pathname, { replace: true, state: null });
+    }
+  }, [location.state]);
 
   const onDrop = useCallback(
     async (acceptedFiles: FileWithPath[]) => {
@@ -193,6 +206,8 @@ export default function Nova() {
               createChatSubmitHandler(submitParam, isAnswer, chatType)
             }
             fileUploadState={fileUploadState}
+            inputContents={inputContents}
+            setInputContents={setInputContents}
           />
         </>
       );

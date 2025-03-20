@@ -60,9 +60,19 @@ interface AIChatProps {
     chatType: SERVICE_TYPE
   ) => Promise<void>;
   fileUploadState: FileUploadState;
+  inputContents: string;
+  setInputContents: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const AIChat = (props: AIChatProps) => {
+  const {
+    expiredNOVA,
+    setExpiredNOVA,
+    createChatSubmitHandler,
+    fileUploadState,
+    inputContents,
+    setInputContents
+  } = props;
   const dispatch = useAppDispatch();
   const location = useLocation();
   const navigate = useNavigate();
@@ -73,7 +83,6 @@ const AIChat = (props: AIChatProps) => {
   const isShareMode = useAppSelector(isShareModeSelector);
   const isExporting = useAppSelector(isExportingSelector);
   const chatMode = useAppSelector(novaChatModeSelector);
-  const [inputContents, setInputContents] = useState<string>('');
   const [imagePreview, setImagePreview] = useState<NovaFileInfo | null>(null);
 
   const chatListRef = useRef<HTMLDivElement>(null);
@@ -255,9 +264,9 @@ const AIChat = (props: AIChatProps) => {
               </S.ShareGuide>
             )}
             <ChatList
-              expiredNOVA={props.expiredNOVA}
+              expiredNOVA={expiredNOVA}
               novaHistory={novaHistory}
-              createChatSubmitHandler={props.createChatSubmitHandler}
+              createChatSubmitHandler={createChatSubmitHandler}
               onSave={onSave}
               scrollHandler={handleOnScroll}
               setImagePreview={setImagePreview}
@@ -295,12 +304,12 @@ const AIChat = (props: AIChatProps) => {
             <InputBar
               novaHistory={novaHistory}
               disabled={creating === 'NOVA'}
-              expiredNOVA={props.expiredNOVA}
-              onSubmit={props.createChatSubmitHandler}
+              expiredNOVA={expiredNOVA}
+              onSubmit={createChatSubmitHandler}
               contents={inputContents}
               setContents={setInputContents}
             />
-            <FileUploading {...props.fileUploadState} />
+            <FileUploading {...fileUploadState} />
           </>
         )}
 
