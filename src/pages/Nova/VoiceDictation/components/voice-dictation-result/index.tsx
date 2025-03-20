@@ -22,7 +22,7 @@ import { selectTabSlice } from '../../../../../store/slices/tabSlice';
 import { useVoiceDictationContext } from '../../provider/voice-dictation-provider';
 import PlaybackSpeedModalContent from '../modals/playback-speed-modal-content';
 // AudioPlayer 컴포넌트와 타입 임포트 업데이트
-import CustomAudioPlayer, { PlaybackSpeed } from '../voice-audio-player';
+import AudioPlayer, { PlaybackSpeed } from '../voice-audio-player';
 import VoiceSaveBottomSheet from '../voice-save-bottom-sheet';
 
 import * as S from './style';
@@ -133,7 +133,7 @@ export default function VoiceDictationResult() {
         </S.ContentContainer>
 
         <S.AudioPlayerContainer>
-          <CustomAudioPlayer
+          <AudioPlayer
             audioSource={voiceDictationResult?.data.voiceUrl as string}
             endDuration={convertKoreanTimeToSeconds(audioDuration)}
             onPlay={async () => {
@@ -169,7 +169,7 @@ export default function VoiceDictationResult() {
                 <span>{t(`Nova.Result.Save`)}</span>
               </Button>
             </S.ButtonWrapper>
-          </CustomAudioPlayer>
+          </AudioPlayer>
         </S.AudioPlayerContainer>
       </S.Container>
     </S.Wrapper>
