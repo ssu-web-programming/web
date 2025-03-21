@@ -1,8 +1,11 @@
+import { useEffect, useState } from 'react';
 import { ReactComponent as MaxDarkIcon } from 'img/dark/nova/ico_max.svg';
 import { ReactComponent as MinDarkIcon } from 'img/dark/nova/ico_min.svg';
 import { ReactComponent as MaxLightIcon } from 'img/light/nova/ico_max.svg';
 import { ReactComponent as MinLightIcon } from 'img/light/nova/ico_min.svg';
 
+import usePostSplunkLog from '../../api/usePostSplunkLog';
+import { ClientStatusType } from '../../pages/Nova/Nova';
 import {
   selectPageCreditReceived,
   selectPageService
@@ -22,20 +25,28 @@ export const ScreenChangeButton = () => {
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const { screenMode } = useAppSelector(screenModeSelector);
   const { platform, device } = useAppSelector(platformInfoSelector);
-  const { from } = useLangParameterNavigate();
 
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
   const isCreditRecieved = useAppSelector(selectPageCreditReceived(selectedNovaTab));
   const service = useAppSelector(selectPageService(selectedNovaTab));
   const showSurveyModal = UseShowSurveyModal();
 
-  console.log('from: ', from);
-  console.log('platform: ', platform);
+  const [isShow, setIsShow] = useState(false);
+
+  useEffect(() => {
+    Bridge.callSyncBridgeApiWithCallback({
+      api: 'getClientStatus',
+      callback: async (status: ClientStatusType) => {
+        setIsShow(status === 'home');
+      }
+    });
+  }, []);
+
   if (
     ((platform === ClientType.web ||
       platform === ClientType.windows ||
       platform === ClientType.mac) &&
-      from === 'home') ||
+      isShow) ||
     ((platform === ClientType.ios || platform === ClientType.android) &&
       device === DeviceType.phone)
   ) {
