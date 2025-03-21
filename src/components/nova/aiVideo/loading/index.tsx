@@ -8,15 +8,19 @@ import { NOVA_VIDEO_GET_INFO, NOVA_VIDEO_MAKE_VIDEOS } from '../../../../api/con
 import { EVideoStatus, InitVideos } from '../../../../constants/heygenTypes';
 import { NOVA_TAB_TYPE } from '../../../../constants/novaTapTypes';
 import { getServiceLoggingInfo, SERVICE_TYPE } from '../../../../constants/serviceType';
+import { setOnlineStatus } from '../../../../store/slices/network';
 import {
   resetPageData,
   selectPageResult,
   setPageStatus,
   updatePageResult
 } from '../../../../store/slices/nova/pageStatusSlice';
+import { activeToast } from '../../../../store/slices/toastSlice';
 import { getCurrentFile } from '../../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../../store/store';
+import Bridge from '../../../../util/bridge';
 import { calLeftCredit } from '../../../../util/common';
+import { base64ToBlob } from '../../../../util/files';
 import useErrorHandle from '../../../hooks/useErrorHandle';
 import AvatarCard from '../component/AvatarCard';
 import Progress from '../component/Progress';
@@ -39,11 +43,31 @@ export default function Loading() {
   });
 
   useEffect(() => {
-    generateVideo();
+    if (result?.info.selectedAvatar.video.id === '') {
+      generateVideo();
+    }
   }, []);
 
   useEffect(() => {
-    if (result?.info.selectedAvatar.video.id != '') {
+    if (result?.info.selectedAvatar.startTime) {
+      const newProgress = calculateProgress(
+        result.info.selectedAvatar.startTime,
+        result.info.selectedAvatar.input_text
+      );
+      setProgress(newProgress);
+    }
+  }, [result?.info.selectedAvatar.startTime]);
+
+  useEffect(() => {
+    if (!result?.info.selectedAvatar) return;
+
+    if (result?.info.selectedAvatar.startTime && !timerRef.current.interval) {
+      startTimer(result.info.selectedAvatar.startTime);
+    }
+  }, [result?.info.selectedAvatar.startTime]);
+
+  useEffect(() => {
+    if (result?.info.selectedAvatar.video.id) {
       pollingRef.current = setInterval(
         () => pollingVideo(result?.info.selectedAvatar.video.id),
         POLLING_INTERVAL
@@ -57,16 +81,31 @@ export default function Loading() {
     };
   }, [result?.info.selectedAvatar.video.id]);
 
-  const startTimer = () => {
+  // dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'script' }));
+  const startTimer = (savedStartTime?: number) => {
     if (timerRef.current.interval) return;
 
-    timerRef.current.startTime = Date.now();
+    const startTime = savedStartTime ?? Date.now();
+    timerRef.current.startTime = startTime;
+
+    dispatch(
+      updatePageResult({
+        tab: NOVA_TAB_TYPE.aiVideo,
+        result: {
+          info: {
+            ...result?.info,
+            selectedAvatar: {
+              ...result?.info?.selectedAvatar,
+              startTime: startTime
+            }
+          }
+        }
+      })
+    );
 
     timerRef.current.interval = setInterval(() => {
-      const elapsedSeconds = Math.floor((Date.now() - timerRef.current.startTime!) / 1000);
-      const expectedDuration = (result?.info.selectedAvatar.input_text.length || 0) * 60;
-
-      setProgress(Math.floor(Math.min((elapsedSeconds / expectedDuration) * 100, 99)));
+      const newProgress = calculateProgress(startTime, result?.info?.selectedAvatar?.input_text);
+      setProgress(newProgress);
     }, POLLING_INTERVAL);
   };
 
@@ -79,7 +118,9 @@ export default function Loading() {
 
   const generateVideo = async () => {
     try {
-      startTimer();
+      if (!result?.info.selectedAvatar.startTime) {
+        startTimer();
+      }
 
       const { res } = await apiWrapper().request(NOVA_VIDEO_MAKE_VIDEOS, {
         headers: {
@@ -101,9 +142,9 @@ export default function Loading() {
         })
       });
 
-      const { data } = await res.json();
+      const response = await res.json();
 
-      if (data.video_id) {
+      if (response.success) {
         dispatch(
           updatePageResult({
             tab: NOVA_TAB_TYPE.aiVideo,
@@ -112,12 +153,19 @@ export default function Loading() {
                 ...result?.info,
                 selectedAvatar: {
                   ...result?.info?.selectedAvatar,
-                  video: { ...InitVideos, id: data.video_id }
+                  video: { ...InitVideos, id: response.data.video_id },
+                  startTime: Date.now()
                 }
               }
             }
           })
         );
+      } else {
+        const { leftCredit } = calLeftCredit(res.headers);
+        errorHandle({ code: response.error.code, credit: leftCredit });
+        stopTimer();
+        dispatch(resetPageData(NOVA_TAB_TYPE.aiVideo));
+        dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'home' }));
       }
     } catch (error) {
       errorHandle(error);
@@ -158,6 +206,8 @@ export default function Loading() {
           })
         );
         dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'done' }));
+        await OnSave(data.video_url);
+
         const log_info = getServiceLoggingInfo(SERVICE_TYPE.NOVA_AI_AVATA_VIDEO_HEYGEN);
         await logger({
           dp: 'ai.nova',
@@ -187,6 +237,15 @@ export default function Loading() {
     }
   };
 
+  const OnSave = async (link: string) => {
+    if (link) {
+      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'saving' }));
+      Bridge.callBridgeApi('downloadAnimation', link);
+    } else {
+      dispatch(activeToast({ type: 'error', msg: 'ToastMsg.SaveFailed' }));
+    }
+  };
+
   return (
     <S.Container>
       <S.Guide>
@@ -199,3 +258,12 @@ export default function Loading() {
     </S.Container>
   );
 }
+
+const calculateProgress = (startTime: number | null, inputText: string | undefined) => {
+  if (!startTime) return 0;
+
+  const elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);
+  const expectedDuration = (inputText?.length || 0) * 60;
+
+  return Math.floor(Math.min((elapsedSeconds / expectedDuration) * 100, 99));
+};

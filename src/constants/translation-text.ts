@@ -71,6 +71,38 @@ export const SOURCE_LANGUAGES_WITH_LANG_CODE = [
   { langCode: 'HU', lang: i18n.t('Nova.translation.Language.List.Hungarian') } // 헝가리어
 ];
 
+export const FILE_SOURCE_LANGUAGES_WITH_LANG_CODE = [
+  { langCode: 'EL', lang: i18n.t('Nova.translation.Language.List.Greek') }, // 그리스어
+  { langCode: 'NL', lang: i18n.t('Nova.translation.Language.List.Dutch') }, // 네덜란드어
+  { langCode: 'NB', lang: i18n.t('Nova.translation.Language.List.NorwegianBokmal') }, // 노르웨이어
+  { langCode: 'DA', lang: i18n.t('Nova.translation.Language.List.Danish') }, // 덴마크어
+  { langCode: 'DE', lang: i18n.t('Nova.translation.Language.List.German') }, // 독일어
+  { langCode: 'LV', lang: i18n.t('Nova.translation.Language.List.Latvian') }, // 라트비아어
+  { langCode: 'RU', lang: i18n.t('Nova.translation.Language.List.Russian') }, // 러시아어
+  { langCode: 'RO', lang: i18n.t('Nova.translation.Language.List.Romanian') }, // 루마니아어
+  { langCode: 'LT', lang: i18n.t('Nova.translation.Language.List.Lithuanian') }, // 리투아니아어
+  { langCode: 'BG', lang: i18n.t('Nova.translation.Language.List.Bulgarian') }, // 불가리아어
+  { langCode: 'SK', lang: i18n.t('Nova.translation.Language.List.Slovak') }, // 슬로바키아어
+  { langCode: 'SL', lang: i18n.t('Nova.translation.Language.List.Slovenian') }, // 슬로베니아어
+  { langCode: 'SV', lang: i18n.t('Nova.translation.Language.List.Swedish') }, // 스웨덴어
+  { langCode: 'ES', lang: i18n.t('Nova.translation.Language.List.Spanish') }, // 스페인어
+  { langCode: 'ET', lang: i18n.t('Nova.translation.Language.List.Estonian') }, // 에스토니아어
+  { langCode: 'EN', lang: i18n.t('Nova.translation.Language.List.EnglishAll') }, // 영어
+  { langCode: 'UK', lang: i18n.t('Nova.translation.Language.List.Ukrainian') }, // 우크라이나어
+  { langCode: 'IT', lang: i18n.t('Nova.translation.Language.List.Italian') }, // 이탈리아어
+  { langCode: 'ID', lang: i18n.t('Nova.translation.Language.List.Indonesian') }, // 인도네시아어
+  { langCode: 'JA', lang: i18n.t('Nova.translation.Language.List.Japanese') }, // 일본어
+  { langCode: 'ZH', lang: i18n.t('Nova.translation.Language.List.ChineseAll') }, // 중국어
+  { langCode: 'CS', lang: i18n.t('Nova.translation.Language.List.Czech') }, // 체코어
+  { langCode: 'TR', lang: i18n.t('Nova.translation.Language.List.Turkish') }, // 터키어
+  { langCode: 'PL', lang: i18n.t('Nova.translation.Language.List.Polish') }, // 폴란드어
+  { langCode: 'PT', lang: i18n.t('Nova.translation.Language.List.PortugueseAll') }, // 포르투갈어
+  { langCode: 'FI', lang: i18n.t('Nova.translation.Language.List.Finnish') }, // 핀란드어
+  { langCode: 'FR', lang: i18n.t('Nova.translation.Language.List.French') }, // 프랑스어
+  { langCode: 'KO', lang: i18n.t('Nova.translation.Language.List.Korean') },
+  { langCode: 'HU', lang: i18n.t('Nova.translation.Language.List.Hungarian') } // 헝가리어
+];
+
 export const TARGET_LANGUAGES = [
   '그리스어',
   '네덜란드어',

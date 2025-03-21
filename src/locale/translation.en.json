@@ -314,6 +314,7 @@
       "chat": {
         "title": "Chat",
         "aiChat": "Chat",
+        "chat": "Chat",
         "docImgQuery": "Document/Image query",
         "imgGen": "Generate Image"
       },

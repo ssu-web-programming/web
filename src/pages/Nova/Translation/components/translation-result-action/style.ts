@@ -44,6 +44,7 @@ const TextArea = styled.textarea`
   background: ${({ theme }) => theme.color.background.gray01};
   color: ${({ theme }) => theme.color.text.gray04};
   white-space: pre-line;
+  resize: none;
 `;
 
 export { Header, IconWrapper, TextArea, Wrapper };

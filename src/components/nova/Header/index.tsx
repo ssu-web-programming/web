@@ -10,6 +10,7 @@ import { useTranslationContext } from 'pages/Nova/Translation/provider/translati
 import ClosedModalContent from 'pages/Nova/VoiceDictation/components/modals/closed-modal-content';
 import { useVoiceDictationContext } from 'pages/Nova/VoiceDictation/provider/voice-dictation-provider';
 import { Trans, useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { clearError, errorSelector } from 'store/slices/errorSlice';
 
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
@@ -58,6 +59,7 @@ export interface NovaHeaderProps {
 
 export default function NovaHeader(props: NovaHeaderProps) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { isLightMode, curTheme } = useAppSelector(themeInfoSelector);
   const novaHistory = useAppSelector(novaHistorySelector);
   const isShareMode = useAppSelector(isShareModeSelector);
@@ -91,10 +93,10 @@ export default function NovaHeader(props: NovaHeaderProps) {
     translationComponentType === 'LOADING';
 
   const newChat = async (isBack = false) => {
+    if (creating === 'NOVA') return;
+
     const isShowModal = await showSurveyModal(selectedNovaTab, service, isCreditRecieved);
     if (isShowModal) return;
-
-    if (creating === 'NOVA') return;
 
     const ret = await confirm({
       title: isBack ? undefined : t(`Nova.Confirm.NewChat.Title`)!,
@@ -174,6 +176,7 @@ export default function NovaHeader(props: NovaHeaderProps) {
     dispatch(setPageResult({ tab: selectedNovaTab, result: null }));
     dispatch(selectNovaTab(NOVA_TAB_TYPE.home));
     dispatch(clearError());
+    if (props.setInputContents) props.setInputContents('');
     Bridge.callBridgeApi('curNovaTab', NOVA_TAB_TYPE.home);
   };
 
@@ -219,8 +222,8 @@ export default function NovaHeader(props: NovaHeaderProps) {
         // 녹음중 상태이면 아래 팝업을 열어여한다.
 
         if (isClosedModalCondition && selectedNovaTab === NOVA_TAB_TYPE.voiceDictation) {
-          const result = await openClosedModal();
-          if (!result) return;
+          await openClosedModal();
+          return;
         }
       }
 

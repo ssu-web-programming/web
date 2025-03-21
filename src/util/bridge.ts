@@ -7,7 +7,6 @@ import { setFileState } from 'store/slices/nova/translation/download-slice';
 import { resetCurrentWrite } from 'store/slices/writeHistorySlice';
 import { v4 as uuidv4 } from 'uuid';
 
-import { track } from '@amplitude/analytics-browser';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { useConfirm } from '../components/Confirm';
@@ -547,7 +546,8 @@ export const useInitBridgeListener = () => {
               changePanel({
                 cmd,
                 body: {
-                  inputText: body.inputText || ''
+                  inputText: body.inputText || '',
+                  selectedNovaTab: body.openTab
                 }
               })
             );
@@ -666,7 +666,11 @@ export const useInitBridgeListener = () => {
 
             if (body.isSaved) {
               dispatch(activeToast({ type: 'info', msg: t('ToastMsg.Success') }));
-            } else {
+            } else if (
+              getPlatform() !== ClientType.mac &&
+              getPlatform() !== ClientType.unknown &&
+              body.isSaved === false
+            ) {
               dispatch(activeToast({ type: 'error', msg: t('ToastMsg.SaveFailed') }));
             }
             break;
@@ -675,7 +679,11 @@ export const useInitBridgeListener = () => {
             dispatch(initLoadingSpinner());
             if (body.isSaved) {
               dispatch(activeToast({ type: 'info', msg: t('ToastMsg.Success') }));
-            } else {
+            } else if (
+              getPlatform() !== ClientType.mac &&
+              getPlatform() !== ClientType.unknown &&
+              body.isSaved === false
+            ) {
               dispatch(activeToast({ type: 'error', msg: t('ToastMsg.SaveFailed') }));
             }
             break;

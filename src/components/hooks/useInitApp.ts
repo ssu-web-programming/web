@@ -47,7 +47,8 @@ export default function useInitApp() {
           data: { expiredTime } // seconds
         } = await res.json();
         if (success) {
-          const time = process.env.NODE_ENV == 'production' ? expiredTime * 1000 : 10000;
+          // expiredTime * 1000
+          const time = process.env.NODE_ENV == 'production' ? 60 * 1000 * 5 : 3000;
           dispatch(setNovaExpireTime(time));
         }
       } catch (err) {

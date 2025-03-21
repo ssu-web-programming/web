@@ -314,6 +314,7 @@
       "chat": {
         "title": "チャット",
         "aiChat": "チャット",
+        "chat": "チャット",
         "docImgQuery": "ドキュメント/画像クエリ",
         "imgGen": "画像生成"
       },

@@ -282,10 +282,7 @@ export default function Avatar() {
             font-weight: 500;
             border-radius: 8px;
             position: relative;
-          `}
-          onClick={() => {
-            dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'voice' }));
-          }}>
+          `}>
           <span>{t('Nova.aiVideo.button.makeVideo')}</span>
           <S.CreditInfo>
             <img src={CreditColorIcon} alt="credit" />

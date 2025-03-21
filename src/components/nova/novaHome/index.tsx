@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { FileUploadState } from '../../../constants/fileTypes';
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
@@ -45,6 +45,7 @@ interface NovaHomeProps {
 
 const NovaHome = (props: NovaHomeProps) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const chatNova = useChatNova();
@@ -65,6 +66,8 @@ const NovaHome = (props: NovaHomeProps) => {
     if (location.state) {
       const { inputText } = location.state.body;
       setInputContents(inputText);
+
+      navigate(location.pathname, { replace: true, state: null });
     }
   }, [location.state]);
 
@@ -75,7 +78,7 @@ const NovaHome = (props: NovaHomeProps) => {
     const versionMap: Record<ClientType, string> = {
       android: '9.9.8',
       ios: '9.8.10',
-      windows: '10.105.267',
+      windows: '10.105.262',
       mac: '9.0.67'
     };
     return !isHigherVersion(versionMap[platform as keyof typeof versionMap], version);

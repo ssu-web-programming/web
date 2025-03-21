@@ -8,7 +8,6 @@ import CheckLightIcon from 'img/light/nova/check_purple.svg';
 import { overlay } from 'overlay-kit';
 import { useTranslation } from 'react-i18next';
 import { themeInfoSelector } from 'store/slices/theme';
-import { getLocalFiles } from 'store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import { css } from 'styled-components';
 import { formatMilliseconds } from 'util/getAudioDuration';
@@ -23,7 +22,7 @@ import { selectTabSlice } from '../../../../../store/slices/tabSlice';
 import { useVoiceDictationContext } from '../../provider/voice-dictation-provider';
 import PlaybackSpeedModalContent from '../modals/playback-speed-modal-content';
 // AudioPlayer 컴포넌트와 타입 임포트 업데이트
-import CustomAudioPlayer, { PlaybackSpeed } from '../voice-audio-player';
+import AudioPlayer, { PlaybackSpeed } from '../voice-audio-player';
 import VoiceSaveBottomSheet from '../voice-save-bottom-sheet';
 
 import * as S from './style';
@@ -33,7 +32,6 @@ export default function VoiceDictationResult() {
     sharedVoiceDictationInfo: { voiceDictationResult, audioDuration, currentTime }
   } = useVoiceDictationContext();
   const dispatch = useAppDispatch();
-  const localFiles = useAppSelector(getLocalFiles);
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
   const service = useAppSelector(selectPageService(selectedNovaTab));
@@ -77,79 +75,102 @@ export default function VoiceDictationResult() {
     });
   };
 
+  const convertKoreanTimeToSeconds = (timeString: string): number => {
+    // 정규식을 사용하여 분과 초 추출
+    const minutesMatch = timeString.match(/(\d+)분/);
+    const secondsMatch = timeString.match(/(\d+)초/);
+
+    // 분과 초 값 추출 (없을 경우 0으로 설정)
+    const minutes = minutesMatch ? parseInt(minutesMatch[1], 10) : 0;
+    const seconds = secondsMatch ? parseInt(secondsMatch[1], 10) : 0;
+
+    // 총 초 계산 및 반환
+    return minutes * 60 + seconds;
+  };
+
+  console.log('123 배포 확인!');
+  console.log('audioDuration123123', audioDuration);
+
   return (
     <S.Wrapper>
       <S.Container>
-        <S.Header>
-          <S.Title lang={'ko'}>
-            <img src={isLightMode ? CheckLightIcon : CheckDarkIcon} alt="check" />
-            <span>{t('Nova.voiceDictation.Status.Completed')}</span>
-          </S.Title>
+        <S.ContentContainer>
+          <S.Header>
+            <S.Title lang={'ko'}>
+              <img src={isLightMode ? CheckLightIcon : CheckDarkIcon} alt="check" />
+              <span>{t('Nova.voiceDictation.Status.Completed')}</span>
+            </S.Title>
 
-          <S.Description>{t('Nova.voiceDictation.Status.ConversionSuccess')}</S.Description>
-        </S.Header>
+            <S.Description>{t('Nova.voiceDictation.Status.ConversionSuccess')}</S.Description>
+          </S.Header>
 
-        <S.TranscriptContainer>
-          <S.NewTranscript>
-            <span>{t('Nova.voiceDictation.Button.NewDictation')}</span>
-            <span>
-              {currentTime} · {audioDuration}
-            </span>
-          </S.NewTranscript>
+          <S.TranscriptContainer>
+            <S.NewTranscript>
+              <span>{t('Nova.voiceDictation.Button.NewDictation')}</span>
+              <span>
+                {currentTime} · {audioDuration}
+              </span>
+            </S.NewTranscript>
 
-          {voiceDictationResult?.data.segments.map((transcript, idx) => (
-            <S.TranscriptItem key={idx} color={VOICE_COLOR[transcript.speaker.name]}>
-              <S.TranscriptIcon color={VOICE_COLOR[transcript.speaker.name]}>
-                참{transcript.speaker.label}
-              </S.TranscriptIcon>
-              <S.TranscriptContent>
-                <S.TranscriptInfo>
-                  <S.TranscriptName>
-                    {t('Nova.voiceDictation.Status.Participant')}
-                    {transcript.speaker.name}
-                  </S.TranscriptName>
-                  <S.TranscriptTime>{formatMilliseconds(transcript.start)}</S.TranscriptTime>
-                </S.TranscriptInfo>
-                <S.TranscriptText>{transcript.text}</S.TranscriptText>
-              </S.TranscriptContent>
-            </S.TranscriptItem>
-          ))}
-        </S.TranscriptContainer>
+            {voiceDictationResult?.data.segments.map((transcript, idx) => (
+              <S.TranscriptItem key={idx} color={VOICE_COLOR[transcript.speaker.name]}>
+                <S.TranscriptIcon color={VOICE_COLOR[transcript.speaker.name]}>
+                  참{transcript.speaker.label}
+                </S.TranscriptIcon>
+                <S.TranscriptContent>
+                  <S.TranscriptInfo>
+                    <S.TranscriptName>
+                      {t('Nova.voiceDictation.Status.Participant')}
+                      {transcript.speaker.name}
+                    </S.TranscriptName>
+                    <S.TranscriptTime>{formatMilliseconds(transcript.start)}</S.TranscriptTime>
+                  </S.TranscriptInfo>
+                  <S.TranscriptText>{transcript.text}</S.TranscriptText>
+                </S.TranscriptContent>
+              </S.TranscriptItem>
+            ))}
+          </S.TranscriptContainer>
+        </S.ContentContainer>
 
-        {/* CustomAudioPlayer로 컴포넌트 이름 변경 */}
-        <CustomAudioPlayer
-          audioSource={localFiles[0]}
-          onPlay={() => console.log('Started playing')}
-          onPause={() => console.log('Paused')}
-          isLightMode={isLightMode}
-          openSpeedbackPopup={handleOpenPlaybackSpeed}>
-          <S.ButtonWrapper>
-            <Button
-              variant="purple"
-              width={'full'}
-              height={48}
-              cssExt={css`
-                display: flex;
-                gap: 4px;
-                font-size: 16px;
-                font-weight: 500;
-                border-radius: 8px;
-              `}
-              onClick={async () => {
-                const isShowModal = await showSurveyModal(
-                  selectedNovaTab,
-                  service,
-                  isCreditRecieved
-                );
-                if (isShowModal) return;
+        <S.AudioPlayerContainer>
+          <AudioPlayer
+            audioSource={voiceDictationResult?.data.voiceUrl as string}
+            endDuration={convertKoreanTimeToSeconds(audioDuration)}
+            onPlay={async () => {
+              const isShowModal = await showSurveyModal(selectedNovaTab, service, isCreditRecieved);
+              if (isShowModal) return;
+            }}
+            onPause={() => console.log('Paused')}
+            isLightMode={isLightMode}
+            openSpeedbackPopup={handleOpenPlaybackSpeed}>
+            <S.ButtonWrapper>
+              <Button
+                variant="purple"
+                width={'full'}
+                height={48}
+                cssExt={css`
+                  display: flex;
+                  gap: 4px;
+                  font-size: 16px;
+                  font-weight: 500;
+                  border-radius: 8px;
+                `}
+                onClick={async () => {
+                  const isShowModal = await showSurveyModal(
+                    selectedNovaTab,
+                    service,
+                    isCreditRecieved
+                  );
+                  if (isShowModal) return;
 
-                handleOpenSaveOverlay();
-              }}>
-              <img src={DownloadIcon} alt="download" />
-              <span>{t(`Nova.Result.Save`)}</span>
-            </Button>
-          </S.ButtonWrapper>
-        </CustomAudioPlayer>
+                  handleOpenSaveOverlay();
+                }}>
+                <img src={DownloadIcon} alt="download" />
+                <span>{t(`Nova.Result.Save`)}</span>
+              </Button>
+            </S.ButtonWrapper>
+          </AudioPlayer>
+        </S.AudioPlayerContainer>
       </S.Container>
     </S.Wrapper>
   );

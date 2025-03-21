@@ -1,4 +1,6 @@
 import { useConfirm } from 'components/Confirm';
+import { TRANSLATION_EXTENSION_TYPE } from 'constants/fileTypes';
+import { NOVA_TAB_TYPE } from 'constants/novaTapTypes';
 import { useTranslation } from 'react-i18next';
 import { setPageStatus } from 'store/slices/nova/pageStatusSlice';
 import { platformInfoSelector } from 'store/slices/platformInfo';
@@ -27,6 +29,8 @@ export default function useCurrentDocAnalysis() {
   const { getAvailableFileCnt } = useUserInfoUtils();
 
   const analysisCurDoc = async () => {
+    console.log('현재 문서 정보 - currentFile', currentFile);
+
     if (currentFile.type === 'notSupported') {
       await confirm({
         msg: t('Nova.Alert.UnopenableDocError', { max: getAvailableFileCnt(selectedNovaTab) })!,
@@ -39,6 +43,14 @@ export default function useCurrentDocAnalysis() {
       });
     } else if (currentFile.type === 'drive') {
       if (!validateCurFileSize(currentFile)) return;
+      if (selectedNovaTab === NOVA_TAB_TYPE.translation) {
+        if (!TRANSLATION_EXTENSION_TYPE.includes(`.${currentFile.ext}`)) {
+          await confirm({
+            msg: t('Nova.translation.Alert.UnsupportedFormat')
+          });
+          return;
+        }
+      }
 
       if (Number(currentFile.id) === -1) {
         await confirmSaveDoc(true);
@@ -54,7 +66,8 @@ export default function useCurrentDocAnalysis() {
         dispatch(setDriveFiles([curFile]));
         dispatch(setCreating('none'));
       } else {
-        await confirmSaveDoc(false);
+        console.log('platform', platform);
+        await confirmSaveDoc(platform === ClientType.web ? true : false);
       }
     } else if (currentFile.type === 'local' || currentFile.type === 'unknown') {
       if (!validateCurFileSize(currentFile)) return;

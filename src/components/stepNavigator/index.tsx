@@ -5,21 +5,24 @@ import Step from '@mui/material/Step';
 import StepIcon from '@mui/material/StepIcon';
 import { useTranslation } from 'react-i18next';
 
+import { NOVA_TAB_TYPE } from '../../constants/novaTapTypes';
 import { ReactComponent as ArrowDarkIcon } from '../../img/dark/ico_arrow_down_normal.svg';
 import { ReactComponent as ArrowLightIcon } from '../../img/light/ico_arrow_down_normal.svg';
 import { lang } from '../../locale';
+import { setPageStatus } from '../../store/slices/nova/pageStatusSlice';
 import { themeInfoSelector } from '../../store/slices/theme';
-import { useAppSelector } from '../../store/store';
+import { useAppDispatch, useAppSelector } from '../../store/store';
+import { stepOrder } from '../nova/aiVideo';
 
 import * as S from './style';
 
 interface StepNavigatorProps {
   activeStep: number;
-  setActiveStep: React.Dispatch<React.SetStateAction<number>>;
   steps: { label: React.ReactNode; children: React.ReactNode }[];
 }
 
-export default function StepNavigator({ activeStep, setActiveStep, steps }: StepNavigatorProps) {
+export default function StepNavigator({ activeStep, steps }: StepNavigatorProps) {
+  const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const selectedStepRef = useRef<HTMLDivElement>(null);
@@ -31,16 +34,44 @@ export default function StepNavigator({ activeStep, setActiveStep, steps }: Step
     }
   }, []);
 
+  useEffect(() => {
+    document.querySelectorAll('.MuiStep-root').forEach((el) => {
+      if (el.querySelector('.Mui-completed')) {
+        el.classList.add('step-has-completed');
+      } else {
+        el.classList.remove('step-has-completed');
+      }
+
+      if (el.querySelector('.Mui-disabled')) {
+        el.classList.add('step-has-disabled');
+      } else {
+        el.classList.remove('step-has-disabled');
+      }
+    });
+
+    document.querySelectorAll('.MuiStepLabel-root').forEach((el) => {
+      if (el.querySelector('.Mui-completed')) {
+        el.classList.add('step-label-has-completed');
+      } else {
+        el.classList.remove('step-label-has-completed');
+      }
+
+      if (el.querySelector('.Mui-disabled')) {
+        el.classList.add('step-label-has-disabled');
+      } else {
+        el.classList.remove('step-label-has-disabled');
+      }
+    });
+  }, [steps]);
+
   const handleMove = (index: number) => {
-    if (index === activeStep) {
-      return;
-    } else if (index < activeStep) {
-      setActiveStep(activeStep - 1);
-    } else {
-      setActiveStep(activeStep + 1);
+    if (index === activeStep) return;
+
+    const newStatus = stepOrder[index];
+    if (newStatus) {
+      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: newStatus }));
     }
   };
-
   const CustomStepIcon = (props: any) => {
     const { active, completed, className } = props;
     if (completed) {

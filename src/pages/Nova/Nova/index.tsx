@@ -1,6 +1,7 @@
 import React, { Suspense, useCallback, useEffect, useState } from 'react';
 import { FileWithPath, useDropzone } from 'react-dropzone';
 import { useTranslation } from 'react-i18next';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import Announcement from '../../../components/Announcement';
 import { useConfirm } from '../../../components/Confirm';
@@ -42,10 +43,11 @@ import { ReactComponent as UploadLightIcon } from '../../../img/light/ico_upload
 import { announceInfoSelector } from '../../../store/slices/nova/announceSlice';
 import {
   novaChatModeSelector,
-  novaHistorySelector
+  novaHistorySelector,
+  setIsShareMode
 } from '../../../store/slices/nova/novaHistorySlice';
 import { selectPageService, selectPageStatus } from '../../../store/slices/nova/pageStatusSlice';
-import { selectNovaTab, selectTabSlice } from '../../../store/slices/tabSlice';
+import { selectTabSlice } from '../../../store/slices/tabSlice';
 import { themeInfoSelector } from '../../../store/slices/theme';
 import { userInfoSelector } from '../../../store/slices/userInfo';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
@@ -58,6 +60,7 @@ export type ClientStatusType = 'home' | 'doc_edit_mode' | 'doc_view_mode';
 
 export default function Nova() {
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
   const confirm = useConfirm();
   const announcementList = useAppSelector(announceInfoSelector);
   const { goConvertPage } = useConvert2DTo3D();
@@ -102,12 +105,13 @@ export default function Nova() {
           text: t(`Confirm`),
           callback: () => {
             setExpiredNOVA(false);
+            dispatch(setIsShareMode(false));
             chatNova.newChat(selectedNovaTab, novaHistory);
           }
         }
       });
     }
-  }, [expiredNOVA]);
+  }, [expiredNOVA, selectedNovaTab]);
 
   const onDrop = useCallback(
     async (acceptedFiles: FileWithPath[]) => {
@@ -249,7 +253,7 @@ export default function Nova() {
         {(usingAI || status === 'home') && isDragActive && <Uploading />}
         <NovaHeader />
         {(status === 'progress' || status === 'saving') && <Progress />}
-        <S.Body>
+        <S.Body isScroll={selectedNovaTab != NOVA_TAB_TYPE.voiceDictation}>
           {selectedNovaTab === NOVA_TAB_TYPE.home && <Banner />}
           {announcementList
             .filter(

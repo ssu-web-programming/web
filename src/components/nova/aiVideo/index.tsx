@@ -24,20 +24,22 @@ import Avatar from './avatar';
 import Loading from './loading';
 import Script from './script';
 import * as S from './styles';
-import { Container } from './styles';
 import Voice from './voice';
 
+export const stepOrder = ['avatar', 'voice', 'script'] as const;
 export default function AIVideo() {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const status = useAppSelector(selectPageStatus(NOVA_TAB_TYPE.aiVideo));
-  const [activeStep, setActiveStep] = useState<number>(0);
+  const activeStep = stepOrder.includes(status as any) ? stepOrder.indexOf(status as any) : 0;
   const result = useAppSelector(selectPageResult(NOVA_TAB_TYPE.aiVideo));
   const { getAvatars } = useGetAvatars();
   const { getVoices } = useGetVoices();
   const { getLanguages } = useGetLanguages();
 
   const fetchInitialData = async () => {
+    dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'progress' }));
+
     if (!result?.info.avatars) {
       await getAvatars('all');
     }
@@ -45,14 +47,13 @@ export default function AIVideo() {
       await getVoices('all', 'all');
     }
     if (!result?.info.languages) {
-      getLanguages();
+      await getLanguages();
     }
   };
 
   useEffect(() => {
-    dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'progress' }));
     fetchInitialData().then(() => {
-      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'avatar' }));
+      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: status }));
     });
   }, []);
 
@@ -70,7 +71,6 @@ export default function AIVideo() {
         <>
           <StepNavigator
             activeStep={activeStep}
-            setActiveStep={setActiveStep}
             steps={[
               {
                 label: <S.Label>{t('Nova.aiVideo.selectAvatar.stepTitle')}</S.Label>,
