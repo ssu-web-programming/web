@@ -1,13 +1,16 @@
+import { useEffect, useState } from 'react';
 import { ReactComponent as MaxDarkIcon } from 'img/dark/nova/ico_max.svg';
 import { ReactComponent as MinDarkIcon } from 'img/dark/nova/ico_min.svg';
 import { ReactComponent as MaxLightIcon } from 'img/light/nova/ico_max.svg';
 import { ReactComponent as MinLightIcon } from 'img/light/nova/ico_min.svg';
 
+import usePostSplunkLog from '../../api/usePostSplunkLog';
+import { ClientStatusType } from '../../pages/Nova/Nova';
 import {
   selectPageCreditReceived,
   selectPageService
 } from '../../store/slices/nova/pageStatusSlice';
-import { DeviceType, platformInfoSelector } from '../../store/slices/platformInfo';
+import { ClientType, DeviceType, platformInfoSelector } from '../../store/slices/platformInfo';
 import { screenModeSelector, setScreenMode } from '../../store/slices/screenMode';
 import { selectTabSlice } from '../../store/slices/tabSlice';
 import { themeInfoSelector } from '../../store/slices/theme';
@@ -22,16 +25,30 @@ export const ScreenChangeButton = () => {
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const { screenMode } = useAppSelector(screenModeSelector);
   const { platform, device } = useAppSelector(platformInfoSelector);
-  const { from } = useLangParameterNavigate();
 
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
   const isCreditRecieved = useAppSelector(selectPageCreditReceived(selectedNovaTab));
   const service = useAppSelector(selectPageService(selectedNovaTab));
   const showSurveyModal = UseShowSurveyModal();
 
+  const [isShow, setIsShow] = useState(false);
+
+  useEffect(() => {
+    Bridge.callSyncBridgeApiWithCallback({
+      api: 'getClientStatus',
+      callback: async (status: ClientStatusType) => {
+        setIsShow(status === 'home');
+      }
+    });
+  }, []);
+
   if (
-    ((platform === 'unknown' || platform === 'web' || isDesktop) && from === 'home') ||
-    ((platform === 'android' || platform === 'ios') && device === DeviceType.phone)
+    ((platform === ClientType.web ||
+      platform === ClientType.windows ||
+      platform === ClientType.mac) &&
+      isShow) ||
+    ((platform === ClientType.ios || platform === ClientType.android) &&
+      device === DeviceType.phone)
   ) {
     return (
       <IconButton
