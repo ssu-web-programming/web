@@ -7,7 +7,7 @@ import {
   selectPageCreditReceived,
   selectPageService
 } from '../../store/slices/nova/pageStatusSlice';
-import { DeviceType, platformInfoSelector } from '../../store/slices/platformInfo';
+import { ClientType, DeviceType, platformInfoSelector } from '../../store/slices/platformInfo';
 import { screenModeSelector, setScreenMode } from '../../store/slices/screenMode';
 import { selectTabSlice } from '../../store/slices/tabSlice';
 import { themeInfoSelector } from '../../store/slices/theme';
@@ -29,9 +29,15 @@ export const ScreenChangeButton = () => {
   const service = useAppSelector(selectPageService(selectedNovaTab));
   const showSurveyModal = UseShowSurveyModal();
 
+  console.log('from: ', from);
+  console.log('platform: ', platform);
   if (
-    ((platform === 'unknown' || platform === 'web' || isDesktop) && from === 'home') ||
-    ((platform === 'android' || platform === 'ios') && device === DeviceType.phone)
+    ((platform === ClientType.web ||
+      platform === ClientType.windows ||
+      platform === ClientType.mac) &&
+      from === 'home') ||
+    ((platform === ClientType.ios || platform === ClientType.android) &&
+      device === DeviceType.phone)
   ) {
     return (
       <IconButton
