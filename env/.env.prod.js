@@ -6,7 +6,7 @@ const REACT_APP_PO_API = 'https://polink-static-contents.polarisoffice.com';
 const REACT_APP_PO_PUBLIC_API = 'https://www.polarisoffice.com';
 const REACT_APP_GTM_ID = 'GTM-PGSXB6GL';
 const REACT_APP_GA4_TRACKING_ID = 'G-0C5M4VGQVE';
-const REACT_APP_AMPLITUDE_API_KEY = '36797087f29a87d11cf8a7451befab2b';
+const REACT_APP_AMPLITUDE_API_KEY = 'b751d38d7ca22b987320d976cb5b8657';
 const REACT_APP_AI_EVENT_URL_KO = 'https://polarisoffice.com/ko/promotion/firstmonth_202311_app';
 const REACT_APP_AI_EVENT_URL_EN = 'https://polarisoffice.com/en/promotion/firstmonth_202311_app';
 
