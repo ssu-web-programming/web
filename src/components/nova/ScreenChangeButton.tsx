@@ -25,7 +25,6 @@ export const ScreenChangeButton = () => {
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const { screenMode } = useAppSelector(screenModeSelector);
   const { platform, device } = useAppSelector(platformInfoSelector);
-  const { from } = useLangParameterNavigate();
 
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
   const isCreditRecieved = useAppSelector(selectPageCreditReceived(selectedNovaTab));
