@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction, useMemo, useState } from 'react';
 import ModalSheet from 'components/modalSheet';
 import {
+  FILE_SOURCE_LANGUAGES_WITH_LANG_CODE,
   FILE_TARGET_LANGUAGES_WITH_LANG_CODE,
   SOURCE_LANGUAGES_WITH_LANG_CODE,
   TARGET_LANGUAGES_WITH_LANG_CODE
@@ -37,12 +38,22 @@ export default function LanguageSearch({
   btnType
 }: Props) {
   const { t, i18n } = useTranslation();
-  const initialLanguages =
-    langType === 'source'
-      ? SOURCE_LANGUAGES_WITH_LANG_CODE
-      : btnType === 'FILE'
-        ? FILE_TARGET_LANGUAGES_WITH_LANG_CODE
-        : TARGET_LANGUAGES_WITH_LANG_CODE;
+
+  const getInitialLanguages = () => {
+    if (langType === 'source' && btnType === 'TEXT') {
+      return SOURCE_LANGUAGES_WITH_LANG_CODE;
+    }
+
+    if (langType === 'source' && btnType === 'FILE') {
+      return FILE_SOURCE_LANGUAGES_WITH_LANG_CODE;
+    }
+
+    if (langType === 'target' && btnType === 'FILE') {
+      return FILE_TARGET_LANGUAGES_WITH_LANG_CODE;
+    }
+
+    return TARGET_LANGUAGES_WITH_LANG_CODE;
+  };
 
   const [searchTerm, setSearchTerm] = useState<string>('');
   const { latestLangList } = useLangSearch(langType);
@@ -57,7 +68,7 @@ export default function LanguageSearch({
     const searchValue = searchTerm.toLowerCase();
 
     // 먼저 검색어에 맞는 언어 필터링
-    const filtered = initialLanguages.filter((language) => {
+    const filtered = getInitialLanguages().filter((language) => {
       const { lang, langCode } = language;
 
       // 1. 일반 검색 (대소문자 구분 없이)
@@ -94,7 +105,7 @@ export default function LanguageSearch({
         // 한국어나 기타 언어일 경우 한국어 기준으로 정렬
         return filtered.sort((a, b) => a.lang.localeCompare(b.lang, 'ko'));
     }
-  }, [searchTerm, initialLanguages, i18n.language]);
+  }, [searchTerm, i18n.language, getInitialLanguages]);
   return (
     <ModalSheet isOpen={isOpen} setIsOpen={close} snapPoints={[0.8]} initialSnap={0}>
       <S.Wrapper>
