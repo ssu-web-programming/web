@@ -59,12 +59,15 @@ export const Item = styled.div<{ isMobile?: boolean }>`
   }
 
   .title span {
+    width: 100%;
     height: 51px;
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
+    word-break: break-all;
+    overflow-wrap: break-word;
   }
 
   .site {
@@ -78,7 +81,7 @@ export const Item = styled.div<{ isMobile?: boolean }>`
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      display: ${({ isMobile }) => (isMobile ? 'unset' : '-webkit-box')};
+      display: ${({ isMobile }) => (isMobile ? 'unset' : 'inline-block')};
       -webkit-line-clamp: 1;
       -webkit-box-orient: vertical;
     }
