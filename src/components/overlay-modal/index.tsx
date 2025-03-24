@@ -66,7 +66,7 @@ const ModalContent = styled.div<{ cssExt?: FlattenSimpleInterpolation }>`
   height: auto;
   max-width: 90%;
   max-height: 90vh;
-  padding: 20px;
+  padding: 24px;
   overflow-y: auto;
 
   ${(props) => props.cssExt || ''};
