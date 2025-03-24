@@ -11,7 +11,7 @@ import { lang, langFormatCode } from 'locale';
 import { setNovaExpireTime } from 'store/slices/appState';
 import { setNovaAgreement, setUserInfo } from 'store/slices/userInfo';
 import { useAppDispatch } from 'store/store';
-import Bridge, { ClientType, getDevice, getPlatform, getVersion } from 'util/bridge';
+import Bridge from 'util/bridge';
 
 import { init } from '@amplitude/analytics-browser';
 
@@ -47,7 +47,7 @@ export default function useInitApp() {
           data: { expiredTime } // seconds
         } = await res.json();
         if (success) {
-          const time = process.env.NODE_ENV == 'production' ? expiredTime * 1000 : 3000;
+          const time = process.env.NODE_ENV == 'production' ? expiredTime * 1000 : 720000;
           dispatch(setNovaExpireTime(time));
         }
       } catch (err) {
