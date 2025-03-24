@@ -33,11 +33,17 @@ export const StyledButton = styled.div<{ isExpanded: boolean }>`
   }
 `;
 
-export const ItemWrap = styled.div`
+export const ReferenceWrap = styled.div`
+  display: flex;
+  gap: 4px;
+`;
+
+export const ItemWrap = styled.div<{ isMobile?: boolean }>`
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: ${({ isMobile }) => `repeat(${isMobile ? 3 : 4}, minmax(0, 1fr))`};
   align-items: flex-start;
   gap: 4px;
+  flex: 1;
 `;
 
 export const Item = styled.div<{ isMobile?: boolean }>`
