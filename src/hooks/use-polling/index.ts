@@ -1,5 +1,8 @@
 import { useCallback, useState } from 'react';
 
+import { sendNovaStatus } from '../../api/apiWrapper';
+import { NOVA_TAB_TYPE } from '../../constants/novaTapTypes';
+
 interface PollingConfig<T, R, P> {
   // 초기 API 호출 함수 (ID를 반환하는 API)
   initialFn: (params: P) => Promise<T>;

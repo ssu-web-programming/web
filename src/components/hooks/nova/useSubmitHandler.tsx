@@ -1,5 +1,5 @@
 import { useCallback, useRef } from 'react';
-import { apiWrapper, streaming } from 'api/apiWrapper';
+import { apiWrapper, sendNovaStatus, streaming } from 'api/apiWrapper';
 import { load } from 'cheerio';
 import { DocUnopenableError, ExceedPoDriveLimitError } from 'error/error';
 import { overlay } from 'overlay-kit';
@@ -106,16 +106,17 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
       let timer = null;
       let citations: string[] = [];
 
+      const curTab =
+        chatType === SERVICE_TYPE.NOVA_WEBSEARCH_PERPLEXITY ||
+        chatType === SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO
+          ? NOVA_TAB_TYPE.perplexity
+          : NOVA_TAB_TYPE.aiChat;
+
       try {
         dispatch(setCreating('NOVA'));
         dispatch(setUsingAI(true));
         dispatch(setIsExternal(false));
 
-        const curTab =
-          chatType === SERVICE_TYPE.NOVA_WEBSEARCH_PERPLEXITY ||
-          chatType === SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO
-            ? NOVA_TAB_TYPE.perplexity
-            : NOVA_TAB_TYPE.aiChat;
         Bridge.callBridgeApi('curNovaTab', curTab);
         dispatch(selectNovaTab(curTab));
         dispatch(setPageStatus({ tab: curTab, status: 'chat' }));
@@ -215,10 +216,14 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
             }, 3000);
           timer = progressing();
         }
-        const { res, logger } = await requestor.current.request(NOVA_CHAT_API, {
-          body: formData,
-          method: 'POST'
-        });
+        const { res, logger } = await requestor.current.request(
+          NOVA_CHAT_API,
+          {
+            body: formData,
+            method: 'POST'
+          },
+          { name: curTab, uuid: v4() }
+        );
         splunk = logger;
 
         if (timer) clearTimeout(timer);
@@ -341,6 +346,7 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
           if (citations.length > 0) {
             await getReferences(citations, id);
           }
+          await sendNovaStatus({ name: curTab, uuid: '' }, 'finish');
 
           if (splunk) {
             const log_info = getServiceLoggingInfo(chatType ?? chatMode);
