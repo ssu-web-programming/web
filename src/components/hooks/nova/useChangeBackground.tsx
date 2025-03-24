@@ -1,6 +1,8 @@
+import { v4 } from 'uuid';
+
 import { track } from '@amplitude/analytics-browser';
 
-import { apiWrapper } from '../../../api/apiWrapper';
+import { apiWrapper, sendNovaStatus } from '../../../api/apiWrapper';
 import { NOVA_CHANGE_BACKGROUND } from '../../../api/constant';
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import { getServiceLoggingInfo, SERVICE_TYPE } from '../../../constants/serviceType';
@@ -77,10 +79,14 @@ export const useChangeBackground = () => {
     try {
       const formData = await createFormDataFromFiles([curPageFile]);
       formData.append('prompt', prompt);
-      const { res, logger } = await apiWrapper().request(NOVA_CHANGE_BACKGROUND, {
-        body: formData,
-        method: 'POST'
-      });
+      const { res, logger } = await apiWrapper().request(
+        NOVA_CHANGE_BACKGROUND,
+        {
+          body: formData,
+          method: 'POST'
+        },
+        { name: NOVA_TAB_TYPE.changeBG, uuid: v4() }
+      );
       const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
 
       const response = await res.json();
@@ -123,6 +129,8 @@ export const useChangeBackground = () => {
     } catch (err) {
       resetPageState();
       errorHandle(err);
+    } finally {
+      await sendNovaStatus({ name: NOVA_TAB_TYPE.changeBG, uuid: '' }, 'finish');
     }
   };
 

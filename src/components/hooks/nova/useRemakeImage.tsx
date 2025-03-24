@@ -1,6 +1,8 @@
+import { v4 } from 'uuid';
+
 import { track } from '@amplitude/analytics-browser';
 
-import { apiWrapper } from '../../../api/apiWrapper';
+import { apiWrapper, sendNovaStatus } from '../../../api/apiWrapper';
 import { NOVA_REMAKE_IMAGE } from '../../../api/constant';
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import { getServiceLoggingInfo, SERVICE_TYPE } from '../../../constants/serviceType';
@@ -50,16 +52,19 @@ export const useRemakeImage = () => {
   };
 
   const handleRemakeImage = async () => {
-    console.log('동작!', curPageFile);
     if (!curPageFile) return;
 
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.remakeImg, status: 'loading' }));
     try {
       const formData = await createFormDataFromFiles([curPageFile]);
-      const { res, logger } = await apiWrapper().request(NOVA_REMAKE_IMAGE, {
-        body: formData,
-        method: 'POST'
-      });
+      const { res, logger } = await apiWrapper().request(
+        NOVA_REMAKE_IMAGE,
+        {
+          body: formData,
+          method: 'POST'
+        },
+        { name: NOVA_TAB_TYPE.remakeImg, uuid: v4() }
+      );
       const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
 
       const response = await res.json();
@@ -92,6 +97,8 @@ export const useRemakeImage = () => {
     } catch (err) {
       resetPageState();
       errorHandle(err);
+    } finally {
+      await sendNovaStatus({ name: NOVA_TAB_TYPE.remakeImg, uuid: '' }, 'finish');
     }
   };
 

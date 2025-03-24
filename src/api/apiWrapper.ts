@@ -50,7 +50,12 @@ export function apiWrapper() {
     });
   };
 
-  const request = async function (api: string, init: ApiInit, logger = usePostSplunkLog) {
+  const request = async function (
+    api: string,
+    init: ApiInit,
+    featureEntry?: { name: string; uuid: string },
+    logger = usePostSplunkLog
+  ) {
     await waitForInitComplete();
 
     if (!navigator.onLine) {
@@ -75,6 +80,11 @@ export function apiWrapper() {
       'X-PO-AI-API-LANGUAGE': lang,
       ...session
     };
+
+    if (featureEntry) {
+      headers['uuid'] = featureEntry.uuid;
+      await sendNovaStatus(featureEntry, 'start');
+    }
 
     // FormData인 경우 Content-Type 헤더를 추가하지 않음
     if (!(init.body instanceof FormData)) {
@@ -168,4 +178,17 @@ export const streaming = async (
     const parsed = parser(decodeStr);
     output(parsed);
   }
+};
+
+export const sendNovaStatus = async (
+  featureEntry: { name: string; uuid: string },
+  status: string
+) => {
+  console.log('status: ', featureEntry.name);
+  console.log('status: ', status);
+  await Bridge.callBridgeApi('novaStatusChanged', {
+    feature: featureEntry.name,
+    status: status,
+    uuid: featureEntry.uuid
+  });
 };

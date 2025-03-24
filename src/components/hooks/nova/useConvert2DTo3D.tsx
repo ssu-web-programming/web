@@ -1,6 +1,8 @@
+import { v4 } from 'uuid';
+
 import { track } from '@amplitude/analytics-browser';
 
-import { apiWrapper } from '../../../api/apiWrapper';
+import { apiWrapper, sendNovaStatus } from '../../../api/apiWrapper';
 import { NOVA_GENERATE_ANIMATION } from '../../../api/constant';
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import { getServiceLoggingInfo, SERVICE_TYPE } from '../../../constants/serviceType';
@@ -79,10 +81,14 @@ export const useConvert2DTo3D = () => {
       formData.append('pattern', pattern);
       formData.append('animationType', animationType);
 
-      const { res, logger } = await apiWrapper().request(NOVA_GENERATE_ANIMATION, {
-        body: formData,
-        method: 'POST'
-      });
+      const { res, logger } = await apiWrapper().request(
+        NOVA_GENERATE_ANIMATION,
+        {
+          body: formData,
+          method: 'POST'
+        },
+        { name: NOVA_TAB_TYPE.convert2DTo3D, uuid: v4() }
+      );
       const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
 
       const response = await res.json();
@@ -125,6 +131,8 @@ export const useConvert2DTo3D = () => {
     } catch (err) {
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.convert2DTo3D, status: 'home' }));
       errorHandle(err);
+    } finally {
+      await sendNovaStatus({ name: NOVA_TAB_TYPE.convert2DTo3D, uuid: '' }, 'finish');
     }
   };
 
