@@ -40,7 +40,7 @@ export const VoiceContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 8px;
 `;
 
 export const TextWrap = styled.div<{ isActive: boolean }>`
@@ -50,7 +50,7 @@ export const TextWrap = styled.div<{ isActive: boolean }>`
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  padding: 8px;
+  padding: 8px 12px;
   gap: 8px;
   border: 1px solid
     ${({ isActive, theme }) => (isActive ? 'var(--ai-purple-50-main)' : theme.color.border.gray01)};
