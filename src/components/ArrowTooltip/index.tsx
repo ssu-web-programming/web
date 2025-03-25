@@ -18,7 +18,10 @@ const CustomTooltip = styled(({ className, ...props }: TooltipProps) => (
     marginBottom: '4px !important',
     backgroundColor: theme.color.background.tooltip,
     whiteSpace: 'break-spaces',
-    fontSize: '12px'
+    fontSize: '12px',
+    fontWeight: '500',
+    lineHeight: '150%',
+    borderRadius: '8px'
   }
 }));
 
