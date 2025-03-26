@@ -88,9 +88,6 @@ export default function VoiceDictationResult() {
     return minutes * 60 + seconds;
   };
 
-  console.log('123 배포 확인!');
-  console.log('audioDuration123123', audioDuration);
-
   return (
     <S.Wrapper>
       <S.Container>
