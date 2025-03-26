@@ -49,6 +49,13 @@ const TimeDisplay = styled.div`
   font-size: 12px;
   color: ${({ theme }) => theme.color.text.gray01};
   margin: 0px 16px;
+
+  & > span:nth-child(1) {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 150%;
+    color: ${({ theme }) => theme.color.text.main};
+  }
 `;
 
 const ControlsContainer = styled.div`

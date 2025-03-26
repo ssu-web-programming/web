@@ -7,10 +7,12 @@ const ModalContainer = styled.div`
   border-radius: 16px;
 `;
 
-const ModalTitle = styled.h2`
-  font-size: 18px;
+const ModalTitle = styled.p`
   color: ${({ theme }) => theme.color.text.gray04};
   margin-bottom: 24px;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 150%;
 `;
 
 const RadioGroup = styled.div`
@@ -23,7 +25,7 @@ const RadioGroup = styled.div`
 const RadioLabel = styled.label`
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 9.5px;
   cursor: pointer;
   padding: 4px 0;
 `;
@@ -51,23 +53,23 @@ const RadioInput = styled.input.attrs({ type: 'radio' })`
 const RadioText = styled.span`
   font-size: 16px;
   color: ${({ theme }) => theme.color.text.gray03};
+  font-weight: 500;
 `;
 
 const ButtonGroup = styled.div`
   display: flex;
-  gap: 12px;
+  gap: 8px;
 
-  & > :nth-child(1) {
-    flex-grow: 1;
+  & > button:nth-child(1) {
+    width: 92px;
   }
 
-  & > :nth-child(2) {
-    flex-grow: 3;
+  & > button:nth-child(2) {
+    width: 196px;
   }
 `;
 
 const Button = styled.button<{ primary?: boolean }>`
-  flex: 1;
   padding: 14px;
   border-radius: 8px;
   border: none;

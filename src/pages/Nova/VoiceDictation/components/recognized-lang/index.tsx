@@ -55,6 +55,7 @@ export default function RecognizedLang() {
           transform: translateX(-50%);
           left: 40%;
           width: 160px;
+          top: 37px;
         `}
       />
     </S.SelectWrapper>

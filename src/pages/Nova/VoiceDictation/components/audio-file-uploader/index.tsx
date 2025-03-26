@@ -17,7 +17,6 @@ import * as S from './style';
 
 interface ImageUploaderProps {
   guideMsg: string;
-  handleUploadComplete: () => void;
   curTab: NOVA_TAB_TYPE;
   creditCount?: number;
   onNext?: () => void;

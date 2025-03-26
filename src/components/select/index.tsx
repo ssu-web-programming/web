@@ -17,6 +17,7 @@ interface StyledProps {
   $optionContainerStyle?: FlattenSimpleInterpolation;
   $optionStyle?: FlattenSimpleInterpolation;
   $iconStyles?: FlattenSimpleInterpolation;
+  $selectTextStyles?: FlattenSimpleInterpolation;
 }
 
 export interface SelectOption<T extends string> {
@@ -59,7 +60,8 @@ export default function Select<T extends string>({
   $stylesSelectedOption = false,
   $optionContainerStyle,
   $optionStyle,
-  $iconStyles
+  $iconStyles,
+  $selectTextStyles
 }: SelectProps<T>) {
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const [isOpen, setIsOpen] = useState(false);
@@ -70,12 +72,14 @@ export default function Select<T extends string>({
 
   const defaultRenderSelectedValue = (option: SelectOption<T>) => {
     if (!option) {
-      return <S.SelectText>{placeholder}</S.SelectText>;
+      return <S.SelectText $selectTextStyles={$selectTextStyles}>{placeholder}</S.SelectText>;
     }
     if (option.component) {
       return option.component;
     }
-    return <S.SelectText>{t(option.label as string)}</S.SelectText>;
+    return (
+      <S.SelectText $selectTextStyles={$selectTextStyles}>{t(option.label as string)}</S.SelectText>
+    );
   };
 
   const defaultRenderOption = (option: SelectOption<T>) => {

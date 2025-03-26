@@ -12,6 +12,7 @@ import { setError } from 'store/slices/errorSlice';
 import { themeInfoSelector } from 'store/slices/theme';
 import { getCurrentFile, getLocalFiles } from 'store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from 'store/store';
+import { css } from 'styled-components';
 import { formatCurrentTime } from 'util/getAudioDuration';
 
 import { track } from '@amplitude/analytics-browser';
@@ -194,6 +195,12 @@ export default function VoiceDictationReady() {
                     }));
                   }}
                   direction="up"
+                  $selectButtonStyle={css`
+                    color: #6f3ad0;
+                  `}
+                  $selectTextStyles={css`
+                    font-size: 16px;
+                  `}
                 />
               </S.LanguageValue>
             </S.LanguageSelector>

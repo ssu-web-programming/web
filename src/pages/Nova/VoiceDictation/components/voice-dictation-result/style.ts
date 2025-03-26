@@ -122,9 +122,9 @@ const TranscriptContent = styled.div`
 
 const TranscriptName = styled.div`
   font-size: 14px;
-  line-height: 21px;
   font-weight: 600;
-  color: ${({ theme }) => theme.color.text.gray02};
+  color: ${({ theme }) => theme.color.text.gray03};
+  line-height: 150%;
 `;
 const TranscriptInfo = styled.div`
   display: flex;
