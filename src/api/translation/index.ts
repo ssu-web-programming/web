@@ -6,9 +6,11 @@ import {
   NOVA_TRANSLATE_TEXT,
   PO_DRIVE_DOC_OPEN_STATUS
 } from 'api/constant';
+import { v4 } from 'uuid';
 
 import { track } from '@amplitude/analytics-browser';
 
+import { NOVA_TAB_TYPE } from '../../constants/novaTapTypes';
 import { getServiceLoggingInfo, SERVICE_TYPE } from '../../constants/serviceType';
 import { getCurrentFile } from '../../store/slices/uploadFiles';
 import { useAppSelector } from '../../store/store';
@@ -39,13 +41,17 @@ export interface CheckTranslateStatusResponse {
 
 const translationHttp = {
   postTranslateText: async ({ text, sourceLang, targetLang }: PostTranslateText) => {
-    const { res, logger } = await apiWrapper().request(NOVA_TRANSLATE_TEXT, {
-      headers: {
-        'Content-Type': 'application/json'
+    const { res, logger } = await apiWrapper().request(
+      NOVA_TRANSLATE_TEXT,
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ text, sourceLang, targetLang }),
+        method: 'POST'
       },
-      body: JSON.stringify({ text, sourceLang, targetLang }),
-      method: 'POST'
-    });
+      { name: NOVA_TAB_TYPE.translation, uuid: v4() }
+    );
 
     const response = await res.json();
     if (!response.success) {
@@ -67,10 +73,14 @@ const translationHttp = {
     formData.append('sourceLang', sourceLang || '');
     formData.append('targetLang', targetLang);
 
-    const { res, logger } = await apiWrapper().request(NOVA_TRANSLATE_DOCUMENT, {
-      method: 'POST',
-      body: formData
-    });
+    const { res, logger } = await apiWrapper().request(
+      NOVA_TRANSLATE_DOCUMENT,
+      {
+        method: 'POST',
+        body: formData
+      },
+      { name: NOVA_TAB_TYPE.translation, uuid: v4() }
+    );
 
     const response = await res.json();
     if (!response.success) {

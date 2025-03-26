@@ -27,13 +27,15 @@ export default function useShowConfirmModal() {
                 close(true);
               }
             }}
-            onCancel={{
-              text: onCancel?.text || '',
-              handleCancel: () => {
-                onCancel?.handleCancel();
-                close(false);
+            {...(onCancel && {
+              onCancel: {
+                text: onCancel.text || '',
+                handleCancel: () => {
+                  onCancel.handleCancel();
+                  close(false);
+                }
               }
-            }}
+            })}
             neverShowAgain={neverShowAgain}
             cookieName={cookieName}
           />

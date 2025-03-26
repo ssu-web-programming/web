@@ -11,7 +11,7 @@ import { lang, langFormatCode } from 'locale';
 import { setNovaExpireTime } from 'store/slices/appState';
 import { setNovaAgreement, setUserInfo } from 'store/slices/userInfo';
 import { useAppDispatch } from 'store/store';
-import Bridge, { ClientType, getDevice, getPlatform, getVersion } from 'util/bridge';
+import Bridge from 'util/bridge';
 
 import { init } from '@amplitude/analytics-browser';
 
