@@ -184,8 +184,6 @@ export const sendNovaStatus = async (
   featureEntry: { name: string; uuid: string },
   status: string
 ) => {
-  console.log('status: ', featureEntry.name);
-  console.log('status: ', status);
   await Bridge.callBridgeApi('novaStatusChanged', {
     feature: featureEntry.name,
     status: status,
