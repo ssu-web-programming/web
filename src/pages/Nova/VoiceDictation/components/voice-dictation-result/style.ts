@@ -12,17 +12,17 @@ const Container = styled.div`
   flex-direction: column;
   width: 100%;
   height: 100vh;
-  overflow: hidden; /* 전체 컨테이너가 스크롤되지 않도록 */
+  overflow: hidden;
 `;
 
 // 상단 콘텐츠 영역을 감싸는 컨테이너 추가
 const ContentContainer = styled.div`
   display: flex;
   flex-direction: column;
-  flex: 1; /* 남은 공간을 모두 차지 */
-  overflow: hidden; /* 내부 스크롤 처리를 위해 */
+  flex: 1;
+  overflow: hidden;
   padding: 0 16px;
-  min-height: 0; /* flex 컨테이너에서 overflow가 제대로 작동하기 위해 필요 */
+  min-height: 0;
 `;
 
 const Header = styled.div`
@@ -64,37 +64,35 @@ const TranscriptContainer = styled.div`
   margin: 0 0 16px 0;
   border: 1px solid ${({ theme }) => theme.color.border.gray01};
   height: calc(100vh - 345px);
-  overflow-y: auto;
+  /* overflow-y: auto; */
   padding: 16px;
 
-  &::-webkit-scrollbar-track {
+  /* &::-webkit-scrollbar-track {
     padding-top: 12px;
     margin-top: 12px;
     margin-bottom: 12px;
     padding-bottom: 12px;
-  }
+  } */
+`;
+
+const TranscriptScrollContainer = styled.div`
+  overflow-y: auto;
+  height: calc(100% - 50px);
 `;
 
 const NewTranscript = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 16px;
   border-radius: 0.5rem;
   border: none;
   width: 100%;
   justify-content: space-between;
   font-size: 0.875rem;
 
-  & > span:nth-child(1) {
+  & > p {
     color: ${({ theme }) => theme.color.text.gray03};
     font-size: 16px;
     font-weight: 600;
-  }
-
-  & > span:nth-child(2) {
-    color: #9ea4aa;
-    font-size: 14px;
-    font-weight: 400;
   }
 `;
 
@@ -102,6 +100,14 @@ const TranscriptItem = styled.div<{ color: string }>`
   display: flex;
   gap: 0.75rem;
   margin-bottom: 16px;
+`;
+
+const TimeWrapper = styled.div`
+  color: #9ea4aa;
+  font-size: 14px;
+  font-weight: 400;
+  margin-bottom: 16px;
+  margin-top: 4px;
 `;
 
 const TranscriptIcon = styled.div<{ color: string }>`
@@ -161,10 +167,8 @@ const ButtonWrapper = styled.div`
   margin-bottom: 24px;
 `;
 
-// AudioPlayer와 버튼 영역을 감싸는 컨테이너 추가
 const AudioPlayerContainer = styled.div`
-  /* AudioPlayer의 높이가 고정되어 있다고 가정 */
-  flex-shrink: 0; /* 크기 고정 */
+  flex-shrink: 0;
 `;
 
 export {
@@ -176,6 +180,7 @@ export {
   Header,
   NewTranscript,
   SaveButton,
+  TimeWrapper,
   Title,
   TranscriptContainer,
   TranscriptContent,
@@ -183,6 +188,7 @@ export {
   TranscriptInfo,
   TranscriptItem,
   TranscriptName,
+  TranscriptScrollContainer,
   TranscriptText,
   TranscriptTime,
   Wrapper

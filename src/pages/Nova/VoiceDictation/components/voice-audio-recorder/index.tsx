@@ -38,14 +38,12 @@ export default function VoiceAudioRecorder() {
   };
 
   return (
-    <>
-      <TestAudioRecorder
-        isInitRecording={isVoiceRecording}
-        onRecordingFinish={handleRecordingFinish}
-        onStopConfirm={openStopOverlay as any}
-        selectedLangOption={selectedLangOption}
-        openLangOverlay={openLangOverlay}
-      />
-    </>
+    <TestAudioRecorder
+      isInitRecording={isVoiceRecording}
+      onRecordingFinish={handleRecordingFinish}
+      onStopConfirm={openStopOverlay as any}
+      selectedLangOption={selectedLangOption}
+      openLangOverlay={openLangOverlay}
+    />
   );
 }
