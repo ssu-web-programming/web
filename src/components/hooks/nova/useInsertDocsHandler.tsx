@@ -60,7 +60,10 @@ export const useInsertDocsHandler = () => {
               });
               break;
             case 'doc_view_mode':
-              if (selectedNovaTab === NOVA_TAB_TYPE.translation) {
+              if (
+                selectedNovaTab === NOVA_TAB_TYPE.translation ||
+                selectedNovaTab === NOVA_TAB_TYPE.voiceDictation
+              ) {
                 confirm({
                   title: t(`Nova.Chat.InsertDoc.Fail.Title`)!,
                   msg: t(`Nova.Chat.InsertDoc.Fail.Msg.Translation`)!,
