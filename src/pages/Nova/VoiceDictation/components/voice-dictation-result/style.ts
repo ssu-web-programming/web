@@ -64,20 +64,13 @@ const TranscriptContainer = styled.div`
   margin: 0 0 16px 0;
   border: 1px solid ${({ theme }) => theme.color.border.gray01};
   height: calc(100vh - 345px);
-  /* overflow-y: auto; */
-  padding: 16px;
-
-  /* &::-webkit-scrollbar-track {
-    padding-top: 12px;
-    margin-top: 12px;
-    margin-bottom: 12px;
-    padding-bottom: 12px;
-  } */
 `;
 
 const TranscriptScrollContainer = styled.div`
   overflow-y: auto;
-  height: calc(100% - 50px);
+  height: calc(100% - 90px);
+  padding-left: 16px;
+  padding-right: 8px;
 `;
 
 const NewTranscript = styled.div`
@@ -88,6 +81,7 @@ const NewTranscript = styled.div`
   width: 100%;
   justify-content: space-between;
   font-size: 0.875rem;
+  padding: 16px 16px 0px 16px;
 
   & > p {
     color: ${({ theme }) => theme.color.text.gray03};
@@ -108,6 +102,7 @@ const TimeWrapper = styled.div`
   font-weight: 400;
   margin-bottom: 16px;
   margin-top: 4px;
+  padding: 0px 16px;
 `;
 
 const TranscriptIcon = styled.div<{ color: string }>`
