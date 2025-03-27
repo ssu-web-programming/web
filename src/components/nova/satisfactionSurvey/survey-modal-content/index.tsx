@@ -4,6 +4,7 @@ import { css } from 'styled-components';
 
 import { apiWrapper } from '../../../../api/apiWrapper';
 import { NOVA_CREDIT_OFFER } from '../../../../api/constant';
+import { NOVA_TAB_TYPE } from '../../../../constants/novaTapTypes';
 import { getServiceLoggingInfo, SERVICE_TYPE } from '../../../../constants/serviceType';
 import CloseDarkIcon from '../../../../img/dark/ico_nova_close.svg';
 import BadDisableDarkIcon from '../../../../img/dark/nova/survey/ico_bad_disable.svg';
@@ -15,6 +16,7 @@ import BadDisableLightIcon from '../../../../img/light/nova/survey/ico_bad_disab
 import BadEnableLightIcon from '../../../../img/light/nova/survey/ico_bad_enable.svg';
 import GoodDisableLightIcon from '../../../../img/light/nova/survey/ico_good_disable.svg';
 import GoodEnableLightIcon from '../../../../img/light/nova/survey/ico_good_enable.svg';
+import { novaChatModeSelector } from '../../../../store/slices/nova/novaHistorySlice';
 import {
   selectPageService,
   setPageCreditReceivedByServiceType
@@ -36,6 +38,7 @@ export default function SurveyModalContent() {
   const isLightMode = useAppSelector(themeInfoSelector);
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
   const service = useAppSelector(selectPageService(selectedNovaTab));
+  const chatMode = useAppSelector(novaChatModeSelector);
   const errHandle = useErrorHandle();
   const [result, setResult] = useState<'great' | 'sorry' | null>(null);
   const [dontShowSurvey, setDontShowSurvey] = useState(false);
@@ -80,7 +83,13 @@ export default function SurveyModalContent() {
             serviceType: service[0].serviceType
           })
         );
-        const log_info = getServiceLoggingInfo(service[0].serviceType);
+
+        const gptVer =
+          selectedNovaTab === NOVA_TAB_TYPE.aiChat || selectedNovaTab === NOVA_TAB_TYPE.perplexity
+            ? chatMode
+            : service[0].serviceType;
+
+        const log_info = getServiceLoggingInfo(gptVer);
         await logger({
           dp: 'ai.nova',
           dt: 'credit_event',
