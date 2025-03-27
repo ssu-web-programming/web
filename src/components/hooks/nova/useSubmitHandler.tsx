@@ -183,7 +183,8 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
         formData.append('vsId', vsId);
         formData.append('threadId', threadId);
         formData.append('model', getServiceEngineName(chatType ?? chatMode));
-        formData.append('history', JSON.stringify(novaHistory.length ? novaHistory : []));
+        const history = novaHistory.map(({ files, ...rest }) => rest);
+        formData.append('history', JSON.stringify(history.length > 0 ? history : []));
 
         dispatch(
           pushChat({
