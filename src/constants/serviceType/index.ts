@@ -261,10 +261,10 @@ export const getServiceEngineName = (serviceType: SERVICE_TYPE): string => {
     [SERVICE_TYPE.NOVA_IMG_GPT4O]: 'gpt4o',
     [SERVICE_TYPE.NOVA_ASK_DOC_GPT4O]: 'gpt4o',
     [SERVICE_TYPE.NOVA_ASK_IMG_GPT4O]: 'gpt4o',
-    [SERVICE_TYPE.NOVA_CHAT_GPT4O_MINI]: '4o_mini',
+    [SERVICE_TYPE.NOVA_CHAT_GPT4O_MINI]: 'gpt-4o-mini',
     [SERVICE_TYPE.NOVA_CHAT_O3MINI]: 'o3-mini',
     [SERVICE_TYPE.WRITE_CLADE3]: 'claude',
-    [SERVICE_TYPE.NOVA_CHAT_CLAUDE_3_7_SONNET]: 'calude',
+    [SERVICE_TYPE.NOVA_CHAT_CLAUDE_3_7_SONNET]: 'claude-3-7-sonnet',
     [SERVICE_TYPE.WRITE_CLOVA]: 'clovax',
     [SERVICE_TYPE.NOVA_WEBSEARCH_PERPLEXITY]: 'sonar',
     [SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO]: 'sonar-reasoning-pro'
