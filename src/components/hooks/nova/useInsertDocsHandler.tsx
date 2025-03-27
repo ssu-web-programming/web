@@ -43,10 +43,11 @@ export const useInsertDocsHandler = () => {
   };
 
   const insertDocsHandler = useCallback(
-    async (history?: NovaChatType) => {
+    async (history?: NovaChatType, outPutTxt?: string) => {
       Bridge.callSyncBridgeApiWithCallback({
         api: 'getClientStatus',
         callback: async (status: ClientStatusType) => {
+          console.log('status', status);
           switch (status) {
             case 'home':
               confirm({
@@ -102,9 +103,13 @@ export const useInsertDocsHandler = () => {
                   }
                 }
               } else if (selectedNovaTab === NOVA_TAB_TYPE.translation) {
-                console.log('history', history);
                 insertDoc(history!.output);
                 dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.CompleteInsert`) }));
+              } else if (selectedNovaTab === NOVA_TAB_TYPE.voiceDictation) {
+                if (outPutTxt) {
+                  insertDoc(outPutTxt);
+                  dispatch(activeToast({ type: 'info', msg: t(`ToastMsg.CompleteInsert`) }));
+                }
               } else {
                 if (!result) break;
                 if (result.link) {
