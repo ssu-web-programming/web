@@ -117,7 +117,8 @@ export default function VoiceDictationResult() {
       name: t('Nova.Chat.InsertDoc.Title'),
       iconSrc: isLightMode ? insertDocIcon : insertDarkDocIcon,
       clickHandler: async () => {
-        await insertDocsHandler();
+        const segments = voiceDictationResult!.data.segments;
+        await insertDocsHandler(undefined, parseJsonToText(segments));
       },
       isActive: clientStatus !== 'home'
     },
