@@ -162,6 +162,7 @@ export default function VoiceDictationResult() {
                     iconSrc={iconButton.iconSrc}
                     iconSize={24}
                     width={'fit'}
+                    tooltipDuration={2000}
                   />
                 ))}
               </div>

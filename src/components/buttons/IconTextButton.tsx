@@ -1,5 +1,8 @@
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, useEffect, useRef, useState } from 'react';
+import { platformInfoSelector } from 'store/slices/platformInfo';
+import { useAppSelector } from 'store/store';
 import styled from 'styled-components';
+import { ClientType } from 'util/bridge';
 
 import Icon, { IconSize } from '../Icon';
 
@@ -47,9 +50,13 @@ const TooltipWrapper = styled.div`
   display: inline-block;
 `;
 
-const Tooltip = styled.div`
+interface TooltipProps {
+  isVisible: boolean;
+}
+
+const Tooltip = styled.div<TooltipProps>`
   width: fit-content;
-  visibility: hidden;
+  visibility: ${(props) => (props.isVisible ? 'visible' : 'hidden')};
   position: absolute;
   z-index: 1;
   bottom: 125%;
@@ -65,7 +72,6 @@ const Tooltip = styled.div`
   white-space: nowrap;
 
   /* 말풍선 꼬리 */
-
   &:after {
     content: '';
     position: absolute;
@@ -78,8 +84,10 @@ const Tooltip = styled.div`
       transparent;
   }
 
-  ${TooltipWrapper}:hover & {
-    visibility: visible;
+  @media (hover: hover) {
+    ${TooltipWrapper}:hover & {
+      visibility: visible;
+    }
   }
 `;
 
@@ -91,10 +99,50 @@ export interface IconTextButtonProps extends ButtonProps {
   iconSize?: IconSize | number;
   innerText?: boolean;
   tooltip?: string;
+  tooltipDuration?: number;
 }
 
 export default function IconTextButton(props: PropsWithChildren<IconTextButtonProps>) {
-  const { children, iconPos = 'right', iconSrc, iconSize = 'sm', tooltip, ...rest } = props;
+  const {
+    children,
+    iconPos = 'right',
+    iconSrc,
+    iconSize = 'sm',
+    tooltip,
+    tooltipDuration = 2000,
+    ...rest
+  } = props;
+
+  const [isTooltipVisible, setIsTooltipVisible] = useState(false);
+  const timerRef = useRef<number | null>(null);
+  const { platform } = useAppSelector(platformInfoSelector);
+  const isMobile = platform === ClientType.ios || platform === ClientType.android;
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (!tooltip) return;
+
+    e.stopPropagation();
+
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+
+    // 툴팁 표시
+    setIsTooltipVisible(true);
+
+    timerRef.current = window.setTimeout(() => {
+      setIsTooltipVisible(false);
+      timerRef.current = null;
+    }, tooltipDuration);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, []);
 
   const buttonContent = (
     <Contents>
@@ -131,9 +179,9 @@ export default function IconTextButton(props: PropsWithChildren<IconTextButtonPr
 
   if (tooltip) {
     return (
-      <TooltipWrapper>
+      <TooltipWrapper onTouchStart={isMobile ? handleTouchStart : undefined}>
         <Button {...rest}>{buttonContent}</Button>
-        <Tooltip>{tooltip}</Tooltip>
+        <Tooltip isVisible={isTooltipVisible}>{tooltip}</Tooltip>
       </TooltipWrapper>
     );
   }
