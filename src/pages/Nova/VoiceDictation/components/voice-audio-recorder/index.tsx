@@ -1,8 +1,9 @@
 import OverlayModal from 'components/overlay-modal';
 import { overlay } from 'overlay-kit';
 import { setIsMicrophoneState } from 'store/slices/appState';
-import { useAppDispatch } from 'store/store';
-import Bridge from 'util/bridge';
+import { platformInfoSelector } from 'store/slices/platformInfo';
+import { useAppDispatch, useAppSelector } from 'store/store';
+import Bridge, { ClientType } from 'util/bridge';
 
 import { useVoiceDictationContext } from '../../provider/voice-dictation-provider';
 import DesktopLangSelector from '../modals/desktop-lang-selector';
@@ -16,6 +17,9 @@ export default function VoiceAudioRecorder() {
   } = useVoiceDictationContext();
 
   const dispatch = useAppDispatch();
+  const { platform } = useAppSelector(platformInfoSelector);
+
+  const isMobile = platform === ClientType.ios || platform === ClientType.android;
 
   const openStopOverlay = async () => {
     return await overlay.openAsync(({ isOpen, close }) => (
@@ -53,7 +57,7 @@ export default function VoiceAudioRecorder() {
         onRecordingFinish={handleRecordingFinish}
         onStopConfirm={openStopOverlay as any}
         selectedLangOption={selectedLangOption}
-        openLangOverlay={openMobileLangOverlay}
+        openLangOverlay={isMobile ? openMobileLangOverlay : openLangOverlay}
       />
     </>
   );

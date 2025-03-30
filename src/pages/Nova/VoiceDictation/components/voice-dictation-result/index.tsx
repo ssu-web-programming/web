@@ -20,6 +20,7 @@ import {
 } from '../../../../../store/slices/nova/pageStatusSlice';
 import { selectTabSlice } from '../../../../../store/slices/tabSlice';
 import { useVoiceDictationContext } from '../../provider/voice-dictation-provider';
+import MobilePlaybackSpeedModalContent from '../modals/mobile-playback-speed-modal-content';
 import PlaybackSpeedModalContent from '../modals/playback-speed-modal-content';
 // AudioPlayer 컴포넌트와 타입 임포트 업데이트
 import AudioPlayer, { PlaybackSpeed } from '../voice-audio-player';
@@ -65,12 +66,19 @@ export default function VoiceDictationResult() {
 
     overlay.open(({ isOpen, close }) => {
       return (
-        <OverlayModal isOpen={isOpen} onClose={close}>
-          <PlaybackSpeedModalContent
-            onChangeSpeedOptions={handleChangeSpeedOtions}
-            currentSpeed={currentSpeed}
-          />
-        </OverlayModal>
+        // <OverlayModal isOpen={isOpen} onClose={close}>
+        //   <PlaybackSpeedModalContent
+        //     onChangeSpeedOptions={handleChangeSpeedOtions}
+        //     currentSpeed={currentSpeed}
+        //   />
+
+        // </OverlayModal>
+        <MobilePlaybackSpeedModalContent
+          isOpen={isOpen}
+          setIsOpen={close}
+          selectedSpeed={currentSpeed}
+          onSelectSpeed={handleChangeSpeedOtions}
+        />
       );
     });
   };

@@ -23,12 +23,6 @@ export default function PlaybackSpeedModalContent({ onChangeSpeedOptions, curren
 
   const speeds: PlaybackSpeed[] = [0.8, 1.0, 1.2, 1.5, 1.8, 2.0];
 
-  const { t } = useTranslation();
-  const { selectedNovaTab } = useAppSelector(selectTabSlice);
-  const service = useAppSelector(selectPageService(selectedNovaTab));
-  const isCreditRecieved = useAppSelector(selectPageCreditReceived(selectedNovaTab));
-  const showSurveyModal = UseShowSurveyModal();
-
   const handleClose = () => {
     overlay.closeAll();
   };
