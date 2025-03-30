@@ -7,9 +7,11 @@ import DownloadIcon from 'img/light/ico_download_white.svg';
 import CheckLightIcon from 'img/light/nova/check_purple.svg';
 import { overlay } from 'overlay-kit';
 import { useTranslation } from 'react-i18next';
+import { platformInfoSelector } from 'store/slices/platformInfo';
 import { themeInfoSelector } from 'store/slices/theme';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import { css } from 'styled-components';
+import { ClientType } from 'util/bridge';
 import { formatMilliseconds } from 'util/getAudioDuration';
 
 import UseShowSurveyModal from '../../../../../components/hooks/use-survey-modal';
@@ -39,6 +41,10 @@ export default function VoiceDictationResult() {
   const isCreditRecieved = useAppSelector(selectPageCreditReceived(selectedNovaTab));
   const showSurveyModal = UseShowSurveyModal();
 
+  const { platform } = useAppSelector(platformInfoSelector);
+
+  const isMobile = platform === ClientType.ios || platform === ClientType.android;
+
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -66,17 +72,26 @@ export default function VoiceDictationResult() {
 
     overlay.open(({ isOpen, close }) => {
       return (
-        // <OverlayModal isOpen={isOpen} onClose={close}>
-        //   <PlaybackSpeedModalContent
-        //     onChangeSpeedOptions={handleChangeSpeedOtions}
-        //     currentSpeed={currentSpeed}
-        //   />
+        <OverlayModal isOpen={isOpen} onClose={close}>
+          <PlaybackSpeedModalContent
+            onChangeSpeedOptions={handleChangeSpeedOtions}
+            currentSpeed={currentSpeed}
+          />
+        </OverlayModal>
+      );
+    });
+  };
 
-        // </OverlayModal>
+  const handleOpenMobilePlaybackSpeed = (
+    handleChangeSpeedOtions: (nextSpeed: PlaybackSpeed) => void,
+    currentSpeed: PlaybackSpeed
+  ) => {
+    overlay.open(({ isOpen, close }) => {
+      return (
         <MobilePlaybackSpeedModalContent
           isOpen={isOpen}
           setIsOpen={close}
-          selectedSpeed={currentSpeed}
+          currentSpeed={currentSpeed}
           onSelectSpeed={handleChangeSpeedOtions}
         />
       );
@@ -147,7 +162,7 @@ export default function VoiceDictationResult() {
             }}
             onPause={() => console.log('Paused')}
             isLightMode={isLightMode}
-            openSpeedbackPopup={handleOpenPlaybackSpeed}>
+            openSpeedbackPopup={isMobile ? handleOpenMobilePlaybackSpeed : handleOpenPlaybackSpeed}>
             <S.ButtonWrapper>
               <Button
                 variant="purple"

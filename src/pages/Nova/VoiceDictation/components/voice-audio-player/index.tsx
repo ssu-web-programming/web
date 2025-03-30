@@ -109,6 +109,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
 
   const handleChangeSpeedOtions = (nextSpeed: PlaybackSpeed) => {
     if (audioRef.current) {
+      console.log('여기도냐?', nextSpeed);
       setPlaybackSpeed(nextSpeed);
       audioRef.current.playbackRate = nextSpeed;
     }
@@ -118,21 +119,11 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
     openSpeedbackPopup?.(handleChangeSpeedOtions, playbackSpeed);
   };
 
-  // const handleEnded = () => {
-  //   console.log('handleEnded 함수 실행!');
-  //   setIsPlaying(false);
-  // };
-
   const progress = endDuration ? Math.min((currentTime / endDuration) * 100, 100) : 0;
 
   return (
     <S.Container>
-      <audio
-        ref={audioRef}
-        src={audioSource as string}
-        onTimeUpdate={handleTimeUpdate}
-        // onEnded={handleEnded}
-      />
+      <audio ref={audioRef} src={audioSource as string} onTimeUpdate={handleTimeUpdate} />
 
       <S.ProgressBarContainer onClick={handleProgressBarClick}>
         <S.ProgressBar progress={`${progress}%`} />
