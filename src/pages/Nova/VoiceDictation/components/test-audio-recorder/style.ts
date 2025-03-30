@@ -53,7 +53,7 @@ const ButtonGroup = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
+  gap: 44px;
   height: 64px;
   margin-top: 8px;
 `;

@@ -8,14 +8,15 @@ import * as S from './style';
 interface Props {
   fileName?: string;
   isDeleteIcon?: boolean;
+  iconSize?: number;
 }
 
-export default function FileItem({ fileName, isDeleteIcon = true }: Props) {
+export default function FileItem({ fileName, isDeleteIcon = true, iconSize = 60 }: Props) {
   const dispatch = useAppDispatch();
   return (
     <S.Wrapper>
       <S.IconContainer>
-        <Icon size={60} iconSrc={getFileIcon(fileName as string)} />
+        <Icon size={iconSize} iconSrc={getFileIcon(fileName as string)} />
         {isDeleteIcon && (
           <S.DeleteIcon
             onClick={() => {

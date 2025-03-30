@@ -6,6 +6,7 @@ import Bridge from 'util/bridge';
 
 import { useVoiceDictationContext } from '../../provider/voice-dictation-provider';
 import DesktopLangSelector from '../modals/desktop-lang-selector';
+import MobileLangSelector from '../modals/mobile-lang-selector';
 import StopModalContent from '../modals/stop-modal-content';
 import TestAudioRecorder from '../test-audio-recorder';
 
@@ -32,6 +33,14 @@ export default function VoiceAudioRecorder() {
     ));
   };
 
+  const openMobileLangOverlay = () => {
+    overlay.open(({ isOpen, close }) => (
+      <OverlayModal isOpen={isOpen} onClose={close}>
+        <MobileLangSelector isOpened={isOpen} setIsOpened={close} />
+      </OverlayModal>
+    ));
+  };
+
   const handleRecordingFinish = async () => {
     dispatch(setIsMicrophoneState(null));
     await Bridge.callBridgeApi('getRecordingState', false);
@@ -44,7 +53,7 @@ export default function VoiceAudioRecorder() {
         onRecordingFinish={handleRecordingFinish}
         onStopConfirm={openStopOverlay as any}
         selectedLangOption={selectedLangOption}
-        openLangOverlay={openLangOverlay}
+        openLangOverlay={openMobileLangOverlay}
       />
     </>
   );
