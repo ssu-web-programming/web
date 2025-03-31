@@ -12,10 +12,13 @@ import { setError } from 'store/slices/errorSlice';
 import { themeInfoSelector } from 'store/slices/theme';
 import { getCurrentFile, getLocalFiles } from 'store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from 'store/store';
+import { css } from 'styled-components';
 import { formatCurrentTime } from 'util/getAudioDuration';
 
 import { track } from '@amplitude/analytics-browser';
 
+import { sendNovaStatus } from '../../../../../api/apiWrapper';
+import { NOVA_TAB_TYPE } from '../../../../../constants/novaTapTypes';
 import { calLeftCredit } from '../../../../../util/common';
 import {
   LangOptionValues,
@@ -140,6 +143,8 @@ export default function VoiceDictationReady() {
         dictation_type: voiceFile ? 'record' : 'file',
         function_result: false
       });
+    } finally {
+      await sendNovaStatus({ name: NOVA_TAB_TYPE.voiceDictation, uuid: '' }, 'finish');
     }
   };
 
@@ -194,6 +199,12 @@ export default function VoiceDictationReady() {
                     }));
                   }}
                   direction="up"
+                  $selectButtonStyle={css`
+                    color: #6f3ad0;
+                  `}
+                  $selectTextStyles={css`
+                    font-size: 16px;
+                  `}
                 />
               </S.LanguageValue>
             </S.LanguageSelector>

@@ -33,11 +33,11 @@ export enum SERVICE_TYPE {
   NOVA_IMG_GPT4O = 'NOVA_IMG_GPT4O', // 10
   NOVA_ASK_DOC_GPT4O = 'NOVA_ASK_DOC_GPT4O', // 10
   NOVA_ASK_IMG_GPT4O = 'NOVA_ASK_IMG_GPT4O', // 10
-  WRITE_GPT4 = 'WRITE_GPT4', // 5
-  GPT3 = 'GPT3', // 2
+  NOVA_CHAT_GPT4O_MINI = 'NOVA_CHAT_GPT4O_MINI', // 5
   NOVA_CHAT_O3MINI = 'NOVA_CHAT_O3MINI', // 2
   WRITE_CLOVA = 'WRITE_CLOVA', // 2
   WRITE_CLADE3 = 'WRITE_CLADE3', // 5
+  NOVA_CHAT_CLAUDE_3_7_SONNET = 'NOVA_CHAT_CLAUDE_3_7_SONNET', // 5
 
   // Tools
   NOVA_WEBSEARCH_PERPLEXITY = 'NOVA_WEBSEARCH_PERPLEXITY', // 5
@@ -66,11 +66,11 @@ export const TAB_SERVICE_MAP: Record<NOVA_TAB_TYPE, SERVICE_TYPE[]> = {
     SERVICE_TYPE.NOVA_IMG_GPT4O,
     SERVICE_TYPE.NOVA_ASK_DOC_GPT4O,
     SERVICE_TYPE.NOVA_ASK_IMG_GPT4O,
-    SERVICE_TYPE.WRITE_GPT4,
-    SERVICE_TYPE.GPT3,
+    SERVICE_TYPE.NOVA_CHAT_GPT4O_MINI,
     SERVICE_TYPE.NOVA_CHAT_O3MINI,
     SERVICE_TYPE.WRITE_CLOVA,
-    SERVICE_TYPE.WRITE_CLADE3
+    SERVICE_TYPE.WRITE_CLADE3,
+    SERVICE_TYPE.NOVA_CHAT_CLAUDE_3_7_SONNET
   ],
   [NOVA_TAB_TYPE.perplexity]: [
     SERVICE_TYPE.NOVA_WEBSEARCH_PERPLEXITY,
@@ -99,11 +99,11 @@ export const SERVICE_GROUP_MAP: Record<SERVICE_CATEGORY, Record<string, SERVICE_
   [SERVICE_CATEGORY.CHAT]: {
     chat: [
       SERVICE_TYPE.NOVA_CHAT_GPT4O,
+      SERVICE_TYPE.NOVA_CHAT_GPT4O_MINI,
       SERVICE_TYPE.NOVA_CHAT_O3MINI,
-      SERVICE_TYPE.WRITE_GPT4,
-      SERVICE_TYPE.GPT3,
       SERVICE_TYPE.WRITE_CLOVA,
-      SERVICE_TYPE.WRITE_CLADE3
+      SERVICE_TYPE.WRITE_CLADE3,
+      SERVICE_TYPE.NOVA_CHAT_CLAUDE_3_7_SONNET
     ],
     docImgQuery: [SERVICE_TYPE.NOVA_ASK_DOC_GPT4O, SERVICE_TYPE.NOVA_ASK_IMG_GPT4O],
     imgGen: [SERVICE_TYPE.NOVA_IMG_GPT4O]
@@ -135,11 +135,11 @@ export const CHAT_GROUP_MAP: Record<string, SERVICE_TYPE[] | SERVICE_TYPE> = {
     SERVICE_TYPE.NOVA_ASK_IMG_GPT4O,
     SERVICE_TYPE.NOVA_IMG_GPT4O
   ],
+  GPT_4O_MINI: SERVICE_TYPE.NOVA_CHAT_GPT4O_MINI,
   GPT_O3_MINI: SERVICE_TYPE.NOVA_CHAT_O3MINI,
-  GPT_4: SERVICE_TYPE.WRITE_GPT4,
-  GPT_3_5: SERVICE_TYPE.GPT3,
   CLOVA_X: SERVICE_TYPE.WRITE_CLOVA,
   CLAUDE_3_5: SERVICE_TYPE.WRITE_CLADE3,
+  CLAUDE_3_7: SERVICE_TYPE.NOVA_CHAT_CLAUDE_3_7_SONNET,
   PERPLEXITY: SERVICE_TYPE.NOVA_WEBSEARCH_PERPLEXITY,
   PERPLEXITY_REASONING_PRO: SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO
 };
@@ -161,16 +161,12 @@ const CHAT_GROUP_DETAIL_MAP: Record<
     label: 'GPT-4o',
     icon: (isLightMode) => (isLightMode ? GPTLogoLightIcon : GPTLogoDarkIcon)
   },
+  GPT_4O_MINI: {
+    label: 'GPT-4o-mini',
+    icon: (isLightMode) => (isLightMode ? GPTLogoLightIcon : GPTLogoDarkIcon)
+  },
   GPT_O3_MINI: {
     label: 'GPT-O3-mini',
-    icon: (isLightMode) => (isLightMode ? GPTLogoLightIcon : GPTLogoDarkIcon)
-  },
-  GPT_4: {
-    label: 'GPT-4',
-    icon: (isLightMode) => (isLightMode ? GPTLogoLightIcon : GPTLogoDarkIcon)
-  },
-  GPT_3_5: {
-    label: 'GPT-3.5',
     icon: (isLightMode) => (isLightMode ? GPTLogoLightIcon : GPTLogoDarkIcon)
   },
   CLOVA_X: {
@@ -179,6 +175,10 @@ const CHAT_GROUP_DETAIL_MAP: Record<
   },
   CLAUDE_3_5: {
     label: 'Claude 3.5 Sonnet',
+    icon: (isLightMode) => (isLightMode ? ClaudeLogoLightIcon : ClaudeLogoDarkIcon)
+  },
+  CLAUDE_3_7: {
+    label: 'Claude 3.7 Sonnet',
     icon: (isLightMode) => (isLightMode ? ClaudeLogoLightIcon : ClaudeLogoDarkIcon)
   },
   PERPLEXITY: {
@@ -261,13 +261,13 @@ export const getServiceEngineName = (serviceType: SERVICE_TYPE): string => {
     [SERVICE_TYPE.NOVA_IMG_GPT4O]: 'gpt4o',
     [SERVICE_TYPE.NOVA_ASK_DOC_GPT4O]: 'gpt4o',
     [SERVICE_TYPE.NOVA_ASK_IMG_GPT4O]: 'gpt4o',
-    [SERVICE_TYPE.WRITE_GPT4]: 'gpt4o',
-    [SERVICE_TYPE.GPT3]: 'gpt3.5',
+    [SERVICE_TYPE.NOVA_CHAT_GPT4O_MINI]: 'gpt-4o-mini',
+    [SERVICE_TYPE.NOVA_CHAT_O3MINI]: 'o3-mini',
     [SERVICE_TYPE.WRITE_CLADE3]: 'claude',
+    [SERVICE_TYPE.NOVA_CHAT_CLAUDE_3_7_SONNET]: 'claude-3-7-sonnet',
     [SERVICE_TYPE.WRITE_CLOVA]: 'clovax',
     [SERVICE_TYPE.NOVA_WEBSEARCH_PERPLEXITY]: 'sonar',
-    [SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO]: 'sonar-reasoning-pro',
-    [SERVICE_TYPE.NOVA_CHAT_O3MINI]: 'o3-mini'
+    [SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO]: 'sonar-reasoning-pro'
   };
 
   return mapping[serviceType] || 'unknown';
@@ -289,10 +289,10 @@ export const getServiceLoggingInfo = (serviceType: SERVICE_TYPE): ServiceLogging
     [SERVICE_TYPE.NOVA_IMG_GPT4O]: { name: 'nova_chating', detail: 'nova_chat_gpt4o' },
     [SERVICE_TYPE.NOVA_ASK_DOC_GPT4O]: { name: 'nova_chating', detail: 'nova_chat_gpt4o' },
     [SERVICE_TYPE.NOVA_ASK_IMG_GPT4O]: { name: 'nova_chating', detail: 'nova_chat_gpt4o' },
+    [SERVICE_TYPE.NOVA_CHAT_GPT4O_MINI]: { name: 'nova_chating', detail: '4o_mini' },
     [SERVICE_TYPE.NOVA_CHAT_O3MINI]: { name: 'nova_chating', detail: '3o_mini' },
-    [SERVICE_TYPE.WRITE_GPT4]: { name: 'nova_chating', detail: '4' },
-    [SERVICE_TYPE.GPT3]: { name: 'nova_chating', detail: '3.5' },
     [SERVICE_TYPE.WRITE_CLADE3]: { name: 'nova_chating', detail: 'claude3' },
+    [SERVICE_TYPE.NOVA_CHAT_CLAUDE_3_7_SONNET]: { name: 'nova_chating', detail: 'claude3.7' },
     [SERVICE_TYPE.WRITE_CLOVA]: { name: 'nova_chating', detail: 'clova' },
     [SERVICE_TYPE.NOVA_WEBSEARCH_PERPLEXITY]: { name: 'nova_web_search', detail: 'perplexity' },
     [SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO]: {

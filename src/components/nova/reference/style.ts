@@ -33,11 +33,17 @@ export const StyledButton = styled.div<{ isExpanded: boolean }>`
   }
 `;
 
-export const ItemWrap = styled.div`
+export const ReferenceWrap = styled.div`
+  display: flex;
+  gap: 4px;
+`;
+
+export const ItemWrap = styled.div<{ isMobile?: boolean }>`
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: ${({ isMobile }) => `repeat(${isMobile ? 3 : 4}, minmax(0, 1fr))`};
   align-items: flex-start;
   gap: 4px;
+  flex: 1;
 `;
 
 export const Item = styled.div<{ isMobile?: boolean }>`
@@ -59,12 +65,15 @@ export const Item = styled.div<{ isMobile?: boolean }>`
   }
 
   .title span {
+    width: 100%;
     height: 51px;
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
+    word-break: break-all;
+    overflow-wrap: break-word;
   }
 
   .site {
@@ -78,7 +87,7 @@ export const Item = styled.div<{ isMobile?: boolean }>`
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      display: ${({ isMobile }) => (isMobile ? 'unset' : '-webkit-box')};
+      display: ${({ isMobile }) => (isMobile ? 'unset' : 'inline-block')};
       -webkit-line-clamp: 1;
       -webkit-box-orient: vertical;
     }

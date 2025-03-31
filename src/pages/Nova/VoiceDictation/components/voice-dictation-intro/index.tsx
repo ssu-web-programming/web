@@ -91,7 +91,6 @@ export default function VoiceDictationIntro() {
         <AudioFileUploader
           guideMsg={t('Nova.voiceDictation.Guide.UploadGuide')}
           curTab={NOVA_TAB_TYPE.voiceDictation}
-          handleUploadComplete={() => console.log('123')}
           creditCount={50}
           onNext={handleMoveToFileReady}
         />

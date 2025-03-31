@@ -84,8 +84,8 @@ const TextArea = styled.textarea`
   line-height: 24px;
   color: ${({ theme }) => theme.color.text.gray04};
   padding: 12px 32px 12px 16px;
-  border-top: 1px solid ${({ theme }) => theme.color.border.gray01};
-  border-bottom: 1px solid ${({ theme }) => theme.color.border.gray01};
+  border-top: 1px solid ${({ theme }) => theme.color.border.gray02};
+  border-bottom: 1px solid ${({ theme }) => theme.color.border.gray02};
   background: ${({ theme }) => theme.color.background.gray01};
   white-space: pre-line;
   resize: none;

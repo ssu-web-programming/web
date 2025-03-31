@@ -14,6 +14,8 @@ import { useAppDispatch, useAppSelector } from 'store/store';
 
 import { track } from '@amplitude/analytics-browser';
 
+import { sendNovaStatus } from '../../../../../api/apiWrapper';
+import { NOVA_TAB_TYPE } from '../../../../../constants/novaTapTypes';
 import {
   selectPageService,
   setPageServiceUsage
@@ -94,6 +96,7 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
 
       const { downloadUrl } = result;
       handleMoveToFileResult({ downloadUrl });
+      sendNovaStatus({ name: NOVA_TAB_TYPE.translation, uuid: '' }, 'finish');
     },
     onError: (error: any) => {
       if (error.code === 'Timeout') {
@@ -127,6 +130,7 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
         translate_type: 'file',
         function_result: false
       });
+      sendNovaStatus({ name: NOVA_TAB_TYPE.translation, uuid: '' }, 'finish');
     }
   });
 
@@ -198,6 +202,8 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
         document_format: currentFile.ext,
         translate_type: 'text'
       });
+    } finally {
+      await sendNovaStatus({ name: NOVA_TAB_TYPE.translation, uuid: '' }, 'finish');
     }
   };
 

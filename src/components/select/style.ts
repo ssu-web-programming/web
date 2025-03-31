@@ -7,6 +7,7 @@ const SelectContainer = styled.div<{
 }>`
   position: relative;
   width: ${({ width }) => width || '100%'};
+  height: 100%;
 
   ${({ $containerStyle }) => $containerStyle && $containerStyle}
 `;
@@ -18,6 +19,7 @@ const SelectButton = styled.button<{
 }>`
   position: relative;
   width: 100%;
+  height: 100%;
   text-align: left;
   background: transparent;
   color: ${({ theme }) => theme.color.text.gray04};
@@ -48,7 +50,9 @@ const SelectButton = styled.button<{
   ${({ $selectButtonStyle }) => $selectButtonStyle && $selectButtonStyle}
 `;
 
-const SelectText = styled.span`
+const SelectText = styled.span<{
+  $selectTextStyles?: FlattenSimpleInterpolation;
+}>`
   display: block;
   white-space: nowrap;
   overflow: hidden;
@@ -56,6 +60,8 @@ const SelectText = styled.span`
   padding-right: 25px;
   font-weight: 500;
   font-size: 14px;
+
+  ${({ $selectTextStyles }) => $selectTextStyles && $selectTextStyles}
 `;
 
 const IconWrapper = styled.span<{ isOpen: boolean; $iconStyles?: FlattenSimpleInterpolation }>`

@@ -1,16 +1,26 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Button from 'components/buttons/Button';
+import IconTextButton from 'components/buttons/IconTextButton';
+import { useInsertDocsHandler } from 'components/hooks/nova/useInsertDocsHandler';
+import { useCopyToClipboard } from 'components/hooks/useCopyToClipboard';
 import OverlayModal from 'components/overlay-modal';
 import { VOICE_COLOR } from 'constants/voice-dictation';
 import CheckDarkIcon from 'img/dark/nova/check_purple.svg';
+import copyDarkIcon from 'img/dark/nova/translation/copy.svg';
+import insertDarkDocIcon from 'img/dark/nova/translation/insert_docs.svg';
 import DownloadIcon from 'img/light/ico_download_white.svg';
 import CheckLightIcon from 'img/light/nova/check_purple.svg';
+import copyIcon from 'img/light/nova/translation/copy.svg';
+import insertDocIcon from 'img/light/nova/translation/insert_docs.svg';
 import { overlay } from 'overlay-kit';
+import { ClientStatusType } from 'pages/Nova/Nova';
 import { useTranslation } from 'react-i18next';
 import { themeInfoSelector } from 'store/slices/theme';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import { css } from 'styled-components';
+import Bridge from 'util/bridge';
 import { formatMilliseconds } from 'util/getAudioDuration';
+import { parseJsonToText } from 'util/voice-dictation';
 
 import UseShowSurveyModal from '../../../../../components/hooks/use-survey-modal';
 import {
@@ -36,6 +46,11 @@ export default function VoiceDictationResult() {
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
   const service = useAppSelector(selectPageService(selectedNovaTab));
   const isCreditRecieved = useAppSelector(selectPageCreditReceived(selectedNovaTab));
+  const { copyText } = useCopyToClipboard();
+
+  const [clientStatus, setClientStatus] = useState<ClientStatusType>('doc_edit_mode');
+  const { insertDocsHandler } = useInsertDocsHandler();
+
   const showSurveyModal = UseShowSurveyModal();
 
   const { t } = useTranslation();
@@ -88,8 +103,39 @@ export default function VoiceDictationResult() {
     return minutes * 60 + seconds;
   };
 
-  console.log('123 배포 확인!');
-  console.log('audioDuration123123', audioDuration);
+  const updateClientStatus = useCallback(() => {
+    Bridge.callSyncBridgeApiWithCallback({
+      api: 'getClientStatus',
+      callback: async (status: ClientStatusType) => {
+        setClientStatus(status);
+      }
+    });
+  }, []);
+
+  const ICON_BUTTON_LIST = [
+    {
+      name: t('Nova.Chat.InsertDoc.Title'),
+      iconSrc: isLightMode ? insertDocIcon : insertDarkDocIcon,
+      clickHandler: async () => {
+        const segments = voiceDictationResult!.data.segments;
+        await insertDocsHandler(undefined, parseJsonToText(segments));
+      },
+      isActive: clientStatus !== 'home'
+    },
+    {
+      name: t('Nova.Chat.Copy'),
+      iconSrc: isLightMode ? copyIcon : copyDarkIcon,
+      clickHandler: async () => {
+        const segments = voiceDictationResult!.data.segments;
+        await copyText(parseJsonToText(segments));
+      },
+      isActive: true
+    }
+  ];
+
+  useEffect(() => {
+    updateClientStatus();
+  }, [updateClientStatus]);
 
   return (
     <S.Wrapper>
@@ -106,29 +152,46 @@ export default function VoiceDictationResult() {
 
           <S.TranscriptContainer>
             <S.NewTranscript>
-              <span>{t('Nova.voiceDictation.Button.NewDictation')}</span>
+              <p>{t('Nova.voiceDictation.Button.NewDictation')}</p>
+              <div>
+                {ICON_BUTTON_LIST.filter((iconButton) => iconButton.isActive).map((iconButton) => (
+                  <IconTextButton
+                    key={iconButton.name}
+                    onClick={iconButton.clickHandler}
+                    tooltip={iconButton.name}
+                    iconSrc={iconButton.iconSrc}
+                    iconSize={24}
+                    width={'fit'}
+                    tooltipDuration={2000}
+                  />
+                ))}
+              </div>
+            </S.NewTranscript>
+            <S.TimeWrapper>
               <span>
                 {currentTime} · {audioDuration}
               </span>
-            </S.NewTranscript>
+            </S.TimeWrapper>
 
-            {voiceDictationResult?.data.segments.map((transcript, idx) => (
-              <S.TranscriptItem key={idx} color={VOICE_COLOR[transcript.speaker.name]}>
-                <S.TranscriptIcon color={VOICE_COLOR[transcript.speaker.name]}>
-                  참{transcript.speaker.label}
-                </S.TranscriptIcon>
-                <S.TranscriptContent>
-                  <S.TranscriptInfo>
-                    <S.TranscriptName>
-                      {t('Nova.voiceDictation.Status.Participant')}
-                      {transcript.speaker.name}
-                    </S.TranscriptName>
-                    <S.TranscriptTime>{formatMilliseconds(transcript.start)}</S.TranscriptTime>
-                  </S.TranscriptInfo>
-                  <S.TranscriptText>{transcript.text}</S.TranscriptText>
-                </S.TranscriptContent>
-              </S.TranscriptItem>
-            ))}
+            <S.TranscriptScrollContainer>
+              {voiceDictationResult?.data.segments.map((transcript, idx) => (
+                <S.TranscriptItem key={idx} color={VOICE_COLOR[transcript.speaker.name]}>
+                  <S.TranscriptIcon color={VOICE_COLOR[transcript.speaker.name]}>
+                    참{transcript.speaker.label}
+                  </S.TranscriptIcon>
+                  <S.TranscriptContent>
+                    <S.TranscriptInfo>
+                      <S.TranscriptName>
+                        {t('Nova.voiceDictation.Status.Participant')}
+                        {transcript.speaker.name}
+                      </S.TranscriptName>
+                      <S.TranscriptTime>{formatMilliseconds(transcript.start)}</S.TranscriptTime>
+                    </S.TranscriptInfo>
+                    <S.TranscriptText>{transcript.text}</S.TranscriptText>
+                  </S.TranscriptContent>
+                </S.TranscriptItem>
+              ))}
+            </S.TranscriptScrollContainer>
           </S.TranscriptContainer>
         </S.ContentContainer>
 

@@ -8,10 +8,7 @@ import { useAppDispatch } from 'store/store';
 import Bridge from 'util/bridge';
 import { changeFileExtension, formatMilliseconds } from 'util/getAudioDuration';
 
-import {
-  useVoiceDictationContext,
-  VoiceDictationResult
-} from '../../provider/voice-dictation-provider';
+import { useVoiceDictationContext } from '../../provider/voice-dictation-provider';
 import VoiceFileModalContent from '../voice-file-modal-content';
 
 import * as S from './style';
@@ -38,11 +35,9 @@ export default function VoiceSaveBottomSheet({ isOpened, setIsOpened }: Props) {
     });
   };
 
-  const parseJsonToText = (): string => {
-    // 1. segments를 시간순으로 정렬
+  const parseJsonToText = () => {
     const sortedSegments = [...voiceDictationResult!.data.segments].sort((a, b) => a.end - b.end);
 
-    // 2. 각 segment를 포맷팅된 문자열로 변환
     const formattedText = sortedSegments
       .map((segment) => {
         const speaker = `참석자 ${segment.speaker.name}`;
@@ -75,8 +70,6 @@ export default function VoiceSaveBottomSheet({ isOpened, setIsOpened }: Props) {
     });
 
     const { data } = result;
-    console.log('fileName', fileName);
-    console.log('변환 완료', changeFileExtension(fileName, type));
 
     await Bridge.callBridgeApi('downloadVoiceFile', {
       fileName: changeFileExtension(fileName, type),

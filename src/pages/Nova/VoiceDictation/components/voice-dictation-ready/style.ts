@@ -116,8 +116,7 @@ const LanguageSelector = styled.div`
 `;
 
 const LanguageLabel = styled.span`
-  color: #374151;
-  color: ${({ theme }) => theme.color.text.gray02};
+  color: ${({ theme }) => theme.color.text.gray03};
 `;
 
 const LanguageValue = styled.div`

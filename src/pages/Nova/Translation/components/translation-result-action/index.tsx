@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
 import IconTextButton from 'components/buttons/IconTextButton';
-import { useConfirm } from 'components/Confirm';
 import { useInsertDocsHandler } from 'components/hooks/nova/useInsertDocsHandler';
 import { useCopyToClipboard } from 'components/hooks/useCopyToClipboard';
 import copyDarkIcon from 'img/dark/nova/translation/copy.svg';

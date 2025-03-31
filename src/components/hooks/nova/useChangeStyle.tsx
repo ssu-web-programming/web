@@ -1,6 +1,8 @@
+import { v4 } from 'uuid';
+
 import { track } from '@amplitude/analytics-browser';
 
-import { apiWrapper } from '../../../api/apiWrapper';
+import { apiWrapper, sendNovaStatus } from '../../../api/apiWrapper';
 import { NOVA_CHANGE_STYLE } from '../../../api/constant';
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import { getServiceLoggingInfo, SERVICE_TYPE } from '../../../constants/serviceType';
@@ -75,10 +77,14 @@ export const useChangeStyle = () => {
     try {
       const formData = await createFormDataFromFiles([curPageFile]);
       formData.append('style', style);
-      const { res, logger } = await apiWrapper().request(NOVA_CHANGE_STYLE, {
-        body: formData,
-        method: 'POST'
-      });
+      const { res, logger } = await apiWrapper().request(
+        NOVA_CHANGE_STYLE,
+        {
+          body: formData,
+          method: 'POST'
+        },
+        { name: NOVA_TAB_TYPE.changeStyle, uuid: v4() }
+      );
       const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
 
       const response = await res.json();
@@ -121,6 +127,8 @@ export const useChangeStyle = () => {
     } catch (err) {
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeStyle, status: 'home' }));
       errorHandle(err);
+    } finally {
+      await sendNovaStatus({ name: NOVA_TAB_TYPE.changeStyle, uuid: '' }, 'finish');
     }
   };
 

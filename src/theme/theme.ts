@@ -1,7 +1,6 @@
 import DarkLogo from '../img/dark/nova/ico_logo_nova_with_text.svg';
 import LightLogo from '../img/light/nova/ico_logo_nova_with_text.svg';
 import { ThemeType } from '../store/slices/theme';
-import { ClientType, getPlatform } from '../util/bridge';
 
 export const lightTheme = {
   mode: 'light',
@@ -21,6 +20,7 @@ export const lightTheme = {
       gray11: 'var(--gray-gray-20)',
       gray12: 'var(--gray-gray-15)',
       gray13: 'var(--gray-gray-22)',
+      gray14: 'var(--white)',
       yellow01: 'var(--yellow-yellow-95)',
       yellow02: 'var(--yellow-yellow-95)',
       purple01: 'var(--ai-purple-50-main)',
@@ -100,6 +100,7 @@ export const darkTheme = {
       gray11: 'var(--gray-gray-85)',
       gray12: 'var(--gray-gray-87)',
       gray13: 'var(--gray-gray-35)',
+      gray14: 'var(--gray-gray-90-01)',
       yellow01: 'var(--gray-gray-85)',
       yellow02: 'var(--gray-gray-90)',
       purple01: 'var(--ai-purple-90)',

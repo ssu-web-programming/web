@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { v4 } from 'uuid';
 
 import { track } from '@amplitude/analytics-browser';
 
-import { apiWrapper } from '../../../../api/apiWrapper';
+import { apiWrapper, sendNovaStatus } from '../../../../api/apiWrapper';
 import { NOVA_VIDEO_GET_INFO, NOVA_VIDEO_MAKE_VIDEOS } from '../../../../api/constant';
 import { EVideoStatus, InitVideos } from '../../../../constants/heygenTypes';
 import { NOVA_TAB_TYPE } from '../../../../constants/novaTapTypes';
 import { getServiceLoggingInfo, SERVICE_TYPE } from '../../../../constants/serviceType';
-import { setOnlineStatus } from '../../../../store/slices/network';
 import {
   resetPageData,
   selectPageResult,
@@ -20,7 +20,6 @@ import { getCurrentFile } from '../../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../../store/store';
 import Bridge from '../../../../util/bridge';
 import { calLeftCredit } from '../../../../util/common';
-import { base64ToBlob } from '../../../../util/files';
 import useErrorHandle from '../../../hooks/useErrorHandle';
 import AvatarCard from '../component/AvatarCard';
 import Progress from '../component/Progress';
@@ -122,25 +121,29 @@ export default function Loading() {
         startTimer();
       }
 
-      const { res } = await apiWrapper().request(NOVA_VIDEO_MAKE_VIDEOS, {
-        headers: {
-          'Content-Type': 'application/json'
+      const { res } = await apiWrapper().request(
+        NOVA_VIDEO_MAKE_VIDEOS,
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          method: 'POST',
+          body: JSON.stringify({
+            avatar_type: result?.info.selectedAvatar?.avatar.talking_photo_id
+              ? 'talking_photo'
+              : 'avatar',
+            avatar_id:
+              result?.info.selectedAvatar.avatar.avatar_id === ''
+                ? result?.info.selectedAvatar.avatar.talking_photo_id
+                : result?.info.selectedAvatar.avatar.avatar_id,
+            avatar_style: result?.info.selectedAvatar.avatar_style,
+            voice_id: result?.info.selectedAvatar.voice.voice_id,
+            input_text: result?.info.selectedAvatar.input_text,
+            background_color: result?.info.selectedAvatar.background_color
+          })
         },
-        method: 'POST',
-        body: JSON.stringify({
-          avatar_type: result?.info.selectedAvatar?.avatar.talking_photo_id
-            ? 'talking_photo'
-            : 'avatar',
-          avatar_id:
-            result?.info.selectedAvatar.avatar.avatar_id === ''
-              ? result?.info.selectedAvatar.avatar.talking_photo_id
-              : result?.info.selectedAvatar.avatar.avatar_id,
-          avatar_style: result?.info.selectedAvatar.avatar_style,
-          voice_id: result?.info.selectedAvatar.voice.voice_id,
-          input_text: result?.info.selectedAvatar.input_text,
-          background_color: result?.info.selectedAvatar.background_color
-        })
-      });
+        { name: NOVA_TAB_TYPE.aiVideo, uuid: v4() }
+      );
 
       const response = await res.json();
 
@@ -207,6 +210,7 @@ export default function Loading() {
         );
         dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'done' }));
         await OnSave(data.video_url);
+        await sendNovaStatus({ name: NOVA_TAB_TYPE.aiVideo, uuid: '' }, 'finish');
 
         const log_info = getServiceLoggingInfo(SERVICE_TYPE.NOVA_AI_AVATA_VIDEO_HEYGEN);
         await logger({
@@ -228,6 +232,7 @@ export default function Loading() {
       stopTimer();
       dispatch(resetPageData(NOVA_TAB_TYPE.aiVideo));
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'home' }));
+      await sendNovaStatus({ name: NOVA_TAB_TYPE.aiVideo, uuid: '' }, 'finish');
 
       track('nova_create_video', {
         file_id: currentFile.id,
