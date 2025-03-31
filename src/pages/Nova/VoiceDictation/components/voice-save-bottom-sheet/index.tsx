@@ -6,8 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { activeLoadingSpinner } from 'store/slices/loadingSpinner';
 import { useAppDispatch } from 'store/store';
 import Bridge from 'util/bridge';
-import { changeFileExtension } from 'util/getAudioDuration';
-import { parseJsonToText } from 'util/voice-dictation';
+import { changeFileExtension, formatMilliseconds } from 'util/getAudioDuration';
 
 import { useVoiceDictationContext } from '../../provider/voice-dictation-provider';
 import VoiceFileModalContent from '../voice-file-modal-content';
@@ -51,9 +50,9 @@ export default function VoiceSaveBottomSheet({ isOpened, setIsOpened }: Props) {
 
     return formattedText;
   };
-    
+
   const convertJsonToTxt = () => {
-    const text = parseJsonToText(voiceDictationResult!.data.segments);
+    const text = parseJsonToText();
 
     const file = new File([text], fileName, {
       type: 'text/plain;charset=utf-8'
