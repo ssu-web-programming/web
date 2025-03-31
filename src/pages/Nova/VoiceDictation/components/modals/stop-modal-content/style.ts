@@ -8,15 +8,16 @@ const ModalContainer = styled.div`
 `;
 
 const Title = styled.p`
-  font-size: 18px;
-  margin-bottom: 24px;
+  margin-bottom: 12px;
   color: ${({ theme }) => theme.color.text.gray04};
+  font-weight: 700;
+  font-size: 20px;
 `;
 
 const SubTitle = styled.p`
   font-size: 16px;
   font-weight: 400;
-  line-height: 24px;
+  line-height: 150%;
   text-align: left;
   margin-bottom: 36px;
   color: ${({ theme }) => theme.color.text.gray04};
@@ -24,7 +25,7 @@ const SubTitle = styled.p`
 
 const ButtonGroup = styled.div`
   display: flex;
-  gap: 12px;
+  gap: 8px;
 
   & > :nth-child(1) {
     flex-grow: 1;

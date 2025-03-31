@@ -26,7 +26,7 @@ export const ConfirmBox = styled.div`
   max-width: 343px;
   box-shadow: 0 8px 16px 0 #0000001a;
   background: ${({ theme }) => theme.color.background.gray05};
-  border-radius: 10px;
+  border-radius: 16px;
   z-index: 100;
   max-height: 100vh;
   height: fit-content;
@@ -173,12 +173,10 @@ const Confirm = () => {
             onClick={handleOk}
             cssExt={css`
               order: ${direction === 'row' ? 2 : undefined};
-              min-width: 92px;
-              width: 100%;
+              width: 195px;
               border-radius: 8px;
               line-height: 19px;
               font-weight: 500;
-              flex: 2;
             `}>
             {onOk?.text}
           </Button>
@@ -190,12 +188,10 @@ const Confirm = () => {
               onClick={handleCancel}
               cssExt={css`
                 order: ${direction === 'row' ? 1 : undefined};
-                min-width: 92px;
-                width: 100%;
+                width: 92px;
                 border-radius: 8px;
                 line-height: 19px;
                 font-weight: 500;
-                flex: 1;
               `}>
               {onCancel.text}
             </Button>

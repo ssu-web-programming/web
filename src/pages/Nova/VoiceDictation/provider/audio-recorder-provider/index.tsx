@@ -74,7 +74,10 @@ const draw = (
   const ctx = canvas.getContext('2d') as CustomCanvasRenderingContext2D;
   if (!ctx) return;
 
-  const baseHeight = 40;
+  // console.log('ctx', ctx);
+  // console.log('canvas', canvas);
+
+  const baseHeight = 16;
   const amp = canvas.height / 2;
 
   // background color 색을 width , height만큼 채우는 코드
@@ -97,7 +100,8 @@ const draw = (
     ctx.fillStyle = gradient;
     const x = i * (barWidth + gap);
     const value = data[i] || 0;
-    const dynamicHeight = baseHeight + value / 2;
+    // bar의 높이가 최대 48px로 바뀜
+    const dynamicHeight = Math.min(48, baseHeight + value / 2);
     const y = amp - dynamicHeight / 2;
     const h = dynamicHeight;
 
@@ -184,6 +188,7 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({ ch
           analyserRef.current.getByteFrequencyData(frequencyData);
 
           const data = calculateBarData(frequencyData, canvasRef.current.clientWidth, 2, 5);
+          console.log('data', data);
 
           draw(data, canvasRef.current, 2, 5, isPaused);
           if (isPaused) {

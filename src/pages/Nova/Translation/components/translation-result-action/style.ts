@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
-  border: 1px solid ${({ theme }) => theme.color.background.gray10};
+  border: 1px solid ${({ theme }) => theme.color.border.gray01};
   border-radius: 8px;
   background: ${({ theme }) => theme.color.background.gray01};
 `;
@@ -11,7 +11,7 @@ const Header = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 8px 16px;
-  border-bottom: 1px solid ${({ theme }) => theme.color.background.gray10};
+  border-bottom: 1px solid ${({ theme }) => theme.color.border.gray02};
 
   & > p {
     font-size: 14px;
@@ -45,6 +45,19 @@ const TextArea = styled.textarea`
   color: ${({ theme }) => theme.color.text.gray04};
   white-space: pre-line;
   resize: none;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 14px;
+    background: #ccc;
+  }
+
+  &::-webkit-scrollbar-track {
+    border-radius: 14px;
+  }
 `;
 
 export { Header, IconWrapper, TextArea, Wrapper };

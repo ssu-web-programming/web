@@ -36,6 +36,22 @@ export default function VoiceSaveBottomSheet({ isOpened, setIsOpened }: Props) {
     });
   };
 
+  const parseJsonToText = () => {
+    const sortedSegments = [...voiceDictationResult!.data.segments].sort((a, b) => a.end - b.end);
+
+    const formattedText = sortedSegments
+      .map((segment) => {
+        const speaker = `참석자 ${segment.speaker.name}`;
+        const endTime = formatMilliseconds(segment.end);
+        const text = segment.text.trim();
+
+        return `[${speaker}] ${endTime}\n${text}\n`;
+      })
+      .join('\n');
+
+    return formattedText;
+  };
+    
   const convertJsonToTxt = () => {
     const text = parseJsonToText(voiceDictationResult!.data.segments);
 
@@ -55,8 +71,6 @@ export default function VoiceSaveBottomSheet({ isOpened, setIsOpened }: Props) {
     });
 
     const { data } = result;
-    console.log('fileName', fileName);
-    console.log('변환 완료', changeFileExtension(fileName, type));
 
     await Bridge.callBridgeApi('downloadVoiceFile', {
       fileName: changeFileExtension(fileName, type),

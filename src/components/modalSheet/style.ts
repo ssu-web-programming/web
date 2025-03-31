@@ -8,10 +8,13 @@ export const CustomSheet = styled(Sheet)`
 
   .react-modal-sheet-container {
     background-color: ${({ theme }) => theme.color.background.yellow02} !important;
+    border-top-left-radius: 16px !important;
+    border-top-right-radius: 16px !important;
   }
 
   .react-modal-sheet-header {
-    height: 22px;
+    height: 22px !important;
+    margin-bottom: 10px;
   }
 
   .react-modal-sheet-drag-indicator {

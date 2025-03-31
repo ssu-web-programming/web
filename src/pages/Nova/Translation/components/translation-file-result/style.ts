@@ -22,7 +22,7 @@ const SubTitle = styled.div`
 `;
 
 const FileItemWrapper = styled.div`
-  border: 1px solid ${({ theme }) => theme.color.background.gray02};
+  border: 1px solid ${({ theme }) => theme.color.border.gray01};
   background: ${({ theme }) => theme.color.background.gray01};
   border-radius: 16px;
   padding: 32px 16px;

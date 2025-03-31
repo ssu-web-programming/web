@@ -151,7 +151,7 @@ export default function TranslationFileUploader({
           inputRef={inputImgFileRef}
           tooltipStyle={{
             minWidth: '165px',
-            top: '12px',
+            top: '8px',
             left: 'unset',
             right: 'unset',
             bottom: 'unset',

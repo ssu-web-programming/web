@@ -15,7 +15,7 @@ export default function FileItem({ fileName, isDeleteIcon = true }: Props) {
   return (
     <S.Wrapper>
       <S.IconContainer>
-        <Icon size={45} iconSrc={getFileIcon(fileName as string)} />
+        <Icon size={60} iconSrc={getFileIcon(fileName as string)} />
         {isDeleteIcon && (
           <S.DeleteIcon
             onClick={() => {
