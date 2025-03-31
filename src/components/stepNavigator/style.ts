@@ -39,10 +39,16 @@ export const Step = styled(Stepper).withConfig({
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 6px 8px;
     border: 1px solid ${({ theme }) => theme.color.border.gray05};
     border-radius: 6px;
     background-color: ${({ theme }) => theme.color.background.gray01};
+  }
+
+  .step-has-completed {
+    padding: 6px 12px 6px 6px;
+  }
+  .step-has-disabled {
+    padding: 6px 6px 6px 12px;
   }
   .step-has-completed,
   .step-has-disabled {
@@ -50,6 +56,7 @@ export const Step = styled(Stepper).withConfig({
 
     span {
       gap: unset;
+      padding: 0;
     }
   }
 
@@ -106,6 +113,7 @@ export const Label = styled(StepLabel)`
 
   .MuiStepLabel-labelContainer {
     span {
+      min-width: 25px;
       font-size: 14px;
       font-weight: 600;
       line-height: 20px;
@@ -125,12 +133,12 @@ export const Label = styled(StepLabel)`
   }
   .MuiSvgIcon-root.Mui-active {
     color: transparent !important;
-    border: 2px solid ${({ theme }) => theme.color.background.purple01};
+    border: 1px solid ${({ theme }) => theme.color.background.purple01};
     border-radius: 99px;
 
     text {
       fill: ${({ theme }) => theme.color.background.purple01};
-      font-size: 1rem;
+      font-size: 1.2rem;
       font-family: Pretendard, sans-serif;
     }
   }

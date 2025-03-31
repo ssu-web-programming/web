@@ -104,7 +104,7 @@ export const CustomTabs = styled(Tabs)`
     min-height: auto;
     padding: 4px 0;
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 400;
     line-height: 21px;
     font-family: Pretendard, sans-serif;
     text-align: center;
@@ -117,6 +117,7 @@ export const CustomTabs = styled(Tabs)`
     color: ${({ theme }) => theme.color.text.highlight03} !important;
     background-color: ${({ theme }) => theme.color.background.selected};
     border-radius: 4px;
+    font-weight: 500;
     &::after {
       display: none;
     }

@@ -46,14 +46,20 @@ export const ScrollDownButton = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 8px 0 #0000001a;
+  box-shadow: ${({ theme }) => (theme.mode === 'light' ? '0 2px 8px 0 #0000001a' : 'none')};
   z-index: 1;
 
   button {
     transform: rotate(-90deg);
     width: 100%;
     height: 100%;
+    border: ${({ theme }) => (theme.mode === 'light' ? 'none' : '1px solid var(--gray-gray-87)')};
     border-radius: 50%;
+    background-color: ${({ theme }) => theme.color.background.gray14};
+
+    svg path {
+      fill: ${({ theme }) => theme.color.text.gray03};
+    }
   }
 `;
 

@@ -16,6 +16,7 @@ import usePrivacyConsent from '../../../components/hooks/nova/usePrivacyConsent'
 import { useRemakeImage } from '../../../components/hooks/nova/useRemakeImage';
 import { useRemoveBackground } from '../../../components/hooks/nova/useRemoveBackground';
 import useSubmitHandler from '../../../components/hooks/nova/useSubmitHandler';
+import useShowConfirmModal from '../../../components/hooks/use-show-confirm-modal';
 import { useChatNova } from '../../../components/hooks/useChatNova';
 import AIChat from '../../../components/nova/aiChat';
 import AIVideo from '../../../components/nova/aiVideo';
@@ -47,7 +48,7 @@ import {
   setIsShareMode
 } from '../../../store/slices/nova/novaHistorySlice';
 import { selectPageService, selectPageStatus } from '../../../store/slices/nova/pageStatusSlice';
-import { selectTabSlice } from '../../../store/slices/tabSlice';
+import { selectNovaTab, selectTabSlice } from '../../../store/slices/tabSlice';
 import { themeInfoSelector } from '../../../store/slices/theme';
 import { userInfoSelector } from '../../../store/slices/userInfo';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
@@ -73,6 +74,7 @@ export default function Nova() {
   const { handleAgreement } = usePrivacyConsent();
   const { loadLocalFile, uploadTranslationFile } = useManageFile();
   const chatNova = useChatNova();
+  const showConfirmModal = useShowConfirmModal();
   const [expiredNOVA, setExpiredNOVA] = useState<boolean>(false);
   const [fileUploadState, setFileUploadState] = useState<FileUploadState>({
     type: '',
@@ -98,12 +100,11 @@ export default function Nova() {
         selectedNovaTab === NOVA_TAB_TYPE.aiChat ||
         selectedNovaTab === NOVA_TAB_TYPE.perplexity)
     ) {
-      confirm({
-        title: '',
+      showConfirmModal({
         msg: t('Nova.Alert.ExpiredNOVA'),
         onOk: {
           text: t(`Confirm`),
-          callback: () => {
+          handleOk: () => {
             setExpiredNOVA(false);
             dispatch(setIsShareMode(false));
             chatNova.newChat(selectedNovaTab, novaHistory);

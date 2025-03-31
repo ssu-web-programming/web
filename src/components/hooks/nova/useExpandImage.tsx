@@ -1,6 +1,8 @@
+import { v4 } from 'uuid';
+
 import { track } from '@amplitude/analytics-browser';
 
-import { apiWrapper } from '../../../api/apiWrapper';
+import { apiWrapper, sendNovaStatus } from '../../../api/apiWrapper';
 import { NOVA_EXPAND_IMAGE } from '../../../api/constant';
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import { getServiceLoggingInfo, SERVICE_TYPE } from '../../../constants/serviceType';
@@ -85,10 +87,14 @@ export const useExpandImage = () => {
       formData.append('extend_up', String(extend_up));
       formData.append('extend_down', String(extend_down));
 
-      const { res, logger } = await apiWrapper().request(NOVA_EXPAND_IMAGE, {
-        body: formData,
-        method: 'POST'
-      });
+      const { res, logger } = await apiWrapper().request(
+        NOVA_EXPAND_IMAGE,
+        {
+          body: formData,
+          method: 'POST'
+        },
+        { name: NOVA_TAB_TYPE.expandImg, uuid: v4() }
+      );
       const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
 
       const response = await res.json();
@@ -136,6 +142,8 @@ export const useExpandImage = () => {
     } catch (err) {
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.expandImg, status: 'home' }));
       errorHandle(err);
+    } finally {
+      await sendNovaStatus({ name: NOVA_TAB_TYPE.expandImg, uuid: '' }, 'finish');
     }
   };
 

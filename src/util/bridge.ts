@@ -258,6 +258,12 @@ const callApi = (api: ApiType, arg?: string | number | object | boolean) => {
             }
             break;
           }
+          case 'novaStatusChanged': {
+            if (window.webkit.messageHandlers.novaStatusChanged) {
+              window.webkit.messageHandlers.novaStatusChanged.postMessage(arg);
+            }
+            break;
+          }
           case 'closeNova': {
             if (window.webkit.messageHandlers.closeNova) {
               window.webkit.messageHandlers.closeNova.postMessage(arg);
@@ -793,6 +799,7 @@ type ApiType =
   | 'downloadFile'
   | 'downloadVoiceFile'
   | 'getRecordingState'
+  | 'novaStatusChanged'
   | 'closeNova';
 
 const Bridge = {

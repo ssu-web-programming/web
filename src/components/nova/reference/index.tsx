@@ -23,6 +23,7 @@ import UseShowSurveyModal from '../../hooks/use-survey-modal';
 import ModalSheet from '../../modalSheet';
 
 import * as S from './style';
+import { ReferenceWrap } from './style';
 
 interface referenceProps {
   references: NovaWebReference[];
@@ -71,23 +72,25 @@ export default function Reference({ references }: referenceProps) {
         )}
       </S.Header>
       {references.length > 0 ? (
-        <S.ItemWrap>
-          {references.slice(0, maxItemsToShow).map((ref, index) => (
-            <S.Item key={index} onClick={() => openLink(ref.url)} isMobile={isMobile}>
-              {!isMobile && (
-                <div className="title">
-                  <span>{ref.title}</span>
+        <S.ReferenceWrap>
+          <S.ItemWrap isMobile={isMobile}>
+            {references.slice(0, maxItemsToShow).map((ref, index) => (
+              <S.Item key={index} onClick={() => openLink(ref.url)} isMobile={isMobile}>
+                {!isMobile && (
+                  <div className="title">
+                    <span>{ref.title}</span>
+                  </div>
+                )}
+                <div className="site">
+                  <img
+                    src={ref.favicon ? ref.favicon : isLightMode ? LinkLightIcon : LinkDarkIcon}
+                    alt="favicon"
+                  />
+                  <span>{ref.site ? ref.site : new URL(ref.url).hostname}</span>
                 </div>
-              )}
-              <div className="site">
-                <img
-                  src={ref.favicon ? ref.favicon : isLightMode ? LinkLightIcon : LinkDarkIcon}
-                  alt="favicon"
-                />
-                <span>{ref.site ? ref.site : new URL(ref.url).hostname}</span>
-              </div>
-            </S.Item>
-          ))}
+              </S.Item>
+            ))}
+          </S.ItemWrap>
           {isMobile && references.length > 3 && (
             <S.Item
               onClick={() => {
@@ -98,23 +101,7 @@ export default function Reference({ references }: referenceProps) {
               <span>{t(`Nova.perplexity.button.countMore`, { count: references.length - 3 })}</span>
             </S.Item>
           )}
-          <ModalSheet isOpen={isOpen} setIsOpen={setIsOpen} detent="content-height">
-            <S.SheetWrap>
-              <S.SheetHeader>{t('Nova.perplexity.source')}</S.SheetHeader>
-              <S.SheetContent>
-                {references.map((ref, idx) => (
-                  <React.Fragment key={idx}>
-                    <S.SheetItem onClick={() => openLink(ref.url)}>
-                      <div className="title">{`${idx + 1}. ${ref.title}`}</div>
-                      <div className="desc">{ref.desc}</div>
-                    </S.SheetItem>
-                    <div className="driver" />
-                  </React.Fragment>
-                ))}
-              </S.SheetContent>
-            </S.SheetWrap>
-          </ModalSheet>
-        </S.ItemWrap>
+        </S.ReferenceWrap>
       ) : isMobile ? (
         <Lottie
           animationData={isLightMode ? SkeletonMobileLight : SkeletonMobileDark}
@@ -130,6 +117,22 @@ export default function Reference({ references }: referenceProps) {
           style={{ width: 288, height: 90 }}
         />
       )}
+      <ModalSheet isOpen={isOpen} setIsOpen={setIsOpen} detent="content-height">
+        <S.SheetWrap>
+          <S.SheetHeader>{t('Nova.perplexity.source')}</S.SheetHeader>
+          <S.SheetContent>
+            {references.map((ref, idx) => (
+              <React.Fragment key={idx}>
+                <S.SheetItem onClick={() => openLink(ref.url)}>
+                  <div className="title">{`${idx + 1}. ${ref.title}`}</div>
+                  <div className="desc">{ref.desc}</div>
+                </S.SheetItem>
+                <div className="driver" />
+              </React.Fragment>
+            ))}
+          </S.SheetContent>
+        </S.SheetWrap>
+      </ModalSheet>
     </S.Container>
   );
 }

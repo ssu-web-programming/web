@@ -11,9 +11,9 @@ import * as S from './style';
 
 export interface ConfirmModalProps {
   title?: string;
-  msg?: string;
-  onOk?: { text: string; handleOk: () => void };
-  onCancel?: { text: string; handleCancel: () => void };
+  msg?: string | null;
+  onOk?: { text?: string | null; handleOk: () => void };
+  onCancel?: { text?: string | null; handleCancel: () => void };
   neverShowAgain?: boolean;
   cookieName?: string;
 }

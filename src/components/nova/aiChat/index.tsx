@@ -1,22 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ReactComponent as IconArrowLeft } from 'img/light/ico_arrow_left.svg';
+import { ReactComponent as ArrowLeftDarkIcon } from 'img/dark/ico_arrow_left.svg';
+import { ReactComponent as ArrowLeftLightIcon } from 'img/light/ico_arrow_left.svg';
 import { useTranslation } from 'react-i18next';
 import Lottie from 'react-lottie-player';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import { css } from 'styled-components';
-import { SwiperSlide } from 'swiper/swiper-react';
 
 import { apiWrapper } from '../../../api/apiWrapper';
 import { NOVA_SHARE_CHAT } from '../../../api/constant';
 import { FileUploadState } from '../../../constants/fileTypes';
-import { getChatGroupKey, getServiceGroupInfo, SERVICE_TYPE } from '../../../constants/serviceType';
-import ico_reading_glasses_dark from '../../../img/dark/duotone_magnifying_glass_dark.svg';
-import ico_documents_dark from '../../../img/dark/ico_documents.svg';
-import ico_image_dark from '../../../img/dark/ico_image.svg';
-import ico_reading_glasses_light from '../../../img/light/duotone_magnifying_glass.svg';
-import ico_documents_light from '../../../img/light/ico_documents.svg';
-import ico_image_light from '../../../img/light/ico_image.svg';
+import { getChatGroupKey, SERVICE_TYPE } from '../../../constants/serviceType';
 import Spinner from '../../../img/light/spinner.json';
 import { lang } from '../../../locale';
 import {
@@ -32,7 +26,6 @@ import {
   setIsExporting,
   setIsShareMode
 } from '../../../store/slices/nova/novaHistorySlice';
-import { selectPageStatus } from '../../../store/slices/nova/pageStatusSlice';
 import { selectTabSlice } from '../../../store/slices/tabSlice';
 import { themeInfoSelector } from '../../../store/slices/theme';
 import { activeToast } from '../../../store/slices/toastSlice';
@@ -40,9 +33,6 @@ import Bridge from '../../../util/bridge';
 import { downloadImage } from '../../../util/downloadImage';
 import IconButton from '../../buttons/IconButton';
 import CheckBox from '../../checkbox';
-import { useConfirm } from '../../Confirm';
-import useCopyText from '../../hooks/copyText';
-import Icon from '../../Icon';
 import ChatList from '../chatList/ChatList';
 import { FileUploading } from '../FileUploading';
 import { Guide } from '../Guide';
@@ -63,10 +53,8 @@ interface AIChatProps {
 }
 
 const AIChat = (props: AIChatProps) => {
-  const { expiredNOVA, setExpiredNOVA, createChatSubmitHandler, fileUploadState } = props;
+  const { expiredNOVA, createChatSubmitHandler, fileUploadState } = props;
   const dispatch = useAppDispatch();
-  const location = useLocation();
-  const navigate = useNavigate();
   const { t } = useTranslation();
   const { usingAI, creating } = useAppSelector(selectTabSlice);
   const novaHistory = useAppSelector(novaHistorySelector);
@@ -74,6 +62,7 @@ const AIChat = (props: AIChatProps) => {
   const isShareMode = useAppSelector(isShareModeSelector);
   const isExporting = useAppSelector(isExportingSelector);
   const chatMode = useAppSelector(novaChatModeSelector);
+  const isLightMode = useAppSelector(themeInfoSelector);
   const [imagePreview, setImagePreview] = useState<NovaFileInfo | null>(null);
   const [inputContents, setInputContents] = useState<string>('');
   const chatListRef = useRef<HTMLDivElement>(null);
@@ -258,7 +247,7 @@ const AIChat = (props: AIChatProps) => {
             {showScrollDownBtn && (
               <S.ScrollDownButton>
                 <IconButton
-                  iconComponent={IconArrowLeft}
+                  iconComponent={isLightMode ? ArrowLeftLightIcon : ArrowLeftDarkIcon}
                   iconSize="md"
                   onClick={() => {
                     chatListRef.current?.scrollTo({

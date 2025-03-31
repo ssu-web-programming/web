@@ -17,6 +17,8 @@ import { formatCurrentTime } from 'util/getAudioDuration';
 
 import { track } from '@amplitude/analytics-browser';
 
+import { sendNovaStatus } from '../../../../../api/apiWrapper';
+import { NOVA_TAB_TYPE } from '../../../../../constants/novaTapTypes';
 import { calLeftCredit } from '../../../../../util/common';
 import {
   LangOptionValues,
@@ -141,6 +143,8 @@ export default function VoiceDictationReady() {
         dictation_type: voiceFile ? 'record' : 'file',
         function_result: false
       });
+    } finally {
+      await sendNovaStatus({ name: NOVA_TAB_TYPE.voiceDictation, uuid: '' }, 'finish');
     }
   };
 

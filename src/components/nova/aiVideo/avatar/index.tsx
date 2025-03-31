@@ -247,16 +247,16 @@ export default function Avatar() {
                 <Button
                   key={shape}
                   variant="lightPurple"
-                  width={85}
                   height={36}
                   selected={result?.info.selectedAvatar?.avatar_style === shape}
                   cssExt={css`
+                    width: auto;
                     display: flex;
                     gap: 4px;
                     font-size: 14px;
                     font-weight: 500;
                     border-radius: 8px;
-                    padding: 6px 8px;
+                    padding: 6px 12px 6px 8px;
                   `}
                   onClick={() => selectAvatarStyle(shape as 'circle' | 'normal')}>
                   <img src={getShapeIcon(shape as 'circle' | 'normal')} alt={shape} />

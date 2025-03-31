@@ -1,11 +1,7 @@
 import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState } from 'react';
 import { useConfirm } from 'components/Confirm';
 import { useTranslation } from 'react-i18next';
-import {
-  formatDuration,
-  getAudioDurationViaAudioElement,
-  getAudioDurationViaWebAudioAPI
-} from 'util/getAudioDuration';
+import { formatDuration, getAudioDurationViaWebAudioAPI } from 'util/getAudioDuration';
 
 export type VoiceDictationComponentType =
   | 'INTRO'
@@ -15,7 +11,7 @@ export type VoiceDictationComponentType =
   | 'FILE_READY'
   | 'RESULT';
 
-interface Segments {
+export interface Segments {
   confidence: number;
   diarization: {
     label: string;
