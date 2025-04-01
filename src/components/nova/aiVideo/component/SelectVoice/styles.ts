@@ -6,7 +6,7 @@ export const Container = styled.div<{
   $isMin: boolean;
 }>`
   max-width: ${({ $isMobile, $isMin }) => ($isMobile ? '100%' : $isMin ? '340px' : '420px')};
-  height: ${({ $isMobile, $isMin }) => ($isMobile ? '100%' : $isMin ? '333px' : '620px')};
+  height: ${({ $isMobile, $isMin }) => ($isMobile ? '100%' : $isMin ? '50%' : '620px')};
   max-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -59,7 +59,7 @@ export const VoiceInfoWrap = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 3.5px;
 
   .radio {
     width: 32px;

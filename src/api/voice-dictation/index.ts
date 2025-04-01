@@ -1,9 +1,9 @@
 import { apiWrapper } from 'api/apiWrapper';
 import { NOVA_SPEECH_DOWNLOAD, NOVA_SPEECH_RECOGNIZE } from 'api/constant';
 import { LangOptionValues } from 'pages/Nova/VoiceDictation/provider/voice-dictation-provider';
+import { v4 } from 'uuid';
 
-import { track } from '@amplitude/analytics-browser';
-
+import { NOVA_TAB_TYPE } from '../../constants/novaTapTypes';
 import { getServiceLoggingInfo, SERVICE_TYPE } from '../../constants/serviceType';
 import { CurrentFileInfo, getCurrentFile } from '../../store/slices/uploadFiles';
 import { useAppSelector } from '../../store/store';
@@ -26,13 +26,17 @@ const voiceDictationHttp = {
     formData.append('file', file);
     formData.append('language', lang);
 
-    const { res, logger } = await apiWrapper().request(NOVA_SPEECH_RECOGNIZE, {
-      headers: {
-        'Content-Type': 'application/json'
+    const { res, logger } = await apiWrapper().request(
+      NOVA_SPEECH_RECOGNIZE,
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        method: 'POST',
+        body: formData
       },
-      method: 'POST',
-      body: formData
-    });
+      { name: NOVA_TAB_TYPE.voiceDictation, uuid: v4() }
+    );
 
     const response = await res.json();
 

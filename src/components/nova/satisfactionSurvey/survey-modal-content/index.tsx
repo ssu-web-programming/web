@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { overlay } from 'overlay-kit';
+import Lottie from 'react-lottie-player';
 import { css } from 'styled-components';
 
 import { apiWrapper } from '../../../../api/apiWrapper';
 import { NOVA_CREDIT_OFFER } from '../../../../api/constant';
+import { NOVA_TAB_TYPE } from '../../../../constants/novaTapTypes';
 import { getServiceLoggingInfo, SERVICE_TYPE } from '../../../../constants/serviceType';
 import CloseDarkIcon from '../../../../img/dark/ico_nova_close.svg';
 import BadDisableDarkIcon from '../../../../img/dark/nova/survey/ico_bad_disable.svg';
@@ -15,6 +17,8 @@ import BadDisableLightIcon from '../../../../img/light/nova/survey/ico_bad_disab
 import BadEnableLightIcon from '../../../../img/light/nova/survey/ico_bad_enable.svg';
 import GoodDisableLightIcon from '../../../../img/light/nova/survey/ico_good_disable.svg';
 import GoodEnableLightIcon from '../../../../img/light/nova/survey/ico_good_enable.svg';
+import Spinner from '../../../../img/light/spinner.json';
+import { novaChatModeSelector } from '../../../../store/slices/nova/novaHistorySlice';
 import {
   selectPageService,
   setPageCreditReceivedByServiceType
@@ -36,9 +40,11 @@ export default function SurveyModalContent() {
   const isLightMode = useAppSelector(themeInfoSelector);
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
   const service = useAppSelector(selectPageService(selectedNovaTab));
+  const chatMode = useAppSelector(novaChatModeSelector);
   const errHandle = useErrorHandle();
   const [result, setResult] = useState<'great' | 'sorry' | null>(null);
   const [dontShowSurvey, setDontShowSurvey] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleClose = () => {
     // 검증을 위해 1분으로 세팅 / 상용은 1시간
@@ -49,6 +55,8 @@ export default function SurveyModalContent() {
   };
 
   const handleSubmit = () => {
+    if (isLoading) return;
+
     if (dontShowSurvey) {
       // 검증을 위해 7분으로 세팅
       const minute = process.env.NODE_ENV == 'production' ? 10080 : 7;
@@ -56,12 +64,14 @@ export default function SurveyModalContent() {
     }
 
     handleOfferCredit().then(() => {
+      setIsLoading(false);
       showOfferCreditPopup();
     });
   };
 
   const handleOfferCredit = async () => {
     try {
+      setIsLoading(true);
       const { res, logger } = await apiWrapper().request(NOVA_CREDIT_OFFER, {
         headers: {
           'Content-Type': 'application/json'
@@ -80,13 +90,20 @@ export default function SurveyModalContent() {
             serviceType: service[0].serviceType
           })
         );
-        const log_info = getServiceLoggingInfo(service[0].serviceType);
+
+        const gptVer =
+          selectedNovaTab === NOVA_TAB_TYPE.aiChat || selectedNovaTab === NOVA_TAB_TYPE.perplexity
+            ? chatMode
+            : service[0].serviceType;
+
+        const log_info = getServiceLoggingInfo(gptVer);
         await logger({
           dp: 'ai.nova',
           dt: 'credit_event',
           el: 'feedback_send',
           type: result ?? '',
-          detail_type: log_info.name
+          detail_type: log_info.name,
+          gpt_ver: log_info.detail
         });
       }
     } catch (error) {
@@ -163,7 +180,11 @@ export default function SurveyModalContent() {
             opacity: 1;
           `}
           onClick={handleSubmit}>
-          <span>{'의견 보내기'}</span>
+          {isLoading ? (
+            <Lottie animationData={Spinner} loop play style={{ width: 27, height: 27 }} />
+          ) : (
+            <span>{'의견 보내기'}</span>
+          )}
         </Button>
         <S.CheckBoxWrap>
           <CheckBox
