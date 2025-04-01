@@ -15,9 +15,11 @@ import insertDocIcon from 'img/light/nova/translation/insert_docs.svg';
 import { overlay } from 'overlay-kit';
 import { ClientStatusType } from 'pages/Nova/Nova';
 import { useTranslation } from 'react-i18next';
+import { platformInfoSelector } from 'store/slices/platformInfo';
 import { themeInfoSelector } from 'store/slices/theme';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import { css } from 'styled-components';
+import { ClientType } from 'util/bridge';
 import Bridge from 'util/bridge';
 import { formatMilliseconds } from 'util/getAudioDuration';
 import { parseJsonToText } from 'util/voice-dictation';
@@ -30,6 +32,7 @@ import {
 } from '../../../../../store/slices/nova/pageStatusSlice';
 import { selectTabSlice } from '../../../../../store/slices/tabSlice';
 import { useVoiceDictationContext } from '../../provider/voice-dictation-provider';
+import MobilePlaybackSpeedModalContent from '../modals/mobile-playback-speed-modal-content';
 import PlaybackSpeedModalContent from '../modals/playback-speed-modal-content';
 // AudioPlayer 컴포넌트와 타입 임포트 업데이트
 import AudioPlayer, { PlaybackSpeed } from '../voice-audio-player';
@@ -52,6 +55,10 @@ export default function VoiceDictationResult() {
   const { insertDocsHandler } = useInsertDocsHandler();
 
   const showSurveyModal = UseShowSurveyModal();
+
+  const { platform } = useAppSelector(platformInfoSelector);
+
+  const isMobile = platform === ClientType.ios || platform === ClientType.android;
 
   const { t } = useTranslation();
 
@@ -86,6 +93,22 @@ export default function VoiceDictationResult() {
             currentSpeed={currentSpeed}
           />
         </OverlayModal>
+      );
+    });
+  };
+
+  const handleOpenMobilePlaybackSpeed = (
+    handleChangeSpeedOtions: (nextSpeed: PlaybackSpeed) => void,
+    currentSpeed: PlaybackSpeed
+  ) => {
+    overlay.open(({ isOpen, close }) => {
+      return (
+        <MobilePlaybackSpeedModalContent
+          isOpen={isOpen}
+          setIsOpen={close}
+          currentSpeed={currentSpeed}
+          onSelectSpeed={handleChangeSpeedOtions}
+        />
       );
     });
   };
@@ -205,7 +228,7 @@ export default function VoiceDictationResult() {
             }}
             onPause={() => console.log('Paused')}
             isLightMode={isLightMode}
-            openSpeedbackPopup={handleOpenPlaybackSpeed}>
+            openSpeedbackPopup={isMobile ? handleOpenMobilePlaybackSpeed : handleOpenPlaybackSpeed}>
             <S.ButtonWrapper>
               <Button
                 variant="purple"

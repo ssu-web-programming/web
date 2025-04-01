@@ -20,7 +20,7 @@ const ToggleWrapper = styled.div`
 `;
 
 const TextAreaWrapper = styled.div`
-  height: 425px;
+  height: 420px;
   margin-top: 12px;
   border-radius: 8px;
   border: 1px solid ${({ theme }) => theme.color.border.gray01};

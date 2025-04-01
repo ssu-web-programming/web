@@ -141,7 +141,7 @@ export default function TranslationFileUploader({
   return (
     <Wrap>
       {getActiveFile() ? (
-        <FileItem fileName={getActiveFile()?.name} />
+        <FileItem fileName={getActiveFile()?.name} iconSize={64} />
       ) : (
         <FileUploader
           type="file"
