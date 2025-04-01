@@ -404,9 +404,7 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                       {creating != 'NOVA' &&
                         !expiredNOVA &&
                         [...novaHistory].reverse().find((item) => item.isAnswer === false)?.id ===
-                          item.id &&
-                        item.chatType !== SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO &&
-                        item.chatType !== SERVICE_TYPE.NOVA_WEBSEARCH_PERPLEXITY && (
+                          item.id && (
                           <SelectBox
                             placeHolder={t('Nova.perplexity.button.anotherAnswer') || ''}
                             minWidth={290}
