@@ -28,8 +28,8 @@ const FileName = styled.p`
 
 const DeleteIcon = styled(IcDelete)`
   position: absolute;
-  top: -6px;
-  right: -6px; /* 아이콘 컨테이너 기준 오른쪽 상단 */
+  top: 0px;
+  right: 0px; /* 아이콘 컨테이너 기준 오른쪽 상단 */
   cursor: pointer;
   z-index: 1;
 `;
