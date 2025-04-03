@@ -72,6 +72,8 @@ export const Content = styled.div`
 `;
 
 export const List = styled.ul`
+  display: flex;
+  gap: 4px;
   padding: 0;
 
   li {

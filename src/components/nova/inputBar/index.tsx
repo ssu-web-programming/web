@@ -490,6 +490,7 @@ export default function InputBar(props: InputBarProps) {
                 align-items: center;
                 justify-content: center;
                 margin-right: 8px;
+                margin-bottom: 8px;
                 opacity: 1;
                 padding: 0;
               `}
