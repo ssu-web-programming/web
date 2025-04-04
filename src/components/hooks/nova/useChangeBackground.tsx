@@ -4,6 +4,7 @@ import { track } from '@amplitude/analytics-browser';
 
 import { apiWrapper, sendNovaStatus } from '../../../api/apiWrapper';
 import { NOVA_CHANGE_BACKGROUND } from '../../../api/constant';
+import { parseGptVer } from '../../../api/usePostSplunkLog';
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import { getServiceLoggingInfo, SERVICE_TYPE } from '../../../constants/serviceType';
 import {
@@ -16,11 +17,10 @@ import {
 } from '../../../store/slices/nova/pageStatusSlice';
 import { getCurrentFile, setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
+import Bridge from '../../../util/bridge';
 import { calLeftCredit } from '../../../util/common';
 import { createFormDataFromFiles, fileToBase64 } from '../../../util/files';
 import useErrorHandle from '../useErrorHandle';
-import Bridge from "../../../util/bridge";
-import {parseGptVer} from "../../../api/usePostSplunkLog";
 
 export const useChangeBackground = () => {
   const errorHandle = useErrorHandle();

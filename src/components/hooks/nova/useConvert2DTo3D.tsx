@@ -1,7 +1,5 @@
 import { v4 } from 'uuid';
 
-import { track } from '@amplitude/analytics-browser';
-
 import { apiWrapper, sendNovaStatus } from '../../../api/apiWrapper';
 import { NOVA_GENERATE_ANIMATION } from '../../../api/constant';
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
@@ -15,10 +13,10 @@ import {
 } from '../../../store/slices/nova/pageStatusSlice';
 import { getCurrentFile, setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
+import Bridge from '../../../util/bridge';
 import { calLeftCredit } from '../../../util/common';
 import { createFormDataFromFiles, fileToBase64 } from '../../../util/files';
 import useErrorHandle from '../useErrorHandle';
-import Bridge from "../../../util/bridge";
 
 export const useConvert2DTo3D = () => {
   const errorHandle = useErrorHandle();

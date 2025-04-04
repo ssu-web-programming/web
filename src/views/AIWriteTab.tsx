@@ -5,8 +5,6 @@ import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 
-import { track } from '@amplitude/analytics-browser';
-
 import { apiWrapper, streaming } from '../api/apiWrapper';
 import { AI_WRITE_RESPONSE_STREAM_API } from '../api/constant';
 import { calcToken, parseGptVer } from '../api/usePostSplunkLog';
