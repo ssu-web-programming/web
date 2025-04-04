@@ -19,6 +19,7 @@ import { track } from '@amplitude/analytics-browser';
 
 import { sendNovaStatus } from '../../../../../api/apiWrapper';
 import { NOVA_TAB_TYPE } from '../../../../../constants/novaTapTypes';
+import Bridge from '../../../../../util/bridge';
 import { calLeftCredit } from '../../../../../util/common';
 import {
   LangOptionValues,
@@ -107,12 +108,15 @@ export default function VoiceDictationReady() {
       }
 
       const { deductionCredit } = calLeftCredit(headers);
-      track('nova_dictation', {
-        file_id: currentFile.id,
-        document_format: currentFile.ext,
-        credit: deductionCredit,
-        dictation_type: voiceFile ? 'record' : 'file',
-        function_result: true
+      Bridge.callBridgeApi('amplitudeData', {
+        type: 'nova_dictation',
+        props: {
+          file_id: currentFile.id,
+          document_format: currentFile.ext,
+          credit: deductionCredit,
+          dictation_type: voiceFile ? 'record' : 'file',
+          function_result: true
+        }
       });
 
       await handleMoveToResult(result);
@@ -137,11 +141,14 @@ export default function VoiceDictationReady() {
         componentType: 'VOICE_READY'
       }));
 
-      track('nova_dictation', {
-        file_id: currentFile.id,
-        document_format: currentFile.ext,
-        dictation_type: voiceFile ? 'record' : 'file',
-        function_result: false
+      await Bridge.callBridgeApi('amplitudeData', {
+        type: 'nova_dictation',
+        props: {
+          file_id: currentFile.id,
+          document_format: currentFile.ext,
+          dictation_type: voiceFile ? 'record' : 'file',
+          function_result: false
+        }
       });
     } finally {
       await sendNovaStatus({ name: NOVA_TAB_TYPE.voiceDictation, uuid: '' }, 'finish');

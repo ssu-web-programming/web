@@ -72,10 +72,13 @@ export default function Result({ children }: ResultProps) {
         isUsed: true
       })
     );
-    track('save_nova_image', {
-      image_name: service[0].serviceType,
-      document_format: currentFile.ext,
-      file_id: currentFile.id
+    Bridge.callBridgeApi('amplitudeData', {
+      type: 'save_nova_image',
+      props: {
+        image_name: service[0].serviceType,
+        document_format: currentFile.ext,
+        file_id: currentFile.id
+      }
     });
   }, []);
 
@@ -247,10 +250,13 @@ export default function Result({ children }: ResultProps) {
 
                     insertDocsHandler();
 
-                    track('insert_nova_image', {
-                      image_name: service[0].serviceType,
-                      document_format: currentFile.ext,
-                      file_id: currentFile.id
+                    await Bridge.callBridgeApi('amplitudeData', {
+                      type: 'insert_nova_image',
+                      props: {
+                        image_name: service[0].serviceType,
+                        document_format: currentFile.ext,
+                        file_id: currentFile.id
+                      }
                     });
                   }}>
                   <img src={isLightMode ? InsertDocsLightIcon : InsertDocsDarkIcon} alt="docs" />

@@ -19,6 +19,8 @@ import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { calLeftCredit } from '../../../util/common';
 import { createFormDataFromFiles, fileToBase64 } from '../../../util/files';
 import useErrorHandle from '../useErrorHandle';
+import Bridge from "../../../util/bridge";
+import {parseGptVer} from "../../../api/usePostSplunkLog";
 
 export const useChangeBackground = () => {
   const errorHandle = useErrorHandle();
@@ -110,20 +112,26 @@ export const useChangeBackground = () => {
           el: log_info.name,
           gpt_ver: log_info.detail
         });
-        track('nova_image', {
-          image_name: 'NOVA_REPLACE_BG_CLIPDROP',
-          file_id: currentFile.id,
-          document_format: currentFile.ext,
-          credit: deductionCredit,
-          function_result: true
+        await Bridge.callBridgeApi('amplitudeData', {
+          type: 'nova_image',
+          props: {
+            image_name: 'NOVA_REPLACE_BG_CLIPDROP',
+            file_id: currentFile.id,
+            document_format: currentFile.ext,
+            credit: deductionCredit,
+            function_result: true
+          }
         });
       } else {
         handleChangeBGError(response.error.code, Number(leftCredit), prompt);
-        track('nova_image', {
-          image_name: 'NOVA_REPLACE_BG_CLIPDROP',
-          file_id: currentFile.id,
-          document_format: currentFile.ext,
-          function_result: false
+        await Bridge.callBridgeApi('amplitudeData', {
+          type: 'nova_image',
+          props: {
+            image_name: 'NOVA_REPLACE_BG_CLIPDROP',
+            file_id: currentFile.id,
+            document_format: currentFile.ext,
+            function_result: false
+          }
         });
       }
     } catch (err) {

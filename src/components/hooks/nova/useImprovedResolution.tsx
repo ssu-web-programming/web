@@ -18,6 +18,7 @@ import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { calLeftCredit } from '../../../util/common';
 import { createFormDataFromFiles } from '../../../util/files';
 import useErrorHandle from '../useErrorHandle';
+import Bridge from "../../../util/bridge";
 
 export const useImprovedResolution = () => {
   const errorHandle = useErrorHandle();
@@ -78,20 +79,26 @@ export const useImprovedResolution = () => {
           el: log_info.name,
           gpt_ver: log_info.detail
         });
-        track('nova_image', {
-          image_name: 'NOVA_PO_RESOLUTION',
-          file_id: currentFile.id,
-          document_format: currentFile.ext,
-          credit: deductionCredit,
-          function_result: true
+        await Bridge.callBridgeApi('amplitudeData', {
+          type: 'nova_image',
+          props: {
+            image_name: 'NOVA_PO_RESOLUTION',
+            file_id: currentFile.id,
+            document_format: currentFile.ext,
+            credit: deductionCredit,
+            function_result: true
+          }
         });
       } else {
         handleImprovedResError(response.error.code, Number(leftCredit));
-        track('nova_image', {
-          image_name: 'NOVA_PO_RESOLUTION',
-          file_id: currentFile.id,
-          document_format: currentFile.ext,
-          function_result: false
+        await Bridge.callBridgeApi('amplitudeData', {
+          type: 'nova_image',
+          props: {
+            image_name: 'NOVA_PO_RESOLUTION',
+            file_id: currentFile.id,
+            document_format: currentFile.ext,
+            function_result: false
+          }
         });
       }
     } catch (err) {
