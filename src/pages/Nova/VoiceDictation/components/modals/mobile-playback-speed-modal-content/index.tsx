@@ -8,6 +8,11 @@ import 'rc-slider/assets/index.css';
 
 export type PlaybackSpeed = 0.8 | 1.0 | 1.2 | 1.5 | 1.8 | 2.0;
 
+interface MarkStyle {
+  label: string;
+  style: React.CSSProperties;
+}
+
 interface PlaybackSpeedBottomSheetProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
@@ -38,11 +43,23 @@ const MobilePlaybackSpeedModalContent: React.FC<PlaybackSpeedBottomSheetProps> =
     setCurrentSpeedIndex(roundedIndex);
   };
 
-  const handleSpeedOptionClick = (speed: PlaybackSpeed) => {
-    onSelectSpeed(speed);
-    setSelectedSpeed(speed);
-    setCurrentSpeedIndex(speeds.indexOf(speed));
-  };
+  const sliderMarks = speeds.reduce(
+    (acc, speed, index) => {
+      acc[index] = {
+        label: speed.toFixed(1),
+        style: {
+          color: selectedSpeed === speed ? '#6F3AD0' : '#9EA4AA',
+          fontSize: selectedSpeed === speed ? '20px' : '16px',
+          fontWeight: selectedSpeed === speed ? 600 : 400,
+          transition: 'all 0.2s ease',
+          cursor: 'pointer',
+          marginTop: 20
+        }
+      };
+      return acc;
+    },
+    {} as Record<number, MarkStyle>
+  );
 
   return (
     <ModalSheet isOpen={isOpen} setIsOpen={setIsOpen} detent="content-height">
@@ -75,19 +92,9 @@ const MobilePlaybackSpeedModalContent: React.FC<PlaybackSpeedBottomSheetProps> =
                 opacity: 1
               }
             }}
+            marks={sliderMarks}
           />
         </S.SliderContainerRC>
-
-        <S.SpeedOptions>
-          {speeds.map((speed) => (
-            <S.SpeedOption
-              key={speed}
-              isSelected={selectedSpeed === speed}
-              onClick={() => handleSpeedOptionClick(speed)}>
-              {speed.toFixed(1)}
-            </S.SpeedOption>
-          ))}
-        </S.SpeedOptions>
       </S.SheetContainer>
     </ModalSheet>
   );

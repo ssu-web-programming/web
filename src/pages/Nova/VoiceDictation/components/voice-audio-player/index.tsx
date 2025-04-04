@@ -109,7 +109,6 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
 
   const handleChangeSpeedOtions = (nextSpeed: PlaybackSpeed) => {
     if (audioRef.current) {
-      console.log('여기도냐?', nextSpeed);
       setPlaybackSpeed(nextSpeed);
       audioRef.current.playbackRate = nextSpeed;
     }
