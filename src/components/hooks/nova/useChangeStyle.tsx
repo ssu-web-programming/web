@@ -15,10 +15,10 @@ import {
 } from '../../../store/slices/nova/pageStatusSlice';
 import { getCurrentFile, setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
+import Bridge from '../../../util/bridge';
 import { calLeftCredit } from '../../../util/common';
 import { createFormDataFromFiles, fileToBase64 } from '../../../util/files';
 import useErrorHandle from '../useErrorHandle';
-import Bridge from "../../../util/bridge";
 
 export const useChangeStyle = () => {
   const errorHandle = useErrorHandle();

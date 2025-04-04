@@ -8,13 +8,8 @@ import {
 } from 'api/constant';
 import { v4 } from 'uuid';
 
-import { track } from '@amplitude/analytics-browser';
-
 import { NOVA_TAB_TYPE } from '../../constants/novaTapTypes';
 import { getServiceLoggingInfo, SERVICE_TYPE } from '../../constants/serviceType';
-import { getCurrentFile } from '../../store/slices/uploadFiles';
-import { useAppSelector } from '../../store/store';
-import { calLeftCredit } from '../../util/common';
 
 interface PostTranslateText {
   text: string;
