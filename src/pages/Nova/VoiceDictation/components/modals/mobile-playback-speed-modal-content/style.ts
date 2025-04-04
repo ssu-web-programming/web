@@ -3,9 +3,8 @@ import styled from 'styled-components';
 export const SheetContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 16px;
   width: 100%;
-  padding: 0px 16px 40px 16px;
+  padding: 0px 16px 70px 16px;
 `;
 
 export const Title = styled.h2`
@@ -25,6 +24,18 @@ export const SliderContainerRC = styled.div`
   /* rc-slider 관련 커스텀 스타일 오버라이드 */
   .rc-slider {
     padding: 8px 0;
+  }
+
+  .rc-slider-dot {
+    visibility: hidden;
+  }
+
+  .rc-slider-mark .rc-slider-mark-text:nth-child(1) {
+    padding-left: 20px;
+  }
+
+  .rc-slider-mark .rc-slider-mark-text:nth-child(6) {
+    padding-right: 20px;
   }
 
   .rc-slider-rail {
@@ -59,34 +70,6 @@ export const SliderContainerRC = styled.div`
       border-color: #6f3ad0;
       box-shadow: 0 0 0 3px rgba(111, 58, 208, 0.2);
     }
-  }
-`;
-
-export const SpeedOptions = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding: 8px 0;
-  width: 100%;
-`;
-
-interface SpeedOptionProps {
-  isSelected: boolean;
-}
-
-export const SpeedOption = styled.button<SpeedOptionProps>`
-  background: none;
-  border: none;
-  font-family: 'Pretendard', sans-serif;
-  font-weight: ${({ isSelected }) => (isSelected ? '600' : '400')};
-  font-size: ${({ isSelected }) => (isSelected ? '20px' : '16px')};
-  line-height: 1em;
-  color: ${({ isSelected }) => (isSelected ? '#6F3AD0' : '#9EA4AA')};
-  padding: 4px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-
-  &:hover {
-    color: ${({ isSelected }) => (isSelected ? '#6F3AD0' : '#454C53')};
   }
 `;
 

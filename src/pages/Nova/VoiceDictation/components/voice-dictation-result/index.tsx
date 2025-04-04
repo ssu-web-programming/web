@@ -39,7 +39,6 @@ import AudioPlayer, { PlaybackSpeed } from '../voice-audio-player';
 import VoiceSaveBottomSheet from '../voice-save-bottom-sheet';
 
 import * as S from './style';
-
 export default function VoiceDictationResult() {
   const {
     sharedVoiceDictationInfo: { voiceDictationResult, audioDuration, currentTime }

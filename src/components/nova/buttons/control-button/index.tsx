@@ -8,15 +8,11 @@ type SVGComponent = FunctionComponent<SVGProps<SVGSVGElement>>;
 interface ControlButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   icon: SVGComponent;
   darkIcon: SVGComponent;
-  width?: number;
-  height?: number;
 }
 
 export default function ControlButton({
   icon: Icon,
   darkIcon: DarkIcon,
-  width = 64,
-  height = 64,
   onClick,
   ...props
 }: ControlButtonProps) {
@@ -25,7 +21,7 @@ export default function ControlButton({
 
   return (
     <S.StyledButton onClick={onClick} {...props}>
-      <ButtonIcon width={width} height={height} />
+      <ButtonIcon />
     </S.StyledButton>
   );
 }
