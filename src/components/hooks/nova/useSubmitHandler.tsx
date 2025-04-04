@@ -331,13 +331,16 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
 
         dispatch(setUsingAI(false));
 
-        track('nova_chating', {
-          is_document: type != '',
-          document_format: currentFile.ext,
-          file_id: currentFile.id,
-          model_type: chatMode,
-          chating_type: type == '' ? 'default' : type,
-          function_result: true
+        await Bridge.callBridgeApi('amplitudeData', {
+          type: 'nova_chating',
+          props: {
+            is_document: type != '',
+            document_format: currentFile.ext,
+            file_id: currentFile.id,
+            model_type: chatMode,
+            chating_type: type == '' ? 'default' : type,
+            function_result: true
+          }
         });
       } finally {
         dispatch(setCreating('none'));

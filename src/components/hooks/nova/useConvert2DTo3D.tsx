@@ -18,6 +18,7 @@ import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { calLeftCredit } from '../../../util/common';
 import { createFormDataFromFiles, fileToBase64 } from '../../../util/files';
 import useErrorHandle from '../useErrorHandle';
+import Bridge from "../../../util/bridge";
 
 export const useConvert2DTo3D = () => {
   const errorHandle = useErrorHandle();
@@ -112,20 +113,26 @@ export const useConvert2DTo3D = () => {
           el: log_info.name,
           gpt_ver: log_info.detail
         });
-        track('nova_image', {
-          image_name: 'Immersity',
-          file_id: currentFile.id,
-          document_format: currentFile.ext,
-          credit: deductionCredit,
-          function_result: true
+        await Bridge.callBridgeApi('amplitudeData', {
+          type: 'nova_image',
+          props: {
+            image_name: 'Immersity',
+            file_id: currentFile.id,
+            document_format: currentFile.ext,
+            credit: deductionCredit,
+            function_result: true
+          }
         });
       } else {
         handleExpandError(response.error.code, Number(leftCredit), pattern, animationType);
-        track('nova_image', {
-          image_name: 'Immersity',
-          file_id: currentFile.id,
-          document_format: currentFile.ext,
-          function_result: false
+        await Bridge.callBridgeApi('amplitudeData', {
+          type: 'nova_image',
+          props: {
+            image_name: 'Immersity',
+            file_id: currentFile.id,
+            document_format: currentFile.ext,
+            function_result: false
+          }
         });
       }
     } catch (err) {

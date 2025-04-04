@@ -28,6 +28,7 @@ import {
   WriteType
 } from '../store/slices/writeHistorySlice';
 import { useAppSelector } from '../store/store';
+import Bridge from '../util/bridge';
 import { calLeftCredit } from '../util/common';
 
 const TabWrapper = styled.div`
@@ -145,11 +146,14 @@ const AIWriteTab = (props: WriteTabProps) => {
         }
       }
 
-      track('ai_write', {
-        document_format: currentFile.ext,
-        file_id: currentFile.id,
-        model_type: gpt_ver,
-        function_result: true
+      await Bridge.callBridgeApi('amplitudeData', {
+        type: 'ai_write',
+        props: {
+          document_format: currentFile.ext,
+          file_id: currentFile.id,
+          model_type: gpt_ver,
+          function_result: true
+        }
       });
     } finally {
       dispatch(setCreating('none'));
@@ -168,12 +172,15 @@ const AIWriteTab = (props: WriteTabProps) => {
           /* empty */
         }
       }
-      track('ai_write', {
-        document_format: currentFile.ext,
-        file_id: currentFile.id,
-        model_type: gpt_ver,
-        credit: usedCredit,
-        function_result: true
+      await Bridge.callBridgeApi('amplitudeData', {
+        type: 'ai_write',
+        props: {
+          document_format: currentFile.ext,
+          file_id: currentFile.id,
+          model_type: gpt_ver,
+          credit: usedCredit,
+          function_result: true
+        }
       });
     }
   };

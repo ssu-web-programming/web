@@ -28,6 +28,7 @@ import {
 } from '../store/slices/txt2imgHistory';
 import { getCurrentFile } from '../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../store/store';
+import Bridge from '../util/bridge';
 import { calLeftCredit } from '../util/common';
 
 const Body = styled.div`
@@ -145,21 +146,27 @@ const ImageCreate = ({ contents }: { contents: string }) => {
         dispatch(updateT2ICurItemIndex(null));
         errorHandle(error);
 
-        track('text_to_image', {
-          document_format: currentFile.ext,
-          file_id: currentFile.id,
-          model_type: parseGptVer(apiBody.type),
-          function_result: false
+        await Bridge.callBridgeApi('amplitudeData', {
+          type: 'text_to_image',
+          props: {
+            document_format: currentFile.ext,
+            file_id: currentFile.id,
+            model_type: parseGptVer(apiBody.type),
+            function_result: false
+          }
         });
       } finally {
         dispatch(setCreating('none'));
 
-        track('text_to_image', {
-          document_format: currentFile.ext,
-          file_id: currentFile.id,
-          model_type: parseGptVer(apiBody.type),
-          credit: usedCredit,
-          function_result: true
+        await Bridge.callBridgeApi('amplitudeData', {
+          type: 'text_to_image',
+          props: {
+            document_format: currentFile.ext,
+            file_id: currentFile.id,
+            model_type: parseGptVer(apiBody.type),
+            credit: usedCredit,
+            function_result: true
+          }
         });
       }
     },

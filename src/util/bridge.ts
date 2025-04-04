@@ -270,6 +270,12 @@ const callApi = (api: ApiType, arg?: string | number | object | boolean) => {
             }
             break;
           }
+          case 'amplitudeData': {
+            if (window.webkit.messageHandlers.amplitudeData) {
+              window.webkit.messageHandlers.amplitudeData.postMessage(arg);
+            }
+            break;
+          }
         }
         break;
       }
@@ -800,7 +806,8 @@ type ApiType =
   | 'downloadVoiceFile'
   | 'getRecordingState'
   | 'novaStatusChanged'
-  | 'closeNova';
+  | 'closeNova'
+  | 'amplitudeData';
 
 const Bridge = {
   checkSession: (api: string) => {

@@ -170,6 +170,13 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
           file_id: currentFile.id,
           document_format: currentFile.ext
         });
+        await Bridge.callBridgeApi('amplitudeData', {
+          type: 'copy_nova_chating',
+          props: {
+            file_id: currentFile.id,
+            document_format: currentFile.ext
+          }
+        });
       }
     },
     {
