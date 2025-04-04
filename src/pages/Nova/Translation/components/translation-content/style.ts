@@ -7,7 +7,7 @@ const TranslationWrapper = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  padding: 24px 16px;
+  margin: 24px 16px;
   background: ${({ theme }) => theme.color.background.bg};
 `;
 

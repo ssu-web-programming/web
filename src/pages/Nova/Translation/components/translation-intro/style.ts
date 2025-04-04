@@ -49,6 +49,7 @@ const TextAreaHeader = styled.div`
     justify-content: center;
     gap: 4px;
     color: ${({ theme }) => theme.color.text.gray04};
+    padding: 0px 24px 0px 12px;
   }
 
   & > div:nth-child(2) {
@@ -65,6 +66,7 @@ const TextAreaHeader = styled.div`
     justify-content: center;
     gap: 4px;
     color: ${({ theme }) => theme.color.text.gray04};
+    padding: 0px 24px 0px 12px;
 
     & > span {
       overflow: hidden;
