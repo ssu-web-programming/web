@@ -220,11 +220,14 @@ export default function Loading() {
         });
 
         const { deductionCredit } = calLeftCredit(res.headers);
-        track('nova_create_video', {
-          file_id: currentFile.id,
-          document_format: currentFile.ext,
-          credit: deductionCredit,
-          function_result: true
+        await Bridge.callBridgeApi('amplitudeData', {
+          type: 'nova_create_video',
+          props: {
+            file_id: currentFile.id,
+            document_format: currentFile.ext,
+            credit: deductionCredit,
+            function_result: true
+          }
         });
       }
     } catch (error) {
@@ -234,10 +237,13 @@ export default function Loading() {
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'home' }));
       await sendNovaStatus({ name: NOVA_TAB_TYPE.aiVideo, uuid: '' }, 'finish');
 
-      track('nova_create_video', {
-        file_id: currentFile.id,
-        document_format: currentFile.ext,
-        function_result: false
+      await Bridge.callBridgeApi('amplitudeData', {
+        type: 'nova_create_video',
+        props: {
+          file_id: currentFile.id,
+          document_format: currentFile.ext,
+          function_result: false
+        }
       });
     }
   };

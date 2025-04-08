@@ -1,7 +1,6 @@
 import React from 'react';
 import Box from '@mui/material/Box';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import Lottie from 'react-lottie-player';
+import { SelectChangeEvent } from '@mui/material/Select';
 import { FlattenSimpleInterpolation } from 'styled-components';
 
 import { ReactComponent as ArrowDarkIcon } from '../../img/dark/ico_arrow_down_normal.svg';
@@ -96,6 +95,7 @@ export default function SelectBox({
           }}
           renderValue={(value) => {
             const selectedItem = menuItem.find((item) => item.key == value);
+
             return selectedItem ? <div>{selectedItem.title}</div> : <div>{placeHolder}</div>;
           }}>
           {menuItem.map((item, index) => {
@@ -108,7 +108,7 @@ export default function SelectBox({
                 <S.ItemWrap>
                   <div className="content">
                     {item.icon && <img src={item.icon} alt="icon" />}
-                    <S.TextWrap selected={isSelectedHighlighted && selectedItem === item.title}>
+                    <S.TextWrap selected={isSelectedHighlighted && selectedItem === item.key}>
                       <span className="title">{item.title}</span>
                       <span className="desc">{item.desc}</span>
                     </S.TextWrap>

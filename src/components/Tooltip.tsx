@@ -133,7 +133,7 @@ const OptionItemWrapper = styled.div<{ type: TooltipType }>`
 
 const Divider = styled.div`
   height: 1px;
-  background-color: ${({ theme }) => theme.color.border.gray01};
+  background-color: ${({ theme }) => theme.color.border.gray02};
 
   &:last-child {
     display: none;

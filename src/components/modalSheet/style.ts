@@ -7,6 +7,7 @@ export const CustomSheet = styled(Sheet)`
   }
 
   .react-modal-sheet-container {
+    max-height: calc(100% - env(safe-area-inset-top) - 56px);
     background-color: ${({ theme }) => theme.color.background.yellow02} !important;
     border-top-left-radius: 16px !important;
     border-top-right-radius: 16px !important;

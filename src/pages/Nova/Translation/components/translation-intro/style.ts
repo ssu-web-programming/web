@@ -20,7 +20,7 @@ const ToggleWrapper = styled.div`
 `;
 
 const TextAreaWrapper = styled.div`
-  height: 425px;
+  height: 420px;
   margin-top: 12px;
   border-radius: 8px;
   border: 1px solid ${({ theme }) => theme.color.border.gray01};
@@ -49,6 +49,7 @@ const TextAreaHeader = styled.div`
     justify-content: center;
     gap: 4px;
     color: ${({ theme }) => theme.color.text.gray04};
+    padding: 0px 24px 0px 12px;
   }
 
   & > div:nth-child(2) {
@@ -65,6 +66,7 @@ const TextAreaHeader = styled.div`
     justify-content: center;
     gap: 4px;
     color: ${({ theme }) => theme.color.text.gray04};
+    padding: 0px 24px 0px 12px;
 
     & > span {
       overflow: hidden;

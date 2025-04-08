@@ -1,4 +1,3 @@
-// AudioRecorder.tsx
 import React, { useEffect } from 'react';
 import { useConfirm } from 'components/Confirm';
 import ControlButton from 'components/nova/buttons/control-button';
@@ -116,21 +115,9 @@ const TestAudioRecorder: React.FC<AudioRecorderProps> = ({
         </S.CanvasWrapper>
       </S.Background>
       <S.ButtonGroup>
-        <ControlButton
-          icon={Lang}
-          darkIcon={DarkLang}
-          onClick={openLangOverlay}
-          width={40}
-          height={40}
-        />
+        <ControlButton icon={Lang} darkIcon={DarkLang} onClick={openLangOverlay} />
         <PlayPauseButton isPaused={isPaused} onPlay={resumeRecording} onPause={pauseRecording} />
-        <ControlButton
-          icon={Stop}
-          darkIcon={DarkStop}
-          onClick={handleStopRecording}
-          width={40}
-          height={40}
-        />
+        <ControlButton icon={Stop} darkIcon={DarkStop} onClick={handleStopRecording} />
       </S.ButtonGroup>
     </S.Container>
   );

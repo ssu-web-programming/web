@@ -4,6 +4,7 @@ import { track } from '@amplitude/analytics-browser';
 
 import { apiWrapper, sendNovaStatus } from '../../../api/apiWrapper';
 import { NOVA_CHANGE_BACKGROUND } from '../../../api/constant';
+import { parseGptVer } from '../../../api/usePostSplunkLog';
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import { getServiceLoggingInfo, SERVICE_TYPE } from '../../../constants/serviceType';
 import {
@@ -16,6 +17,7 @@ import {
 } from '../../../store/slices/nova/pageStatusSlice';
 import { getCurrentFile, setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
+import Bridge from '../../../util/bridge';
 import { calLeftCredit } from '../../../util/common';
 import { createFormDataFromFiles, fileToBase64 } from '../../../util/files';
 import useErrorHandle from '../useErrorHandle';
@@ -110,20 +112,26 @@ export const useChangeBackground = () => {
           el: log_info.name,
           gpt_ver: log_info.detail
         });
-        track('nova_image', {
-          image_name: 'NOVA_REPLACE_BG_CLIPDROP',
-          file_id: currentFile.id,
-          document_format: currentFile.ext,
-          credit: deductionCredit,
-          function_result: true
+        await Bridge.callBridgeApi('amplitudeData', {
+          type: 'nova_image',
+          props: {
+            image_name: 'NOVA_REPLACE_BG_CLIPDROP',
+            file_id: currentFile.id,
+            document_format: currentFile.ext,
+            credit: deductionCredit,
+            function_result: true
+          }
         });
       } else {
         handleChangeBGError(response.error.code, Number(leftCredit), prompt);
-        track('nova_image', {
-          image_name: 'NOVA_REPLACE_BG_CLIPDROP',
-          file_id: currentFile.id,
-          document_format: currentFile.ext,
-          function_result: false
+        await Bridge.callBridgeApi('amplitudeData', {
+          type: 'nova_image',
+          props: {
+            image_name: 'NOVA_REPLACE_BG_CLIPDROP',
+            file_id: currentFile.id,
+            document_format: currentFile.ext,
+            function_result: false
+          }
         });
       }
     } catch (err) {

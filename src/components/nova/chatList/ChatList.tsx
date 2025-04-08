@@ -170,6 +170,13 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
           file_id: currentFile.id,
           document_format: currentFile.ext
         });
+        await Bridge.callBridgeApi('amplitudeData', {
+          type: 'copy_nova_chating',
+          props: {
+            file_id: currentFile.id,
+            document_format: currentFile.ext
+          }
+        });
       }
     },
     {
@@ -404,9 +411,7 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                       {creating != 'NOVA' &&
                         !expiredNOVA &&
                         [...novaHistory].reverse().find((item) => item.isAnswer === false)?.id ===
-                          item.id &&
-                        item.chatType !== SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO &&
-                        item.chatType !== SERVICE_TYPE.NOVA_WEBSEARCH_PERPLEXITY && (
+                          item.id && (
                           <SelectBox
                             placeHolder={t('Nova.perplexity.button.anotherAnswer') || ''}
                             minWidth={290}

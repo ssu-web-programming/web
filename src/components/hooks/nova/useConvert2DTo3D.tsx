@@ -1,7 +1,5 @@
 import { v4 } from 'uuid';
 
-import { track } from '@amplitude/analytics-browser';
-
 import { apiWrapper, sendNovaStatus } from '../../../api/apiWrapper';
 import { NOVA_GENERATE_ANIMATION } from '../../../api/constant';
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
@@ -15,6 +13,7 @@ import {
 } from '../../../store/slices/nova/pageStatusSlice';
 import { getCurrentFile, setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
+import Bridge from '../../../util/bridge';
 import { calLeftCredit } from '../../../util/common';
 import { createFormDataFromFiles, fileToBase64 } from '../../../util/files';
 import useErrorHandle from '../useErrorHandle';
@@ -112,20 +111,26 @@ export const useConvert2DTo3D = () => {
           el: log_info.name,
           gpt_ver: log_info.detail
         });
-        track('nova_image', {
-          image_name: 'Immersity',
-          file_id: currentFile.id,
-          document_format: currentFile.ext,
-          credit: deductionCredit,
-          function_result: true
+        await Bridge.callBridgeApi('amplitudeData', {
+          type: 'nova_image',
+          props: {
+            image_name: 'Immersity',
+            file_id: currentFile.id,
+            document_format: currentFile.ext,
+            credit: deductionCredit,
+            function_result: true
+          }
         });
       } else {
         handleExpandError(response.error.code, Number(leftCredit), pattern, animationType);
-        track('nova_image', {
-          image_name: 'Immersity',
-          file_id: currentFile.id,
-          document_format: currentFile.ext,
-          function_result: false
+        await Bridge.callBridgeApi('amplitudeData', {
+          type: 'nova_image',
+          props: {
+            image_name: 'Immersity',
+            file_id: currentFile.id,
+            document_format: currentFile.ext,
+            function_result: false
+          }
         });
       }
     } catch (err) {

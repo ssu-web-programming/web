@@ -164,7 +164,7 @@ export const TextAreaWrap = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
   gap: 8px;
   border: 1px solid ${({ theme }) => theme.color.border.gray01};
@@ -178,6 +178,7 @@ export const TextArea = styled.textarea<{ value: string }>`
   width: 100%;
   height: 40px;
   padding: 0;
+  margin: auto;
   box-sizing: border-box;
   outline: none;
   border-radius: 3px;

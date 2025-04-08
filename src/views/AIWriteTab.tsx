@@ -5,8 +5,6 @@ import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 
-import { track } from '@amplitude/analytics-browser';
-
 import { apiWrapper, streaming } from '../api/apiWrapper';
 import { AI_WRITE_RESPONSE_STREAM_API } from '../api/constant';
 import { calcToken, parseGptVer } from '../api/usePostSplunkLog';
@@ -28,6 +26,7 @@ import {
   WriteType
 } from '../store/slices/writeHistorySlice';
 import { useAppSelector } from '../store/store';
+import Bridge from '../util/bridge';
 import { calLeftCredit } from '../util/common';
 
 const TabWrapper = styled.div`
@@ -145,11 +144,14 @@ const AIWriteTab = (props: WriteTabProps) => {
         }
       }
 
-      track('ai_write', {
-        document_format: currentFile.ext,
-        file_id: currentFile.id,
-        model_type: gpt_ver,
-        function_result: true
+      await Bridge.callBridgeApi('amplitudeData', {
+        type: 'ai_write',
+        props: {
+          document_format: currentFile.ext,
+          file_id: currentFile.id,
+          model_type: gpt_ver,
+          function_result: true
+        }
       });
     } finally {
       dispatch(setCreating('none'));
@@ -168,12 +170,15 @@ const AIWriteTab = (props: WriteTabProps) => {
           /* empty */
         }
       }
-      track('ai_write', {
-        document_format: currentFile.ext,
-        file_id: currentFile.id,
-        model_type: gpt_ver,
-        credit: usedCredit,
-        function_result: true
+      await Bridge.callBridgeApi('amplitudeData', {
+        type: 'ai_write',
+        props: {
+          document_format: currentFile.ext,
+          file_id: currentFile.id,
+          model_type: gpt_ver,
+          credit: usedCredit,
+          function_result: true
+        }
       });
     }
   };

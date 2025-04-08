@@ -15,6 +15,7 @@ import {
 } from '../../../store/slices/nova/pageStatusSlice';
 import { getCurrentFile, setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
+import Bridge from '../../../util/bridge';
 import { calLeftCredit } from '../../../util/common';
 import { createFormDataFromFiles } from '../../../util/files';
 import useErrorHandle from '../useErrorHandle';
@@ -71,20 +72,26 @@ export const useRemoveBackground = () => {
           el: log_info.name,
           gpt_ver: log_info.detail
         });
-        track('nova_image', {
-          image_name: 'NOVA_REMOVE_BG',
-          file_id: currentFile.id,
-          document_format: currentFile.ext,
-          credit: deductionCredit,
-          function_result: true
+        await Bridge.callBridgeApi('amplitudeData', {
+          type: 'nova_image',
+          props: {
+            image_name: 'NOVA_REMOVE_BG',
+            file_id: currentFile.id,
+            document_format: currentFile.ext,
+            credit: deductionCredit,
+            function_result: true
+          }
         });
       } else {
         handleRemoveBGError(response.error.code, Number(leftCredit));
-        track('nova_image', {
-          image_name: 'NOVA_REMOVE_BG',
-          file_id: currentFile.id,
-          document_format: currentFile.ext,
-          function_result: false
+        await Bridge.callBridgeApi('amplitudeData', {
+          type: 'nova_image',
+          props: {
+            image_name: 'NOVA_REMOVE_BG',
+            file_id: currentFile.id,
+            document_format: currentFile.ext,
+            function_result: false
+          }
         });
       }
     } catch (err) {

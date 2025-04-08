@@ -15,12 +15,14 @@ import { useAppDispatch, useAppSelector } from 'store/store';
 import { track } from '@amplitude/analytics-browser';
 
 import { sendNovaStatus } from '../../../../../api/apiWrapper';
+import { parseGptVer } from '../../../../../api/usePostSplunkLog';
 import { NOVA_TAB_TYPE } from '../../../../../constants/novaTapTypes';
 import {
   selectPageService,
   setPageServiceUsage
 } from '../../../../../store/slices/nova/pageStatusSlice';
 import { selectTabSlice } from '../../../../../store/slices/tabSlice';
+import Bridge from '../../../../../util/bridge';
 import { calLeftCredit } from '../../../../../util/common';
 import LanguageSearch from '../../components/language-search';
 import { TranslateType } from '../../components/translation-intro';
@@ -86,12 +88,15 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
     shouldContinue: ({ status }) => status === 'translating' || status === 'queued',
     onPollingSuccess: (result) => {
       const { deductionCredit } = calLeftCredit(result._headers);
-      track('nova_translate', {
-        file_id: currentFile.id,
-        document_format: currentFile.ext,
-        credit: deductionCredit,
-        translate_type: 'file',
-        function_result: true
+      Bridge.callBridgeApi('amplitudeData', {
+        type: 'nova_translate',
+        props: {
+          file_id: currentFile.id,
+          document_format: currentFile.ext,
+          credit: deductionCredit,
+          translate_type: 'file',
+          function_result: true
+        }
       });
 
       const { downloadUrl } = result;
@@ -124,11 +129,14 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
         componentType: 'INTRO'
       }));
 
-      track('nova_translate', {
-        file_id: currentFile.id,
-        document_format: currentFile.ext,
-        translate_type: 'file',
-        function_result: false
+      Bridge.callBridgeApi('amplitudeData', {
+        type: 'nova_translate',
+        props: {
+          file_id: currentFile.id,
+          document_format: currentFile.ext,
+          translate_type: 'file',
+          function_result: false
+        }
       });
       sendNovaStatus({ name: NOVA_TAB_TYPE.translation, uuid: '' }, 'finish');
     }
@@ -184,11 +192,14 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
       );
 
       const { deductionCredit } = calLeftCredit(headers);
-      track('nova_translate', {
-        file_id: currentFile.id,
-        document_format: currentFile.ext,
-        credit: deductionCredit,
-        translate_type: 'text'
+      await Bridge.callBridgeApi('amplitudeData', {
+        type: 'nova_translate',
+        props: {
+          file_id: currentFile.id,
+          document_format: currentFile.ext,
+          credit: deductionCredit,
+          translate_type: 'text'
+        }
       });
     } catch (e) {
       setSharedTranslationInfo((prev) => ({
