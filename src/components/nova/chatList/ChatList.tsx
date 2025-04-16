@@ -42,8 +42,6 @@ import { css } from 'styled-components';
 import Bridge, { ClientType, getPlatform } from 'util/bridge';
 import { getFileExtension, sliceFileName } from 'util/common';
 
-import { track } from '@amplitude/analytics-browser';
-
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import {
   findTabByService,
