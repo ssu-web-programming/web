@@ -166,10 +166,6 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
         if (isShowModal) return;
 
         onCopy(history.output);
-        track('copy_nova_chating', {
-          file_id: currentFile.id,
-          document_format: currentFile.ext
-        });
         await Bridge.callBridgeApi('amplitudeData', {
           type: 'copy_nova_chating',
           props: {
@@ -188,9 +184,12 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
         if (isShowModal) return;
 
         insertDocsHandler(history);
-        track('insert_nova_chating', {
-          file_id: currentFile.id,
-          document_format: currentFile.ext
+        await Bridge.callBridgeApi('amplitudeData', {
+          type: 'insert_nova_chating',
+          props: {
+            file_id: currentFile.id,
+            document_format: currentFile.ext
+          }
         });
       }
     },
@@ -204,9 +203,12 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
 
         dispatch(selectAllItems());
         dispatch(setIsShareMode(true));
-        track('share_nova_chating', {
-          file_id: currentFile.id,
-          document_format: currentFile.ext
+        await Bridge.callBridgeApi('amplitudeData', {
+          type: 'share_nova_chating',
+          props: {
+            file_id: currentFile.id,
+            document_format: currentFile.ext
+          }
         });
       }
     }

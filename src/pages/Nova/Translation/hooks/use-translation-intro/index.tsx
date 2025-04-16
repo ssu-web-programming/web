@@ -208,10 +208,13 @@ const useTranslationIntro = (translateInputValue: string, type: TranslateType) =
       }));
       errorHandle(e);
 
-      track('nova_translate', {
-        file_id: currentFile.id,
-        document_format: currentFile.ext,
-        translate_type: 'text'
+      await Bridge.callBridgeApi('amplitudeData', {
+        type: 'nova_translate',
+        props: {
+          file_id: currentFile.id,
+          document_format: currentFile.ext,
+          translate_type: 'text'
+        }
       });
     } finally {
       await sendNovaStatus({ name: NOVA_TAB_TYPE.translation, uuid: '' }, 'finish');
