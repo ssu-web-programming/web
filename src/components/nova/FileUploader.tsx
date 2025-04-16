@@ -99,12 +99,18 @@ export const FileUploader = (props: FileUploaderProps) => {
         icon: { src: LogoPOIcon },
         onClick: async () => {
           onChangeTranslationFileType?.('drive');
-          if (isAgreed || selectedNovaTab !== 'aiChat') {
+          if (
+            isAgreed ||
+            (selectedNovaTab !== NOVA_TAB_TYPE.aiChat && selectedNovaTab !== NOVA_TAB_TYPE.home)
+          ) {
             setUploadTarget(target);
             toggleDriveConfirm();
           }
           const uploadLimit = calcAvailableFileCnt(selectedNovaTab);
-          if (uploadLimit === 0 && selectedNovaTab === NOVA_TAB_TYPE.aiChat) {
+          if (
+            uploadLimit === 0 &&
+            (selectedNovaTab === NOVA_TAB_TYPE.home || selectedNovaTab === NOVA_TAB_TYPE.aiChat)
+          ) {
             setIsOpen(false);
             await confirm({
               title: '',
@@ -151,7 +157,9 @@ export const FileUploader = (props: FileUploaderProps) => {
 
             // #IOS-5525 ios webp 파일 단일 선택 시 특정 버전에서 error가 발생하므로, 무조건 multiple로 지원하도록 수정함
             element.multiple =
-              selectedNovaTab === NOVA_TAB_TYPE.aiChat || platform === ClientType.ios;
+              selectedNovaTab === NOVA_TAB_TYPE.home ||
+              selectedNovaTab === NOVA_TAB_TYPE.aiChat ||
+              platform === ClientType.ios;
 
             element.click();
           }
