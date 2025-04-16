@@ -8,7 +8,7 @@ import { recSubType, recType } from '../../../store/slices/recFuncSlice';
 import IconBoxTextButton from '../../buttons/IconBoxTextButton';
 import Grid from '../../layout/Grid';
 
-export type EngineVersion = 'gpt3.5' | 'gpt4' | 'gpt4o' | 'clovax' | 'claude';
+export type EngineVersion = 'gpt3.5' | 'gpt4' | 'gpt4.1' | 'clovax' | 'claude';
 
 export interface VersionListType {
   id: string;
@@ -58,8 +58,8 @@ const versionGpt4: VersionListType = {
   group: 'all'
 };
 export const versionGpt4o: VersionListType = {
-  id: 'GPT 4o',
-  version: 'gpt4o',
+  id: 'GPT 4.1',
+  version: 'gpt4.1',
   group: 'all'
 };
 export const versionClova: VersionListType = {
