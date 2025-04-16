@@ -60,7 +60,7 @@
     "MoveToChating": "More with chat",
     "ToSameTopic": "I will work on it again with the same topic!",
     "ModelSelect": {
-      "gpt4o": "Excellent at language comprehension and creativity.",
+      "gpt4_1": "Writes accurately with the right tone.",
       "gpt4": "Excels in generating diverse texts.",
       "gpt3.5": "Processes tasks quickly and efficiently.",
       "clovax": "Effective for Korean language tasks.",
@@ -338,12 +338,12 @@
       "novaRecentChat": "Recent Conversations with NOVA"
     },
     "ChatModel": {
-      "GPT_4O": {
-        "desc": "Great language understanding",
-        "desc_home": "It excels at document writing by providing a wide range of information accurately",
-        "prompt1": "Analyse the impact of AI on business",
-        "prompt2": "Create an image of the city of the future",
-        "prompt3": "Enhance the attached business plan"
+      "GPT_4_1 ": {
+        "desc": "Great with docs and code",
+        "desc_home": "From complex tasks to long context, it's fast and accurate",
+        "prompt1": "Prepare interview Q&A examples",
+        "prompt2": "Summarize my 5-min presentation",
+        "prompt3": "Summarize the meeting notes"
       },
       "GPT_4O_MINI": {
         "desc": "Lightweight, fast, and powerful",

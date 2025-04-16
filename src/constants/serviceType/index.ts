@@ -129,7 +129,7 @@ export const SERVICE_GROUP_MAP: Record<SERVICE_CATEGORY, Record<string, SERVICE_
 };
 
 export const CHAT_GROUP_MAP: Record<string, SERVICE_TYPE[] | SERVICE_TYPE> = {
-  GPT_4O: [
+  GPT_4_1: [
     SERVICE_TYPE.NOVA_CHAT_GPT4O,
     SERVICE_TYPE.NOVA_ASK_DOC_GPT4O,
     SERVICE_TYPE.NOVA_ASK_IMG_GPT4O,
@@ -157,8 +157,8 @@ const CHAT_GROUP_DETAIL_MAP: Record<
   string,
   { label: string; icon: (isLightMode: boolean) => string }
 > = {
-  GPT_4O: {
-    label: 'GPT-4o',
+  GPT_4_1: {
+    label: 'GPT-4.1',
     icon: (isLightMode) => (isLightMode ? GPTLogoLightIcon : GPTLogoDarkIcon)
   },
   GPT_4O_MINI: {
@@ -257,7 +257,7 @@ export const getMenuItemsFromServiceGroup = (
 
 export const getServiceEngineName = (serviceType: SERVICE_TYPE): string => {
   const mapping: Partial<Record<SERVICE_TYPE, string>> = {
-    [SERVICE_TYPE.NOVA_CHAT_GPT4O]: 'gpt4o',
+    [SERVICE_TYPE.NOVA_CHAT_GPT4O]: 'gpt-4.1',
     [SERVICE_TYPE.NOVA_IMG_GPT4O]: 'gpt4o',
     [SERVICE_TYPE.NOVA_ASK_DOC_GPT4O]: 'gpt4o',
     [SERVICE_TYPE.NOVA_ASK_IMG_GPT4O]: 'gpt4o',
@@ -285,7 +285,7 @@ export interface ServiceLoggingInfo {
 }
 export const getServiceLoggingInfo = (serviceType: SERVICE_TYPE): ServiceLoggingInfo => {
   const mapping: Partial<Record<SERVICE_TYPE, ServiceLoggingInfo>> = {
-    [SERVICE_TYPE.NOVA_CHAT_GPT4O]: { name: 'nova_chating', detail: 'nova_chat_gpt4o' },
+    [SERVICE_TYPE.NOVA_CHAT_GPT4O]: { name: 'nova_chating', detail: '4.1' },
     [SERVICE_TYPE.NOVA_IMG_GPT4O]: { name: 'nova_chating', detail: 'nova_chat_gpt4o' },
     [SERVICE_TYPE.NOVA_ASK_DOC_GPT4O]: { name: 'nova_chating', detail: 'nova_chat_gpt4o' },
     [SERVICE_TYPE.NOVA_ASK_IMG_GPT4O]: { name: 'nova_chating', detail: 'nova_chat_gpt4o' },
