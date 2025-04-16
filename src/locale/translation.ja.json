@@ -338,7 +338,7 @@
       "novaRecentChat": "NOVAとの最近の会話"
     },
     "ChatModel": {
-      "GPT_4O": {
+      "GPT_4_1": {
         "desc": "文書もコードも得意",
         "desc_home": "複雑な作業も長文も、素早く正確に対応します",
         "prompt1": "面接の想定質問と回答をまとめて",
