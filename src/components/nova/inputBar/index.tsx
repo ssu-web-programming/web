@@ -390,7 +390,7 @@ export default function InputBar(props: InputBarProps) {
           </S.PromptWrap>
         )}
         <InputWrap>
-          {chatMode === SERVICE_TYPE.NOVA_CHAT_GPT4O &&
+          {chatMode === SERVICE_TYPE.NOVA_CHAT_GPT4_1 &&
             selectedNovaTab === NOVA_TAB_TYPE.aiChat &&
             props.novaHistory.length > 0 && (
               <S.DocButtonWrap>
@@ -539,7 +539,7 @@ export default function InputBar(props: InputBarProps) {
                   padding: 8px 16px 8px 8px;
                 `}
               />
-              {chatMode === SERVICE_TYPE.NOVA_CHAT_GPT4O && (
+              {chatMode === SERVICE_TYPE.NOVA_CHAT_GPT4_1 && (
                 <S.DocButtonWrap>
                   {UPLOAD_BTN_LIST.map((btn) => (
                     <FileUploader

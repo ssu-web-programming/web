@@ -2,7 +2,7 @@ import { SelectedOption } from 'components/aiWrite/ai-write-input';
 import { VersionListType } from 'components/chat/RecommendBox/FormRec';
 
 const CREDIT_NAME_MAP: { [key: string]: string } = {
-  WRITE_GPT4O: 'GPT 4.1',
+  WRITE_GPT4_1: 'GPT 4.1',
   WRITE_GPT4: 'GPT 4',
   GPT3: 'GPT 3.5',
   WRITE_CLOVA: 'CLOVA X',
@@ -10,7 +10,7 @@ const CREDIT_NAME_MAP: { [key: string]: string } = {
 };
 
 const CREDIT_DESCRITION_MAP: { [key: string]: string } = {
-  WRITE_GPT4O: 'WriteTab.ModelSelect.gpt4_1',
+  WRITE_GPT4_1: 'WriteTab.ModelSelect.gpt4_1',
   WRITE_GPT4: 'WriteTab.ModelSelect.gpt4',
   GPT3: 'WriteTab.ModelSelect.gpt3.5',
   WRITE_CLOVA: 'WriteTab.ModelSelect.clovax',
@@ -18,7 +18,7 @@ const CREDIT_DESCRITION_MAP: { [key: string]: string } = {
 };
 
 const VERSION_MAP: { [key: string]: string } = {
-  WRITE_GPT4O: 'gpt-4.1',
+  WRITE_GPT4_1: 'gpt-4.1',
   WRITE_GPT4: 'gpt4',
   GPT3: 'gpt3.5',
   WRITE_CLOVA: 'clovax',
@@ -28,7 +28,7 @@ const VERSION_MAP: { [key: string]: string } = {
 const ENGINE_VERSION_TO_CREDIT: Record<VersionListType['version'], SelectedOption> = {
   'gpt3.5': 'GPT3',
   gpt4: 'WRITE_GPT4',
-  'gpt4.1': 'WRITE_GPT4O',
+  'gpt4.1': 'WRITE_GPT4_1',
   clovax: 'WRITE_CLOVA',
   claude: 'WRITE_CLADE3'
 };
