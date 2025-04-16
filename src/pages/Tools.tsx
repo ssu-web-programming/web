@@ -7,7 +7,7 @@ import {
   DEFAULT_WRITE_OPTION_FORM_VALUE,
   DEFAULT_WRITE_OPTION_LENGTH_VALUE,
   versionClova,
-  versionGpt4o,
+  versionGpt4_1,
   WriteOptions
 } from '../components/chat/RecommendBox/FormRec';
 import Header from '../components/layout/Header';
@@ -30,7 +30,7 @@ const Body = styled.div`
   overflow: auto;
 `;
 
-const initVersion = lang === LANG_KO_KR ? versionClova : versionGpt4o;
+const initVersion = lang === LANG_KO_KR ? versionClova : versionGpt4_1;
 
 const initWriteOptions: WriteOptions = {
   input: '',

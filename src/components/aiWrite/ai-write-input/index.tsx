@@ -54,7 +54,7 @@ const AIWriteInput = ({
     version: { version }
   } = selectedOptions;
   const [modelSelectedOption, setModelSelectedOption] = useState(ENGINE_VERSION_TO_CREDIT[version]);
-
+  console.log(modelSelectedOption);
   const handleChangeOption = (value: SelectedOption) => {
     setSelectedOptions({
       ...selectedOptions,

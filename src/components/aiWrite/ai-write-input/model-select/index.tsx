@@ -110,7 +110,7 @@ export default function ModelSelect({ selectedOption, onChangeOption }: Props) {
               }}
               hideSelectedStyles={true}
               buttonStyle={css`
-                padding: 0px;
+                padding: 0;
               `}
             />
           )
