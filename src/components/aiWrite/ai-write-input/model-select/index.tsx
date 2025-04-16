@@ -13,13 +13,13 @@ interface ModelSelectOption extends Omit<SelectOption<SelectedOptions>, 'compone
 
 const defaultOptions: ModelSelectOption[] = [
   {
-    value: 'WRITE_GPT4O',
+    value: 'WRITE_GPT4_1',
     component: (
       <SelectModelButton
         item={{
-          id: 'WRITE_GPT4O',
-          desc: CREDIT_DESCRITION_MAP['WRITE_GPT4O'],
-          title: CREDIT_NAME_MAP['WRITE_GPT4O'],
+          id: 'WRITE_GPT4_1',
+          desc: CREDIT_DESCRITION_MAP['WRITE_GPT4_1'],
+          title: CREDIT_NAME_MAP['WRITE_GPT4_1'],
           deductCredit: ''
         }}
       />
@@ -84,7 +84,7 @@ const defaultOptions: ModelSelectOption[] = [
   }
 ];
 
-type SelectedOptions = 'WRITE_GPT4O' | 'WRITE_GPT4' | 'GPT3' | 'WRITE_CLOVA' | 'WRITE_CLADE3';
+type SelectedOptions = 'WRITE_GPT4_1' | 'WRITE_GPT4' | 'GPT3' | 'WRITE_CLOVA' | 'WRITE_CLADE3';
 
 interface Props {
   selectedOption: SelectedOptions;
