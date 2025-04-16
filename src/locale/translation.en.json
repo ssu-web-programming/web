@@ -338,7 +338,7 @@
       "novaRecentChat": "Recent Conversations with NOVA"
     },
     "ChatModel": {
-      "GPT_4_1 ": {
+      "GPT_4_1": {
         "desc": "Great with docs and code",
         "desc_home": "From complex tasks to long context, it's fast and accurate",
         "prompt1": "Prepare interview Q&A examples",
