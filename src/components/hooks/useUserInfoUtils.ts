@@ -11,7 +11,7 @@ export default function useUserInfoUtils() {
   const getMaxFilesPerUpload = (selectedNovaTab: NOVA_TAB_TYPE) => {
     // CLT-4661 이미지를 한 번에 10개 이상 업로드 시 에러 나는 문제로
     // 한번에 첨부 가능한 파일 수를 5개로 제한
-    if (selectedNovaTab === NOVA_TAB_TYPE.aiChat) {
+    if (selectedNovaTab === NOVA_TAB_TYPE.home || selectedNovaTab === NOVA_TAB_TYPE.aiChat) {
       return 5;
     } else {
       return 1;
@@ -19,7 +19,7 @@ export default function useUserInfoUtils() {
   };
 
   const getAvailableFileCnt = (selectedNovaTab: NOVA_TAB_TYPE) => {
-    if (selectedNovaTab === NOVA_TAB_TYPE.aiChat) {
+    if (selectedNovaTab === NOVA_TAB_TYPE.home || selectedNovaTab === NOVA_TAB_TYPE.aiChat) {
       switch (userInfo.ul) {
         case '1':
         case '8':
