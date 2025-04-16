@@ -376,9 +376,7 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
               credit:
                 type === ''
                   ? serviceCredits[chatType ?? chatMode]
-                  : type == 'image'
-                    ? serviceCredits[SERVICE_TYPE.NOVA_ASK_IMG_GPT4O]
-                    : serviceCredits[SERVICE_TYPE.NOVA_ASK_DOC_GPT4O],
+                  : serviceCredits[SERVICE_TYPE.NOVA_ASK_DOC_GPT4_1],
               function_result: true
             });
           }

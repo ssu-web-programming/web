@@ -29,10 +29,9 @@ export enum SERVICE_CATEGORY {
 
 export enum SERVICE_TYPE {
   // Chat
-  NOVA_CHAT_GPT4O = 'NOVA_CHAT_GPT4O', // 5
-  NOVA_IMG_GPT4O = 'NOVA_IMG_GPT4O', // 10
-  NOVA_ASK_DOC_GPT4O = 'NOVA_ASK_DOC_GPT4O', // 10
-  NOVA_ASK_IMG_GPT4O = 'NOVA_ASK_IMG_GPT4O', // 10
+  NOVA_CHAT_GPT4_1 = 'NOVA_CHAT_GPT4_1', // 5
+  NOVA_IMG_GPT4_1 = 'NOVA_IMG_GPT4_1', // 10
+  NOVA_ASK_DOC_GPT4_1 = 'NOVA_ASK_DOC_GPT4_1', // 10
   NOVA_CHAT_GPT4O_MINI = 'NOVA_CHAT_GPT4O_MINI', // 5
   NOVA_CHAT_O3MINI = 'NOVA_CHAT_O3MINI', // 2
   WRITE_CLOVA = 'WRITE_CLOVA', // 2
@@ -62,10 +61,9 @@ export const TAB_SERVICE_MAP: Record<NOVA_TAB_TYPE, SERVICE_TYPE[]> = {
 
   // Chat
   [NOVA_TAB_TYPE.aiChat]: [
-    SERVICE_TYPE.NOVA_CHAT_GPT4O,
-    SERVICE_TYPE.NOVA_IMG_GPT4O,
-    SERVICE_TYPE.NOVA_ASK_DOC_GPT4O,
-    SERVICE_TYPE.NOVA_ASK_IMG_GPT4O,
+    SERVICE_TYPE.NOVA_CHAT_GPT4_1,
+    SERVICE_TYPE.NOVA_IMG_GPT4_1,
+    SERVICE_TYPE.NOVA_ASK_DOC_GPT4_1,
     SERVICE_TYPE.NOVA_CHAT_GPT4O_MINI,
     SERVICE_TYPE.NOVA_CHAT_O3MINI,
     SERVICE_TYPE.WRITE_CLOVA,
@@ -98,15 +96,15 @@ export const TAB_SERVICE_MAP: Record<NOVA_TAB_TYPE, SERVICE_TYPE[]> = {
 export const SERVICE_GROUP_MAP: Record<SERVICE_CATEGORY, Record<string, SERVICE_TYPE[]>> = {
   [SERVICE_CATEGORY.CHAT]: {
     chat: [
-      SERVICE_TYPE.NOVA_CHAT_GPT4O,
+      SERVICE_TYPE.NOVA_CHAT_GPT4_1,
       SERVICE_TYPE.NOVA_CHAT_GPT4O_MINI,
       SERVICE_TYPE.NOVA_CHAT_O3MINI,
       SERVICE_TYPE.WRITE_CLOVA,
       SERVICE_TYPE.WRITE_CLADE3,
       SERVICE_TYPE.NOVA_CHAT_CLAUDE_3_7_SONNET
     ],
-    docImgQuery: [SERVICE_TYPE.NOVA_ASK_DOC_GPT4O, SERVICE_TYPE.NOVA_ASK_IMG_GPT4O],
-    imgGen: [SERVICE_TYPE.NOVA_IMG_GPT4O]
+    docImgQuery: [SERVICE_TYPE.NOVA_ASK_DOC_GPT4_1],
+    imgGen: [SERVICE_TYPE.NOVA_IMG_GPT4_1]
   },
   [SERVICE_CATEGORY.TOOLS]: {
     perplexity: [
@@ -130,10 +128,9 @@ export const SERVICE_GROUP_MAP: Record<SERVICE_CATEGORY, Record<string, SERVICE_
 
 export const CHAT_GROUP_MAP: Record<string, SERVICE_TYPE[] | SERVICE_TYPE> = {
   GPT_4_1: [
-    SERVICE_TYPE.NOVA_CHAT_GPT4O,
-    SERVICE_TYPE.NOVA_ASK_DOC_GPT4O,
-    SERVICE_TYPE.NOVA_ASK_IMG_GPT4O,
-    SERVICE_TYPE.NOVA_IMG_GPT4O
+    SERVICE_TYPE.NOVA_CHAT_GPT4_1,
+    SERVICE_TYPE.NOVA_ASK_DOC_GPT4_1,
+    SERVICE_TYPE.NOVA_IMG_GPT4_1
   ],
   GPT_4O_MINI: SERVICE_TYPE.NOVA_CHAT_GPT4O_MINI,
   GPT_O3_MINI: SERVICE_TYPE.NOVA_CHAT_O3MINI,
@@ -257,10 +254,9 @@ export const getMenuItemsFromServiceGroup = (
 
 export const getServiceEngineName = (serviceType: SERVICE_TYPE): string => {
   const mapping: Partial<Record<SERVICE_TYPE, string>> = {
-    [SERVICE_TYPE.NOVA_CHAT_GPT4O]: 'gpt-4.1',
-    [SERVICE_TYPE.NOVA_IMG_GPT4O]: 'gpt4o',
-    [SERVICE_TYPE.NOVA_ASK_DOC_GPT4O]: 'gpt4o',
-    [SERVICE_TYPE.NOVA_ASK_IMG_GPT4O]: 'gpt4o',
+    [SERVICE_TYPE.NOVA_CHAT_GPT4_1]: 'gpt-4.1',
+    [SERVICE_TYPE.NOVA_IMG_GPT4_1]: 'gpt-4.1',
+    [SERVICE_TYPE.NOVA_ASK_DOC_GPT4_1]: 'gpt-4.1',
     [SERVICE_TYPE.NOVA_CHAT_GPT4O_MINI]: 'gpt-4o-mini',
     [SERVICE_TYPE.NOVA_CHAT_O3MINI]: 'o3-mini',
     [SERVICE_TYPE.WRITE_CLADE3]: 'claude',
@@ -285,10 +281,9 @@ export interface ServiceLoggingInfo {
 }
 export const getServiceLoggingInfo = (serviceType: SERVICE_TYPE): ServiceLoggingInfo => {
   const mapping: Partial<Record<SERVICE_TYPE, ServiceLoggingInfo>> = {
-    [SERVICE_TYPE.NOVA_CHAT_GPT4O]: { name: 'nova_chating', detail: '4.1' },
-    [SERVICE_TYPE.NOVA_IMG_GPT4O]: { name: 'nova_chating', detail: 'nova_chat_gpt4o' },
-    [SERVICE_TYPE.NOVA_ASK_DOC_GPT4O]: { name: 'nova_chating', detail: 'nova_chat_gpt4o' },
-    [SERVICE_TYPE.NOVA_ASK_IMG_GPT4O]: { name: 'nova_chating', detail: 'nova_chat_gpt4o' },
+    [SERVICE_TYPE.NOVA_CHAT_GPT4_1]: { name: 'nova_chating', detail: '4.1' },
+    [SERVICE_TYPE.NOVA_IMG_GPT4_1]: { name: 'nova_chating', detail: '4.1' },
+    [SERVICE_TYPE.NOVA_ASK_DOC_GPT4_1]: { name: 'nova_chating', detail: '4.1' },
     [SERVICE_TYPE.NOVA_CHAT_GPT4O_MINI]: { name: 'nova_chating', detail: '4o_mini' },
     [SERVICE_TYPE.NOVA_CHAT_O3MINI]: { name: 'nova_chating', detail: '3o_mini' },
     [SERVICE_TYPE.WRITE_CLADE3]: { name: 'nova_chating', detail: 'claude3' },
