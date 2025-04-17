@@ -30,11 +30,9 @@ const Body = styled.div`
   overflow: auto;
 `;
 
-const initVersion = lang === LANG_KO_KR ? versionClova : versionGpt4_1;
-
 const initWriteOptions: WriteOptions = {
   input: '',
-  version: initVersion,
+  version: versionGpt4_1,
   form: DEFAULT_WRITE_OPTION_FORM_VALUE,
   length: DEFAULT_WRITE_OPTION_LENGTH_VALUE
 };
