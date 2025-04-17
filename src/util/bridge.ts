@@ -458,7 +458,7 @@ export const useInitBridgeListener = () => {
         if (tab === NOVA_TAB_TYPE.perplexity) {
           dispatch(setChatMode(SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO));
         } else {
-          dispatch(setChatMode(SERVICE_TYPE.NOVA_CHAT_GPT4O));
+          dispatch(setChatMode(SERVICE_TYPE.NOVA_CHAT_GPT4_1));
         }
         dispatch(selectNovaTab(NOVA_TAB_TYPE[tab as keyof typeof NOVA_TAB_TYPE]));
       }

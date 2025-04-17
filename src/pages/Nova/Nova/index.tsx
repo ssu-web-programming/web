@@ -119,7 +119,7 @@ export default function Nova() {
       if (
         selectedNovaTab == NOVA_TAB_TYPE.perplexity ||
         (selectedNovaTab !== NOVA_TAB_TYPE.aiChat && status !== 'home') ||
-        (selectedNovaTab === NOVA_TAB_TYPE.aiChat && chatMode !== SERVICE_TYPE.NOVA_CHAT_GPT4O)
+        (selectedNovaTab === NOVA_TAB_TYPE.aiChat && chatMode !== SERVICE_TYPE.NOVA_CHAT_GPT4_1)
       )
         return;
       if (!(await handleAgreement())) return;

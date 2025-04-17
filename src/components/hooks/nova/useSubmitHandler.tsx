@@ -367,19 +367,20 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
               });
             }
 
-            track('nova_chating', {
-              is_document: type != '',
-              document_format: currentFile.ext,
-              file_id: currentFile.id,
-              model_type: chatType ?? chatMode,
-              chating_type: type == '' ? 'default' : type,
-              credit:
-                type === ''
-                  ? serviceCredits[chatType ?? chatMode]
-                  : type == 'image'
-                    ? serviceCredits[SERVICE_TYPE.NOVA_ASK_IMG_GPT4O]
-                    : serviceCredits[SERVICE_TYPE.NOVA_ASK_DOC_GPT4O],
-              function_result: true
+            await Bridge.callBridgeApi('amplitudeData', {
+              type: 'nova_chating',
+              props: {
+                is_document: type != '',
+                document_format: currentFile.ext,
+                file_id: currentFile.id,
+                model_type: chatMode,
+                chating_type: type == '' ? 'default' : type,
+                credit:
+                  type === ''
+                    ? serviceCredits[chatType ?? chatMode]
+                    : serviceCredits[SERVICE_TYPE.NOVA_ASK_DOC_GPT4_1],
+                function_result: true
+              }
             });
           }
         } catch (err) {

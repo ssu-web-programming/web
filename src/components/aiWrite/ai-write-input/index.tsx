@@ -25,7 +25,12 @@ import icon_credit_outline from '../../../img/light/ico_credit_outline.svg';
 import ModelSelect from './model-select';
 import * as S from './style';
 
-export type SelectedOption = 'WRITE_GPT4O' | 'WRITE_GPT4' | 'GPT3' | 'WRITE_CLOVA' | 'WRITE_CLADE3';
+export type SelectedOption =
+  | 'WRITE_GPT4_1'
+  | 'WRITE_GPT4'
+  | 'GPT3'
+  | 'WRITE_CLOVA'
+  | 'WRITE_CLADE3';
 
 const subjectMaxLength = 1000;
 
@@ -49,7 +54,7 @@ const AIWriteInput = ({
     version: { version }
   } = selectedOptions;
   const [modelSelectedOption, setModelSelectedOption] = useState(ENGINE_VERSION_TO_CREDIT[version]);
-
+  console.log(modelSelectedOption);
   const handleChangeOption = (value: SelectedOption) => {
     setSelectedOptions({
       ...selectedOptions,

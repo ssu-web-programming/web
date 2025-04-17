@@ -42,8 +42,6 @@ import { css } from 'styled-components';
 import Bridge, { ClientType, getPlatform } from 'util/bridge';
 import { getFileExtension, sliceFileName } from 'util/common';
 
-import { track } from '@amplitude/analytics-browser';
-
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import {
   findTabByService,
@@ -166,10 +164,6 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
         if (isShowModal) return;
 
         onCopy(history.output);
-        track('copy_nova_chating', {
-          file_id: currentFile.id,
-          document_format: currentFile.ext
-        });
         await Bridge.callBridgeApi('amplitudeData', {
           type: 'copy_nova_chating',
           props: {
@@ -188,9 +182,12 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
         if (isShowModal) return;
 
         insertDocsHandler(history);
-        track('insert_nova_chating', {
-          file_id: currentFile.id,
-          document_format: currentFile.ext
+        await Bridge.callBridgeApi('amplitudeData', {
+          type: 'insert_nova_chating',
+          props: {
+            file_id: currentFile.id,
+            document_format: currentFile.ext
+          }
         });
       }
     },
@@ -204,9 +201,12 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
 
         dispatch(selectAllItems());
         dispatch(setIsShareMode(true));
-        track('share_nova_chating', {
-          file_id: currentFile.id,
-          document_format: currentFile.ext
+        await Bridge.callBridgeApi('amplitudeData', {
+          type: 'share_nova_chating',
+          props: {
+            file_id: currentFile.id,
+            document_format: currentFile.ext
+          }
         });
       }
     }
@@ -411,7 +411,8 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                       {creating != 'NOVA' &&
                         !expiredNOVA &&
                         [...novaHistory].reverse().find((item) => item.isAnswer === false)?.id ===
-                          item.id && (
+                          item.id &&
+                        novaHistory[novaHistory.length - 1].vsId === '' && (
                           <SelectBox
                             placeHolder={t('Nova.perplexity.button.anotherAnswer') || ''}
                             minWidth={290}
