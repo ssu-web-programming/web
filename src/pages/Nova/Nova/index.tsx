@@ -1,12 +1,9 @@
 import React, { Suspense, useCallback, useEffect, useState } from 'react';
-import AIVideoPage from 'components/ai-video';
 import { FileWithPath, useDropzone } from 'react-dropzone';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useNavigate } from 'react-router-dom';
 
 import Announcement from '../../../components/Announcement';
 import { useConfirm } from '../../../components/Confirm';
-import useClipboard from '../../../components/hooks/nova/use-clipboard';
 import { useChangeBackground } from '../../../components/hooks/nova/useChangeBackground';
 import { useChangeStyle } from '../../../components/hooks/nova/useChangeStyle';
 import { useConvert2DTo3D } from '../../../components/hooks/nova/useConvert2DTo3D';
@@ -251,30 +248,30 @@ export default function Nova() {
 
   return (
     <>
-      <AIVideoPage />
-      {/*<S.Wrapper {...getRootProps()} isScroll={selectedNovaTab != NOVA_TAB_TYPE.aiChat}>*/}
-      {/*  {(usingAI || status === 'home') && isDragActive && <Uploading />}*/}
-      {/*  <NovaHeader />*/}
-      {/*  {(status === 'progress' || status === 'saving') && <Progress />}*/}
-      {/*  <S.Body isScroll={selectedNovaTab != NOVA_TAB_TYPE.voiceDictation}>*/}
-      {/*    {selectedNovaTab === NOVA_TAB_TYPE.home && <Banner />}*/}
-      {/*    {announcementList*/}
-      {/*      .filter(*/}
-      {/*        (info) =>*/}
-      {/*          (service.some((s) => s.serviceType === info.type) ||*/}
-      {/*            (selectedNovaTab === NOVA_TAB_TYPE.home && info.type === 'PO_NOVA_MAIN')) &&*/}
-      {/*          info.status &&*/}
-      {/*          info.isShow*/}
-      {/*      )*/}
-      {/*      .map((info) => {*/}
-      {/*        return <Announcement key={info.id} announcement={info} />;*/}
-      {/*      })}*/}
-      {/*    {renderContent()}*/}
-      {/*  </S.Body>*/}
-      {/*  <Suspense fallback={<Overlay />}>*/}
-      {/*    <Modals />*/}
-      {/*  </Suspense>*/}
-      {/*</S.Wrapper>*/}
+      {/*<AIVideoPage />*/}
+      <S.Wrapper {...getRootProps()} isScroll={selectedNovaTab != NOVA_TAB_TYPE.aiChat}>
+        {(usingAI || status === 'home') && isDragActive && <Uploading />}
+        <NovaHeader />
+        {(status === 'progress' || status === 'saving') && <Progress />}
+        <S.Body isScroll={selectedNovaTab != NOVA_TAB_TYPE.voiceDictation}>
+          {selectedNovaTab === NOVA_TAB_TYPE.home && <Banner />}
+          {announcementList
+            .filter(
+              (info) =>
+                (service.some((s) => s.serviceType === info.type) ||
+                  (selectedNovaTab === NOVA_TAB_TYPE.home && info.type === 'PO_NOVA_MAIN')) &&
+                info.status &&
+                info.isShow
+            )
+            .map((info) => {
+              return <Announcement key={info.id} announcement={info} />;
+            })}
+          {renderContent()}
+        </S.Body>
+        <Suspense fallback={<Overlay />}>
+          <Modals />
+        </Suspense>
+      </S.Wrapper>
     </>
   );
 }

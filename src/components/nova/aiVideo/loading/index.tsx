@@ -263,7 +263,15 @@ export default function Loading() {
         <span className="title">{t('Nova.aiVideo.loading.title')}</span>
         <span className="desc">{t('Nova.aiVideo.loading.desc')}</span>
       </S.Guide>
-      <AvatarCard isShowOnlyCard={true}>
+      <AvatarCard
+        isShowOnlyCard={true}
+        image={
+          result?.info?.selectedAvatar?.avatar?.preview_image_url ||
+          result?.info?.selectedAvatar?.avatar?.talking_photo_url
+        }
+        name={result?.info?.selectedAvatar?.voice?.name || 'Kim-Professional'}
+        country={result?.info?.selectedAvatar?.voice?.language || 'South Korea'}
+        gender={result?.info?.selectedAvatar?.voice?.gender || 'Female'}>
         <Progress progress={progress} setProgress={setProgress} />
       </AvatarCard>
     </S.Container>

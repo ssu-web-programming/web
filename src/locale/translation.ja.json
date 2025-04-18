@@ -535,6 +535,9 @@
       }
     },
     "aiVideo": {
+      "avatarCard": {
+        "guide": "アバターを選択した後\nステップ2で声を設定できます"
+      },
       "tooltip": {
         "colorPicker": "背景を変更してください！",
         "selectVoice": " 声の国籍と言語を一致させてください。",
@@ -565,13 +568,13 @@
         "stepTitle": "音声を選択",
         "title": "アバターの声",
         "selectBox": {
-          "gender": "性別",
-          "country": "国"
+          "gender": "すべての性別",
+          "country": "すべての国"
         }
       },
       "addScript": {
-        "title": "スクリプトを追加",
-        "stepTitle": "スクリプトを追加",
+        "title": "スクリプトを書く",
+        "stepTitle": "スクリプトを書く",
         "textAreaPlaceHolder": "アバターに言わせるセリフをここに記入します"
       },
       "loading": {
@@ -581,7 +584,7 @@
       "button": {
         "showMore": "もっと見る",
         "collapse": "畳む",
-        "makeVideo": "AIビデオを作成する",
+        "generate": "生成する",
         "next": "次へ",
         "prev": "前へ",
         "select": "選択"
