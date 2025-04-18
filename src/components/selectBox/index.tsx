@@ -96,7 +96,15 @@ export default function SelectBox({
           renderValue={(value) => {
             const selectedItem = menuItem.find((item) => item.key == value);
 
-            return selectedItem ? <div>{selectedItem.title}</div> : <div>{placeHolder}</div>;
+            return selectedItem ? (
+              <div style={{ padding: '0', display: 'flex', alignItems: 'center' }}>
+                {selectedItem.title}
+              </div>
+            ) : (
+              <div style={{ padding: '0', display: 'flex', alignItems: 'center' }}>
+                {placeHolder}
+              </div>
+            );
           }}>
           {menuItem.map((item, index) => {
             return (

@@ -1,10 +1,7 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { apiWrapper } from '../../../api/apiWrapper';
-import { NOVA_VIDEO_GET_AVATARS, NOVA_VIDEO_GET_VOICES } from '../../../api/constant';
-import { AvatarInfo, Avatars, Videos, Voices } from '../../../constants/heygenTypes';
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import {
   selectPageResult,
@@ -15,11 +12,10 @@ import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { useGetAvatars } from '../../hooks/nova/use-get-avatars';
 import { useGetLanguages } from '../../hooks/nova/use-get-languages';
 import { useGetVoices } from '../../hooks/nova/use-get-voices';
-import StepNavigator from '../../stepNavigator';
-import Progress from '../Progress';
 import Result from '../result/index';
 
 import AvatarCard from './component/AvatarCard';
+import CustomStepper from './component/stepper';
 import Avatar from './avatar';
 import Loading from './loading';
 import Script from './script';
@@ -36,6 +32,12 @@ export default function AIVideo() {
   const { getAvatars } = useGetAvatars();
   const { getVoices } = useGetVoices();
   const { getLanguages } = useGetLanguages();
+
+  const stepLabels = [
+    t('Nova.aiVideo.selectAvatar.stepTitle'),
+    t('Nova.aiVideo.selectVoice.stepTitle'),
+    t('Nova.aiVideo.addScript.stepTitle')
+  ];
 
   const fetchInitialData = async () => {
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'progress' }));
@@ -57,6 +59,16 @@ export default function AIVideo() {
     });
   }, []);
 
+  const renderStepContent = () => {
+    if (activeStep === 0) {
+      return <Avatar />;
+    } else if (activeStep === 1) {
+      return <Voice />;
+    } else {
+      return <Script />;
+    }
+  };
+
   const renderContent = () => {
     if (status === 'done' || status === 'saving') {
       return (
@@ -68,28 +80,15 @@ export default function AIVideo() {
       return <Loading />;
     } else {
       return (
-        <>
-          <StepNavigator
-            activeStep={activeStep}
-            steps={[
-              {
-                label: <S.Label>{t('Nova.aiVideo.selectAvatar.stepTitle')}</S.Label>,
-                children: <Avatar />
-              },
-              {
-                label: <S.Label>{t('Nova.aiVideo.selectVoice.stepTitle')}</S.Label>,
-                children: <Voice />
-              },
-              {
-                label: <S.Label>{t('Nova.aiVideo.addScript.stepTitle')}</S.Label>,
-                children: <Script />
-              }
-            ]}
-          />
-        </>
+        <S.Container>
+          <CustomStepper currentStep={activeStep} steps={stepLabels.map((label) => ({ label }))} />
+          {renderStepContent()}
+        </S.Container>
       );
     }
   };
 
   return <S.Container>{renderContent()}</S.Container>;
 }
+
+export { AvatarCard };

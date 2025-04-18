@@ -535,6 +535,9 @@
       }
     },
     "aiVideo": {
+      "avatarCard": {
+        "guide": "After selecting an avatar,\nyou can set the voice in step 2."
+      },
       "tooltip": {
         "colorPicker": "Change the background!",
         "selectVoice": "The voice's nationality must match the script language.",
@@ -556,7 +559,7 @@
           "circle": "Pie"
         },
         "tabs": {
-          "all": "All",
+          "all": "All genders",
           "male": "Male",
           "female": "Female"
         }
@@ -566,12 +569,12 @@
         "title": "Avatar Voice",
         "selectBox": {
           "gender": "Gender",
-          "country": "Country"
+          "country": "All countries"
         }
       },
       "addScript": {
-        "title": "Add script",
-        "stepTitle": "Add script",
+        "title": "Write script",
+        "stepTitle": "Write script",
         "textAreaPlaceHolder": "Write the script you want the avatar to speak here"
       },
       "loading": {
@@ -581,7 +584,7 @@
       "button": {
         "showMore": "View More",
         "collapse": "Collapse",
-        "makeVideo": "Create AI video",
+        "generate": "Generate",
         "next": "Next",
         "prev": "Prev",
         "select": "Select"

@@ -5,6 +5,8 @@ import styled, { FlattenSimpleInterpolation } from 'styled-components';
 
 export const Form = styled(FormControl)<{ $cssExt?: FlattenSimpleInterpolation }>`
   .MuiInputBase-root {
+    padding: 0 !important;
+
     svg {
       width: 20px;
       height: 20px;
@@ -27,7 +29,7 @@ export const Form = styled(FormControl)<{ $cssExt?: FlattenSimpleInterpolation }
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 4px 4.5px 4px 10px;
+    padding: 0 8px 0 12px !important;
     border: 1px solid ${({ theme }) => theme.color.border.gray03};
     border-radius: 8px;
     box-sizing: border-box;

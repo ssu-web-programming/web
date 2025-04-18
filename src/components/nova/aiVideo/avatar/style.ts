@@ -6,8 +6,9 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 24px;
-  padding: 12px 16px;
+  gap: 8px;
+  padding: 8px 16px;
+  overflow-y: auto;
 `;
 
 export const ContentWrap = styled.div`
@@ -72,8 +73,8 @@ export const AvartarList = styled.div`
 `;
 
 export const AvartarContainer = styled.div<{ isSelected: boolean }>`
-  width: 76px;
-  height: 76px;
+  width: 100%;
+  aspect-ratio: 1;
   position: relative;
   display: flex;
   align-items: center;
@@ -82,88 +83,162 @@ export const AvartarContainer = styled.div<{ isSelected: boolean }>`
 
 export const OuterBorder = styled.div<{ isSelected: boolean }>`
   display: ${(props) => (props.isSelected ? 'flex' : 'none')};
-  width: 76px;
-  height: 76px;
+  width: 100%;
+  height: 100%;
   position: absolute;
-  border: 2px solid #6f3ad0;
+  border: 2px solid
+    ${({ isSelected, theme }) =>
+      isSelected ? theme.color.border.purple02 : theme.color.border.gray01};
   border-radius: 6px;
   pointer-events: none;
-  z-index: 1;
 `;
 
 export const Image = styled.img`
-  width: 76px;
-  height: 76px;
-  border: 1.27px solid ${({ theme }) => theme.color.border.gray01};
+  width: 100%;
+  height: 100%;
+  border: 1px solid ${({ theme }) => theme.color.border.gray02};
   border-radius: 4px;
   object-fit: cover;
   cursor: pointer;
 `;
 
-export const CheckBox = styled.div`
-  width: 20px;
-  height: 20px;
-  position: absolute;
-  top: 1px;
-  left: 1px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #6f3ad0;
-  border-bottom-right-radius: 8px;
-`;
-
-export const UploadInner = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 12.5px 0;
-`;
-
-export const ImageUploadGuide = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-
-  .title {
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 21px;
-    color: ${({ theme }) => theme.color.text.gray04};
-  }
-  .desc {
-    font-size: 12px;
-    font-weight: 500;
-    line-height: 18px;
-    color: ${({ theme }) => theme.color.text.gray07};
-  }
-`;
-
-export const CreditInfo = styled.div`
-  width: 37px;
-  position: absolute;
-  right: 16px;
-  display: flex;
-  gap: 0.5px;
-
-  img {
-    width: 20px;
-    height: 20px;
-  }
-
-  span {
-    width: 15px;
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 21px;
-  }
-`;
-
-export const LogoWrap = styled.div`
+// 피그마 스타일 컴포넌트 추가
+export const AvatarSelectionContent = styled.div`
   width: 100%;
   display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+export const AvatarPreview = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 4px;
+`;
+
+export const AvatarSelectionContainer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid ${({ theme }) => theme.color.border.gray01};
+  border-radius: 8px;
+  padding: 0;
+  min-height: 328px;
+  max-height: 328px;
+  background-color: ${({ theme }) => theme.color.background.white};
+  overflow: hidden;
+`;
+
+export const AvatarFilterSection = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+`;
+
+export const GenderFilter = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+  border-bottom: 1px solid ${({ theme }) => theme.color.border.gray05};
+  background-color: ${({ theme }) => theme.color.background.gray10};
+`;
+
+export const RadioGroup = styled.div`
+  display: flex;
+  gap: 12px;
+  padding: 2px 0;
+`;
+
+export const RadioItem = styled.div`
+  display: flex;
   align-items: center;
-  justify-content: flex-end;
+  gap: 4px;
+`;
+
+export const RadioButton = styled.div<{ checked: boolean }>`
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid
+    ${({ checked, theme }) => (checked ? theme.color.border.purple01 : theme.color.border.gray01)};
+  background-color: ${({ checked, theme }) =>
+    checked ? theme.color.background.purple01 : 'transparent'};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+
+  &:after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: ${({ theme }) => theme.color.background.white};
+    display: ${({ checked }) => (checked ? 'block' : 'none')};
+  }
+`;
+
+export const RadioLabel = styled.span`
+  font-size: 16px;
+  font-weight: 500;
+  color: ${({ theme }) => theme.color.text.gray03};
+`;
+
+export const GridContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow-y: auto;
+  padding: 12px 12px 0 12px;
+`;
+
+export const GridRow = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  width: 100%;
+`;
+
+export const GridItem = styled.div`
+  flex: 1;
+  aspect-ratio: 1;
+  border-radius: 6px;
+  background-color: ${({ theme }) => theme.color.background.gray01};
+  cursor: pointer;
+
+  &:hover {
+    border: 1px solid ${({ theme }) => theme.color.border.purple01};
+  }
+`;
+
+export const LoadingMessage = styled.div`
+  width: 100%;
+  text-align: center;
+  padding: 8px 0;
+  color: ${({ theme }) => theme.color.text.gray07};
+  font-size: 14px;
+  font-weight: 500;
+  grid-column: 1 / span 4;
+`;
+
+export const SkeletonWrap = styled.div`
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  grid-column: 1 / span 4;
+`;
+
+export const ButtonContainer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
 `;

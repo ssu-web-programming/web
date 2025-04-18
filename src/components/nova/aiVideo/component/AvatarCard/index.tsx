@@ -11,24 +11,57 @@ import {
 import { useAppDispatch, useAppSelector } from '../../../../../store/store';
 import ArrowTooltips from '../../../../ArrowTooltip';
 import ColorPicker from '../../../../colorPicker';
+import GuideMessage from '../GuideMessage';
 
 import * as S from './style';
 
 interface AvatarCardProps {
   isShowOnlyCard?: boolean;
   isHideColorPicker?: boolean;
+  isScriptStep?: boolean;
   children?: React.ReactNode;
+  isSelected?: boolean;
+  selectAvatarStyle?: (shape: 'circle' | 'normal') => void;
+  getShapeIcon?: (shape: 'circle' | 'normal') => string;
+  image?: string;
+  name?: string;
+  country?: string;
+  gender?: string;
 }
 
 export default function AvatarCard({
   isShowOnlyCard = false,
   isHideColorPicker = false,
-  children
+  isScriptStep = false,
+  children,
+  isSelected = true,
+  selectAvatarStyle,
+  getShapeIcon,
+  image,
+  name,
+  country,
+  gender
 }: AvatarCardProps) {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const result = useAppSelector(selectPageResult(NOVA_TAB_TYPE.aiVideo));
   const status = useAppSelector(selectPageStatus(NOVA_TAB_TYPE.aiVideo));
+  const audioRef = React.useRef<HTMLAudioElement | null>(null);
+
+  // Redux에서 필요한 정보 직접 가져오기
+  const selectedAvatar = result?.info?.selectedAvatar;
+  const avatarStyle = selectedAvatar?.avatar_style;
+  const isCircleStyle = avatarStyle === 'circle';
+  const bgColor = selectedAvatar?.background_color || '#b2c7ea';
+
+  // 이미지 URL 결정
+  const imageUrl =
+    image || selectedAvatar?.avatar?.preview_image_url || selectedAvatar?.avatar?.talking_photo_url;
+
+  // 음성 정보
+  const voiceName = name || selectedAvatar?.voice?.name || '-';
+  const voiceLanguage = country || selectedAvatar?.voice?.language || '-';
+  const voiceGender = gender || selectedAvatar?.voice?.gender || '-';
 
   const selectAvatarBackground = (color: string) => {
     dispatch(
@@ -47,55 +80,106 @@ export default function AvatarCard({
     );
   };
 
-  if (!result?.info?.selectedAvatar) {
-    return null;
-  }
-
-  const selectedAvatar = result.info.selectedAvatar;
-  return (
-    <S.AvatarCard isCircle={selectedAvatar?.avatar_style === 'circle'}>
-      {!isShowOnlyCard && !isHideColorPicker && (
-        <ArrowTooltips
-          message={t('Nova.aiVideo.tooltip.colorPicker')}
-          autoClose={true}
-          isReady={status === 'avatar' && selectedAvatar.avatar.avatar_id != ''}
-          cssExt={css`
-            position: absolute;
-            top: 12px;
-            right: 12px;
-          `}>
-          <ColorPicker
-            title={t('Nova.aiVideo.ColorPicker.bgColor')}
-            color={selectedAvatar?.background_color ?? ''}
-            setColor={(color: string) => selectAvatarBackground(color)}
-          />
-        </ArrowTooltips>
-      )}
-      <S.PreviewWrap
-        isCircle={selectedAvatar?.avatar_style === 'circle'}
-        bgColor={selectedAvatar?.background_color ?? ''}>
-        <img
-          src={
-            selectedAvatar?.avatar.avatar_id != ''
-              ? selectedAvatar?.avatar.preview_image_url
-              : selectedAvatar?.avatar.talking_photo_url
+  const handleAvatarStyleChange = (style: 'circle' | 'square') => {
+    if (selectAvatarStyle && style === 'circle') {
+      selectAvatarStyle('circle');
+    } else if (selectAvatarStyle && style === 'square') {
+      selectAvatarStyle('normal');
+    } else {
+      dispatch(
+        updatePageResult({
+          tab: NOVA_TAB_TYPE.aiVideo,
+          result: {
+            info: {
+              ...result?.info,
+              selectedAvatar: {
+                ...result?.info?.selectedAvatar,
+                avatar_style: style === 'square' ? 'normal' : 'circle'
+              }
+            }
           }
-          alt="preview_img"
-        />
-      </S.PreviewWrap>
-      {!isShowOnlyCard && (
-        <S.AvatarInfo isCircle={selectedAvatar?.avatar_style === 'circle'}>
-          {selectedAvatar?.voice.name ? (
-            <>
-              <span className="name">{selectedAvatar?.voice.name}</span>
-              <span className="etc">{`${selectedAvatar?.voice.language} | ${selectedAvatar?.voice.gender}`}</span>
-            </>
-          ) : (
-            <span className="name">{'-'}</span>
+        })
+      );
+    }
+  };
+
+  const renderCard = () => {
+    const isAvatarStep = status === 'avatar';
+
+    return (
+      <S.AvatarCard isCircle={isCircleStyle}>
+        <S.AvatarContentContainer>
+          <S.AvatarImageContainer
+            isCircle={isCircleStyle}
+            bgColor={bgColor}
+            isSelected={isScriptStep ? false : isAvatarStep}>
+            <S.AvatarImageWrapper>
+              {imageUrl ? (
+                <S.AvatarImageElement src={imageUrl} alt={voiceName} isCircle={isCircleStyle} />
+              ) : (
+                <S.AvatarImage isCircle={isCircleStyle} />
+              )}
+            </S.AvatarImageWrapper>
+          </S.AvatarImageContainer>
+
+          {!isShowOnlyCard && !isHideColorPicker && (
+            <S.AvatarStyleContainer>
+              <ArrowTooltips
+                message={t('Nova.aiVideo.tooltip.colorPicker')}
+                autoClose={true}
+                isReady={
+                  status === 'avatar' && result?.info?.selectedAvatar?.avatar?.avatar_id !== ''
+                }
+                placement="top-start"
+                cssExt={css`
+                  margin-bottom: 4px;
+                  right: 0;
+                `}>
+                <ColorPicker
+                  title={t('Nova.aiVideo.ColorPicker.bgColor')}
+                  color={result?.info?.selectedAvatar?.background_color ?? ''}
+                  setColor={(color: string) => selectAvatarBackground(color)}
+                />
+              </ArrowTooltips>
+
+              <S.AvatarStyleSelector>
+                <S.AvatarStyleOption
+                  isSelected={!isCircleStyle}
+                  onClick={() => handleAvatarStyleChange('square')}>
+                  {getShapeIcon ? (
+                    <img src={getShapeIcon('normal')} alt="Square" />
+                  ) : (
+                    <S.AvatarStyleSquare />
+                  )}
+                </S.AvatarStyleOption>
+                <S.AvatarStyleOption
+                  isSelected={isCircleStyle}
+                  onClick={() => handleAvatarStyleChange('circle')}>
+                  {getShapeIcon ? (
+                    <img src={getShapeIcon('circle')} alt="Circle" />
+                  ) : (
+                    <S.AvatarStyleCircle />
+                  )}
+                </S.AvatarStyleOption>
+              </S.AvatarStyleSelector>
+            </S.AvatarStyleContainer>
           )}
-        </S.AvatarInfo>
-      )}
-      <>{children}</>
-    </S.AvatarCard>
+        </S.AvatarContentContainer>
+
+        {!isShowOnlyCard && (
+          <S.AvatarInfo isCircle={isCircleStyle} isSelected={status === 'voice'}>
+            <GuideMessage audioRef={audioRef} />
+          </S.AvatarInfo>
+        )}
+        {children}
+      </S.AvatarCard>
+    );
+  };
+
+  return (
+    <>
+      {renderCard()}
+      <audio ref={audioRef} muted={false} />
+    </>
   );
 }

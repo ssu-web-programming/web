@@ -2,20 +2,16 @@ import { useEffect, useRef, useState } from 'react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { css } from 'styled-components';
+import styled from 'styled-components';
 
 import { Voices } from '../../../../constants/heygenTypes';
 import { NOVA_TAB_TYPE } from '../../../../constants/novaTapTypes';
-import ArrowRightDarkIcon from '../../../../img/dark/ico_arrow_right.svg';
 import InfoDarkIcon from '../../../../img/dark/ico_circle_info.svg';
-import PlayDarkIcon from '../../../../img/dark/nova/aiVideo/ico_play.svg';
-import SoundDarkIcon from '../../../../img/dark/nova/aiVideo/ico_sound.svg';
-import HeyzenLogoDarkIcon from '../../../../img/dark/nova/logo/ico_heygen_name_logo.svg';
-import ArrowRightLightIcon from '../../../../img/light/ico_arrow_right.svg';
+import { ReactComponent as PlayDarkIcon } from '../../../../img/dark/nova/aiVideo/ico_play.svg';
+import { ReactComponent as SoundDarkIcon } from '../../../../img/dark/nova/aiVideo/ico_sound.svg';
 import InfoLightIcon from '../../../../img/light/ico_circle_info.svg';
-import CreditColorIcon from '../../../../img/light/ico_credit_color.svg';
-import PlayLightIcon from '../../../../img/light/nova/aiVideo/ico_play.svg';
-import SoundLightIcon from '../../../../img/light/nova/aiVideo/ico_sound.svg';
-import HeyzenLogoLightIcon from '../../../../img/light/nova/logo/ico_heygen_name_logo.svg';
+import { ReactComponent as PlayLightIcon } from '../../../../img/light/nova/aiVideo/ico_play.svg';
+import { ReactComponent as SoundLightIcon } from '../../../../img/light/nova/aiVideo/ico_sound.svg';
 import {
   selectPageResult,
   setPageStatus,
@@ -25,20 +21,67 @@ import { themeInfoSelector } from '../../../../store/slices/theme';
 import { useAppDispatch, useAppSelector } from '../../../../store/store';
 import ArrowTooltips from '../../../ArrowTooltip';
 import Button from '../../../buttons/Button';
+import { useGetVoices } from '../../../hooks/nova/use-get-voices';
+import Radio from '../../../radio';
+import SelectBox from '../../../selectBox';
 import AvatarCard from '../component/AvatarCard';
-import SelectVoice from '../component/SelectVoice';
+import HeygenLogo from '../component/HeygenLogo';
+import VoiceSkeleton from '../component/VoiceSkeleton';
 
 import * as S from './style';
+
+const IconWrapper = styled.div`
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    width: 24px;
+    height: 24px;
+    fill: ${({ theme }) => theme.color.text.gray03};
+  }
+`;
 
 export default function Voice() {
   const dispatch = useAppDispatch();
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const { t } = useTranslation();
   const result = useAppSelector(selectPageResult(NOVA_TAB_TYPE.aiVideo));
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const [playingVoiceId, setPlayingVoiceId] = useState<string | null>(null);
 
+  // 상태 관리
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [playingVoiceId, setPlayingVoiceId] = useState<string | null>(null);
+  const [selectedGender, setSelectedGender] = useState<string>('all');
+  const [selectedLanguage, setSelectedLanguage] = useState<string>('all');
+  const [filteredVoices, setFilteredVoices] = useState<Voices[]>([]);
+
+  // 참조 객체
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const lastVoiceRef = useRef<HTMLDivElement | null>(null);
+
+  // 무한 스크롤 로직을 위한 hooks
+  const { getVoices, hasMore, loading } = useGetVoices();
+
+  // 필터 옵션
+  const genderMenu = [
+    { key: 'all', title: t('Nova.aiVideo.selectAvatar.tabs.all'), value: 'all' },
+    { key: 'male', title: t('Nova.aiVideo.selectAvatar.tabs.male'), value: 'male' },
+    { key: 'female', title: t('Nova.aiVideo.selectAvatar.tabs.female'), value: 'female' }
+  ];
+
+  // 초기화 및 상태 설정
+  useEffect(() => {
+    dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'voice' }));
+
+    // 초기 음성 데이터 로드
+    if (!result?.info?.voices || result?.info?.voices.length === 0) {
+      getVoices('all', 'all');
+    }
+  }, []);
+
+  // 기본 음성 선택
   useEffect(() => {
     if (result?.info.selectedAvatar.voice.voice_id === '' && result?.info.voices?.length > 0) {
       dispatch(
@@ -53,46 +96,60 @@ export default function Voice() {
         })
       );
     }
-    dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'voice' }));
   }, [result?.info.voices]);
 
+  // 필터링된 음성 목록 업데이트
   useEffect(() => {
-    dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'voice' }));
-  }, []);
+    if (!result?.info?.voices) return;
+
+    const newFilteredVoices = result.info.voices.filter(
+      (voice: Voices) =>
+        (selectedGender === 'all' || voice.gender.toLowerCase() === selectedGender) &&
+        (selectedLanguage === 'all' ||
+          voice.language?.toLowerCase() === selectedLanguage?.toLowerCase())
+    );
+
+    setFilteredVoices(newFilteredVoices);
+  }, [result?.info?.voices, selectedGender, selectedLanguage]);
+
+  // 무한 스크롤 설정
+  useEffect(() => {
+    if (filteredVoices.length > 0) {
+      lastVoiceRef.current = document.getElementById(
+        filteredVoices[filteredVoices.length - 1].voice_id
+      ) as HTMLDivElement;
+    }
+  }, [filteredVoices]);
+
+  useEffect(() => {
+    if (loading || !hasMore(selectedLanguage)) return;
+
+    if (observerRef.current) {
+      observerRef.current.disconnect();
+    }
+
+    observerRef.current = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          getVoices(selectedGender, selectedLanguage);
+        }
+      },
+      { threshold: 1 }
+    );
+
+    if (lastVoiceRef.current) {
+      observerRef.current.observe(lastVoiceRef.current);
+    }
+
+    return () => observerRef.current?.disconnect();
+  }, [loading, hasMore, selectedGender, selectedLanguage, filteredVoices]);
 
   const changeSelectedVoice = (voice: Voices) => {
     if (!result || !result.info.voices) return;
 
     const currentVoices = result.info.voices;
-    const firstThreeVoices = currentVoices.slice(0, 3); // 앞의 3개 요소
-    const remainingVoices = currentVoices.slice(3); // 나머지 요소
 
-    // 선택한 보이스가 앞의 3개 중 하나라면 순서 변경 없이 유지
-    if (firstThreeVoices.some((item: Voices) => item.voice_id === voice.voice_id)) {
-      return dispatch(
-        updatePageResult({
-          tab: NOVA_TAB_TYPE.aiVideo,
-          result: {
-            info: {
-              selectedAvatar: {
-                ...result.info.selectedAvatar,
-                voice: voice
-              },
-              voices: currentVoices // 순서 유지
-            }
-          }
-        })
-      );
-    }
-
-    // 선택한 보이스가 앞의 3개에 없으면 나머지 목록에서 필터링 후 맨 앞으로 이동
-    const updatedVoices = [
-      voice,
-      ...firstThreeVoices,
-      ...remainingVoices.filter((item: Voices) => item.voice_id !== voice.voice_id)
-    ];
-
-    dispatch(
+    return dispatch(
       updatePageResult({
         tab: NOVA_TAB_TYPE.aiVideo,
         result: {
@@ -101,7 +158,7 @@ export default function Voice() {
               ...result.info.selectedAvatar,
               voice: voice
             },
-            voices: updatedVoices
+            voices: currentVoices
           }
         }
       })
@@ -117,94 +174,220 @@ export default function Voice() {
     }
   };
 
+  const handleGenderChange = (gender: string) => {
+    const selected = genderMenu.find((item) => item.key === gender);
+    if (selected) setSelectedGender(selected.value);
+  };
+
+  const handleLanguageChange = (language: string) => {
+    setSelectedLanguage(language);
+
+    if (result?.info?.voices) {
+      const voiceList = result.info.voices.filter((voice: Voices) => voice.language === language);
+      if (!voiceList || voiceList.length <= 0) {
+        getVoices(selectedGender, language);
+      }
+    }
+  };
+
+  const handleNextClick = () => {
+    dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'script' }));
+  };
+
+  const handlePrevClick = () => {
+    dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'avatar' }));
+  };
+
+  const renderPlayIcon = (voiceId: string) => {
+    if (playingVoiceId === voiceId) {
+      return isLightMode ? <PlayLightIcon /> : <PlayDarkIcon />;
+    } else {
+      return isLightMode ? <SoundLightIcon /> : <SoundDarkIcon />;
+    }
+  };
+
   return (
     <>
       <S.Container>
         <AvatarCard isHideColorPicker={true} />
-        <S.TitleWrap>
-          <div className="wrap">
-            <span className="title">{t('Nova.aiVideo.selectVoice.title')}</span>
-            <ArrowTooltips message={t('Nova.aiVideo.tooltip.selectVoice')} placement="top-start">
-              <img src={isLightMode ? InfoLightIcon : InfoDarkIcon} alt="info" />
-            </ArrowTooltips>
-          </div>
-          <div className="show" onClick={() => setIsOpen(true)}>
-            <span>{t('Nova.aiVideo.button.showMore')}</span>
-            <img src={isLightMode ? ArrowRightLightIcon : ArrowRightDarkIcon} alt="show_more" />
-          </div>
-        </S.TitleWrap>
         <S.VoiceContainer>
-          {result?.info.voices &&
-            result?.info.voices.slice(0, 3).map((voice: Voices) => (
-              <S.VoiceItem
-                key={voice.voice_id}
-                isSelected={result?.info.selectedAvatar?.voice.voice_id === voice.voice_id}
-                onClick={() => changeSelectedVoice(voice)}>
-                <S.VoiceInfo
-                  isSelected={result?.info.selectedAvatar?.voice.voice_id === voice.voice_id}>
-                  <span className="name">{voice.name}</span>
-                  <S.IdentifyWrap
-                    isSelected={result?.info.selectedAvatar?.voice.voice_id === voice.voice_id}>
-                    <img src={voice.flag} alt="flag" />
-                    <span>{`${voice.language} | ${voice.gender}`}</span>
-                  </S.IdentifyWrap>
-                </S.VoiceInfo>
-                <img
-                  src={
-                    playingVoiceId === voice.voice_id
-                      ? isLightMode
-                        ? PlayLightIcon
-                        : PlayDarkIcon
-                      : isLightMode
-                        ? SoundLightIcon
-                        : SoundDarkIcon
+          <S.VoiceListContainer>
+            <S.FilterRow>
+              {/* 성별 필터 */}
+              <SelectBox
+                menuItem={genderMenu}
+                selectedItem={selectedGender}
+                setSelectedItem={handleGenderChange}
+                placeHolder={t('Nova.aiVideo.selectVoice.selectBox.gender') || ''}
+                isMenuAbove={false}
+                minWidth={128}
+                maxHeight={120}
+                paddingX={12}
+                paddingY={16}
+                gap={6}
+                isSelectedHighlighted={false}
+                isDriver={true}
+                selectBoxCssExt={css`
+                  min-width: 84px;
+                  padding: 0 !important;
+                  justify-content: flex-start;
+                  border: none;
+                  border-radius: 99px;
+                  background-color: ${isLightMode ? 'var(--gray-gray-10)' : 'var(--gray-gray-90)'};
+
+                  div {
+                    font-size: 16px !important;
                   }
-                  alt="play"
-                  onClick={() => playVoice(voice)}
-                />
-                <audio ref={audioRef} muted={false} />
-              </S.VoiceItem>
-            ))}
+                `}
+                innerBoxCssExt={css`
+                  min-height: 24px;
+                `}
+              />
+
+              {/* 언어 필터 */}
+              {result?.info.languages && (
+                <div className="language-with-info">
+                  <SelectBox
+                    menuItem={[
+                      { key: 'all', title: t('Nova.aiVideo.selectAvatar.tabs.all') },
+                      ...(result?.info.languages ?? []).map(
+                        (lang: { id: string; name: string }) => ({
+                          key: lang.id,
+                          title: lang.name
+                        })
+                      )
+                    ]}
+                    selectedItem={selectedLanguage}
+                    setSelectedItem={handleLanguageChange}
+                    placeHolder={t('Nova.aiVideo.selectVoice.selectBox.country') || ''}
+                    isMenuAbove={false}
+                    minWidth={128}
+                    maxHeight={228}
+                    paddingX={12}
+                    paddingY={16}
+                    isSelectedHighlighted={false}
+                    isDriver={true}
+                    selectBoxCssExt={css`
+                      min-width: 84px;
+                      padding: 0 !important;
+                      justify-content: flex-start;
+                      border: none;
+                      border-radius: 99px;
+                      background-color: ${isLightMode
+                        ? 'var(--gray-gray-10)'
+                        : 'var(--gray-gray-90)'};
+
+                      div {
+                        font-size: 16px !important;
+                      }
+                    `}
+                    innerBoxCssExt={css`
+                      min-height: 30px;
+                    `}
+                  />
+                  <ArrowTooltips
+                    message={t('Nova.aiVideo.tooltip.selectVoice')}
+                    placement="top-start"
+                    cssExt={css`
+                      margin-bottom: 4px;
+                      right: -3px;
+                    `}>
+                    <img
+                      src={isLightMode ? InfoLightIcon : InfoDarkIcon}
+                      alt="info"
+                      className="info-icon"
+                    />
+                  </ArrowTooltips>
+                </div>
+              )}
+            </S.FilterRow>
+
+            {/* 음성 목록 */}
+            <S.VoiceListWrap>
+              {filteredVoices.length > 0 ? (
+                filteredVoices.map((voice: Voices, index: number) => {
+                  const isSelected = result?.info.selectedAvatar?.voice.voice_id === voice.voice_id;
+                  return (
+                    <S.VoiceItem
+                      key={voice.voice_id}
+                      id={voice.voice_id}
+                      isSelected={isSelected}
+                      onClick={() => changeSelectedVoice(voice)}
+                      ref={index === filteredVoices.length - 1 ? lastVoiceRef : null}>
+                      <S.VoiceInfoWrap>
+                        <Radio
+                          checked={isSelected}
+                          onChange={() => changeSelectedVoice(voice)}
+                          size={16}
+                        />
+                        <S.VoiceInfo isSelected={isSelected}>
+                          <span className="name">{voice.name}</span>
+                          <S.IdentifyWrap isSelected={isSelected}>
+                            <img src={voice.flag} alt="flag" />
+                            <span>{`${voice.language} | ${voice.gender}`}</span>
+                          </S.IdentifyWrap>
+                        </S.VoiceInfo>
+                      </S.VoiceInfoWrap>
+                      <IconWrapper
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          playVoice(voice);
+                        }}>
+                        {renderPlayIcon(voice.voice_id)}
+                      </IconWrapper>
+                    </S.VoiceItem>
+                  );
+                })
+              ) : (
+                <S.NoVoicesMessage>
+                  {loading ? '' : '해당하는 목소리가 없습니다.'}
+                </S.NoVoicesMessage>
+              )}
+              {loading && (
+                <S.SkeletonWrap>
+                  <VoiceSkeleton count={10} />
+                </S.SkeletonWrap>
+              )}
+            </S.VoiceListWrap>
+          </S.VoiceListContainer>
         </S.VoiceContainer>
-        <Button
-          variant="purple"
-          width={'full'}
-          height={48}
-          disable={true}
-          cssExt={css`
-            display: flex;
-            gap: 4px;
-            font-size: 16px;
-            font-weight: 500;
-            border-radius: 8px;
-            position: relative;
-          `}
-          onClick={() => {
-            dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'script' }));
-          }}>
-          <span>{t('Nova.aiVideo.button.makeVideo')}</span>
-          <S.CreditInfo>
-            <img src={CreditColorIcon} alt="credit" />
-            <span>50</span>
-          </S.CreditInfo>
-        </Button>
-        <S.LogoWrap>
-          <img
-            src={isLightMode ? HeyzenLogoLightIcon : HeyzenLogoDarkIcon}
-            alt="logo"
-            className="logo"
-          />
-        </S.LogoWrap>
+
+        <S.Footer>
+          <S.ButtonGroup>
+            <Button
+              variant="white"
+              width={'full'}
+              height={48}
+              cssExt={css`
+                display: flex;
+                gap: 4px;
+                font-size: 16px;
+                font-weight: 500;
+                border-radius: 8px;
+                border: 1px solid var(--gray-gray-30);
+              `}
+              onClick={handlePrevClick}>
+              <span>{t('Nova.aiVideo.button.prev')}</span>
+            </Button>
+            <Button
+              variant="purple"
+              width={'full'}
+              height={48}
+              cssExt={css`
+                display: flex;
+                gap: 4px;
+                font-size: 16px;
+                font-weight: 500;
+                border-radius: 8px;
+              `}
+              onClick={handleNextClick}>
+              <span>{t('Nova.aiVideo.button.next')}</span>
+            </Button>
+          </S.ButtonGroup>
+          <HeygenLogo />
+        </S.Footer>
       </S.Container>
-      {isOpen && (
-        <SelectVoice
-          setIsOpen={setIsOpen}
-          changeSelectedVoice={changeSelectedVoice}
-          audioRef={audioRef}
-          playingVoiceId={playingVoiceId}
-          setPlayingVoiceId={setPlayingVoiceId}
-        />
-      )}
+      <audio ref={audioRef} muted={false} />
     </>
   );
 }
