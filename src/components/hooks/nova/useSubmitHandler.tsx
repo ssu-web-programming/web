@@ -363,7 +363,8 @@ const useSubmitHandler = ({ setFileUploadState, setExpiredNOVA }: SubmitHandlerP
               splunk({
                 dp: 'ai.nova',
                 el: 'upload_file',
-                file_type: type
+                file_type: type,
+                gpt_ver: log_info.detail
               });
             }
 
