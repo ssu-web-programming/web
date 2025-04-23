@@ -49,39 +49,37 @@ export default function Voice() {
   const { t } = useTranslation();
   const result = useAppSelector(selectPageResult(NOVA_TAB_TYPE.aiVideo));
 
-  // 상태 관리
-  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [playingVoiceId, setPlayingVoiceId] = useState<string | null>(null);
   const [selectedGender, setSelectedGender] = useState<string>('all');
   const [selectedLanguage, setSelectedLanguage] = useState<string>('all');
   const [filteredVoices, setFilteredVoices] = useState<Voices[]>([]);
 
-  // 참조 객체
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const lastVoiceRef = useRef<HTMLDivElement | null>(null);
 
-  // 무한 스크롤 로직을 위한 hooks
-  const { getVoices, hasMore, loading } = useGetVoices();
+  const { getVoices, loading } = useGetVoices();
 
-  // 필터 옵션
   const genderMenu = [
     { key: 'all', title: t('Nova.aiVideo.selectAvatar.tabs.all'), value: 'all' },
     { key: 'male', title: t('Nova.aiVideo.selectAvatar.tabs.male'), value: 'male' },
     { key: 'female', title: t('Nova.aiVideo.selectAvatar.tabs.female'), value: 'female' }
   ];
 
-  // 초기화 및 상태 설정
   useEffect(() => {
-    dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'voice' }));
-
-    // 초기 음성 데이터 로드
-    if (!result?.info?.voices || result?.info?.voices.length === 0) {
+    if (!result?.info?.voices || result.info.voices.length === 0) {
       getVoices('all', 'all');
     }
+
+    // 오디오 요소 clean-up
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.src = '';
+      }
+    };
   }, []);
 
-  // 기본 음성 선택
   useEffect(() => {
     if (result?.info.selectedAvatar.voice.voice_id === '' && result?.info.voices?.length > 0) {
       dispatch(
@@ -98,11 +96,16 @@ export default function Voice() {
     }
   }, [result?.info.voices]);
 
-  // 필터링된 음성 목록 업데이트
   useEffect(() => {
     if (!result?.info?.voices) return;
 
-    const newFilteredVoices = result.info.voices.filter(
+    // 중복 제거 및 필터링
+    const uniqueVoices = new Map<string, Voices>();
+    result.info.voices.forEach((voice: Voices) => {
+      uniqueVoices.set(voice.voice_id, voice);
+    });
+
+    const newFilteredVoices = Array.from(uniqueVoices.values()).filter(
       (voice: Voices) =>
         (selectedGender === 'all' || voice.gender.toLowerCase() === selectedGender) &&
         (selectedLanguage === 'all' ||
@@ -110,19 +113,23 @@ export default function Voice() {
     );
 
     setFilteredVoices(newFilteredVoices);
+
+    // 필터링된 결과가 적으면 추가 데이터 로드
+    if (selectedLanguage !== 'all' && newFilteredVoices.length < 5 && !loading) {
+      getVoices(selectedGender, selectedLanguage);
+    }
   }, [result?.info?.voices, selectedGender, selectedLanguage]);
 
   // 무한 스크롤 설정
   useEffect(() => {
+    // 마지막 요소 참조 설정
     if (filteredVoices.length > 0) {
       lastVoiceRef.current = document.getElementById(
         filteredVoices[filteredVoices.length - 1].voice_id
       ) as HTMLDivElement;
     }
-  }, [filteredVoices]);
 
-  useEffect(() => {
-    if (loading || !hasMore(selectedLanguage)) return;
+    if (loading) return;
 
     if (observerRef.current) {
       observerRef.current.disconnect();
@@ -142,14 +149,13 @@ export default function Voice() {
     }
 
     return () => observerRef.current?.disconnect();
-  }, [loading, hasMore, selectedGender, selectedLanguage, filteredVoices]);
+  }, [loading, selectedGender, selectedLanguage, filteredVoices]);
 
+  // 목소리 선택 핸들러
   const changeSelectedVoice = (voice: Voices) => {
     if (!result || !result.info.voices) return;
 
-    const currentVoices = result.info.voices;
-
-    return dispatch(
+    dispatch(
       updatePageResult({
         tab: NOVA_TAB_TYPE.aiVideo,
         result: {
@@ -157,14 +163,14 @@ export default function Voice() {
             selectedAvatar: {
               ...result.info.selectedAvatar,
               voice: voice
-            },
-            voices: currentVoices
+            }
           }
         }
       })
     );
   };
 
+  // 음성 재생 핸들러
   const playVoice = (voice: Voices) => {
     const audioElement = audioRef.current;
     if (audioElement) {
@@ -174,19 +180,26 @@ export default function Voice() {
     }
   };
 
+  // 성별 필터 변경 핸들러
   const handleGenderChange = (gender: string) => {
     const selected = genderMenu.find((item) => item.key === gender);
-    if (selected) setSelectedGender(selected.value);
+    if (selected) {
+      setSelectedGender(selected.value);
+
+      // 언어가 선택된 상태라면 해당 성별+언어 조합으로 새 데이터 로드
+      if (selectedLanguage !== 'all') {
+        getVoices(selected.value, selectedLanguage);
+      }
+    }
   };
 
+  // 언어 필터 변경 핸들러
   const handleLanguageChange = (language: string) => {
     setSelectedLanguage(language);
 
-    if (result?.info?.voices) {
-      const voiceList = result.info.voices.filter((voice: Voices) => voice.language === language);
-      if (!voiceList || voiceList.length <= 0) {
-        getVoices(selectedGender, language);
-      }
+    // 언어가 선택된 경우 데이터 로드
+    if (language !== 'all') {
+      getVoices(selectedGender, language);
     }
   };
 
@@ -199,11 +212,17 @@ export default function Voice() {
   };
 
   const renderPlayIcon = (voiceId: string) => {
-    if (playingVoiceId === voiceId) {
-      return isLightMode ? <PlayLightIcon /> : <PlayDarkIcon />;
-    } else {
-      return isLightMode ? <SoundLightIcon /> : <SoundDarkIcon />;
-    }
+    return playingVoiceId === voiceId ? (
+      isLightMode ? (
+        <PlayLightIcon />
+      ) : (
+        <PlayDarkIcon />
+      )
+    ) : isLightMode ? (
+      <SoundLightIcon />
+    ) : (
+      <SoundDarkIcon />
+    );
   };
 
   return (

@@ -17,14 +17,14 @@ export function useGetAvatars() {
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
 
-  const getAvatars = async (gender: string) => {
+  const getAvatars = async () => {
     if (loading || !hasMore) return;
-    setLoading(true);
 
+    setLoading(true);
     try {
       const currentPage = result?.info.avatarPage ?? 1;
       const { res } = await apiWrapper().request(
-        `${NOVA_VIDEO_GET_AVATARS}?page=${currentPage}&limit=20&gender=${gender}`,
+        `${NOVA_VIDEO_GET_AVATARS}?page=${currentPage}&limit=30&gender=all`,
         {
           headers: { 'Content-Type': 'application/json' },
           method: 'GET'

@@ -43,7 +43,7 @@ export default function AIVideo() {
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'progress' }));
 
     if (!result?.info.avatars) {
-      await getAvatars('all');
+      await getAvatars();
     }
     if (!result?.info.voices) {
       await getVoices('all', 'all');
