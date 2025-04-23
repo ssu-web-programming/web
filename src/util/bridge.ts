@@ -7,6 +7,7 @@ import { setFileState } from 'store/slices/nova/translation/download-slice';
 import { resetCurrentWrite } from 'store/slices/writeHistorySlice';
 import { v4 as uuidv4 } from 'uuid';
 
+import { track } from '@amplitude/analytics-browser';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { useConfirm } from '../components/Confirm';
@@ -273,6 +274,8 @@ const callApi = (api: ApiType, arg?: string | number | object | boolean) => {
           case 'amplitudeData': {
             if (window.webkit.messageHandlers.amplitudeData) {
               window.webkit.messageHandlers.amplitudeData.postMessage(arg);
+            } else {
+              track((arg as any).type, (arg as any).props);
             }
             break;
           }
