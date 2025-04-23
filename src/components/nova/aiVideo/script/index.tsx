@@ -45,7 +45,7 @@ export default function Script() {
 
   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     const newText = event.target.value;
-    if (newText.length <= 400) {
+    if (newText.length <= 100) {
       setText(newText);
       setIsEnabled(newText.length > 0);
     }
@@ -85,7 +85,6 @@ export default function Script() {
           </S.TitleWrap>
           <S.TextWrap>
             <S.TextArea
-              maxLength={100}
               placeholder={t('Nova.aiVideo.addScript.textAreaPlaceHolder') || ''}
               onChange={handleChange}
               value={text}
