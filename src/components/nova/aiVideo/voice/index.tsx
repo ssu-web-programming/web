@@ -249,7 +249,7 @@ export default function Voice() {
                 <div className="language-with-info">
                   <SelectBox
                     menuItem={[
-                      { key: 'all', title: t('Nova.aiVideo.selectAvatar.tabs.all') },
+                      { key: 'all', title: t('Nova.aiVideo.selectVoice.selectBox.country') },
                       ...(result?.info.languages ?? []).map(
                         (lang: { id: string; name: string }) => ({
                           key: lang.id,
