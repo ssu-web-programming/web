@@ -275,7 +275,7 @@ const callApi = (api: ApiType, arg?: string | number | object | boolean) => {
             if (window.webkit.messageHandlers.amplitudeData) {
               window.webkit.messageHandlers.amplitudeData.postMessage(arg);
             } else {
-              if (typeof arg === 'string') {
+              if (platform === ClientType.ios && typeof arg === 'string') {
                 const amplitudeData = JSON.parse(arg);
                 track(amplitudeData.type, amplitudeData.props);
               }
