@@ -577,7 +577,7 @@
       "addScript": {
         "title": "Write script",
         "stepTitle": "Write script",
-        "textAreaPlaceHolder": "Write the script you want the avatar to speak here"
+        "textAreaPlaceHolder": "Write here what you want your avatar to say"
       },
       "loading": {
         "title": "Creating video",

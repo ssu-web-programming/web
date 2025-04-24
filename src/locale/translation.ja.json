@@ -577,7 +577,7 @@
       "addScript": {
         "title": "スクリプトを書く",
         "stepTitle": "スクリプトを書く",
-        "textAreaPlaceHolder": "アバターに言わせるセリフをここに記入します"
+        "textAreaPlaceHolder": "アバターに話してほしい内容をここに入力してください"
       },
       "loading": {
         "title": "動画生成中",

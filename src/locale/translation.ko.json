@@ -580,7 +580,7 @@
       "addScript": {
         "title": "대본 작성",
         "stepTitle": "대본 작성",
-        "textAreaPlaceHolder": "아바타가 이야기해 주었으면 하는 스크립트를 이곳에 작성 해 보세요"
+        "textAreaPlaceHolder": "아바타가 말할 내용을 여기에 작성해 보세요"
       },
       "loading": {
         "title": "비디오 생성 중",
