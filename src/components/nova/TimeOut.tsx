@@ -5,9 +5,9 @@ import styled from 'styled-components';
 
 import { NOVA_TAB_TYPE } from '../../constants/novaTapTypes';
 import { ReactComponent as BangIcon } from '../../img/light/bang_circle.svg';
-import { selectPageResult } from '../../store/slices/nova/pageStatusSlice';
+import { selectPageResult, setPageStatus } from '../../store/slices/nova/pageStatusSlice';
 import { selectTabSlice } from '../../store/slices/tabSlice';
-import { useAppSelector } from '../../store/store';
+import { useAppDispatch, useAppSelector } from '../../store/store';
 import { useChangeBackground } from '../hooks/nova/useChangeBackground';
 import { useChangeStyle } from '../hooks/nova/useChangeStyle';
 import { useConvert2DTo3D } from '../hooks/nova/useConvert2DTo3D';
@@ -84,6 +84,7 @@ const ButtonWrap = styled.div`
 
 export default function TimeOut() {
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
   const result = useAppSelector(selectPageResult(selectedNovaTab));
   const { handleConver2DTo3D } = useConvert2DTo3D();
@@ -120,6 +121,9 @@ export default function TimeOut() {
         break;
       case NOVA_TAB_TYPE.changeStyle:
         await handleChangeStyle(result?.info);
+        break;
+      case NOVA_TAB_TYPE.aiVideo:
+        dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'loading' }));
         break;
       default:
         return async () => {};
