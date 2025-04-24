@@ -247,7 +247,8 @@ export default function Voice() {
                 isSelectedHighlighted={false}
                 isDriver={true}
                 selectBoxCssExt={css`
-                  min-width: 84px;
+                  min-width: auto;
+                  max-width: 58px;
                   padding: 0 !important;
                   justify-content: flex-start;
                   border: none;
@@ -265,60 +266,57 @@ export default function Voice() {
 
               {/* 언어 필터 */}
               {result?.info.languages && (
-                <div className="language-with-info">
-                  <SelectBox
-                    menuItem={[
-                      { key: 'all', title: t('Nova.aiVideo.selectVoice.selectBox.country') },
-                      ...(result?.info.languages ?? []).map(
-                        (lang: { id: string; name: string }) => ({
-                          key: lang.id,
-                          title: lang.name
-                        })
-                      )
-                    ]}
-                    selectedItem={selectedLanguage}
-                    setSelectedItem={handleLanguageChange}
-                    placeHolder={t('Nova.aiVideo.selectVoice.selectBox.country') || ''}
-                    isMenuAbove={false}
-                    minWidth={128}
-                    maxHeight={228}
-                    paddingX={12}
-                    paddingY={16}
-                    isSelectedHighlighted={false}
-                    isDriver={true}
-                    selectBoxCssExt={css`
-                      min-width: 84px;
-                      padding: 0 !important;
-                      justify-content: flex-start;
-                      border: none;
-                      border-radius: 99px;
-                      background-color: ${isLightMode
-                        ? 'var(--gray-gray-10)'
-                        : 'var(--gray-gray-90)'};
+                <SelectBox
+                  menuItem={[
+                    { key: 'all', title: t('Nova.aiVideo.selectVoice.selectBox.country') },
+                    ...(result?.info.languages ?? []).map((lang: { id: string; name: string }) => ({
+                      key: lang.id,
+                      title: lang.name
+                    }))
+                  ]}
+                  selectedItem={selectedLanguage}
+                  setSelectedItem={handleLanguageChange}
+                  placeHolder={t('Nova.aiVideo.selectVoice.selectBox.country') || ''}
+                  isMenuAbove={false}
+                  minWidth={128}
+                  maxHeight={228}
+                  paddingX={12}
+                  paddingY={16}
+                  isSelectedHighlighted={false}
+                  isDriver={true}
+                  selectBoxCssExt={css`
+                    min-width: auto;
+                    padding: 0 !important;
+                    justify-content: flex-start;
+                    border: none;
+                    border-radius: 99px;
+                    background-color: ${isLightMode
+                      ? 'var(--gray-gray-10)'
+                      : 'var(--gray-gray-90)'};
 
-                      div {
-                        font-size: 16px !important;
-                      }
-                    `}
-                    innerBoxCssExt={css`
-                      min-height: 30px;
-                    `}
-                  />
-                  <ArrowTooltips
-                    message={t('Nova.aiVideo.tooltip.selectVoice')}
-                    placement="top-start"
-                    cssExt={css`
-                      margin-bottom: 4px;
-                      right: -3px;
-                    `}>
-                    <img
-                      src={isLightMode ? InfoLightIcon : InfoDarkIcon}
-                      alt="info"
-                      className="info-icon"
-                    />
-                  </ArrowTooltips>
-                </div>
+                    div {
+                      font-size: 16px !important;
+                    }
+                  `}
+                  innerBoxCssExt={css`
+                    min-height: 30px;
+                  `}
+                />
               )}
+
+              <ArrowTooltips
+                message={t('Nova.aiVideo.tooltip.selectVoice')}
+                placement="top-start"
+                cssExt={css`
+                  margin-bottom: 4px;
+                  right: -3px;
+                `}>
+                <img
+                  src={isLightMode ? InfoLightIcon : InfoDarkIcon}
+                  alt="info"
+                  className="info-icon"
+                />
+              </ArrowTooltips>
             </S.FilterRow>
 
             {/* 음성 목록 */}

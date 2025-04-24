@@ -96,10 +96,11 @@ export const FilterRow = styled.div`
   button {
     min-width: auto;
     padding: 0;
-    margin-left: 8px;
+    margin-left: -4px;
   }
 
   svg {
+    position: relative;
     width: 24px !important;
     height: 24px !important;
     &.MuiSelect-icon {
