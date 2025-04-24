@@ -562,7 +562,7 @@
           "circle": "원형"
         },
         "tabs": {
-          "all": "전체 성별",
+          "all": "전체",
           "male": "남성",
           "female": "여성"
         }
@@ -571,7 +571,9 @@
         "stepTitle": "목소리 선택",
         "title": "아바타 목소리",
         "selectBox": {
-          "gender": "성별",
+          "gender": "전체 성별",
+          "male": "남성",
+          "female": "여성",
           "country": "전체 국가"
         }
       },

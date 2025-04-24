@@ -569,6 +569,8 @@
         "title": "アバターの声",
         "selectBox": {
           "gender": "すべての性別",
+          "male": "男性",
+          "female": "女性",
           "country": "すべての国"
         }
       },

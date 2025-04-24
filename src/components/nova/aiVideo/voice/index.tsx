@@ -61,9 +61,9 @@ export default function Voice() {
   const { getVoices, loading } = useGetVoices();
 
   const genderMenu = [
-    { key: 'all', title: t('Nova.aiVideo.selectAvatar.tabs.all'), value: 'all' },
-    { key: 'male', title: t('Nova.aiVideo.selectAvatar.tabs.male'), value: 'male' },
-    { key: 'female', title: t('Nova.aiVideo.selectAvatar.tabs.female'), value: 'female' }
+    { key: 'all', title: t('Nova.aiVideo.selectVoice.selectBox.gender'), value: 'all' },
+    { key: 'male', title: t('Nova.aiVideo.selectVoice.selectBox.male'), value: 'male' },
+    { key: 'female', title: t('Nova.aiVideo.selectVoice.selectBox.female'), value: 'female' }
   ];
 
   useEffect(() => {

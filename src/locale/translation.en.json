@@ -559,7 +559,7 @@
           "circle": "Pie"
         },
         "tabs": {
-          "all": "All genders",
+          "all": "Gender",
           "male": "Male",
           "female": "Female"
         }
@@ -568,7 +568,9 @@
         "stepTitle": "Select voice",
         "title": "Avatar Voice",
         "selectBox": {
-          "gender": "Gender",
+          "gender": "All genders",
+          "male": "Male",
+          "female": "Female",
           "country": "All countries"
         }
       },
