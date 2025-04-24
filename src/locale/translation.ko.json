@@ -562,7 +562,7 @@
           "circle": "원형"
         },
         "tabs": {
-          "all": "전체 성별",
+          "all": "전체",
           "male": "남성",
           "female": "여성"
         }
@@ -571,14 +571,16 @@
         "stepTitle": "목소리 선택",
         "title": "아바타 목소리",
         "selectBox": {
-          "gender": "성별",
+          "gender": "전체 성별",
+          "male": "남성",
+          "female": "여성",
           "country": "전체 국가"
         }
       },
       "addScript": {
         "title": "대본 작성",
         "stepTitle": "대본 작성",
-        "textAreaPlaceHolder": "아바타가 이야기해 주었으면 하는 스크립트를 이곳에 작성 해 보세요"
+        "textAreaPlaceHolder": "아바타가 말할 내용을 여기에 작성해 보세요"
       },
       "loading": {
         "title": "비디오 생성 중",

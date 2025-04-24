@@ -11,12 +11,14 @@ import { NOVA_TAB_TYPE } from '../../../../constants/novaTapTypes';
 import { getServiceLoggingInfo, SERVICE_TYPE } from '../../../../constants/serviceType';
 import {
   resetPageData,
+  resetPageResult,
   selectPageResult,
+  setPageResult,
   setPageStatus,
   updatePageResult
 } from '../../../../store/slices/nova/pageStatusSlice';
 import { activeToast } from '../../../../store/slices/toastSlice';
-import { getCurrentFile } from '../../../../store/slices/uploadFiles';
+import { getCurrentFile, setDriveFiles, setLocalFiles } from '../../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../../store/store';
 import Bridge from '../../../../util/bridge';
 import { calLeftCredit } from '../../../../util/common';
@@ -115,6 +117,20 @@ export default function Loading() {
     }
   };
 
+  const resetPageState = () => {
+    dispatch(resetPageData(NOVA_TAB_TYPE.aiVideo));
+    dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'home' }));
+  };
+
+  const handleAIVideoError = (errCode: string, leftCredit: number) => {
+    if (errCode === 'Timeout') {
+      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'timeout' }));
+    } else {
+      resetPageState();
+    }
+    errorHandle({ code: errCode, credit: leftCredit });
+  };
+
   const generateVideo = async () => {
     try {
       if (!result?.info.selectedAvatar.startTime) {
@@ -165,16 +181,13 @@ export default function Loading() {
         );
       } else {
         const { leftCredit } = calLeftCredit(res.headers);
-        errorHandle({ code: response.error.code, credit: leftCredit });
+        handleAIVideoError(response.error.code, Number(leftCredit));
         stopTimer();
-        dispatch(resetPageData(NOVA_TAB_TYPE.aiVideo));
-        dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'home' }));
       }
     } catch (error) {
+      resetPageState();
       errorHandle(error);
       stopTimer();
-      dispatch(resetPageData(NOVA_TAB_TYPE.aiVideo));
-      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'home' }));
     }
   };
 
@@ -229,12 +242,15 @@ export default function Loading() {
             function_result: true
           }
         });
+      } else {
+        const { leftCredit } = calLeftCredit(res.headers);
+        handleAIVideoError(data.error.code, Number(leftCredit));
+        stopTimer();
       }
     } catch (error) {
-      errorHandle(error);
       stopTimer();
-      dispatch(resetPageData(NOVA_TAB_TYPE.aiVideo));
-      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'home' }));
+      resetPageState();
+      errorHandle(error);
       await sendNovaStatus({ name: NOVA_TAB_TYPE.aiVideo, uuid: '' }, 'finish');
 
       await Bridge.callBridgeApi('amplitudeData', {

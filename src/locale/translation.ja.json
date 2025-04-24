@@ -569,13 +569,15 @@
         "title": "アバターの声",
         "selectBox": {
           "gender": "すべての性別",
+          "male": "男性",
+          "female": "女性",
           "country": "すべての国"
         }
       },
       "addScript": {
         "title": "スクリプトを書く",
         "stepTitle": "スクリプトを書く",
-        "textAreaPlaceHolder": "アバターに言わせるセリフをここに記入します"
+        "textAreaPlaceHolder": "アバターに話してほしい内容をここに入力してください"
       },
       "loading": {
         "title": "動画生成中",

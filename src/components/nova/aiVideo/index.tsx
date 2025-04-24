@@ -13,6 +13,7 @@ import { useGetAvatars } from '../../hooks/nova/use-get-avatars';
 import { useGetLanguages } from '../../hooks/nova/use-get-languages';
 import { useGetVoices } from '../../hooks/nova/use-get-voices';
 import Result from '../result/index';
+import TimeOut from '../TimeOut';
 
 import AvatarCard from './component/AvatarCard';
 import CustomStepper from './component/stepper';
@@ -43,7 +44,7 @@ export default function AIVideo() {
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'progress' }));
 
     if (!result?.info.avatars) {
-      await getAvatars('all');
+      await getAvatars();
     }
     if (!result?.info.voices) {
       await getVoices('all', 'all');
@@ -78,6 +79,8 @@ export default function AIVideo() {
       );
     } else if (status === 'loading') {
       return <Loading />;
+    } else if (status === 'timeout') {
+      return <TimeOut />;
     } else {
       return (
         <S.Container>
