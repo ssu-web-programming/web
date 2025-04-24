@@ -8,7 +8,6 @@ export const Container = styled.div`
   align-items: center;
   gap: 8px;
   padding: 8px 16px;
-  overflow-y: auto;
 `;
 
 export const ContentWrap = styled.div`
