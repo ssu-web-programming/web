@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { css } from 'styled-components';
 import styled from 'styled-components';
 
+import { AudioContext } from '../../../../components/nova/aiVideo';
 import { Voices } from '../../../../constants/heygenTypes';
 import { NOVA_TAB_TYPE } from '../../../../constants/novaTapTypes';
 import InfoDarkIcon from '../../../../img/dark/ico_circle_info.svg';
@@ -49,12 +50,12 @@ export default function Voice() {
   const { t } = useTranslation();
   const result = useAppSelector(selectPageResult(NOVA_TAB_TYPE.aiVideo));
 
-  const [playingVoiceId, setPlayingVoiceId] = useState<string | null>(null);
+  const audioContext = useContext(AudioContext);
+
   const [selectedGender, setSelectedGender] = useState<string>('all');
   const [selectedLanguage, setSelectedLanguage] = useState<string>('all');
   const [filteredVoices, setFilteredVoices] = useState<Voices[]>([]);
 
-  const audioRef = useRef<HTMLAudioElement | null>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const lastVoiceRef = useRef<HTMLDivElement | null>(null);
 
@@ -71,11 +72,9 @@ export default function Voice() {
       getVoices('all', 'all');
     }
 
-    // 오디오 요소 clean-up
     return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.src = '';
+      if (audioContext) {
+        audioContext.stopAllVoices();
       }
     };
   }, []);
@@ -183,12 +182,9 @@ export default function Voice() {
 
   // 음성 재생 핸들러
   const playVoice = (voice: Voices) => {
-    const audioElement = audioRef.current;
-    if (audioElement) {
-      audioElement.src = voice.preview_audio;
-      audioElement.play().then(() => setPlayingVoiceId(voice.voice_id));
-      audioElement.onended = () => setPlayingVoiceId(null);
-    }
+    if (!audioContext || !voice.preview_audio) return;
+
+    audioContext.playVoice(voice.preview_audio, voice.voice_id);
   };
 
   // 성별 필터 변경 핸들러
@@ -222,8 +218,12 @@ export default function Voice() {
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'avatar' }));
   };
 
+  // 재생 아이콘 렌더링
   const renderPlayIcon = (voiceId: string) => {
-    return playingVoiceId === voiceId ? (
+    // AudioContext의 playingVoiceId 사용
+    const isPlaying = audioContext?.playingVoiceId === voiceId;
+
+    return isPlaying ? (
       isLightMode ? (
         <PlayLightIcon />
       ) : (
@@ -417,7 +417,6 @@ export default function Voice() {
           <HeygenLogo />
         </S.Footer>
       </S.Container>
-      <audio ref={audioRef} muted={false} />
     </>
   );
 }

@@ -1,7 +1,9 @@
 import * as React from 'react';
+import { useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
+import { AudioContext } from '../../../../../components/nova/aiVideo';
 import { Voices } from '../../../../../constants/heygenTypes';
 import { NOVA_TAB_TYPE } from '../../../../../constants/novaTapTypes';
 import { ReactComponent as PlayDarkIcon } from '../../../../../img/dark/nova/aiVideo/ico_play.svg';
@@ -101,16 +103,13 @@ const Divider = styled.span`
   color: ${({ theme }) => theme.color.text.gray07};
 `;
 
-interface GuideMessageProps {
-  audioRef?: React.MutableRefObject<HTMLAudioElement | null>;
-}
-
-function GuideMessage({ audioRef }: GuideMessageProps) {
+function GuideMessage() {
   const { t } = useTranslation();
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const status = useAppSelector(selectPageStatus(NOVA_TAB_TYPE.aiVideo));
   const result = useAppSelector(selectPageResult(NOVA_TAB_TYPE.aiVideo));
-  const [playingVoiceId, setPlayingVoiceId] = React.useState<string | null>(null);
+
+  const audioContext = useContext(AudioContext);
 
   const selectedAvatar = result?.info?.selectedAvatar;
   const selectedVoice = selectedAvatar?.voice as Voices;
@@ -120,25 +119,22 @@ function GuideMessage({ audioRef }: GuideMessageProps) {
   const flagImage = selectedVoice?.flag || '';
 
   const isRenderSound = status == 'voice' || status == 'script';
-
-  // 현재 단계 결정
   const currentStep = STEP_ORDER.includes(status as any) ? STEP_ORDER.indexOf(status as any) : 0;
 
-  // 목소리 재생 함수
   const playVoice = () => {
-    if (!selectedVoice || !selectedVoice.preview_audio || !audioRef?.current) return;
+    if (!selectedVoice || !selectedVoice.preview_audio || !audioContext) return;
 
-    const audioElement = audioRef.current;
-    audioElement.src = selectedVoice.preview_audio;
-    audioElement.play().then(() => setPlayingVoiceId(selectedVoice.voice_id));
-    audioElement.onended = () => setPlayingVoiceId(null);
+    audioContext.playVoice(selectedVoice.preview_audio, selectedVoice.voice_id);
   };
 
   // 스피커 아이콘 렌더링
   const renderSoundIcon = () => {
-    if (!selectedVoice?.voice_id) return null;
+    if (!selectedVoice?.voice_id || !audioContext) return null;
 
-    if (playingVoiceId === selectedVoice.voice_id) {
+    // audioContext의 playingVoiceId 사용
+    const isPlaying = audioContext.playingVoiceId === selectedVoice.voice_id;
+
+    if (isPlaying) {
       return (
         <IconWrapper onClick={playVoice}>
           {isLightMode ? <PlayLightIcon /> : <PlayDarkIcon />}
