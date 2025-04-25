@@ -46,7 +46,6 @@ export default function AvatarCard({
   const { t } = useTranslation();
   const result = useAppSelector(selectPageResult(NOVA_TAB_TYPE.aiVideo));
   const status = useAppSelector(selectPageStatus(NOVA_TAB_TYPE.aiVideo));
-  const audioRef = React.useRef<HTMLAudioElement | null>(null);
 
   const selectedAvatar = result?.info?.selectedAvatar;
   const avatarStyle = selectedAvatar?.avatar_style || 'circle';
@@ -163,7 +162,7 @@ export default function AvatarCard({
 
         {!isShowOnlyCard && (
           <S.AvatarInfo isCircle={isCircleStyle} isSelected={status === 'voice'}>
-            <GuideMessage audioRef={audioRef} />
+            <GuideMessage />
           </S.AvatarInfo>
         )}
         {children}
@@ -171,10 +170,5 @@ export default function AvatarCard({
     );
   };
 
-  return (
-    <>
-      {renderCard()}
-      <audio ref={audioRef} muted={false} />
-    </>
-  );
+  return <>{renderCard()}</>;
 }
