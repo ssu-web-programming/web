@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 export const Container = styled.div`
   width: 100%;
@@ -125,4 +125,21 @@ export const ButtonContainer = styled.div`
   flex-direction: column;
   gap: 8px;
   margin-top: 4px;
+`;
+
+const skeletonPulse = (fromColor: string, toColor: string) => keyframes`
+  0%, 100% {
+    background-color: ${fromColor};
+  }
+  50% {
+    background-color: ${toColor};
+  }
+`;
+export const Skeleton = styled.div`
+  width: 73px;
+  height: 73px;
+  border-radius: 6px;
+  animation: ${({ theme }) =>
+      skeletonPulse(theme.color.background.gray10, theme.color.background.gray16)}
+    2s ease-in-out infinite;
 `;

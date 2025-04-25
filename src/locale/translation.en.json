@@ -581,7 +581,8 @@
       },
       "loading": {
         "title": "Creating video",
-        "desc": "Video creation may take time.\nKeep this screen open to auto-save."
+        "desc": "Video creation may take time.\nKeep this screen open to auto-save.",
+        "complete": "complete"
       },
       "button": {
         "showMore": "View More",

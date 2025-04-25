@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 export const Container = styled.div`
   width: 100%;
@@ -10,60 +10,11 @@ export const Container = styled.div`
   padding: 0 16px;
 `;
 
-export const TitleWrap = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  .wrap {
-    display: flex;
-    gap: 4px;
-  }
-
-  .title,
-  .show {
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 24px;
-    color: ${({ theme }) => theme.color.text.gray04};
-  }
-
-  .show {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-`;
-
 export const VoiceContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
   gap: 8px;
-`;
-
-export const FilterContainer = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 8px;
-`;
-
-export const SelectBoxWrap = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-
-  .language-with-info {
-    display: flex;
-    align-items: center;
-
-    .info-icon {
-      cursor: pointer;
-    }
-  }
 `;
 
 export const VoiceListContainer = styled.div`
@@ -182,14 +133,6 @@ export const NoVoicesMessage = styled.div`
   font-size: 14px;
 `;
 
-export const LoadingMessage = styled.div`
-  width: 100%;
-  padding: 8px;
-  text-align: center;
-  color: ${({ theme }) => theme.color.text.gray07};
-  font-size: 12px;
-`;
-
 export const SkeletonWrap = styled.div`
   width: 100%;
   display: flex;
@@ -208,47 +151,4 @@ export const ButtonGroup = styled.div`
   display: flex;
   gap: 12px;
   margin-top: auto;
-`;
-
-export const CreditInfo = styled.div`
-  width: 37px;
-  position: absolute;
-  right: 16px;
-  display: flex;
-  gap: 0.5px;
-
-  img {
-    width: 20px;
-    height: 20px;
-  }
-
-  span {
-    width: 15px;
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 21px;
-  }
-`;
-
-export const RadioCircle = styled.div<{ isSelected: boolean }>`
-  width: 16px;
-  height: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  border: 1.5px solid
-    ${({ isSelected, theme }) => (isSelected ? theme.color.main : theme.color.border.gray01)};
-  transition: all 0.2s ease;
-  position: relative;
-
-  &::after {
-    content: '';
-    position: absolute;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background-color: ${({ isSelected, theme }) => (isSelected ? theme.color.main : 'transparent')};
-    transition: all 0.2s ease;
-  }
 `;

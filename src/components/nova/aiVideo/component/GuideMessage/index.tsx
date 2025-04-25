@@ -16,13 +16,13 @@ import { themeInfoSelector } from '../../../../../store/slices/theme';
 import { useAppSelector } from '../../../../../store/store';
 
 // 스텝 순서 정의
-const STEP_ORDER = ['avatar', 'voice', 'script'] as const;
+const STEP_ORDER = ['avatar', 'voice', 'script', 'loading', 'saving', 'done'] as const;
 
-const Container = styled.div<{ isActive?: boolean }>`
+const Container = styled.div<{ isCentered: boolean }>`
   width: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: ${({ isCentered }) => (isCentered ? 'center' : 'space-between')};
   align-items: center;
 `;
 
@@ -41,15 +41,14 @@ const Message = styled.div`
   color: ${({ theme }) => theme.color.text.gray07};
 `;
 
-const VoiceName = styled.div`
+const VoiceName = styled.div<{ isCentered: boolean }>`
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: ${({ isCentered }) => (isCentered ? 'center' : 'flex-start')};
   margin-bottom: 4px;
   font-size: 14px;
   font-weight: 700;
-  line-height: 24px;
   color: ${({ theme }) => theme.color.text.main};
 `;
 
@@ -120,11 +119,10 @@ function GuideMessage({ audioRef }: GuideMessageProps) {
   const voiceGender = selectedVoice?.gender || '-';
   const flagImage = selectedVoice?.flag || '';
 
+  const isRenderSound = status == 'voice' || status == 'script';
+
   // 현재 단계 결정
   const currentStep = STEP_ORDER.includes(status as any) ? STEP_ORDER.indexOf(status as any) : 0;
-
-  // 현재 단계가 '음성 설정' 단계인지 확인 (2단계 = 인덱스 1)
-  const isVoiceStep = currentStep === 1;
 
   // 목소리 재생 함수
   const playVoice = () => {
@@ -158,7 +156,7 @@ function GuideMessage({ audioRef }: GuideMessageProps) {
   // 아바타 선택 단계인 경우 가이드 메시지 표시
   if (currentStep === 0) {
     return (
-      <Container>
+      <Container isCentered={!isRenderSound}>
         <Message>{t('Nova.aiVideo.avatarCard.guide')}</Message>
       </Container>
     );
@@ -166,9 +164,9 @@ function GuideMessage({ audioRef }: GuideMessageProps) {
 
   // 나머지 단계에서는 아바타 정보 표시
   return (
-    <Container isActive={isVoiceStep}>
+    <Container isCentered={!isRenderSound}>
       <InfoContainer>
-        <VoiceName>{voiceName}</VoiceName>
+        <VoiceName isCentered={!isRenderSound}>{voiceName}</VoiceName>
         <Details>
           {voiceLanguage && (
             <>
@@ -184,7 +182,7 @@ function GuideMessage({ audioRef }: GuideMessageProps) {
           )}
         </Details>
       </InfoContainer>
-      {currentStep > 0 && renderSoundIcon()}
+      {isRenderSound && renderSoundIcon()}
     </Container>
   );
 }

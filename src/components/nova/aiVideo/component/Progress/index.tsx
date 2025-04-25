@@ -1,11 +1,9 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction } from 'react';
+import { useTranslation } from 'react-i18next';
 
-import { NOVA_TAB_TYPE } from '../../../../../constants/novaTapTypes';
-import { selectPageResult } from '../../../../../store/slices/nova/pageStatusSlice';
-import { useAppSelector } from '../../../../../store/store';
+import Spinner from '../../../../../img/light/spinner.webp';
 
 import * as S from './style';
-import { Container, PercentGuide, ProgressBar } from './style';
 
 interface ProgressProps {
   progress: number;
@@ -13,13 +11,13 @@ interface ProgressProps {
 }
 
 export default function Progress({ progress, setProgress }: ProgressProps) {
-  const result = useAppSelector(selectPageResult(NOVA_TAB_TYPE.aiVideo));
+  const { t } = useTranslation();
 
   return (
-    <S.Container isCircle={result?.info.selectedAvatar?.avatar_style === 'circle'}>
+    <S.Container>
       <S.PercentGuide>
-        <span>{`${progress}% 진행 중`}</span>
-        <S.ProgressBar variant="determinate" value={progress} />
+        <img src={Spinner} alt="spinner" width={24} height={24} />
+        <span>{`${progress}% ${t('Nova.aiVideo.loading.complete')}`}</span>
       </S.PercentGuide>
     </S.Container>
   );

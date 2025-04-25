@@ -1,36 +1,27 @@
 import { LinearProgress } from '@mui/material';
 import styled from 'styled-components';
 
-export const Container = styled.div<{ isCircle: boolean }>`
+export const Container = styled.div`
   width: 100%;
-  height: ${({ isCircle }) => (isCircle ? '233px' : '180px')};
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  height: 48px;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  padding: 0 25px;
-  background-color: ${({ theme }) =>
-    theme.mode === 'light' ? 'rgba(0,0,0,0.4)' : 'rgba(0,0,0,0.7)'};
-  border-radius: 12px;
+  align-items: center;
+  border-radius: 8px;
+  background-color: ${({ theme }) => theme.color.background.selected};
 `;
 
 export const PercentGuide = styled.div`
   width: 100%;
   display: flex;
-  flex-direction: column;
   justify-content: center;
-  gap: 12px;
+  gap: 4px;
 
   span {
     font-size: 16px;
     font-weight: 500;
     line-height: 24px;
-    color: var(--white);
+    color: ${({ theme }) => theme.color.text.main};
     text-align: center;
   }
 `;
