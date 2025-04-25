@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import Lottie from 'react-lottie-player';
 import { css } from 'styled-components';
 
 import { Avatars, InitAvatarInfo } from '../../../../constants/heygenTypes';
@@ -10,12 +9,10 @@ import CircleDarkIcon from '../../../../img/dark/ico_circle.svg';
 import CircleSelectedDarkIcon from '../../../../img/dark/ico_circle_selected.svg';
 import SqureDarkIcon from '../../../../img/dark/ico_square.svg';
 import SqureSelectedDarkIcon from '../../../../img/dark/ico_squre_selected.svg';
-import darkSkeleton from '../../../../img/dark/nova/aiVideo/skeleton_thumbnail_avatar.json';
 import CircleLightIcon from '../../../../img/light/ico_circle.svg';
 import CircleSelectedLightIcon from '../../../../img/light/ico_circle_selected.svg';
 import SqureLightIcon from '../../../../img/light/ico_square.svg';
 import SqureSelectedLightIcon from '../../../../img/light/ico_square_selected.svg';
-import lightSkeleton from '../../../../img/light/nova/aiVideo/skeleton_thumbnail_avatar.json';
 import {
   selectPageResult,
   setPageStatus,
@@ -27,7 +24,6 @@ import Button from '../../../buttons/Button';
 import { useGetAvatars } from '../../../hooks/nova/use-get-avatars';
 import Radio from '../../../radio';
 import AvatarCard from '../component/AvatarCard';
-import AvatarSkeleton from '../component/AvatarSkeleton';
 import HeygenLogo from '../component/HeygenLogo';
 
 import * as S from './style';
@@ -120,7 +116,6 @@ export default function Avatar() {
   const handleGenderChange = (newGender: string) => {
     setGender(newGender);
 
-    // 성별 변경 후 필터링된 아바타 확인
     setTimeout(() => {
       const filteredAvatars = result?.info?.avatars?.filter(
         (avatar: Avatars) => newGender === 'all' || avatar.gender === newGender
@@ -234,12 +229,7 @@ export default function Avatar() {
                     const skeletonCount = 4 + (currentAvatars % 4);
                     return Array.from({ length: skeletonCount }, (_, index) => (
                       <S.AvartarContainer key={`skeleton-${index}`} isSelected={false}>
-                        <Lottie
-                          loop
-                          animationData={isLightMode ? lightSkeleton : darkSkeleton}
-                          play
-                          style={{ width: '100%', height: '100%' }}
-                        />
+                        <S.Skeleton />
                       </S.AvartarContainer>
                     ));
                   })() as React.ReactNode)}

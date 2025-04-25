@@ -49,7 +49,7 @@ export default function AvatarCard({
   const audioRef = React.useRef<HTMLAudioElement | null>(null);
 
   const selectedAvatar = result?.info?.selectedAvatar;
-  const avatarStyle = selectedAvatar?.avatar_style;
+  const avatarStyle = selectedAvatar?.avatar_style || 'circle';
   const isCircleStyle = avatarStyle === 'circle';
   const bgColor = selectedAvatar?.background_color || 'transparent';
 
