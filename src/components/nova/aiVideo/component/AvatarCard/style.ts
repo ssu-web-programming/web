@@ -115,6 +115,7 @@ export const AvatarInfo = styled.div<{ isCircle: boolean; isSelected?: boolean }
 `;
 
 export const AvatarStyleContainer = styled.div`
+  max-width: 32px;
   position: absolute;
   right: 0;
   bottom: 0;

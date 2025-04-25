@@ -127,8 +127,8 @@ export default function Loading() {
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'timeout' }));
     } else {
       resetPageState();
+      errorHandle({ code: errCode, credit: leftCredit });
     }
-    errorHandle({ code: errCode, credit: leftCredit });
   };
 
   const generateVideo = async () => {

@@ -29,7 +29,9 @@ export const Form = styled(FormControl)<{ $cssExt?: FlattenSimpleInterpolation }
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 8px 0 12px !important;
+    padding-left: 10px;
+    padding-top: 4px;
+    padding-bottom: 4px;
     border: 1px solid ${({ theme }) => theme.color.border.gray03};
     border-radius: 8px;
     box-sizing: border-box;

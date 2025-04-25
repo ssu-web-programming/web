@@ -248,7 +248,7 @@ export default function Voice() {
                 isDriver={true}
                 selectBoxCssExt={css`
                   min-width: auto;
-                  max-width: 58px;
+                  max-width: 60px;
                   padding: 0 !important;
                   justify-content: flex-start;
                   border: none;
