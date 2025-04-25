@@ -5,7 +5,11 @@ import styled from 'styled-components';
 
 import { NOVA_TAB_TYPE } from '../../constants/novaTapTypes';
 import { ReactComponent as BangIcon } from '../../img/light/bang_circle.svg';
-import { selectPageResult, setPageStatus } from '../../store/slices/nova/pageStatusSlice';
+import {
+  selectPageResult,
+  selectPageService,
+  setPageStatus
+} from '../../store/slices/nova/pageStatusSlice';
 import { selectTabSlice } from '../../store/slices/tabSlice';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { useChangeBackground } from '../hooks/nova/useChangeBackground';
@@ -69,16 +73,26 @@ const ButtonWrap = styled.div`
   cursor: pointer;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 
+  div {
+    position: absolute;
+    right: 12px;
+    display: flex;
+    gap: 2px;
+
+    span {
+      font-size: 14px;
+      font-weight: 500;
+    }
+    img {
+      width: 20px;
+    }
+  }
+
   span {
     font-size: 16px;
     font-weight: 500;
     line-height: 24px;
     color: white;
-  }
-
-  img {
-    position: absolute;
-    right: 12px;
   }
 `;
 
@@ -87,6 +101,7 @@ export default function TimeOut() {
   const dispatch = useAppDispatch();
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
   const result = useAppSelector(selectPageResult(selectedNovaTab));
+  const service = useAppSelector(selectPageService(selectedNovaTab));
   const { handleConver2DTo3D } = useConvert2DTo3D();
   const { handleRemoveBackground } = useRemoveBackground();
   const { handleChangeBackground } = useChangeBackground();
@@ -139,7 +154,10 @@ export default function TimeOut() {
         </ContentWrap>
         <ButtonWrap onClick={handleRetry}>
           <span>{t(`Nova.TimeOut.Retry`)}</span>
-          <img src={CreditColorIcon} alt="credit" />
+          <div>
+            <img src={CreditColorIcon} alt="credit" />
+            <span>{service[0].deductCredit}</span>
+          </div>
         </ButtonWrap>
       </Wrap>
     </Container>

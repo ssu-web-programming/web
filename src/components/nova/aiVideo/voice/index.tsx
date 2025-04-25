@@ -81,23 +81,33 @@ export default function Voice() {
   }, []);
 
   useEffect(() => {
-    if (result?.info.selectedAvatar.voice.voice_id === '' && result?.info.voices?.length > 0) {
+    // selectedAvatar나 voice가 undefined인 경우를 체크
+    if (
+      result?.info?.voices?.length > 0 &&
+      result?.info?.selectedAvatar?.avatar?.avatar_id &&
+      (!result?.info?.selectedAvatar?.voice || result?.info?.selectedAvatar?.voice?.voice_id === '')
+    ) {
+      // 기본 음성 선택
       dispatch(
         updatePageResult({
           tab: NOVA_TAB_TYPE.aiVideo,
           result: {
             info: {
               ...result?.info,
-              selectedAvatar: { ...result.info.selectedAvatar, voice: result.info.voices[0] }
+              selectedAvatar: {
+                ...result.info.selectedAvatar,
+                voice: result.info.voices[0]
+              }
             }
           }
         })
       );
     }
-  }, [result?.info.voices]);
+  }, [result?.info?.voices, result?.info?.selectedAvatar]);
 
   useEffect(() => {
-    if (!result?.info?.voices) return;
+    // 선택된 아바타나 아바타 목록이 없으면 처리하지 않음
+    if (!result?.info?.voices || !result?.info?.selectedAvatar?.avatar) return;
 
     // 중복 제거 및 필터링
     const uniqueVoices = new Map<string, Voices>();
@@ -118,7 +128,7 @@ export default function Voice() {
     if (selectedLanguage !== 'all' && newFilteredVoices.length < 5 && !loading) {
       getVoices(selectedGender, selectedLanguage);
     }
-  }, [result?.info?.voices, selectedGender, selectedLanguage]);
+  }, [result?.info?.voices, selectedGender, selectedLanguage, result?.info?.selectedAvatar]);
 
   // 무한 스크롤 설정
   useEffect(() => {
@@ -153,7 +163,8 @@ export default function Voice() {
 
   // 목소리 선택 핸들러
   const changeSelectedVoice = (voice: Voices) => {
-    if (!result || !result.info.voices) return;
+    // 선택된 아바타가 없으면 변경하지 않음
+    if (!result || !result.info.voices || !result?.info?.selectedAvatar?.avatar) return;
 
     dispatch(
       updatePageResult({
@@ -375,6 +386,7 @@ export default function Voice() {
               variant="white"
               width={'full'}
               height={48}
+              disable={loading}
               cssExt={css`
                 display: flex;
                 gap: 4px;
@@ -390,6 +402,7 @@ export default function Voice() {
               variant="purple"
               width={'full'}
               height={48}
+              disable={loading}
               cssExt={css`
                 display: flex;
                 gap: 4px;

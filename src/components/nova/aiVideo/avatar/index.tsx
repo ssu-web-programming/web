@@ -254,6 +254,7 @@ export default function Avatar() {
             width={'full'}
             height={48}
             onClick={handleNext}
+            disable={isLoading}
             cssExt={css`
               display: flex;
               gap: 4px;

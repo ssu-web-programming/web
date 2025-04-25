@@ -28,8 +28,10 @@ export default function Script() {
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const result = useAppSelector(selectPageResult(NOVA_TAB_TYPE.aiVideo));
   const status = useAppSelector(selectPageStatus(NOVA_TAB_TYPE.aiVideo));
-  const [text, setText] = useState(result?.info.selectedAvatar.input_text);
-  const [isEnabled, setIsEnabled] = useState(text.length);
+
+  const defaultText = result?.info?.selectedAvatar?.input_text || '';
+  const [text, setText] = useState(defaultText);
+  const [isEnabled, setIsEnabled] = useState(defaultText.length > 0);
 
   const isScriptStep = status === 'script';
 
@@ -52,6 +54,9 @@ export default function Script() {
   };
 
   const selectAvatarScript = () => {
+    // selectedAvatar가 없으면 실행하지 않음
+    if (!result?.info?.selectedAvatar) return;
+
     dispatch(
       updatePageResult({
         tab: NOVA_TAB_TYPE.aiVideo,
@@ -59,7 +64,7 @@ export default function Script() {
           info: {
             ...result?.info,
             selectedAvatar: {
-              ...result?.info?.selectedAvatar,
+              ...result.info.selectedAvatar,
               input_text: text
             }
           }

@@ -6,7 +6,8 @@ import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import {
   selectPageResult,
   selectPageStatus,
-  setPageStatus
+  setPageStatus,
+  updatePageResult
 } from '../../../store/slices/nova/pageStatusSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { useGetAvatars } from '../../hooks/nova/use-get-avatars';
@@ -43,14 +44,20 @@ export default function AIVideo() {
   const fetchInitialData = async () => {
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'progress' }));
 
-    if (!result?.info.avatars) {
-      await getAvatars();
-    }
-    if (!result?.info.voices) {
-      await getVoices('all', 'all');
-    }
-    if (!result?.info.languages) {
-      await getLanguages();
+    try {
+      if (!result?.info.avatars) {
+        await getAvatars();
+      }
+
+      if (!result?.info.voices) {
+        await getVoices('all', 'all');
+      }
+
+      if (!result?.info.languages) {
+        await getLanguages();
+      }
+    } catch (error) {
+      console.error('데이터 로드 실패:', error);
     }
   };
 
@@ -59,6 +66,32 @@ export default function AIVideo() {
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: status }));
     });
   }, []);
+
+  // 아바타 로드 완료 시 첫 번째 아바타 자동 선택
+  useEffect(() => {
+    if (
+      result?.info?.avatars &&
+      result.info.avatars.length > 0 &&
+      (!result?.info?.selectedAvatar?.avatar || !result?.info?.selectedAvatar?.avatar?.avatar_id)
+    ) {
+      dispatch(
+        updatePageResult({
+          tab: NOVA_TAB_TYPE.aiVideo,
+          result: {
+            info: {
+              ...result?.info,
+              selectedAvatar: {
+                ...(result?.info?.selectedAvatar || {}),
+                avatar: result.info.avatars[0],
+                voice: { voice_id: '' },
+                input_text: ''
+              }
+            }
+          }
+        })
+      );
+    }
+  }, [result?.info?.avatars]);
 
   const renderStepContent = () => {
     if (activeStep === 0) {
