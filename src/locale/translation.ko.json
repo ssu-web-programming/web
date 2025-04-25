@@ -574,7 +574,7 @@
           "gender": "전체 성별",
           "male": "남성",
           "female": "여성",
-          "country": "전체 국가"
+          "language": "전체 언어"
         }
       },
       "addScript": {

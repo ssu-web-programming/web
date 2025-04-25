@@ -268,7 +268,7 @@ export default function Voice() {
               {result?.info.languages && (
                 <SelectBox
                   menuItem={[
-                    { key: 'all', title: t('Nova.aiVideo.selectVoice.selectBox.country') },
+                    { key: 'all', title: t('Nova.aiVideo.selectVoice.selectBox.language') },
                     ...(result?.info.languages ?? []).map((lang: { id: string; name: string }) => ({
                       key: lang.id,
                       title: lang.name
@@ -276,7 +276,7 @@ export default function Voice() {
                   ]}
                   selectedItem={selectedLanguage}
                   setSelectedItem={handleLanguageChange}
-                  placeHolder={t('Nova.aiVideo.selectVoice.selectBox.country') || ''}
+                  placeHolder={t('Nova.aiVideo.selectVoice.selectBox.language') || ''}
                   isMenuAbove={false}
                   minWidth={128}
                   maxHeight={228}

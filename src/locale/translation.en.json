@@ -571,7 +571,7 @@
           "gender": "All genders",
           "male": "Male",
           "female": "Female",
-          "country": "All countries"
+          "language": "All languages"
         }
       },
       "addScript": {
