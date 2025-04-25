@@ -28,10 +28,30 @@ export default function Script() {
   const { isLightMode } = useAppSelector(themeInfoSelector);
   const result = useAppSelector(selectPageResult(NOVA_TAB_TYPE.aiVideo));
   const status = useAppSelector(selectPageStatus(NOVA_TAB_TYPE.aiVideo));
-  const [text, setText] = useState(result?.info.selectedAvatar.input_text);
-  const [isEnabled, setIsEnabled] = useState(text.length);
+
+  // 선택된 아바타가 없거나 input_text가 undefined일 경우 빈 문자열로 초기화
+  const defaultText = result?.info?.selectedAvatar?.input_text || '';
+  const [text, setText] = useState(defaultText);
+  const [isEnabled, setIsEnabled] = useState(defaultText.length > 0);
 
   const isScriptStep = status === 'script';
+
+  // 선택된 아바타가 없으면 음성 페이지로 리다이렉션
+  useEffect(() => {
+    if (!result?.info?.selectedAvatar?.avatar?.avatar_id) {
+      console.warn('선택된 아바타가 없습니다. 음성 선택 페이지로 이동합니다.');
+      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'voice' }));
+      return;
+    }
+
+    if (!result?.info?.selectedAvatar?.voice?.voice_id) {
+      console.warn('선택된 음성이 없습니다. 음성 선택 페이지로 이동합니다.');
+      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'voice' }));
+      return;
+    }
+
+    dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'script' }));
+  }, []);
 
   useEffect(() => {
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'script' }));
@@ -52,6 +72,9 @@ export default function Script() {
   };
 
   const selectAvatarScript = () => {
+    // selectedAvatar가 없으면 실행하지 않음
+    if (!result?.info?.selectedAvatar) return;
+
     dispatch(
       updatePageResult({
         tab: NOVA_TAB_TYPE.aiVideo,
@@ -59,7 +82,7 @@ export default function Script() {
           info: {
             ...result?.info,
             selectedAvatar: {
-              ...result?.info?.selectedAvatar,
+              ...result.info.selectedAvatar,
               input_text: text
             }
           }

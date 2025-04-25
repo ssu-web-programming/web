@@ -83,7 +83,8 @@ export default function AIVideo() {
               selectedAvatar: {
                 ...(result?.info?.selectedAvatar || {}),
                 avatar: result.info.avatars[0],
-                voice: { voice_id: '' }
+                voice: { voice_id: '' },
+                input_text: ''
               }
             }
           }
