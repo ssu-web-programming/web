@@ -82,7 +82,8 @@ export default function AIVideo() {
               ...result?.info,
               selectedAvatar: {
                 ...(result?.info?.selectedAvatar || {}),
-                avatar: result.info.avatars[0]
+                avatar: result.info.avatars[0],
+                voice: { voice_id: '' }
               }
             }
           }
