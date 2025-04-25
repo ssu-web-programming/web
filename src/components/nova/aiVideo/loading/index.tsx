@@ -44,7 +44,7 @@ export default function Loading() {
   });
 
   useEffect(() => {
-    if (result?.info.selectedAvatar.video.id === '') {
+    if (!result?.info.selectedAvatar.video) {
       generateVideo();
     }
   }, []);
@@ -68,7 +68,7 @@ export default function Loading() {
   }, [result?.info.selectedAvatar.startTime]);
 
   useEffect(() => {
-    if (result?.info.selectedAvatar.video.id) {
+    if (result?.info.selectedAvatar.video?.id) {
       pollingRef.current = setInterval(
         () => pollingVideo(result?.info.selectedAvatar.video.id),
         POLLING_INTERVAL
@@ -80,7 +80,7 @@ export default function Loading() {
         clearInterval(pollingRef.current);
       }
     };
-  }, [result?.info.selectedAvatar.video.id]);
+  }, [result?.info.selectedAvatar.video?.id]);
 
   // dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'script' }));
   const startTimer = (savedStartTime?: number) => {
