@@ -81,7 +81,11 @@ export default function Voice() {
   }, []);
 
   useEffect(() => {
-    if (result?.info.selectedAvatar.voice.voice_id === '' && result?.info.voices?.length > 0) {
+    if (
+      result?.info?.selectedAvatar?.avatar?.avatar_id &&
+      result?.info.selectedAvatar.voice.voice_id === '' &&
+      result?.info.voices?.length > 0
+    ) {
       dispatch(
         updatePageResult({
           tab: NOVA_TAB_TYPE.aiVideo,
@@ -94,7 +98,7 @@ export default function Voice() {
         })
       );
     }
-  }, [result?.info.voices]);
+  }, [result?.info.voices, result?.info?.selectedAvatar?.avatar]);
 
   useEffect(() => {
     if (!result?.info?.voices) return;
@@ -268,7 +272,7 @@ export default function Voice() {
               {result?.info.languages && (
                 <SelectBox
                   menuItem={[
-                    { key: 'all', title: t('Nova.aiVideo.selectVoice.selectBox.country') },
+                    { key: 'all', title: t('Nova.aiVideo.selectVoice.selectBox.language') },
                     ...(result?.info.languages ?? []).map((lang: { id: string; name: string }) => ({
                       key: lang.id,
                       title: lang.name
@@ -276,7 +280,7 @@ export default function Voice() {
                   ]}
                   selectedItem={selectedLanguage}
                   setSelectedItem={handleLanguageChange}
-                  placeHolder={t('Nova.aiVideo.selectVoice.selectBox.country') || ''}
+                  placeHolder={t('Nova.aiVideo.selectVoice.selectBox.language') || ''}
                   isMenuAbove={false}
                   minWidth={128}
                   maxHeight={228}
@@ -375,6 +379,7 @@ export default function Voice() {
               variant="white"
               width={'full'}
               height={48}
+              disable={loading}
               cssExt={css`
                 display: flex;
                 gap: 4px;
@@ -390,6 +395,7 @@ export default function Voice() {
               variant="purple"
               width={'full'}
               height={48}
+              disable={loading}
               cssExt={css`
                 display: flex;
                 gap: 4px;
