@@ -54,7 +54,6 @@ export default function Script() {
   };
 
   const selectAvatarScript = () => {
-    // selectedAvatar가 없으면 실행하지 않음
     if (!result?.info?.selectedAvatar) return;
 
     dispatch(

@@ -48,20 +48,15 @@ export default function AvatarCard({
   const status = useAppSelector(selectPageStatus(NOVA_TAB_TYPE.aiVideo));
   const audioRef = React.useRef<HTMLAudioElement | null>(null);
 
-  // Redux에서 필요한 정보 직접 가져오기
   const selectedAvatar = result?.info?.selectedAvatar;
   const avatarStyle = selectedAvatar?.avatar_style;
   const isCircleStyle = avatarStyle === 'circle';
-  const bgColor = selectedAvatar?.background_color || '#b2c7ea';
+  const bgColor = selectedAvatar?.background_color || 'transparent';
 
-  // 이미지 URL 결정
   const imageUrl =
     image || selectedAvatar?.avatar?.preview_image_url || selectedAvatar?.avatar?.talking_photo_url;
 
-  // 음성 정보
   const voiceName = name || selectedAvatar?.voice?.name || '-';
-  const voiceLanguage = country || selectedAvatar?.voice?.language || '-';
-  const voiceGender = gender || selectedAvatar?.voice?.gender || '-';
 
   const selectAvatarBackground = (color: string) => {
     dispatch(

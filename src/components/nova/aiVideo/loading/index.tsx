@@ -82,7 +82,6 @@ export default function Loading() {
     };
   }, [result?.info.selectedAvatar.video?.id]);
 
-  // dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'script' }));
   const startTimer = (savedStartTime?: number) => {
     if (timerRef.current.interval) return;
 
@@ -201,7 +200,7 @@ export default function Loading() {
         body: JSON.stringify({ video_id: videoId })
       });
 
-      const { data } = await res.json();
+      const { data, success } = await res.json();
       if (data.status === EVideoStatus.completed) {
         stopTimer();
         setProgress(100);
@@ -242,7 +241,9 @@ export default function Loading() {
             function_result: true
           }
         });
-      } else {
+      }
+
+      if (!success) {
         const { leftCredit } = calLeftCredit(res.headers);
         handleAIVideoError(data.error.code, Number(leftCredit));
         stopTimer();
