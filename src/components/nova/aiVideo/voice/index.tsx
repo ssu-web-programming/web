@@ -150,7 +150,7 @@ export default function Voice() {
           getVoices(selectedGender, selectedLanguage);
         }
       },
-      { threshold: 1 }
+      { threshold: 0.1, root: null }
     );
 
     if (lastVoiceRef.current) {
