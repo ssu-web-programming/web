@@ -106,6 +106,10 @@ export function useGetVoices() {
             }
           })
         );
+
+        if (data.voices.length < 10) {
+          setHasMoreMap((prev) => ({ ...prev, [filterKey]: false }));
+        }
       } else {
         setHasMoreMap((prev) => ({ ...prev, [filterKey]: false }));
       }
