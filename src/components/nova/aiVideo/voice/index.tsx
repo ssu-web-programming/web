@@ -263,8 +263,6 @@ export default function Voice() {
                   padding: 0 !important;
                   justify-content: flex-start;
                   border: none;
-                  border-radius: 99px;
-                  background-color: ${isLightMode ? 'var(--gray-gray-10)' : 'var(--gray-gray-90)'};
 
                   div {
                     font-size: 16px !important;
@@ -300,10 +298,6 @@ export default function Voice() {
                     padding: 0 !important;
                     justify-content: flex-start;
                     border: none;
-                    border-radius: 99px;
-                    background-color: ${isLightMode
-                      ? 'var(--gray-gray-10)'
-                      : 'var(--gray-gray-90)'};
 
                     div {
                       font-size: 16px !important;
