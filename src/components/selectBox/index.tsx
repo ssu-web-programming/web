@@ -29,6 +29,7 @@ interface SelectBoxProps {
   isMenuAbove?: boolean;
   isSelectedHighlighted?: boolean;
   isDriver?: boolean;
+  isDisabled?: boolean;
   selectBoxCssExt?: FlattenSimpleInterpolation;
   innerBoxCssExt?: FlattenSimpleInterpolation;
 }
@@ -47,6 +48,7 @@ export default function SelectBox({
   isMenuAbove = true,
   isSelectedHighlighted = true,
   isDriver = false,
+  isDisabled = false,
   selectBoxCssExt,
   innerBoxCssExt
 }: SelectBoxProps) {
@@ -62,6 +64,7 @@ export default function SelectBox({
         <S.StyledSelect
           value={selectedItem ?? placeHolder}
           onChange={handleChange}
+          disabled={isDisabled}
           IconComponent={isLightMode ? ArrowLightIcon : ArrowDarkIcon}
           MenuProps={{
             PaperProps: {

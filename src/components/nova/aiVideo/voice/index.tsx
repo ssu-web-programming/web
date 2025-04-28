@@ -257,6 +257,7 @@ export default function Voice() {
                 gap={6}
                 isSelectedHighlighted={false}
                 isDriver={true}
+                isDisabled={loading}
                 selectBoxCssExt={css`
                   min-width: auto;
                   max-width: 60px;
@@ -293,6 +294,7 @@ export default function Voice() {
                   paddingY={16}
                   isSelectedHighlighted={false}
                   isDriver={true}
+                  isDisabled={loading}
                   selectBoxCssExt={css`
                     min-width: auto;
                     padding: 0 !important;
