@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   width: 100%;
-  height: 100%;
+  height: calc(100% - 72px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -14,56 +14,63 @@ export const TitleWrap = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
 
-  .wrap {
-    display: flex;
-    gap: 4px;
-  }
-
-  .title,
-  .show {
+  .title {
     font-size: 16px;
     font-weight: 500;
     line-height: 24px;
     color: ${({ theme }) => theme.color.text.gray04};
   }
-
-  .show {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  button {
+    min-width: auto;
+    padding: 0;
   }
 `;
 
-export const VoiceContainer = styled.div`
+export const ScriptContainer = styled.div`
   width: 100%;
+  min-height: 204px;
   display: flex;
   flex-direction: column;
+  flex: 1;
   gap: 8px;
 `;
 
-export const TextWrap = styled.div<{ isActive: boolean }>`
+export const TextWrap = styled.div`
   width: 100%;
-  height: 188px;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
   padding: 8px 12px;
   gap: 8px;
-  border: 1px solid
-    ${({ isActive, theme }) => (isActive ? 'var(--ai-purple-50-main)' : theme.color.border.gray01)};
+  border: 2px solid var(--ai-purple-50-main);
   border-radius: 8px;
   background: ${({ theme }) => (theme.mode === 'light' ? 'var(--white)' : 'none')};
 
-  .length {
+  .length-wrapper {
     width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  .length {
     font-size: 12px;
     font-weight: 400;
     line-height: 14.32px;
-    text-align: left;
+    text-align: right;
     color: ${({ theme }) => theme.color.text.gray09};
+  }
+
+  .tooltip-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 `;
 
@@ -81,12 +88,15 @@ export const TextArea = styled.textarea<{ isEnabled: boolean }>`
     isEnabled ? theme.color.text.gray04 : theme.color.text.gray01};
 `;
 
-export const CreditInfo = styled.div`
-  width: 37px;
-  position: absolute;
-  right: 16px;
+export const ButtonGroup = styled.div`
+  width: 100%;
   display: flex;
-  gap: 0.5px;
+  gap: 8px;
+`;
+
+export const CreditInfo = styled.div`
+  display: flex;
+  width: 37px;
 
   img {
     width: 20px;
@@ -99,11 +109,4 @@ export const CreditInfo = styled.div`
     font-weight: 500;
     line-height: 21px;
   }
-`;
-
-export const LogoWrap = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
 `;

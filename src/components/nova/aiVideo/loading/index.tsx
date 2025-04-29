@@ -11,12 +11,14 @@ import { NOVA_TAB_TYPE } from '../../../../constants/novaTapTypes';
 import { getServiceLoggingInfo, SERVICE_TYPE } from '../../../../constants/serviceType';
 import {
   resetPageData,
+  resetPageResult,
   selectPageResult,
+  setPageResult,
   setPageStatus,
   updatePageResult
 } from '../../../../store/slices/nova/pageStatusSlice';
 import { activeToast } from '../../../../store/slices/toastSlice';
-import { getCurrentFile } from '../../../../store/slices/uploadFiles';
+import { getCurrentFile, setDriveFiles, setLocalFiles } from '../../../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../../../store/store';
 import Bridge from '../../../../util/bridge';
 import { calLeftCredit } from '../../../../util/common';
@@ -42,7 +44,7 @@ export default function Loading() {
   });
 
   useEffect(() => {
-    if (result?.info.selectedAvatar.video.id === '') {
+    if (!result?.info.selectedAvatar.video) {
       generateVideo();
     }
   }, []);
@@ -66,7 +68,7 @@ export default function Loading() {
   }, [result?.info.selectedAvatar.startTime]);
 
   useEffect(() => {
-    if (result?.info.selectedAvatar.video.id) {
+    if (result?.info.selectedAvatar.video?.id) {
       pollingRef.current = setInterval(
         () => pollingVideo(result?.info.selectedAvatar.video.id),
         POLLING_INTERVAL
@@ -78,9 +80,8 @@ export default function Loading() {
         clearInterval(pollingRef.current);
       }
     };
-  }, [result?.info.selectedAvatar.video.id]);
+  }, [result?.info.selectedAvatar.video?.id]);
 
-  // dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'script' }));
   const startTimer = (savedStartTime?: number) => {
     if (timerRef.current.interval) return;
 
@@ -112,6 +113,20 @@ export default function Loading() {
     if (timerRef.current.interval) {
       clearInterval(timerRef.current.interval);
       timerRef.current.interval = null;
+    }
+  };
+
+  const resetPageState = () => {
+    dispatch(resetPageData(NOVA_TAB_TYPE.aiVideo));
+    dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'home' }));
+  };
+
+  const handleAIVideoError = (errCode: string, leftCredit: number) => {
+    if (errCode === 'Timeout') {
+      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'timeout' }));
+    } else {
+      resetPageState();
+      errorHandle({ code: errCode, credit: leftCredit });
     }
   };
 
@@ -165,16 +180,13 @@ export default function Loading() {
         );
       } else {
         const { leftCredit } = calLeftCredit(res.headers);
-        errorHandle({ code: response.error.code, credit: leftCredit });
+        handleAIVideoError(response.error.code, Number(leftCredit));
         stopTimer();
-        dispatch(resetPageData(NOVA_TAB_TYPE.aiVideo));
-        dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'home' }));
       }
     } catch (error) {
+      resetPageState();
       errorHandle(error);
       stopTimer();
-      dispatch(resetPageData(NOVA_TAB_TYPE.aiVideo));
-      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'home' }));
     }
   };
 
@@ -188,7 +200,7 @@ export default function Loading() {
         body: JSON.stringify({ video_id: videoId })
       });
 
-      const { data } = await res.json();
+      const { data, success } = await res.json();
       if (data.status === EVideoStatus.completed) {
         stopTimer();
         setProgress(100);
@@ -230,11 +242,16 @@ export default function Loading() {
           }
         });
       }
+
+      if (!success) {
+        const { leftCredit } = calLeftCredit(res.headers);
+        handleAIVideoError(data.error.code, Number(leftCredit));
+        stopTimer();
+      }
     } catch (error) {
-      errorHandle(error);
       stopTimer();
-      dispatch(resetPageData(NOVA_TAB_TYPE.aiVideo));
-      dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.aiVideo, status: 'home' }));
+      resetPageState();
+      errorHandle(error);
       await sendNovaStatus({ name: NOVA_TAB_TYPE.aiVideo, uuid: '' }, 'finish');
 
       await Bridge.callBridgeApi('amplitudeData', {
@@ -263,9 +280,17 @@ export default function Loading() {
         <span className="title">{t('Nova.aiVideo.loading.title')}</span>
         <span className="desc">{t('Nova.aiVideo.loading.desc')}</span>
       </S.Guide>
-      <AvatarCard isShowOnlyCard={true}>
-        <Progress progress={progress} setProgress={setProgress} />
-      </AvatarCard>
+      <AvatarCard
+        isHideColorPicker={true}
+        image={
+          result?.info?.selectedAvatar?.avatar?.preview_image_url ||
+          result?.info?.selectedAvatar?.avatar?.talking_photo_url
+        }
+        name={result?.info?.selectedAvatar?.voice?.name || 'Kim-Professional'}
+        country={result?.info?.selectedAvatar?.voice?.language || 'South Korea'}
+        gender={result?.info?.selectedAvatar?.voice?.gender || 'Female'}
+      />
+      <Progress progress={progress} setProgress={setProgress} />
     </S.Container>
   );
 }

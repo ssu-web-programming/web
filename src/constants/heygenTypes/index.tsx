@@ -76,6 +76,6 @@ export const InitAvatarInfo: AvatarInfo = {
   avatar_type: 'avatar',
   avatar_style: 'circle',
   input_text: '',
-  background_color: '#e8ebed',
+  background_color: 'transparent',
   startTime: null
 };

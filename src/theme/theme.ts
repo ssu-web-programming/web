@@ -21,6 +21,8 @@ export const lightTheme = {
       gray12: 'var(--gray-gray-15)',
       gray13: 'var(--gray-gray-22)',
       gray14: 'var(--white)',
+      gray15: 'var(--gray-gray-40)',
+      gray16: 'var(--gray-gray-20)',
       yellow01: 'var(--yellow-yellow-95)',
       yellow02: 'var(--yellow-yellow-95)',
       purple01: 'var(--ai-purple-50-main)',
@@ -36,7 +38,9 @@ export const lightTheme = {
       gray03: 'var(--gray-gray-40)',
       gray04: 'var(--gray-gray-12)',
       gray05: 'var(--gray-gray-30)',
-      purple01: 'var(--ai-purple-90)'
+      gray06: 'var(--gray-gray-30)',
+      purple01: 'var(--ai-purple-90)',
+      purple02: 'var(--ai-purple-50-main)'
     },
     main: 'var(--ai-purple-50-main)',
     tab: {
@@ -60,9 +64,11 @@ export const lightTheme = {
       gray08: 'var(--gray-gray-60-03)',
       gray09: 'var(--gray-gray-70)',
       gray10: 'var(--gray-gray-80-02)',
+      gray11: 'var(--white)',
       highlight01: 'var(--ai-purple-45)',
       highlight02: 'var(--gray-gray-80-02)',
-      highlight03: 'var(--ai-purple-50-main )'
+      highlight03: 'var(--ai-purple-50-main )',
+      highlight04: 'var(--white)'
     },
     toast: {
       success: {
@@ -101,6 +107,8 @@ export const darkTheme = {
       gray12: 'var(--gray-gray-87)',
       gray13: 'var(--gray-gray-35)',
       gray14: 'var(--gray-gray-90-01)',
+      gray15: 'var(--gray-gray-87)',
+      gray16: 'var(--gray-gray-35)',
       yellow01: 'var(--gray-gray-85)',
       yellow02: 'var(--gray-gray-90)',
       purple01: 'var(--ai-purple-90)',
@@ -116,7 +124,9 @@ export const darkTheme = {
       gray03: 'var(--gray-gray-87)',
       gray04: 'var(--gray-gray-87)',
       gray05: 'var(--gray-gray-35)',
-      purple01: 'var(--ai-purple-80-sub)'
+      gray06: 'var(--gray-gray-90)',
+      purple01: 'var(--ai-purple-80-sub)',
+      purple02: 'var(--ai-purple-90)'
     },
     main: 'var(--ai-purple-50-main)',
     tab: {
@@ -140,9 +150,11 @@ export const darkTheme = {
       gray08: 'var(--gray-gray-35)',
       gray09: 'var(--gray-gray-60)',
       gray10: 'var(--gray-gray-65)',
+      gray11: 'var(--gray-gray-25)',
       highlight01: 'var(--ai-purple-90)',
       highlight02: 'var(--ai-purple-90)',
-      highlight03: 'var(--ai-purple-90)'
+      highlight03: 'var(--ai-purple-90)',
+      highlight04: 'var(--ai-purple-50-main)'
     },
     toast: {
       success: {

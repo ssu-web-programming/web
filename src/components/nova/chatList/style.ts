@@ -67,10 +67,6 @@ export const ChatButtonWrapper = styled.div`
   align-items: center;
   gap: 12px;
   margin-top: 8px;
-
-  button > div {
-    gap: 4px;
-  }
 `;
 
 export const ChatMode = styled.div`

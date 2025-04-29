@@ -4,6 +4,14 @@ export const Container = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
+  flex-direction: column;
+`;
+
+export const ContentContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 16px;
 `;
 
 export const Label = styled.div`

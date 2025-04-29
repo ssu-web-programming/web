@@ -146,7 +146,7 @@
       "StartCreatingImage": "이미지를 생성합니다.",
       "CompleteCreatingImage": "이미지 생성 완료. 원하는 작업을 실행하세요.",
       "CompleteInsertImage": "이미지가 문서에 삽입이 완료 되었습니다.",
-      "ForbiddenWord": "이미지 설명에 부적절한 단어가 포함되어 있습니다. ",
+      "ForbiddenWord": "이미지 설명에 부적절한 단어가 포함되어 있습니다. ",
       "GPTExceededLimit": "채팅한 글자 수가 제한을 초과하여 오류가 발생했습니다. 다시 시도해 주세요."
     },
     "ModelSelect": {
@@ -369,7 +369,7 @@
       "CLAUDE_3_5": {
         "desc": "창의적인 글을 잘 써요",
         "desc_home": "독창적인 이야기 구성과 신선한 아이디어를 제시하는 데 강점을 가지고 있어요",
-        "prompt1": "‘미래의 교육’이라는 주제로 창의적인 글을 작성해줘",
+        "prompt1": "'미래의 교육'이라는 주제로 창의적인 글을 작성해줘",
         "prompt2": "감성적인 브랜드 스토리를 써줘",
         "prompt3": "문학적인 느낌을 살려 연설문을 작성해줘"
       },
@@ -538,9 +538,12 @@
       }
     },
     "aiVideo": {
+      "avatarCard": {
+        "guide": "아바타 선택 후,\n2단계에서 목소리를 설정할 수 있어요"
+      },
       "tooltip": {
         "colorPicker": "배경을 변경해보세요!",
-        "selectVoice": "선택한 목소리의 국적과 스크립트 입력 언어가 일치해야 영상 생성이 가능합니다.",
+        "selectVoice": "선택한 목소리의 국적과 스크립트 입력 언어가\n일치해야 영상 생성이 가능합니다.",
         "addScript": "선택한 목소리의 국적과 스크립트 입력 언어가 일치해야 영상 생성이 가능합니다.\n입력한 스크립트 양에 따라 영상 생성 시간이 달라질 수 있습니다. (100자당 약 5분 소요)"
       },
       "ColorPicker": {
@@ -568,23 +571,26 @@
         "stepTitle": "목소리 선택",
         "title": "아바타 목소리",
         "selectBox": {
-          "gender": "성별",
-          "country": "국가"
+          "gender": "전체 성별",
+          "male": "남성",
+          "female": "여성",
+          "language": "전체 언어"
         }
       },
       "addScript": {
-        "title": "스크립트 추가",
-        "stepTitle": "스크립트 추가",
-        "textAreaPlaceHolder": "아바타가 이야기해 주었으면 하는 스크립트를 이곳에 작성 해 보세요"
+        "title": "대본 작성",
+        "stepTitle": "대본 작성",
+        "textAreaPlaceHolder": "아바타가 말할 내용을 여기에 작성해 보세요"
       },
       "loading": {
         "title": "비디오 생성 중",
-        "desc": "스크립트양에 따라 다소 시간이 소요될 수 있어요.\n생성 중 화면을 유지하면 영상이\n다운로드 폴더에 자동 저장됩니다."
+        "desc": "스크립트양에 따라 다소 시간이 소요될 수 있어요.\n생성 중 화면을 유지하면 영상이\n다운로드 폴더에 자동 저장됩니다.",
+        "complete": "완료"
       },
       "button": {
         "showMore": "더 보기",
         "collapse": "접기",
-        "makeVideo": "AI 비디오 만들기",
+        "generate": "생성하기",
         "next": "다음",
         "prev": "이전",
         "select": "선택하기"
@@ -980,7 +986,7 @@
         "Cancel": "거부"
       },
       "GoToDocSearch": {
-        "Msg": "‘문서 검색’으로 이동 시, NOVA와 함께한 대화는 종료됩니다. 그래도 이동하시겠어요?",
+        "Msg": "'문서 검색'으로 이동 시, NOVA와 함께한 대화는 종료됩니다. 그래도 이동하시겠어요?",
         "Ok": "문서 검색하기"
       },
       "GoToOtherAiFeatures": {

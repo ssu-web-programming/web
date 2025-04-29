@@ -1,79 +1,18 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 export const Container = styled.div`
   width: 100%;
-  height: 100%;
+  height: calc(100% - 72px);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 24px;
-  padding: 12px 16px;
-`;
-
-export const ContentWrap = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-`;
-
-export const AvatarSelectBox = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   gap: 8px;
-`;
-
-export const TitleWrap = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  .title,
-  .show {
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 24px;
-    color: ${({ theme }) => theme.color.text.gray04};
-  }
-
-  .show {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  span {
-    cursor: pointer;
-  }
-`;
-
-export const ButtonWrap = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-`;
-
-export const AvartarList = styled.div`
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(4, 76px);
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 8px;
-  box-sizing: border-box;
+  padding: 8px 16px;
 `;
 
 export const AvartarContainer = styled.div<{ isSelected: boolean }>`
-  width: 76px;
-  height: 76px;
+  width: 100%;
+  aspect-ratio: 1;
   position: relative;
   display: flex;
   align-items: center;
@@ -82,88 +21,125 @@ export const AvartarContainer = styled.div<{ isSelected: boolean }>`
 
 export const OuterBorder = styled.div<{ isSelected: boolean }>`
   display: ${(props) => (props.isSelected ? 'flex' : 'none')};
-  width: 76px;
-  height: 76px;
+  width: 100%;
+  height: 100%;
   position: absolute;
-  border: 2px solid #6f3ad0;
+  border: 2px solid
+    ${({ isSelected, theme }) =>
+      isSelected ? theme.color.border.purple02 : theme.color.border.gray01};
   border-radius: 6px;
   pointer-events: none;
-  z-index: 1;
 `;
 
 export const Image = styled.img`
-  width: 76px;
-  height: 76px;
-  border: 1.27px solid ${({ theme }) => theme.color.border.gray01};
+  width: 100%;
+  height: 100%;
+  border: 1px solid ${({ theme }) => theme.color.border.gray02};
   border-radius: 4px;
   object-fit: cover;
   cursor: pointer;
 `;
 
-export const CheckBox = styled.div`
-  width: 20px;
-  height: 20px;
-  position: absolute;
-  top: 1px;
-  left: 1px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #6f3ad0;
-  border-bottom-right-radius: 8px;
-`;
-
-export const UploadInner = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 12.5px 0;
-`;
-
-export const ImageUploadGuide = styled.div`
+export const AvatarSelectionContent = styled.div`
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-
-  .title {
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 21px;
-    color: ${({ theme }) => theme.color.text.gray04};
-  }
-  .desc {
-    font-size: 12px;
-    font-weight: 500;
-    line-height: 18px;
-    color: ${({ theme }) => theme.color.text.gray07};
-  }
+  gap: 8px;
 `;
 
-export const CreditInfo = styled.div`
-  width: 37px;
-  position: absolute;
-  right: 16px;
-  display: flex;
-  gap: 0.5px;
-
-  img {
-    width: 20px;
-    height: 20px;
-  }
-
-  span {
-    width: 15px;
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 21px;
-  }
-`;
-
-export const LogoWrap = styled.div`
+export const AvatarPreview = styled.div`
   width: 100%;
   display: flex;
+  justify-content: center;
+  margin-bottom: 4px;
+`;
+
+export const AvatarSelectionContainer = styled.div`
+  width: 100%;
+  min-height: 204px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 0;
+  border: 1px solid ${({ theme }) => theme.color.border.gray01};
+  border-radius: 8px;
+  padding: 0;
+  background-color: ${({ theme }) => theme.color.background.white};
+  overflow: hidden;
+`;
+
+export const AvatarFilterSection = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+`;
+
+export const GenderFilter = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+  border-bottom: 1px solid ${({ theme }) => theme.color.border.gray05};
+  background-color: ${({ theme }) => theme.color.background.gray10};
+`;
+
+export const RadioGroup = styled.div`
+  display: flex;
+  gap: 12px;
+  padding: 2px 0;
+`;
+
+export const RadioItem = styled.div`
+  display: flex;
   align-items: center;
-  justify-content: flex-end;
+  gap: 4px;
+`;
+
+export const RadioLabel = styled.span`
+  font-size: 16px;
+  font-weight: 500;
+  color: ${({ theme }) => theme.color.text.gray03};
+`;
+
+export const GridContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow-y: auto;
+  padding: 12px 12px 0 12px;
+`;
+
+export const GridRow = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  width: 100%;
+`;
+
+export const ButtonContainer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+`;
+
+const skeletonPulse = (fromColor: string, toColor: string) => keyframes`
+  0%, 100% {
+    background-color: ${fromColor};
+  }
+  50% {
+    background-color: ${toColor};
+  }
+`;
+export const Skeleton = styled.div`
+  width: 73px;
+  height: 73px;
+  border-radius: 6px;
+  animation: ${({ theme }) =>
+      skeletonPulse(theme.color.background.gray10, theme.color.background.gray16)}
+    2s ease-in-out infinite;
 `;
