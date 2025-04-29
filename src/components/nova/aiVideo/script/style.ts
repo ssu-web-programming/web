@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   width: 100%;
-  height: 100%;
+  height: calc(100% - 72px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -29,16 +29,19 @@ export const TitleWrap = styled.div`
   }
 `;
 
-export const VoiceContainer = styled.div`
+export const ScriptContainer = styled.div`
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
+  flex: 1;
   gap: 8px;
 `;
 
 export const TextWrap = styled.div`
   width: 100%;
-  height: 188px;
+  height: 100%;
+  min-height: 204px;
   display: flex;
   flex-direction: column;
   align-items: center;

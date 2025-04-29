@@ -80,7 +80,7 @@ export default function Script() {
     <>
       <S.Container>
         <AvatarCard isHideColorPicker={true} isScriptStep={isScriptStep} />
-        <S.VoiceContainer>
+        <S.ScriptContainer>
           <S.TitleWrap>
             <span className="title">{t('Nova.aiVideo.addScript.title') || '대본 작성'}</span>
             <ArrowTooltips message={t('Nova.aiVideo.tooltip.addScript')} placement="top-start">
@@ -98,7 +98,7 @@ export default function Script() {
               <span className="length">{text.length}/100</span>
             </div>
           </S.TextWrap>
-        </S.VoiceContainer>
+        </S.ScriptContainer>
         <S.ButtonGroup>
           <Button
             variant="white"
