@@ -2,7 +2,7 @@ import styled, { keyframes } from 'styled-components';
 
 export const Container = styled.div`
   width: 100%;
-  height: 100%;
+  height: calc(100% - 72px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -40,9 +40,9 @@ export const Image = styled.img`
   cursor: pointer;
 `;
 
-// 피그마 스타일 컴포넌트 추가
 export const AvatarSelectionContent = styled.div`
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -57,14 +57,14 @@ export const AvatarPreview = styled.div`
 
 export const AvatarSelectionContainer = styled.div`
   width: 100%;
+  min-height: 204px;
   display: flex;
   flex-direction: column;
+  flex: 1;
   gap: 0;
   border: 1px solid ${({ theme }) => theme.color.border.gray01};
   border-radius: 8px;
   padding: 0;
-  min-height: 328px;
-  max-height: 328px;
   background-color: ${({ theme }) => theme.color.background.white};
   overflow: hidden;
 `;
