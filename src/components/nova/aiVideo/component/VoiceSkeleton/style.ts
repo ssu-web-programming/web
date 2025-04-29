@@ -24,6 +24,7 @@ export const Skeleton = styled.div`
   padding: 12px 16px 12px 12px;
   gap: 7px;
   border: 1px solid ${({ theme }) => theme.color.border.gray02};
+  background-color: ${({ theme }) => theme.color.background.gray01};
 
   .content1 {
     width: 50%;
