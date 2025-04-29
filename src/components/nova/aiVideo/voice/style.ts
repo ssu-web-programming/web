@@ -1,8 +1,8 @@
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 
 export const Container = styled.div`
   width: 100%;
-  height: 100%;
+  height: calc(100% - 72px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -12,9 +12,11 @@ export const Container = styled.div`
 
 export const VoiceContainer = styled.div`
   width: 100%;
+  min-height: 204px;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  overflow: hidden;
 `;
 
 export const VoiceListContainer = styled.div`
@@ -24,7 +26,6 @@ export const VoiceListContainer = styled.div`
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  height: 328px;
 `;
 
 export const FilterRow = styled.div`
