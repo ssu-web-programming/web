@@ -196,7 +196,13 @@
     "SaveCompleted": "保存",
     "SaveFailed": "保存に失敗しました",
     "CopyLinkCompleted": "リンクが正常にコピーされました。",
-    "Success": "成功的に保存されました！"
+    "Success": "成功的に保存されました！",
+    "Chat": {
+      "notSupportedImage": "背景が複雑なため、削除に失敗しました。別の画像でお試しください。"
+    },
+    "RemoveBG": {
+      "failedDueToComplexity": "背景が複雑なため、削除に失敗しました。別の画像でお試しください。"
+    }
   },
   "Offline": {
     "UnstableConnection": "サービス接続に問題が発生しました。",
