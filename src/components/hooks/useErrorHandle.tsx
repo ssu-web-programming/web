@@ -202,16 +202,7 @@ const useErrorHandle = () => {
           break;
         }
         default: {
-          switch (error.code) {
-            case ERR_FOREGROUND: {
-              msg = t(`ToastMsg.RemoveBG.failedDueToComplexity`);
-              break;
-            }
-            case NOT_SUPPORTED_IMAGE: {
-              msg = t(`ToastMsg.Chat.notSupportedImage`);
-              break;
-            }
-          }
+          console.log('code: ', error.code);
 
           switch (error.status) {
             case 401:
@@ -224,6 +215,18 @@ const useErrorHandle = () => {
             default:
               msg = t(`ToastMsg.ErrorMsg`, { code: error.status, msg: error.statusText });
               break;
+          }
+
+          switch (error.code) {
+            case ERR_FOREGROUND: {
+              msg = t(`ToastMsg.RemoveBG.failedDueToComplexity`);
+              console.log('??');
+              break;
+            }
+            case NOT_SUPPORTED_IMAGE: {
+              msg = t(`ToastMsg.Chat.notSupportedImage`);
+              break;
+            }
           }
         }
       }
