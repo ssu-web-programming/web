@@ -44,6 +44,12 @@ export class DocConvertingError extends Error {
   }
 }
 
+export class ModerationBlockedError extends Error {
+  constructor() {
+    super(NOT_SUPPORTED_IMAGE);
+  }
+}
+
 type UnopeanbleType = {
   type: 'PASSWORD' | 'UNOPENABLE_DOCUMENT';
   filename: string;

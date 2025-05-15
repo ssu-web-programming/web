@@ -4,6 +4,7 @@ import {
   ERR_NOT_ONLINE,
   ExceedPoDriveLimitError,
   INVALID_PROMPT,
+  ModerationBlockedError,
   NoCreditError,
   NoFileInDrive,
   NovaNoCreditError
@@ -123,6 +124,11 @@ export function apiWrapper() {
             current,
             necessary
           });
+        } else if (!res.ok && res.status === 400) {
+          const body = await res.json();
+          if (body?.error?.code === 'moderation_blocked') {
+            throw new ModerationBlockedError();
+          }
         }
 
         const body = await res.json();
