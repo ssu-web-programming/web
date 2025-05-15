@@ -9,12 +9,14 @@ import {
   DelayDocConverting,
   DocConvertingError,
   DocUnopenableError,
+  ERR_FOREGROUND,
   ERR_INVALID_SESSION,
   ERR_NOT_ONLINE,
   GPT_EXCEEDED_LIMIT,
   INVALID_PROMPT,
   NoCreditError,
   NoFileInDrive,
+  NOT_SUPPORTED_IMAGE,
   NovaNoCreditError,
   TIME_OUT_ERROR
 } from '../../error/error';
@@ -200,6 +202,17 @@ const useErrorHandle = () => {
           break;
         }
         default: {
+          switch (error.code) {
+            case ERR_FOREGROUND: {
+              msg = t(`ToastMsg.RemoveBG.failedDueToComplexity`);
+              break;
+            }
+            case NOT_SUPPORTED_IMAGE: {
+              msg = t(`ToastMsg.Chat.notSupportedImage`);
+              break;
+            }
+          }
+
           switch (error.status) {
             case 401:
               msg = t(`ToastMsg.UnauthorizedMsg`);

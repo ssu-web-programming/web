@@ -196,7 +196,13 @@
     "SaveCompleted": "저장 완료",
     "SaveFailed": "저장 실패",
     "CopyLinkCompleted": "링크 복사가 완료되었습니다.",
-    "Success": "성공적으로 저장되었어요!"
+    "Success": "성공적으로 저장되었어요!",
+    "Chat": {
+      "notSupportedImage": "저작권 보호된 콘텐츠이거나 지원되지 않는 이미지입니다. 확인 후 다시 시도해 주세요."
+    },
+    "RemoveBG": {
+      "failedDueToComplexity": "이미지 배경이 복잡해 배경 제거에 실패했습니다. 다른 이미지로 시도해 주세요."
+    }
   },
   "Offline": {
     "UnstableConnection": "서비스 접속이 원활하지 않습니다.",
