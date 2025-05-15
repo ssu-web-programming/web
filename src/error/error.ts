@@ -3,6 +3,8 @@ export const ERR_INVALID_SESSION = 'ERR_INVALID_SESSION';
 export const INVALID_PROMPT = 'INVALID_PROMPT';
 export const GPT_EXCEEDED_LIMIT = 'GPT_EXCEEDED_LIMIT';
 export const TIME_OUT_ERROR = 'TIME_OUT_ERROR';
+export const NOT_SUPPORTED_IMAGE = 'moderation_blocked';
+export const ERR_FOREGROUND = 'unknown_foreground';
 const EXCEED_PO_DRIVE_LIMIT = 'EXCEED_PO_DRIVE_LIMIT';
 const ERR_DOC_CONVERT = 'ERR_DOC_CONVERT';
 const ERR_DOC_UNOPENABLE = 'ERR_DOC_UNOPENABLE';
@@ -39,6 +41,12 @@ export class ExceedPoDriveLimitError extends Error {
 export class DocConvertingError extends Error {
   constructor() {
     super(ERR_DOC_CONVERT);
+  }
+}
+
+export class ModerationBlockedError extends Error {
+  constructor() {
+    super(NOT_SUPPORTED_IMAGE);
   }
 }
 

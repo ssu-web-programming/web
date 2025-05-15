@@ -9,14 +9,15 @@ import {
   DelayDocConverting,
   DocConvertingError,
   DocUnopenableError,
+  ERR_FOREGROUND,
   ERR_INVALID_SESSION,
   ERR_NOT_ONLINE,
   GPT_EXCEEDED_LIMIT,
   INVALID_PROMPT,
+  ModerationBlockedError,
   NoCreditError,
   NoFileInDrive,
-  NovaNoCreditError,
-  TIME_OUT_ERROR
+  NovaNoCreditError
 } from '../../error/error';
 import { setOnlineStatus } from '../../store/slices/network';
 import { activeToast } from '../../store/slices/toastSlice';
@@ -180,6 +181,9 @@ const useErrorHandle = () => {
           callback: () => {}
         }
       });
+    } else if (error instanceof ModerationBlockedError) {
+      const msg = t(`ToastMsg.Chat.notSupportedImage`);
+      dispatch(activeToast({ type: 'error', msg }));
     } else {
       let msg: string | React.ReactNode = '';
       switch (error.message) {
@@ -211,6 +215,14 @@ const useErrorHandle = () => {
             default:
               msg = t(`ToastMsg.ErrorMsg`, { code: error.status, msg: error.statusText });
               break;
+          }
+
+          switch (error.code) {
+            case ERR_FOREGROUND: {
+              msg = t(`ToastMsg.RemoveBG.failedDueToComplexity`);
+              console.log('??');
+              break;
+            }
           }
         }
       }

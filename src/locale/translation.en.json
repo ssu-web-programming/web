@@ -196,7 +196,13 @@
     "SaveCompleted": "Saved",
     "SaveFailed": "Failed to save",
     "CopyLinkCompleted": "Link copied successfully.",
-    "Success": "Successfully saved!"
+    "Success": "Successfully saved!",
+    "Chat": {
+      "notSupportedImage": "The content may be copyrighted or unsupported. Please try again."
+    },
+    "RemoveBG": {
+      "failedDueToComplexity": "Background is too complex to remove. Please try another image."
+    }
   },
   "Offline": {
     "UnstableConnection": "Service connectivity issues!",
