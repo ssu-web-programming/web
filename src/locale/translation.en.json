@@ -379,12 +379,12 @@
         "prompt2": "Compose an emotional brand story",
         "prompt3": "Write a speech with a literary touch"
       },
-      "CLAUDE_3_7": {
-        "desc": "Answers complex questions well",
-        "desc_home": "Accurately processes complex content and aids in development",
-        "prompt1": "Make a basic web crawler using Python",
-        "prompt2": "Make complex ideas easy for beginners to grasp",
-        "prompt3": "Rewrite it to make the flow logical and natural"
+      "CLAUDE_4": {
+        "desc": "Summarizes info accurately",
+        "desc_home": "Understands complex context, solves creatively, and handles expert tasks smoothly",
+        "prompt1": "Explain relativity at a middle school level",
+        "prompt2": "Write a deep piece on a philosophical topic",
+        "prompt3": "Suggest 5 marketing campaign ideas"
       },
       "PERPLEXITY": {
         "desc": "Provides accurate web search info",
