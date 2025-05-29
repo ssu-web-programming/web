@@ -1,11 +1,13 @@
 import * as React from 'react';
 import { overlay } from 'overlay-kit';
+import { useTranslation } from 'react-i18next';
 import { css } from 'styled-components';
 
 import GiftIcon from '../../../../img/common/ico_gift.svg';
 import CreditMotionDark from '../../../../img/dark/nova/credit_motion.gif';
 import { ReactComponent as ArrowDownIcon } from '../../../../img/light/ico_arrow_right.svg';
 import CreditMotionLight from '../../../../img/light/nova/credit_motion.gif';
+import { lang } from '../../../../locale';
 import { themeInfoSelector } from '../../../../store/slices/theme';
 import { useAppSelector } from '../../../../store/store';
 import Bridge from '../../../../util/bridge';
@@ -14,6 +16,7 @@ import Button from '../../../buttons/Button';
 import * as S from './style';
 
 export default function CreditOfferContent() {
+  const { t } = useTranslation();
   const isLightMode = useAppSelector(themeInfoSelector);
 
   const handleClose = () => {
@@ -21,7 +24,7 @@ export default function CreditOfferContent() {
   };
 
   const handleBuyCredit = () => {
-    Bridge.callBridgeApi('openWindow', 'https://www.polarisoffice.com/ko/store');
+    Bridge.callBridgeApi('openWindow', `https://www.polarisoffice.com/${lang}/store`);
   };
 
   return (
@@ -29,10 +32,10 @@ export default function CreditOfferContent() {
       <S.ContentWrap>
         <S.TextWrap>
           <div className="title">
-            <span>{`50크레딧을 선물로 드릴게요!`}</span>
+            <span>{t('Nova.Modal.Survey.Result.Gift')}</span>
             <img src={GiftIcon} alt="gift" />
           </div>
-          <span className="desc">{`소중한 의견 감사해요!\n더 좋은 기능으로 보답할게요.`}</span>
+          <span className="desc">{t('Nova.Modal.Survey.Result.Greeting')}</span>
         </S.TextWrap>
         <S.ImageWrap>
           <img src={isLightMode ? CreditMotionLight : CreditMotionDark} alt="credit" />
@@ -53,10 +56,10 @@ export default function CreditOfferContent() {
             opacity: 1;
           `}
           onClick={handleClose}>
-          <span>{'확인'}</span>
+          <span>{t('Nova.Modal.Survey.Result.Confirm')}</span>
         </Button>
         <S.BuyButton onClick={handleBuyCredit}>
-          <span>단품 크레딧 구매하기</span>
+          <span>{t('Nova.Modal.Survey.Result.BuyCredit')}</span>
           <ArrowDownIcon />
         </S.BuyButton>
       </S.ButtonWrap>
