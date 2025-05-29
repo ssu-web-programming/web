@@ -1036,8 +1036,23 @@
       "SelectImg": "Please select an image to analyze.",
       "SelectTranslationFile": "Please select the document you want to translate."
     },
-    "Translate": {
-      "UploadGuide": "Translates PDF, DOCX, and PPTX documents. \n Supported Capacity: Up to 30 MB"
+    "Modal": {
+      "Survey": {
+        "Title": "How was NOVA?",
+        "Desc": "Leave your feedback and get 50 credits!",
+        "Answer": {
+          "Good": "Great",
+          "Bad": "Needs Work"
+        },
+        "SendFeedback": "Send Feedback",
+        "DontShow": "Don’t show for a week",
+        "Result": {
+          "Gift": "We’ll give you 50 credits as a gift!",
+          "Greeting": "Thank you for your valuable feedback! We’ll reward you with better features.",
+          "BuyCredit": "Buy individual credits",
+          "Confirm": "Confirm"
+        }
+      }
     }
   }
 }

@@ -1044,51 +1044,21 @@
       "SelectTranslationFile": "번역하고 싶은 문서를 선택해 보세요."
     },
     "Modal": {
-      "MissionComplete": {
-        "Title": "미션 성공!",
-        "SubTitle": "최대 아이패드 당첨의 기회룰렛을 돌려\n경품을 확인해보세요!",
-        "Desc": "하루 <span class='highlight'>최대 3회</span> 행운권 추첨 가능!",
-        "ButtonText": "룰렛 돌리기"
-      },
-      "PrizeCredit": {
-        "Title": "축 30 크레딧 당첨!",
-        "SubTitle": "크레딧 받고 경품에 다시 도전해 보세요!",
-        "Desc": "* 1일 최대 3회 도전 가능",
-        "ButtonText": "NOVA 사용하기",
-        "LinkText": "AI 무제한 구독 70% 할인 받기"
-      },
-      "NotEnoughHeart": {
-        "Title": "하트를 더 채워주세요!",
-        "SubTitle": "조금만 더 채워서 경품을 받아보세요!",
-        "ButtonText": "NOVA 사용하기",
-        "LinkText": "AI 무제한 구독 70% 할인 받기"
-      },
-      "NextChance": {
-        "Title": "내일 또 만나요!",
-        "SubTitle": "행운권 추첨은 하루 최대 3회까지!\n내일 또 참여해주세요!",
-        "Desc": "매일 00시 기준으로 업데이트 됩니다.",
-        "ButtonText": "이벤트 둘러보기"
-      },
-      "Prize": {
-        "Title": "축 경품 당첨!",
-        "SubTitle": "정보를 입력하고, 경품을 받아가세요!",
-        "Desc": "* 입력하신 내용으로 이벤트 종료 후 경품 안내를 드릴게요.",
-        "ButtonText": "당첨 정보 제출하기",
-        "Input": {
-          "Name": "이름을 입력해 주세요.",
-          "Phone": "전화번호를 입력해 주세요."
+      "Survey": {
+        "Title": "NOVA의 결과가\n만족스러우셨나요?",
+        "Desc": "의견을 남겨주시면 50크레딧을 드려요!",
+        "Answer": {
+          "Good": "좋아요!",
+          "Bad": "아쉬워요"
         },
-        "PrivateInfo": {
-          "Title": "개인정보 수집 안내",
-          "Content1": "개인정보 수집 항목: 이름, 전화번호",
-          "Content2": "수집 및 이용 목적: 기프티콘 발송 및 실물 경품 전달 안내",
-          "Content3": "수집 및 이용 기간: 이벤트 종료 1개월 후까지"
+        "SendFeedback": "의견 보내기",
+        "DontShow": "일주일간 보지않기",
+        "Result": {
+          "Gift": "50크레딧을 선물로 드릴게요!",
+          "Greeting": "소중한 의견 감사해요! 더 좋은 기능으로 보답할게요.",
+          "BuyCredit": "단품 크레딧 구매하기",
+          "Confirm": "확인"
         }
-      },
-      "LuckyDrawComplete": {
-        "Title": "응모가 정상적으로\n완료되었습니다.",
-        "SubTitle": "당첨자 분들께는 이벤트 종료 후\n개별 연락 드릴 예정입니다.",
-        "ButtonText": "NOVA 계속 사용하기"
       }
     }
   }

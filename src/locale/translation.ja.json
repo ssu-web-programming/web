@@ -1027,8 +1027,23 @@
       "SelectImg": "分析したい画像を選んでください。",
       "SelectTranslationFile": "翻訳したい文書を選択してください。"
     },
-    "Translate": {
-      "UploadGuide": "PDF、DOCX、PPTXドキュメントを翻訳します。 \n サポートされる容量：最大30MB"
+    "Modal": {
+      "Survey": {
+        "Title": "NOVAに満足？",
+        "Desc": "ご意見をいただくと50クレジットをプレゼント！",
+        "Answer": {
+          "Good": "満足",
+          "Bad": "不満"
+        },
+        "SendFeedback": "フィードバックを送る",
+        "DontShow": "1週間表示しない",
+        "Result": {
+          "Gift": "50クレジットをプレゼントします！",
+          "Greeting": "貴重なご意見ありがとうございます！さらに良い機能でお応えします。",
+          "BuyCredit": "単品クレジットを購入する",
+          "Confirm": "確認"
+        }
+      }
     }
   }
 }

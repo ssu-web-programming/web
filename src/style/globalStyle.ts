@@ -55,7 +55,8 @@ const GlobalStyle = createGlobalStyle`
     --black-alpha: rgba(0, 0, 0, 0.3);
     
     --deep-navy:#042B48;
-
+      
+    --gray-gray-90-02: #232323;
     --gray-gray-90-01: #26282b;
     --gray-gray-90: #2d2d2d;
     --gray-gray-89: #262626;
