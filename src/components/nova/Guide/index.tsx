@@ -36,7 +36,7 @@ export const Guide = (props: GuideProps) => {
     } else {
       const isVoiceDictation = selectedNovaTab === 'voiceDictation';
 
-      return isVoiceDictation ? VoiceDictationIcon : iconMap[selectedNovaTab];
+      return isVoiceDictation ? VoiceDictationIcon : iconMap[selectedNovaTab][0];
     }
   };
 

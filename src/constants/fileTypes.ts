@@ -125,6 +125,7 @@ export const getValidExt = (tab: NOVA_TAB_TYPE) => {
       return SUPPORT_IMAGE_TYPE.filter(({ extensions }) =>
         ['.jpg', '.jpeg', '.png', '.bmp', '.webp'].includes(extensions)
       );
+    case 'styleStudio':
     case 'aiVideo':
       return SUPPORT_IMAGE_TYPE.filter(({ extensions }) =>
         ['.jpg', '.jpeg', '.png'].includes(extensions)

@@ -26,11 +26,13 @@ export const lightTheme = {
       yellow01: 'var(--yellow-yellow-95)',
       yellow02: 'var(--yellow-yellow-95)',
       purple01: 'var(--ai-purple-50-main)',
+      red01: 'var(--white)',
+      red02: 'var(--primary-po-red-10)',
       mainBg: 'var(--ai-purple-99-bg-light)',
       selected: 'var(--ai-purple-97-list-over)',
       dimBg: 'var(--white-alpha)',
       deepNavy: 'var(--deep-navy)',
-      tooltip: 'var(--gray-gray-89-alpha)'
+      tooltip: 'var(--black-tooltip-alpha)'
     },
     border: {
       gray01: 'var(--gray-gray-40)',
@@ -40,7 +42,8 @@ export const lightTheme = {
       gray05: 'var(--gray-gray-30)',
       gray06: 'var(--gray-gray-30)',
       purple01: 'var(--ai-purple-90)',
-      purple02: 'var(--ai-purple-50-main)'
+      purple02: 'var(--ai-purple-50-main)',
+      red01: 'var(--primary-po-red-10)'
     },
     main: 'var(--ai-purple-50-main)',
     tab: {
@@ -65,6 +68,7 @@ export const lightTheme = {
       gray09: 'var(--gray-gray-70)',
       gray10: 'var(--gray-gray-80-02)',
       gray11: 'var(--white)',
+      red01: 'var(--primary-po-red-50)',
       highlight01: 'var(--ai-purple-45)',
       highlight02: 'var(--gray-gray-80-02)',
       highlight03: 'var(--ai-purple-50-main )',
@@ -112,6 +116,8 @@ export const darkTheme = {
       yellow01: 'var(--gray-gray-85)',
       yellow02: 'var(--gray-gray-90)',
       purple01: 'var(--ai-purple-90)',
+      red01: 'var(--primary-po-red-50-alpha-05)',
+      red02: 'var(--primary-po-red-50)',
       mainBg: 'var(--ai-purple-50-main-alpha)',
       selected: 'var(--ai-purple-50-main-alpha)',
       dimBg: 'var(--black-alpha)',
@@ -126,7 +132,8 @@ export const darkTheme = {
       gray05: 'var(--gray-gray-35)',
       gray06: 'var(--gray-gray-90)',
       purple01: 'var(--ai-purple-80-sub)',
-      purple02: 'var(--ai-purple-90)'
+      purple02: 'var(--ai-purple-90)',
+      red01: 'var(--primary-po-red-50-alpha-30)'
     },
     main: 'var(--ai-purple-50-main)',
     tab: {
@@ -151,6 +158,7 @@ export const darkTheme = {
       gray09: 'var(--gray-gray-60)',
       gray10: 'var(--gray-gray-65)',
       gray11: 'var(--gray-gray-25)',
+      red01: 'var(--white)',
       highlight01: 'var(--ai-purple-90)',
       highlight02: 'var(--ai-purple-90)',
       highlight03: 'var(--ai-purple-90)',

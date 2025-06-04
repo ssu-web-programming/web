@@ -8,9 +8,8 @@ import ReactPlayer from 'react-player';
 import { setOnlineStatus } from 'store/slices/network';
 import { css } from 'styled-components';
 
-import { track } from '@amplitude/analytics-browser';
-
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
+import { SERVICE_TYPE } from '../../../constants/serviceType';
 import CheckDarkIcon from '../../../img/dark/nova/check_purple.svg';
 import CreditColorIcon from '../../../img/light/ico_credit_color.svg';
 import CheckLightIcon from '../../../img/light/nova/check_purple.svg';
@@ -64,6 +63,8 @@ export default function Result({ children }: ResultProps) {
   const isCreditRecieved = useAppSelector(selectPageCreditReceived(selectedNovaTab));
   const showSurveyModal = UseShowSurveyModal();
 
+  console.log('service: ', service);
+  console.log('selectedNovaTab: ', selectedNovaTab);
   useEffect(() => {
     dispatch(
       setPageServiceUsage({

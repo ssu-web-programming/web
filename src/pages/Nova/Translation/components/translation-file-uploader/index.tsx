@@ -11,9 +11,9 @@ import { userInfoSelector } from 'store/slices/userInfo';
 import { useAppSelector } from 'store/store';
 import styled from 'styled-components';
 
+import FileItem from '../../../../../components/nova/file-item';
 import { NOVA_TAB_TYPE } from '../../../../../constants/novaTapTypes';
 import { OriginalFileType, useTranslationContext } from '../../provider/translation-provider';
-import FileItem from '../file-item';
 
 const Wrap = styled.div`
   display: flex;
