@@ -126,21 +126,28 @@ export const GuideText = styled.div`
 
 export const InputBox = styled.div`
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
   background: ${({ theme }) => theme.color.background.gray01};
   border: 1px solid ${({ theme }) => theme.color.border.gray02};
   border-radius: 20px;
   padding: 16px;
   box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
 `;
 
 export const InputTitle = styled.div`
-  margin-bottom: 16px;
   font-size: 16px;
   font-weight: 500;
   color: ${({ theme }) => theme.color.text.gray04};
+`;
+
+export const TextAreaWrap = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 `;
 
 export const InputTextarea = styled.textarea`
@@ -152,7 +159,6 @@ export const InputTextarea = styled.textarea`
   padding: 12px;
   box-sizing: border-box;
   outline: none;
-  margin-bottom: 8px;
   font-size: 14px;
   font-weight: 400;
   color: ${({ theme }) => theme.color.text.gray04};

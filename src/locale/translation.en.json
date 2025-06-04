@@ -445,9 +445,10 @@
       }
     },
     "styleStudio": {
+      "Tooltip": "Explore trending character styles!",
       "Guide": {
         "Title": "Style Studio",
-        "SubTitle": "Explore trending character styles!",
+        "SubTitle": "With just one click, transform your image or text into your favorite style!",
         "ImgUploader": "Click or drag here to upload\nSupports JPG and PNG files under 20MB."
       },
       "SelectStyle": {
@@ -467,7 +468,7 @@
         },
         "Desc": {
           "Title": "Image Description",
-          "SubTitle": "For better results, please enter at <b>least 10 characters.</b>",
+          "SubTitle": "For better results, please enter at <span>least 10 characters.</span>",
           "PlaceHolder": "ex. A cat looking out the window on a rainy day"
         },
         "UploadImage": {
@@ -475,6 +476,11 @@
         },
         "Warning": "Users are solely responsible for the use of generated content.\nAny use that infringes on others' rights or serves criminal purposes is prohibited.",
         "Button": "Generate"
+      },
+      "Loading": "Applying style",
+      "Done": {
+        "Title": "Style applied",
+        "SubTitle": "Your image has been transformed with the selected style.\nFeel free to use it!"
       }
     },
     "convert2DTo3D": {

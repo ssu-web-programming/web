@@ -94,17 +94,18 @@ export const ImageItem = styled.div<{ isHighlight: boolean }>`
     border-radius: 8px 8px 0 0;
   }
 
-  .title {
+  span.title {
     width: 100%;
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 6.5px;
+    font-family: Pretendard, sans-serif;
     font-size: 13px;
     font-weight: 500;
     line-height: 20px;
     text-align: center;
+    text-transform: none;
     padding: 4px 0;
     background-color: ${({ theme }) => theme.color.background.gray01};
     color: ${({ theme }) => theme.color.text.gray03};

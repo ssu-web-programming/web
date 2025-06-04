@@ -91,11 +91,17 @@ const StyleStudio = () => {
         {/* 이미지 설명 입력 */}
         <S.InputBox>
           <S.InputTitle>{t('Nova.styleStudio.SelectStyle.Desc.Title')}</S.InputTitle>
-          <S.InputTextarea
-            placeholder={t('Nova.styleStudio.SelectStyle.Desc.PlaceHolder') || ''}
-            onChange={(e) => setPrompt(e.target.value)}
-          />
-          <S.InputSubGuide>{t('Nova.styleStudio.SelectStyle.Desc.SubTitle')}</S.InputSubGuide>
+          <S.TextAreaWrap>
+            <S.InputTextarea
+              placeholder={t('Nova.styleStudio.SelectStyle.Desc.PlaceHolder') || ''}
+              onChange={(e) => setPrompt(e.target.value)}
+            />
+            <S.InputSubGuide
+              dangerouslySetInnerHTML={{
+                __html: t('Nova.styleStudio.SelectStyle.Desc.SubTitle') || ''
+              }}
+            />
+          </S.TextAreaWrap>
         </S.InputBox>
 
         {/* 이미지 첨부 */}

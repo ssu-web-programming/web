@@ -1,8 +1,8 @@
 import React, { ReactElement, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { css } from 'styled-components';
 
 import { NOVA_TAB_TYPE } from '../../../../constants/novaTapTypes';
-import { iconMap } from '../../../../constants/serviceType';
 import ArrowTooltips from '../../../arrowTooltip';
 import NewBadge from '../../../new-badge';
 import * as S from '../homeLayout/style';
@@ -16,6 +16,7 @@ type AIToolCardProps = {
 };
 
 const AIToolCard = ({ tab, isHighlight, icons, label, handleClick }: AIToolCardProps) => {
+  const { t } = useTranslation();
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
@@ -31,10 +32,11 @@ const AIToolCard = ({ tab, isHighlight, icons, label, handleClick }: AIToolCardP
       {isHighlight ? (
         <ArrowTooltips
           autoClose={true}
-          message={'일본 애니, 꾸러기 만화 등 다양한 스타일을 만나보세요!'}
+          message={t('Nova.styleStudio.Tooltip')}
           placement="top-start"
           cssExt={css`
             padding: 0;
+            height: 100%;
           `}
           tooltipStyles={{ marginBottom: '12px !important' }}
           arrowStyles={{ transform: 'translate3d(16px, 0, 0) !important' }}>
@@ -42,7 +44,7 @@ const AIToolCard = ({ tab, isHighlight, icons, label, handleClick }: AIToolCardP
           <S.ImageItem onClick={handleClick} isHighlight={isHighlight}>
             {isHighlight && <NewBadge />}
             <img src={icons[index]} alt={tab} />
-            <div className="title">{label}</div>
+            <span className="title">{label}</span>
           </S.ImageItem>
         </ArrowTooltips>
       ) : (
@@ -50,7 +52,7 @@ const AIToolCard = ({ tab, isHighlight, icons, label, handleClick }: AIToolCardP
           <S.HighlightWrap isHighlight={isHighlight} />
           <S.ImageItem onClick={handleClick} isHighlight={isHighlight}>
             <img src={icons[index]} alt={tab} />
-            <div className="title">{label}</div>
+            <span className="title">{label}</span>
           </S.ImageItem>
         </>
       )}
