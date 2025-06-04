@@ -39,12 +39,33 @@ export const TextWrap = styled.div`
   }
 `;
 
-export const ImageWrap = styled.div`
+export const ResultWrap = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 20px;
+`;
+
+export const ImageCircle = styled.div<{ isSelected: boolean }>`
+  width: 120px;
+  height: 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+  background: ${({ theme, isSelected }) =>
+    isSelected ? theme.color.background.mainBg02 : theme.color.background.gray02};
+  border: 2px solid
+    ${({ theme, isSelected }) =>
+      isSelected ? 'var(--ai-purple-50-main)' : theme.color.border.gray02};
+  border-radius: 120px;
+
+  span {
+    color: ${({ theme, isSelected }) =>
+      isSelected ? theme.color.text.main : theme.color.text.gray12};
+  }
 `;
 
 export const ButtonWrap = styled.div`
