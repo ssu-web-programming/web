@@ -18,6 +18,7 @@ const Background = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 8px;
   background-image: ${({ theme }) =>
     `url(${theme.mode === 'light' ? BlurLightIcon : BlurDarkIcon})`};
   background-size: contain;

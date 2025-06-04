@@ -113,7 +113,7 @@ export default function ArrowTooltips({
   }, [open, autoClose, isReady]);
 
   return (
-    <div ref={tooltipRef}>
+    <div ref={tooltipRef} style={{ height: '100%' }}>
       <CustomTooltip
         title={message}
         arrow
