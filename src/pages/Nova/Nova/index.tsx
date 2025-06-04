@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import Announcement from '../../../components/Announcement';
 import { useConfirm } from '../../../components/Confirm';
+import { useGenerateStyleStudio } from '../../../components/hooks/nova/use-generate-style-studio';
 import { useChangeBackground } from '../../../components/hooks/nova/useChangeBackground';
 import { useChangeStyle } from '../../../components/hooks/nova/useChangeStyle';
 import { useConvert2DTo3D } from '../../../components/hooks/nova/useConvert2DTo3D';
@@ -16,6 +17,7 @@ import { useRemoveBackground } from '../../../components/hooks/nova/useRemoveBac
 import useSubmitHandler from '../../../components/hooks/nova/useSubmitHandler';
 import useShowConfirmModal from '../../../components/hooks/use-show-confirm-modal';
 import { useChatNova } from '../../../components/hooks/useChatNova';
+import ImageUploadGuide from '../../../components/image-upload-guide';
 import AIChat from '../../../components/nova/aiChat';
 import AIVideo from '../../../components/nova/aiVideo';
 import Banner from '../../../components/nova/banner';
@@ -23,16 +25,17 @@ import Convert from '../../../components/nova/Convert';
 import Expand from '../../../components/nova/Expand';
 import { Guide } from '../../../components/nova/Guide';
 import NovaHeader from '../../../components/nova/Header';
+import NovaHome from '../../../components/nova/home/homeLayout';
 import ImageUploader from '../../../components/nova/ImageUploader';
 import Loading from '../../../components/nova/Loading';
 import Modals, { Overlay } from '../../../components/nova/modals/Modals';
-import NovaHome from '../../../components/nova/novaHome';
 import Progress from '../../../components/nova/Progress';
 import Prompt from '../../../components/nova/Prompt';
 import Result from '../../../components/nova/result/index';
 import Theme from '../../../components/nova/Theme';
 import TimeOut from '../../../components/nova/TimeOut';
 import Uploading from '../../../components/nova/Uploading';
+import StyleStudio from '../../../components/styleStudio';
 import { FileUploadState } from '../../../constants/fileTypes';
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import { SERVICE_TYPE } from '../../../constants/serviceType';
@@ -62,6 +65,7 @@ export default function Nova() {
   const dispatch = useAppDispatch();
   const confirm = useConfirm();
   const announcementList = useAppSelector(announceInfoSelector);
+  const { goStylePage } = useGenerateStyleStudio();
   const { goConvertPage } = useConvert2DTo3D();
   const { goPromptPage } = useChangeBackground();
   const { handleRemoveBackground } = useRemoveBackground();
@@ -146,6 +150,9 @@ export default function Nova() {
       if (status === 'saving') return;
 
       switch (selectedNovaTab) {
+        case NOVA_TAB_TYPE.styleStudio:
+          await goStylePage();
+          break;
         case NOVA_TAB_TYPE.convert2DTo3D:
           await goConvertPage();
           break;
@@ -208,25 +215,15 @@ export default function Nova() {
       switch (status) {
         case 'home':
         case 'progress':
-          return (
-            <Guide>
-              <ImageUploader handleUploadComplete={handleUploadComplete} curTab={selectedNovaTab}>
-                <S.ImageBox>
-                  <S.Icon disable={isAgreed === undefined}>
-                    {isLightMode ? <UploadLightIcon /> : <UploadDarkIcon />}
-                    <span>{t(`Nova.UploadTooltip.UploadImage`)}</span>
-                  </S.Icon>
-                  <S.Credit>
-                    <span>10</span>
-                    <div className="img">
-                      <img src={CreditIcon} alt="credit" />
-                    </div>
-                  </S.Credit>
-                  <S.Guide>{t(`Nova.${selectedNovaTab}.Guide.ImgUploader`)}</S.Guide>
-                </S.ImageBox>
-              </ImageUploader>
-            </Guide>
-          );
+          if (selectedNovaTab === NOVA_TAB_TYPE.styleStudio) {
+            return <StyleStudio />;
+          } else {
+            return (
+              <Guide>
+                <ImageUploadGuide handleUploadComplete={handleUploadComplete} />
+              </Guide>
+            );
+          }
         case 'convert':
           return <Convert />;
         case 'prompt':

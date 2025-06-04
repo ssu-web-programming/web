@@ -53,6 +53,7 @@ const GlobalStyle = createGlobalStyle`
 
     --black: #000000;
     --black-alpha: rgba(0, 0, 0, 0.3);
+    --black-tooltip-alpha: rgba(0, 0, 0, 0.6);
     
     --deep-navy:#042B48;
       
@@ -86,10 +87,13 @@ const GlobalStyle = createGlobalStyle`
     --gray-shadow-light: rgba(38, 40, 43, 0.05);
 
     --sale: #fb4949;
-
+      
+    --primary-po-red-10: #FFE3E3;
     --primary-po-red-30: #FEEEEE;
     --primary-po-red-40: #FA8C8C;
     --primary-po-red-50: #F95C5C;
+    --primary-po-red-50-alpha-05: rgba(249, 92, 92, 0.05);
+    --primary-po-red-50-alpha-30: rgba(249, 92, 92, 0.3);  
     --primary-po-red-60: #D34E4E;
     --primary-po-red-70: #FB4949;
     --primary-po-red-80: #632424;

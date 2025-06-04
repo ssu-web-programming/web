@@ -10,6 +10,7 @@ import Bridge, { ClientType } from 'util/bridge';
 import { getCurrentDateFormatted } from 'util/getAudioDuration';
 
 import UseShowSurveyModal from '../../../../../components/hooks/use-survey-modal';
+import FileItem from '../../../../../components/nova/file-item';
 import {
   selectPageCreditReceived,
   selectPageService
@@ -17,7 +18,6 @@ import {
 import { platformInfoSelector } from '../../../../../store/slices/platformInfo';
 import { selectTabSlice } from '../../../../../store/slices/tabSlice';
 import { useTranslationContext } from '../../provider/translation-provider';
-import FileItem from '../file-item';
 
 import * as S from './style';
 

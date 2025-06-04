@@ -76,6 +76,10 @@ const iconMap: Record<
     light: { default: convert2DTo3DLightIcon, selected: convert2DTo3DLightSelectedIcon },
     dark: { default: convert2DTo3DDarkIcon, selected: convert2DTo3DDarkSelectedIcon }
   },
+  styleStudio: {
+    light: { default: removeBGLightIcon, selected: removeBGLightSelectedIcon },
+    dark: { default: removeBGDarkIcon, selected: removeBGDarkSelectedIcon }
+  },
   removeBG: {
     light: { default: removeBGLightIcon, selected: removeBGLightSelectedIcon },
     dark: { default: removeBGDarkIcon, selected: removeBGDarkSelectedIcon }

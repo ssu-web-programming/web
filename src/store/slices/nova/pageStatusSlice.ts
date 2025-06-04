@@ -25,6 +25,7 @@ export type PageStatus = {
   [NOVA_TAB_TYPE.aiChat]: StepStatus<'chat'>;
   [NOVA_TAB_TYPE.perplexity]: StepStatus<'chat'>;
   [NOVA_TAB_TYPE.convert2DTo3D]: StepStatus<'convert'>;
+  [NOVA_TAB_TYPE.styleStudio]: StepStatus<'select-style'>;
   [NOVA_TAB_TYPE.removeBG]: StepStatus<''>;
   [NOVA_TAB_TYPE.changeBG]: StepStatus<'prompt'>;
   [NOVA_TAB_TYPE.remakeImg]: StepStatus<''>;

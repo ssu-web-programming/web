@@ -333,6 +333,7 @@
       },
       "image": {
         "title": "画像",
+        "styleStudio": "スタイルスタジオ",
         "removeBG": "背景を消す",
         "improvedRes": "解像度を上げる",
         "changeBG": "背景を変更",
@@ -441,6 +442,39 @@
         "countMore": "その他{{count}}件のアイテム",
         "collapse": "畳む",
         "anotherAnswer": "他の回答を見る"
+      }
+    },
+    "styleStudio": {
+      "Guide": {
+        "Title": "スタイルスタジオ",
+        "SubTitle": "人気スタイルを一気に体験！",
+        "ImgUploader": "ここをクリックまたはドラッグしてアップロード\n20MB以下のJPG・PNG形式に対応しています"
+      },
+      "SelectStyle": {
+        "CharStyle": "キャラクタースタイル",
+        "StyleGuide": "本スタイルは実在のブランドとは関係のない参考イメージです。",
+        "Style": {
+          "Ghibli": "日本アニメ",
+          "Disney": "おとぎ話",
+          "Pixar": "3Dスタイル",
+          "Marvel": "アクション",
+          "AnimalCrossing": "動物の村",
+          "SailorMoon": "クラシック少女",
+          "Shinchan": "元気な漫画",
+          "Simpsons": "ファミリーコミック",
+          "Lego": "ブロックおもちゃ",
+          "Figurine": "ボックスフィギュア"
+        },
+        "Desc": {
+          "Title": "画像説明",
+          "SubTitle": "よりよい結果のために、<b>10文字以上</b>で入力してください。",
+          "PlaceHolder": "例：雨の日に窓の外を見ている猫"
+        },
+        "UploadImage": {
+          "Title": "画像をアップロード（任意）"
+        },
+        "Warning": "生成されたコンテンツの使用に関する責任は、利用者本人にあります。\n他人の権利を侵害する行為や、犯罪目的での使用は禁止されています。",
+        "Button": "生成する"
       }
     },
     "convert2DTo3D": {

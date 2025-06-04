@@ -333,6 +333,7 @@
       },
       "image": {
         "title": "Image",
+        "styleStudio": "Style Studio",
         "removeBG": "Remove Background",
         "improvedRes": "Improve Resolution",
         "changeBG": "Change Background",
@@ -441,6 +442,39 @@
         "countMore": "{{count}} More Items",
         "collapse": "Collapse",
         "anotherAnswer": "See Other Answers"
+      }
+    },
+    "styleStudio": {
+      "Guide": {
+        "Title": "Style Studio",
+        "SubTitle": "Explore trending character styles!",
+        "ImgUploader": "Click or drag here to upload\nSupports JPG and PNG files under 20MB."
+      },
+      "SelectStyle": {
+        "CharStyle": "Character Styles",
+        "StyleGuide": "These styles are for illustrative purposes and are not affiliated with actual brands.",
+        "Style": {
+          "Ghibli": "Anime",
+          "Disney": "Fairy Tale",
+          "Pixar": "3D Style",
+          "Marvel": "Action",
+          "AnimalCrossing": "Animal Village",
+          "SailorMoon": "Classic Girl",
+          "Shinchan": "Playful Cartoon",
+          "Simpsons": "Family Comic",
+          "Lego": "Block Toy",
+          "Figurine": "Box Figure"
+        },
+        "Desc": {
+          "Title": "Image Description",
+          "SubTitle": "For better results, please enter at <b>least 10 characters.</b>",
+          "PlaceHolder": "ex. A cat looking out the window on a rainy day"
+        },
+        "UploadImage": {
+          "Title": "Upload Image (Optional)"
+        },
+        "Warning": "Users are solely responsible for the use of generated content.\nAny use that infringes on others' rights or serves criminal purposes is prohibited.",
+        "Button": "Generate"
       }
     },
     "convert2DTo3D": {
