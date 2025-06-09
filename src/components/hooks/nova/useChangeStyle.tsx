@@ -90,13 +90,13 @@ export const useChangeStyle = () => {
 
       const response = await res.json();
       if (response.success) {
-        const image = response.data.image[0];
         dispatch(
           setPageResult({
             tab: NOVA_TAB_TYPE.changeStyle,
             result: {
-              contentType: image.contentType,
-              data: image.data,
+              contentType: '',
+              data: '',
+              link: response.data.imageUrl,
               info: style
             }
           })
