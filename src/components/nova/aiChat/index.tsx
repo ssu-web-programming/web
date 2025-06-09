@@ -3,7 +3,6 @@ import { ReactComponent as ArrowLeftDarkIcon } from 'img/dark/ico_arrow_left.svg
 import { ReactComponent as ArrowLeftLightIcon } from 'img/light/ico_arrow_left.svg';
 import { useTranslation } from 'react-i18next';
 import Lottie from 'react-lottie-player';
-import { useLocation, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import { css } from 'styled-components';
 
