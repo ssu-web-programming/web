@@ -472,7 +472,7 @@
           "PlaceHolder": "ex. A cat looking out the window on a rainy day"
         },
         "UploadImage": {
-          "Title": "Upload Image (Optional)"
+          "Title": "Upload Image"
         },
         "Warning": "Users are solely responsible for the use of generated content.\nAny use that infringes on others' rights or serves criminal purposes is prohibited.",
         "Button": "Generate"

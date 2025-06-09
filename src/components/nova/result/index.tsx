@@ -63,8 +63,6 @@ export default function Result({ children }: ResultProps) {
   const isCreditRecieved = useAppSelector(selectPageCreditReceived(selectedNovaTab));
   const showSurveyModal = UseShowSurveyModal();
 
-  console.log('service: ', service);
-  console.log('selectedNovaTab: ', selectedNovaTab);
   useEffect(() => {
     dispatch(
       setPageServiceUsage({
@@ -92,6 +90,8 @@ export default function Result({ children }: ResultProps) {
           selectedNovaTab === NOVA_TAB_TYPE.aiVideo
         ) {
           setShowInsertDocBtn(status !== 'home' && isPC && currentFile.ext === 'pptx');
+        } else if (selectedNovaTab === NOVA_TAB_TYPE.styleStudio) {
+          setShowInsertDocBtn(false);
         } else {
           setShowInsertDocBtn(status !== 'home' || isMobile);
         }
@@ -200,7 +200,8 @@ export default function Result({ children }: ResultProps) {
           )}
           <S.ButtonWrap>
             {(selectedNovaTab === NOVA_TAB_TYPE.changeBG ||
-              selectedNovaTab === NOVA_TAB_TYPE.remakeImg) && (
+              selectedNovaTab === NOVA_TAB_TYPE.remakeImg ||
+              selectedNovaTab === NOVA_TAB_TYPE.styleStudio) && (
               <Button
                 variant="gray"
                 width={'full'}

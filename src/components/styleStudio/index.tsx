@@ -88,7 +88,7 @@ const StyleStudio = () => {
           <S.GuideText>{t('Nova.styleStudio.SelectStyle.StyleGuide')}</S.GuideText>
         </S.StyleSectionBox>
 
-        {/* 이미지 설명 입력 */}
+        {/* 이미지 설명 */}
         <S.InputBox>
           <S.InputTitle>{t('Nova.styleStudio.SelectStyle.Desc.Title')}</S.InputTitle>
           <S.TextAreaWrap>
@@ -130,7 +130,7 @@ const StyleStudio = () => {
           width={'full'}
           height={48}
           onClick={() => handleGenerateStyle(selectedStyle.id, prompt)}
-          disable={prompt.length < 10}
+          disable={(prompt.trim().length <= 0 || prompt.length < 10) && !currentFile}
           cssExt={css`
             font-size: 16px;
             font-weight: 500;
