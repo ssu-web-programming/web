@@ -15,7 +15,7 @@ export const ConfirmBox = styled.div`
   flex-direction: column;
   align-items: center;
   position: absolute;
-  gap: 12px;
+  gap: 36px;
   top: 0;
   left: 0;
   right: 0;
@@ -81,7 +81,6 @@ export const Footer = styled.div<{ direction?: 'column' | 'row' }>`
   display: flex;
   flex-direction: ${(props) => props.direction};
   gap: 8px;
-  margin-top: 24px;
 
   button {
     font-size: 16px;
@@ -173,7 +172,7 @@ const Confirm = () => {
             onClick={handleOk}
             cssExt={css`
               order: ${direction === 'row' ? 2 : undefined};
-              width: 195px;
+              width: 100%;
               border-radius: 8px;
               line-height: 19px;
               font-weight: 500;

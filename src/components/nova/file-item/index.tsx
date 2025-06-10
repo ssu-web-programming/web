@@ -1,7 +1,15 @@
 import Icon from 'components/Icon';
 import { getFileIcon } from 'components/nova/inputBar';
-import { setDriveFiles } from 'store/slices/uploadFiles';
-import { useAppDispatch } from 'store/store';
+import {
+  removeCurrentFile,
+  setCurrentFile,
+  setDriveFiles,
+  setLocalFiles
+} from 'store/slices/uploadFiles';
+import { useAppDispatch, useAppSelector } from 'store/store';
+
+import { resetPageData } from '../../../store/slices/nova/pageStatusSlice';
+import { selectTabSlice } from '../../../store/slices/tabSlice';
 
 import * as S from './style';
 
@@ -13,6 +21,8 @@ interface Props {
 
 export default function FileItem({ fileName, isDeleteIcon = true, iconSize = 60 }: Props) {
   const dispatch = useAppDispatch();
+  const { selectedNovaTab } = useAppSelector(selectTabSlice);
+
   return (
     <S.Wrapper>
       <S.IconContainer>
@@ -21,6 +31,8 @@ export default function FileItem({ fileName, isDeleteIcon = true, iconSize = 60 
           <S.DeleteIcon
             onClick={() => {
               dispatch(setDriveFiles([]));
+              dispatch(setLocalFiles([]));
+              dispatch(resetPageData(selectedNovaTab));
             }}
           />
         )}

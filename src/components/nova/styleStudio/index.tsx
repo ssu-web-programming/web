@@ -1,25 +1,25 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { css } from 'styled-components';
 
-import { NOVA_TAB_TYPE } from '../../constants/novaTapTypes';
-import style3DCharacter from '../../img/common/nova/styleStudio/style_3d.png';
-import styleAnimalCrossing from '../../img/common/nova/styleStudio/style_animalcrossing.png';
-import styleDisney from '../../img/common/nova/styleStudio/style_disney.png';
-import styleGibli from '../../img/common/nova/styleStudio/style_ghibli.png';
-import styleLego from '../../img/common/nova/styleStudio/style_lego.png';
-import styleMarvel from '../../img/common/nova/styleStudio/style_marvel.png';
-import stylePixar from '../../img/common/nova/styleStudio/style_pixar.png';
-import styleSailorMoon from '../../img/common/nova/styleStudio/style_sailormoon.png';
-import styleJjanggu from '../../img/common/nova/styleStudio/style_shinchan.png';
-import styleSimpson from '../../img/common/nova/styleStudio/style_simpson.png';
-import { ReactComponent as BangIcon } from '../../img/light/bang_circle.svg';
-import { selectPageData } from '../../store/slices/nova/pageStatusSlice';
-import { useAppSelector } from '../../store/store';
-import Button from '../buttons/Button';
-import { useGenerateStyleStudio } from '../hooks/nova/use-generate-style-studio';
-import ImageUploadGuide from '../image-upload-guide';
-import FileItem from '../nova/file-item';
+import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
+import style3DCharacter from '../../../img/common/nova/styleStudio/style_3d.png';
+import styleAnimalCrossing from '../../../img/common/nova/styleStudio/style_animalcrossing.png';
+import styleDisney from '../../../img/common/nova/styleStudio/style_disney.png';
+import styleGibli from '../../../img/common/nova/styleStudio/style_ghibli.png';
+import styleLego from '../../../img/common/nova/styleStudio/style_lego.png';
+import styleMarvel from '../../../img/common/nova/styleStudio/style_marvel.png';
+import stylePixar from '../../../img/common/nova/styleStudio/style_pixar.png';
+import styleSailorMoon from '../../../img/common/nova/styleStudio/style_sailormoon.png';
+import styleJjanggu from '../../../img/common/nova/styleStudio/style_shinchan.png';
+import styleSimpson from '../../../img/common/nova/styleStudio/style_simpson.png';
+import { ReactComponent as BangIcon } from '../../../img/light/bang_circle.svg';
+import { selectPageData } from '../../../store/slices/nova/pageStatusSlice';
+import { useAppSelector } from '../../../store/store';
+import Button from '../../buttons/Button';
+import { useGenerateStyleStudio } from '../../hooks/nova/use-generate-style-studio';
+import ImageUploadGuide from '../../image-upload-guide';
+import FileItem from '../file-item';
 
 import * as S from './style';
 
@@ -62,6 +62,12 @@ const StyleStudio = () => {
   const [selectedStyle, setSelectedStyle] = useState<IStyle>(styleImages[0]);
   const [prompt, setPrompt] = useState('');
 
+  const isDisabled = () => {
+    const trimmed = prompt.trim();
+    const hasNormalChar = /[a-zA-Z0-9가-힣]/.test(trimmed);
+    return (trimmed === '' || trimmed.length < 10 || !hasNormalChar) && !currentFile;
+  };
+
   return (
     <S.Wrapper>
       <S.TitleWrap>
@@ -88,6 +94,18 @@ const StyleStudio = () => {
           <S.GuideText>{t('Nova.styleStudio.SelectStyle.StyleGuide')}</S.GuideText>
         </S.StyleSectionBox>
 
+        {/* 이미지 첨부 */}
+        <S.UploadBox>
+          <S.InputTitle>{t('Nova.styleStudio.SelectStyle.UploadImage.Title')}</S.InputTitle>
+          {currentFile ? (
+            <S.UploadedBox>
+              <FileItem fileName={currentFile.name} isDeleteIcon={true} iconSize={48} />
+            </S.UploadedBox>
+          ) : (
+            <ImageUploadGuide handleUploadComplete={() => {}} showSimpleGuide={true} />
+          )}
+        </S.UploadBox>
+
         {/* 이미지 설명 */}
         <S.InputBox>
           <S.InputTitle>{t('Nova.styleStudio.SelectStyle.Desc.Title')}</S.InputTitle>
@@ -104,18 +122,6 @@ const StyleStudio = () => {
           </S.TextAreaWrap>
         </S.InputBox>
 
-        {/* 이미지 첨부 */}
-        <S.UploadBox>
-          <S.InputTitle>{t('Nova.styleStudio.SelectStyle.UploadImage.Title')}</S.InputTitle>
-          {currentFile ? (
-            <S.UploadedBox>
-              <FileItem fileName={currentFile.name} isDeleteIcon={true} iconSize={48} />
-            </S.UploadedBox>
-          ) : (
-            <ImageUploadGuide handleUploadComplete={() => {}} showSimpleGuide={true} />
-          )}
-        </S.UploadBox>
-
         {/* 가이드 메시지 */}
         <S.GuideMessage>
           <S.IconWrap>
@@ -130,7 +136,7 @@ const StyleStudio = () => {
           width={'full'}
           height={48}
           onClick={() => handleGenerateStyle(selectedStyle.id, prompt)}
-          disable={(prompt.trim().length <= 0 || prompt.length < 10) && !currentFile}
+          disable={isDisabled()}
           cssExt={css`
             font-size: 16px;
             font-weight: 500;
