@@ -32,10 +32,10 @@ import Modals, { Overlay } from '../../../components/nova/modals/Modals';
 import Progress from '../../../components/nova/Progress';
 import Prompt from '../../../components/nova/Prompt';
 import Result from '../../../components/nova/result/index';
+import StyleStudio from '../../../components/nova/styleStudio';
 import Theme from '../../../components/nova/Theme';
 import TimeOut from '../../../components/nova/TimeOut';
 import Uploading from '../../../components/nova/Uploading';
-import StyleStudio from '../../../components/styleStudio';
 import { FileUploadState } from '../../../constants/fileTypes';
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import { SERVICE_TYPE } from '../../../constants/serviceType';
@@ -65,7 +65,6 @@ export default function Nova() {
   const dispatch = useAppDispatch();
   const confirm = useConfirm();
   const announcementList = useAppSelector(announceInfoSelector);
-  const { goStylePage } = useGenerateStyleStudio();
   const { goConvertPage } = useConvert2DTo3D();
   const { goPromptPage } = useChangeBackground();
   const { handleRemoveBackground } = useRemoveBackground();
@@ -150,9 +149,6 @@ export default function Nova() {
       if (status === 'saving') return;
 
       switch (selectedNovaTab) {
-        case NOVA_TAB_TYPE.styleStudio:
-          await goStylePage();
-          break;
         case NOVA_TAB_TYPE.convert2DTo3D:
           await goConvertPage();
           break;

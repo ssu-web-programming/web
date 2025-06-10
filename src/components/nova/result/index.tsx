@@ -9,7 +9,6 @@ import { setOnlineStatus } from 'store/slices/network';
 import { css } from 'styled-components';
 
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
-import { SERVICE_TYPE } from '../../../constants/serviceType';
 import CheckDarkIcon from '../../../img/dark/nova/check_purple.svg';
 import CreditColorIcon from '../../../img/light/ico_credit_color.svg';
 import CheckLightIcon from '../../../img/light/nova/check_purple.svg';
@@ -32,6 +31,7 @@ import Bridge, { ClientType, getPlatform } from '../../../util/bridge';
 import { base64ToBlob } from '../../../util/files';
 import Button from '../../buttons/Button';
 import { useConfirm } from '../../Confirm';
+import { useGenerateStyleStudio } from '../../hooks/nova/use-generate-style-studio';
 import { useChangeBackground } from '../../hooks/nova/useChangeBackground';
 import { useInsertDocsHandler } from '../../hooks/nova/useInsertDocsHandler';
 import { useRemakeImage } from '../../hooks/nova/useRemakeImage';
@@ -58,6 +58,7 @@ export default function Result({ children }: ResultProps) {
   const { insertDocsHandler } = useInsertDocsHandler();
   const { handleChangeBackground } = useChangeBackground();
   const { handleRemakeImage } = useRemakeImage();
+  const { handleGenerateStyle } = useGenerateStyleStudio();
   const [showInsertDocBtn, setShowInsertDocBtn] = useState(true);
 
   const isCreditRecieved = useAppSelector(selectPageCreditReceived(selectedNovaTab));
@@ -90,8 +91,6 @@ export default function Result({ children }: ResultProps) {
           selectedNovaTab === NOVA_TAB_TYPE.aiVideo
         ) {
           setShowInsertDocBtn(status !== 'home' && isPC && currentFile.ext === 'pptx');
-        } else if (selectedNovaTab === NOVA_TAB_TYPE.styleStudio) {
-          setShowInsertDocBtn(false);
         } else {
           setShowInsertDocBtn(status !== 'home' || isMobile);
         }
@@ -159,6 +158,10 @@ export default function Result({ children }: ResultProps) {
         break;
       case NOVA_TAB_TYPE.remakeImg:
         await handleRemakeImage();
+        break;
+      case NOVA_TAB_TYPE.styleStudio:
+        await handleGenerateStyle(result?.info.style, result?.info.prompt);
+        break;
     }
   };
 

@@ -15,7 +15,7 @@ import { getCurrentFile, setDriveFiles, setLocalFiles } from '../../../../store/
 import { useAppDispatch, useAppSelector } from '../../../../store/store';
 import Bridge from '../../../../util/bridge';
 import { calLeftCredit } from '../../../../util/common';
-import { createFormDataFromFiles, fileToBase64 } from '../../../../util/files';
+import { createFormDataFromFiles } from '../../../../util/files';
 import useErrorHandle from '../../useErrorHandle';
 
 export const useGenerateStyleStudio = () => {
@@ -51,24 +51,6 @@ export const useGenerateStyleStudio = () => {
     errorHandle({ code: errCode, credit: leftCredit });
   };
 
-  const goStylePage = async () => {
-    if (!curPageFile) return;
-
-    dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.styleStudio, status: 'progress' }));
-    try {
-      fileToBase64(curPageFile)
-        .then((data) => {
-          dispatch(setPageResult({ tab: NOVA_TAB_TYPE.styleStudio, result: data }));
-        })
-        .then(() => {
-          dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.styleStudio, status: 'theme' }));
-        });
-    } catch (err) {
-      resetPageState();
-      errorHandle(err);
-    }
-  };
-
   const handleGenerateStyle = async (style: string, prompt?: string) => {
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.styleStudio, status: 'loading' }));
     try {
@@ -93,9 +75,8 @@ export const useGenerateStyleStudio = () => {
           setPageResult({
             tab: NOVA_TAB_TYPE.styleStudio,
             result: {
-              contentType: '',
-              data: '',
-              link: response.data.imageUrl,
+              contentType: response.data.image[0].contentType,
+              data: response.data.image[0].data,
               info: {
                 style: style,
                 prompt: prompt ?? ''
@@ -142,5 +123,5 @@ export const useGenerateStyleStudio = () => {
     }
   };
 
-  return { goStylePage, handleGenerateStyle };
+  return { handleGenerateStyle };
 };
