@@ -12,6 +12,7 @@ import {
 } from '../../store/slices/nova/pageStatusSlice';
 import { selectTabSlice } from '../../store/slices/tabSlice';
 import { useAppDispatch, useAppSelector } from '../../store/store';
+import { useGenerateStyleStudio } from '../hooks/nova/use-generate-style-studio';
 import { useChangeBackground } from '../hooks/nova/useChangeBackground';
 import { useChangeStyle } from '../hooks/nova/useChangeStyle';
 import { useConvert2DTo3D } from '../hooks/nova/useConvert2DTo3D';
@@ -109,8 +110,13 @@ export default function TimeOut() {
   const { handleExpandImage } = useExpandImage();
   const { handleImprovedResolution } = useImprovedResolution();
   const { handleChangeStyle } = useChangeStyle();
+  const { handleGenerateStyle } = useGenerateStyleStudio();
+
   const handleRetry = async () => {
     switch (selectedNovaTab) {
+      case NOVA_TAB_TYPE.styleStudio:
+        await handleGenerateStyle(result?.info.style, result?.info.prompt);
+        break;
       case NOVA_TAB_TYPE.convert2DTo3D:
         await handleConver2DTo3D(result?.info.pattern, result?.info.animationType);
         break;
