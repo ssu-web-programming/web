@@ -40,7 +40,10 @@ export const useGenerateStyleStudio = () => {
           result: {
             contentType: '',
             data: '',
-            info: style
+            info: {
+              style: style,
+              prompt: prompt ?? ''
+            }
           }
         })
       );
