@@ -112,7 +112,7 @@ export default function ImageUploader({
       dispatch(
         setPageData({
           tab: curTab,
-          data: fileData
+          data: { file: fileData, info: selectedFile.name }
         })
       );
       dispatch(setPageStatus({ tab: curTab, status: 'home' }));

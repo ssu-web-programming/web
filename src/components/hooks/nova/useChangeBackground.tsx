@@ -61,7 +61,7 @@ export const useChangeBackground = () => {
 
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeBG, status: 'progress' }));
     try {
-      fileToBase64(curPageFile)
+      fileToBase64(curPageFile.file)
         .then((data) => {
           dispatch(setPageResult({ tab: NOVA_TAB_TYPE.changeBG, result: data }));
         })
@@ -79,7 +79,7 @@ export const useChangeBackground = () => {
 
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeBG, status: 'loading' }));
     try {
-      const formData = await createFormDataFromFiles([curPageFile]);
+      const formData = await createFormDataFromFiles([curPageFile.file]);
       formData.append('prompt', prompt);
       const { res, logger } = await apiWrapper().request(
         NOVA_CHANGE_BACKGROUND,

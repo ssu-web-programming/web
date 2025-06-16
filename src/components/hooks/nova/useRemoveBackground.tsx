@@ -50,7 +50,7 @@ export const useRemoveBackground = () => {
 
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.removeBG, status: 'loading' }));
     try {
-      const formData = await createFormDataFromFiles([curPageFile]);
+      const formData = await createFormDataFromFiles([curPageFile.file]);
       const { res, logger } = await apiWrapper().request(
         NOVA_REMOVE_BACKGROUND,
         {

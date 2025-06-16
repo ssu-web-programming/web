@@ -57,7 +57,7 @@ export const useImprovedResolution = () => {
 
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.improvedRes, status: 'loading' }));
     try {
-      const formData = await createFormDataFromFiles([curPageFile]);
+      const formData = await createFormDataFromFiles([curPageFile.file]);
       const { res, logger } = await apiWrapper().request(
         NOVA_IMPROVED_RESOLUTION,
         {

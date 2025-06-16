@@ -57,7 +57,7 @@ export const useRemakeImage = () => {
 
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.remakeImg, status: 'loading' }));
     try {
-      const formData = await createFormDataFromFiles([curPageFile]);
+      const formData = await createFormDataFromFiles([curPageFile.file]);
       const { res, logger } = await apiWrapper().request(
         NOVA_REMAKE_IMAGE,
         {
