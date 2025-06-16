@@ -404,6 +404,7 @@
     },
     "Tabs": {
       "aiChat": "AI Chat",
+      "styleStudio": "Style Studio",
       "convert2DTo3D": "2D to 3D",
       "removeBG": "Remove Background",
       "changeBG": "Change Background",
