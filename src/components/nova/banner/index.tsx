@@ -4,6 +4,9 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import BannerEn1 from '../../../img/common/nova/banner/banner1_nova_en.png';
 import BannerJa1 from '../../../img/common/nova/banner/banner1_nova_jp.png';
 import BannerKo1 from '../../../img/common/nova/banner/banner1_nova_ko.png';
+import BannerEn2 from '../../../img/common/nova/banner/banner2_nova_en.png';
+import BannerJa2 from '../../../img/common/nova/banner/banner2_nova_jp.png';
+import BannerKo2 from '../../../img/common/nova/banner/banner2_nova_ko.png';
 import { lang } from '../../../locale';
 import Bridge from '../../../util/bridge';
 
@@ -19,6 +22,13 @@ const bannerImages = [
       ko: BannerKo1,
       en: BannerEn1,
       ja: BannerJa1
+    }
+  },
+  {
+    image: {
+      ko: BannerKo2,
+      en: BannerEn2,
+      ja: BannerJa2
     },
     url: `https://polarisoffice.com/${lang}/ai`
   }
@@ -44,7 +54,7 @@ const Banner = () => {
             className="swiper-slide"
             key={index}
             onClick={() => handleOpenPage(banner.url ?? '')}>
-            <S.Image src={banner.image[lang] || BannerEn1} alt="banner" />
+            <S.Image src={banner.image[lang] || BannerEn2} alt="banner" />
           </SwiperSlide>
         ))}
       </Swiper>
