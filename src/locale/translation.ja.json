@@ -404,6 +404,7 @@
     },
     "Tabs": {
       "aiChat": "AIチャット",
+      "styleStudio": "スタイルスタジオ",
       "convert2DTo3D": "2Dから3Dへ",
       "removeBG": "背景を消す",
       "changeBG": "背景を変更",
