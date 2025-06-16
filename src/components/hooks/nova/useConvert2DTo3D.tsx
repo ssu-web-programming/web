@@ -61,7 +61,7 @@ export const useConvert2DTo3D = () => {
 
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.convert2DTo3D, status: 'progress' }));
     try {
-      const base64Data = await fileToBase64(curPageFile);
+      const base64Data = await fileToBase64(curPageFile.file);
       dispatch(setPageResult({ tab: NOVA_TAB_TYPE.convert2DTo3D, result: base64Data }));
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.convert2DTo3D, status: 'convert' }));
     } catch (err) {
@@ -76,7 +76,7 @@ export const useConvert2DTo3D = () => {
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.convert2DTo3D, status: 'loading' }));
 
     try {
-      const formData = await createFormDataFromFiles([curPageFile]);
+      const formData = await createFormDataFromFiles([curPageFile.file]);
       formData.append('pattern', pattern);
       formData.append('animationType', animationType);
 

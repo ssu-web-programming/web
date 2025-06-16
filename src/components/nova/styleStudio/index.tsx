@@ -65,7 +65,7 @@ const StyleStudio = () => {
   const isDisabled = () => {
     const trimmed = prompt.trim();
     const hasNormalChar = /[a-zA-Z0-9가-힣]/.test(trimmed);
-    return (trimmed === '' || trimmed.length < 10 || !hasNormalChar) && !currentFile;
+    return (trimmed === '' || trimmed.length < 10 || !hasNormalChar) && !currentFile?.file;
   };
 
   return (
@@ -97,9 +97,9 @@ const StyleStudio = () => {
         {/* 이미지 첨부 */}
         <S.UploadBox>
           <S.InputTitle>{t('Nova.styleStudio.SelectStyle.UploadImage.Title')}</S.InputTitle>
-          {currentFile ? (
+          {currentFile?.file ? (
             <S.UploadedBox>
-              <FileItem fileName={currentFile.name} isDeleteIcon={true} iconSize={48} />
+              <FileItem fileName={currentFile.info} isDeleteIcon={true} iconSize={48} />
             </S.UploadedBox>
           ) : (
             <ImageUploadGuide handleUploadComplete={() => {}} showSimpleGuide={true} />

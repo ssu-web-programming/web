@@ -58,7 +58,7 @@ export const useGenerateStyleStudio = () => {
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.styleStudio, status: 'loading' }));
     try {
       const formData = curPageFile
-        ? await createFormDataFromFiles([curPageFile], 'image')
+        ? await createFormDataFromFiles([curPageFile.file], 'image')
         : new FormData();
       formData.append('style', style);
       formData.append('prompt', prompt ?? '');

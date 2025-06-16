@@ -37,7 +37,7 @@ export type PageStatus = {
   [NOVA_TAB_TYPE.aiVideo]: StepStatus<'avatar' | 'voice' | 'script'>;
 };
 
-export type PageData = File | null;
+export type PageData = { file: File; info?: string } | null;
 export type PageResult = ResultImage | null;
 export type PageService = {
   serviceType: SERVICE_TYPE;

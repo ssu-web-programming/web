@@ -58,7 +58,7 @@ export const useChangeStyle = () => {
 
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeStyle, status: 'progress' }));
     try {
-      fileToBase64(curPageFile)
+      fileToBase64(curPageFile.file)
         .then((data) => {
           dispatch(setPageResult({ tab: NOVA_TAB_TYPE.changeStyle, result: data }));
         })
@@ -76,7 +76,7 @@ export const useChangeStyle = () => {
 
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.changeStyle, status: 'loading' }));
     try {
-      const formData = await createFormDataFromFiles([curPageFile]);
+      const formData = await createFormDataFromFiles([curPageFile.file]);
       formData.append('style', style);
       const { res, logger } = await apiWrapper().request(
         NOVA_CHANGE_STYLE,
