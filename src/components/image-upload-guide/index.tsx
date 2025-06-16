@@ -21,13 +21,13 @@ const ImageUploadGuide = ({
   handleUploadComplete,
   showSimpleGuide = false
 }: ImageUploadGuideProps) => {
-  const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
-  const { selectedNovaTab } = useAppSelector(selectTabSlice);
-  const { isLightMode } = useAppSelector(themeInfoSelector);
   const { t } = useTranslation();
+  const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
+  const { isLightMode } = useAppSelector(themeInfoSelector);
+  const { selectedNovaTab } = useAppSelector(selectTabSlice);
 
   return (
-    <ImageUploader handleUploadComplete={handleUploadComplete} curTab={selectedNovaTab}>
+    <ImageUploader handleUploadComplete={handleUploadComplete}>
       <S.ImageBox>
         <S.Icon disable={isAgreed === undefined}>
           {isLightMode ? <UploadLightIcon /> : <UploadDarkIcon />}

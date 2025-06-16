@@ -48,7 +48,11 @@ import {
   novaHistorySelector,
   setIsShareMode
 } from '../../../store/slices/nova/novaHistorySlice';
-import { selectPageService, selectPageStatus } from '../../../store/slices/nova/pageStatusSlice';
+import {
+  resetPageData,
+  selectPageService,
+  selectPageStatus
+} from '../../../store/slices/nova/pageStatusSlice';
 import { selectNovaTab, selectTabSlice } from '../../../store/slices/tabSlice';
 import { themeInfoSelector } from '../../../store/slices/theme';
 import { userInfoSelector } from '../../../store/slices/userInfo';
@@ -130,7 +134,11 @@ export default function Nova() {
       if (selectedNovaTab === NOVA_TAB_TYPE.translation) {
         await uploadTranslationFile(acceptedFiles, 30 * 1024 * 1024);
       } else {
-        loadLocalFile(acceptedFiles);
+        const files: File[] = acceptedFiles.map(
+          (file) => new File([file], file.name, { type: file.type })
+        );
+        dispatch(resetPageData(selectedNovaTab));
+        await loadLocalFile(files);
       }
     },
     [confirm, t]
