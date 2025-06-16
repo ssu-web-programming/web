@@ -144,6 +144,7 @@ export const MAX_FILE_UPLOAD_SIZE_MB_EXPAND_IMG = 30;
 export const MAX_FILE_UPLOAD_SIZE_MB_IMPROVED_RES = 10;
 export const MAX_FILE_UPLOAD_SIZE_MB_CHANGE_STYLE = 10;
 export const MAX_FILE_UPLOAD_SIZE_MB_AI_VIDEO = 50;
+export const MAX_FILE_UPLOAD_SIZE_MB_STYLE_STUDIO = 20;
 export const MIN_FILE_UPLOAD_SIZE_KB = 1;
 export const MAX_FILE_UPLOAD_SIZE_MB_VOICE_DICTATION = 200;
 export const MAX_FILE_UPLOAD_SIZE_MB_TRANSLATE = 30;
@@ -152,6 +153,8 @@ export const getMaxFileSize = (tab: NOVA_TAB_TYPE): number => {
   switch (tab) {
     case NOVA_TAB_TYPE.aiChat:
       return MAX_FILE_UPLOAD_SIZE_MB_AI_CHAT;
+    case NOVA_TAB_TYPE.styleStudio:
+      return MAX_FILE_UPLOAD_SIZE_MB_STYLE_STUDIO;
     case NOVA_TAB_TYPE.convert2DTo3D:
       return MAX_FILE_UPLOAD_SIZE_MB_CONVERT_2DTO3D;
     case NOVA_TAB_TYPE.removeBG:
