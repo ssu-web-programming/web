@@ -102,7 +102,11 @@ const StyleStudio = () => {
               <FileItem fileName={currentFile.info} isDeleteIcon={true} iconSize={48} />
             </S.UploadedBox>
           ) : (
-            <ImageUploadGuide handleUploadComplete={() => {}} showSimpleGuide={true} />
+            <ImageUploadGuide
+              handleUploadComplete={() => {}}
+              showSimpleGuide={true}
+              type="styleStudio"
+            />
           )}
         </S.UploadBox>
 
