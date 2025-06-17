@@ -146,15 +146,6 @@ export const FileUploader = (props: FileUploaderProps) => {
           onChangeTranslationFileType?.('drive');
           const element = inputRef?.current;
           if (element) {
-            const targetType =
-              target === 'nova-image'
-                ? getValidExt(selectedNovaTab)
-                : target === 'nova-translation'
-                  ? TRANSLATION_SUPPORT_TYPE
-                  : SUPPORT_DOCUMENT_TYPE;
-
-            element.accept = getAccept(targetType);
-
             // #IOS-5525 ios webp 파일 단일 선택 시 특정 버전에서 error가 발생하므로, 무조건 multiple로 지원하도록 수정함
             element.multiple =
               selectedNovaTab === NOVA_TAB_TYPE.home ||
