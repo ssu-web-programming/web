@@ -263,9 +263,11 @@ async function getImageDimensions(file: File): Promise<{ width: number; height: 
 
     reader.onload = (e) => {
       const result = e.target?.result;
+      console.log('result: ' + result);
       if (result) {
         img.src = result as string;
       } else {
+        console.log('Failed to load image');
         reject(new Error('Failed to load image'));
       }
     };
