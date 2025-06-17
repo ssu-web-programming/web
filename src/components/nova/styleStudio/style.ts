@@ -61,7 +61,7 @@ export const SectionTitle = styled.div`
 export const StyleGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  row-gap: 8px;
+  gap: 8px;
   width: 100%;
   padding: 0;
 `;
@@ -74,8 +74,8 @@ export const StyleItem = styled.div`
 `;
 
 export const ThumbnailWrap = styled.div`
-  width: 78px;
-  height: 78px;
+  width: 100%;
+  aspect-ratio: 1 / 1;
   position: relative;
   display: flex;
   align-items: center;
@@ -104,7 +104,9 @@ export const InnerBorder = styled.div<{ isSelected: boolean }>`
 `;
 
 export const Thumbnail = styled.img`
-  width: 78px;
+  width: 100%;
+  height: 100%;
+  display: block;
   border-radius: 12px;
   object-fit: cover;
   box-sizing: border-box;
