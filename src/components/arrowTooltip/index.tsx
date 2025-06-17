@@ -26,6 +26,7 @@ const CustomTooltip = styled(
     backgroundColor: theme.color.background.tooltip,
     backdropFilter: 'blur(6px)',
     whiteSpace: 'break-spaces',
+    fontFamily: 'Pretendard, sans-serif',
     fontSize: '12px',
     fontWeight: '500',
     lineHeight: '150%',
