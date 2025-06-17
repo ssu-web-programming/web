@@ -35,7 +35,7 @@ import Result from '../../../components/nova/result/index';
 import StyleStudio from '../../../components/nova/styleStudio';
 import Theme from '../../../components/nova/Theme';
 import TimeOut from '../../../components/nova/TimeOut';
-import Uploading from '../../../components/nova/Uploading';
+import Uploading from '../../../components/nova/uploading';
 import { FileUploadState } from '../../../constants/fileTypes';
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import { SERVICE_TYPE } from '../../../constants/serviceType';

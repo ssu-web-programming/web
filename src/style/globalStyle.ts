@@ -54,6 +54,7 @@ const GlobalStyle = createGlobalStyle`
     --black: #000000;
     --black-alpha: rgba(0, 0, 0, 0.3);
     --black-tooltip-alpha: rgba(0, 0, 0, 0.6);
+    --black-dim-alpha: rgba(0, 0, 0, 0.95);
     
     --deep-navy:#042B48;
       
@@ -83,6 +84,7 @@ const GlobalStyle = createGlobalStyle`
     --gray-gray-10: #f7f8f9;
     --white: #ffffff;
     --white-alpha: rgba(255, 255, 255, 0.7);
+    --white-dim-alpha: rgba(255, 255, 255, 0.95);
 
     --gray-shadow-light: rgba(38, 40, 43, 0.05);
 

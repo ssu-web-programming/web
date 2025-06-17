@@ -32,6 +32,7 @@ export const lightTheme = {
       mainBg02: 'var(--ai-purple-99-bg-light)',
       selected: 'var(--ai-purple-97-list-over)',
       dimBg: 'var(--white-alpha)',
+      dimBg02: 'var(--white-dim-alpha)',
       deepNavy: 'var(--deep-navy)',
       tooltip: 'var(--black-tooltip-alpha)'
     },
@@ -44,6 +45,7 @@ export const lightTheme = {
       gray06: 'var(--gray-gray-30)',
       purple01: 'var(--ai-purple-90)',
       purple02: 'var(--ai-purple-50-main)',
+      purple03: 'var(--ai-purple-90)',
       red01: 'var(--primary-po-red-10)'
     },
     main: 'var(--ai-purple-50-main)',
@@ -124,6 +126,7 @@ export const darkTheme = {
       mainBg02: 'var(--gray-gray-90-02)',
       selected: 'var(--ai-purple-50-main-alpha)',
       dimBg: 'var(--black-alpha)',
+      dimBg02: 'var(--black-dim-alpha)',
       deepNavy: 'var(--gray-gray-25)',
       tooltip: 'var(--gary-gray-62-alpha)'
     },
@@ -136,6 +139,7 @@ export const darkTheme = {
       gray06: 'var(--gray-gray-90)',
       purple01: 'var(--ai-purple-80-sub)',
       purple02: 'var(--ai-purple-90)',
+      purple03: 'var(--ai-purple-40)',
       red01: 'var(--primary-po-red-50-alpha-30)'
     },
     main: 'var(--ai-purple-50-main)',
