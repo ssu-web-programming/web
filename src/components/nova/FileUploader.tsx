@@ -258,7 +258,8 @@ export const FileUploader = (props: FileUploaderProps) => {
           }}>
           <FileButton
             target={target}
-            accept={getAccept(accept)}
+            accept={getAccept(accept, platform)}
+            // accept="image/jpg,image/png,image/jpeg,image/webp,image/bmp"
             handleOnChange={(files) => {
               type === 'file' ? uploadTranslationFile(files, maxFileSize) : loadLocalFile(files);
             }}
@@ -281,9 +282,9 @@ export const FileUploader = (props: FileUploaderProps) => {
   );
 };
 
-export const getAccept = (infos: SupportFileType[] | File) => {
-  // web = extensioin, others = mimeType
-  const platform = getPlatform();
+export const getAccept = (infos: SupportFileType[] | File, platform: ClientType) => {
+  console.log('platform', platform);
+
   if (infos instanceof File) {
     if (platform === ClientType.unknown) {
       return getFileExtension(infos.name.toLowerCase());
@@ -292,8 +293,10 @@ export const getAccept = (infos: SupportFileType[] | File) => {
     }
   } else {
     if (platform === ClientType.unknown) {
+      console.log('1111', infos.map((type) => type.mimeType).join(','));
       return infos.map((type) => type.extensions).join(',');
     } else {
+      console.log('2222', infos.map((type) => type.mimeType).join(','));
       return infos.map((type) => type.mimeType).join(',');
     }
   }

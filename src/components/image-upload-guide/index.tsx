@@ -15,11 +15,13 @@ import * as S from './style';
 interface ImageUploadGuideProps {
   handleUploadComplete?: () => void;
   showSimpleGuide?: boolean;
+  type?: 'image' | 'styleStudio';
 }
 
 const ImageUploadGuide = ({
   handleUploadComplete,
-  showSimpleGuide = false
+  showSimpleGuide = false,
+  type = 'image'
 }: ImageUploadGuideProps) => {
   const { t } = useTranslation();
   const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
