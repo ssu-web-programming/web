@@ -15,11 +15,13 @@ import * as S from './style';
 interface ImageUploadGuideProps {
   handleUploadComplete?: () => void;
   showSimpleGuide?: boolean;
+  type?: 'image' | 'styleStudio';
 }
 
 const ImageUploadGuide = ({
   handleUploadComplete,
-  showSimpleGuide = false
+  showSimpleGuide = false,
+  type = 'image'
 }: ImageUploadGuideProps) => {
   const { t } = useTranslation();
   const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
@@ -27,7 +29,7 @@ const ImageUploadGuide = ({
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
 
   return (
-    <ImageUploader handleUploadComplete={handleUploadComplete}>
+    <ImageUploader handleUploadComplete={handleUploadComplete} type={type}>
       <S.ImageBox>
         <S.Icon disable={isAgreed === undefined}>
           {isLightMode ? <UploadLightIcon /> : <UploadDarkIcon />}
