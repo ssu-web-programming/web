@@ -154,7 +154,7 @@ export const FileUploader = (props: FileUploaderProps) => {
                   : SUPPORT_DOCUMENT_TYPE;
 
             // element.accept = getAccept(targetType);
-            element.accept = '.webp,.bmp';
+            element.accept = 'image/jpg, image/png';
             console.log('getAccept(targetType)', getAccept(targetType));
 
             // #IOS-5525 ios webp 파일 단일 선택 시 특정 버전에서 error가 발생하므로, 무조건 multiple로 지원하도록 수정함
