@@ -153,8 +153,7 @@ export const FileUploader = (props: FileUploaderProps) => {
                   ? TRANSLATION_SUPPORT_TYPE
                   : SUPPORT_DOCUMENT_TYPE;
 
-            // element.accept = getAccept(targetType);
-            element.accept = '.jpg, .png';
+            element.accept = getAccept(targetType);
             console.log('getAccept(targetType)', getAccept(targetType));
             console.log('DEBUG: platform =', platform);
             console.log('DEBUG: navigator.userAgent =', navigator.userAgent);
@@ -272,7 +271,8 @@ export const FileUploader = (props: FileUploaderProps) => {
           }}>
           <FileButton
             target={target}
-            accept={getAccept(accept)}
+            // accept={getAccept(accept)}
+            accept="image/jpg, image/png, image/jpeg"
             handleOnChange={(files) => {
               type === 'file' ? uploadTranslationFile(files, maxFileSize) : loadLocalFile(files);
             }}
