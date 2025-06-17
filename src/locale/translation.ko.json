@@ -472,7 +472,7 @@
         },
         "Desc": {
           "Title": "이미지 설명",
-          "SubTitle": "더 나은 결과를 위해 <span>최소 10자</span> 이상으로 작성해 주세요.",
+          "SubTitle": "더 나은 결과를 위해 <span>최소 10자 이상</span>으로 작성해 주세요.",
           "PlaceHolder": "예: 고양이가 비 오는 날 창밖을 보는 장면"
         },
         "UploadImage": {
