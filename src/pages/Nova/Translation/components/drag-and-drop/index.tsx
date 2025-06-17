@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import Uploading from 'components/nova/Uploading';
+import Uploading from 'components/nova/uploading';
 import { useDropzone } from 'react-dropzone';
 
 interface Props {
