@@ -81,7 +81,10 @@ export default function ArrowTooltips({
 
   useEffect(() => {
     if (isReady) {
-      setOpen(true);
+      // luna: 컴포넌트 렌더링 전에 렌더링 되며 tooltip 위치가 순간적으로 변경되는 문제가 있어 delay 주도록 수정함
+      setTimeout(() => {
+        setOpen(true);
+      }, 50);
     }
   }, [isReady]);
 
