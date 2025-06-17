@@ -34,7 +34,7 @@ export default function AudioFileUploader({ guideMsg }: ImageUploaderProps) {
     const element = inputRef?.current;
     if (element) {
       const targetType = AUDIO_SUPPORT_TYPE;
-      element.accept = getAccept(targetType);
+      element.accept = getAccept(targetType, platform);
       element.multiple = false;
       element.click();
     }
@@ -74,7 +74,7 @@ export default function AudioFileUploader({ guideMsg }: ImageUploaderProps) {
     <S.Wrap>
       <FileButton
         target={target}
-        accept={getAccept(AUDIO_SUPPORT_TYPE)}
+        accept={getAccept(AUDIO_SUPPORT_TYPE, platform)}
         ref={inputRef}
         onClick={handleClickFileUpload}
         handleOnChange={handleChange}>

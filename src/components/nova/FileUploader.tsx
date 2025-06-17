@@ -146,16 +146,16 @@ export const FileUploader = (props: FileUploaderProps) => {
           onChangeTranslationFileType?.('drive');
           const element = inputRef?.current;
           if (element) {
-            const targetType =
-              target === 'nova-image'
-                ? getValidExt(selectedNovaTab)
-                : target === 'nova-translation'
-                  ? TRANSLATION_SUPPORT_TYPE
-                  : SUPPORT_DOCUMENT_TYPE;
+            // const targetType =
+            //   target === 'nova-image'
+            //     ? getValidExt(selectedNovaTab)
+            //     : target === 'nova-translation'
+            //       ? TRANSLATION_SUPPORT_TYPE
+            //       : SUPPORT_DOCUMENT_TYPE;
 
             // element.accept = getAccept(targetType);
-            console.log('getAccept(targetType)', getAccept(targetType));
-            element.accept = 'image/jpg,image/png,image/jpeg,image/webp,image/bmp';
+            // console.log('getAccept(targetType)', getAccept(targetType));
+            // element.accept = 'image/jpg,image/png,image/jpeg,image/webp,image/bmp';
 
             // #IOS-5525 ios webp 파일 단일 선택 시 특정 버전에서 error가 발생하므로, 무조건 multiple로 지원하도록 수정함
             element.multiple =
@@ -269,7 +269,7 @@ export const FileUploader = (props: FileUploaderProps) => {
           }}>
           <FileButton
             target={target}
-            // accept={getAccept(accept)}
+            accept={getAccept(accept, platform)}
             // accept="image/jpg,image/png,image/jpeg,image/webp,image/bmp"
             handleOnChange={(files) => {
               type === 'file' ? uploadTranslationFile(files, maxFileSize) : loadLocalFile(files);
@@ -293,9 +293,9 @@ export const FileUploader = (props: FileUploaderProps) => {
   );
 };
 
-export const getAccept = (infos: SupportFileType[] | File) => {
-  // web = extensioin, others = mimeType
-  const platform = getPlatform();
+export const getAccept = (infos: SupportFileType[] | File, platform: ClientType) => {
+  console.log('platform', platform);
+
   if (infos instanceof File) {
     if (platform === ClientType.unknown) {
       return getFileExtension(infos.name.toLowerCase());
@@ -304,8 +304,10 @@ export const getAccept = (infos: SupportFileType[] | File) => {
     }
   } else {
     if (platform === ClientType.unknown) {
+      console.log('1111', infos.map((type) => type.mimeType).join(','));
       return infos.map((type) => type.extensions).join(',');
     } else {
+      console.log('2222', infos.map((type) => type.mimeType).join(','));
       return infos.map((type) => type.mimeType).join(',');
     }
   }
