@@ -153,7 +153,8 @@ export const FileUploader = (props: FileUploaderProps) => {
                   ? TRANSLATION_SUPPORT_TYPE
                   : SUPPORT_DOCUMENT_TYPE;
 
-            element.accept = getAccept(targetType);
+            // element.accept = getAccept(targetType);
+            element.accept = 'image/jpg, image/png, image/jpeg';
             console.log('getAccept(targetType)', getAccept(targetType));
             console.log('DEBUG: platform =', platform);
             console.log('DEBUG: navigator.userAgent =', navigator.userAgent);
