@@ -94,6 +94,7 @@ export default function ImageUploader({ handleUploadComplete, children }: ImageU
     try {
       dispatch(setPageStatus({ tab: selectedNovaTab, status: 'progress' }));
       let fileData: File = selectedFile;
+      console.log('image Uploader file Data: ', fileData);
 
       if (isSpecificFormat(selectedFile)) {
         if (await isPixelLimitExceeded(selectedFile, selectedNovaTab)) {
