@@ -105,21 +105,6 @@ export const SUPPORT_IMAGE_TYPE: SupportFileType[] = [
   }
 ];
 
-export const SUPPORT_STYLE_STUDIO_IMAGE_TYPE: SupportFileType[] = [
-  {
-    mimeType: 'image/jpeg',
-    extensions: '.jpg'
-  },
-  {
-    mimeType: 'image/jpeg',
-    extensions: '.jpeg'
-  },
-  {
-    mimeType: 'image/png',
-    extensions: '.png'
-  }
-];
-
 export const getValidExt = (tab: NOVA_TAB_TYPE) => {
   switch (tab) {
     case 'aiChat':

@@ -6,8 +6,7 @@ import {
   AUDIO_SUPPORT_TYPE,
   compressImage,
   isPixelLimitExceeded,
-  SUPPORT_IMAGE_TYPE,
-  SUPPORT_STYLE_STUDIO_IMAGE_TYPE
+  SUPPORT_IMAGE_TYPE
 } from '../../constants/fileTypes';
 import { NOVA_TAB_TYPE } from '../../constants/novaTapTypes';
 import {
@@ -40,14 +39,9 @@ const Wrap = styled.div`
 interface ImageUploaderProps {
   handleUploadComplete?: () => void;
   children: React.ReactNode;
-  type?: 'image' | 'styleStudio';
 }
 
-export default function ImageUploader({
-  handleUploadComplete,
-  children,
-  type = 'image'
-}: ImageUploaderProps) {
+export default function ImageUploader({ handleUploadComplete, children }: ImageUploaderProps) {
   const { t } = useTranslation();
   const confirm = useConfirm();
   const inputImgFileRef = useRef<HTMLInputElement | null>(null);
@@ -138,7 +132,7 @@ export default function ImageUploader({
       <FileUploader
         key={target}
         target={target}
-        accept={type === 'styleStudio' ? SUPPORT_STYLE_STUDIO_IMAGE_TYPE : SUPPORT_IMAGE_TYPE}
+        accept={SUPPORT_IMAGE_TYPE}
         inputRef={inputImgFileRef}
         tooltipStyle={{
           minWidth: '165px',

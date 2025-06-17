@@ -29,7 +29,7 @@ const ImageUploadGuide = ({
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
 
   return (
-    <ImageUploader handleUploadComplete={handleUploadComplete} type={type}>
+    <ImageUploader handleUploadComplete={handleUploadComplete}>
       <S.ImageBox>
         <S.Icon disable={isAgreed === undefined}>
           {isLightMode ? <UploadLightIcon /> : <UploadDarkIcon />}
