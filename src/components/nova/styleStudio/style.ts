@@ -49,6 +49,7 @@ export const MainDesc = styled.div`
   font-weight: 400;
   color: ${({ theme }) => theme.color.text.gray06};
   text-align: center;
+  white-space: break-spaces;
 `;
 
 export const SectionTitle = styled.div`
