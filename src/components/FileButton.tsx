@@ -37,6 +37,8 @@ const FileButton = forwardRef<HTMLInputElement, FileButtonProps>((props, ref) =>
   const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
   const { handleAgreement } = usePrivacyConsent();
 
+  console.log('진짜 실행되기전에 accept', accept);
+
   return (
     <FileButtonBase onClick={target === 'nova-voice-dictation' ? handleClick : handleAgreement}>
       <Label disable={isAgreed === undefined}>{children}</Label>
