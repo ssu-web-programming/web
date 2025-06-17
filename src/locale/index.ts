@@ -107,10 +107,16 @@ const resources = {
   }
 };
 
-i18n.use(LanguageDetector).use(initReactI18next).init({
-  resources,
-  lng: lang,
-  fallbackLng: 'en'
-});
+i18n
+  .use(LanguageDetector)
+  .use(initReactI18next)
+  .init({
+    resources,
+    lng: lang,
+    fallbackLng: 'en'
+  })
+  .then(() => {
+    document.documentElement.lang = i18n.language;
+  });
 
 export default i18n;
