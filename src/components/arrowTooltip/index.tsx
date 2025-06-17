@@ -125,7 +125,17 @@ export default function ArrowTooltips({
         open={open}
         onClick={handleTooltipToggle}
         tooltipStyles={tooltipStyles}
-        arrowStyles={arrowStyles}>
+        arrowStyles={arrowStyles}
+        PopperProps={{
+          modifiers: [
+            {
+              name: 'eventListener',
+              options: {
+                resize: true
+              }
+            }
+          ]
+        }}>
         <S.CustomButton className="tooltipBtn" cssExt={cssExt}>
           {children}
         </S.CustomButton>
