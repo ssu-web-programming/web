@@ -86,13 +86,14 @@ export default function ImageUploader({ handleUploadComplete, children }: ImageU
   };
 
   const handleFileProcessing = async () => {
+    dispatch(setPageStatus({ tab: selectedNovaTab, status: 'progress' }));
     const selectedFile = await getSelectedFile();
     if (!selectedFile) {
+      dispatch(setPageStatus({ tab: selectedNovaTab, status: 'home' }));
       return;
     }
 
     try {
-      dispatch(setPageStatus({ tab: selectedNovaTab, status: 'progress' }));
       let fileData: File = selectedFile;
 
       if (isSpecificFormat(selectedFile)) {
@@ -113,7 +114,6 @@ export default function ImageUploader({ handleUploadComplete, children }: ImageU
       } else {
         fileData = await compressImage(selectedFile, selectedNovaTab);
       }
-
       dispatch(
         setPageData({
           tab: selectedNovaTab,

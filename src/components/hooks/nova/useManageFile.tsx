@@ -150,8 +150,6 @@ export function useManageFile({ onFinishCallback, onClearPastedImages }: Props =
     onFinishCallback?.();
     onClearPastedImages?.();
 
-    console.log('upload files:', files);
-
     const maxFileUploadCntOnce = getMaxFilesPerUpload(selectedNovaTab);
     if (files.length > maxFileUploadCntOnce) {
       await confirm({
@@ -205,7 +203,6 @@ export function useManageFile({ onFinishCallback, onClearPastedImages }: Props =
             ? [...AUDIO_SUPPORT_TYPE.flatMap((type) => type.extensions)]
             : [...getValidExt(selectedNovaTab).flatMap((type) => type.extensions)];
 
-    console.log('supportedExtensions: ', supportedExtensions);
     const invalidFiles = files.filter((file) => {
       const fileExtension = `.${file.name.split('.').pop()?.toLowerCase()}`;
       return !supportedExtensions.includes(fileExtension);
