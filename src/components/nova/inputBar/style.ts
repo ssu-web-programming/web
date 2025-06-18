@@ -10,7 +10,7 @@ export const InputBarBase = styled.div<{ disabled: boolean }>`
   box-shadow: ${({ theme }) =>
     theme.mode === 'light' ? '0px -4px 8px 0px var(--gray-shadow-light)' : 'none'};
   background-color: ${({ theme }) => theme.color.background.gray05};
-
+  z-index: 2000;
   ${({ disabled }) =>
     disabled &&
     css`
