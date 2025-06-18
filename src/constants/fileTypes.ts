@@ -242,34 +242,22 @@ export async function compressImage(file: File, tab: NOVA_TAB_TYPE): Promise<Fil
 
 async function getImageDimensions(file: File): Promise<{ width: number; height: number }> {
   return new Promise((resolve, reject) => {
+    console.log('file type: ', file.type);
     const img = new Image();
-    const reader = new FileReader();
+    const objectUrl = URL.createObjectURL(file);
 
-    reader.onload = (e) => {
-      const result = e.target?.result;
-      if (result) {
-        img.src = result as string;
-      } else {
-        console.log('Failed to load image');
-        reject(new Error('Failed to load image'));
-      }
-    };
+    img.src = objectUrl;
 
     img.onload = () => {
+      URL.revokeObjectURL(objectUrl);
       resolve({ width: img.width, height: img.height });
     };
 
     img.onerror = (err) => {
-      console.error('Image failed to load:', err);
-      reject(new Error(`Image load error: ${err}`));
+      URL.revokeObjectURL(objectUrl);
+      console.error('Image load error:', err);
+      reject(new Error('Image failed to load. Possibly unsupported or corrupt file.'));
     };
-
-    reader.onerror = (err) => {
-      console.error('Render failed to load:', err);
-      reject(new Error(`FileReader error: ${err}`));
-    };
-
-    reader.readAsDataURL(file);
   });
 }
 
