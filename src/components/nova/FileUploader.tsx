@@ -146,6 +146,7 @@ export const FileUploader = (props: FileUploaderProps) => {
           onChangeTranslationFileType?.('drive');
           const element = inputRef?.current;
           if (element) {
+            element.accept = getAccept(accept, platform);
             // #IOS-5525 ios webp 파일 단일 선택 시 특정 버전에서 error가 발생하므로, 무조건 multiple로 지원하도록 수정함
             element.multiple =
               selectedNovaTab === NOVA_TAB_TYPE.home ||
@@ -283,8 +284,6 @@ export const FileUploader = (props: FileUploaderProps) => {
 };
 
 export const getAccept = (infos: SupportFileType[] | File, platform: ClientType) => {
-  console.log('platform', platform);
-
   if (infos instanceof File) {
     if (platform === ClientType.unknown) {
       return getFileExtension(infos.name.toLowerCase());
@@ -293,10 +292,8 @@ export const getAccept = (infos: SupportFileType[] | File, platform: ClientType)
     }
   } else {
     if (platform === ClientType.unknown) {
-      console.log('1111', infos.map((type) => type.mimeType).join(','));
       return infos.map((type) => type.extensions).join(',');
     } else {
-      console.log('2222', infos.map((type) => type.mimeType).join(','));
       return infos.map((type) => type.mimeType).join(',');
     }
   }
