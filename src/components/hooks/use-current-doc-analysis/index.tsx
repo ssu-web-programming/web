@@ -64,7 +64,6 @@ export default function useCurrentDocAnalysis() {
         dispatch(setDriveFiles([curFile]));
         dispatch(setCreating('none'));
       } else {
-        console.log('platform', platform);
         await confirmSaveDoc(platform === ClientType.web ? true : false);
       }
     } else if (currentFile.type === 'local' || currentFile.type === 'unknown') {

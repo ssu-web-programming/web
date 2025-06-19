@@ -220,7 +220,6 @@ const useErrorHandle = () => {
           switch (error.code) {
             case ERR_FOREGROUND: {
               msg = t(`ToastMsg.RemoveBG.failedDueToComplexity`);
-              console.log('??');
               break;
             }
           }

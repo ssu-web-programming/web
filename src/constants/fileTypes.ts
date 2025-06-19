@@ -188,7 +188,6 @@ export const isValidFileSize = (size: number, tab: NOVA_TAB_TYPE) => {
 };
 
 export async function compressImage(file: File, tab: NOVA_TAB_TYPE): Promise<File> {
-  console.log('compressImage', file);
   const { width, height } = await getImageDimensions(file);
   let widthOrHeight = -1;
 
@@ -244,11 +243,9 @@ async function getImageDimensions(file: File): Promise<{ width: number; height: 
   return new Promise((resolve, reject) => {
     const img = new Image();
     const reader = new FileReader();
-    console.log('getImageDimensions: ', file);
 
     reader.onload = (e) => {
       const result = e.target?.result;
-      console.log('result:', result);
       if (result) {
         img.src = result as string;
       } else {

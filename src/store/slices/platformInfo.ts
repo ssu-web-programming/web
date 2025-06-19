@@ -41,7 +41,6 @@ const platformInfo = createSlice({
       return state;
     },
     getPlatformInfo: (state) => {
-      console.log('현재 state 반환!', state);
       return state;
     }
   }
