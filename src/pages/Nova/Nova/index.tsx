@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 
 import Announcement from '../../../components/Announcement';
 import { useConfirm } from '../../../components/Confirm';
-import { useGenerateStyleStudio } from '../../../components/hooks/nova/use-generate-style-studio';
 import { useChangeBackground } from '../../../components/hooks/nova/useChangeBackground';
 import { useChangeStyle } from '../../../components/hooks/nova/useChangeStyle';
 import { useConvert2DTo3D } from '../../../components/hooks/nova/useConvert2DTo3D';
@@ -26,7 +25,6 @@ import Expand from '../../../components/nova/Expand';
 import { Guide } from '../../../components/nova/Guide';
 import NovaHeader from '../../../components/nova/Header';
 import NovaHome from '../../../components/nova/home/homeLayout';
-import ImageUploader from '../../../components/nova/ImageUploader';
 import Loading from '../../../components/nova/Loading';
 import Modals, { Overlay } from '../../../components/nova/modals/Modals';
 import Progress from '../../../components/nova/Progress';
@@ -34,14 +32,11 @@ import Prompt from '../../../components/nova/Prompt';
 import Result from '../../../components/nova/result/index';
 import StyleStudio from '../../../components/nova/styleStudio';
 import Theme from '../../../components/nova/Theme';
-import TimeOut from '../../../components/nova/TimeOut';
+import TimeOut from '../../../components/nova/timeout';
 import Uploading from '../../../components/nova/uploading';
 import { FileUploadState } from '../../../constants/fileTypes';
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import { SERVICE_TYPE } from '../../../constants/serviceType';
-import { ReactComponent as UploadDarkIcon } from '../../../img/dark/ico_upload_img_plus.svg';
-import CreditIcon from '../../../img/light/ico_credit_gray.svg';
-import { ReactComponent as UploadLightIcon } from '../../../img/light/ico_upload_img_plus.svg';
 import { announceInfoSelector } from '../../../store/slices/nova/announceSlice';
 import {
   novaChatModeSelector,
@@ -53,7 +48,7 @@ import {
   selectPageService,
   selectPageStatus
 } from '../../../store/slices/nova/pageStatusSlice';
-import { selectNovaTab, selectTabSlice } from '../../../store/slices/tabSlice';
+import { selectTabSlice } from '../../../store/slices/tabSlice';
 import { themeInfoSelector } from '../../../store/slices/theme';
 import { userInfoSelector } from '../../../store/slices/userInfo';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
