@@ -468,9 +468,9 @@
           "Figurine": "Box Figure"
         },
         "Desc": {
-          "Title": "Image Description",
+          "Title": "Image Description (Optional)",
           "SubTitle": "For better results, please enter at <span>least 10 characters.</span>",
-          "PlaceHolder": "ex. A cat looking out the window on a rainy day"
+          "PlaceHolder": "Describe the scene or changes you want.\n(e.g., Change the background to a rainy day / Add a ribbon to the character's head)"
         },
         "UploadImage": {
           "Title": "Upload Image"
