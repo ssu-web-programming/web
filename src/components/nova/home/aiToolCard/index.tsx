@@ -31,7 +31,7 @@ const AIToolCard = ({ tab, isHighlight, icons, label, handleClick }: AIToolCardP
     <S.ImageItemWrapper>
       {isHighlight ? (
         <ArrowTooltips
-          autoClose={true}
+          autoClose={false}
           message={t('Nova.styleStudio.Tooltip')}
           placement="top-start"
           cssExt={css`
