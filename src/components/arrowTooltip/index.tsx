@@ -134,7 +134,8 @@ export default function ArrowTooltips({
                 resize: true
               }
             }
-          ]
+          ],
+          style: { zIndex: 99 }
         }}>
         <S.CustomButton className="tooltipBtn" cssExt={cssExt}>
           {children}
