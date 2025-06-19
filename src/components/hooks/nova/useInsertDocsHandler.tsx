@@ -47,7 +47,6 @@ export const useInsertDocsHandler = () => {
       Bridge.callSyncBridgeApiWithCallback({
         api: 'getClientStatus',
         callback: async (status: ClientStatusType) => {
-          console.log('status', status);
           switch (status) {
             case 'home':
               confirm({
