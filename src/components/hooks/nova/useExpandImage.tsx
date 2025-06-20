@@ -62,7 +62,7 @@ export const useExpandImage = () => {
 
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.expandImg, status: 'progress' }));
     try {
-      const base64Data = await fileToBase64(curPageFile);
+      const base64Data = await fileToBase64(curPageFile.file);
       dispatch(setPageResult({ tab: NOVA_TAB_TYPE.expandImg, result: base64Data }));
       dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.expandImg, status: 'expand' }));
     } catch (err) {
@@ -82,7 +82,7 @@ export const useExpandImage = () => {
     dispatch(setPageStatus({ tab: NOVA_TAB_TYPE.expandImg, status: 'loading' }));
 
     try {
-      const formData = await createFormDataFromFiles([curPageFile]);
+      const formData = await createFormDataFromFiles([curPageFile.file]);
       formData.append('extend_left', String(extend_left));
       formData.append('extend_right', String(extend_right));
       formData.append('extend_up', String(extend_up));

@@ -16,6 +16,7 @@ import { useRemoveBackground } from '../../../components/hooks/nova/useRemoveBac
 import useSubmitHandler from '../../../components/hooks/nova/useSubmitHandler';
 import useShowConfirmModal from '../../../components/hooks/use-show-confirm-modal';
 import { useChatNova } from '../../../components/hooks/useChatNova';
+import ImageUploadGuide from '../../../components/image-upload-guide';
 import AIChat from '../../../components/nova/aiChat';
 import AIVideo from '../../../components/nova/aiVideo';
 import Banner from '../../../components/nova/banner';
@@ -23,30 +24,31 @@ import Convert from '../../../components/nova/Convert';
 import Expand from '../../../components/nova/Expand';
 import { Guide } from '../../../components/nova/Guide';
 import NovaHeader from '../../../components/nova/Header';
-import ImageUploader from '../../../components/nova/ImageUploader';
+import NovaHome from '../../../components/nova/home/homeLayout';
 import Loading from '../../../components/nova/Loading';
 import Modals, { Overlay } from '../../../components/nova/modals/Modals';
-import NovaHome from '../../../components/nova/novaHome';
 import Progress from '../../../components/nova/Progress';
 import Prompt from '../../../components/nova/Prompt';
 import Result from '../../../components/nova/result/index';
+import StyleStudio from '../../../components/nova/styleStudio';
 import Theme from '../../../components/nova/Theme';
-import TimeOut from '../../../components/nova/TimeOut';
-import Uploading from '../../../components/nova/Uploading';
+import TimeOut from '../../../components/nova/timeout';
+import Uploading from '../../../components/nova/uploading';
 import { FileUploadState } from '../../../constants/fileTypes';
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import { SERVICE_TYPE } from '../../../constants/serviceType';
-import { ReactComponent as UploadDarkIcon } from '../../../img/dark/ico_upload_img_plus.svg';
-import CreditIcon from '../../../img/light/ico_credit_gray.svg';
-import { ReactComponent as UploadLightIcon } from '../../../img/light/ico_upload_img_plus.svg';
 import { announceInfoSelector } from '../../../store/slices/nova/announceSlice';
 import {
   novaChatModeSelector,
   novaHistorySelector,
   setIsShareMode
 } from '../../../store/slices/nova/novaHistorySlice';
-import { selectPageService, selectPageStatus } from '../../../store/slices/nova/pageStatusSlice';
-import { selectNovaTab, selectTabSlice } from '../../../store/slices/tabSlice';
+import {
+  resetPageData,
+  selectPageService,
+  selectPageStatus
+} from '../../../store/slices/nova/pageStatusSlice';
+import { selectTabSlice } from '../../../store/slices/tabSlice';
 import { themeInfoSelector } from '../../../store/slices/theme';
 import { userInfoSelector } from '../../../store/slices/userInfo';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
@@ -127,7 +129,11 @@ export default function Nova() {
       if (selectedNovaTab === NOVA_TAB_TYPE.translation) {
         await uploadTranslationFile(acceptedFiles, 30 * 1024 * 1024);
       } else {
-        loadLocalFile(acceptedFiles);
+        const files: File[] = acceptedFiles.map(
+          (file) => new File([file], file.name, { type: file.type })
+        );
+        dispatch(resetPageData(selectedNovaTab));
+        await loadLocalFile(files);
       }
     },
     [confirm, t]
@@ -208,25 +214,15 @@ export default function Nova() {
       switch (status) {
         case 'home':
         case 'progress':
-          return (
-            <Guide>
-              <ImageUploader handleUploadComplete={handleUploadComplete} curTab={selectedNovaTab}>
-                <S.ImageBox>
-                  <S.Icon disable={isAgreed === undefined}>
-                    {isLightMode ? <UploadLightIcon /> : <UploadDarkIcon />}
-                    <span>{t(`Nova.UploadTooltip.UploadImage`)}</span>
-                  </S.Icon>
-                  <S.Credit>
-                    <span>10</span>
-                    <div className="img">
-                      <img src={CreditIcon} alt="credit" />
-                    </div>
-                  </S.Credit>
-                  <S.Guide>{t(`Nova.${selectedNovaTab}.Guide.ImgUploader`)}</S.Guide>
-                </S.ImageBox>
-              </ImageUploader>
-            </Guide>
-          );
+          if (selectedNovaTab === NOVA_TAB_TYPE.styleStudio) {
+            return <StyleStudio />;
+          } else {
+            return (
+              <Guide>
+                <ImageUploadGuide handleUploadComplete={handleUploadComplete} />
+              </Guide>
+            );
+          }
         case 'convert':
           return <Convert />;
         case 'prompt':

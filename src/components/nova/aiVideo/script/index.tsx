@@ -15,7 +15,7 @@ import {
 } from '../../../../store/slices/nova/pageStatusSlice';
 import { themeInfoSelector } from '../../../../store/slices/theme';
 import { useAppDispatch, useAppSelector } from '../../../../store/store';
-import ArrowTooltips from '../../../ArrowTooltip';
+import ArrowTooltips from '../../../arrowTooltip';
 import Button from '../../../buttons/Button';
 import AvatarCard from '../component/AvatarCard';
 import HeygenLogo from '../component/HeygenLogo';

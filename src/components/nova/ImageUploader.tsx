@@ -14,6 +14,7 @@ import {
   setPageData,
   setPageStatus
 } from '../../store/slices/nova/pageStatusSlice';
+import { selectTabSlice } from '../../store/slices/tabSlice';
 import { getDriveFiles, getLocalFiles } from '../../store/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { convertDriveFileToFile } from '../../util/files';
@@ -37,23 +38,27 @@ const Wrap = styled.div`
 
 interface ImageUploaderProps {
   handleUploadComplete?: () => void;
-  curTab: NOVA_TAB_TYPE;
   children: React.ReactNode;
 }
 
-export default function ImageUploader({
-  handleUploadComplete,
-  curTab,
-  children
-}: ImageUploaderProps) {
+export default function ImageUploader({ handleUploadComplete, children }: ImageUploaderProps) {
   const { t } = useTranslation();
   const confirm = useConfirm();
   const inputImgFileRef = useRef<HTMLInputElement | null>(null);
   const dispatch = useAppDispatch();
   const errorHandle = useErrorHandle();
+  const { selectedNovaTab } = useAppSelector(selectTabSlice);
   const localFiles = useAppSelector(getLocalFiles);
   const driveFiles = useAppSelector(getDriveFiles);
-  const currentFile = useAppSelector(selectPageData(curTab));
+  const currentFile = useAppSelector(selectPageData(selectedNovaTab));
+
+  useEffect(() => {
+    if (currentFile && handleUploadComplete) {
+      handleUploadComplete();
+    } else {
+      handleFileProcessing();
+    }
+  }, [localFiles, driveFiles, currentFile, selectedNovaTab]);
 
   const target = 'nova-image';
 
@@ -81,17 +86,18 @@ export default function ImageUploader({
   };
 
   const handleFileProcessing = async () => {
+    dispatch(setPageStatus({ tab: selectedNovaTab, status: 'progress' }));
     const selectedFile = await getSelectedFile();
     if (!selectedFile) {
+      dispatch(setPageStatus({ tab: selectedNovaTab, status: 'home' }));
       return;
     }
 
     try {
-      dispatch(setPageStatus({ tab: curTab, status: 'progress' }));
       let fileData: File = selectedFile;
 
       if (isSpecificFormat(selectedFile)) {
-        if (await isPixelLimitExceeded(selectedFile, curTab)) {
+        if (await isPixelLimitExceeded(selectedFile, selectedNovaTab)) {
           await confirm({
             title: '',
             msg: `${t('Nova.Confirm.OverMaxFilePixel')}\n\n${t(
@@ -106,29 +112,20 @@ export default function ImageUploader({
           });
         }
       } else {
-        fileData = await compressImage(selectedFile, curTab);
+        fileData = await compressImage(selectedFile, selectedNovaTab);
       }
-
       dispatch(
         setPageData({
-          tab: curTab,
-          data: fileData
+          tab: selectedNovaTab,
+          data: { file: fileData, info: selectedFile.name }
         })
       );
-      dispatch(setPageStatus({ tab: curTab, status: 'home' }));
+      dispatch(setPageStatus({ tab: selectedNovaTab, status: 'home' }));
     } catch (err) {
-      dispatch(setPageStatus({ tab: curTab, status: 'home' }));
+      dispatch(setPageStatus({ tab: selectedNovaTab, status: 'home' }));
       errorHandle(err);
     }
   };
-
-  useEffect(() => {
-    if (currentFile && handleUploadComplete) {
-      handleUploadComplete();
-    } else {
-      handleFileProcessing();
-    }
-  }, [localFiles, driveFiles, currentFile, curTab]);
 
   return (
     <Wrap>

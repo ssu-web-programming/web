@@ -1,13 +1,19 @@
 import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
+  html * {
+    font-family: 'Pretendard', sans-serif;
+  }
+  html:lang(ja) * {
+    font-family: 'Pretendard JP', sans-serif;
+  }
+    
   html,
   body,
   #root {
     margin: 0;
     padding: 0;
     background-color: ${({ theme }: { theme: any }) => theme.color.background.gray01};
-    font-family: 'Pretendard', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 
@@ -53,9 +59,12 @@ const GlobalStyle = createGlobalStyle`
 
     --black: #000000;
     --black-alpha: rgba(0, 0, 0, 0.3);
+    --black-tooltip-alpha: rgba(0, 0, 0, 0.6);
+    --black-dim-alpha: rgba(0, 0, 0, 0.95);
     
     --deep-navy:#042B48;
-
+      
+    --gray-gray-90-02: #232323;
     --gray-gray-90-01: #26282b;
     --gray-gray-90: #2d2d2d;
     --gray-gray-89: #262626;
@@ -81,14 +90,18 @@ const GlobalStyle = createGlobalStyle`
     --gray-gray-10: #f7f8f9;
     --white: #ffffff;
     --white-alpha: rgba(255, 255, 255, 0.7);
+    --white-dim-alpha: rgba(255, 255, 255, 0.95);
 
     --gray-shadow-light: rgba(38, 40, 43, 0.05);
 
     --sale: #fb4949;
-
+      
+    --primary-po-red-10: #FFE3E3;
     --primary-po-red-30: #FEEEEE;
     --primary-po-red-40: #FA8C8C;
     --primary-po-red-50: #F95C5C;
+    --primary-po-red-50-alpha-05: rgba(249, 92, 92, 0.05);
+    --primary-po-red-50-alpha-30: rgba(249, 92, 92, 0.3);  
     --primary-po-red-60: #D34E4E;
     --primary-po-red-70: #FB4949;
     --primary-po-red-80: #632424;

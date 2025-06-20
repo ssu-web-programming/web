@@ -11,6 +11,10 @@ import ExpandImgIcon from '../../img/common/nova/imgSample/image_expand_sample.p
 import RemakeImgIcon from '../../img/common/nova/imgSample/image_remake_sample.png';
 import ChangeStyleIcon from '../../img/common/nova/imgSample/image_style_sample.png';
 import ImprovedResIcon from '../../img/common/nova/imgSample/image_upscaling_sample.png';
+import StyleStudioIcon1 from '../../img/common/nova/imgSample/style_studio1.png';
+import StyleStudioIcon2 from '../../img/common/nova/imgSample/style_studio2.png';
+import StyleStudioIcon3 from '../../img/common/nova/imgSample/style_studio3.png';
+import StyleStudioIcon4 from '../../img/common/nova/imgSample/style_studio4.png';
 import ClaudeLogoDarkIcon from '../../img/dark/nova/logo/ico_claude_logo.svg';
 import ClovaLogoDarkIcon from '../../img/dark/nova/logo/ico_clova_logo.svg';
 import GPTLogoDarkIcon from '../../img/dark/nova/logo/ico_gpt_logo.svg';
@@ -47,6 +51,7 @@ export enum SERVICE_TYPE {
   NOVA_AI_AVATA_VIDEO_HEYGEN = 'NOVA_AI_AVATA_VIDEO_HEYGEN', // 10
 
   // Image
+  NOVA_STYLE_STUDIO = 'NOVA_STYLE_STUDIO',
   NOVA_REMOVE_BG = 'NOVA_REMOVE_BG', // 10
   NOVA_PO_RESOLUTION = 'NOVA_PO_RESOLUTION', // 2
   NOVA_REPLACE_BG_CLIPDROP = 'NOVA_REPLACE_BG_CLIPDROP', // 10
@@ -84,6 +89,7 @@ export const TAB_SERVICE_MAP: Record<NOVA_TAB_TYPE, SERVICE_TYPE[]> = {
   [NOVA_TAB_TYPE.aiVideo]: [SERVICE_TYPE.NOVA_AI_AVATA_VIDEO_HEYGEN],
 
   // Image
+  [NOVA_TAB_TYPE.styleStudio]: [SERVICE_TYPE.NOVA_STYLE_STUDIO],
   [NOVA_TAB_TYPE.removeBG]: [SERVICE_TYPE.NOVA_REMOVE_BG],
   [NOVA_TAB_TYPE.changeBG]: [SERVICE_TYPE.NOVA_REPLACE_BG_CLIPDROP],
   [NOVA_TAB_TYPE.remakeImg]: [SERVICE_TYPE.NOVA_REIMAGE_CLIPDROP],
@@ -116,6 +122,7 @@ export const SERVICE_GROUP_MAP: Record<SERVICE_CATEGORY, Record<string, SERVICE_
     aiVideo: [SERVICE_TYPE.NOVA_AI_AVATA_VIDEO_HEYGEN]
   },
   [SERVICE_CATEGORY.IMAGE]: {
+    styleStudio: [SERVICE_TYPE.NOVA_STYLE_STUDIO],
     removeBG: [SERVICE_TYPE.NOVA_REMOVE_BG],
     improvedRes: [SERVICE_TYPE.NOVA_PO_RESOLUTION],
     changeBG: [SERVICE_TYPE.NOVA_REPLACE_BG_CLIPDROP],
@@ -188,20 +195,21 @@ const CHAT_GROUP_DETAIL_MAP: Record<
   }
 };
 
-export const iconMap: Record<NOVA_TAB_TYPE, string> = {
-  home: '',
-  aiChat: '',
-  perplexity: PerplexityIcon,
-  convert2DTo3D: Convert2DTo3DIcon,
-  removeBG: RemoveBGIcon,
-  changeBG: ChangeBGIcon,
-  remakeImg: RemakeImgIcon,
-  expandImg: ExpandImgIcon,
-  improvedRes: ImprovedResIcon,
-  changeStyle: ChangeStyleIcon,
-  translation: TranslationIcon,
-  voiceDictation: VoiceDictationIcon,
-  aiVideo: AIVideoIcon
+export const iconMap: Record<NOVA_TAB_TYPE, string[]> = {
+  home: [],
+  aiChat: [],
+  perplexity: [PerplexityIcon],
+  convert2DTo3D: [Convert2DTo3DIcon],
+  styleStudio: [StyleStudioIcon1, StyleStudioIcon2, StyleStudioIcon3, StyleStudioIcon4],
+  removeBG: [RemoveBGIcon],
+  changeBG: [ChangeBGIcon],
+  remakeImg: [RemakeImgIcon],
+  expandImg: [ExpandImgIcon],
+  improvedRes: [ImprovedResIcon],
+  changeStyle: [ChangeStyleIcon],
+  translation: [TranslationIcon],
+  voiceDictation: [VoiceDictationIcon],
+  aiVideo: [AIVideoIcon]
 };
 
 export const getServiceGroupInfo = (groupKey: string, isLightMode: boolean) => {
@@ -294,6 +302,7 @@ export const getServiceLoggingInfo = (serviceType: SERVICE_TYPE): ServiceLogging
       name: 'nova_web_search',
       detail: 'perplexity_pro'
     },
+    [SERVICE_TYPE.NOVA_STYLE_STUDIO]: { name: 'nova_style_studio', detail: 'image1' },
     [SERVICE_TYPE.NOVA_REMOVE_BG]: { name: 'nova_background_remove', detail: 'remove_bg' },
     [SERVICE_TYPE.NOVA_REPLACE_BG_CLIPDROP]: { name: 'nova_background_change', detail: 'clipdrop' },
     [SERVICE_TYPE.NOVA_REIMAGE_CLIPDROP]: { name: 'nova_image_remake', detail: 'clipdrop' },

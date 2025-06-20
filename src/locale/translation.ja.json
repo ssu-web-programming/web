@@ -202,6 +202,9 @@
     },
     "RemoveBG": {
       "failedDueToComplexity": "背景が複雑なため、削除に失敗しました。別の画像でお試しください。"
+    },
+    "aiVideo": {
+      "NotMatchVoice": "音声と言語が一致しません。\nクレジットは消費されていません。再度お試しください。"
     }
   },
   "Offline": {
@@ -333,6 +336,7 @@
       },
       "image": {
         "title": "画像",
+        "styleStudio": "スタイルスタジオ",
         "removeBG": "背景を消す",
         "improvedRes": "解像度を上げる",
         "changeBG": "背景を変更",
@@ -403,6 +407,7 @@
     },
     "Tabs": {
       "aiChat": "AIチャット",
+      "styleStudio": "スタイルスタジオ",
       "convert2DTo3D": "2Dから3Dへ",
       "removeBG": "背景を消す",
       "changeBG": "背景を変更",
@@ -441,6 +446,45 @@
         "countMore": "その他{{count}}件のアイテム",
         "collapse": "畳む",
         "anotherAnswer": "他の回答を見る"
+      }
+    },
+    "styleStudio": {
+      "Tooltip": "人気スタイルを一気に体験！",
+      "Guide": {
+        "Title": "スタジオ",
+        "SubTitle": "クリック一つで、画像やテキストがお好みのスタイルに変身します！",
+        "ImgUploader": "ここをクリックまたはドラッグしてアップロード\n20MB以下のJPG・PNG形式に対応しています"
+      },
+      "SelectStyle": {
+        "CharStyle": "キャラクタースタイル",
+        "StyleGuide": "本スタイルは実在のブランドとは関係のない参考イメージです。",
+        "Style": {
+          "Ghibli": "日本アニメ",
+          "Disney": "おとぎ話",
+          "Pixar": "3Dスタイル",
+          "Marvel": "アクション",
+          "AnimalCrossing": "動物の村",
+          "SailorMoon": "クラシック少女",
+          "Shinchan": "元気な漫画",
+          "Simpsons": "ファミリーコミック",
+          "Lego": "ブロックおもちゃ",
+          "Figurine": "ボックスフィギュア"
+        },
+        "Desc": {
+          "Title": "画像説明 (任意)",
+          "SubTitle": "よりよい結果のために、<span>10文字以上</span>で入力してください。",
+          "PlaceHolder": "描写したいシーンや変更点を自由に教えてください。\n(例：背景を雨の日に変更してください / キャラクターの頭にリボンを追加してください)"
+        },
+        "UploadImage": {
+          "Title": "画像をアップロード"
+        },
+        "Warning": "生成されたコンテンツの使用に関する責任は、利用者本人にあります。\n他人の権利を侵害する行為や、犯罪目的での使用は禁止されています。",
+        "Button": "生成する"
+      },
+      "Loading": "スタイルを適用中です",
+      "Done": {
+        "Title": "スタイルの適用が完了しました",
+        "SubTitle": "画像が選択したスタイルで作成されました。\nご自由にお使いください！"
       }
     },
     "convert2DTo3D": {
@@ -1027,8 +1071,23 @@
       "SelectImg": "分析したい画像を選んでください。",
       "SelectTranslationFile": "翻訳したい文書を選択してください。"
     },
-    "Translate": {
-      "UploadGuide": "PDF、DOCX、PPTXドキュメントを翻訳します。 \n サポートされる容量：最大30MB"
+    "Modal": {
+      "Survey": {
+        "Title": "NOVAに満足？",
+        "Desc": "ご意見をいただくと50クレジットをプレゼント！",
+        "Answer": {
+          "Good": "まんぞく",
+          "Bad": "ふまん"
+        },
+        "SendFeedback": "フィードバックを送る",
+        "DontShow": "1週間表示しない",
+        "Result": {
+          "Gift": "50クレジットをプレゼント！",
+          "Greeting": "貴重なご意見ありがとうございます！さらに良い機能でお応えします。",
+          "BuyCredit": "単品クレジットを購入する",
+          "Confirm": "確認"
+        }
+      }
     }
   }
 }

@@ -17,13 +17,15 @@ const IconContainer = styled.div`
 `;
 
 const FileName = styled.p`
+  width: 264px;
+  max-width: 100%;
   text-align: center;
   color: ${({ theme }) => theme.color.text.gray03};
   margin-top: 8px;
-  max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   word-break: break-word;
+  white-space: nowrap;
 `;
 
 const DeleteIcon = styled(IcDelete)`

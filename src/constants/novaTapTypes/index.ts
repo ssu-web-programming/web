@@ -3,6 +3,7 @@ export enum NOVA_TAB_TYPE {
   aiChat = 'aiChat',
   perplexity = 'perplexity',
   convert2DTo3D = 'convert2DTo3D',
+  styleStudio = 'styleStudio',
   removeBG = 'removeBG',
   changeBG = 'changeBG',
   remakeImg = 'remakeImg',

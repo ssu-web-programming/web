@@ -494,7 +494,6 @@ export const useInitBridgeListener = () => {
 
             initPlatform(body);
             Bridge.callBridgeApi('analyzeCurFile');
-            console.log('isExternal: ', body.isExternal);
 
             // 이전 버전에는 해당 이벤트가 없어 예외처리
             if (body.isExternal === undefined) {

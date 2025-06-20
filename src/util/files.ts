@@ -160,19 +160,20 @@ export const convertFiles = async (files: NovaFileInfo[]) => {
 };
 
 export const createFormDataFromFiles = async (
-  files: (File | DriveFileInfo)[]
+  files: (File | DriveFileInfo)[],
+  key?: string
 ): Promise<FormData> => {
   const formData = new FormData();
 
   for (const file of files) {
     if (file instanceof File) {
-      formData.append('multipartFile', file);
+      formData.append(key ?? 'multipartFile', file);
     } else if ('fileId' in file) {
       try {
         const blob = await downloadFileAsBlob(file);
         const fileName = file.name;
         const fileType = file.type;
-        formData.append('multipartFile', new File([blob], fileName, { type: fileType }));
+        formData.append(key ?? 'multipartFile', new File([blob], fileName, { type: fileType }));
       } catch (err) {
         throw err;
       }
@@ -262,7 +263,6 @@ export const blobToFile = (blob: Blob): File => {
   const fileType = SUPPORT_IMAGE_TYPE.find((type) => type.mimeType === blob.type);
   const ext = fileType ? fileType.extensions : '.png';
 
-  console.log('ext', ext);
   return new File([blob], `image${ext}`, { type: blob.type });
 };
 

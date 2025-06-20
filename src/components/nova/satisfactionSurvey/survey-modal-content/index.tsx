@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { overlay } from 'overlay-kit';
+import { useTranslation } from 'react-i18next';
 import Lottie from 'react-lottie-player';
 import { css } from 'styled-components';
 
 import { apiWrapper } from '../../../../api/apiWrapper';
 import { NOVA_CREDIT_OFFER } from '../../../../api/constant';
 import { NOVA_TAB_TYPE } from '../../../../constants/novaTapTypes';
-import { getServiceLoggingInfo, SERVICE_TYPE } from '../../../../constants/serviceType';
+import { getServiceLoggingInfo } from '../../../../constants/serviceType';
 import CloseDarkIcon from '../../../../img/dark/ico_nova_close.svg';
 import BadDisableDarkIcon from '../../../../img/dark/nova/survey/ico_bad_disable.svg';
 import BadEnableDarkIcon from '../../../../img/dark/nova/survey/ico_bad_enable.svg';
@@ -36,8 +37,9 @@ import CreditOfferContent from '../ciredit-offer-modal-content';
 import * as S from './style';
 
 export default function SurveyModalContent() {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const isLightMode = useAppSelector(themeInfoSelector);
+  const { isLightMode } = useAppSelector(themeInfoSelector);
   const { selectedNovaTab } = useAppSelector(selectTabSlice);
   const service = useAppSelector(selectPageService(selectedNovaTab));
   const chatMode = useAppSelector(novaChatModeSelector);
@@ -132,37 +134,43 @@ export default function SurveyModalContent() {
         onClick={handleClose}
       />
       <S.TextWrap>
-        <span className="title">{`NOVA의 결과가\n만족스러우셨나요?`}</span>
-        <span className="desc">{`의견을 남겨주시면 50크레딧을 드려요!`}</span>
+        <span className="title">{t('Nova.Modal.Survey.Title')}</span>
+        <span className="desc">{t('Nova.Modal.Survey.Desc')}</span>
       </S.TextWrap>
-      <S.ImageWrap>
-        <img
-          src={
-            result === 'great'
-              ? isLightMode
-                ? GoodEnableLightIcon
-                : GoodEnableDarkIcon
-              : isLightMode
-                ? GoodDisableLightIcon
-                : GoodDisableDarkIcon
-          }
-          alt="good"
-          onClick={() => setResult('great')}
-        />
-        <img
-          src={
-            result === 'sorry'
-              ? isLightMode
-                ? BadEnableLightIcon
-                : BadEnableDarkIcon
-              : isLightMode
-                ? BadDisableLightIcon
-                : BadDisableDarkIcon
-          }
-          alt="bad"
-          onClick={() => setResult('sorry')}
-        />
-      </S.ImageWrap>
+      <S.ResultWrap>
+        <S.ImageCircle isSelected={result === 'great'}>
+          <img
+            src={
+              result === 'great'
+                ? isLightMode
+                  ? GoodEnableLightIcon
+                  : GoodEnableDarkIcon
+                : isLightMode
+                  ? GoodDisableLightIcon
+                  : GoodDisableDarkIcon
+            }
+            alt="good"
+            onClick={() => setResult('great')}
+          />
+          <span>{t('Nova.Modal.Survey.Answer.Good')}</span>
+        </S.ImageCircle>
+        <S.ImageCircle isSelected={result === 'sorry'}>
+          <img
+            src={
+              result === 'sorry'
+                ? isLightMode
+                  ? BadEnableLightIcon
+                  : BadEnableDarkIcon
+                : isLightMode
+                  ? BadDisableLightIcon
+                  : BadDisableDarkIcon
+            }
+            alt="bad"
+            onClick={() => setResult('sorry')}
+          />
+          <span>{t('Nova.Modal.Survey.Answer.Bad')}</span>
+        </S.ImageCircle>
+      </S.ResultWrap>
       <S.ButtonWrap>
         <Button
           variant="grayToPurple"
@@ -178,12 +186,13 @@ export default function SurveyModalContent() {
             border-radius: 8px;
             position: relative;
             opacity: 1;
+            box-shadow: none;
           `}
           onClick={handleSubmit}>
           {isLoading ? (
             <Lottie animationData={Spinner} loop play style={{ width: 27, height: 27 }} />
           ) : (
-            <span>{'의견 보내기'}</span>
+            <span>{t('Nova.Modal.Survey.SendFeedback')}</span>
           )}
         </Button>
         <S.CheckBoxWrap>
@@ -192,7 +201,7 @@ export default function SurveyModalContent() {
             onClick={() => setDontShowSurvey(!dontShowSurvey)}
             isCircleBox={false}
           />
-          <span>일주일간 보지않기</span>
+          <span>{t('Nova.Modal.Survey.DontShow')}</span>
         </S.CheckBoxWrap>
       </S.ButtonWrap>
     </S.ModalContainer>

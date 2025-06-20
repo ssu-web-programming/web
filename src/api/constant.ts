@@ -40,6 +40,7 @@ export const NOVA_REMAKE_IMAGE = '/api/v2/nova/image/reimagine';
 export const NOVA_EXPAND_IMAGE = 'api/v2/nova/image/uncrop';
 export const NOVA_IMPROVED_RESOLUTION = '/api/v2/nova/image/resolution';
 export const NOVA_CHANGE_STYLE = '/api/v2/nova/image/transfer';
+export const NOVA_GENERATE_STYLE = '/api/v2/nova/style-studio/generate';
 export const NOVA_GET_ANNOUNCEMENT_LIST = '/api/v2/nova/announcementList';
 
 export const NOVA_TRANSLATE_TEXT = '/api/v2/nova/translate/text';

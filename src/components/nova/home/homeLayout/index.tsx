@@ -2,37 +2,38 @@ import React, { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { FileUploadState } from '../../../constants/fileTypes';
-import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
-import { getDownloadUrlByPlatform } from '../../../constants/platform';
+import { FileUploadState } from '../../../../constants/fileTypes';
+import { NOVA_TAB_TYPE } from '../../../../constants/novaTapTypes';
+import { getDownloadUrlByPlatform } from '../../../../constants/platform';
 import {
   findTabByService,
   iconMap,
   SERVICE_CATEGORY,
   SERVICE_GROUP_MAP,
   SERVICE_TYPE
-} from '../../../constants/serviceType';
-import { ReactComponent as IconConvertDark } from '../../../img/dark/nova/tab/convert_Img.svg';
-import { ReactComponent as IconConvertLight } from '../../../img/light/nova/tab/convert_Img.svg';
-import { setIsExternal } from '../../../store/slices/appState';
+} from '../../../../constants/serviceType';
+import { ReactComponent as IconConvertDark } from '../../../../img/dark/nova/tab/convert_Img.svg';
+import { ReactComponent as IconConvertLight } from '../../../../img/light/nova/tab/convert_Img.svg';
+import { setIsExternal } from '../../../../store/slices/appState';
 import {
   novaChatModeSelector,
   novaHistorySelector,
   setChatMode
-} from '../../../store/slices/nova/novaHistorySlice';
-import { setPageStatus } from '../../../store/slices/nova/pageStatusSlice';
-import { platformInfoSelector } from '../../../store/slices/platformInfo';
-import { selectNovaTab, selectTabSlice } from '../../../store/slices/tabSlice';
-import { themeInfoSelector } from '../../../store/slices/theme';
-import { useAppDispatch, useAppSelector } from '../../../store/store';
-import Bridge from '../../../util/bridge';
-import { ClientType } from '../../../util/bridge';
-import { isHigherVersion } from '../../../util/common';
-import { useConfirm } from '../../Confirm';
-import useShowConfirmModal from '../../hooks/use-show-confirm-modal';
-import { useChatNova } from '../../hooks/useChatNova';
-import { FileUploading } from '../FileUploading';
-import InputBar, { InputBarSubmitParam } from '../inputBar';
+} from '../../../../store/slices/nova/novaHistorySlice';
+import { setPageStatus } from '../../../../store/slices/nova/pageStatusSlice';
+import { platformInfoSelector } from '../../../../store/slices/platformInfo';
+import { selectNovaTab, selectTabSlice } from '../../../../store/slices/tabSlice';
+import { themeInfoSelector } from '../../../../store/slices/theme';
+import { useAppDispatch, useAppSelector } from '../../../../store/store';
+import Bridge from '../../../../util/bridge';
+import { ClientType } from '../../../../util/bridge';
+import { isHigherVersion } from '../../../../util/common';
+import { useConfirm } from '../../../Confirm';
+import useShowConfirmModal from '../../../hooks/use-show-confirm-modal';
+import { useChatNova } from '../../../hooks/useChatNova';
+import { FileUploading } from '../../FileUploading';
+import InputBar, { InputBarSubmitParam } from '../../inputBar';
+import AIToolCard from '../aiToolCard';
 
 import * as S from './style';
 
@@ -43,7 +44,7 @@ interface NovaHomeProps {
   fileUploadState: FileUploadState;
 }
 
-const NovaHome = (props: NovaHomeProps) => {
+const HomeLayout = (props: NovaHomeProps) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -173,7 +174,7 @@ const NovaHome = (props: NovaHomeProps) => {
   return (
     <>
       <S.Body>
-        <S.ToolWrap>
+        <S.ToolWrap isImage={false}>
           <S.ToolTitle>{t('Nova.Home.tools.title')}</S.ToolTitle>
           <S.AIToolWrap>
             {Object.entries(SERVICE_GROUP_MAP[SERVICE_CATEGORY.TOOLS]).map(([key, services]) => {
@@ -182,25 +183,30 @@ const NovaHome = (props: NovaHomeProps) => {
 
               return (
                 <div key={key} onClick={() => handleMovePage(tab)}>
-                  <img src={iconMap[tab] || ''} alt={key} />
+                  <img src={iconMap[tab][0] || ''} alt={key} />
                   <span>{t(`Nova.Home.tools.${tab}`)}</span>
                 </div>
               );
             })}
           </S.AIToolWrap>
         </S.ToolWrap>
-        <S.ToolWrap>
+        <S.ToolWrap isImage={true}>
           <S.ToolTitle>{t('Nova.Home.image.title')}</S.ToolTitle>
           <S.AIImageWrap>
             {Object.entries(SERVICE_GROUP_MAP[SERVICE_CATEGORY.IMAGE]).map(([key, services]) => {
               const tab = findTabByService(services[0]);
               if (!tab) return null;
 
+              const isHighlight = services[0] === SERVICE_TYPE.NOVA_STYLE_STUDIO;
               return (
-                <S.ImageItem key={key} onClick={() => handleMovePage(tab)}>
-                  <img src={iconMap[tab] || ''} alt={key} />
-                  <span>{getTabTranslationKey(tab)}</span>
-                </S.ImageItem>
+                <AIToolCard
+                  key={key}
+                  tab={tab}
+                  isHighlight={isHighlight}
+                  icons={iconMap[tab]}
+                  label={getTabTranslationKey(tab)}
+                  handleClick={() => handleMovePage(tab)}
+                />
               );
             })}
           </S.AIImageWrap>
@@ -219,4 +225,4 @@ const NovaHome = (props: NovaHomeProps) => {
   );
 };
 
-export default NovaHome;
+export default HomeLayout;

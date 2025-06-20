@@ -9,7 +9,7 @@ import {
   updatePageResult
 } from '../../../../../store/slices/nova/pageStatusSlice';
 import { useAppDispatch, useAppSelector } from '../../../../../store/store';
-import ArrowTooltips from '../../../../ArrowTooltip';
+import ArrowTooltips from '../../../../arrowTooltip';
 import ColorPicker from '../../../../colorPicker';
 import GuideMessage from '../GuideMessage';
 
