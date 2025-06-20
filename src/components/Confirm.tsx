@@ -39,14 +39,22 @@ export const Header = styled.div`
 
 const Title = styled.h2`
   margin: 0;
-  font-size: 16px;
+  font-size: 20px;
+  line-height: 150%;
   font-weight: 700;
-  line-height: 24px;
   box-sizing: border-box;
   color: ${({ theme }) => theme.color.text.gray04};
 `;
 
-export const ContentArea = styled.div`
+export const ContentWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+`;
+
+export const Content = styled.div`
   width: 100%;
   height: fit-content;
   display: flex;
@@ -150,20 +158,22 @@ const Confirm = () => {
     <>
       <Blanket />
       <ConfirmBox>
-        {title && (
-          <Header ref={headerRef}>
-            <Title>{title}</Title>
-          </Header>
-        )}
-        <ContentArea ref={contentsRef}>
-          {msg}
-          {neverShowAgain && (
-            <CheckWrap onClick={handleCheck}>
-              <CheckBox isChecked={isChecked} setIsChecked={setIsChecked} />
-              <span>{t(`DontShowAgain`)}</span>
-            </CheckWrap>
+        <ContentWrap>
+          {title && (
+            <Header ref={headerRef}>
+              <Title>{title}</Title>
+            </Header>
           )}
-        </ContentArea>
+          <Content ref={contentsRef}>
+            {msg}
+            {neverShowAgain && (
+              <CheckWrap onClick={handleCheck}>
+                <CheckBox isChecked={isChecked} setIsChecked={setIsChecked} />
+                <span>{t(`DontShowAgain`)}</span>
+              </CheckWrap>
+            )}
+          </Content>
+        </ContentWrap>
         <Footer direction={direction} ref={footerRef}>
           <Button
             variant="purple"

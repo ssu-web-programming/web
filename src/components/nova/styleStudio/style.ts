@@ -210,7 +210,17 @@ export const UploadedBox = styled.div`
   gap: 8px;
 `;
 
+export const Footer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+`;
+
 export const GuideMessage = styled.div`
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: flex-start;
