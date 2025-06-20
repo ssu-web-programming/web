@@ -202,6 +202,9 @@
     },
     "RemoveBG": {
       "failedDueToComplexity": "背景が複雑なため、削除に失敗しました。別の画像でお試しください。"
+    },
+    "aiVideo": {
+      "NotMatchVoice": "音声と言語が一致しません。\nクレジットは消費されていません。再度お試しください。"
     }
   },
   "Offline": {

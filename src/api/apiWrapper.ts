@@ -7,7 +7,8 @@ import {
   ModerationBlockedError,
   NoCreditError,
   NoFileInDrive,
-  NovaNoCreditError
+  NovaNoCreditError,
+  VoiceError
 } from '../error/error';
 import { lang } from '../locale';
 import store from '../store/store';
@@ -18,6 +19,7 @@ import {
   AI_WRITE_RESPONSE_STREAM_API,
   ALLI_RESPONSE_STREAM_API,
   NOVA_CHAT_API,
+  NOVA_VIDEO_GET_INFO,
   PO_DRIVE_CONVERT_STATUS,
   PO_DRIVE_DOWNLOAD,
   PO_DRIVE_UPLOAD,
@@ -100,7 +102,8 @@ export function apiWrapper() {
       signal: abortController.signal,
       headers
     });
-
+    console.log('res: ', res);
+    console.log('res.status: ', res.status);
     if (res.status !== 200) {
       if (
         api === AI_WRITE_RESPONSE_STREAM_API ||
@@ -135,6 +138,11 @@ export function apiWrapper() {
         if (body?.error?.code === 'invalid_prompt') throw new Error(INVALID_PROMPT);
 
         throw res;
+      } else if (api === NOVA_VIDEO_GET_INFO) {
+        const body = await res.json();
+        if (body?.error?.code === 'voice_error') {
+          throw new VoiceError();
+        }
       } else if (api === PO_DRIVE_DOWNLOAD) {
         throw new NoFileInDrive();
       } else if (api === PO_DRIVE_CONVERT_STATUS) {
