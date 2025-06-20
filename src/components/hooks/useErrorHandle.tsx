@@ -17,7 +17,8 @@ import {
   ModerationBlockedError,
   NoCreditError,
   NoFileInDrive,
-  NovaNoCreditError
+  NovaNoCreditError,
+  VoiceError
 } from '../../error/error';
 import { setOnlineStatus } from '../../store/slices/network';
 import { activeToast } from '../../store/slices/toastSlice';
@@ -184,6 +185,9 @@ const useErrorHandle = () => {
     } else if (error instanceof ModerationBlockedError) {
       const msg = t(`ToastMsg.Chat.notSupportedImage`);
       dispatch(activeToast({ type: 'error', msg }));
+    } else if (error instanceof VoiceError) {
+      const msg = t(`ToastMsg.aiVideo.NotMatchVoice`);
+      dispatch(activeToast({ type: 'error', msg }));
     } else {
       let msg: string | React.ReactNode = '';
       switch (error.message) {
@@ -216,7 +220,6 @@ const useErrorHandle = () => {
               msg = t(`ToastMsg.ErrorMsg`, { code: error.status, msg: error.statusText });
               break;
           }
-
           switch (error.code) {
             case ERR_FOREGROUND: {
               msg = t(`ToastMsg.RemoveBG.failedDueToComplexity`);
