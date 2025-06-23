@@ -1,8 +1,9 @@
-import { ButtonHTMLAttributes } from 'react';
+import React, { ButtonHTMLAttributes } from 'react';
 import icon_credit_gray from 'img/light/ico_credit_gray.svg';
 import { useTranslation } from 'react-i18next';
 import { FlattenSimpleInterpolation } from 'styled-components';
 
+import Spinner from '../../../img/light/spinner.webp';
 import { Chip } from '../IconTextButton';
 
 import * as S from './style';
@@ -34,6 +35,7 @@ export default function SelectModelButton({
   hideSelectedStyles = false
 }: SelectModelButtonProps) {
   const { t } = useTranslation();
+  console.log(item.deductCredit);
 
   return (
     <S.StyledButton
@@ -47,9 +49,25 @@ export default function SelectModelButton({
           <p>{t(item.desc)}</p>
         </S.ItemWrapper>
         <S.IconWrapper>
-          <Chip iconSrc={icon_credit_gray} size={20}>
-            <span>{item.deductCredit}</span>
-          </Chip>
+          {(() => {
+            if (item.deductCredit === 0) {
+              return (
+                <S.FreeBadge>
+                  <span>{t('Nova.Home.free')}</span>
+                </S.FreeBadge>
+              );
+            }
+
+            if (!item.deductCredit) {
+              return <img src={Spinner} alt="spinner" width={24} height={24} />;
+            }
+
+            return (
+              <Chip iconSrc={icon_credit_gray} size={20}>
+                <span>{item.deductCredit}</span>
+              </Chip>
+            );
+          })()}
         </S.IconWrapper>
       </S.InnerWrapper>
     </S.StyledButton>
