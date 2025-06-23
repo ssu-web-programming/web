@@ -35,7 +35,6 @@ export default function SelectModelButton({
   hideSelectedStyles = false
 }: SelectModelButtonProps) {
   const { t } = useTranslation();
-  console.log(item.deductCredit);
 
   return (
     <S.StyledButton
