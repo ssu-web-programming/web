@@ -141,3 +141,22 @@ export const CreditWrap = styled.div`
     color: ${({ theme }) => theme.color.text.gray04};
   }
 `;
+
+export const FreeBadge = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: 6px;
+  background: linear-gradient(
+    90deg,
+    var(--primary-po-blue-30) 0%,
+    var(--primary-po-purple-30) 100%
+  );
+
+  span {
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+  }
+`;

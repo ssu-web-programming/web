@@ -239,10 +239,9 @@ export const getMenuItemsFromServiceGroup = (
   return Object.entries(CHAT_GROUP_MAP).map(([groupKey, services]) => {
     const { icon, label } = getServiceGroupInfo(groupKey, isLightMode);
 
-    const credits = (Array.isArray(services) ? services : [services])
-      .map((service) => serviceCredits[service] ?? 0)
-      .filter((credit) => credit > 0);
-
+    const credits = (Array.isArray(services) ? services : [services]).map(
+      (service) => serviceCredits[service]
+    );
     const minCredit = Math.min(...credits);
     const maxCredit = Math.max(...credits);
 

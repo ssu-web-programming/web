@@ -78,7 +78,13 @@ const initialPageState: PageStateType = {
   service: Object.keys(NOVA_TAB_TYPE).reduce(
     (acc, key) => ({
       ...acc,
-      [key as keyof PageStatus]: []
+      [key as keyof PageStatus]: [
+        {
+          serviceType: NOVA_TAB_TYPE[key as keyof PageStatus],
+          deductCredit: -1,
+          isUsed: false
+        }
+      ]
     }),
     {} as PageStateType['service']
   ),
