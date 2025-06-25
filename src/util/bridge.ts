@@ -707,9 +707,7 @@ export const useInitBridgeListener = () => {
           }
           // 전화 여부를 판단하는 로직!
           case 'getCallState': {
-            console.log('body.isIncomingCall', body.isIncomingCall);
             // 전화가 오면 녹음을 멈추고 전화가 안오면 녹음을 시작한다.
-
             dispatch(setIsRecordingState(body.isIncomingCall ? 'pause' : 'start'));
             break;
           }

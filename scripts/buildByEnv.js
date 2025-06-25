@@ -10,7 +10,6 @@ const build = async () => {
 };
 
 const buildTarget = async (target) => {
-  console.log(`start ${serverEnv}_${target} building`);
   const env = await GetEnvVars({
     envFile: {
       filePath: `./env/.env.${target}.js`
@@ -28,7 +27,6 @@ const buildTarget = async (target) => {
     env
   });
 
-  console.log(`end ${serverEnv}_${target} building`);
 };
 
 build();

@@ -77,7 +77,6 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
         onPlay?.();
         setIsPlaying(true);
       } else {
-        console.log('end');
         // 끝 부분인 경우 처음으로 되돌리고 재생 시작 (선택 사항)
         audioRef.current.currentTime = 0;
         audioRef.current.play();

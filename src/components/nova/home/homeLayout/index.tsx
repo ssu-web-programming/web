@@ -114,7 +114,6 @@ const HomeLayout = (props: NovaHomeProps) => {
   };
 
   const handleMovePage = async (tab: NOVA_TAB_TYPE) => {
-    navigate('/aiWrite?lang=ko');
     if (tab === NOVA_TAB_TYPE.translation || tab === NOVA_TAB_TYPE.voiceDictation) {
       if (isUpdateRequired()) {
         confirmUpload();
