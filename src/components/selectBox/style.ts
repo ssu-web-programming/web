@@ -150,8 +150,8 @@ export const FreeBadge = styled.div`
   border-radius: 6px;
   background: linear-gradient(
     90deg,
-    var(--primary-po-blue-30) 0%,
-    var(--primary-po-purple-30) 100%
+    var(--primary-po-blue-45) 0%,
+    var(--primary-po-purple-45) 100%
   );
 
   span {
