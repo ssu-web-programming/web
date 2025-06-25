@@ -57,4 +57,25 @@ const IconWrapper = styled.div`
   }
 `;
 
-export { IconWrapper, InnerWrapper, ItemWrapper, StyledButton };
+const FreeBadge = styled.div`
+  min-width: 33px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: 6px;
+  background: linear-gradient(
+    90deg,
+    var(--primary-po-blue-45) 0%,
+    var(--primary-po-purple-45) 100%
+  );
+
+  span {
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+  }
+`;
+
+export { FreeBadge, IconWrapper, InnerWrapper, ItemWrapper, StyledButton };

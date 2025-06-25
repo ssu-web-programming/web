@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { ContentArea, Header } from 'components/Confirm';
+import { Content, Header } from 'components/Confirm';
 import styled, { css } from 'styled-components';
 import { isMobile } from 'util/bridge';
 
@@ -118,7 +118,7 @@ const DriveConfirm = (props: DriveConfirmType) => {
             />
           </HeaderContainer>
         </Header>
-        <ContentArea ref={contentsRef}>{msg}</ContentArea>
+        <Content ref={contentsRef}>{msg}</Content>
         <Footer direction={direction} ref={footerRef}>
           <Button
             selected={!onOk.disable}

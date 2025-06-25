@@ -102,8 +102,6 @@ export function apiWrapper() {
       signal: abortController.signal,
       headers
     });
-    console.log('res: ', res);
-    console.log('res.status: ', res.status);
     if (res.status !== 200) {
       if (
         api === AI_WRITE_RESPONSE_STREAM_API ||

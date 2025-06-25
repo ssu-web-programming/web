@@ -127,26 +127,28 @@ const StyleStudio = () => {
         </S.InputBox>
 
         {/* 가이드 메시지 */}
-        <S.GuideMessage>
-          <S.IconWrap>
-            <BangIcon />
-          </S.IconWrap>
-          <span>{t('Nova.styleStudio.SelectStyle.Warning')}</span>
-        </S.GuideMessage>
+        <S.Footer>
+          <S.GuideMessage>
+            <S.IconWrap>
+              <BangIcon />
+            </S.IconWrap>
+            <span>{t('Nova.styleStudio.SelectStyle.Warning')}</span>
+          </S.GuideMessage>
 
-        {/* 생성 버튼 */}
-        <Button
-          variant="purple"
-          width={'full'}
-          height={48}
-          onClick={() => handleGenerateStyle(selectedStyle.id, prompt)}
-          disable={isDisabled()}
-          cssExt={css`
-            font-size: 16px;
-            font-weight: 500;
-          `}>
-          {t('Nova.styleStudio.SelectStyle.Button')}
-        </Button>
+          {/* 생성 버튼 */}
+          <Button
+            variant="purple"
+            width={'full'}
+            height={48}
+            onClick={() => handleGenerateStyle(selectedStyle.id, prompt)}
+            disable={isDisabled()}
+            cssExt={css`
+              font-size: 16px;
+              font-weight: 500;
+            `}>
+            {t('Nova.styleStudio.SelectStyle.Button')}
+          </Button>
+        </S.Footer>
       </S.ContentArea>
     </S.Wrapper>
   );

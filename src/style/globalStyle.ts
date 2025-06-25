@@ -105,6 +105,9 @@ const GlobalStyle = createGlobalStyle`
     --primary-po-red-60: #D34E4E;
     --primary-po-red-70: #FB4949;
     --primary-po-red-80: #632424;
+      
+    --primary-po-purple-30: #D79BFF;
+    --primary-po-purple-45: #D345FF;
 
     --primary-po-green-10: #EDF7E8;
     --primary-po-green-40: #85CA5F;
@@ -112,7 +115,9 @@ const GlobalStyle = createGlobalStyle`
     --primary-po-green-60: #449916;
     --primary-po-green-90: #20480A;
 
+    --primary-po-blue-30: #7EC0FF;
     --primary-po-blue-40: #60A5FA;
+    --primary-po-blue-45: #3CA0FF;
     --primary-po-blue-50: #1D7FF9;
     --primary-po-blue-60: #186CD3;
   }

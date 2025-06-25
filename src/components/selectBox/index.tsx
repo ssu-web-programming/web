@@ -1,6 +1,7 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import { SelectChangeEvent } from '@mui/material/Select';
+import { useTranslation } from 'react-i18next';
 import { FlattenSimpleInterpolation } from 'styled-components';
 
 import { ReactComponent as ArrowDarkIcon } from '../../img/dark/ico_arrow_down_normal.svg';
@@ -52,6 +53,7 @@ export default function SelectBox({
   selectBoxCssExt,
   innerBoxCssExt
 }: SelectBoxProps) {
+  const { t } = useTranslation();
   const { isLightMode } = useAppSelector(themeInfoSelector);
 
   const handleChange = (event: SelectChangeEvent<unknown>) => {
@@ -124,18 +126,27 @@ export default function SelectBox({
                       <span className="desc">{item.desc}</span>
                     </S.TextWrap>
                   </div>
-                  {item.credit && (
-                    <>
-                      {item.credit === '-1' ? (
-                        <img src={Spinner} alt="spinner" width={24} height={24} />
-                      ) : (
+                  {item.credit &&
+                    (() => {
+                      if (item.credit === '-1') {
+                        return <img src={Spinner} alt="spinner" width={24} height={24} />;
+                      }
+
+                      if (item.credit === '0') {
+                        return (
+                          <S.FreeBadge>
+                            <span>{t('Nova.Home.free')}</span>
+                          </S.FreeBadge>
+                        );
+                      }
+
+                      return (
                         <S.CreditWrap>
                           <img src={isLightMode ? CreditLightIcon : CreditDarkIcon} alt="credit" />
                           <span>{item.credit}</span>
                         </S.CreditWrap>
-                      )}
-                    </>
-                  )}
+                      );
+                    })()}
                 </S.ItemWrap>
                 {isDriver && index < menuItem.length - 1 && <S.Divider />}
               </S.StyledMenuItem>

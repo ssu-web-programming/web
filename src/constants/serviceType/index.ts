@@ -38,8 +38,8 @@ export enum SERVICE_TYPE {
   NOVA_ASK_DOC_GPT4_1 = 'NOVA_ASK_DOC_GPT4_1', // 10
   NOVA_CHAT_GPT4O_MINI = 'NOVA_CHAT_GPT4O_MINI', // 5
   NOVA_CHAT_O3MINI = 'NOVA_CHAT_O3MINI', // 2
-  WRITE_CLOVA = 'WRITE_CLOVA', // 2
-  WRITE_CLADE3 = 'WRITE_CLADE3', // 5
+  NOVA_CHAT_CLOVA = 'NOVA_CHAT_CLOVA', // 2
+  NOVA_CHAT_CLAUDE3 = 'NOVA_CHAT_CLAUDE3', // 5
   NOVA_CHAT_CLAUDE_SONNET_4 = 'NOVA_CHAT_CLAUDE_SONNET_4', // 5
 
   // Tools
@@ -71,8 +71,8 @@ export const TAB_SERVICE_MAP: Record<NOVA_TAB_TYPE, SERVICE_TYPE[]> = {
     SERVICE_TYPE.NOVA_ASK_DOC_GPT4_1,
     SERVICE_TYPE.NOVA_CHAT_GPT4O_MINI,
     SERVICE_TYPE.NOVA_CHAT_O3MINI,
-    SERVICE_TYPE.WRITE_CLOVA,
-    SERVICE_TYPE.WRITE_CLADE3,
+    SERVICE_TYPE.NOVA_CHAT_CLOVA,
+    SERVICE_TYPE.NOVA_CHAT_CLAUDE3,
     SERVICE_TYPE.NOVA_CHAT_CLAUDE_SONNET_4
   ],
   [NOVA_TAB_TYPE.perplexity]: [
@@ -105,8 +105,8 @@ export const SERVICE_GROUP_MAP: Record<SERVICE_CATEGORY, Record<string, SERVICE_
       SERVICE_TYPE.NOVA_CHAT_GPT4_1,
       SERVICE_TYPE.NOVA_CHAT_GPT4O_MINI,
       SERVICE_TYPE.NOVA_CHAT_O3MINI,
-      SERVICE_TYPE.WRITE_CLOVA,
-      SERVICE_TYPE.WRITE_CLADE3,
+      SERVICE_TYPE.NOVA_CHAT_CLOVA,
+      SERVICE_TYPE.NOVA_CHAT_CLAUDE3,
       SERVICE_TYPE.NOVA_CHAT_CLAUDE_SONNET_4
     ],
     docImgQuery: [SERVICE_TYPE.NOVA_ASK_DOC_GPT4_1],
@@ -141,8 +141,8 @@ export const CHAT_GROUP_MAP: Record<string, SERVICE_TYPE[] | SERVICE_TYPE> = {
   ],
   GPT_4O_MINI: SERVICE_TYPE.NOVA_CHAT_GPT4O_MINI,
   GPT_O3_MINI: SERVICE_TYPE.NOVA_CHAT_O3MINI,
-  CLOVA_X: SERVICE_TYPE.WRITE_CLOVA,
-  CLAUDE_3_5: SERVICE_TYPE.WRITE_CLADE3,
+  CLOVA_X: SERVICE_TYPE.NOVA_CHAT_CLOVA,
+  CLAUDE_3_5: SERVICE_TYPE.NOVA_CHAT_CLAUDE3,
   CLAUDE_4: SERVICE_TYPE.NOVA_CHAT_CLAUDE_SONNET_4,
   PERPLEXITY: SERVICE_TYPE.NOVA_WEBSEARCH_PERPLEXITY,
   PERPLEXITY_REASONING_PRO: SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO
@@ -239,10 +239,9 @@ export const getMenuItemsFromServiceGroup = (
   return Object.entries(CHAT_GROUP_MAP).map(([groupKey, services]) => {
     const { icon, label } = getServiceGroupInfo(groupKey, isLightMode);
 
-    const credits = (Array.isArray(services) ? services : [services])
-      .map((service) => serviceCredits[service] ?? 0)
-      .filter((credit) => credit > 0);
-
+    const credits = (Array.isArray(services) ? services : [services]).map(
+      (service) => serviceCredits[service]
+    );
     const minCredit = Math.min(...credits);
     const maxCredit = Math.max(...credits);
 
@@ -267,9 +266,9 @@ export const getServiceEngineName = (serviceType: SERVICE_TYPE): string => {
     [SERVICE_TYPE.NOVA_ASK_DOC_GPT4_1]: 'gpt-4.1',
     [SERVICE_TYPE.NOVA_CHAT_GPT4O_MINI]: 'gpt-4o-mini',
     [SERVICE_TYPE.NOVA_CHAT_O3MINI]: 'o3-mini',
-    [SERVICE_TYPE.WRITE_CLADE3]: 'claude',
+    [SERVICE_TYPE.NOVA_CHAT_CLAUDE3]: 'claude',
     [SERVICE_TYPE.NOVA_CHAT_CLAUDE_SONNET_4]: 'claude-sonnet-4',
-    [SERVICE_TYPE.WRITE_CLOVA]: 'clovax',
+    [SERVICE_TYPE.NOVA_CHAT_CLOVA]: 'clovax',
     [SERVICE_TYPE.NOVA_WEBSEARCH_PERPLEXITY]: 'sonar',
     [SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO]: 'sonar-reasoning-pro'
   };
@@ -294,9 +293,9 @@ export const getServiceLoggingInfo = (serviceType: SERVICE_TYPE): ServiceLogging
     [SERVICE_TYPE.NOVA_ASK_DOC_GPT4_1]: { name: 'nova_chating', detail: '4.1' },
     [SERVICE_TYPE.NOVA_CHAT_GPT4O_MINI]: { name: 'nova_chating', detail: '4o_mini' },
     [SERVICE_TYPE.NOVA_CHAT_O3MINI]: { name: 'nova_chating', detail: '3o_mini' },
-    [SERVICE_TYPE.WRITE_CLADE3]: { name: 'nova_chating', detail: 'claude3' },
+    [SERVICE_TYPE.NOVA_CHAT_CLAUDE3]: { name: 'nova_chating', detail: 'claude3' },
     [SERVICE_TYPE.NOVA_CHAT_CLAUDE_SONNET_4]: { name: 'nova_chating', detail: 'claude4' },
-    [SERVICE_TYPE.WRITE_CLOVA]: { name: 'nova_chating', detail: 'clova' },
+    [SERVICE_TYPE.NOVA_CHAT_CLOVA]: { name: 'nova_chating', detail: 'clova' },
     [SERVICE_TYPE.NOVA_WEBSEARCH_PERPLEXITY]: { name: 'nova_web_search', detail: 'perplexity' },
     [SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO]: {
       name: 'nova_web_search',

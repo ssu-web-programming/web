@@ -188,7 +188,6 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({ ch
           analyserRef.current.getByteFrequencyData(frequencyData);
 
           const data = calculateBarData(frequencyData, canvasRef.current.clientWidth, 2, 5);
-          console.log('data', data);
 
           draw(data, canvasRef.current, 2, 5, isPaused);
           if (isPaused) {
@@ -216,7 +215,6 @@ export const AudioRecorderProvider: React.FC<AudioRecorderProviderProps> = ({ ch
       });
       streamRef.current = stream;
 
-      console.log('startRecording-platform', platform);
       const mediaRecorder = new MediaRecorder(stream, {
         mimeType: platform === ClientType.windows ? 'video/webm;codecs=vp8' : 'video/mp4'
       });

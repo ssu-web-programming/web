@@ -113,17 +113,8 @@ const ImageCreate = ({ contents }: { contents: string }) => {
           gpt_ver: parseGptVer(apiBody.type)
         });
 
-        const { deductionCredit, leftCredit } = calLeftCredit(res.headers);
+        const { deductionCredit } = calLeftCredit(res.headers);
         usedCredit = deductionCredit;
-        dispatch(
-          activeToast({
-            type: 'info',
-            msg: `${t(`Txt2ImgTab.ToastMsg.StartCreatingImage`)} \n${t(`ToastMsg.AboutCredit`, {
-              deductionCredit: deductionCredit,
-              leftCredit: leftCredit === '-1' ? t('Unlimited') : Number(leftCredit).toLocaleString()
-            })}`
-          })
-        );
 
         const { images, translatedPrompts } = body.data;
         if (images) {
