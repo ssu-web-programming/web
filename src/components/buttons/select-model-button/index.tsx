@@ -1,4 +1,4 @@
-import React, { ButtonHTMLAttributes } from 'react';
+import React, { ButtonHTMLAttributes, useEffect } from 'react';
 import icon_credit_gray from 'img/light/ico_credit_gray.svg';
 import { useTranslation } from 'react-i18next';
 import { FlattenSimpleInterpolation } from 'styled-components';
@@ -35,6 +35,8 @@ export default function SelectModelButton({
   hideSelectedStyles = false
 }: SelectModelButtonProps) {
   const { t } = useTranslation();
+
+  useEffect(() => {}, [item]);
 
   return (
     <S.StyledButton
