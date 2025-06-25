@@ -17,7 +17,6 @@ export const getAudioDurationViaWebAudioAPI = (audioFile: File): Promise<number>
         arrayBuffer,
         (audioBuffer) => {
           // audioBuffer.duration이 오디오의 총 길이를 초 단위로 반환
-          console.log('audioBuffer.duration', audioBuffer.duration);
           resolve(audioBuffer.duration);
         },
         (error) => {
@@ -50,7 +49,6 @@ export const getAudioDurationViaAudioElement = (audioFile: File): Promise<number
     audio.addEventListener('loadedmetadata', () => {
       // 메모리 누수 방지를 위해 URL 객체 해제
       URL.revokeObjectURL(objectUrl);
-      console.log('audio.duration', audio.duration);
       resolve(audio.duration);
     });
 

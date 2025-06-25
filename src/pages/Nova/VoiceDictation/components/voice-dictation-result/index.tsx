@@ -225,7 +225,7 @@ export default function VoiceDictationResult() {
               const isShowModal = await showSurveyModal(selectedNovaTab, service, isCreditRecieved);
               if (isShowModal) return;
             }}
-            onPause={() => console.log('Paused')}
+            onPause={}
             isLightMode={isLightMode}
             openSpeedbackPopup={isMobile ? handleOpenMobilePlaybackSpeed : handleOpenPlaybackSpeed}>
             <S.ButtonWrapper>

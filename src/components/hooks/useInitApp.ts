@@ -32,7 +32,6 @@ import {
 
 export default function useInitApp() {
   const dispatch = useAppDispatch();
-  console.log('init app');
 
   const initNovaExpireTime = useCallback(
     async (headers: HeadersInit) => {
@@ -185,7 +184,6 @@ export default function useInitApp() {
 
   return async () => {
     const resSession = await Bridge.checkSession('app init');
-    console.log('res Session', resSession);
     if (!resSession || !resSession.success) {
       throw new Error(ERR_INVALID_SESSION);
     }

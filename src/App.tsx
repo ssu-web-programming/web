@@ -75,7 +75,6 @@ function App() {
 
   useEffect(() => {
     const fetchInit = async () => {
-      console.log('fetch init');
       if (!location.pathname.toLowerCase().startsWith('/nova/share')) {
         await initBridgeListener();
         await initApp();
