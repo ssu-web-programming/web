@@ -30,8 +30,9 @@ export type SelectedOption =
   | 'WRITE_GPT4'
   | 'GPT3'
   | 'WRITE_CLOVA'
-  | 'WRITE_CLADE3';
-
+  | 'WRITE_CLADE3'
+  | 'WRITE_EXAONE4'
+  | 'WRITE_SOLARPRO2';
 const subjectMaxLength = 1000;
 
 const AIWriteInput = ({

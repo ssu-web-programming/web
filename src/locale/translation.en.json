@@ -63,8 +63,10 @@
       "gpt4_1": "Writes accurately with the right tone.",
       "gpt4": "Excels in generating diverse texts.",
       "gpt3.5": "Processes tasks quickly and efficiently.",
-      "clovax": "Effective for Korean language tasks.",
-      "claude": "Writes creative content skillfully."
+      "clovax": "Explains clearly and in a friendly way",
+      "claude": "Writes creative content skillfully.",
+      "exaone4": "Strong in analysis and expertise",
+      "solarpro2": "Expert in data and documents"
     }
   },
   "ChatingTab": {

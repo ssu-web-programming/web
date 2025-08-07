@@ -8,7 +8,14 @@ import { recSubType, recType } from '../../../store/slices/recFuncSlice';
 import IconBoxTextButton from '../../buttons/IconBoxTextButton';
 import Grid from '../../layout/Grid';
 
-export type EngineVersion = 'gpt3.5' | 'gpt4' | 'gpt-4.1' | 'clovax' | 'claude';
+export type EngineVersion =
+  | 'gpt3.5'
+  | 'gpt4'
+  | 'gpt-4.1'
+  | 'clovax'
+  | 'claude'
+  | 'exaone4'
+  | 'solarpro2';
 
 export interface VersionListType {
   id: string;

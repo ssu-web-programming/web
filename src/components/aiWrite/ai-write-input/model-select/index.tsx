@@ -27,6 +27,63 @@ const defaultOptions: ModelSelectOption[] = [
     selected: false
   },
   {
+    value: 'WRITE_CLOVA',
+    component: (
+      <SelectModelButton
+        item={{
+          id: 'WRITE_CLOVA',
+          desc: CREDIT_DESCRITION_MAP['WRITE_CLOVA'],
+          title: CREDIT_NAME_MAP['WRITE_CLOVA'],
+          deductCredit: ''
+        }}
+      />
+    ),
+    selected: false
+  },
+  {
+    value: 'WRITE_EXAONE4',
+    component: (
+      <SelectModelButton
+        item={{
+          id: 'WRITE_EXAONE4',
+          desc: CREDIT_DESCRITION_MAP['WRITE_EXAONE4'],
+          title: CREDIT_NAME_MAP['WRITE_EXAONE4'],
+          deductCredit: ''
+        }}
+      />
+    ),
+    selected: false
+  },
+  {
+    value: 'WRITE_SOLARPRO2',
+    component: (
+      <SelectModelButton
+        item={{
+          id: 'WRITE_SOLARPRO2',
+          desc: CREDIT_DESCRITION_MAP['WRITE_SOLARPRO2'],
+          title: CREDIT_NAME_MAP['WRITE_SOLARPRO2'],
+          deductCredit: ''
+        }}
+      />
+    ),
+    selected: false
+  },
+
+  {
+    value: 'WRITE_CLADE3',
+    component: (
+      <SelectModelButton
+        item={{
+          id: 'WRITE_CLADE3',
+          desc: CREDIT_DESCRITION_MAP['WRITE_CLADE3'],
+          title: CREDIT_NAME_MAP['WRITE_CLADE3'],
+          deductCredit: ''
+        }}
+      />
+    ),
+    selected: false
+  },
+  {
     value: 'WRITE_GPT4',
     component: (
       <SelectModelButton
@@ -53,38 +110,17 @@ const defaultOptions: ModelSelectOption[] = [
       />
     ),
     selected: false
-  },
-  {
-    value: 'WRITE_CLOVA',
-    component: (
-      <SelectModelButton
-        item={{
-          id: 'WRITE_CLOVA',
-          desc: CREDIT_DESCRITION_MAP['WRITE_CLOVA'],
-          title: CREDIT_NAME_MAP['WRITE_CLOVA'],
-          deductCredit: ''
-        }}
-      />
-    ),
-    selected: false
-  },
-  {
-    value: 'WRITE_CLADE3',
-    component: (
-      <SelectModelButton
-        item={{
-          id: 'WRITE_CLADE3',
-          desc: CREDIT_DESCRITION_MAP['WRITE_CLADE3'],
-          title: CREDIT_NAME_MAP['WRITE_CLADE3'],
-          deductCredit: ''
-        }}
-      />
-    ),
-    selected: false
   }
 ];
 
-type SelectedOptions = 'WRITE_GPT4_1' | 'WRITE_GPT4' | 'GPT3' | 'WRITE_CLOVA' | 'WRITE_CLADE3';
+type SelectedOptions =
+  | 'WRITE_GPT4_1'
+  | 'WRITE_GPT4'
+  | 'GPT3'
+  | 'WRITE_CLOVA'
+  | 'WRITE_CLADE3'
+  | 'WRITE_EXAONE4'
+  | 'WRITE_SOLARPRO2';
 
 interface Props {
   selectedOption: SelectedOptions;
