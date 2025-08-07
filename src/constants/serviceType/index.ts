@@ -21,8 +21,10 @@ import GPTLogoDarkIcon from '../../img/dark/nova/logo/ico_gpt_logo.svg';
 import PerplexityLogoDarkIcon from '../../img/dark/nova/logo/ico_perplexity_logo.svg';
 import ClaudeLogoLightIcon from '../../img/light/nova/logo/ico_claude_logo.svg';
 import ClovaLogoLightIcon from '../../img/light/nova/logo/ico_clova_logo.svg';
+import ExaoneLogoLightIcon from '../../img/light/nova/logo/ico_exaone_logo.svg';
 import GPTLogoLightIcon from '../../img/light/nova/logo/ico_gpt_logo.svg';
 import PerplexityLogoLightIcon from '../../img/light/nova/logo/ico_perplexity_logo.svg';
+import SolarLogoLightIcon from '../../img/light/nova/logo/ico_solar_logo.svg';
 import { NOVA_TAB_TYPE } from '../novaTapTypes';
 
 export enum SERVICE_CATEGORY {
@@ -41,6 +43,9 @@ export enum SERVICE_TYPE {
   NOVA_CHAT_CLOVA = 'NOVA_CHAT_CLOVA', // 2
   NOVA_CHAT_CLAUDE3 = 'NOVA_CHAT_CLAUDE3', // 5
   NOVA_CHAT_CLAUDE_SONNET_4 = 'NOVA_CHAT_CLAUDE_SONNET_4', // 5
+
+  NOVA_CHAT_EXAONE_4 = 'NOVA_CHAT_EXAONE_4', // free
+  NOVA_CHAT_SOLAR_PRO_2 = 'NOVA_CHAT_SOLAR_PRO_2', // free
 
   // Tools
   NOVA_WEBSEARCH_PERPLEXITY = 'NOVA_WEBSEARCH_PERPLEXITY', // 5
@@ -139,13 +144,15 @@ export const CHAT_GROUP_MAP: Record<string, SERVICE_TYPE[] | SERVICE_TYPE> = {
     SERVICE_TYPE.NOVA_ASK_DOC_GPT4_1,
     SERVICE_TYPE.NOVA_IMG_GPT4_1
   ],
-  GPT_4O_MINI: SERVICE_TYPE.NOVA_CHAT_GPT4O_MINI,
-  GPT_O3_MINI: SERVICE_TYPE.NOVA_CHAT_O3MINI,
   CLOVA_X: SERVICE_TYPE.NOVA_CHAT_CLOVA,
-  CLAUDE_3_5: SERVICE_TYPE.NOVA_CHAT_CLAUDE3,
+  EXAONE_4: SERVICE_TYPE.NOVA_CHAT_EXAONE_4,
+  SOLAR_PRO_2: SERVICE_TYPE.NOVA_CHAT_SOLAR_PRO_2,
+  PERPLEXITY_REASONING_PRO: SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO,
   CLAUDE_4: SERVICE_TYPE.NOVA_CHAT_CLAUDE_SONNET_4,
+  CLAUDE_3_5: SERVICE_TYPE.NOVA_CHAT_CLAUDE3,
+  GPT_4O_MINI: SERVICE_TYPE.NOVA_CHAT_GPT4O_MINI,
   PERPLEXITY: SERVICE_TYPE.NOVA_WEBSEARCH_PERPLEXITY,
-  PERPLEXITY_REASONING_PRO: SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO
+  GPT_O3_MINI: SERVICE_TYPE.NOVA_CHAT_O3MINI
 };
 
 export const getChatGroupKey = (serviceType: SERVICE_TYPE): string => {
@@ -174,8 +181,16 @@ const CHAT_GROUP_DETAIL_MAP: Record<
     icon: (isLightMode) => (isLightMode ? GPTLogoLightIcon : GPTLogoDarkIcon)
   },
   CLOVA_X: {
-    label: 'CLOVA X',
+    label: 'NAVER CLOVA X',
     icon: (isLightMode) => (isLightMode ? ClovaLogoLightIcon : ClovaLogoDarkIcon)
+  },
+  EXAONE_4: {
+    label: 'LG AI Research EXAONE 4.0',
+    icon: (isLightMode) => (isLightMode ? ExaoneLogoLightIcon : ExaoneLogoLightIcon)
+  },
+  SOLAR_PRO_2: {
+    label: 'Upstage Solar Pro 2',
+    icon: (isLightMode) => (isLightMode ? SolarLogoLightIcon : SolarLogoLightIcon)
   },
   CLAUDE_3_5: {
     label: 'Claude 3.5 Sonnet',
@@ -190,7 +205,7 @@ const CHAT_GROUP_DETAIL_MAP: Record<
     icon: (isLightMode) => (isLightMode ? PerplexityLogoLightIcon : PerplexityLogoDarkIcon)
   },
   PERPLEXITY_REASONING_PRO: {
-    label: 'Perplexity Reasoning Pro',
+    label: 'Perplexity RP',
     icon: (isLightMode) => (isLightMode ? PerplexityLogoLightIcon : PerplexityLogoDarkIcon)
   }
 };
@@ -270,7 +285,9 @@ export const getServiceEngineName = (serviceType: SERVICE_TYPE): string => {
     [SERVICE_TYPE.NOVA_CHAT_CLAUDE_SONNET_4]: 'claude-sonnet-4',
     [SERVICE_TYPE.NOVA_CHAT_CLOVA]: 'clovax',
     [SERVICE_TYPE.NOVA_WEBSEARCH_PERPLEXITY]: 'sonar',
-    [SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO]: 'sonar-reasoning-pro'
+    [SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO]: 'sonar-reasoning-pro',
+    [SERVICE_TYPE.NOVA_CHAT_EXAONE_4]: 'exaone-4',
+    [SERVICE_TYPE.NOVA_CHAT_SOLAR_PRO_2]: 'solar-pro-2'
   };
 
   return mapping[serviceType] || 'unknown';
