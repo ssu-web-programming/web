@@ -8,6 +8,7 @@ import {
   DEFAULT_WRITE_OPTION_LENGTH_VALUE,
   versionClova,
   versionGpt4_1,
+  versionGpt5,
   WriteOptions
 } from '../components/chat/RecommendBox/FormRec';
 import Header from '../components/layout/Header';
@@ -32,7 +33,7 @@ const Body = styled.div`
 
 const initWriteOptions: WriteOptions = {
   input: '',
-  version: versionGpt4_1,
+  version: versionGpt5,
   form: DEFAULT_WRITE_OPTION_FORM_VALUE,
   length: DEFAULT_WRITE_OPTION_LENGTH_VALUE
 };

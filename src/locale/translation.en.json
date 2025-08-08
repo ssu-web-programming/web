@@ -64,7 +64,8 @@
       "gpt4": "Excels in generating diverse texts.",
       "gpt3.5": "Processes tasks quickly and efficiently.",
       "clovax": "Effective for Korean language tasks.",
-      "claude": "Writes creative content skillfully."
+      "claude": "Writes creative content skillfully.",
+      "gpt5": "Smart and up-to-date OpenAI model"
     }
   },
   "ChatingTab": {
@@ -404,6 +405,13 @@
         "prompt1": "3-year blockchain research trend",
         "prompt2": "A comparative analysis of global remote work policies",
         "prompt3": "A breakdown of 5 healthcare tech papers"
+      },
+      "GPT_5": {
+        "desc": "Smart and up-to-date OpenAI model",
+        "desc_home": "Smart and up-to-date OpenAI model",
+        "prompt1": " Show how GPT-5 is different",
+        "prompt2": "Show a manager-friendly report style",
+        "prompt3": "Explain crypto in 30 seconds"
       }
     },
     "Tabs": {
