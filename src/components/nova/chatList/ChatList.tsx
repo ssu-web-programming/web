@@ -415,7 +415,7 @@ const ChatList = forwardRef<HTMLDivElement, ChatListProps>((props, ref) => {
                         novaHistory[novaHistory.length - 1].vsId === '' && (
                           <SelectBox
                             placeHolder={t('Nova.perplexity.button.anotherAnswer') || ''}
-                            minWidth={290}
+                            minWidth={330}
                             paddingX={4}
                             paddingY={4}
                             menuItem={getMenuItemsFromServiceGroup(

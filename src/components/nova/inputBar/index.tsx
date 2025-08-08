@@ -502,7 +502,7 @@ export default function InputBar(props: InputBarProps) {
             <>
               <SelectBox
                 menuItem={getMenuItemsFromServiceGroup(serviceCredits, isLightMode, t)}
-                maxWidth={298}
+                maxWidth={330}
                 paddingX={4}
                 paddingY={4}
                 selectedItem={chatMode}
