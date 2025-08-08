@@ -409,7 +409,7 @@
       "GPT_5": {
         "desc": "Smart and up-to-date OpenAI model",
         "desc_home": "Smart and up-to-date OpenAI model",
-        "prompt1": "Predict human–AI collaboration future.",
+        "prompt1": "Predict human–AI collaboration future",
         "prompt2": "Show a manager-friendly report style",
         "prompt3": "Explain crypto in 30 seconds"
       }
