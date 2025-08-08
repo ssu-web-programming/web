@@ -297,6 +297,7 @@ export interface ServiceLoggingInfo {
 }
 export const getServiceLoggingInfo = (serviceType: SERVICE_TYPE): ServiceLoggingInfo => {
   const mapping: Partial<Record<SERVICE_TYPE, ServiceLoggingInfo>> = {
+    [SERVICE_TYPE.NOVA_CHAT_GPT5]: { name: 'nova_chating', detail: '5' },
     [SERVICE_TYPE.NOVA_CHAT_GPT4_1]: { name: 'nova_chating', detail: '4.1' },
     [SERVICE_TYPE.NOVA_IMG_GPT4_1]: { name: 'nova_chating', detail: '4.1' },
     [SERVICE_TYPE.NOVA_ASK_DOC_GPT4_1]: { name: 'nova_chating', detail: '4.1' },
