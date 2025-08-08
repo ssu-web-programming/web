@@ -7,7 +7,7 @@ const CREDIT_NAME_MAP: { [key: string]: string } = {
   GPT3: 'GPT 3.5',
   WRITE_CLOVA: 'CLOVA X',
   WRITE_CLADE3: 'Claude 3.5 Sonnet',
-  GPT5: 'GPT 5'
+  WRITE_GPT5: 'GPT 5'
 };
 
 const CREDIT_DESCRITION_MAP: { [key: string]: string } = {
@@ -16,7 +16,7 @@ const CREDIT_DESCRITION_MAP: { [key: string]: string } = {
   GPT3: 'WriteTab.ModelSelect.gpt3.5',
   WRITE_CLOVA: 'WriteTab.ModelSelect.clovax',
   WRITE_CLADE3: 'WriteTab.ModelSelect.claude',
-  GPT5: 'WriteTab.ModelSelect.gpt5'
+  WRITE_GPT5: 'WriteTab.ModelSelect.gpt5'
 };
 
 const VERSION_MAP: { [key: string]: string } = {
@@ -33,7 +33,7 @@ const ENGINE_VERSION_TO_CREDIT: Record<VersionListType['version'], SelectedOptio
   'gpt-4.1': 'WRITE_GPT4_1',
   clovax: 'WRITE_CLOVA',
   claude: 'WRITE_CLADE3',
-  gpt5: 'GPT5'
+  gpt5: 'WRITE_GPT5'
 };
 
 export { CREDIT_DESCRITION_MAP, CREDIT_NAME_MAP, ENGINE_VERSION_TO_CREDIT, VERSION_MAP };
