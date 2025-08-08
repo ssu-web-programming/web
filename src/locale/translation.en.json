@@ -64,7 +64,8 @@
       "gpt4": "Excels in generating diverse texts.",
       "gpt3.5": "Processes tasks quickly and efficiently.",
       "clovax": "Effective for Korean language tasks.",
-      "claude": "Writes creative content skillfully."
+      "claude": "Writes creative content skillfully.",
+      "gpt5": "Smart and up-to-date OpenAI model"
     }
   },
   "ChatingTab": {

@@ -13,6 +13,20 @@ interface ModelSelectOption extends Omit<SelectOption<SelectedOptions>, 'compone
 
 const defaultOptions: ModelSelectOption[] = [
   {
+    value: 'GPT5',
+    component: (
+      <SelectModelButton
+        item={{
+          id: 'GPT5',
+          desc: CREDIT_DESCRITION_MAP['GPT5'],
+          title: CREDIT_NAME_MAP['GPT5'],
+          deductCredit: ''
+        }}
+      />
+    ),
+    selected: false
+  },
+  {
     value: 'WRITE_GPT4_1',
     component: (
       <SelectModelButton
@@ -20,34 +34,6 @@ const defaultOptions: ModelSelectOption[] = [
           id: 'WRITE_GPT4_1',
           desc: CREDIT_DESCRITION_MAP['WRITE_GPT4_1'],
           title: CREDIT_NAME_MAP['WRITE_GPT4_1'],
-          deductCredit: ''
-        }}
-      />
-    ),
-    selected: false
-  },
-  {
-    value: 'WRITE_GPT4',
-    component: (
-      <SelectModelButton
-        item={{
-          id: 'WRITE_GPT4',
-          desc: CREDIT_DESCRITION_MAP['WRITE_GPT4'],
-          title: CREDIT_NAME_MAP['WRITE_GPT4'],
-          deductCredit: ''
-        }}
-      />
-    ),
-    selected: false
-  },
-  {
-    value: 'GPT3',
-    component: (
-      <SelectModelButton
-        item={{
-          id: 'GPT3',
-          desc: CREDIT_DESCRITION_MAP['GPT3'],
-          title: CREDIT_NAME_MAP['GPT3'],
           deductCredit: ''
         }}
       />
@@ -81,10 +67,44 @@ const defaultOptions: ModelSelectOption[] = [
       />
     ),
     selected: false
+  },
+  {
+    value: 'WRITE_GPT4',
+    component: (
+      <SelectModelButton
+        item={{
+          id: 'WRITE_GPT4',
+          desc: CREDIT_DESCRITION_MAP['WRITE_GPT4'],
+          title: CREDIT_NAME_MAP['WRITE_GPT4'],
+          deductCredit: ''
+        }}
+      />
+    ),
+    selected: false
+  },
+  {
+    value: 'GPT3',
+    component: (
+      <SelectModelButton
+        item={{
+          id: 'GPT3',
+          desc: CREDIT_DESCRITION_MAP['GPT3'],
+          title: CREDIT_NAME_MAP['GPT3'],
+          deductCredit: ''
+        }}
+      />
+    ),
+    selected: false
   }
 ];
 
-type SelectedOptions = 'WRITE_GPT4_1' | 'WRITE_GPT4' | 'GPT3' | 'WRITE_CLOVA' | 'WRITE_CLADE3';
+type SelectedOptions =
+  | 'WRITE_GPT4_1'
+  | 'WRITE_GPT4'
+  | 'GPT3'
+  | 'WRITE_CLOVA'
+  | 'WRITE_CLADE3'
+  | 'GPT5';
 
 interface Props {
   selectedOption: SelectedOptions;
