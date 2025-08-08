@@ -53,7 +53,7 @@ export type NovaHistoryState = {
 
 const initialState: NovaHistoryState = {
   chatHistory: [],
-  chatMode: SERVICE_TYPE.NOVA_CHAT_GPT4_1,
+  chatMode: SERVICE_TYPE.NOVA_CHAT_GPT5,
   selectedItems: [],
   isShareMode: false,
   isExporting: false
