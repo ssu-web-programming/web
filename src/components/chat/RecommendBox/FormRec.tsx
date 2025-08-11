@@ -15,8 +15,8 @@ export type EngineVersion =
   | 'clovax'
   | 'claude'
   | 'gpt5'
-  | 'exaone4'
-  | 'solarpro2';
+  | 'exaone-4.0'
+  | 'solar-pro-2';
 
 export interface VersionListType {
   id: string;
