@@ -32,7 +32,7 @@ export const useChatNova = () => {
       if (selectedNovaTab === NOVA_TAB_TYPE.perplexity) {
         dispatch(setChatMode(SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO));
       } else {
-        dispatch(setChatMode(SERVICE_TYPE.NOVA_CHAT_GPT4_1));
+        dispatch(setChatMode(SERVICE_TYPE.NOVA_CHAT_GPT5));
       }
       dispatch(setPageStatus({ tab: selectedNovaTab, status: 'home' }));
     } catch (err) {

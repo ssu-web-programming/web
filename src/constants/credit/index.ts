@@ -8,7 +8,8 @@ const CREDIT_NAME_MAP: { [key: string]: string } = {
   WRITE_CLOVA: 'CLOVA X',
   WRITE_CLADE3: 'Claude 3.5 Sonnet',
   WRITE_EXAONE4: 'LG AI Research EXAONE 4.0',
-  WRITE_SOLARPRO2: 'Solar Pro 2'
+  WRITE_SOLARPRO2: 'Solar Pro 2',
+  WRITE_GPT5: 'GPT 5'
 };
 
 const CREDIT_DESCRITION_MAP: { [key: string]: string } = {
@@ -18,7 +19,8 @@ const CREDIT_DESCRITION_MAP: { [key: string]: string } = {
   WRITE_CLOVA: 'WriteTab.ModelSelect.clovax',
   WRITE_CLADE3: 'WriteTab.ModelSelect.claude',
   WRITE_EXAONE4: 'WriteTab.ModelSelect.exaone4',
-  WRITE_SOLARPRO2: 'WriteTab.ModelSelect.solarpro2'
+  WRITE_SOLARPRO2: 'WriteTab.ModelSelect.solarpro2',
+  WRITE_GPT5: 'WriteTab.ModelSelect.gpt5'
 };
 
 const VERSION_MAP: { [key: string]: string } = {
@@ -36,7 +38,8 @@ const ENGINE_VERSION_TO_CREDIT: Record<VersionListType['version'], SelectedOptio
   clovax: 'WRITE_CLOVA',
   claude: 'WRITE_CLADE3',
   exaone4: 'WRITE_EXAONE4',
-  solarpro2: 'WRITE_SOLARPRO2'
+  solarpro2: 'WRITE_SOLARPRO2',
+  gpt5: 'WRITE_GPT5'
 };
 
 export { CREDIT_DESCRITION_MAP, CREDIT_NAME_MAP, ENGINE_VERSION_TO_CREDIT, VERSION_MAP };

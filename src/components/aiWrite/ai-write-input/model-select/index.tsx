@@ -13,6 +13,20 @@ interface ModelSelectOption extends Omit<SelectOption<SelectedOptions>, 'compone
 
 const defaultOptions: ModelSelectOption[] = [
   {
+    value: 'WRITE_GPT5',
+    component: (
+      <SelectModelButton
+        item={{
+          id: 'WRITE_GPT5',
+          desc: CREDIT_DESCRITION_MAP['WRITE_GPT5'],
+          title: CREDIT_NAME_MAP['WRITE_GPT5'],
+          deductCredit: ''
+        }}
+      />
+    ),
+    selected: false
+  },
+  {
     value: 'WRITE_GPT4_1',
     component: (
       <SelectModelButton
@@ -68,7 +82,6 @@ const defaultOptions: ModelSelectOption[] = [
     ),
     selected: false
   },
-
   {
     value: 'WRITE_CLADE3',
     component: (
@@ -120,7 +133,8 @@ type SelectedOptions =
   | 'WRITE_CLOVA'
   | 'WRITE_CLADE3'
   | 'WRITE_EXAONE4'
-  | 'WRITE_SOLARPRO2';
+  | 'WRITE_SOLARPRO2'
+  | 'WRITE_GPT5';
 
 interface Props {
   selectedOption: SelectedOptions;

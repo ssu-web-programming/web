@@ -32,7 +32,9 @@ export type SelectedOption =
   | 'WRITE_CLOVA'
   | 'WRITE_CLADE3'
   | 'WRITE_EXAONE4'
-  | 'WRITE_SOLARPRO2';
+  | 'WRITE_SOLARPRO2'
+  | 'WRITE_GPT5';
+
 const subjectMaxLength = 1000;
 
 const AIWriteInput = ({
