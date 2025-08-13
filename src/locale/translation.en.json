@@ -383,7 +383,7 @@
       "EXAONE_4": {
         "desc": "Strong in analysis and expertise",
         "desc_home": "Strong in analysis and expertise",
-        "prompt1": "Predict human–AI collaboration future.",
+        "prompt1": "Describe a day in a robot-only future city.",
         "prompt2": "Solve past medical exam-style question & explain.",
         "prompt3": "Simulate social change with mass space travel."
       },
