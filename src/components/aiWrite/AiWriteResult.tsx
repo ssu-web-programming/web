@@ -203,15 +203,15 @@ const AiWriteResult = ({
               {t(`WriteTab.InsertDoc`)}
             </Button>
           </Grid>
-          <RightBox>
-            {currentWrite.version === 'clovax' ? (
-              <ClovaXLinkText />
-            ) : currentWrite.version === 'claude' ? (
-              <ClaudeLinkText />
-            ) : (
-              <OpenAILinkText />
-            )}
-          </RightBox>
+          {/*<RightBox>*/}
+          {/*  {currentWrite.version === 'clovax' ? (*/}
+          {/*    <ClovaXLinkText />*/}
+          {/*  ) : currentWrite.version === 'claude' ? (*/}
+          {/*    <ClaudeLinkText />*/}
+          {/*  ) : (*/}
+          {/*    <OpenAILinkText />*/}
+          {/*  )}*/}
+          {/*</RightBox>*/}
         </ButtonBox>
       </ResWrapper>
     </Wrapper>
