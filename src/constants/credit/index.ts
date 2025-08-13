@@ -28,7 +28,9 @@ const VERSION_MAP: { [key: string]: string } = {
   WRITE_GPT4: 'gpt4',
   GPT3: 'gpt3.5',
   WRITE_CLOVA: 'clovax',
-  WRITE_CLADE3: 'claude'
+  WRITE_CLADE3: 'claude',
+  WRITE_EXAONE_4_0: 'exaone-4.0',
+  WRITE_SOLAR_PRO_2: 'solar-pro-2'
 };
 
 const ENGINE_VERSION_TO_CREDIT: Record<VersionListType['version'], SelectedOption> = {
