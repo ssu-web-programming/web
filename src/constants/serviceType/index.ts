@@ -47,7 +47,9 @@ export enum SERVICE_TYPE {
   NOVA_IMG_GPT5 = 'NOVA_IMG_GPT5', // 10
 
   NOVA_CHAT_EXAONE_4_0 = 'NOVA_CHAT_EXAONE_4_0', // free
+  CREATE_TEXT_EXAONE_4_0 = 'CREATE_TEXT_EXAONE_4_0',
   NOVA_CHAT_SOLAR_PRO_2 = 'NOVA_CHAT_SOLAR_PRO_2', // free
+  CREATE_TEXT_SOLAR_PRO_2 = 'CREATE_TEXT_SOLAR_PRO_2',
 
   // Tools
   NOVA_WEBSEARCH_PERPLEXITY = 'NOVA_WEBSEARCH_PERPLEXITY', // 5
@@ -84,7 +86,9 @@ export const TAB_SERVICE_MAP: Record<NOVA_TAB_TYPE, SERVICE_TYPE[]> = {
     SERVICE_TYPE.NOVA_CHAT_GPT5,
     SERVICE_TYPE.NOVA_IMG_GPT5,
     SERVICE_TYPE.NOVA_CHAT_EXAONE_4_0,
-    SERVICE_TYPE.NOVA_CHAT_SOLAR_PRO_2
+    SERVICE_TYPE.CREATE_TEXT_EXAONE_4_0,
+    SERVICE_TYPE.NOVA_CHAT_SOLAR_PRO_2,
+    SERVICE_TYPE.CREATE_TEXT_SOLAR_PRO_2
   ],
   [NOVA_TAB_TYPE.perplexity]: [
     SERVICE_TYPE.NOVA_WEBSEARCH_PERPLEXITY,
@@ -299,7 +303,9 @@ export const getServiceEngineName = (serviceType: SERVICE_TYPE): string => {
     [SERVICE_TYPE.NOVA_WEBSEARCH_PERPLEXITY]: 'sonar',
     [SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO]: 'sonar-reasoning-pro',
     [SERVICE_TYPE.NOVA_CHAT_EXAONE_4_0]: 'exaone-4.0',
+    [SERVICE_TYPE.CREATE_TEXT_EXAONE_4_0]: 'exaone-4.0',
     [SERVICE_TYPE.NOVA_CHAT_SOLAR_PRO_2]: 'solar-pro-2',
+    [SERVICE_TYPE.CREATE_TEXT_SOLAR_PRO_2]: 'solar-pro-2',
     [SERVICE_TYPE.NOVA_CHAT_GPT5]: 'gpt-5',
     [SERVICE_TYPE.NOVA_IMG_GPT5]: 'gpt-5'
   };
@@ -333,6 +339,10 @@ export const getServiceLoggingInfo = (serviceType: SERVICE_TYPE): ServiceLogging
       name: 'nova_web_search',
       detail: 'perplexity_pro'
     },
+    [SERVICE_TYPE.NOVA_CHAT_EXAONE_4_0]: { name: 'nova_chating', detail: 'exaone4' },
+    [SERVICE_TYPE.CREATE_TEXT_EXAONE_4_0]: { name: 'aiwrite', detail: 'exaone4' },
+    [SERVICE_TYPE.NOVA_CHAT_SOLAR_PRO_2]: { name: 'nova_chating', detail: 'solar_pro2' },
+    [SERVICE_TYPE.CREATE_TEXT_SOLAR_PRO_2]: { name: 'aiwrite', detail: 'solar_pro2' },
     [SERVICE_TYPE.NOVA_STYLE_STUDIO]: { name: 'nova_style_studio', detail: 'image1' },
     [SERVICE_TYPE.NOVA_REMOVE_BG]: { name: 'nova_background_remove', detail: 'remove_bg' },
     [SERVICE_TYPE.NOVA_REPLACE_BG_CLIPDROP]: { name: 'nova_background_change', detail: 'clipdrop' },
