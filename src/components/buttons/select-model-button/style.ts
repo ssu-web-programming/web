@@ -59,6 +59,7 @@ const IconWrapper = styled.div`
 
 const FreeBadge = styled.div`
   min-width: 33px;
+  width: max-content;
   height: 24px;
   display: flex;
   align-items: center;

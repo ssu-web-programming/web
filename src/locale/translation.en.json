@@ -376,14 +376,14 @@
       "CLOVA_X": {
         "desc": "Explains clearly and in a friendly way",
         "desc_home": "Explains clearly and in a friendly way",
-        "prompt1": "Describe a day in a robot-only future city.",
-        "prompt2": "Solve past medical exam-style question & explain.",
-        "prompt3": "Simulate social change with mass space travel."
+        "prompt1": "Tell me the best new convenience food combo",
+        "prompt2": "Tell me top 5 stress fixes",
+        "prompt3": "Recommend a rainy day playlist"
       },
       "EXAONE_4": {
         "desc": "Strong in analysis and expertise",
         "desc_home": "Strong in analysis and expertise",
-        "prompt1": "Predict human–AI collaboration future.",
+        "prompt1": "Describe a day in a robot-only future city.",
         "prompt2": "Solve past medical exam-style question & explain.",
         "prompt3": "Simulate social change with mass space travel."
       },
