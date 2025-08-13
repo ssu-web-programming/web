@@ -8,7 +8,7 @@ const CREDIT_NAME_MAP: { [key: string]: string } = {
   WRITE_CLOVA: 'CLOVA X',
   WRITE_CLADE3: 'Claude 3.5 Sonnet',
   WRITE_EXAONE_4_0: 'LG AI Research EXAONE 4.0',
-  WRITE_SOLAR_PRO_2: 'Solar Pro 2',
+  WRITE_SOLAR_PRO_2: 'Upstage Solar Pro 2',
   WRITE_GPT5: 'GPT 5'
 };
 
