@@ -31,6 +31,8 @@ export type SelectedOption =
   | 'GPT3'
   | 'WRITE_CLOVA'
   | 'WRITE_CLADE3'
+  | 'WRITE_EXAONE_4_0'
+  | 'WRITE_SOLAR_PRO_2'
   | 'WRITE_GPT5';
 
 const subjectMaxLength = 1000;

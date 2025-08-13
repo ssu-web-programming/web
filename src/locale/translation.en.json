@@ -65,7 +65,9 @@
       "gpt3.5": "Processes tasks quickly and efficiently.",
       "clovax": "Effective for Korean language tasks.",
       "claude": "Writes creative content skillfully.",
-      "gpt5": "Smart and up-to-date OpenAI model"
+      "gpt5": "Smart and up-to-date OpenAI model",
+      "exaone4": "Strong in analysis and expertise",
+      "solarpro2": "Expert in data and documents"
     }
   },
   "ChatingTab": {
@@ -372,11 +374,25 @@
         "prompt3": "Create a paper on cosmic expansion and the Hubble law"
       },
       "CLOVA_X": {
-        "desc": "Effective for Korean tasks",
-        "desc_home": "Effective for Korean language tasks and strong in writing Korean documents",
-        "prompt1": "Clean up common polite phrases in business documents",
-        "prompt2": "Write a script for a Korean presentation",
-        "prompt3": "Make edits to a report look natural and seamless"
+        "desc": "Explains clearly and in a friendly way",
+        "desc_home": "Explains clearly and in a friendly way",
+        "prompt1": "Describe a day in a robot-only future city.",
+        "prompt2": "Solve past medical exam-style question & explain.",
+        "prompt3": "Simulate social change with mass space travel."
+      },
+      "EXAONE_4": {
+        "desc": "Strong in analysis and expertise",
+        "desc_home": "Strong in analysis and expertise",
+        "prompt1": "Predict human–AI collaboration future.",
+        "prompt2": "Solve past medical exam-style question & explain.",
+        "prompt3": "Simulate social change with mass space travel."
+      },
+      "SOLAR_PRO_2": {
+        "desc": "Expert in data and documents",
+        "desc_home": "Expert in data and documents",
+        "prompt1": "Reinterpret global memes in Korean.",
+        "prompt2": "Top 5 jobs that will disappear in the future.",
+        "prompt3": "Create English phrases for a B2B sales pitch."
       },
       "CLAUDE_3_5": {
         "desc": "Good at creative writing",

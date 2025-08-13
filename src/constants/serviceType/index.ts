@@ -21,8 +21,10 @@ import GPTLogoDarkIcon from '../../img/dark/nova/logo/ico_gpt_logo.svg';
 import PerplexityLogoDarkIcon from '../../img/dark/nova/logo/ico_perplexity_logo.svg';
 import ClaudeLogoLightIcon from '../../img/light/nova/logo/ico_claude_logo.svg';
 import ClovaLogoLightIcon from '../../img/light/nova/logo/ico_clova_logo.svg';
+import ExaoneLogoLightIcon from '../../img/light/nova/logo/ico_exaone_logo.svg';
 import GPTLogoLightIcon from '../../img/light/nova/logo/ico_gpt_logo.svg';
 import PerplexityLogoLightIcon from '../../img/light/nova/logo/ico_perplexity_logo.svg';
+import SolarLogoLightIcon from '../../img/light/nova/logo/ico_solar_logo.svg';
 import { NOVA_TAB_TYPE } from '../novaTapTypes';
 
 export enum SERVICE_CATEGORY {
@@ -43,6 +45,11 @@ export enum SERVICE_TYPE {
   NOVA_CHAT_CLAUDE_SONNET_4 = 'NOVA_CHAT_CLAUDE_SONNET_4', // 5
   NOVA_CHAT_GPT5 = 'NOVA_CHAT_GPT5',
   NOVA_IMG_GPT5 = 'NOVA_IMG_GPT5', // 10
+
+  NOVA_CHAT_EXAONE_4_0 = 'NOVA_CHAT_EXAONE_4_0', // free
+  CREATE_TEXT_EXAONE_4_0 = 'CREATE_TEXT_EXAONE_4_0',
+  NOVA_CHAT_SOLAR_PRO_2 = 'NOVA_CHAT_SOLAR_PRO_2', // free
+  CREATE_TEXT_SOLAR_PRO_2 = 'CREATE_TEXT_SOLAR_PRO_2',
 
   // Tools
   NOVA_WEBSEARCH_PERPLEXITY = 'NOVA_WEBSEARCH_PERPLEXITY', // 5
@@ -77,7 +84,11 @@ export const TAB_SERVICE_MAP: Record<NOVA_TAB_TYPE, SERVICE_TYPE[]> = {
     SERVICE_TYPE.NOVA_CHAT_CLAUDE3,
     SERVICE_TYPE.NOVA_CHAT_CLAUDE_SONNET_4,
     SERVICE_TYPE.NOVA_CHAT_GPT5,
-    SERVICE_TYPE.NOVA_IMG_GPT5
+    SERVICE_TYPE.NOVA_IMG_GPT5,
+    SERVICE_TYPE.NOVA_CHAT_EXAONE_4_0,
+    SERVICE_TYPE.CREATE_TEXT_EXAONE_4_0,
+    SERVICE_TYPE.NOVA_CHAT_SOLAR_PRO_2,
+    SERVICE_TYPE.CREATE_TEXT_SOLAR_PRO_2
   ],
   [NOVA_TAB_TYPE.perplexity]: [
     SERVICE_TYPE.NOVA_WEBSEARCH_PERPLEXITY,
@@ -145,6 +156,9 @@ export const CHAT_GROUP_MAP: Record<string, SERVICE_TYPE[] | SERVICE_TYPE> = {
     SERVICE_TYPE.NOVA_IMG_GPT4_1
   ],
   CLOVA_X: SERVICE_TYPE.NOVA_CHAT_CLOVA,
+  EXAONE_4: SERVICE_TYPE.NOVA_CHAT_EXAONE_4_0,
+  SOLAR_PRO_2: SERVICE_TYPE.NOVA_CHAT_SOLAR_PRO_2,
+
   PERPLEXITY_REASONING_PRO: SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO,
   CLAUDE_4: SERVICE_TYPE.NOVA_CHAT_CLAUDE_SONNET_4,
   CLAUDE_3_5: SERVICE_TYPE.NOVA_CHAT_CLAUDE3,
@@ -179,8 +193,16 @@ const CHAT_GROUP_DETAIL_MAP: Record<
     icon: (isLightMode) => (isLightMode ? GPTLogoLightIcon : GPTLogoDarkIcon)
   },
   CLOVA_X: {
-    label: 'CLOVA X',
+    label: 'NAVER CLOVA X',
     icon: (isLightMode) => (isLightMode ? ClovaLogoLightIcon : ClovaLogoDarkIcon)
+  },
+  EXAONE_4: {
+    label: 'LG AI Research EXAONE 4.0',
+    icon: (isLightMode) => (isLightMode ? ExaoneLogoLightIcon : ExaoneLogoLightIcon)
+  },
+  SOLAR_PRO_2: {
+    label: 'Upstage Solar Pro 2',
+    icon: (isLightMode) => (isLightMode ? SolarLogoLightIcon : SolarLogoLightIcon)
   },
   CLAUDE_3_5: {
     label: 'Claude 3.5 Sonnet',
@@ -195,7 +217,7 @@ const CHAT_GROUP_DETAIL_MAP: Record<
     icon: (isLightMode) => (isLightMode ? PerplexityLogoLightIcon : PerplexityLogoDarkIcon)
   },
   PERPLEXITY_REASONING_PRO: {
-    label: 'Perplexity Reasoning Pro',
+    label: 'Perplexity RP',
     icon: (isLightMode) => (isLightMode ? PerplexityLogoLightIcon : PerplexityLogoDarkIcon)
   },
   GPT_5: {
@@ -280,6 +302,10 @@ export const getServiceEngineName = (serviceType: SERVICE_TYPE): string => {
     [SERVICE_TYPE.NOVA_CHAT_CLOVA]: 'clovax',
     [SERVICE_TYPE.NOVA_WEBSEARCH_PERPLEXITY]: 'sonar',
     [SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO]: 'sonar-reasoning-pro',
+    [SERVICE_TYPE.NOVA_CHAT_EXAONE_4_0]: 'exaone-4.0',
+    [SERVICE_TYPE.CREATE_TEXT_EXAONE_4_0]: 'exaone-4.0',
+    [SERVICE_TYPE.NOVA_CHAT_SOLAR_PRO_2]: 'solar-pro-2',
+    [SERVICE_TYPE.CREATE_TEXT_SOLAR_PRO_2]: 'solar-pro-2',
     [SERVICE_TYPE.NOVA_CHAT_GPT5]: 'gpt-5',
     [SERVICE_TYPE.NOVA_IMG_GPT5]: 'gpt-5'
   };
@@ -313,6 +339,10 @@ export const getServiceLoggingInfo = (serviceType: SERVICE_TYPE): ServiceLogging
       name: 'nova_web_search',
       detail: 'perplexity_pro'
     },
+    [SERVICE_TYPE.NOVA_CHAT_EXAONE_4_0]: { name: 'nova_chating', detail: 'exaone4' },
+    [SERVICE_TYPE.CREATE_TEXT_EXAONE_4_0]: { name: 'aiwrite', detail: 'exaone4' },
+    [SERVICE_TYPE.NOVA_CHAT_SOLAR_PRO_2]: { name: 'nova_chating', detail: 'solar_pro2' },
+    [SERVICE_TYPE.CREATE_TEXT_SOLAR_PRO_2]: { name: 'aiwrite', detail: 'solar_pro2' },
     [SERVICE_TYPE.NOVA_STYLE_STUDIO]: { name: 'nova_style_studio', detail: 'image1' },
     [SERVICE_TYPE.NOVA_REMOVE_BG]: { name: 'nova_background_remove', detail: 'remove_bg' },
     [SERVICE_TYPE.NOVA_REPLACE_BG_CLIPDROP]: { name: 'nova_background_change', detail: 'clipdrop' },

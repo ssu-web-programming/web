@@ -55,6 +55,34 @@ const defaultOptions: ModelSelectOption[] = [
     selected: false
   },
   {
+    value: 'WRITE_EXAONE_4_0',
+    component: (
+      <SelectModelButton
+        item={{
+          id: 'WRITE_EXAONE_4_0',
+          desc: CREDIT_DESCRITION_MAP['WRITE_EXAONE_4_0'],
+          title: CREDIT_NAME_MAP['WRITE_EXAONE_4_0'],
+          deductCredit: ''
+        }}
+      />
+    ),
+    selected: false
+  },
+  {
+    value: 'WRITE_SOLAR_PRO_2',
+    component: (
+      <SelectModelButton
+        item={{
+          id: 'WRITE_SOLAR_PRO_2',
+          desc: CREDIT_DESCRITION_MAP['WRITE_SOLAR_PRO_2'],
+          title: CREDIT_NAME_MAP['WRITE_SOLAR_PRO_2'],
+          deductCredit: ''
+        }}
+      />
+    ),
+    selected: false
+  },
+  {
     value: 'WRITE_CLADE3',
     component: (
       <SelectModelButton
@@ -104,6 +132,8 @@ type SelectedOptions =
   | 'GPT3'
   | 'WRITE_CLOVA'
   | 'WRITE_CLADE3'
+  | 'WRITE_EXAONE_4_0'
+  | 'WRITE_SOLAR_PRO_2'
   | 'WRITE_GPT5';
 
 interface Props {
