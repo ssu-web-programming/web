@@ -298,7 +298,7 @@ export const getServiceEngineName = (serviceType: SERVICE_TYPE): string => {
     [SERVICE_TYPE.NOVA_CHAT_CLOVA]: 'clovax',
     [SERVICE_TYPE.NOVA_WEBSEARCH_PERPLEXITY]: 'sonar',
     [SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO]: 'sonar-reasoning-pro',
-    [SERVICE_TYPE.NOVA_CHAT_EXAONE_4_0]: 'exaone-4',
+    [SERVICE_TYPE.NOVA_CHAT_EXAONE_4_0]: 'exaone-4.0',
     [SERVICE_TYPE.NOVA_CHAT_SOLAR_PRO_2]: 'solar-pro-2',
     [SERVICE_TYPE.NOVA_CHAT_GPT5]: 'gpt-5',
     [SERVICE_TYPE.NOVA_IMG_GPT5]: 'gpt-5'
