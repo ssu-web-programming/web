@@ -55,13 +55,13 @@ const defaultOptions: ModelSelectOption[] = [
     selected: false
   },
   {
-    value: 'WRITE_EXAONE_4',
+    value: 'WRITE_EXAONE_4_0',
     component: (
       <SelectModelButton
         item={{
-          id: 'WRITE_EXAONE_4',
-          desc: CREDIT_DESCRITION_MAP['WRITE_EXAONE_4'],
-          title: CREDIT_NAME_MAP['WRITE_EXAONE_4'],
+          id: 'WRITE_EXAONE_4_0',
+          desc: CREDIT_DESCRITION_MAP['WRITE_EXAONE_4_0'],
+          title: CREDIT_NAME_MAP['WRITE_EXAONE_4_0'],
           deductCredit: ''
         }}
       />
@@ -132,7 +132,7 @@ type SelectedOptions =
   | 'GPT3'
   | 'WRITE_CLOVA'
   | 'WRITE_CLADE3'
-  | 'WRITE_EXAONE_4'
+  | 'WRITE_EXAONE_4_0'
   | 'WRITE_SOLAR_PRO_2'
   | 'WRITE_GPT5';
 
