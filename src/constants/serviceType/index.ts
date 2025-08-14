@@ -197,7 +197,7 @@ const CHAT_GROUP_DETAIL_MAP: Record<
     icon: (isLightMode) => (isLightMode ? ClovaLogoLightIcon : ClovaLogoDarkIcon)
   },
   EXAONE_4: {
-    label: 'LG AI Research EXAONE 4.0',
+    label: 'LG EXAONE 4.0',
     icon: (isLightMode) => (isLightMode ? ExaoneLogoLightIcon : ExaoneLogoLightIcon)
   },
   SOLAR_PRO_2: {
