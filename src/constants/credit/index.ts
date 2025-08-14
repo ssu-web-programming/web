@@ -30,7 +30,8 @@ const VERSION_MAP: { [key: string]: string } = {
   WRITE_CLOVA: 'clovax',
   WRITE_CLADE3: 'claude',
   WRITE_EXAONE_4_0: 'exaone-4.0',
-  WRITE_SOLAR_PRO_2: 'solar-pro-2'
+  WRITE_SOLAR_PRO_2: 'solar-pro-2',
+  WRITE_GPT5: 'gpt5'
 };
 
 const ENGINE_VERSION_TO_CREDIT: Record<VersionListType['version'], SelectedOption> = {
