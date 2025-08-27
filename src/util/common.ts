@@ -18,40 +18,194 @@ marked.use({
 });
 
 const htmlBody = `
-
 <html>
 <head>
 <style>
-table{
-  border-collapse: collapse ;
-  border-radius: 6px;
-  width: 100%;
-}
-
-th ,
-td{
-  padding: 1em;
-  padding-top: .5em;
-  padding-bottom: .5em;
-}
-
-table,
-tr,
-td,
-th 
-{
-  border-radius: 6px;
-  border: 1px solid #e0d1ff;
-  padding: 15px 10px;
-}
-th
-{
-  border: 1px solid #e0d1ff;
-  color: #6f3ad0;
-  background: #f5f1fd;
-  padding: 10px 10px;
-}
-
+.markdown {
+    h1 {
+      font-size: 28px;
+      line-height: 130%;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: #26282b;
+      margin-bottom: 40px;
+    }
+    h2 {
+      font-size: 24px;
+      line-height: 140%;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: #26282b;
+      margin-bottom: 24px;
+    }
+    h3 {
+      font-size: 20px;
+      line-height: 140%;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: #26282b;
+      margin-bottom: 24px;
+    }
+    h4 {
+      font-size: 18px;
+      line-height: 140%;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: #26282b;
+      margin-bottom: 24px;
+    }
+    h5 {
+      font-size: 20px;
+      line-height: 140%;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: #26282b;
+      margin-bottom: 24px;
+    }
+    h6 {
+      font-size: 18px;
+      line-height: 140%;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: #26282b;
+      margin-bottom: 24px;
+    }
+    
+    p {
+      font-size: 16px;
+      line-height: 160%;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      color: #454c53;
+      margin-bottom: 16px;
+    }
+    sub,
+    small {
+      font-size: 14px;
+      line-height: 160%;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      color: #454c53;
+      margin-bottom: 12px;
+    }
+    
+    b,
+    strong {
+      font-weight: 700;
+    }
+    em, 
+    i {
+      font-style: italic;
+      font-weight: 500;
+    }
+    mark,
+    .highlight {
+      background: #fff4cc;
+    }
+    blockquote {
+      border-left: 4px solid #b3b8bd;
+      border-radius: 2px;
+      padding-left: 24px;
+    }
+    hr {
+      width: 100%;
+      height: 1px;
+      color: #c9cdd2;
+      margin-top: 32px;
+      margin-bottom: 32px;
+    }
+    
+    ul {
+      list-style: disc;
+    }
+    ul li {
+      list-style: disc;
+    }
+    ol {
+      list-style: decimal;
+    }
+    ol li {
+      list-style: decimal;
+    }
+    ul,
+    ol {
+      padding-left: 24px;
+      margin-bottom: 24px;
+    }
+    li {
+      font-size: 16px;
+      line-height: 160%;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      color: #454c53;
+    }
+    li + li {
+      margin-top: 8px;
+    }
+    
+    a:hover {
+      color: #004de6;
+      text-decoration-thickness: 2px;
+    }
+    a:visited {
+      color: #551a8b;
+      text-decoration-thickness: 2px;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border: 1px solid #c9cdd2;
+      margin-top: 0;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+    tr,
+    td,
+    th {
+      border: 1px solid #e8ebed;
+      border-radius: unset;
+      padding: 12px 8px;
+      background: #ffffff;
+    }
+    th {
+      background: #f7f8f9;
+      font-weight: 700;
+      font-size: 16px;
+      line-height: 160%;
+      letter-spacing: -0.01em;
+      color: #454c53;
+      text-align: center;
+    }
+    
+    pre {
+      width: 100%;
+      background: #f1f1f1;
+      border: 1px solid #e8ebed;
+      border-radius: 4px;
+      padding: 8.8px;
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+    code {
+      display: flex;
+      width: 100%;
+      font-family: 'Source Code Pro', monospace;
+      font-size: 16px;
+      word-wrap: break-word;
+      overflow: hidden;
+      white-space: pre-wrap;
+      color: #454C53;
+    }
+    
+    p img,
+    img {
+      width: 200px !important;
+      height: 200px !important;
+      border-radius: 16px;
+    }
+  }
 </style>
 </head>
 <body>
@@ -68,7 +222,8 @@ export const markdownToHtml = async (markdown: string) => {
     const $ = load(htmlBody);
     const body = $('body');
 
-    body.html(converted);
+    body.html(`<div class="markdown">${converted}</div>`);
+
     $('a').each((_, el) => {
       $(el).attr('target', '_blank').attr('rel', 'noopener noreferrer');
     });
