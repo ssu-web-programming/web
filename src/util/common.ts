@@ -110,7 +110,8 @@ const htmlBody = `
     hr {
       width: 100%;
       height: 1px;
-      color: #c9cdd2;
+      background: #c9cdd2;
+      border: 0;
       margin-top: 32px;
       margin-bottom: 32px;
     }
@@ -143,6 +144,9 @@ const htmlBody = `
       margin-top: 8px;
     }
     
+    a {
+      color: #0066ff;
+    }
     a:hover {
       color: #004de6;
       text-decoration-thickness: 2px;
