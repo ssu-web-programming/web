@@ -28,15 +28,17 @@ const htmlBody = `
       font-weight: 700;
       letter-spacing: -0.01em;
       color: #26282b;
+      margin-top: 0;
       margin-bottom: 40px;
     }
     h2 {
-      font-size: 24px;
+      font-size: 22px;
       line-height: 140%;
       font-weight: 700;
       letter-spacing: -0.01em;
       color: #26282b;
-      margin-bottom: 24px;
+      margin-top: 0;
+      margin-bottom: 16px;
     }
     h3 {
       font-size: 20px;
@@ -44,7 +46,8 @@ const htmlBody = `
       font-weight: 700;
       letter-spacing: -0.01em;
       color: #26282b;
-      margin-bottom: 24px;
+      margin-top: 0;
+      margin-bottom: 16px;
     }
     h4 {
       font-size: 18px;
@@ -52,6 +55,7 @@ const htmlBody = `
       font-weight: 600;
       letter-spacing: -0.01em;
       color: #26282b;
+      margin-top: 0;
       margin-bottom: 24px;
     }
     h5 {
@@ -60,6 +64,7 @@ const htmlBody = `
       font-weight: 600;
       letter-spacing: -0.01em;
       color: #26282b;
+      margin-top: 0;
       margin-bottom: 24px;
     }
     h6 {
@@ -68,6 +73,7 @@ const htmlBody = `
       font-weight: 600;
       letter-spacing: -0.01em;
       color: #26282b;
+      margin-top: 0;
       margin-bottom: 24px;
     }
     
@@ -110,10 +116,10 @@ const htmlBody = `
     hr {
       width: 100%;
       height: 1px;
-      background: #c9cdd2;
+      color: #c9cdd2;
       border: 0;
-      margin-top: 32px;
-      margin-bottom: 32px;
+      margin-top: 24px;
+      margin-bottom: 24px;
     }
     
     ul {
