@@ -137,7 +137,7 @@ const htmlBody = `
     ul,
     ol {
       padding-left: 24px;
-      margin-bottom: 24px;
+      margin-bottom: 12px;
     }
     li {
       font-size: 16px;
