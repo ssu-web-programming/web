@@ -83,13 +83,13 @@ const defaultOptions: ModelSelectOption[] = [
     selected: false
   },
   {
-    value: 'WRITE_CLADE3',
+    value: 'NOVA_CHAT_CLAUDE_SONNET_4',
     component: (
       <SelectModelButton
         item={{
-          id: 'WRITE_CLADE3',
-          desc: CREDIT_DESCRITION_MAP['WRITE_CLADE3'],
-          title: CREDIT_NAME_MAP['WRITE_CLADE3'],
+          id: 'NOVA_CHAT_CLAUDE_SONNET_4',
+          desc: CREDIT_DESCRITION_MAP['NOVA_CHAT_CLAUDE_SONNET_4'],
+          title: CREDIT_NAME_MAP['NOVA_CHAT_CLAUDE_SONNET_4'],
           deductCredit: ''
         }}
       />
@@ -131,7 +131,7 @@ type SelectedOptions =
   | 'WRITE_GPT4'
   | 'GPT3'
   | 'WRITE_CLOVA'
-  | 'WRITE_CLADE3'
+  | 'NOVA_CHAT_CLAUDE_SONNET_4'
   | 'WRITE_EXAONE_4_0'
   | 'WRITE_SOLAR_PRO_2'
   | 'WRITE_GPT5';
@@ -143,7 +143,12 @@ interface Props {
 
 export default function ModelSelect({ selectedOption, onChangeOption }: Props) {
   const creditInfo = useAppSelector(creditInfoSelector);
+
+  console.log('creditInfo', creditInfo);
+
   const [options, setOptions] = useState(defaultOptions);
+
+  console.log('options', options);
 
   useEffect(() => {
     if (creditInfo) {

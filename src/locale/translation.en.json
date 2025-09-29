@@ -65,6 +65,7 @@
       "gpt3.5": "Processes tasks quickly and efficiently.",
       "clovax": "Effective for Korean language tasks.",
       "claude": "Writes creative content skillfully.",
+      "claude4": "It answers complex questions accurately.",
       "gpt5": "Smart and up-to-date OpenAI model",
       "exaone4": "Strong in analysis and expertise",
       "solarpro2": "Expert in data and documents"

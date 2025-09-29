@@ -36,7 +36,7 @@ export default function SelectModelButton({
 }: SelectModelButtonProps) {
   const { t } = useTranslation();
 
-  useEffect(() => {}, [item]);
+  console.log('item', item);
 
   return (
     <S.StyledButton

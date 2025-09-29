@@ -13,7 +13,8 @@ export type EngineVersion =
   | 'gpt4'
   | 'gpt-4.1'
   | 'clovax'
-  | 'claude'
+  // | 'claude'
+  | 'claude4'
   | 'gpt5'
   | 'exaone-4.0'
   | 'solar-pro-2';
@@ -76,8 +77,8 @@ export const versionClova: VersionListType = {
   group: 'all'
 };
 export const versionClaude: VersionListType = {
-  id: 'Claude 3.5 Sonnet',
-  version: 'claude',
+  id: 'Claude 4.0 Sonnet',
+  version: 'claude4',
   group: 'all'
 };
 export const versionGpt5: VersionListType = {
