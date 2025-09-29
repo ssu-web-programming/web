@@ -261,13 +261,7 @@ const SpeechBubble = (props: PropsWithChildren<SpeechBubbleProps>) => {
 
       {chat.role === 'assistant' && !loadingMsg && (
         <LisenceRight>
-          {chat.version === 'clovax' ? (
-            <ClovaXLinkText />
-          ) : chat.version === 'claude' ? (
-            <ClaudeLinkText />
-          ) : (
-            <OpenAILinkText />
-          )}
+          {chat.version === 'clovax' ? <ClovaXLinkText /> : <OpenAILinkText />}
         </LisenceRight>
       )}
     </Wrapper>

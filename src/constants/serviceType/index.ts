@@ -161,7 +161,7 @@ export const CHAT_GROUP_MAP: Record<string, SERVICE_TYPE[] | SERVICE_TYPE> = {
 
   PERPLEXITY_REASONING_PRO: SERVICE_TYPE.NOVA_WEBSEARCH_SONAR_REASONING_PRO,
   CLAUDE_4: SERVICE_TYPE.NOVA_CHAT_CLAUDE_SONNET_4,
-  CLAUDE_3_5: SERVICE_TYPE.NOVA_CHAT_CLAUDE3,
+  // CLAUDE_3_5: SERVICE_TYPE.NOVA_CHAT_CLAUDE3,
   GPT_4O_MINI: SERVICE_TYPE.NOVA_CHAT_GPT4O_MINI,
   PERPLEXITY: SERVICE_TYPE.NOVA_WEBSEARCH_PERPLEXITY,
   GPT_O3_MINI: SERVICE_TYPE.NOVA_CHAT_O3MINI
@@ -204,10 +204,11 @@ const CHAT_GROUP_DETAIL_MAP: Record<
     label: 'Upstage Solar Pro 2',
     icon: (isLightMode) => (isLightMode ? SolarLogoLightIcon : SolarLogoLightIcon)
   },
-  CLAUDE_3_5: {
-    label: 'Claude 3.5 Sonnet',
-    icon: (isLightMode) => (isLightMode ? ClaudeLogoLightIcon : ClaudeLogoDarkIcon)
-  },
+  // 지원 종료로 제거!
+  // CLAUDE_3_5: {
+  //   label: 'Claude 3.5 Sonnet',
+  //   icon: (isLightMode) => (isLightMode ? ClaudeLogoLightIcon : ClaudeLogoDarkIcon)
+  // },
   CLAUDE_4: {
     label: 'Claude 4.0 Sonnet',
     icon: (isLightMode) => (isLightMode ? ClaudeLogoLightIcon : ClaudeLogoDarkIcon)
