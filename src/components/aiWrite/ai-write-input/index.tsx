@@ -30,7 +30,7 @@ export type SelectedOption =
   | 'WRITE_GPT4'
   | 'GPT3'
   | 'WRITE_CLOVA'
-  | 'NOVA_CHAT_CLAUDE_SONNET_4'
+  | 'WRITE_CLAUDE_SONNET_4'
   | 'WRITE_EXAONE_4_0'
   | 'WRITE_SOLAR_PRO_2'
   | 'WRITE_GPT5';

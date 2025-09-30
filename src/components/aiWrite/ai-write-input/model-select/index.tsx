@@ -83,13 +83,13 @@ const defaultOptions: ModelSelectOption[] = [
     selected: false
   },
   {
-    value: 'NOVA_CHAT_CLAUDE_SONNET_4',
+    value: 'WRITE_CLAUDE_SONNET_4',
     component: (
       <SelectModelButton
         item={{
-          id: 'NOVA_CHAT_CLAUDE_SONNET_4',
-          desc: CREDIT_DESCRITION_MAP['NOVA_CHAT_CLAUDE_SONNET_4'],
-          title: CREDIT_NAME_MAP['NOVA_CHAT_CLAUDE_SONNET_4'],
+          id: 'WRITE_CLAUDE_SONNET_4',
+          desc: CREDIT_DESCRITION_MAP['WRITE_CLAUDE_SONNET_4'],
+          title: CREDIT_NAME_MAP['WRITE_CLAUDE_SONNET_4'],
           deductCredit: ''
         }}
       />
@@ -131,7 +131,7 @@ type SelectedOptions =
   | 'WRITE_GPT4'
   | 'GPT3'
   | 'WRITE_CLOVA'
-  | 'NOVA_CHAT_CLAUDE_SONNET_4'
+  | 'WRITE_CLAUDE_SONNET_4'
   | 'WRITE_EXAONE_4_0'
   | 'WRITE_SOLAR_PRO_2'
   | 'WRITE_GPT5';

@@ -13,7 +13,6 @@ export type EngineVersion =
   | 'gpt4'
   | 'gpt-4.1'
   | 'clovax'
-  // | 'claude'
   | 'claude4'
   | 'gpt5'
   | 'exaone-4.0'

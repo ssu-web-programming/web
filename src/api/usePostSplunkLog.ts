@@ -209,7 +209,9 @@ export const calcToken = (text: string) => {
 export const parseGptVer = (version: EngineVersion | VersionType): LLMVersion => {
   try {
     if (version === 'clovax') return 'CLOVA';
-    // else if (version === 'claude') return 'claude3';
+    else if (version === 'claude4') return 'claude4';
+    else if (version === 'exaone-4.0') return 'exaone-4.0';
+    else if (version === 'solar-pro-2') return 'solar-pro-2';
     else if (version === 'sd3') return 'Stable_Diffusion';
     else if (version === 'dalle3') return 'Dalle-3';
     const gptVer = new RegExp(/gpt([0-9]*[.]?[0-9]+[a-z]?)/g).exec(version);

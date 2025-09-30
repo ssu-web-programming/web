@@ -6,7 +6,7 @@ const CREDIT_NAME_MAP: { [key: string]: string } = {
   WRITE_GPT4: 'GPT 4',
   GPT3: 'GPT 3.5',
   WRITE_CLOVA: 'NAVER CLOVA X',
-  NOVA_CHAT_CLAUDE_SONNET_4: 'Claude 4.0 Sonnet',
+  WRITE_CLAUDE_SONNET_4: 'Claude 4.0 Sonnet',
   WRITE_EXAONE_4_0: 'LG EXAONE 4.0',
   WRITE_SOLAR_PRO_2: 'Upstage Solar Pro 2',
   WRITE_GPT5: 'GPT 5'
@@ -17,7 +17,7 @@ const CREDIT_DESCRITION_MAP: { [key: string]: string } = {
   WRITE_GPT4: 'WriteTab.ModelSelect.gpt4',
   GPT3: 'WriteTab.ModelSelect.gpt3.5',
   WRITE_CLOVA: 'WriteTab.ModelSelect.clovax',
-  NOVA_CHAT_CLAUDE_SONNET_4: 'WriteTab.ModelSelect.claude4',
+  WRITE_CLAUDE_SONNET_4: 'WriteTab.ModelSelect.claude4',
   WRITE_EXAONE_4_0: 'WriteTab.ModelSelect.exaone4',
   WRITE_SOLAR_PRO_2: 'WriteTab.ModelSelect.solarpro2',
   WRITE_GPT5: 'WriteTab.ModelSelect.gpt5'
@@ -28,7 +28,7 @@ const VERSION_MAP: { [key: string]: string } = {
   WRITE_GPT4: 'gpt4',
   GPT3: 'gpt3.5',
   WRITE_CLOVA: 'clovax',
-  NOVA_CHAT_CLAUDE_SONNET_4: 'claude4',
+  WRITE_CLAUDE_SONNET_4: 'claude4',
   WRITE_EXAONE_4_0: 'exaone-4.0',
   WRITE_SOLAR_PRO_2: 'solar-pro-2',
   WRITE_GPT5: 'gpt5'
@@ -39,7 +39,7 @@ const ENGINE_VERSION_TO_CREDIT: Record<VersionListType['version'], SelectedOptio
   gpt4: 'WRITE_GPT4',
   'gpt-4.1': 'WRITE_GPT4_1',
   clovax: 'WRITE_CLOVA',
-  claude4: 'NOVA_CHAT_CLAUDE_SONNET_4',
+  claude4: 'WRITE_CLAUDE_SONNET_4',
   'exaone-4.0': 'WRITE_EXAONE_4_0',
   'solar-pro-2': 'WRITE_SOLAR_PRO_2',
   gpt5: 'WRITE_GPT5'
