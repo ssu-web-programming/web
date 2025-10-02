@@ -347,7 +347,7 @@ export const getServiceLoggingInfo = (serviceType: SERVICE_TYPE): ServiceLogging
     [SERVICE_TYPE.NOVA_STYLE_STUDIO]: { name: 'nova_style_studio', detail: 'image1' },
     [SERVICE_TYPE.NOVA_REMOVE_BG]: { name: 'nova_background_remove', detail: 'remove_bg' },
     [SERVICE_TYPE.NOVA_REPLACE_BG_CLIPDROP]: { name: 'nova_background_change', detail: 'clipdrop' },
-    [SERVICE_TYPE.NOVA_REIMAGE_CLIPDROP]: { name: 'nova_image_remake', detail: 'clipdrop' },
+    [SERVICE_TYPE.NOVA_REIMAGE_CLIPDROP]: { name: 'nova_image_remake', detail: 'gemini2.5' },
     [SERVICE_TYPE.NOVA_UNCROP_CLIPDROP]: { name: 'nova_image_expansion', detail: 'clipdrop' },
     [SERVICE_TYPE.NOVA_PO_RESOLUTION]: {
       name: 'nova_resolution_elevation',
