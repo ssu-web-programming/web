@@ -214,6 +214,7 @@ export const parseGptVer = (version: EngineVersion | VersionType): LLMVersion =>
     else if (version === 'solar-pro-2') return 'solar-pro-2';
     else if (version === 'sd3') return 'Stable_Diffusion';
     else if (version === 'dalle3') return 'Dalle-3';
+    else if (version === 'gpt-4.1') return '4.1';
     const gptVer = new RegExp(/gpt([0-9]*[.]?[0-9]+[a-z]?)/g).exec(version);
     return gptVer && gptVer[1] ? gptVer[1] : 0;
   } catch (err) {
