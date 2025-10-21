@@ -193,8 +193,6 @@ export default function useInitApp() {
     }
 
     if (!resSession || !resSession.success) {
-      console.log('fail');
-      console.log('return return');
       dispatch(setIsNotLogin(true));
       return;
     }

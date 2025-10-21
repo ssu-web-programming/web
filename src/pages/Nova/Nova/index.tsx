@@ -56,6 +56,7 @@ import Translation from '../Translation';
 import VoiceDictation from '../VoiceDictation';
 
 import * as S from './style';
+import Bridge from '../../../util/bridge';
 
 export type ClientStatusType = 'home' | 'doc_edit_mode' | 'doc_view_mode';
 
@@ -249,7 +250,10 @@ export default function Nova() {
         <S.Dim>
           <S.LoginWrap>
             <img src={LockAndKeyIcon} alt="lock_and_key" />
-            <p dangerouslySetInnerHTML={{ __html: t('Nova.Home.requestLogin') || '' }} />
+            <p
+              dangerouslySetInnerHTML={{ __html: t('Nova.Home.requestLogin') || '' }}
+              onClick={Bridge.callBridgeApi('requestLogin')}
+            />
           </S.LoginWrap>
         </S.Dim>
       )}
