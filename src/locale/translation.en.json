@@ -350,7 +350,8 @@
         "changeStyle": "Change Style",
         "convert2DTo3D": "2D to 3D"
       },
-      "novaRecentChat": "Recent Conversations with NOVA"
+      "novaRecentChat": "Recent Conversations with NOVA",
+      "requestLogin": "<span>Sign in</span> now and try out the AI tools!"
     },
     "ChatModel": {
       "GPT_4_1": {

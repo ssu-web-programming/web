@@ -350,7 +350,8 @@
         "changeStyle": "スタイルを変更",
         "convert2DTo3D": "2Dから3Dへ"
       },
-      "novaRecentChat": "NOVAとの最近の会話"
+      "novaRecentChat": "NOVAとの最近の会話",
+      "requestLogin": "<span>ログイン</span>して、AIツールをお試しください。"
     },
     "ChatModel": {
       "GPT_4_1": {
