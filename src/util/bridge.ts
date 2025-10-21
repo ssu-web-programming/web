@@ -223,8 +223,8 @@ const callApi = (api: ApiType, arg?: string | number | object | boolean) => {
             }
             break;
           }
-            if (window.webkit.messageHandlers.uploadFile) {
           case 'uploadFile': {
+            if (window.webkit.messageHandlers.uploadFile) {
               window.webkit.messageHandlers.uploadFile.postMessage(arg);
             }
             break;
