@@ -282,6 +282,12 @@ const callApi = (api: ApiType, arg?: string | number | object | boolean) => {
             }
             break;
           }
+          case 'requestLogin': {
+            if (window.webkit.messageHandlers.requestLogin) {
+              window.webkit.messageHandlers.requestLogin.postMessage(arg);
+            }
+            break;
+          }
         }
         break;
       }
@@ -810,7 +816,8 @@ type ApiType =
   | 'getRecordingState'
   | 'novaStatusChanged'
   | 'closeNova'
-  | 'amplitudeData';
+  | 'amplitudeData'
+  | 'requestLogin';
 
 const Bridge = {
   checkSession: (api: string) => {

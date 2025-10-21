@@ -37,6 +37,8 @@ import Uploading from '../../../components/nova/uploading';
 import { FileUploadState } from '../../../constants/fileTypes';
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import { SERVICE_TYPE } from '../../../constants/serviceType';
+import LockAndKeyIcon from '../../../img/common/lock_and_key.png';
+import { appStateSelector } from '../../../store/slices/appState';
 import { announceInfoSelector } from '../../../store/slices/nova/announceSlice';
 import {
   novaChatModeSelector,
@@ -49,8 +51,6 @@ import {
   selectPageStatus
 } from '../../../store/slices/nova/pageStatusSlice';
 import { selectTabSlice } from '../../../store/slices/tabSlice';
-import { themeInfoSelector } from '../../../store/slices/theme';
-import { userInfoSelector } from '../../../store/slices/userInfo';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
 import Translation from '../Translation';
 import VoiceDictation from '../VoiceDictation';
@@ -63,6 +63,7 @@ export default function Nova() {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const confirm = useConfirm();
+  const { isNotLogin } = useAppSelector(appStateSelector);
   const announcementList = useAppSelector(announceInfoSelector);
   const { goConvertPage } = useConvert2DTo3D();
   const { goPromptPage } = useChangeBackground();
@@ -85,8 +86,6 @@ export default function Nova() {
     setFileUploadState,
     setExpiredNOVA
   });
-  const { isLightMode } = useAppSelector(themeInfoSelector);
-  const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
   const { usingAI, selectedNovaTab } = useAppSelector(selectTabSlice);
   const status = useAppSelector(selectPageStatus(selectedNovaTab));
   const service = useAppSelector(selectPageService(selectedNovaTab));
@@ -246,7 +245,14 @@ export default function Nova() {
 
   return (
     <>
-      {/*<AIVideoPage />*/}
+      {isNotLogin && (
+        <S.Dim>
+          <S.LoginWrap>
+            <img src={LockAndKeyIcon} alt="lock_and_key" />
+            <p dangerouslySetInnerHTML={{ __html: t('Nova.Home.requestLogin') || '' }} />
+          </S.LoginWrap>
+        </S.Dim>
+      )}
       <S.Wrapper {...getRootProps()} isScroll={selectedNovaTab != NOVA_TAB_TYPE.aiChat}>
         {(usingAI || status === 'home') && isDragActive && <Uploading />}
         <NovaHeader />

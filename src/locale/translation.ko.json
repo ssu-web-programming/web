@@ -350,7 +350,8 @@
         "changeStyle": "스타일 변환",
         "convert2DTo3D": "2D <img/> 3D 변환"
       },
-      "novaRecentChat": "NOVA와의 최근 대화"
+      "novaRecentChat": "NOVA와의 최근 대화",
+      "requestLogin": "지금 <span>로그인</span>하고 AI 도구를 이용해보세요!"
     },
     "ChatModel": {
       "GPT_4_1": {

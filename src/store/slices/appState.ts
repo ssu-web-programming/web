@@ -4,6 +4,7 @@ import { RootState } from '../store';
 
 type DocType = string;
 type InitialState = {
+  isNotLogin: boolean;
   docType: DocType;
   novaExpireTime: number;
   isStartedByRibbon: boolean;
@@ -16,6 +17,7 @@ type InitialState = {
 };
 
 const initialState: InitialState = {
+  isNotLogin: false,
   docType: 'unknown',
   novaExpireTime: 1800000,
   isStartedByRibbon: true,
@@ -31,6 +33,10 @@ const appStateSlice = createSlice({
   name: 'appState',
   initialState,
   reducers: {
+    setIsNotLogin: (state, action: PayloadAction<boolean>) => {
+      state.isNotLogin = action.payload;
+      return state;
+    },
     setDocType: (state, action: PayloadAction<DocType>) => {
       state.docType = action.payload;
       return state;
@@ -63,6 +69,7 @@ const appStateSlice = createSlice({
 });
 
 export const {
+  setIsNotLogin,
   setDocType,
   setNovaExpireTime,
   setIsCallState,

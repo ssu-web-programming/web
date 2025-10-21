@@ -8,10 +8,10 @@ import {
 } from 'api/constant';
 import { ERR_INVALID_SESSION } from 'error/error';
 import { lang, langFormatCode } from 'locale';
-import { setNovaExpireTime } from 'store/slices/appState';
+import { setIsNotLogin, setNovaExpireTime } from 'store/slices/appState';
 import { setNovaAgreement, setUserInfo } from 'store/slices/userInfo';
 import { useAppDispatch } from 'store/store';
-import Bridge from 'util/bridge';
+import Bridge, { CheckSessionResponse } from 'util/bridge';
 
 import { init } from '@amplitude/analytics-browser';
 
@@ -183,14 +183,27 @@ export default function useInitApp() {
   );
 
   return async () => {
-    const resSession = await Bridge.checkSession('app init');
-    if (!resSession || !resSession.success) {
-      throw new Error(ERR_INVALID_SESSION);
+    let resSession: CheckSessionResponse | null = null;
+
+    try {
+      resSession = (await Bridge.checkSession('app init')) as CheckSessionResponse;
+    } catch (e) {
+      console.warn('[checkSession] failed (ignored):', e);
+      resSession = null;
     }
 
-    const AID = resSession.sessionInfo['AID'];
-    const BID = resSession.sessionInfo['BID'];
-    const SID = resSession.sessionInfo['SID'];
+    if (!resSession || !resSession.success) {
+      console.log('fail');
+      console.log('return return');
+      dispatch(setIsNotLogin(true));
+      return;
+    }
+
+    const { sessionInfo, userInfo } = resSession;
+
+    const AID = sessionInfo['AID'];
+    const BID = sessionInfo['BID'];
+    const SID = sessionInfo['SID'];
 
     const session: any = {};
     session['X-PO-AI-MayFlower-Auth-AID'] = AID;
@@ -217,12 +230,13 @@ export default function useInitApp() {
       })
     );
 
-    dispatch(setUserInfo(resSession.userInfo));
+    dispatch(setUserInfo(userInfo));
 
+    console.log('sdfksdjkfljsdkljkdsf');
     Bridge.callSyncBridgeApiWithCallback({
       api: 'getClientStatus',
       callback: async (status: ClientStatusType) => {
-        const logger = usePostSplunkLog({ bid: BID, sid: SID, ...resSession.userInfo });
+        const logger = usePostSplunkLog({ bid: BID, sid: SID, ...userInfo });
         await logger({
           dp: 'ai.nova',
           el: status === 'home' ? 'home_intobox' : 'document_intobox'
