@@ -22,6 +22,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
+      <head>
+        <meta name="google-site-verification" content="1UYE7QA7vWuKgg_eff7wSNFWpI3cN4xBI2XaK7m95uA" />
+      </head>
       <body className={`font-sans antialiased`}>
         <AuthProvider>
           <FeedProvider>{children}</FeedProvider>
