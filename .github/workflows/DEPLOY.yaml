@@ -1,0 +1,91 @@
+name: DEPLOY
+
+on:
+  workflow_dispatch:
+    inputs:
+      AWS_ENV:
+        description: 배포 환경
+        required: true
+        type: choice
+        options:
+          - 개발
+          - 검증
+          - 상용
+      AWS_DEPLOY_BINARY:
+        required: true
+        type: string
+
+
+
+jobs:
+  # 작업 이름 정의
+  deploy:
+    # runner가 실행될 환경을 설정합니다.
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set environment variables
+        id: init_env
+        run: |
+          if [ "${{ github.event.inputs.AWS_ENV }}" = "상용" ]; then
+            echo "AWS_ACCESS_KEY=${{ secrets.PR_AWS_ACCESS_KEY }}" >> $GITHUB_ENV
+            echo "AWS_PRIVATE_KEY=${{ secrets.PR_AWS_PRIVATE_KEY }}" >> $GITHUB_ENV
+            echo "S3_BINARY_BUCKET=polink-production-provisional-data" >> $GITHUB_ENV
+            echo "S3_BINARY_PATH=deployment/BERLIN/binary" >> $GITHUB_ENV
+            echo "S3_DEPLOY_BUCKET=pr-po-ai-frontend-static-s3" >> $GITHUB_ENV
+            echo "CLOUDFRONT_DISTRIBUTION_ID=E3JZ4I6ZJCIMNN" >> $GITHUB_ENV
+          elif [ "${{ github.event.inputs.AWS_ENV }}" = "검증" ]; then
+            echo "AWS_ACCESS_KEY=${{ secrets.VF_AWS_ACCESS_KEY }}" >> $GITHUB_ENV
+            echo "AWS_PRIVATE_KEY=${{ secrets.VF_AWS_PRIVATE_KEY }}" >> $GITHUB_ENV
+            echo "S3_BINARY_BUCKET=vf-ca-provisional-data" >> $GITHUB_ENV
+            echo "S3_BINARY_PATH=deployment/BERLIN/binary" >> $GITHUB_ENV
+            echo "S3_DEPLOY_BUCKET=vf-po-ai-frontend-static-s3" >> $GITHUB_ENV
+            echo "CLOUDFRONT_DISTRIBUTION_ID=E2PX7B1ISOYX5L" >> $GITHUB_ENV
+          elif [ "${{ github.event.inputs.AWS_ENV }}" = "개발" ]; then
+            echo "AWS_ACCESS_KEY=${{ secrets.TB_AWS_ACCESS_KEY }}" >> $GITHUB_ENV
+            echo "AWS_PRIVATE_KEY=${{ secrets.TB_AWS_PRIVATE_KEY }}" >> $GITHUB_ENV
+            echo "S3_BINARY_BUCKET=pcloud-testbed-provisional-data" >> $GITHUB_ENV
+            echo "S3_BINARY_PATH=deployment/BERLIN/binary" >> $GITHUB_ENV
+            echo "S3_DEPLOY_BUCKET=tb-po-ai-frontend-static" >> $GITHUB_ENV
+            echo "CLOUDFRONT_DISTRIBUTION_ID=EBA1RV7VCJAN0" >> $GITHUB_ENV
+          fi
+
+      # AWS 인증 정보 설정
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ env.AWS_PRIVATE_KEY }}
+          aws-region: ap-northeast-2
+
+      # 배포할 바이너리 S3에서 다운로드
+      - name: Download binary file from S3
+        run: |
+          mkdir -p /tmp/deploy-artifact
+          aws s3 cp --recursive \
+            "s3://${{ env.S3_BINARY_BUCKET }}/${{ env.S3_BINARY_PATH }}/${{ inputs.AWS_DEPLOY_BINARY }}" \
+            /tmp/deploy-artifact/${{ inputs.AWS_DEPLOY_BINARY }} \
+            --region us-west-1
+
+      # S3에 빌드 결과물 배포
+      # dist 폴더 내용을 S3 버킷에 동기화, --delete 옵션으로 버킷에 있는 이전 파일 삭제
+      - name: Deploy to S3
+        run: |
+          aws s3 sync /tmp/deploy-artifact/${{ inputs.AWS_DEPLOY_BINARY }} \
+          s3://${{ env.S3_DEPLOY_BUCKET }}/ \
+          --region ap-northeast-2
+
+      # CloudFront 캐시 무효화
+      - name: Invalidate CloudFront Cache
+        run: aws cloudfront create-invalidation --distribution-id ${{ env.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
+
+      # ✅ 빌드 및 배포 결과 요약 출력
+      - name: Summary
+        run: |
+          echo "## ✅ 배포 Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **배포 환경:** ${{ github.event.inputs.AWS_ENV }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **배포 바이너리명:** ${{ github.event.inputs.AWS_DEPLOY_BINARY }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **배포 S3 버킷 경로 :** s3://${{ env.S3_DEPLOY_BUCKET }}/" >> $GITHUB_STEP_SUMMARY
+          echo "- **CloudFront ID :** ${{ env.CLOUDFRONT_DISTRIBUTION_ID }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "🚀 배포가 완료되었습니다!" >> $GITHUB_STEP_SUMMARY

@@ -1,0 +1,114 @@
+name: BUILD
+
+on:
+  workflow_dispatch:
+    inputs:
+      AWS_ENV:
+        description: 배포 환경
+        required: true
+        type: choice
+        options:
+          - 개발
+          - 검증
+          - 상용
+          
+      
+
+jobs:
+  # 작업 이름 정의
+  build:
+    # runner가 실행될 환경을 설정합니다.
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set environment variables
+        id: init_env
+        run: |
+          if [ "${{ github.event.inputs.AWS_ENV }}" = "상용" ]; then
+            echo "BUILD_COMMAND=build:prod" >> $GITHUB_ENV
+            echo "AWS_ACCESS_KEY=${{ secrets.PR_AWS_ACCESS_KEY }}" >> $GITHUB_ENV
+            echo "AWS_PRIVATE_KEY=${{ secrets.PR_AWS_PRIVATE_KEY }}" >> $GITHUB_ENV
+            echo "S3_BINARY_BUCKET=polink-production-provisional-data" >> $GITHUB_ENV
+            echo "S3_BINARY_PATH=deployment/BERLIN/binary" >> $GITHUB_ENV
+          elif [ "${{ github.event.inputs.AWS_ENV }}" = "검증" ]; then
+            echo "BUILD_COMMAND=build:staging" >> $GITHUB_ENV
+            echo "AWS_ACCESS_KEY=${{ secrets.VF_AWS_ACCESS_KEY }}" >> $GITHUB_ENV
+            echo "AWS_PRIVATE_KEY=${{ secrets.VF_AWS_PRIVATE_KEY }}" >> $GITHUB_ENV
+            echo "S3_BINARY_BUCKET=vf-ca-provisional-data" >> $GITHUB_ENV
+            echo "S3_BINARY_PATH=deployment/BERLIN/binary" >> $GITHUB_ENV
+          elif [ "${{ github.event.inputs.AWS_ENV }}" = "개발" ]; then
+            echo "BUILD_COMMAND=build:staging" >> $GITHUB_ENV
+            echo "AWS_ACCESS_KEY=${{ secrets.TB_AWS_ACCESS_KEY }}" >> $GITHUB_ENV
+            echo "AWS_PRIVATE_KEY=${{ secrets.TB_AWS_PRIVATE_KEY }}" >> $GITHUB_ENV
+            echo "S3_BINARY_BUCKET=pcloud-testbed-provisional-data" >> $GITHUB_ENV
+            echo "S3_BINARY_PATH=deployment/BERLIN/binary" >> $GITHUB_ENV
+          fi
+
+      # 깃 빌드 번호를 가져옵니다.
+      - name: Set custom environment variables
+        run: |
+          echo "GITHUB_REPO=$(echo $GITHUB_REPOSITORY | awk -F'/' '{print $2}')" >> $GITHUB_ENV
+          echo "BUILD_NO=${GITHUB_SHA::10}" >> $GITHUB_ENV
+
+          
+      # 레포지토리 코드를 가져옵니다.
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Node.js 환경을 설정합니다.
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          cache: 'yarn' # yarn 캐시 활성화
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
+
+      # yarn 캐시 및 node_modules 캐시 복원
+      - uses: actions/cache@v4
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        with:
+          path: |
+            ${{ steps.yarn-cache-dir-path.outputs.dir }}
+            **/node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      # 프로젝트 의존성 설치
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      # 프로젝트 빌드 실행
+      # CI false를 하지 않으면 warning의 경우에 에러를 던지기 때문에 필수!
+      - name: Build
+        run: |
+          echo "Running build command: ${{ env.BUILD_COMMAND }}"
+          CI=false yarn run ${{ env.BUILD_COMMAND }}
+
+      # AWS 인증 정보 설정
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ env.AWS_PRIVATE_KEY }}
+          aws-region: us-west-1
+
+      # 빌드 결과물 S3 업로드 (바이너리 파일명 : 깃 레포지토리명-빌드번호
+      - name: Deploy to S3
+        run: |
+          aws s3 cp --recursive ./build s3://${{ env.S3_BINARY_BUCKET }}/${{ env.S3_BINARY_PATH }}/${{ env.GITHUB_REPO }}-${{ env.BUILD_NO }}/ 
+
+      # ✅ 빌드 요약 Summary 출력
+      - name: Show Summary
+        run: |
+          echo "## ✅ Build Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **배포 환경:** ${{ github.event.inputs.AWS_ENV }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **빌드 명령:** ${{ env.BUILD_COMMAND }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **S3 버킷:** ${{ env.S3_BINARY_BUCKET }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **S3 경로:** s3://${{ env.S3_BINARY_BUCKET }}/${{ env.S3_BINARY_PATH }}/${{ env.GITHUB_REPO }}-${{ env.BUILD_NO }}/" >> $GITHUB_STEP_SUMMARY
+          echo "- **배포 바이너리명:** ${{ env.GITHUB_REPO }}-${{ env.BUILD_NO }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "🚀 빌드 및 업로드가 완료되었습니다!" >> $GITHUB_STEP_SUMMARY
