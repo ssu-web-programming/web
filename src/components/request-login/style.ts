@@ -36,6 +36,10 @@ export const LoginWrap = styled.div`
       cursor: pointer;
     }
   }
+
+  img {
+    cursor: pointer;
+  }
 `;
 
 export const Content = styled.div`
