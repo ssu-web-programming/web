@@ -16,12 +16,16 @@ interface ImageUploadGuideProps {
   handleUploadComplete?: () => void;
   showSimpleGuide?: boolean;
   type?: 'image' | 'styleStudio';
+  size?: number;
+  format?: string;
 }
 
 const ImageUploadGuide = ({
   handleUploadComplete,
   showSimpleGuide = false,
-  type = 'image'
+  type = 'image',
+  size,
+  format
 }: ImageUploadGuideProps) => {
   const { t } = useTranslation();
   const { novaAgreement: isAgreed } = useAppSelector(userInfoSelector);
@@ -43,7 +47,12 @@ const ImageUploadGuide = ({
             </div>
           </S.Credit>
         )}
-        <S.Guide>{t(`Nova.${selectedNovaTab}.Guide.ImgUploader`)}</S.Guide>
+        <S.Guide>
+          {t(`Nova.${selectedNovaTab}.Guide.ImgUploader`, {
+            ...(size && { size }),
+            ...(format && { format })
+          })}
+        </S.Guide>
       </S.ImageBox>
     </ImageUploader>
   );

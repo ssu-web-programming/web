@@ -483,12 +483,17 @@
       "Guide": {
         "Title": "스타일 스튜디오",
         "SubTitle": "클릭 한 번으로, 이미지/텍스트를\n다양한 스타일로 변화시켜 보세요!",
-        "ImgUploader": "이곳을 클릭하거나 드래그하여 업로드\n20MB 이하의 JPG, PNG 형식을 지원합니다."
+        "ImgUploader": "이곳을 클릭하거나 드래그하여 업로드\n{{size}}MB 이하의 JPG, PNG 형식을 지원합니다."
       },
       "SelectStyle": {
         "CharStyle": "캐릭터 스타일",
         "StyleGuide": "본 스타일은 실제 브랜드와 무관한 참고 스타일입니다.",
         "Style": {
+          "PhotoSticker": "포토 스티커",
+          "TimeMachine": "타임머신",
+          "BabyFace": "베이비 페이스",
+          "YokaiHunter": "요괴 헌터",
+          "PixelArt": "픽셀 아트",
           "Ghibli": "일본 애니",
           "Disney": "동화 감성",
           "Pixar": "3D 그래픽",
@@ -509,7 +514,8 @@
           "Title": "이미지 첨부"
         },
         "Warning": "콘텐츠 사용에 따른 책임은 사용자에게 있으며,\n타인의 권리 침해 또는 범죄 목적의 사용은 금지됩니다.",
-        "Button": "생성하기"
+        "Button": "생성하기",
+        "StyleChangedGuideMsg": "업로드 기준 변경으로 첨부한 이미지가 초기화되었어요"
       },
       "Loading": "스타일을 적용하고 있어요",
       "Done": {

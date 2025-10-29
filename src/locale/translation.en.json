@@ -486,6 +486,11 @@
         "CharStyle": "Character Styles",
         "StyleGuide": "These styles are for illustrative purposes and are not affiliated with actual brands.",
         "Style": {
+          "PhotoSticker": "Photo Sticker",
+          "TimeMachine": "Time Machine",
+          "BabyFace": "Baby Face",
+          "YokaiHunter": "Yokai Hunter",
+          "PixelArt": "Pixel Art",
           "Ghibli": "Anime",
           "Disney": "Fairy Tale",
           "Pixar": "3D Style",
@@ -506,7 +511,8 @@
           "Title": "Upload Image"
         },
         "Warning": "Users are solely responsible for the use of generated content.\nAny use that infringes on others' rights or serves criminal purposes is prohibited.",
-        "Button": "Generate"
+        "Button": "Generate",
+        "StyleChangedGuideMsg": "Upload rules changed so the attached image was reset"
       },
       "Loading": "Applying style",
       "Done": {

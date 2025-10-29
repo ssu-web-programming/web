@@ -1,23 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { css } from 'styled-components';
 
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import style3DCharacter from '../../../img/common/nova/styleStudio/style_3d.png';
 import styleAnimalCrossing from '../../../img/common/nova/styleStudio/style_animalcrossing.png';
+import styleBabyFace from '../../../img/common/nova/styleStudio/style_baby_face.png';
 import styleDisney from '../../../img/common/nova/styleStudio/style_disney.png';
 import styleGibli from '../../../img/common/nova/styleStudio/style_ghibli.png';
 import styleLego from '../../../img/common/nova/styleStudio/style_lego.png';
 import styleMarvel from '../../../img/common/nova/styleStudio/style_marvel.png';
+import stylePhoto from '../../../img/common/nova/styleStudio/style_photo_sticker.png';
 import stylePixar from '../../../img/common/nova/styleStudio/style_pixar.png';
+import stylePixelArt from '../../../img/common/nova/styleStudio/style_pixel_art.png';
 import styleSailorMoon from '../../../img/common/nova/styleStudio/style_sailormoon.png';
 import styleJjanggu from '../../../img/common/nova/styleStudio/style_shinchan.png';
 import styleSimpson from '../../../img/common/nova/styleStudio/style_simpson.png';
+import styleTimeMachine from '../../../img/common/nova/styleStudio/style_time_machine.png';
+import styleYokaiHunter from '../../../img/common/nova/styleStudio/style_yokai_hunter.png';
 import { ReactComponent as BangIcon } from '../../../img/light/bang_circle.svg';
-import { selectPageData } from '../../../store/slices/nova/pageStatusSlice';
-import { useAppSelector } from '../../../store/store';
+import { resetPageData, selectPageData } from '../../../store/slices/nova/pageStatusSlice';
+import { setDriveFiles, setLocalFiles } from '../../../store/slices/uploadFiles';
+import { useAppDispatch, useAppSelector } from '../../../store/store';
 import Button from '../../buttons/Button';
 import { useGenerateStyleStudio } from '../../hooks/nova/use-generate-style-studio';
+import useShowConfirmModal from '../../hooks/use-show-confirm-modal';
 import ImageUploadGuide from '../../image-upload-guide';
 import FileItem from '../file-item';
 
@@ -31,10 +38,37 @@ interface IStyle {
 
 const StyleStudio = () => {
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
   const currentFile = useAppSelector(selectPageData(NOVA_TAB_TYPE.styleStudio));
   const { handleGenerateStyle } = useGenerateStyleStudio();
+  const showConfirmModal = useShowConfirmModal();
 
   const styleImages: IStyle[] = [
+    {
+      src: stylePhoto,
+      label: t('Nova.styleStudio.SelectStyle.Style.PhotoSticker'),
+      id: 'photo_sticker'
+    },
+    {
+      src: styleTimeMachine,
+      label: t('Nova.styleStudio.SelectStyle.Style.TimeMachine'),
+      id: 'time_machine'
+    },
+    {
+      src: styleBabyFace,
+      label: t('Nova.styleStudio.SelectStyle.Style.BabyFace'),
+      id: 'baby_face'
+    },
+    {
+      src: styleYokaiHunter,
+      label: t('Nova.styleStudio.SelectStyle.Style.YokaiHunter'),
+      id: 'yokai_hunter'
+    },
+    {
+      src: stylePixelArt,
+      label: t('Nova.styleStudio.SelectStyle.Style.PixelArt'),
+      id: 'pixel_art'
+    },
     { src: styleGibli, label: t('Nova.styleStudio.SelectStyle.Style.Ghibli'), id: 'ghibli' },
     { src: styleDisney, label: t('Nova.styleStudio.SelectStyle.Style.Disney'), id: 'disney' },
     { src: stylePixar, label: t('Nova.styleStudio.SelectStyle.Style.Pixar'), id: 'pixar' },
@@ -68,6 +102,29 @@ const StyleStudio = () => {
     return (trimmed === '' || trimmed.length < 10 || !hasNormalChar) && !currentFile?.file;
   };
 
+  const isNewStyle = (style: IStyle) => {
+    const newStyleIds = ['photo_sticker', 'time_machine', 'baby_face', 'pixel_art'];
+    return newStyleIds.includes(style.id);
+  };
+
+  const handleStyleClick = (changedStyle: IStyle) => {
+    if (currentFile && isNewStyle(selectedStyle) !== isNewStyle(changedStyle)) {
+      showConfirmModal({
+        msg: t('Nova.styleStudio.SelectStyle.StyleChangedGuideMsg'),
+        onOk: {
+          text: t(`Confirm`),
+          handleOk: () => {}
+        }
+      });
+
+      dispatch(resetPageData(NOVA_TAB_TYPE.styleStudio));
+      dispatch(setLocalFiles([]));
+      dispatch(setDriveFiles([]));
+    }
+
+    setSelectedStyle(changedStyle);
+  };
+
   return (
     <S.Wrapper>
       <S.TitleWrap>
@@ -81,7 +138,7 @@ const StyleStudio = () => {
           <S.SectionTitle>{t('Nova.styleStudio.SelectStyle.CharStyle')}</S.SectionTitle>
           <S.StyleGrid>
             {styleImages.map((item) => (
-              <S.StyleItem key={item.id} onClick={() => setSelectedStyle(item)}>
+              <S.StyleItem key={item.id} onClick={() => handleStyleClick(item)}>
                 <S.ThumbnailWrap>
                   <S.OuterBorder isSelected={selectedStyle.id === item.id} />
                   <S.InnerBorder isSelected={selectedStyle.id === item.id} />
@@ -106,6 +163,7 @@ const StyleStudio = () => {
               handleUploadComplete={() => {}}
               showSimpleGuide={true}
               type="styleStudio"
+              size={isNewStyle(selectedStyle) ? 7 : 20}
             />
           )}
         </S.UploadBox>
