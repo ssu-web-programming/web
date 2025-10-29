@@ -10,14 +10,12 @@ import {
   WriteOptions
 } from '../components/chat/RecommendBox/FormRec';
 import Header from '../components/layout/Header';
-import LockAndKeyIcon from '../img/common/lock_and_key.png';
+import RequestLogin from '../components/request-login';
 import { appStateSelector } from '../store/slices/appState';
 import { getCurrentFile } from '../store/slices/uploadFiles';
 import { useAppSelector } from '../store/store';
 import Bridge from '../util/bridge';
 import AIWriteTab from '../views/AIWriteTab';
-
-import * as S from './Nova/Nova/style';
 
 const Wrapper = styled.div`
   display: flex;
@@ -61,17 +59,7 @@ export default function Tools() {
 
   return (
     <>
-      {isNotLogin && (
-        <S.Dim>
-          <S.LoginWrap>
-            <img src={LockAndKeyIcon} alt="lock_and_key" />
-            <p
-              dangerouslySetInnerHTML={{ __html: t('Nova.Home.requestLogin') || '' }}
-              onClick={() => Bridge.callBridgeApi('requestLogin')}
-            />
-          </S.LoginWrap>
-        </S.Dim>
-      )}
+      <RequestLogin />
       <Wrapper>
         <Header title={t('AITools')} subTitle={'AI Write'}></Header>
         <Body>

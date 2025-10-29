@@ -34,11 +34,10 @@ import StyleStudio from '../../../components/nova/styleStudio';
 import Theme from '../../../components/nova/Theme';
 import TimeOut from '../../../components/nova/timeout';
 import Uploading from '../../../components/nova/uploading';
+import RequestLogin from '../../../components/request-login';
 import { FileUploadState } from '../../../constants/fileTypes';
 import { NOVA_TAB_TYPE } from '../../../constants/novaTapTypes';
 import { SERVICE_TYPE } from '../../../constants/serviceType';
-import LockAndKeyIcon from '../../../img/common/lock_and_key.png';
-import { appStateSelector } from '../../../store/slices/appState';
 import { announceInfoSelector } from '../../../store/slices/nova/announceSlice';
 import {
   novaChatModeSelector,
@@ -52,7 +51,6 @@ import {
 } from '../../../store/slices/nova/pageStatusSlice';
 import { selectTabSlice } from '../../../store/slices/tabSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
-import Bridge from '../../../util/bridge';
 import Translation from '../Translation';
 import VoiceDictation from '../VoiceDictation';
 
@@ -64,7 +62,6 @@ export default function Nova() {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const confirm = useConfirm();
-  const { isNotLogin } = useAppSelector(appStateSelector);
   const announcementList = useAppSelector(announceInfoSelector);
   const { goConvertPage } = useConvert2DTo3D();
   const { goPromptPage } = useChangeBackground();
@@ -246,17 +243,7 @@ export default function Nova() {
 
   return (
     <>
-      {isNotLogin && (
-        <S.Dim>
-          <S.LoginWrap>
-            <img src={LockAndKeyIcon} alt="lock_and_key" />
-            <p
-              dangerouslySetInnerHTML={{ __html: t('Nova.Home.requestLogin') || '' }}
-              onClick={() => Bridge.callBridgeApi('requestLogin')}
-            />
-          </S.LoginWrap>
-        </S.Dim>
-      )}
+      <RequestLogin />
       <S.Wrapper {...getRootProps()} isScroll={selectedNovaTab != NOVA_TAB_TYPE.aiChat}>
         {(usingAI || status === 'home') && isDragActive && <Uploading />}
         <NovaHeader />

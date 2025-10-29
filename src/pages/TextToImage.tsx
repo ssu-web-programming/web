@@ -4,14 +4,11 @@ import { useLocation } from 'react-router';
 import styled from 'styled-components';
 
 import Header from '../components/layout/Header';
-import LockAndKeyIcon from '../img/common/lock_and_key.png';
-import { appStateSelector } from '../store/slices/appState';
+import RequestLogin from '../components/request-login';
 import { getCurrentFile } from '../store/slices/uploadFiles';
 import { useAppSelector } from '../store/store';
 import Bridge from '../util/bridge';
 import ImageCreate from '../views/ImageCreate';
-
-import * as S from './Nova/Nova/style';
 
 const Wrapper = styled.div`
   display: flex;
@@ -32,7 +29,6 @@ const Body = styled.div`
 const TextToImage = () => {
   const location = useLocation();
   const { t } = useTranslation();
-  const { isNotLogin } = useAppSelector(appStateSelector);
   const currentFile = useAppSelector(getCurrentFile);
 
   useEffect(() => {
@@ -43,17 +39,7 @@ const TextToImage = () => {
 
   return (
     <>
-      {isNotLogin && (
-        <S.Dim>
-          <S.LoginWrap>
-            <img src={LockAndKeyIcon} alt="lock_and_key" />
-            <p
-              dangerouslySetInnerHTML={{ __html: t('Nova.Home.requestLogin') || '' }}
-              onClick={() => Bridge.callBridgeApi('requestLogin')}
-            />
-          </S.LoginWrap>
-        </S.Dim>
-      )}
+      <RequestLogin />
       <Wrapper>
         <Header title={t('AITools')} subTitle={t('TextToImage')}></Header>
         <Body>
