@@ -14,13 +14,32 @@ interface SignupFormProps {
 export function SignupForm({ onSwitchToLogin }: SignupFormProps) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [fullName, setFullName] = useState("");
-  const { loginWithKakao } = useAuth();
+  const [nickname, setNickname] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const { register: registerUser, loginWithKakao } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: 회원가입 로직 구현
-    console.log("회원가입:", { username, password, fullName });
+    setErrorMessage(null);
+    setSuccessMessage(null);
+    setIsSubmitting(true);
+    try {
+      await registerUser({ username, password, nickname });
+      setSuccessMessage("회원가입이 완료되었습니다. 이제 로그인해 주세요.");
+      setUsername("");
+      setPassword("");
+      setNickname("");
+    } catch (error) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : "회원가입에 실패했습니다. 잠시 후 다시 시도해 주세요.";
+      setErrorMessage(message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleKakaoLogin = async () => {
@@ -57,28 +76,51 @@ export function SignupForm({ onSwitchToLogin }: SignupFormProps) {
           type="text"
           placeholder="아이디"
           value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          onChange={(e) => {
+            setUsername(e.target.value);
+            setErrorMessage(null);
+          }}
           className="w-full bg-background border-border"
+          disabled={isSubmitting}
         />
         <Input
           type="password"
           placeholder="비밀번호"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) => {
+            setPassword(e.target.value);
+            setErrorMessage(null);
+          }}
           className="w-full bg-background border-border"
+          disabled={isSubmitting}
         />
         <Input
           type="text"
           placeholder="사용자 이름"
-          value={fullName}
-          onChange={(e) => setFullName(e.target.value)}
+          value={nickname}
+          onChange={(e) => {
+            setNickname(e.target.value);
+            setErrorMessage(null);
+          }}
           className="w-full bg-background border-border"
+          disabled={isSubmitting}
         />
+        {errorMessage && (
+          <p className="text-sm text-destructive" role="alert" aria-live="assertive">
+            {errorMessage}
+          </p>
+        )}
+        {successMessage && (
+          <p className="text-sm text-emerald-600" aria-live="polite">
+            {successMessage}
+          </p>
+        )}
         <Button
           type="submit"
-          className="w-full bg-gradient-to-r from-[#833ab4] via-[#fd1d1d] to-[#fcb045] text-white font-semibold"
+          disabled={isSubmitting}
+          className="w-full bg-gradient-to-r from-[#833ab4] via-[#fd1d1d] to-[#fcb045] text-white font-semibold disabled:opacity-60 disabled:pointer-events-none"
         >
-          가입
+          {isSubmitting ? "가입 중..." : "가입"}
         </Button>
       </form>
 
