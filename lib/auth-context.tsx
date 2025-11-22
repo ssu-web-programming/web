@@ -19,11 +19,6 @@ interface RegisterPayload {
   nickname: string;
 }
 
-interface LoginPayload {
-  userId: string;
-  password: string;
-  username: string;
-}
 
 interface AuthContextType {
   user: User | null;
@@ -298,19 +293,3 @@ async function safeParseJson(response: Response) {
   }
 }
 
-function deriveUserField(
-  profile: unknown,
-  key: "id" | "userId" | "email",
-  fallback: string,
-) {
-  if (profile && typeof profile === "object") {
-    const record = profile as Record<string, unknown>;
-    if (key in record) {
-      const value = record[key];
-      if (typeof value === "string" || typeof value === "number") {
-        return String(value);
-      }
-    }
-  }
-  return fallback;
-}

@@ -52,6 +52,7 @@ export function FeedPreview({ images, caption, hashtags }: FeedPreviewProps) {
 
       {/* Image carousel */}
       <div className="relative aspect-square bg-muted flex-shrink-0 overflow-hidden max-h-[300px]">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={images[currentImageIndex] || "/placeholder.svg"}
           alt={`Feed image ${currentImageIndex + 1}`}

@@ -295,6 +295,7 @@ export function UploadPage() {
           <div className="space-y-4">
             <Card className="overflow-hidden">
               <div className="relative aspect-[4/5] max-h-[400px] bg-gray-200 flex items-center justify-center">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={previewUrls[currentImageIndex] || "/placeholder.svg"}
                   alt={`Preview ${currentImageIndex + 1}`}
@@ -348,6 +349,7 @@ export function UploadPage() {
                         : "border-transparent"
                     }`}
                   >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={url || "/placeholder.svg"}
                       alt={`Thumb ${index + 1}`}

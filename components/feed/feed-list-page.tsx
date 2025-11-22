@@ -52,6 +52,7 @@ export function FeedListPage() {
             onClick={() => setSelectedPost(post)}
             className="relative aspect-square group cursor-pointer overflow-hidden"
           >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={post.imageUrls[0] || "/placeholder.svg"}
               alt="Feed post"

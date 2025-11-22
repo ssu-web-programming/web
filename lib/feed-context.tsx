@@ -54,8 +54,17 @@ export function FeedProvider({ children }: { children: ReactNode }) {
       const data = await response.json();
 
       // API 응답을 FeedPost 형식으로 변환
+      interface ApiPost {
+        _id?: string;
+        id?: string;
+        imageUrls?: string[];
+        caption?: string;
+        hashtags?: string[];
+        createdAt?: string;
+      }
+
       if (Array.isArray(data)) {
-        const formattedPosts: FeedPost[] = data.map((post: any) => ({
+        const formattedPosts: FeedPost[] = data.map((post: ApiPost) => ({
           id: post._id || post.id || Date.now().toString(),
           imageUrls: post.imageUrls || [],
           caption: post.caption || "",
@@ -63,9 +72,9 @@ export function FeedProvider({ children }: { children: ReactNode }) {
           createdAt: post.createdAt || new Date().toISOString(),
         }));
         setPosts(formattedPosts);
-      } else if (data && Array.isArray(data.posts)) {
+      } else if (data && typeof data === "object" && "posts" in data && Array.isArray(data.posts)) {
         // 응답이 { posts: [...] } 형태인 경우
-        const formattedPosts: FeedPost[] = data.posts.map((post: any) => ({
+        const formattedPosts: FeedPost[] = (data.posts as ApiPost[]).map((post: ApiPost) => ({
           id: post._id || post.id || Date.now().toString(),
           imageUrls: post.imageUrls || [],
           caption: post.caption || "",
