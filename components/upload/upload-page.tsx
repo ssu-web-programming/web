@@ -79,11 +79,13 @@ export function UploadPage() {
       formData.append("prompt", caption.trim() || "");
 
       // API 호출
+      // 일반 로그인은 accessToken을 localStorage에서 가져와서 사용
       const accessToken = typeof window !== "undefined" 
         ? localStorage.getItem("accessToken") 
         : null;
 
       const headers: HeadersInit = {};
+      // 일반 로그인인 경우 Authorization 헤더 추가
       if (accessToken) {
         headers["Authorization"] = `Bearer ${accessToken}`;
       }
@@ -92,10 +94,20 @@ export function UploadPage() {
       const response = await fetch(`${API_BASE_URL}/posts`, {
         method: "POST",
         headers,
+        credentials: "include", // HttpOnly 쿠키 포함 (카카오 로그인용)
         body: formData,
       });
 
       if (!response.ok) {
+        // 401 Unauthorized인 경우 인증 에러 처리
+        if (response.status === 401) {
+          if (typeof window !== "undefined") {
+            window.location.href = "/";
+          }
+          setIsGenerating(false);
+          return;
+        }
+
         let errorMessage = "AI 추천 생성에 실패했습니다.";
         try {
           const errorData = await response.json();
@@ -116,7 +128,9 @@ export function UploadPage() {
           // JSON 파싱 실패 시 기본 메시지 사용
           errorMessage = `요청 실패 (${response.status} ${response.statusText})`;
         }
-        throw new Error(errorMessage);
+        setError(errorMessage);
+        setIsGenerating(false);
+        return;
       }
 
       const data = await response.json();

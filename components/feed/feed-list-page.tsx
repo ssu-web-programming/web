@@ -16,6 +16,13 @@ export function FeedListPage() {
     staleTime: 30 * 1000, // 30초
     refetchOnWindowFocus: true,
     refetchOnReconnect: true,
+    retry: (failureCount, error) => {
+      // 401 에러인 경우 재시도하지 않음
+      if (error instanceof Error && error.message.includes("인증이 만료되었습니다")) {
+        return false;
+      }
+      return failureCount < 3;
+    },
   });
 
   if (isLoading) {

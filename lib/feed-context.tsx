@@ -59,6 +59,7 @@ function transformApiResponse(data: unknown): FeedPost[] {
 
 // 피드 목록을 가져오는 함수
 export async function fetchPostsApi(): Promise<FeedPost[]> {
+  // 일반 로그인은 accessToken을 localStorage에서 가져와서 사용
   const accessToken = typeof window !== "undefined" 
     ? localStorage.getItem("accessToken") 
     : null;
@@ -66,6 +67,8 @@ export async function fetchPostsApi(): Promise<FeedPost[]> {
   const headers: HeadersInit = {
     "Content-Type": "application/json",
   };
+  
+  // 일반 로그인인 경우 Authorization 헤더 추가
   if (accessToken) {
     headers["Authorization"] = `Bearer ${accessToken}`;
   }
@@ -73,9 +76,18 @@ export async function fetchPostsApi(): Promise<FeedPost[]> {
   const response = await fetch(`${API_BASE_URL}/posts`, {
     method: "GET",
     headers,
+    credentials: "include", // HttpOnly 쿠키 포함 (카카오 로그인용)
   });
 
   if (!response.ok) {
+    // 401 Unauthorized인 경우 인증 에러 처리
+    if (response.status === 401) {
+      // 동적 import로 handleAuthError 사용
+      if (typeof window !== "undefined") {
+        window.location.href = "/";
+      }
+      throw new Error("인증이 만료되었습니다. 다시 로그인해주세요.");
+    }
     throw new Error("피드 목록을 불러오는데 실패했습니다.");
   }
 

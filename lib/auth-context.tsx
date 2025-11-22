@@ -26,7 +26,8 @@ interface AuthContextType {
   register: (payload: RegisterPayload) => Promise<boolean>;
   loginWithKakao: () => Promise<boolean>;
   setUserFromStorage: () => void;
-  logout: () => void;
+  logout: (redirectToLogin?: boolean) => Promise<void>;
+  handleAuthError: () => void;
   isAuthenticated: boolean;
 }
 
@@ -50,6 +51,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  // 사용자 정보를 저장하는 헬퍼 함수
+  const saveUserData = (profile: Record<string, unknown>, fallbackUserId: string, fallbackUsername: string) => {
+    const userId = profile.userId ? String(profile.userId) : fallbackUserId;
+    const username = profile.username ? String(profile.username) : (fallbackUsername || userId);
+    const email = profile.email ? String(profile.email) : `${userId}@example.com`;
+    const id = profile._id ? String(profile._id) : (profile.id ? String(profile.id) : userId);
+
+    const userData = { id, userId, username, email };
+    if (typeof window !== "undefined") {
+      localStorage.setItem("user", JSON.stringify(userData));
+    }
+    setUser(userData);
+  };
+
   const login = async (userId: string, password: string, username: string): Promise<boolean> => {
     const trimmedUserId = userId?.trim() || "";
     const trimmedPassword = password?.trim() || "";
@@ -64,6 +79,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include", // HttpOnly 쿠키 지원
       body: JSON.stringify({ 
         userId: trimmedUserId, 
         password: trimmedPassword, 
@@ -83,31 +99,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const data = await safeParseJson(response);
 
+    // 로그인 응답에서 access_token과 사용자 정보 추출
     if (data && typeof data === "object") {
+      // 일반 로그인은 백엔드가 쿠키 관리를 하지 않으므로 access_token을 localStorage에 저장
       const accessToken =
         "access_token" in data ? String(data.access_token) : null;
-      const profile =
-        "user" in data && data.user && typeof data.user === "object"
-          ? data.user
-          : null;
 
-      if (typeof window !== "undefined") {
-        if (accessToken) {
-          localStorage.setItem("accessToken", accessToken);
-        }
+      if (typeof window !== "undefined" && accessToken) {
+        localStorage.setItem("accessToken", accessToken);
       }
 
-      // 사용자 정보 저장
-      if (profile && typeof profile === "object") {
-        const userRecord = profile as Record<string, unknown>;
-        const userId = userRecord.userId ? String(userRecord.userId) : trimmedUserId;
-        const username = userRecord.username ? String(userRecord.username) : (trimmedUsername || userId);
-        const email = userRecord.email ? String(userRecord.email) : `${userId}@example.com`;
-        const id = userRecord._id ? String(userRecord._id) : (userRecord.id ? String(userRecord.id) : userId);
+      const profile =
+        "user" in data && data.user && typeof data.user === "object"
+          ? data.user as Record<string, unknown>
+          : null;
 
-        const userData = { id, userId, username, email };
-        localStorage.setItem("user", JSON.stringify(userData));
-        setUser(userData);
+      if (profile) {
+        saveUserData(profile, trimmedUserId, trimmedUsername);
       } else {
         // 프로필이 없는 경우 기본 정보로 설정
         const userData = {
@@ -116,13 +124,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           username: trimmedUsername || trimmedUserId,
           email: `${trimmedUserId}@example.com`,
         };
-        localStorage.setItem("user", JSON.stringify(userData));
+        if (typeof window !== "undefined") {
+          localStorage.setItem("user", JSON.stringify(userData));
+        }
         setUser(userData);
       }
-      return true;
     }
-
-    throw new Error("로그인 응답을 해석하지 못했습니다.");
+    
+    return true;
   };
 
   const register = async ({
@@ -143,6 +152,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include", // HttpOnly 쿠키 지원
       body: JSON.stringify({
         userId: trimmedUserId,
         password: trimmedPassword,
@@ -181,6 +191,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             headers: {
               "Content-Type": "application/json",
             },
+            credentials: "include", // HttpOnly 쿠키 지원
             body: JSON.stringify({
               userId: registeredUserId,
               password: trimmedPassword,
@@ -192,24 +203,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           if (loginResponse.ok) {
             const loginData = await safeParseJson(loginResponse);
             if (loginData && typeof loginData === "object") {
+              // 일반 로그인은 백엔드가 쿠키 관리를 하지 않으므로 access_token을 localStorage에 저장
               const accessToken =
                 "access_token" in loginData ? String(loginData.access_token) : null;
 
-              if (typeof window !== "undefined") {
-                if (accessToken) {
-                  localStorage.setItem("accessToken", accessToken);
-                }
+              if (typeof window !== "undefined" && accessToken) {
+                localStorage.setItem("accessToken", accessToken);
               }
 
-              // 사용자 정보 저장
-              const userId = userRecord.userId ? String(userRecord.userId) : registeredUserId;
-              const username = userRecord.username ? String(userRecord.username) : trimmedNickname;
-              const email = userRecord.email ? String(userRecord.email) : `${userId}@example.com`;
-              const id = userRecord._id ? String(userRecord._id) : (userRecord.id ? String(userRecord.id) : userId);
+              const loginProfile =
+                "user" in loginData && loginData.user && typeof loginData.user === "object"
+                  ? loginData.user as Record<string, unknown>
+                  : null;
 
-              const userData = { id, userId, username, email };
-              localStorage.setItem("user", JSON.stringify(userData));
-              setUser(userData);
+              if (loginProfile) {
+                saveUserData(loginProfile, registeredUserId, username);
+              } else {
+                // 프로필이 없는 경우 회원가입 응답의 사용자 정보 사용
+                saveUserData(userRecord, registeredUserId, username);
+              }
             }
           }
         } catch (loginError) {
@@ -251,13 +263,42 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const logout = () => {
+  const logout = async (redirectToLogin = true) => {
+    // 백엔드 로그아웃 API 호출 (쿠키 삭제)
+    try {
+      const accessToken = typeof window !== "undefined" 
+        ? localStorage.getItem("accessToken") 
+        : null;
+
+      const headers: HeadersInit = {};
+      if (accessToken) {
+        headers["Authorization"] = `Bearer ${accessToken}`;
+      }
+
+      await fetch(`${API_BASE_URL}/auth/logout`, {
+        method: "POST",
+        headers,
+        credentials: "include", // HttpOnly 쿠키 포함 (카카오 로그인용)
+      });
+    } catch (error) {
+      console.error("로그아웃 API 호출 실패:", error);
+    }
+    
     setUser(null);
     if (typeof window !== "undefined") {
       localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
       localStorage.removeItem("user");
+      
+      // 로그인 화면으로 리다이렉트
+      if (redirectToLogin) {
+        window.location.href = "/";
+      }
     }
+  };
+
+  // 인증 에러 처리 (401 에러 시 자동 로그아웃 및 리다이렉트)
+  const handleAuthError = () => {
+    logout(true);
   };
 
   return (
@@ -269,6 +310,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         loginWithKakao,
         setUserFromStorage,
         logout,
+        handleAuthError,
         isAuthenticated: !!user,
       }}
     >
