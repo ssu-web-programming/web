@@ -53,7 +53,7 @@ export function MainApp() {
               {user?.username || user?.userId || "User"}
             </span>
             <Button
-              onClick={logout}
+              onClick={() => logout()}
               variant="ghost"
               size="sm"
               className="text-muted-foreground hover:text-foreground"
