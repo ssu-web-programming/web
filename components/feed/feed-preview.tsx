@@ -33,27 +33,29 @@ export function FeedPreview({ images, caption, hashtags }: FeedPreviewProps) {
   };
 
   return (
-    <Card className="max-w-lg mx-auto overflow-hidden border border-border">
+    <Card className="max-w-[400px] max-h-[600px] mx-auto overflow-hidden border border-border flex flex-co p-3">
       {/* Header */}
-      <div className="flex items-center gap-3 p-4 border-b border-border">
+      <div className="flex items-center gap-3 p-2 border-b border-border">
         <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center">
           <span className="text-sm font-semibold text-primary-foreground">
-            {user?.username?.[0].toUpperCase()}
+            {user?.username?.[0]?.toUpperCase() ||
+              user?.userId?.[0]?.toUpperCase() ||
+              "U"}
           </span>
         </div>
         <div className="flex-1">
           <p className="font-semibold text-foreground text-sm">
-            {user?.username}
+            {user?.username || user?.userId || "User"}
           </p>
         </div>
       </div>
 
       {/* Image carousel */}
-      <div className="relative aspect-square bg-muted">
+      <div className="relative aspect-square bg-muted flex-shrink-0 overflow-hidden max-h-[300px]">
         <img
           src={images[currentImageIndex] || "/placeholder.svg"}
           alt={`Feed image ${currentImageIndex + 1}`}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-contain"
         />
 
         {images.length > 1 && (
@@ -89,7 +91,7 @@ export function FeedPreview({ images, caption, hashtags }: FeedPreviewProps) {
       </div>
 
       {/* Actions */}
-      <div className="p-4 space-y-3">
+      <div className="p-3 space-y-3 flex-shrink overflow-y-auto">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <button
@@ -97,14 +99,14 @@ export function FeedPreview({ images, caption, hashtags }: FeedPreviewProps) {
               className="hover:opacity-70 transition-opacity"
             >
               <Heart
-                className={`w-6 h-6 ${liked ? "fill-red-500 text-red-500" : "text-foreground"}`}
+                className={`w-5 h-5 ${liked ? "fill-red-500 text-red-500" : "text-foreground"}`}
               />
             </button>
             <button className="hover:opacity-70 transition-opacity">
-              <MessageCircle className="w-6 h-6 text-foreground" />
+              <MessageCircle className="w-5 h-5 text-foreground" />
             </button>
             <button className="hover:opacity-70 transition-opacity">
-              <Send className="w-6 h-6 text-foreground" />
+              <Send className="w-5 h-5 text-foreground" />
             </button>
           </div>
           <button
@@ -119,10 +121,32 @@ export function FeedPreview({ images, caption, hashtags }: FeedPreviewProps) {
 
         {/* Caption */}
         <div className="space-y-2">
-          <p className="text-sm text-foreground">
-            <span className="font-semibold">{user?.username}</span> {caption}
+          {/* 사용자 이름 */}
+          <p className="text-sm font-semibold text-foreground">
+            {user?.username || user?.userId || "User"}
           </p>
-          <p className="text-sm text-primary">{hashtags.join(" ")}</p>
+          {/* 해시태그 */}
+          <div className="text-sm flex flex-wrap gap-1">
+            {hashtags.map((tag, index) => {
+              // 해시태그에서 # 제거
+              const tagWithoutHash = tag.replace(/^#/, "");
+              return (
+                <a
+                  key={index}
+                  href={`https://www.instagram.com/explore/search/keyword/?q=${encodeURIComponent(tagWithoutHash)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#4150f7] hover:underline"
+                >
+                  {tag}
+                </a>
+              );
+            })}
+          </div>
+          {/* 캡션 */}
+          <p className="text-sm text-foreground">
+            {caption}
+          </p>
         </div>
 
         <p className="text-xs text-muted-foreground">방금 전</p>

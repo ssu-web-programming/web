@@ -12,7 +12,7 @@ interface SignupFormProps {
 }
 
 export function SignupForm({ onSwitchToLogin }: SignupFormProps) {
-  const [username, setUsername] = useState("");
+  const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const [nickname, setNickname] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -26,9 +26,9 @@ export function SignupForm({ onSwitchToLogin }: SignupFormProps) {
     setSuccessMessage(null);
     setIsSubmitting(true);
     try {
-      await registerUser({ username, password, nickname });
+      await registerUser({ userId, password, nickname });
       setSuccessMessage("회원가입이 완료되었습니다. 이제 로그인해 주세요.");
-      setUsername("");
+      setUserId("");
       setPassword("");
       setNickname("");
     } catch (error) {
@@ -75,9 +75,9 @@ export function SignupForm({ onSwitchToLogin }: SignupFormProps) {
         <Input
           type="text"
           placeholder="아이디"
-          value={username}
+          value={userId}
           onChange={(e) => {
-            setUsername(e.target.value);
+            setUserId(e.target.value);
             setErrorMessage(null);
           }}
           className="w-full bg-background border-border"

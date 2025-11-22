@@ -4,7 +4,7 @@ import type React from "react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ChevronLeft, ChevronRight, Sparkles, Upload, X } from "lucide-react";
+import { CheckCircle, ChevronLeft, ChevronRight, Loader2, Sparkles, Upload, X } from "lucide-react";
 import { useFeed } from "@/lib/feed-context";
 import { useAuth } from "@/lib/auth-context";
 import { FeedPreview } from "@/components/feed/feed-preview";
@@ -17,8 +17,15 @@ export function UploadPage() {
   const [generatedHashtags, setGeneratedHashtags] = useState<string[]>([]);
   const [caption, setCaption] = useState("");
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const { addPost } = useFeed();
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const { addPost, fetchPosts } = useFeed();
   const { user } = useAuth();
+
+  const API_BASE_URL =
+    process.env.NEXT_PUBLIC_API_BASE_URL ??
+    "https://sns-ai-backend-production.up.railway.app";
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
@@ -48,40 +55,101 @@ export function UploadPage() {
     }
   };
 
-  const generateContent = () => {
-    // Mock AI generation - in real app, this would call an AI API
-    const captions = [
-      "완벽한 순간을 포착했어요! 이 특별한 날을 여러분과 공유하게 되어 기쁩니다.",
-      "오늘의 하이라이트를 담았습니다. 함께해주셔서 감사해요!",
-      "멋진 하루의 기록. 이 순간이 영원히 기억되길 바랍니다.",
-      "특별한 순간들의 모음. 여러분도 즐거운 하루 보내세요!",
-      "행복한 순간을 나눕니다. 좋은 하루 되세요!",
-    ];
+  const generateContent = async () => {
+    if (selectedFiles.length === 0) {
+      alert("이미지를 먼저 업로드해주세요.");
+      return;
+    }
 
-    const hashtagSets = [
-      ["#일상", "#데일리", "#소통", "#좋아요", "#팔로우"],
-      [
-        "#daily",
-        "#instagood",
-        "#photooftheday",
-        "#instadaily",
-        "#likeforlikes",
-      ],
-      ["#감성", "#사진", "#추억", "#행복", "#일상스타그램"],
-      ["#lifestyle", "#photography", "#memories", "#happiness", "#instaphoto"],
-      ["#오늘", "#기록", "#순간", "#공유", "#인스타"],
-    ];
+    setIsGenerating(true);
+    setError(null);
 
-    const randomCaption = captions[Math.floor(Math.random() * captions.length)];
-    const randomHashtags =
-      hashtagSets[Math.floor(Math.random() * hashtagSets.length)];
+    try {
+      // FormData 생성
+      const formData = new FormData();
+      
+      // 이미지 파일들 추가 (files는 array<string>이지만 FormData에서는 파일 객체로 전송)
+      selectedFiles.forEach((file) => {
+        formData.append("files", file);
+      });
 
-    setGeneratedCaption(randomCaption);
-    setGeneratedHashtags(randomHashtags);
-    setShowResult(true);
+      // 프롬프트(캡션) 추가 (항상 전송, 없으면 빈 문자열)
+      formData.append("prompt", caption.trim() || "");
+
+      // API 호출
+      const accessToken = typeof window !== "undefined" 
+        ? localStorage.getItem("accessToken") 
+        : null;
+
+      const headers: HeadersInit = {};
+      if (accessToken) {
+        headers["Authorization"] = `Bearer ${accessToken}`;
+      }
+      // FormData를 보낼 때는 Content-Type을 설정하지 않음 (브라우저가 자동으로 boundary 설정)
+
+      const response = await fetch(`${API_BASE_URL}/posts`, {
+        method: "POST",
+        headers,
+        body: formData,
+      });
+
+      if (!response.ok) {
+        let errorMessage = "AI 추천 생성에 실패했습니다.";
+        try {
+          const errorData = await response.json();
+          if (errorData && typeof errorData === "object") {
+            if ("message" in errorData) {
+              errorMessage = String(errorData.message);
+            } else if ("error" in errorData) {
+              errorMessage = String(errorData.error);
+            } else if (Array.isArray(errorData) && errorData.length > 0) {
+              errorMessage = errorData.map((err: unknown) => 
+                typeof err === "object" && err && "message" in err 
+                  ? String(err.message) 
+                  : String(err)
+              ).join(", ");
+            }
+          }
+        } catch {
+          // JSON 파싱 실패 시 기본 메시지 사용
+          errorMessage = `요청 실패 (${response.status} ${response.statusText})`;
+        }
+        throw new Error(errorMessage);
+      }
+
+      const data = await response.json();
+
+      // 응답 데이터 처리
+      if (data && typeof data === "object" && "post" in data) {
+        const post = data.post;
+        if (post && typeof post === "object") {
+          const captionText = "caption" in post ? String(post.caption) : "";
+          const hashtags = "hashtags" in post && Array.isArray(post.hashtags)
+            ? post.hashtags.map((tag: unknown) => String(tag))
+            : [];
+
+          setGeneratedCaption(captionText);
+          setGeneratedHashtags(hashtags);
+          setShowResult(true);
+        } else {
+          throw new Error("응답 데이터를 해석하지 못했습니다.");
+        }
+      } else {
+        throw new Error("응답 데이터를 해석하지 못했습니다.");
+      }
+    } catch (err) {
+      const message =
+        err instanceof Error
+          ? err.message
+          : "AI 추천 생성 중 오류가 발생했습니다.";
+      setError(message);
+      alert(message);
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
-  const handleSavePost = () => {
+  const handleSavePost = async () => {
     const finalCaption = caption || generatedCaption;
     addPost(selectedFiles, finalCaption, generatedHashtags);
     // Reset form
@@ -92,7 +160,9 @@ export function UploadPage() {
     setGeneratedHashtags([]);
     setCaption("");
     setCurrentImageIndex(0);
-    alert("피드가 저장되었습니다!");
+    setShowSuccessModal(true);
+    // 피드 목록 다시 불러오기
+    await fetchPosts();
   };
 
   const nextImage = () => {
@@ -107,7 +177,16 @@ export function UploadPage() {
 
   if (showResult) {
     return (
-      <div className="space-y-6">
+      <>
+        {isGenerating && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+            <div className="flex flex-col items-center gap-4">
+              <Loader2 className="w-12 h-12 text-primary animate-spin" />
+              <p className="text-lg font-medium text-foreground">AI 추천 생성 중...</p>
+            </div>
+          </div>
+        )}
+        <div className="space-y-6">
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-semibold text-foreground">
             생성된 피드 미리보기
@@ -127,15 +206,51 @@ export function UploadPage() {
 
         <FeedPreview
           images={previewUrls}
-          caption={caption || generatedCaption}
+          caption={generatedCaption}
           hashtags={generatedHashtags}
         />
       </div>
+      {/* Success Modal */}
+      {showSuccessModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+          <Card className="w-full max-w-md p-6 space-y-4">
+            <div className="flex flex-col items-center gap-4">
+              <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
+                <CheckCircle className="w-10 h-10 text-primary" />
+              </div>
+              <div className="text-center space-y-2">
+                <h3 className="text-xl font-semibold text-foreground">
+                  피드가 저장되었습니다
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  피드가 성공적으로 저장되었습니다.
+                </p>
+              </div>
+              <Button
+                onClick={() => setShowSuccessModal(false)}
+                className="w-full bg-primary hover:bg-primary/90"
+              >
+                확인
+              </Button>
+            </div>
+          </Card>
+        </div>
+      )}
+      </>
     );
   }
 
   return (
-    <div className="space-y-6">
+    <>
+      {isGenerating && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="flex flex-col items-center gap-4">
+            <Loader2 className="w-12 h-12 text-primary animate-spin" />
+            <p className="text-lg font-medium text-foreground">AI 추천 생성 중...</p>
+          </div>
+        </div>
+      )}
+      <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-semibold text-foreground mb-2">
           새 피드 만들기
@@ -179,11 +294,11 @@ export function UploadPage() {
           {/* Left side: Image viewer */}
           <div className="space-y-4">
             <Card className="overflow-hidden">
-              <div className="relative aspect-[4/5] bg-black">
+              <div className="relative aspect-[4/5] max-h-[400px] bg-gray-200 flex items-center justify-center">
                 <img
                   src={previewUrls[currentImageIndex] || "/placeholder.svg"}
                   alt={`Preview ${currentImageIndex + 1}`}
-                  className="w-full h-full object-contain"
+                  className="max-w-full max-h-full w-auto h-auto object-contain"
                 />
 
                 {/* Image navigation */}
@@ -273,10 +388,12 @@ export function UploadPage() {
               {/* Profile section */}
               <div className="flex items-center gap-3 mb-4 pb-4 border-b border-border">
                 <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-primary-foreground font-semibold">
-                  {user?.username.charAt(0).toUpperCase()}
+                  {user?.username?.[0]?.toUpperCase() ||
+                    user?.userId?.[0]?.toUpperCase() ||
+                    "U"}
                 </div>
                 <span className="font-semibold text-foreground">
-                  {user?.username}
+                  {user?.username || user?.userId || "User"}
                 </span>
               </div>
 
@@ -302,18 +419,49 @@ export function UploadPage() {
             </Card>
 
             {/* Action buttons */}
-            <div className="flex gap-3">
+            <div className="space-y-2">
+              {error && (
+                <p className="text-sm text-destructive">{error}</p>
+              )}
               <Button
                 onClick={generateContent}
-                className="flex-1 bg-primary hover:bg-primary/90 gap-2"
+                disabled={isGenerating || selectedFiles.length === 0}
+                className="flex-1 bg-primary hover:bg-primary/90 gap-2 disabled:opacity-60 disabled:pointer-events-none"
               >
                 <Sparkles className="w-5 h-5" />
-                AI 추천 받기
+                {isGenerating ? "AI 추천 생성 중..." : "AI 추천 받기"}
               </Button>
             </div>
           </div>
         </div>
       )}
     </div>
+    {/* Success Modal */}
+    {showSuccessModal && (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+        <Card className="w-full max-w-md p-6 space-y-4">
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
+              <CheckCircle className="w-10 h-10 text-primary" />
+            </div>
+            <div className="text-center space-y-2">
+              <h3 className="text-xl font-semibold text-foreground">
+                피드가 저장되었습니다
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                피드가 성공적으로 저장되었습니다.
+              </p>
+            </div>
+            <Button
+              onClick={() => setShowSuccessModal(false)}
+              className="w-full bg-primary hover:bg-primary/90"
+            >
+              확인
+            </Button>
+          </div>
+        </Card>
+      </div>
+    )}
+    </>
   );
 }

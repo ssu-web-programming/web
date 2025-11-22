@@ -12,7 +12,7 @@ interface LoginFormProps {
 }
 
 export function LoginForm({ onSwitchToSignup }: LoginFormProps) {
-  const [username, setUsername] = useState("");
+  const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -23,7 +23,7 @@ export function LoginForm({ onSwitchToSignup }: LoginFormProps) {
     setErrorMessage(null);
     setIsSubmitting(true);
     try {
-      await login(username, password);
+      await login(userId, password, "");
     } catch (error) {
       const message =
         error instanceof Error
@@ -48,10 +48,10 @@ export function LoginForm({ onSwitchToSignup }: LoginFormProps) {
       <form onSubmit={handleSubmit} className="space-y-2">
         <Input
           type="text"
-          placeholder="전화번호, 사용자 이름 또는 이메일"
-          value={username}
+          placeholder="아이디"
+          value={userId}
           onChange={(e) => {
-            setUsername(e.target.value);
+            setUserId(e.target.value);
             setErrorMessage(null);
           }}
           className="w-full bg-background border-border"

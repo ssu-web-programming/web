@@ -46,7 +46,7 @@ export function MainApp() {
 
           <div className="flex items-center gap-4">
             <span className="text-sm text-muted-foreground">
-              {user?.username}
+              {user?.username || user?.userId || "User"}
             </span>
             <Button
               onClick={logout}

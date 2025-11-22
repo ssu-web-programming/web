@@ -7,8 +7,17 @@ import { ImageIcon } from "lucide-react";
 import { FeedDetailModal } from "@/components/feed/feed-detail-modal";
 
 export function FeedListPage() {
-  const { posts } = useFeed();
+  const { posts, isLoading } = useFeed();
   const [selectedPost, setSelectedPost] = useState<FeedPost | null>(null);
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20 space-y-4">
+        <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+        <p className="text-muted-foreground">피드를 불러오는 중...</p>
+      </div>
+    );
+  }
 
   if (posts.length === 0) {
     return (
@@ -48,10 +57,10 @@ export function FeedListPage() {
               alt="Feed post"
               className="w-full h-full object-cover transition-transform group-hover:scale-105"
             />
-            {post.images.length > 1 && (
+            {post.imageUrls.length > 1 && (
               <div className="absolute top-2 right-2 bg-background/80 text-foreground px-2 py-1 rounded text-xs font-medium flex items-center gap-1">
                 <ImageIcon className="w-3 h-3" />
-                {post.images.length}
+                {post.imageUrls.length}
               </div>
             )}
             <div className="absolute inset-0 bg-background/0 group-hover:bg-background/10 transition-colors" />

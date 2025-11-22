@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { X, Heart, MessageCircle, Send, Bookmark, ChevronLeft, ChevronRight } from "lucide-react"
 import { useAuth } from "@/lib/auth-context"
+import { Card } from "@/components/ui/card"
 import type { FeedPost } from "@/lib/feed-context"
 
 interface FeedDetailModalProps {
@@ -34,16 +35,17 @@ export function FeedDetailModal({ post, onClose }: FeedDetailModalProps) {
     }, [onClose])
 
     const nextImage = () => {
-        setCurrentImageIndex((prev) => (prev + 1) % post.images.length)
+        setCurrentImageIndex((prev) => (prev + 1) % post.imageUrls.length)
     }
 
     const prevImage = () => {
-        setCurrentImageIndex((prev) => (prev - 1 + post.images.length) % post.images.length)
+        setCurrentImageIndex((prev) => (prev - 1 + post.imageUrls.length) % post.imageUrls.length)
     }
 
-    const formatDate = (date: Date) => {
+    const formatDate = (date: Date | string) => {
         const now = new Date()
-        const diff = now.getTime() - date.getTime()
+        const dateObj = typeof date === "string" ? new Date(date) : date
+        const diff = now.getTime() - dateObj.getTime()
         const minutes = Math.floor(diff / 60000)
         const hours = Math.floor(diff / 3600000)
         const days = Math.floor(diff / 86400000)
@@ -55,50 +57,69 @@ export function FeedDetailModal({ post, onClose }: FeedDetailModalProps) {
     }
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/95 p-4" onClick={onClose}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={onClose}>
             <div
-                className="relative w-full max-w-5xl max-h-[90vh] bg-card rounded-lg overflow-hidden shadow-2xl flex flex-col md:flex-row"
+                className="relative"
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Close button */}
                 <button
                     onClick={onClose}
-                    className="absolute top-4 right-4 z-10 w-10 h-10 bg-background/80 hover:bg-background text-foreground rounded-full flex items-center justify-center transition-colors"
+                    className="absolute -top-2 -right-2 z-10 w-10 h-10 bg-background/90 hover:bg-background text-foreground rounded-full flex items-center justify-center transition-colors shadow-lg"
                 >
                     <X className="w-6 h-6" />
                 </button>
 
-                {/* Image section */}
-                <div className="relative flex-1 bg-muted flex items-center justify-center">
-                    <div className="relative w-full aspect-square md:aspect-auto md:h-full">
+                {/* Feed Preview Card */}
+                <Card className="max-w-[400px] max-h-[600px] overflow-hidden border border-border flex flex-col p-3">
+                    {/* Header */}
+                    <div className="flex items-center gap-3 p-2 border-b border-border">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+                            <span className="text-sm font-semibold text-primary-foreground">
+                                {user?.username?.[0]?.toUpperCase() ||
+                                    user?.userId?.[0]?.toUpperCase() ||
+                                    "U"}
+                            </span>
+                        </div>
+                        <div className="flex-1">
+                            <p className="font-semibold text-foreground text-sm">
+                                {user?.username || user?.userId || "User"}
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Image carousel */}
+                    <div className="relative aspect-square bg-muted flex-shrink-0 overflow-hidden max-h-[300px]">
                         <img
                             src={post.imageUrls[currentImageIndex] || "/placeholder.svg"}
-                            alt={`Post image ${currentImageIndex + 1}`}
+                            alt={`Feed image ${currentImageIndex + 1}`}
                             className="w-full h-full object-contain"
                         />
 
-                        {post.images.length > 1 && (
+                        {post.imageUrls.length > 1 && (
                             <>
                                 <button
                                     onClick={prevImage}
-                                    className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-background/80 hover:bg-background text-foreground rounded-full flex items-center justify-center transition-colors"
+                                    className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-background/80 text-foreground rounded-full flex items-center justify-center hover:bg-background transition-colors"
                                 >
-                                    <ChevronLeft className="w-6 h-6" />
+                                    <ChevronLeft className="w-5 h-5" />
                                 </button>
                                 <button
                                     onClick={nextImage}
-                                    className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-background/80 hover:bg-background text-foreground rounded-full flex items-center justify-center transition-colors"
+                                    className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-background/80 text-foreground rounded-full flex items-center justify-center hover:bg-background transition-colors"
                                 >
-                                    <ChevronRight className="w-6 h-6" />
+                                    <ChevronRight className="w-5 h-5" />
                                 </button>
 
                                 {/* Dots indicator */}
-                                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                                    {post.images.map((_, index) => (
+                                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5">
+                                    {post.imageUrls.map((_, index) => (
                                         <div
                                             key={index}
-                                            className={`w-2 h-2 rounded-full transition-colors ${
-                                                index === currentImageIndex ? "bg-primary" : "bg-background/60"
+                                            className={`w-1.5 h-1.5 rounded-full transition-colors ${
+                                                index === currentImageIndex
+                                                    ? "bg-primary"
+                                                    : "bg-background/60"
                                             }`}
                                         />
                                     ))}
@@ -106,62 +127,69 @@ export function FeedDetailModal({ post, onClose }: FeedDetailModalProps) {
                             </>
                         )}
                     </div>
-                </div>
-
-                {/* Content section */}
-                <div className="w-full md:w-96 flex flex-col border-l border-border">
-                    {/* Header */}
-                    <div className="flex items-center gap-3 p-4 border-b border-border">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-                            <span className="text-sm font-semibold text-primary-foreground">{user?.username?.[0].toUpperCase()}</span>
-                        </div>
-                        <div className="flex-1">
-                            <p className="font-semibold text-foreground text-sm">{user?.username}</p>
-                        </div>
-                    </div>
-
-                    {/* Caption and comments */}
-                    <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                        <div className="space-y-2">
-                            <div className="flex gap-3">
-                                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center flex-shrink-0">
-                  <span className="text-sm font-semibold text-primary-foreground">
-                    {user?.username?.[0].toUpperCase()}
-                  </span>
-                                </div>
-                                <div className="flex-1">
-                                    <p className="text-sm text-foreground">
-                                        <span className="font-semibold">{user?.username}</span> {post.caption}
-                                    </p>
-                                    <p className="text-sm text-primary mt-2">{post.hashtags.join(" ")}</p>
-                                    <p className="text-xs text-muted-foreground mt-2">{formatDate(post.createdAt)}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
                     {/* Actions */}
-                    <div className="border-t border-border p-4 space-y-3">
+                    <div className="p-3 space-y-3 flex-shrink overflow-y-auto">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-4">
-                                <button onClick={() => setLiked(!liked)} className="hover:opacity-70 transition-opacity">
-                                    <Heart className={`w-6 h-6 ${liked ? "fill-red-500 text-red-500" : "text-foreground"}`} />
+                                <button
+                                    onClick={() => setLiked(!liked)}
+                                    className="hover:opacity-70 transition-opacity"
+                                >
+                                    <Heart
+                                        className={`w-5 h-5 ${liked ? "fill-red-500 text-red-500" : "text-foreground"}`}
+                                    />
                                 </button>
                                 <button className="hover:opacity-70 transition-opacity">
-                                    <MessageCircle className="w-6 h-6 text-foreground" />
+                                    <MessageCircle className="w-5 h-5 text-foreground" />
                                 </button>
                                 <button className="hover:opacity-70 transition-opacity">
-                                    <Send className="w-6 h-6 text-foreground" />
+                                    <Send className="w-5 h-5 text-foreground" />
                                 </button>
                             </div>
-                            <button onClick={() => setSaved(!saved)} className="hover:opacity-70 transition-opacity">
-                                <Bookmark className={`w-6 h-6 ${saved ? "fill-foreground text-foreground" : "text-foreground"}`} />
+                            <button
+                                onClick={() => setSaved(!saved)}
+                                className="hover:opacity-70 transition-opacity"
+                            >
+                                <Bookmark
+                                    className={`w-6 h-6 ${saved ? "fill-foreground text-foreground" : "text-foreground"}`}
+                                />
                             </button>
+                        </div>
+
+                        {/* Caption */}
+                        <div className="space-y-2">
+                            {/* 사용자 이름 */}
+                            <p className="text-sm font-semibold text-foreground">
+                                {user?.username || user?.userId || "User"}
+                            </p>
+                            {/* 해시태그 */}
+                            <div className="text-sm flex flex-wrap gap-1">
+                                {post.hashtags.map((tag, index) => {
+                                    // 해시태그에서 # 제거
+                                    const tagWithoutHash = tag.replace(/^#/, "");
+                                    return (
+                                        <a
+                                            key={index}
+                                            href={`https://www.instagram.com/explore/search/keyword/?q=${encodeURIComponent(tagWithoutHash)}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-[#4150f7] hover:underline"
+                                        >
+                                            {tag}
+                                        </a>
+                                    );
+                                })}
+                            </div>
+                            {/* 캡션 */}
+                            <p className="text-sm text-foreground">
+                                {post.caption}
+                            </p>
                         </div>
 
                         <p className="text-xs text-muted-foreground">{formatDate(post.createdAt)}</p>
                     </div>
-                </div>
+                </Card>
             </div>
         </div>
     )
