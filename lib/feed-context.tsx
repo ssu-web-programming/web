@@ -1,6 +1,7 @@
 "use client";
 
-import { createContext, type ReactNode, useContext, useState, useEffect } from "react";
+import { createContext, type ReactNode, useContext } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL ??
@@ -20,80 +21,74 @@ interface FeedContextType {
   isLoading: boolean;
   addPost: (images: File[], caption: string, hashtags: string[]) => void;
   fetchPosts: () => Promise<void>;
+  refetchPosts: () => void;
 }
 
 const FeedContext = createContext<FeedContextType | undefined>(undefined);
 
-export function FeedProvider({ children }: { children: ReactNode }) {
-  const [posts, setPosts] = useState<FeedPost[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+// API 응답을 FeedPost 형식으로 변환하는 함수
+interface ApiPost {
+  _id?: string;
+  id?: string;
+  imageUrls?: string[];
+  caption?: string;
+  hashtags?: string[];
+  createdAt?: string;
+}
 
-  const fetchPosts = async () => {
-    setIsLoading(true);
-    try {
-      const accessToken = typeof window !== "undefined" 
-        ? localStorage.getItem("accessToken") 
-        : null;
+function transformApiResponse(data: unknown): FeedPost[] {
+  if (Array.isArray(data)) {
+    return data.map((post: ApiPost) => ({
+      id: post._id || post.id || Date.now().toString(),
+      imageUrls: post.imageUrls || [],
+      caption: post.caption || "",
+      hashtags: post.hashtags || [],
+      createdAt: post.createdAt || new Date().toISOString(),
+    }));
+  } else if (data && typeof data === "object" && "posts" in data && Array.isArray(data.posts)) {
+    return (data.posts as ApiPost[]).map((post: ApiPost) => ({
+      id: post._id || post.id || Date.now().toString(),
+      imageUrls: post.imageUrls || [],
+      caption: post.caption || "",
+      hashtags: post.hashtags || [],
+      createdAt: post.createdAt || new Date().toISOString(),
+    }));
+  }
+  return [];
+}
 
-      const headers: HeadersInit = {
-        "Content-Type": "application/json",
-      };
-      if (accessToken) {
-        headers["Authorization"] = `Bearer ${accessToken}`;
-      }
+// 피드 목록을 가져오는 함수
+export async function fetchPostsApi(): Promise<FeedPost[]> {
+  const accessToken = typeof window !== "undefined" 
+    ? localStorage.getItem("accessToken") 
+    : null;
 
-      const response = await fetch(`${API_BASE_URL}/posts`, {
-        method: "GET",
-        headers,
-      });
-
-      if (!response.ok) {
-        throw new Error("피드 목록을 불러오는데 실패했습니다.");
-      }
-
-      const data = await response.json();
-
-      // API 응답을 FeedPost 형식으로 변환
-      interface ApiPost {
-        _id?: string;
-        id?: string;
-        imageUrls?: string[];
-        caption?: string;
-        hashtags?: string[];
-        createdAt?: string;
-      }
-
-      if (Array.isArray(data)) {
-        const formattedPosts: FeedPost[] = data.map((post: ApiPost) => ({
-          id: post._id || post.id || Date.now().toString(),
-          imageUrls: post.imageUrls || [],
-          caption: post.caption || "",
-          hashtags: post.hashtags || [],
-          createdAt: post.createdAt || new Date().toISOString(),
-        }));
-        setPosts(formattedPosts);
-      } else if (data && typeof data === "object" && "posts" in data && Array.isArray(data.posts)) {
-        // 응답이 { posts: [...] } 형태인 경우
-        const formattedPosts: FeedPost[] = (data.posts as ApiPost[]).map((post: ApiPost) => ({
-          id: post._id || post.id || Date.now().toString(),
-          imageUrls: post.imageUrls || [],
-          caption: post.caption || "",
-          hashtags: post.hashtags || [],
-          createdAt: post.createdAt || new Date().toISOString(),
-        }));
-        setPosts(formattedPosts);
-      }
-    } catch (error) {
-      console.error("피드 목록 불러오기 실패:", error);
-    } finally {
-      setIsLoading(false);
-    }
+  const headers: HeadersInit = {
+    "Content-Type": "application/json",
   };
+  if (accessToken) {
+    headers["Authorization"] = `Bearer ${accessToken}`;
+  }
 
-  // 컴포넌트 마운트 시 피드 목록 불러오기
-  useEffect(() => {
-    fetchPosts();
-  }, []);
+  const response = await fetch(`${API_BASE_URL}/posts`, {
+    method: "GET",
+    headers,
+  });
+
+  if (!response.ok) {
+    throw new Error("피드 목록을 불러오는데 실패했습니다.");
+  }
+
+  const data = await response.json();
+  return transformApiResponse(data);
+}
+
+export function FeedProvider({ children }: { children: ReactNode }) {
+  const queryClient = useQueryClient();
+
+  const refetchPosts = () => {
+    queryClient.invalidateQueries({ queryKey: ["posts"] });
+  };
 
   const addPost = (images: File[], caption: string, hashtags: string[]) => {
     const imageUrls = images.map((file) => URL.createObjectURL(file));
@@ -105,11 +100,19 @@ export function FeedProvider({ children }: { children: ReactNode }) {
       hashtags,
       createdAt: new Date(),
     };
-    setPosts((prev) => [newPost, ...prev]);
+    // Optimistic update
+    queryClient.setQueryData<FeedPost[]>(["posts"], (old = []) => [newPost, ...old]);
+  };
+
+  // feed-list-page에서 직접 useQuery를 사용하므로 여기서는 빈 배열과 false를 반환
+  const posts: FeedPost[] = [];
+  const isLoading = false;
+  const fetchPosts = async () => {
+    queryClient.invalidateQueries({ queryKey: ["posts"] });
   };
 
   return (
-    <FeedContext.Provider value={{ posts, isLoading, addPost, fetchPosts }}>
+    <FeedContext.Provider value={{ posts, isLoading, addPost, fetchPosts, refetchPosts }}>
       {children}
     </FeedContext.Provider>
   );

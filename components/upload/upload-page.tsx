@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { CheckCircle, ChevronLeft, ChevronRight, Loader2, Sparkles, Upload, X } from "lucide-react";
 import { useFeed } from "@/lib/feed-context";
+import { useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/lib/auth-context";
 import { FeedPreview } from "@/components/feed/feed-preview";
 
@@ -20,8 +21,9 @@ export function UploadPage() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const { addPost, fetchPosts } = useFeed();
+  const { addPost } = useFeed();
   const { user } = useAuth();
+  const queryClient = useQueryClient();
 
   const API_BASE_URL =
     process.env.NEXT_PUBLIC_API_BASE_URL ??
@@ -161,8 +163,8 @@ export function UploadPage() {
     setCaption("");
     setCurrentImageIndex(0);
     setShowSuccessModal(true);
-    // 피드 목록 다시 불러오기
-    await fetchPosts();
+    // 피드 목록 캐시 무효화하여 자동으로 다시 불러오기
+    queryClient.invalidateQueries({ queryKey: ["posts"] });
   };
 
   const nextImage = () => {

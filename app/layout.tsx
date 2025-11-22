@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
 import { AuthProvider } from "@/lib/auth-context";
 import { FeedProvider } from "@/lib/feed-context";
+import { QueryProvider } from "@/lib/query-provider";
 import "./globals.css";
 
 const _geist = Geist({ subsets: ["latin"] });
@@ -26,9 +27,11 @@ export default function RootLayout({
         <meta name="google-site-verification" content="1UYE7QA7vWuKgg_eff7wSNFWpI3cN4xBI2XaK7m95uA" />
       </head>
       <body className={`font-sans antialiased`}>
-        <AuthProvider>
-          <FeedProvider>{children}</FeedProvider>
-        </AuthProvider>
+        <QueryProvider>
+          <AuthProvider>
+            <FeedProvider>{children}</FeedProvider>
+          </AuthProvider>
+        </QueryProvider>
       </body>
     </html>
   );

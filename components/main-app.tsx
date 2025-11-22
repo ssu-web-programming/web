@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";
 import { Grid3x3, LogOut, Upload } from "lucide-react";
@@ -8,8 +9,11 @@ import { UploadPage } from "@/components/upload/upload-page";
 import { FeedListPage } from "@/components/feed/feed-list-page";
 
 export function MainApp() {
-  const [activeTab, setActiveTab] = useState<"upload" | "feed">("upload");
+  const router = useRouter();
+  const pathname = usePathname();
   const { logout, user } = useAuth();
+  
+  const activeTab = pathname === "/feed" ? "feed" : "upload";
 
   return (
     <div className="min-h-screen bg-background">
@@ -20,7 +24,7 @@ export function MainApp() {
 
           <nav className="flex items-center gap-6">
             <button
-              onClick={() => setActiveTab("upload")}
+              onClick={() => router.push("/")}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
                 activeTab === "upload"
                   ? "bg-primary text-primary-foreground"
@@ -32,7 +36,7 @@ export function MainApp() {
             </button>
 
             <button
-              onClick={() => setActiveTab("feed")}
+              onClick={() => router.push("/feed")}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
                 activeTab === "feed"
                   ? "bg-primary text-primary-foreground"

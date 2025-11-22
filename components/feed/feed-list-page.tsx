@@ -1,14 +1,22 @@
 "use client";
 
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import type { FeedPost } from "@/lib/feed-context";
-import { useFeed } from "@/lib/feed-context";
+import { fetchPostsApi } from "@/lib/feed-context";
 import { ImageIcon } from "lucide-react";
 import { FeedDetailModal } from "@/components/feed/feed-detail-modal";
 
 export function FeedListPage() {
-  const { posts, isLoading } = useFeed();
   const [selectedPost, setSelectedPost] = useState<FeedPost | null>(null);
+
+  const { data: posts = [], isLoading } = useQuery({
+    queryKey: ["posts"],
+    queryFn: fetchPostsApi,
+    staleTime: 30 * 1000, // 30초
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
+  });
 
   if (isLoading) {
     return (
