@@ -288,6 +288,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (typeof window !== "undefined") {
       localStorage.removeItem("accessToken");
       localStorage.removeItem("user");
+      localStorage.removeItem("refreshToken");
       
       // 로그인 화면으로 리다이렉트
       if (redirectToLogin) {
