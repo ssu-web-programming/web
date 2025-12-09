@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { LoginForm } from "@/components/login/login-form";
 import { SignupForm } from "@/components/login/signup-form";
@@ -8,11 +9,53 @@ import { MainApp } from "@/components/main-app";
 import Image from "next/image";
 
 export default function Home() {
-  const { isAuthenticated } = useAuth();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const { isAuthenticated, setUserFromStorage } = useAuth();
   const [isSignup, setIsSignup] = useState(false);
+  const [isProcessingToken, setIsProcessingToken] = useState(false);
+
+  // 카카오 리다이렉트로 전달된 token/refreshToken 처리
+  useEffect(() => {
+    const token = searchParams.get("token");
+    const refreshToken = searchParams.get("refreshToken");
+    if (!token && !refreshToken) return;
+
+    setIsProcessingToken(true);
+    try {
+      if (token) {
+        localStorage.setItem("accessToken", token);
+        const userData = buildUserFromToken(token);
+        if (userData) {
+          localStorage.setItem("user", JSON.stringify(userData));
+        }
+      }
+      if (refreshToken) {
+        localStorage.setItem("refreshToken", refreshToken);
+      }
+      setUserFromStorage();
+
+      // querystring 정리하여 새로고침 없이 token 제거
+      const params = new URLSearchParams(Array.from(searchParams.entries()));
+      params.delete("token");
+      params.delete("refreshToken");
+      const next = params.toString();
+      router.replace(next ? `/?${next}` : "/");
+    } finally {
+      setIsProcessingToken(false);
+    }
+  }, [searchParams, router, setUserFromStorage]);
 
   if (isAuthenticated) {
     return <MainApp />;
+  }
+
+  if (isProcessingToken) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-sm text-muted-foreground">로그인 처리 중...</p>
+      </div>
+    );
   }
 
   return (
@@ -51,4 +94,20 @@ export default function Home() {
       </footer>
     </div>
   );
+}
+
+function buildUserFromToken(token: string | null) {
+  if (!token) return null;
+  try {
+    const payloadPart = token.split(".")[1];
+    const decoded = JSON.parse(atob(payloadPart.replace(/-/g, "+").replace(/_/g, "/")));
+    const userId = decoded.userId || decoded.sub || decoded.id;
+    if (!userId) return null;
+    const username = decoded.username || userId;
+    const email = decoded.email || `${userId}@kakao.com`;
+    const id = decoded.id || userId;
+    return { id: String(id), userId: String(userId), username: String(username), email: String(email) };
+  } catch {
+    return null;
+  }
 }
