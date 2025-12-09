@@ -17,7 +17,7 @@ function KakaoCallbackContent() {
   useEffect(() => {
     const handleCallback = async () => {
       try {
-        // URL에서 code 또는 다른 파라미터 가져오기
+        const tokenFromQuery = searchParams.get("token");
         const code = searchParams.get("code");
         const errorParam = searchParams.get("error");
 
@@ -25,6 +25,19 @@ function KakaoCallbackContent() {
           throw new Error("카카오 로그인에 실패했습니다.");
         }
 
+        // 신규 플로우: 백엔드가 직접 토큰을 리다이렉트 쿼리에 실어줌 (?token=...)
+        if (tokenFromQuery) {
+          saveTokens({ accessToken: tokenFromQuery, refreshToken: searchParams.get("refreshToken") });
+          const userData = buildUserFromToken(tokenFromQuery);
+          if (userData) {
+            localStorage.setItem("user", JSON.stringify(userData));
+          }
+          setUserFromStorage();
+          router.push("/");
+          return;
+        }
+
+        // 기존 플로우: code를 받아 백엔드에 교환 요청
         if (!code) {
           throw new Error("인증 코드를 받지 못했습니다.");
         }
@@ -58,13 +71,7 @@ function KakaoCallbackContent() {
               ? data.user
               : null;
 
-          // 토큰 저장
-          if (accessToken) {
-            localStorage.setItem("accessToken", accessToken);
-          }
-          if (refreshToken) {
-            localStorage.setItem("refreshToken", refreshToken);
-          }
+          saveTokens({ accessToken, refreshToken });
 
           // 사용자 정보 저장
           if (profile && typeof profile === "object") {
@@ -125,6 +132,32 @@ function KakaoCallbackContent() {
 async function safeParseJson(response: Response) {
   try {
     return await response.json();
+  } catch {
+    return null;
+  }
+}
+
+function saveTokens({ accessToken, refreshToken }: { accessToken: string | null; refreshToken: string | null }) {
+  if (!accessToken && !refreshToken) return;
+  if (accessToken) {
+    localStorage.setItem("accessToken", accessToken);
+  }
+  if (refreshToken) {
+    localStorage.setItem("refreshToken", refreshToken);
+  }
+}
+
+function buildUserFromToken(token: string | null) {
+  if (!token) return null;
+  try {
+    const payloadPart = token.split(".")[1];
+    const decoded = JSON.parse(atob(payloadPart.replace(/-/g, "+").replace(/_/g, "/")));
+    const userId = decoded.userId || decoded.sub || decoded.id;
+    if (!userId) return null;
+    const username = decoded.username || userId;
+    const email = decoded.email || `${userId}@kakao.com`;
+    const id = decoded.id || userId;
+    return { id: String(id), userId: String(userId), username: String(username), email: String(email) };
   } catch {
     return null;
   }
