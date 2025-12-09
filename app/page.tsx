@@ -30,35 +30,49 @@ function HomeContent() {
   const [isProcessingToken, setIsProcessingToken] = useState(false);
 
   // 카카오 리다이렉트로 전달된 token/refreshToken 처리
+  // 로그인 후 토큰 파라미터 처리 (한 번만)
   useEffect(() => {
-    const token = searchParams.get("token");
-    const refreshToken = searchParams.get("refreshToken");
-    if (!token && !refreshToken) return;
+    // useSearchParams는 객체가 매 렌더마다 새로울 수 있어 ref로 한 번만 처리
+    const processedRef = { current: false };
+    const handleTokenFromUrl = () => {
+      if (processedRef.current) return;
+      const token = searchParams.get("token");
+      const refreshToken = searchParams.get("refreshToken");
+      if (!token && !refreshToken) return;
+      processedRef.current = true;
 
-    setIsProcessingToken(true);
-    try {
-      if (token) {
-        localStorage.setItem("accessToken", token);
-        const userData = buildUserFromToken(token);
-        if (userData) {
-          localStorage.setItem("user", JSON.stringify(userData));
+      setIsProcessingToken(true);
+      try {
+        if (token) {
+          localStorage.setItem("accessToken", token);
+          const userData = buildUserFromToken(token);
+          if (userData) {
+            localStorage.setItem("user", JSON.stringify(userData));
+          }
         }
-      }
-      if (refreshToken) {
-        localStorage.setItem("refreshToken", refreshToken);
-      }
-      setUserFromStorage();
+        if (refreshToken) {
+          localStorage.setItem("refreshToken", refreshToken);
+        }
+        setUserFromStorage();
 
-      // querystring 정리하여 새로고침 없이 token 제거
-      const params = new URLSearchParams(Array.from(searchParams.entries()));
-      params.delete("token");
-      params.delete("refreshToken");
-      const next = params.toString();
-      router.replace(next ? `/?${next}` : "/");
-    } finally {
-      setIsProcessingToken(false);
-    }
-  }, [searchParams, router, setUserFromStorage]);
+        // querystring 정리하여 새로고침 없이 token 제거
+        const params = new URLSearchParams(Array.from(searchParams.entries()));
+        params.delete("token");
+        params.delete("refreshToken");
+        const next = params.toString();
+        const cleanedPath = next ? `/?${next}` : "/";
+        if (typeof window !== "undefined") {
+          window.history.replaceState(null, "", cleanedPath);
+        }
+        router.replace(cleanedPath);
+      } finally {
+        setIsProcessingToken(false);
+      }
+    };
+
+    handleTokenFromUrl();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // 실행은 최초 마운트 시 한 번만
 
   if (isAuthenticated) {
     return <MainApp />;
