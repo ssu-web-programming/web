@@ -1,21 +1,27 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { X, Heart, MessageCircle, Send, Bookmark, ChevronLeft, ChevronRight } from "lucide-react"
+import { X, Heart, MessageCircle, Send, Bookmark, ChevronLeft, ChevronRight, Trash2 } from "lucide-react"
 import { useAuth } from "@/lib/auth-context"
 import { Card } from "@/components/ui/card"
 import type { FeedPost } from "@/lib/feed-context"
+import { deletePostApi } from "@/lib/feed-context"
+import { useQueryClient } from "@tanstack/react-query"
 
 interface FeedDetailModalProps {
     post: FeedPost
     onClose: () => void
+    onDelete?: () => void
 }
 
-export function FeedDetailModal({ post, onClose }: FeedDetailModalProps) {
+export function FeedDetailModal({ post, onClose, onDelete }: FeedDetailModalProps) {
     const [currentImageIndex, setCurrentImageIndex] = useState(0)
     const [liked, setLiked] = useState(false)
     const [saved, setSaved] = useState(false)
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+    const [isDeleting, setIsDeleting] = useState(false)
     const { user } = useAuth()
+    const queryClient = useQueryClient()
 
     // Prevent body scroll when modal is open
     useEffect(() => {
@@ -54,6 +60,27 @@ export function FeedDetailModal({ post, onClose }: FeedDetailModalProps) {
         if (minutes < 60) return `${minutes}분 전`
         if (hours < 24) return `${hours}시간 전`
         return `${days}일 전`
+    }
+
+    const handleDelete = async () => {
+        setIsDeleting(true)
+        try {
+            await deletePostApi(post.id)
+            // 피드 목록 새로고침
+            queryClient.invalidateQueries({ queryKey: ["posts"] })
+            // 모달 닫기
+            onClose()
+            // 부모 컴포넌트에 삭제 알림 (선택사항)
+            if (onDelete) {
+                onDelete()
+            }
+        } catch (error) {
+            console.error("게시물 삭제 실패:", error)
+            alert(error instanceof Error ? error.message : "게시물 삭제에 실패했습니다.")
+        } finally {
+            setIsDeleting(false)
+            setShowDeleteConfirm(false)
+        }
     }
 
     return (
@@ -147,6 +174,12 @@ export function FeedDetailModal({ post, onClose }: FeedDetailModalProps) {
                                 <button className="hover:opacity-70 transition-opacity">
                                     <Send className="w-5 h-5 text-foreground" />
                                 </button>
+                                <button
+                                    onClick={() => setShowDeleteConfirm(true)}
+                                    className="hover:opacity-70 transition-opacity"
+                                >
+                                    <Trash2 className="w-5 h-5 text-foreground" />
+                                </button>
                             </div>
                             <button
                                 onClick={() => setSaved(!saved)}
@@ -192,6 +225,39 @@ export function FeedDetailModal({ post, onClose }: FeedDetailModalProps) {
                     </div>
                 </Card>
             </div>
+
+            {/* 삭제 확인 모달 */}
+            {showDeleteConfirm && (
+                <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 backdrop-blur-sm" onClick={() => !isDeleting && setShowDeleteConfirm(false)}>
+                    <div
+                        className="bg-card border border-border rounded-lg p-6 max-w-sm w-full mx-4"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <h3 className="text-lg font-semibold text-foreground mb-2">
+                            게시물 삭제
+                        </h3>
+                        <p className="text-sm text-muted-foreground mb-6">
+                            정말 삭제하시겠어요?
+                        </p>
+                        <div className="flex gap-3 justify-end">
+                            <button
+                                onClick={() => setShowDeleteConfirm(false)}
+                                disabled={isDeleting}
+                                className="px-4 py-2 text-sm font-medium text-foreground hover:bg-muted rounded-lg transition-colors disabled:opacity-50"
+                            >
+                                취소
+                            </button>
+                            <button
+                                onClick={handleDelete}
+                                disabled={isDeleting}
+                                className="px-4 py-2 text-sm font-medium text-destructive bg-destructive/10 hover:bg-destructive/20 rounded-lg transition-colors disabled:opacity-50"
+                            >
+                                {isDeleting ? "삭제 중..." : "삭제"}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }

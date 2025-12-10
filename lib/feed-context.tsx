@@ -95,6 +95,37 @@ export async function fetchPostsApi(): Promise<FeedPost[]> {
   return transformApiResponse(data);
 }
 
+// 게시물 삭제 함수
+export async function deletePostApi(postId: string): Promise<void> {
+  const accessToken = typeof window !== "undefined" 
+    ? localStorage.getItem("accessToken") 
+    : null;
+
+  const headers: HeadersInit = {
+    "Content-Type": "application/json",
+  };
+  
+  if (accessToken) {
+    headers["Authorization"] = `Bearer ${accessToken}`;
+  }
+
+  const response = await fetch(`${API_BASE_URL}/posts/${postId}`, {
+    method: "DELETE",
+    headers,
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    if (response.status === 401) {
+      if (typeof window !== "undefined") {
+        window.location.href = "/";
+      }
+      throw new Error("인증이 만료되었습니다. 다시 로그인해주세요.");
+    }
+    throw new Error("게시물 삭제에 실패했습니다.");
+  }
+}
+
 export function FeedProvider({ children }: { children: ReactNode }) {
   const queryClient = useQueryClient();
 
